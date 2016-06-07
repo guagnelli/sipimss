@@ -4,11 +4,11 @@
     $string_values = $this->lang->line('interface');
 ?>
     <style type="text/css">
-        .button-padding {padding-top: 20px}
-        .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding:20px}
+        .button-padding {padding-top: 30px}
+        .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
     </style>
-    
-        
+
+    <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/informacionGeneral.js"></script>
     
     <!-- Inicio informacion personal -->
     <div class='row'>
@@ -29,14 +29,17 @@
                     array(
                         'id'=>'perfil_apellido_paterno',
                         'type'=>'text',
+                        'value' => $apellidoPaterno,
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_apellido_paterno'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_paterno'],
-                            'maxlength'=>15
+                            'maxlength'=>15,
+                            'readonly' => 'readonly',
+                              
                             )
                         )
                     );
@@ -55,14 +58,16 @@
                     array(
                         'id'=>'perfil_apellido_materno',
                         'type'=>'text',
+                        'value' => $apellidoMaterno,
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_apellido_materno'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_materno'],
-                            'maxlength'=>15
+                            'maxlength'=>15,
+                            'readonly' => 'readonly'
                             )
                         )
                     );
@@ -81,14 +86,16 @@
                     array(
                         'id'=>'perfil_nombre',
                         'type'=>'text',
+                        'value' => $nombre,
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_nombre'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_nombre'],
-                            'maxlength'=>15
+                            'maxlength'=>15,
+                            'readonly' => 'readonly'
                             )
                         )
                     );
@@ -97,7 +104,7 @@
             <?php   echo form_error_format('perfil_nombre'); ?>
         </div>
         <div class="form-group col-xs-3 col-md-3 button-padding">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary btn-xs" id="btnEditarNombre">
                <?php echo $string_values['perfil']['btn_informacion_general_editar_nombre']; ?> 
             </button>
         </div>
@@ -117,14 +124,15 @@
                     array(
                         'id'=>'perfil_edad',
                         'type'=>'text',
+                        'value' => $edad,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_edad'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_edad'],
-                            'maxlength'=>30
+                            'maxlength'=>30,
+                            'readonly' => 'readonly'
                             )
                         )
                     );
@@ -148,6 +156,7 @@
                         'type'=>'dropdown',
                         'options'=>$generos,
                         'first' => array('' => $string_values['perfil']['plh_informacion_general_genero'] ),
+                        'value' => $generoSelected,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -179,6 +188,7 @@
                         'type'=>'dropdown',
                         'options'=>$estadosCiviles,
                         'first' => array('' => $string_values['perfil']['plh_informacion_general_estado_civil'] ),
+                        'value' => $estadoCivilSelected,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -204,6 +214,7 @@
                     array(
                         'id'=>'perfil_correo_electronico',
                         'type'=>'text',
+                        'value' => $correoElectronico,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_correo_electronico'],
@@ -235,6 +246,7 @@
                     array(
                         'id'=>'perfil_telefono_particular',
                         'type'=>'text',
+                        'value'=>$telParticular,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_telefono_particular'],
@@ -264,6 +276,7 @@
                     array(
                         'id'=>'perfil_telefono_laboral',
                         'type'=>'text',
+                        'value'=>$telLaboral,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_telefono_laboral'],
@@ -283,7 +296,6 @@
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_empleos_actuales' class="control-label">
-                <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_empleos_actuales']; ?>
             </label>
             <div class="input-group">
@@ -295,6 +307,7 @@
                     array(
                         'id'=>'perfil_empleos_actuales',
                         'type'=>'text',
+                        'value'=>$empleosFueraImss,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_empleos_actuales'],
@@ -326,26 +339,22 @@
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_matricula' class="control-label">
-                <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_matricula']; ?>
             </label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
+            <div class="input-group">                
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_matricula',
                         'type'=>'text',
+                        'value'=>$matricula,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_matricula'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_matricula'],
-                            'maxlength'=>10
+                            'maxlength'=>10,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -355,26 +364,23 @@
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_delegacion' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_delegacion']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_delegacion',
                         'type'=>'text',
+                        'value'=>$delegacion,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_delegacion'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_delegacion'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -386,26 +392,23 @@
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_nombre_categoria' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre_categoria']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_nombre_categoria',
                         'type'=>'text',
+                        'value'=>$nombreCategoria,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_nombre_categoria'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_nombre_categoria'],
-                            'maxlength'=>25
+                            'maxlength'=>25,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -415,26 +418,23 @@
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_clave_categoria' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_clave_categoria']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_clave_categoria',
                         'type'=>'text',
+                        'value'=>$claveCategoria,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_clave_categoria'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_clave_categoria'],
-                            'maxlength'=>11
+                            'maxlength'=>11,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -446,26 +446,23 @@
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_nombre_area_adscripcion' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre_area_adscripcion']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_nombre_area_adscripcion',
                         'type'=>'text',
+                        'value'=>$nombreAreaAdscripcion,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_nombre_area_adscripcion'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_nombre_area_adscripcion'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -475,26 +472,23 @@
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_nombre_unidad_adscripcion' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre_unidad_adscripcion']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_nombre_unidad_adscripcion',
                         'type'=>'text',
+                        'value'=>$nombreUnidadAdscripcion,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_nombre_unidad_adscripcion'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_nombre_unidad_adscripcion'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -506,26 +500,23 @@
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_nombre_clave_adscripcion' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre_clave_adscripcion']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_nombre_clave_adscripcion',
                         'type'=>'text',
+                        'value'=>$claveAdscripcion,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_nombre_clave_adscripcion'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_nombre_clave_adscripcion'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -534,8 +525,7 @@
             <?php echo form_error_format('perfil_nombre_clave_adscripcion'); ?>    
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-            <label for='perfil_clave_antiguedad' class="control-label">
-                <b class="rojo">*</b>
+            <label for='perfil_clave_antiguedad' class="control-label">                
                 <?php echo $string_values['perfil']['lbl_informacion_general_antiguedad']; ?>
             </label>
             <div class="row">
@@ -546,13 +536,15 @@
                                 array(
                                     'id'=>'perfil_antiguedad_anios',
                                     'type'=>'text',
+                                    'value'=>$antiguedadAnios,
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
                                         'data-toggle'=>'tooltip',
                                         'data-placement'=>'bottom',
                                         'title'=>$string_values['perfil']['lbl_informacion_general_antiguedad_anios'],
-                                        'maxlength'=>20
+                                        'maxlength'=>20,
+                                        'disabled' => true,
                                         )
                                     )
                                 );
@@ -567,13 +559,15 @@
                                 array(
                                     'id'=>'perfil_antiguedad_quincenas',
                                     'type'=>'text',
+                                    'value'=>$antiguedadQuincenas,
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
                                         'data-toggle'=>'tooltip',
                                         'data-placement'=>'bottom',
                                         'title'=>$string_values['perfil']['lbl_informacion_general_antiguedad_quincenas'],
-                                        'maxlength'=>20
+                                        'maxlength'=>20,
+                                        'disabled' => true,
                                         )
                                     )
                                 );
@@ -588,13 +582,15 @@
                                 array(
                                     'id'=>'perfil_antiguedad_dias',
                                     'type'=>'text',
+                                    'value'=>$antiguedadDias,
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
                                         'data-toggle'=>'tooltip',
                                         'data-placement'=>'bottom',
                                         'title'=>$string_values['perfil']['lbl_informacion_general_antiguedad_dias'],
-                                        'maxlength'=>20
+                                        'maxlength'=>20,
+                                        'disabled' => true,
                                         )
                                     )
                                 );
@@ -608,27 +604,23 @@
     </div>
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
-            <label for='perfil_tipo_contratacion' class="control-label">
-                <b class="rojo">*</b>
+            <label for='perfil_tipo_contratacion' class="control-label">                
                 <?php echo $string_values['perfil']['lbl_informacion_general_tipo_contratacion']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_tipo_contratacion',
                         'type'=>'text',
+                        'value'=>$tipoContratacion,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_tipo_contratacion'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_tipo_contratacion'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -637,27 +629,23 @@
             <?php echo form_error_format('perfil_tipo_contratacion'); ?>    
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-            <label for='perfil_estatus_empleado' class="control-label">
-                <b class="rojo">*</b>
+            <label for='perfil_estatus_empleado' class="control-label">                
                 <?php echo $string_values['perfil']['lbl_informacion_general_estatus_empleado']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_estatus_empleado',
                         'type'=>'text',
+                        'value'=>$estatusEmpleado,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_estatus_empleado'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_estatus_empleado'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -668,27 +656,23 @@
     </div>
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
-            <label for='perfil_clave_presupuestal' class="control-label">
-                <b class="rojo">*</b>
+            <label for='perfil_clave_presupuestal' class="control-label">                
                 <?php echo $string_values['perfil']['lbl_informacion_general_clave_presupuestal']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_clave_presupuestal',
                         'type'=>'text',
+                        'value'=>$clavePresupuestal,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_clave_presupuestal'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_clave_presupuestal'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );
@@ -698,26 +682,23 @@
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_curp' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_curp']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"> </span>
-                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'perfil_curp',
                         'type'=>'text',
+                        'value'=>$curp,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
-                            'placeholder'=>$string_values['perfil']['plh_informacion_general_curp'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_curp'],
-                            'maxlength'=>20
+                            'maxlength'=>20,
+                            'disabled' => true,
                             )
                         )
                     );

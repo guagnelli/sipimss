@@ -84,7 +84,7 @@ div#wrapper {
 .navbar-default .navbar-nav > li > a {
   color: #fff;
 }
-.navbar-default .navbar-nav > li > a:hover,
+/*.navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
   color: #372950;
   background-color: transparent;
@@ -94,8 +94,8 @@ div#wrapper {
 .navbar-default .navbar-nav > .active > a:focus {
   color: #bb8cff;
   background-color: #e7e7e7;
-}
-
+}*/
+/*
 .navbar .navbar-nav li a {
   padding: 0 10px;
   line-height: 56px;
@@ -107,7 +107,7 @@ div#wrapper {
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
     color: #d8a21c;
     background-color: #e7e7e7;
-}
+}*/
 .navbar .navbar-nav li a i {
   border: 1px solid #fff;
   padding: 8px 0;
@@ -168,9 +168,9 @@ div#wrapper {
   text-shadow: none;
 }
 
-.but_list, .tab-content{
+/*.but_list, .tab-content{
 	margin:1.5em 0 0 0;
-}
+}*/
 
 .navbar .navbar-nav li .dropdown-toggle.avatar img {
   height: 40px;
@@ -373,15 +373,15 @@ ul.nav.navbar-nav.navbar-right {
   transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
 }
 /*----*/
-.nav > li > a {
+/*.nav > li > a {
   color: #999;
   font-weight:500;
   padding: 0px 20px 0px 0px;
   font-size: 0.85em;
-   /*border-bottom: 1px solid #E9E9E9;*/
-   /*border-bottom: 1px solid #483467;*/
+   border-bottom: 1px solid #E9E9E9;
+   border-bottom: 1px solid #483467;
    
-}
+}*/
 .hvr-bounce-to-right:hover i.nav_icon , 
 .hvr-bounce-to-right:focus i.nav_icon, 
 .hvr-bounce-to-right:active i.nav_icon{
@@ -2054,9 +2054,9 @@ nav.nav-sidebar {
 tr.table-row:hover{
 	background:#FAFAFA;
 }
-.tab-content {
+/*.tab-content {
     padding-left: 0px;
-}
+}*/
 tr.table-row {
     border-top: 1px solid #F3F3F4;
 }
@@ -2917,4 +2917,17 @@ ul.dropdown-menu.dropdown-menu-right {
 .top-content label {
     font-size: 1.6em;
 }
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+    color:white;
+    background-color:#6a4d93;
+}
+
+.nav-pills > li > a,
+.nav-pills > li > a:hover,
+.nav-pills > li > a:focus {
+    color:black;
+    background-color:#F3F3F4;
 }
