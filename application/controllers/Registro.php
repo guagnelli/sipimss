@@ -47,8 +47,8 @@ class Registro extends MY_Controller {
                 $datos_registro = $this->input->post(null, true); //cargamos el array post en una variable
                 pr($datos_registro);
                 $verifica_existe_user_local = $this->mod_registro->get_existe_usuario(trim($datos_registro['reg_matricula'])); //Verifica que no exista el usuario localmente
-                if ($verifica_existe_user_local == 0) {//Si el usuario no exixte localmente, lo debe guardar 
-//                if ($verifica_existe_user_local > 0) {
+//                if ($verifica_existe_user_local == 0) {//Si el usuario no exixte localmente, lo debe guardar 
+                if ($verifica_existe_user_local > 0) {
                     if ($datos_registro['reg_contrasenia'] === $datos_registro['reg_confirma_contrasenia']) {//Valida contraseña
 //                      $exists = $this->validarUsuarioCupo($datos_registro['reg_matricula'], $datos_registro['reg_sesion']); //Validar que el usuario no este registrado
                         // obtenemos los datos del sistema de personal (SIAP)

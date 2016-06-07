@@ -41,7 +41,7 @@ class Login_model extends CI_Model {
         $log_ini_ses_ip = $parametros['LOG_INI_SES_IP'];
         $inicio_satisfactorio = $parametros['INICIO_SATISFACTORIO'];
         $resp = '@resp';
-
+        $this->db->reconnect();
         $llamada = "call log_usuario_ejecuta($usuario_cve, '$log_ini_ses_ip', $inicio_satisfactorio ,$resp)";
 
 //        pr($llamada);
@@ -49,6 +49,7 @@ class Login_model extends CI_Model {
         $resultado = isset($procedimiento->result()[0]->res);
         $resultado = $resultado && $procedimiento->result()[0]->res;
         $procedimiento->free_result(); //Libera el resultado
+        $this->db->close();
         return $resultado;
     }
 
@@ -278,6 +279,7 @@ class Login_model extends CI_Model {
         $bit_ruta = $parametros['BIT_RUTA'];
         $modulo_cve = $parametros['MODULO_CVE'];
         $res = '@res';
+        $this->db->reconnect();
         //genera la llamada al procedimiento
         $llamada = "call bitacora_ejecuta_historico($usuario_cve, '$bit_valores', '$bit_ip', '$bit_ruta', $modulo_cve, $res )";
 
@@ -286,6 +288,8 @@ class Login_model extends CI_Model {
         $resultado = isset($procedimiento->result()[0]->res);
         $resultado = $resultado && $procedimiento->result()[0]->res;
         $procedimiento->free_result(); //Libera el resultado
+        $this->db->close();
+
         return $resultado;
     }
 
