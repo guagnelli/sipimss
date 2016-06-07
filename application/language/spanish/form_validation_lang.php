@@ -87,8 +87,7 @@ $lang['form_validation_exist_a_lowercase']    = 'El campo {field} debe contener 
 $lang['form_validation_exist_a_upercase']    = 'El campo {field} debe contener al menos una mayúscula. Favor de verificarlo.';
 $lang['form_validation_exists_a_aspecial_character_password']    = 'El campo {field} debe contener al menos un carácter especial, como: */_+-. Por favor verifíquelo.';
 $lang['form_validation_exist_a_number']    = 'El campo {field} debe contener al menos un número arábigo. Favor de verificarlo.';
-$lang['form_validation_valida_correo_electronico']    = 'El campo {field} ddddebe ser valido.';
-
+$lang['form_validation_valida_correo_electronico']    = 'El campo {field} no es valido.';
 //El campo Contraseña debe contener al menos un número arábigo. Favor de verificarlo.”
 
 

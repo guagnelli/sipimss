@@ -31,9 +31,7 @@ class Empleados_siap {
         $result['resp_info']=$array_result;
         if (isset($resultado->EMPLEADOS)){
             $result['resultado']=  true;
-            
             $return_info = $this->regresa_datos($result, $data_siap['reg_delegacion']);
-            
         }
         return $return_info;
     }

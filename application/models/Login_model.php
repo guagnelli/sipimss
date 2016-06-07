@@ -201,13 +201,12 @@ class Login_model extends CI_Model {
           exit(); */
         return $query->num_rows();
     }
-    
+
     function intento_fallido($matricula) {
         $intento['usr_matricula'] = $matricula;
         $this->db->insert('ini_ses_int', $intento);
-
     }
-    
+
     /**
      * @autor LEAS
      * Fecha creación: 18-05-2016
@@ -217,7 +216,7 @@ class Login_model extends CI_Model {
     public function get_rol_mod_no_sesion() {
         $select = array('cr.ROL_CVE "cve_rol"', 'cr.ROL_NOMBRE "nombre_rol"',
             'm.MODULO_CVE "cve_modulo"', 'm.MOD_NOMBRE "nombre_modulo"'
-           ,'m.MOD_RUTA "controlador"'
+            , 'm.MOD_RUTA "controlador"'
         );
 
         $this->db->select($select);
@@ -238,6 +237,56 @@ class Login_model extends CI_Model {
         }
         $query->free_result();
         return $result;
+    }
+
+    /**
+     * 
+     * @autor       : LEAS.
+     * @Fecha       : 09052016.
+     * @param array $parametros 'USUARIO_CVE', 'BIT_VALORES', 'MODULO_CVE', 'BIT_IP' 
+     * y 'BIT_RUTA'
+     * @return boolean Si se inserta el registro de bitacora con los parametros 
+     * correspondientes. Devuelve 1 si todo se cumplio satisfactoriamente, si no, 
+     * en el caso de que el usuario sea nullo o algo ocurrio en la base de datos, devuelve 0
+     */
+    public function set_bitacora($parametros = null) {
+        if (!isset($parametros)) {
+            return false;
+        }
+
+        if (is_null($parametros)) {
+            return false;
+        }
+        if (!isset($parametros['USUARIO_CVE']) && is_null($parametros['USUARIO_CVE'])) {
+            return false;
+        }
+        if (!isset($parametros['BIT_VALORES'])) {
+            $parametros['BIT_VALORES'] = 'NULL';
+        }
+        if (!isset($parametros['BIT_IP'])) {
+            $parametros['BIT_IP'] = 'NULL';
+        }
+        if (!isset($parametros['BIT_RUTA'])) {
+            $parametros['BIT_RUTA'] = 'NULL';
+        }
+        if (!isset($parametros['MODULO_CVE'])) {
+            $parametros['MODULO_CVE'] = 'NULL';
+        }
+        $usuario_cve = $parametros['USUARIO_CVE'];
+        $bit_valores = $parametros['BIT_VALORES'];
+        $bit_ip = $parametros['BIT_IP'];
+        $bit_ruta = $parametros['BIT_RUTA'];
+        $modulo_cve = $parametros['MODULO_CVE'];
+        $res = '@res';
+        //genera la llamada al procedimiento
+        $llamada = "call bitacora_ejecuta_historico($usuario_cve, '$bit_valores', '$bit_ip', '$bit_ruta', $modulo_cve, $res )";
+
+//        pr($llamada);
+        $procedimiento = $this->db->query($llamada); //Ejecuta el procedimiento almacenado
+        $resultado = isset($procedimiento->result()[0]->res);
+        $resultado = $resultado && $procedimiento->result()[0]->res;
+        $procedimiento->free_result(); //Libera el resultado
+        return $resultado;
     }
 
 }

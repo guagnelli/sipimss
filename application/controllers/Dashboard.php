@@ -19,10 +19,11 @@ class Dashboard extends CI_Controller {
         //$this->load->model('Dashboard_model', 'dashboard');
         $this->load->library('enum_privilegios_conf');
         $this->load->library('enum_estados_empleado');
-
         $this->load->helper(array('form', 'captcha'));
         $this->load->library('form_complete');
         $this->load->library('form_validation');
+        $this->load->library('empleados_siap');//Importante que se encuentre dentró de la red interna
+        $this->load->model('Registro_model', 'mod_registro');
     }
 
     public function index() {
@@ -51,6 +52,10 @@ class Dashboard extends CI_Controller {
         //$this->template->setMainContent($imprime);*/
   //      $this->template->getTemplate();
         //pr('Hola señores');
+        pr('saludos a la bandera');
+        $datos_siap = $this->empleados_siap->buscar_usuario_siap( array("reg_delegacion"=>'29', "asp_matricula"=>'99292913'));
+        pr($datos_siap);
+        pr($this->mod_registro->get_existe_usuario('99292913'));
     }
 
     private function get_array_valor($array_busqueda, $key) {
