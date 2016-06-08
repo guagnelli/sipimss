@@ -14,6 +14,7 @@
     <div class='row'>
         <h3 class='pinfo'><?php echo $string_values['perfil']['lbl_informacion_general_informacion_personal']; ?> <small><span class="rojo">*</span> <?php echo $string_values['registro']['lbl_campos_obligatorios']; ?></small></h3>
     </div>
+    <?php echo form_open('', array('id'=>'form_informacion_general')); ?>
     <div class='row'> 
         <div class="form-group col-xs-3 col-md-3">
             <label for='perfil_apellido_paterno' class="control-label">
@@ -331,6 +332,7 @@
             </button>
         </div>    
     </div>
+    <?php echo form_close(); ?>
     <!-- Fin informacion personal-->
     <!--Inicio informacion IMSS-->
     <div class='row'>

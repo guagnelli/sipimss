@@ -31,15 +31,30 @@ class Perfil extends CI_Controller {
      */
     public function index()
     {        
+        $datosPerfil = $this->loadInfo(0);
+        
         
         $datosPerfil['generos'] =  array('F' => 'Femenino', 'M' => 'Masculino');
         $datosPerfil['estadosCiviles'] =  dropdown_options($this->mod_perfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE'); 
+        $datosPerfil['formacionProfesionalOptions'] = array();
+                        
+        $main_content = $this->load->view('perfil/index',$datosPerfil,true);
+        $this->template->setMainContent($main_content);
+        $this->template->getTemplate();
+    }
+    
+    /**
+     * 
+     * @param mixed $parameters
+     */
+    private function loadInfo($parameters)
+    {
         $datosPerfil['apellidoPaterno'] = 'A';
         $datosPerfil['apellidoMaterno'] = 'A';
         $datosPerfil['nombre'] = 'A';
         $datosPerfil['edad'] = 'A';       
         $datosPerfil['generoSelected'] = 'M';       
-        $datosPerfil['estadoCivilSelected'] = '1';       
+        $datosPerfil['estadoCivilSelected'] = '2';       
         $datosPerfil['correoElectronico'] = 'A';
         $datosPerfil['telParticular'] = 'A';
         $datosPerfil['telLaboral'] = 'A';
@@ -58,11 +73,7 @@ class Perfil extends CI_Controller {
         $datosPerfil['estatusEmpleado'] = 'A';
         $datosPerfil['clavePresupuestal'] = 'A';
         $datosPerfil['curp'] = 'A';
-
         
-        
-        $main_content = $this->load->view('perfil/index',$datosPerfil,true);
-        $this->template->setMainContent($main_content);
-        $this->template->getTemplate();
+        return $datosPerfil;
     }
 }
