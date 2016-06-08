@@ -435,6 +435,7 @@ if (!function_exists('crear_formato_array')) {
 }
 
 if (!function_exists('crear_lista_asociativa_valores')) {
+
     /**
      * 
      * @param type : $array_value array de busqueda
@@ -454,8 +455,58 @@ if (!function_exists('crear_lista_asociativa_valores')) {
 
         return $array_lista_roles;
     }
+
 }
 
+if (!function_exists('get_busca_acceso_controlador_metodo')) {
+
+    /**
+     * 
+     * @param type $array_busqueda Array donde buscará la existencia del controlador o del método
+     * @param type $controlador  Controlador a buscar
+     * @param type $metodo_controlador Método que incluye el controlador
+     * @return boolean True si existe, false si no
+     */
+    function get_busca_acceso_controlador_funcion($array_busqueda = null, $controlador = null, $metodo_controlador = null) {
+        //Si el arreglo es null y vacio, retorna false 
+//        pr($array_busqueda);
+        if (is_null($array_busqueda) AND empty($array_busqueda)) {
+            return 0;
+        }
+        //Si el controlador a buscar es vacio, retorna FALSE
+        if (is_null($controlador) AND empty($controlador)) {
+            return 0;
+        }
+        
+        if (strlen(trim($metodo_controlador)) == 0) {
+            $metodo_controlador = 'index';
+        }
+
+//        pr($controlador);
+//        pr('metodo ' . $metodo_controlador);
+        //Buscar el controlador en el array 
+        $existe_controlador = array_key_exists($controlador, $array_busqueda);
+
+        if ($existe_controlador) {//Si existe el controlador, buscar en los metodos el acceso
+            $array_valor = $array_busqueda[$controlador]; //Obtiene valor de la llave
+            //verifica si el valor es un arreglo o un valor normal
+            if (is_array($array_valor)) {//Si es array, busca valor
+                $existe_metodo = in_array('*', $array_valor) ? 1 : //Si exite el * (todos) tendá acceso
+                        in_array($metodo_controlador, $array_valor); //Busca si existe el valor
+                return $existe_metodo;
+            } else {
+//                pr('holas');
+                //Verifica que el valor tenga acceso a todo con el caracter "*"
+                $is_todos = $array_valor == '*';
+                return $is_todos;
+            }
+        }
+
+        //Si no existe el controlador, retorna false
+        return 0;
+    }
+
+}
 
     /* End of file general_helper.php */
     

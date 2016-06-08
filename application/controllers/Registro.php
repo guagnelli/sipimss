@@ -45,7 +45,7 @@ class Registro extends MY_Controller {
             $this->form_validation->set_rules($validations);
             if ($this->form_validation->run()) { //Se ejecuta la validación de datos
                 $datos_registro = $this->input->post(null, true); //cargamos el array post en una variable
-                pr($datos_registro);
+//                pr($datos_registro);
                 $verifica_existe_user_local = $this->mod_registro->get_existe_usuario(trim($datos_registro['reg_matricula'])); //Verifica que no exista el usuario localmente
 //                if ($verifica_existe_user_local == 0) {//Si el usuario no exixte localmente, lo debe guardar 
                 if ($verifica_existe_user_local > 0) {
@@ -60,7 +60,7 @@ class Registro extends MY_Controller {
 //                        $taller = $this->tallerFactory($datos_siap, $datos_registro);//Aún no se implementa
                                 $datos_usuario = array();
                                 $datos_usuario['USU_MATRICULA'] = $datos_registro['reg_matricula'];
-//                                $datos_usuario['DELEGACION_CVE'] = $datos_registro['reg_delegacion'];//Cambiar en la base de datos a varchar
+                                $datos_usuario['DELEGACION_CVE'] = $datos_registro['reg_delegacion'];
                                 $datos_usuario['USU_CORREO'] = $datos_registro['reg_correo'];
                                 $datos_usuario['USU_CONTRASENIA'] = hash('sha512', $datos_registro['reg_confirma_contrasenia']);
                                 $datos_usuario['USU_NOMBRE'] = $datos_siap['nombre'];
@@ -68,13 +68,18 @@ class Registro extends MY_Controller {
                                 $datos_usuario['USU_MATERNO'] = $datos_siap['materno'];
                                 $datos_usuario['USU_GENERO'] = $datos_siap['sexo'];
                                 $datos_usuario['USU_CURP'] = $datos_siap['curp'];
+                                $datos_usuario['ADSCRIPCION_CVE'] = $datos_siap['adscripcion'];
+                                $datos_usuario['CATEGORIA_CVE'] = $datos_siap['emp_keypue'];
+                                $datos_usuario['ESTADO_USUARIO_CVE'] = 1;
+                                $datos_usuario['USU_FCH_REGISTRO'] = $datos_siap['fecha_ingreso'];
+//                                $datos_usuario['USU_FCH_NACIMIENTO'] = $datos_siap['nacimiento'];
                                 $result_id_user = $guardar_taller = $this->mod_registro->insert_registro_usuario($datos_usuario); //Retorna id usuario
                                 if ($result_id_user > -1) {//si el id del usuario es mayor que -1, entonces se inserto correctamente el registro
                                     //Datos de bitacora el registro del usuario
                                     $parametros = $this->config->item('parametros_bitacora');
                                     $parametros['USUARIO_CVE'] = $result_id_user; //Asigna id del usuario
 //                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
-                                    $parametros['BIT_RUTA'] = 'https://registro/';
+                                    $parametros['BIT_RUTA'] = '/registro/';
                                     $result = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
                                 }
 
@@ -109,12 +114,14 @@ class Registro extends MY_Controller {
                     }
                 } else {
                     //Manda advertencia, el usuario ya existe en el sistema
-                    pr('El usuario ya existe');
+                    pr('El usuario ya se encuentra registrado');
                 }
             }
         }
-        $data['delegaciones'] = $this->mod_registro->getDelegaciones_rist(); //Obtiene delegaciones del modelo
-        $datos_registro['delegaciones'] = dropdown_options($data['delegaciones'], 'cve_delegacion', 'nom_delegacion'); //Manipulamos la información a mostrar de delegación
+        /*Carga delegaciones */
+        $this->load->model('Catalogos_generales', 'cg');
+        $data['delegaciones'] = $this->cg->getDelegaciones(); //Obtiene delegaciones del modelo
+        $datos_registro['delegaciones'] = dropdown_options($data['delegaciones'], 'DELEGACION_CVE', 'DEL_NOMBRE'); //Manipulamos la información a mostrar de delegación
 
         $main_contet = $this->load->view('registro/registro', $datos_registro, true);
         $this->template->setMainContent($main_contet);

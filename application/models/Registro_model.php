@@ -10,16 +10,6 @@ class Registro_model extends CI_Model {
         $this->load->database();
     }
 
-    public function getDelegaciones_rist() {
-//        $this->db->select(array(''));
-        $query = $this->db->get('rist_delegacion'); //Obtener conjunto de registros
-        $resultado = $query->result_array();
-
-        $query->free_result(); //Libera la memoria
-//        pr($resultado);
-        return $resultado;
-    }
-
     public function getSesion($params = array()) {
         $resultado = array();
         if (array_key_exists('fields', $params)) {

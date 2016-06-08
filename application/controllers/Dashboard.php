@@ -27,7 +27,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function index() {
-        $this->session->sess_destroy();
+//        $this->session->sess_destroy();
 //        $privilegios = $this->lm->set_usuario_rol_modulo_sesion("10010629");
 //        pr($privilegios);
 //        $rol = $this->session->userdata('lista_roles');
@@ -41,21 +41,24 @@ class Dashboard extends CI_Controller {
         //pr($lista_roles_modulos);
         //echo "hola mundo";
         //exit();
-        //$rol_seleccionado = get_array_valor($lista_roles_modulos, 3);
-        //$this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
-//        pr($this->session->userdata('rol_seleccionado'));
+        $rol_seleccionado = get_array_valor($lista_roles_modulos, 3);
+        $this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
+        pr($this->session->userdata('rol_seleccionado'));
 
-//        $data['rol_seleccionado'] = $rol_seleccionado;
-        //$data['lista_roles'] = $lista_roles;
-        //$view_ = $this->load->view('login/Selection_role_tpl', $data, TRUE);
-//        $this->template->setMainContent($view_);
-        //$this->template->setMainContent($imprime);*/
-  //      $this->template->getTemplate();
+        $data['rol_seleccionado'] = $rol_seleccionado;
+        $data['lista_roles'] = $lista_roles;
+        $view_ = $this->load->view('login/Selection_role_tpl', $data, TRUE);
+        $this->template->setMainContent($view_);
+//        $this->template->setMainContent($imprime);*/
+        $this->template->getTemplate();
         //pr('Hola señores');
-        pr('saludos a la bandera');
-        $datos_siap = $this->empleados_siap->buscar_usuario_siap( array("reg_delegacion"=>'29', "asp_matricula"=>'99292913'));
-        pr($datos_siap);
-        pr($this->mod_registro->get_existe_usuario('99292913'));
+//        pr('saludos a la bandera');
+//        pr($lista_roles);
+////        pr('saludos a la bandera');
+//        pr($lista_roles_modulos);
+//        $datos_siap = $this->empleados_siap->buscar_usuario_siap( array("reg_delegacion"=>'29', "asp_matricula"=>'99292913'));
+//        pr($datos_siap);
+//        pr($this->mod_registro->get_existe_usuario('99292913'));
     }
 
     private function get_array_valor($array_busqueda, $key) {

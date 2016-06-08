@@ -5,9 +5,15 @@ if (!defined('BASEPATH'))
 
 $config['salt'] = "B0no5"; ///SALT
 
-$config['menu_coordinador'] = array('login' => array('cerrar_session', 'cerrar_session_ajax'), 'dashboard' => array('*'), 'mail_c' => array('*'), 'tarjeton_c' => array('*'), 'pagina_no_encontrada' => array('index'), 'bonos_titular' => array('*'), 'bono_perfil_empleado' => array('*'), 'catalogos' => array('*'), 'listado_empleados_c' => array('*'));
-$config['menu_validador'] = array('login' => array('cerrar_session', 'cerrar_session_ajax'), 'dashboard' => array('*'), 'tarjeton' => array('*'), 'pagina_no_encontrada' => array('index'), 'bonos_titular' => array('*'), 'bono_perfil_empleado' => array('*'));
-$config['menu_titular'] = array('login' => array('cerrar_session', 'cerrar_session_ajax'), 'dashboard' => array('*'), 'tarjeton' => array('*'), 'pagina_no_encontrada' => array('index'), 'bonos_titular' => array('*'), 'bono_perfil_empleado' => array('*'));
+$config['modulos_no_sesion'] = array(
+                           'login' => array('index','cerrar_session', 'cerrar_session_ajax'), 
+                           'registro' => array('*'), 
+                           'pagina_no_encontrada' => array('index'),
+                           'recuperar_contrasenia' => '*'
+                           );
+$config['modulos_sesion_generales'] = array(
+                           'rol' => '*' 
+                           );
 
 /////Ruta de solicitudes
 $config['ruta_documentacion'] = $_SERVER["DOCUMENT_ROOT"] . "/sipimss_bonos/assets/files/archivos_bono/";

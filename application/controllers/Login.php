@@ -39,14 +39,6 @@ class Login extends CI_Controller {
             $this->lang->load('interface', 'spanish');
             $mensajes = $this->lang->line('interface');
             
-            //checa si se cargaron los roles de acceso sin inicio de sesión
-            if ( !empty($this->session->userdata('permiso_no_sesion'))) {
-                $permiso_no_sesion = $this->session->userdata('permiso_no_sesion');
-            } else {
-                $permiso_no_sesion = $this->lm->get_rol_mod_no_sesion(); //Obtener los roles sin inicio de sesión
-            }
-            pr($permiso_no_sesion);
-
             if (($this->form_validation->run() == true) && ($token_html == $token_session)) { //Aplicamos validaciones a la matrícula, contraseña, captcha; además se verifica que el token obtenido por el formulario sea el mismo que el que se encuentra en sesión
                 $matricula = $this->input->post('matricula', true);
                 $passwd = $this->input->post('passwd', true);
@@ -60,8 +52,8 @@ class Login extends CI_Controller {
                         //pr($check_user);
                         $password_encrypt = hash('sha512', $passwd);
                         if ($login_user->usr_passwd == $password_encrypt) {
-                            $roles = $this->lm->get_usuario_rol_modulo_sesion($login_user->user_cve);
-                            $modulos_extra = $this->lm->get_usuario_modulo_extra_sesion($login_user->user_cve);
+                            $roles = $this->lm->get_usuario_rol_modulo_sesion($login_user->user_cve);//Módulos por rol 
+                            $modulos_extra = $this->lm->get_usuario_modulo_extra_sesion($login_user->user_cve);//Módulos extra por usuario 
                             $clasificar_permisos = $this->generar_propiedades_permisos($roles, $modulos_extra); //                            
 //                            pr($modulos_extra);
                             $datosSession = array(
@@ -77,8 +69,7 @@ class Login extends CI_Controller {
                                 'delegacion_cve' => $login_user->usr_delegacion,
                                 'lista_roles' => crear_lista_asociativa_valores($roles, 'cve_rol', 'nombre_rol'), //Listado de roles del usuario
                                 'lista_roles_modulos' => $this->generar_propiedades_permisos($roles, $modulos_extra), //Permisos por rol (modulos de acceso)
-                                'rol_seleccionado' => array(), //Si tiene más de un rol asignado el usuario, permite que pueda seleccionar entre uno y otro
-                                'permiso_no_sesion' => $permiso_no_sesion
+                                'rol_seleccionado' => array() //Si tiene más de un rol asignado el usuario, permite que pueda seleccionar entre uno y otro
                             );
 
 
@@ -93,8 +84,8 @@ class Login extends CI_Controller {
                             $parametros_log['USUARIO_CVE'] = $login_user->user_cve;
                             $resultado = $this->lm->set_log_ususario_doc($parametros_log);
                             //$this->bitacora->bitacora_login_insertar($check_user['data']->usr_matricula); //Registrar inicio de sesión correcto
-//                            redirect('login/seleccionar_rol');
-                            redirect('dashboard');
+                            redirect('rol/');
+//                            redirect('dashboard');
                             exit();
                         } else { ///Insertar intento fallido
 //                            $this->lm->intento_fallido($matricula);
