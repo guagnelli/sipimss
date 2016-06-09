@@ -13,20 +13,15 @@
                 <div class="list-group">
 
                     <div class="list-group-item">
-                    <?php
-
-                    if(exist_and_not_null($error))
-                    {
-                        echo '<div class="row">
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                                <div class="col-md-10 col-sm-10 col-xs-10 alert alert-danger">
-                                    '.$error.'
-                                </div>
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                            </div>';
-                    }
-
-                    ?>
+                              <?php if(isset($error)){ ?>
+    					<div class="row">
+                                            <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                                            <div class="col-md-10 col-sm-10 col-xs-10">
+                                                    <?php echo html_message($error, $tipo_msg); ?>
+                                            </div>
+                                            <div class="col-md-1 col-sm-1 col-xs-1"></div>
+    					</div>
+                                <?php } ?>
                     </div>
                     <div class="list-group-item">
                             <label for="matricula">Matr&iacute;cula:</label>
@@ -43,7 +38,7 @@
                             <?php
                                 echo $this->form_complete->create_element(array('id'=>'passwd', 'type'=>'password', 'attributes'=>array('class'=>'form-control', 'autocomplete'=>'off', 'placeholder'=>'Contrase&ntilde;a', 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>'Contrase&ntilde;a')));
                             ?>
-                                <a href="http://www.google.com">Olvido su contraseña</a>
+                                
                             <span class="text-danger"> <?php echo form_error('passwd','','');?> </span>
                             <p class="help-block">Contraseñas: 123</p>
                         </div>
@@ -61,12 +56,19 @@
                           <input type="text" class="form-control" name="userCaptcha" id="userCaptcha" placeholder="Escribe el texto de la imágen" autocomplete="off" value="<?php if(!empty($userCaptcha))echo $userCaptcha; ?>">
                             <span class="text-danger"> <?php echo form_error('userCaptcha','','');?> </span>
                         </div>
-                        <div class="list-group-item">
+                        <div class="list-group-item" >
                             <?php
                                 echo $this->form_complete->create_element(array('id'=>'btn_login', 'type'=>'submit', 'value'=>'Iniciar sesión', 'attributes'=>array('class'=>'btn btn-amarillo btn-block espacio')));
                             ?>
+                            <!--<br>-->
                         </div>
-                        <div class="list-group-item">
+                        <div class="list-group-item text-center" >
+                            <a href="http://www.google.com"><?php echo $string_values['restablecer_contrasenia']['lbl_olvido_contrasenia']; ?></a>
+                        </div>
+                        <div class="list-group-item text-center" >
+                            <p class="help-block"><?php echo $string_values['registro']['lbl_no_registrado']; ?></p>
+                            
+                            <a href="registro" class="btn btn-info"><?php echo $string_values['registro']['plh_btn_guardar']; ?></a>
                         </div>
 
                 </div>  <!-- /panel-body-->

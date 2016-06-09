@@ -10,17 +10,18 @@ class Iniciar_sesion {
     function login() {
         $CI = & get_instance(); //Obtiene la insatancia del super objeto en codeigniter para su uso directo
 
-        $CI->load->library('session');
         $CI->load->helper('url');
         $CI->config->load('general');
-
+        $CI->load->library('session');
 
         $logeado = $CI->session->userdata('usuario_logeado'); ///Obtener datos de sesión
-        $matricula = $CI->session->userdata('matricula');
-        $tipo_admin = $CI->session->userdata('roles_modulos'); //tipo de usuario que inicio sesión
-        $permiso_no_sesion = $CI->session->userdata('permiso_no_sesion'); //tipo de usuario que inicio sesión
-        $modulos_permitidos = $CI->session->userdata('rol_seleccionado'); //tipo de usuario que inicio sesión
-
+//        $matricula = $CI->session->userdata('matricula');
+        $tipo_admin = $CI->session->userdata('lista_roles'); //tipo de usuario que inicio sesión
+        $privilegios = $CI->session->userdata('lista_roles_modulos'); //tipo de usuario que inicio sesión
+//        $modulos_permitidos = $CI->session->userdata('rol_seleccionado'); //tipo de usuario que inicio sesión
+//        pr($modulos_permitidos);
+        pr($privilegios);
+//        pr($tipo_admin);
         $controlador = $CI->uri->segment(1);  //Controlador actual o dirección actual
         $funcion_controlador = $CI->uri->segment(2);  //Función que se llama en el controlador
 
@@ -29,26 +30,44 @@ class Iniciar_sesion {
             $modulos_no_sesion = $CI->config->item('modulos_no_sesion'); //Carga roles de no logeado Roles de no logueado
 //            pr($modulos_no_sesion);
             $is_acceso_pagina = get_busca_acceso_controlador_funcion($modulos_no_sesion, $controlador, $funcion_controlador); //Pregunta si tiene acceso  
-//            pr('sin acceso ? ' . $is_acceso_pagina);
+//            
             //si existe el controlador, buscar que tenga acceso al metodo o funciones del controlador            
             if (!$is_acceso_pagina) {//Si no tiene acceso a pagina, redirecciona
-                pr('imprime');
-//                redirect('login');
-//                exit();
-            } else {
-//                redirect($controlador);
-                pr('sssEntrarrr');
-
-//                exit();
+                redirect('login');
+                exit();
             }
         } else {//Logeado
             //Carga los módulos que se puede tener acceso, pero sólo con sesión iniciada
             $modulos_sesion_generales = $CI->config->item('modulos_sesion_generales');
             //Si ya inicio sesión, verifica el acceso al controlador o la URL 
-            $is_acceso_pagina = get_busca_acceso_controlador_funcion($modulos_sesion_generales, $controlador, $funcion_controlador); //Pregunta si tiene acceso  
+            $is_acceso_pagina = get_busca_acceso_controlador_funcion($modulos_sesion_generales, $controlador, $funcion_controlador); //Pregunta si tiene acceso a modulos generales
             if (!$is_acceso_pagina) {//Si no existe, buscará en rol_seleccionado
-                redirect('pagina_no_encontrada');
-                exit();
+//                $is_acceso_rol = FALSE;
+          
+                
+//                foreach ($privilegios as $value_array_privilegios) {
+//                    foreach ($value_array_privilegios as $value_array) {
+//                        $is_acceso_tmp = get_busca_acceso_controlador_funcion($value_array, $controlador, $funcion_controlador);
+//                        if (!$is_acceso_tmp) {
+//                            $is_acceso_rol = TRUE;
+//                            break 2;
+//                        }
+//
+//                    }
+//                }
+//                if (!$is_acceso_rol) {
+//                    redirect('pagina_no_encontrada');
+//                    exit();
+//                }
+                pr('hola.................');
+                $valor_array = get_busca_array_nivel_profundidad_tres($privilegios, $controlador, $funcion_controlador, 'ruta');
+                pr($valor_array);
+                if (empty($valor_array)) {
+//                    redirect('pagina_no_encontrada');
+                    exit();
+                }
+//                    redirect('pagina_no_encontrada');
+//                    exit();
             }
         }
     }

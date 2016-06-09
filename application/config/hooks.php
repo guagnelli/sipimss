@@ -28,3 +28,9 @@ $hook['post_controller_constructor'] = array(
     'filename' => 'Autenticacion.php',
     'filepath' => 'hooks'
 );
+//$hook['pre_controller'] = array(
+//    'function' => 'login',
+//    'class' => 'Iniciar_sesion',
+//    'filename' => 'Autenticacion.php',
+//    'filepath' => 'hooks'
+//);

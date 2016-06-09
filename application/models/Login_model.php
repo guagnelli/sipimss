@@ -67,7 +67,8 @@ class Login_model extends CI_Model {
             return null;
         }
         $select = array('cr.ROL_CVE "cve_rol"', 'cr.ROL_NOMBRE "nombre_rol"',
-            'm.MODULO_CVE "cve_modulo"', 'm.MOD_NOMBRE "nombre_modulo"'
+            'm.MOD_NOMBRE "nombre_modulo"', 'm.MOD_RUTA "ruta"', 'm.MODULO_CVE_PADRE "padre"',
+            'm.MODULO_CVE "cve_modulo"'
         );
 
         $this->db->select($select);
@@ -111,7 +112,7 @@ class Login_model extends CI_Model {
         }
 
         $select = array('m.MODULO_CVE "cve_modulo"', 'm.MOD_NOMBRE "nombre_modulo"',
-            'um.ACCESO "acceso_modulo"'
+            'um.ACCESO "acceso_modulo"', 'm.MOD_RUTA "ruta"', 'm.MODULO_CVE_PADRE "padre"'
         );
 
         $this->db->select($select);

@@ -13,20 +13,15 @@
                 <div class="list-group">
 
                     <div class="list-group-item">
-                    <?php
-
-                    if(isset($error) AND !is_null($error) AND !empty($error))
-                    {
-                        echo '<div class="row">
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                                <div class="col-md-10 col-sm-10 col-xs-10 alert alert-danger">
-                                    '.$error.'
+                        <?php if(isset($error)){ ?>
+                                <div class="row">
+                                    <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                                    <div class="col-md-10 col-sm-10 col-xs-10">
+                                            <?php echo html_message($error, $tipo_msg); ?>
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 col-xs-1"></div>
                                 </div>
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                            </div>';
-                    }
-
-                    ?>
+                         <?php } ?>
                     </div>
                     <div class="list-group-item">
                             <label for="matricula">Seleccione rol </label>

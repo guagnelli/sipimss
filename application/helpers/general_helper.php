@@ -474,14 +474,14 @@ if (!function_exists('get_busca_acceso_controlador_metodo')) {
         //Si el arreglo es null y vacio, retorna false 
 //        pr($array_busqueda);
         if (is_null($array_busqueda) AND empty($array_busqueda)) {
-            return 0;
+            return FALSE;
         }
         //Si el controlador a buscar es vacio, retorna FALSE
         if (is_null($controlador) AND empty($controlador)) {
-            return 0;
+            return FALSE;
         }
 
-        if (strlen(trim($metodo_controlador)) == 0) {
+        if (strlen(trim($metodo_controlador)) == FALSE) {
             $metodo_controlador = 'index';
         }
 
@@ -510,6 +510,55 @@ if (!function_exists('get_busca_acceso_controlador_metodo')) {
     }
 
 }
+
+
+if (!function_exists('get_busca_array_nivel_profundidad_tres')) {
+
+    /**
+     * 
+     * @param type $array_busqueda
+     * @param type $controlador
+     * @param type $metodo_controlador
+     * @param type $llave
+     * @return int|array
+     */
+    function get_busca_array_nivel_profundidad_tres($array_busqueda = null, $controlador = null, $metodo_controlador = 'index', $llave=null) {
+        //Si el arreglo es null y vacio, retorna false 
+//        pr($array_busqueda);
+        $array_result = array();
+        if (is_null($array_busqueda) AND empty($array_busqueda)) {
+            return $array_result;
+        }
+        //Si el controlador a buscar es vacio, retorna FALSE
+        if (is_null($controlador) AND empty($controlador)) {
+            return $array_result;
+        }
+        foreach ($array_busqueda as $value_array_n1) {
+            foreach ($value_array_n1 as $key_n2 => $value_array_n2) {
+                foreach ($value_array_n2 as  $k =>$value_array_n3) {
+//                        pr($k);
+//                        pr($value_array_n3);
+//                        pr($controlador);
+                    if (is_array($value_array_n2) AND array_key_exists($llave, $value_array_n2)) {//Verifica que sea un array y que se encuentrá la llave
+                        $valor_analizar =  $value_array_n2[$llave];
+//                        pr('eeeeeeeeeeeeeeee');
+                        if ($valor_analizar === $controlador) {//Si la llave es diferente de null y no es vacia
+                            $array_result = $value_array_n3;//Retorna el array encontrado
+                            break 3;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Si no existe el controlador, retorna false
+        return $array_result;
+    }
+
+}
+
+
+
 
     /* End of file general_helper.php */
     

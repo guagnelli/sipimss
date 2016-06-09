@@ -28,6 +28,9 @@ class Login extends CI_Controller {
     public function index() {
         $this->config->load('form_validation');
         $error = "";
+        $data = array();
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface');
         //$this->lm->pblInsertAdm808(); //inserta un administrador
 
         if ($this->input->post()) {
@@ -36,9 +39,8 @@ class Login extends CI_Controller {
             $validations = $this->config->item('inicio_sesion'); //Obtener validaciones almacenadas en archivo
             $this->form_validation->set_rules($validations);
             //Carga herramientas de mensajes de texto al usuario 
-            $this->lang->load('interface', 'spanish');
-            $mensajes = $this->lang->line('interface');
-            
+            $tipo_msg = $this->config->item('alert_msg');
+
             if (($this->form_validation->run() == true) && ($token_html == $token_session)) { //Aplicamos validaciones a la matrícula, contraseña, captcha; además se verifica que el token obtenido por el formulario sea el mismo que el que se encuentra en sesión
                 $matricula = $this->input->post('matricula', true);
                 $passwd = $this->input->post('passwd', true);
@@ -52,10 +54,9 @@ class Login extends CI_Controller {
                         //pr($check_user);
                         $password_encrypt = hash('sha512', $passwd);
                         if ($login_user->usr_passwd == $password_encrypt) {
-                            $roles = $this->lm->get_usuario_rol_modulo_sesion($login_user->user_cve);//Módulos por rol 
-                            $modulos_extra = $this->lm->get_usuario_modulo_extra_sesion($login_user->user_cve);//Módulos extra por usuario 
-                            $clasificar_permisos = $this->generar_propiedades_permisos($roles, $modulos_extra); //                            
-//                            pr($modulos_extra);
+                            $roles = $this->lm->get_usuario_rol_modulo_sesion($login_user->user_cve); //Módulos por rol 
+                            $modulos_extra = $this->lm->get_usuario_modulo_extra_sesion($login_user->user_cve); //Módulos extra por usuario 
+//                            pr($roles);
                             $datosSession = array(
                                 'usuario_logeado' => TRUE,
                                 'identificador' => $login_user->user_cve,
@@ -84,20 +85,20 @@ class Login extends CI_Controller {
                             $parametros_log['USUARIO_CVE'] = $login_user->user_cve;
                             $resultado = $this->lm->set_log_ususario_doc($parametros_log);
                             //$this->bitacora->bitacora_login_insertar($check_user['data']->usr_matricula); //Registrar inicio de sesión correcto
-                            redirect('rol/');
+                            redirect('rol/index');
 //                            redirect('dashboard');
                             exit();
                         } else { ///Insertar intento fallido
 //                            $this->lm->intento_fallido($matricula);
-                            $error = $mensajes['login']['er_general'];
+                            $error = $string_values['login']['er_general'];
                         }
-                    } else { ///Cuenta bloqueda por el periodo de tiempo especificado en método checkbrute
-                        $error = "Datos incorrectos.";
+                    } else { //Cuenta bloqueda por el periodo de tiempo especificado en método checkbrute
+                        $error = $string_values['login']['er_general'];
                     }
                 } else {
                     if ($login_user->cantidad_reg == 0) {
                         //La matrícula es incorrecta (no existe en el sistema)
-                        $error = $mensajes['login']['er_no_usuario'];
+                        $error = $string_values['login']['er_no_usuario'];
                     } else {
                         //si "$login_user->cantidad_reg" = -1, el usuario existe pero el password es incorrecto 
                         $this->config->load('general');
@@ -105,15 +106,21 @@ class Login extends CI_Controller {
                         $parametros_log['USUARIO_CVE'] = $login_user->user_cve;
                         $parametros_log['INICIO_SATISFACTORIO'] = 0;
                         $resultado = $this->lm->set_log_ususario_doc($parametros_log); //ejecuta procedimiento almacenado de lo
-                        $error = $mensajes['login']['er_contrasenia_incorrecta'];
+                        $error = $string_values['login']['er_contrasenia_incorrecta'];
                     }
                 }
             } else {
                 $this->session->unset_userdata('token'); //Eliminar token
             }
+            if (isset($error) && !empty($error)) {
+                $tipo_msg_string = $tipo_msg['DANGER']['class'];
+                $data['error'] = $error;
+                $data['tipo_msg'] = $tipo_msg_string;
+            }
         }
+        $data['string_values'] = $string_values;
         $this->token(); //Crear un token cada vez que se ingresa al formulario de inicio sesión
-        $this->template->setMainContent($this->formulario($error));
+        $this->template->setMainContent($this->formulario($data));
         $this->template->getTemplate();
     }
 
@@ -135,11 +142,11 @@ class Login extends CI_Controller {
     private function generar_propiedades_permisos($roles, $modulos_extra) {
         $existe_mod_extra = isset($modulos_extra) and is_null($modulos_extra) and empty($modulos_extra);
         $array_result = array();
-        if (isset($roles) and !is_null($roles) and !empty($roles)) {
-            if ($existe_mod_extra) {
+        if (isset($roles) and !is_null($roles) and !empty($roles)) {//Debe existir rol
+            if ($existe_mod_extra) {//Si existen roles extra (usuario-módulo)
                 $array_result = $this->evaluar_rol_con_modulos($roles, $modulos_extra);
 //            pr($this->evaluar_rol($roles));
-            } else {
+            } else {//Evalua unicamente la tabla de usuario - rol
                 $array_result = $this->evaluar_rol($roles);
             }
         }
@@ -160,16 +167,7 @@ class Login extends CI_Controller {
         }
     }
 
-    private function matricula_formato($matricula) {
-        return hash('sha512', $matricula);
-    }
-
-    private function contrasenia_formato($matricula, $contrasenia) {
-        return hash('sha512', $contrasenia . $matricula);
-    }
-
-    private function formulario($error = "") {
-        $data['error'] = $error;
+    private function formulario($data = array()) {
         $data['captcha'] = create_captcha($this->captcha_config());
         $this->session->set_userdata('captchaWord', $data['captcha']['word']);
         //echo $data['token'] = $this->session->userdata('token'); //Se envia token al formulario

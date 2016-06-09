@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-$this->lang->load('interface','spanish');
-$string_values = $this->lang->line('interface');
+//$this->lang->load('interface','spanish');
+//$string_values = $this->lang->line('interface');
 
 ?>
 <style type="text/css">.rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding:20px} </style>
@@ -41,11 +41,11 @@ $string_values = $this->lang->line('interface');
     				<?php if(isset($error)){ ?>
     					<div class="row">
     						<div class="col-md-1 col-sm-1 col-xs-1"></div>
-    							<div class="col-md-10 col-sm-10 col-xs-10 alert alert-danger">
-    								<?php echo $error; ?>
+    							<div class="col-md-10 col-sm-10 col-xs-10">
+    								<?php echo html_message($error, $tipo_msg['SUCCESS']['class']); ?>
     							</div>
     								<div class="col-md-1 col-sm-1 col-xs-1"></div>
-    							</div>
+    					</div>
     				<?php
     				}
     				echo form_open('', array('id'=>'form_registro', 'class'=>'form-horizontal')); ?>

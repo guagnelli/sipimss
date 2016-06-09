@@ -60,5 +60,8 @@ p {
 		<h1><?php echo $heading; ?></h1>
 		<?php echo $message; ?>
 	</div>
+	<div id="container">
+            <p class="help-block">Regresar</p>
+	</div>
 </body>
 </html>

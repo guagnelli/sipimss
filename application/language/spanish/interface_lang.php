@@ -35,7 +35,7 @@ $lang['interface'] = array(
         'plh_matricula' => 'Introduzca su matrícula',
         'lbl_delegacion' => 'Delegación',
         'plh_delegacion' => 'Seleccione su delegación',
-        'lbl_contrasenia' => 'Contraseña',
+        'lbl_contrasenia' => 'La contraseña no coincide',
         'plh_contrasenia' => 'Introduzca una contraseña',
         'lbl_confirma_contrasenia' => 'Confirmar contraseña',
         'plh_confirma_contrasenia' => 'Confirme su contraseña',
@@ -43,7 +43,12 @@ $lang['interface'] = array(
         'plh_correo' => 'Introduzca su correo electronico',
         'lbl_captcha' => 'Codigo de seguridad',
         'plh_captcha' => 'Escriba el texto de la imágen',
-        'plh_btn_guardar' => 'Registrar'
+        'plh_btn_guardar' => 'Registrar',
+        'lbl_no_registrado' => '¿No se ha registrado?',
+        'lbl_existe_registro' => 'El usuario ya se encuentra registrado'
+    ),
+    'restablecer_contrasenia' => array(
+        'lbl_olvido_contrasenia' => 'He olvidado mi contraseña',
     ),
     'login' => array(
         'lbl_formulario' => 'Iniciar sesión',
@@ -107,6 +112,14 @@ $lang['interface'] = array(
         'lbl_formacion_salud_borrar' => 'Borrar',
         'btn_formacion_salud_agregar_formacion_profesional' => 'Agregar formación profesional',
         'plh_formacion_salud_formacion_profesional' => 'Seleccione una formación profesional',
+    ),
+    //Selección de roles del usuario 
+    'rol' => array(
+        'lbl_selecciona_rol' => 'Debe seleccionar un rol para cargar',
+    ),
+    //Textos generales
+    'general' => array(
+        
     ),
 );
 

@@ -37,7 +37,9 @@ class Registro extends MY_Controller {
     public function index() {
 
         $datos_registro = array();
-
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface');
+        $tipo_msg = $this->config->item('alert_msg');
         if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
             // obtenemos los datos del sistema de personal (SIAP)
             $this->config->load('form_validation'); //Cargar archivo con validaciones
@@ -110,18 +112,24 @@ class Registro extends MY_Controller {
                     } else {
                         //La contraseña no coinside, verificar  queda pendiente
 //                         form_error('reg_contrasenia','La contraseña no coinside');
-                        $this->form_validation->set_message('reg_contrasenia', 'La contraseña no coincide');
+//                        $this->form_validation->set_message('reg_contrasenia', 'La contraseña no coincide');
+                        $error = $string_values['registro']['lbl_contrasenia'];
+                        $tipo_msg = $tipo_msg['DANGER']['class'];
                     }
                 } else {
                     //Manda advertencia, el usuario ya existe en el sistema
-                    pr('El usuario ya se encuentra registrado');
+//                    pr('El usuario ya se encuentra registrado');
+                        $error = $string_values['registro']['lbl_existe_registro'];
+                        $tipo_msg = $tipo_msg['DANGER']['class'];
                 }
             }
+            $datos_registro['error'] = $error;
         }
-        /*Carga delegaciones */
+        /* Carga delegaciones */
         $this->load->model('Catalogos_generales', 'cg');
         $data['delegaciones'] = $this->cg->getDelegaciones(); //Obtiene delegaciones del modelo
         $datos_registro['delegaciones'] = dropdown_options($data['delegaciones'], 'DELEGACION_CVE', 'DEL_NOMBRE'); //Manipulamos la información a mostrar de delegación
+        $datos_registro['string_values'] = $string_values;
 
         $main_contet = $this->load->view('registro/registro', $datos_registro, true);
         $this->template->setMainContent($main_contet);
