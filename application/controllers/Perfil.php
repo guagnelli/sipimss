@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @version 	: 1.0.0
  * @autor 		: Ricardo Sanchez S
  */
-class Perfil extends CI_Controller {
+class Perfil extends MY_Controller {
     
     /**
      * Class Constructor
@@ -19,7 +19,7 @@ class Perfil extends CI_Controller {
         $this->load->library('form_complete');
         $this->load->library('seguridad');
         $this->load->library('empleados_siap');
-        $this->load->model('Perfil_model','mod_perfil');
+        $this->load->model('Perfil_model','modPerfil');
         $this->load->config('general');
         //$this->lang->load('interface');
     }
@@ -31,11 +31,11 @@ class Perfil extends CI_Controller {
      */
     public function index()
     {        
-        $datosPerfil = $this->loadInfo(0);
-        
+                
+        $datosPerfil = $this->loadInfo($this->session->userdata('identificador'));        
         
         $datosPerfil['generos'] =  array('F' => 'Femenino', 'M' => 'Masculino');
-        $datosPerfil['estadosCiviles'] =  dropdown_options($this->mod_perfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE'); 
+        $datosPerfil['estadosCiviles'] =  dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE'); 
         $datosPerfil['formacionProfesionalOptions'] = array();
                         
         $main_content = $this->load->view('perfil/index',$datosPerfil,true);
@@ -47,8 +47,10 @@ class Perfil extends CI_Controller {
      * 
      * @param mixed $parameters
      */
-    private function loadInfo($parameters)
-    {
+    private function loadInfo($identificador)
+    {        
+        $this->modPerfil->getEmpleadoData($identificador);
+        
         $datosPerfil['apellidoPaterno'] = 'A';
         $datosPerfil['apellidoMaterno'] = 'A';
         $datosPerfil['nombre'] = 'A';
