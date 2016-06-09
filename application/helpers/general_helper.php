@@ -332,7 +332,10 @@ if (!function_exists('get_propiedades_boton')) {
 
 if (!function_exists('get_array_valor')) {
 
-    function get_array_valor($array_busqueda, $key) {
+    function get_array_valor($array_busqueda = null, $key = null) {
+        if (is_null($array_busqueda) || is_null($key)) {
+            return array();
+        }
         if (array_key_exists($key, $array_busqueda)) {
             $array_result = $array_busqueda[$key];
             return $array_result;
@@ -477,7 +480,7 @@ if (!function_exists('get_busca_acceso_controlador_metodo')) {
         if (is_null($controlador) AND empty($controlador)) {
             return 0;
         }
-        
+
         if (strlen(trim($metodo_controlador)) == 0) {
             $metodo_controlador = 'index';
         }
