@@ -512,7 +512,7 @@ if (!function_exists('get_busca_acceso_controlador_metodo')) {
 }
 
 
-if (!function_exists('get_busca_array_nivel_profundidad_tres')) {
+if (!function_exists('get_busca_array_nivel_profundidad_dos')) {
 
     /**
      * 
@@ -522,7 +522,7 @@ if (!function_exists('get_busca_array_nivel_profundidad_tres')) {
      * @param type $llave
      * @return int|array
      */
-    function get_busca_array_nivel_profundidad_tres($array_busqueda = null, $controlador = null, $metodo_controlador = 'index', $llave=null) {
+    function get_busca_array_nivel_profundidad_dos($array_busqueda = null, $controlador = null, $metodo_controlador = 'index', $llave = null) {
         //Si el arreglo es null y vacio, retorna false 
 //        pr($array_busqueda);
         $array_result = array();
@@ -535,17 +535,11 @@ if (!function_exists('get_busca_array_nivel_profundidad_tres')) {
         }
         foreach ($array_busqueda as $value_array_n1) {
             foreach ($value_array_n1 as $key_n2 => $value_array_n2) {
-                foreach ($value_array_n2 as  $k =>$value_array_n3) {
-//                        pr($k);
-//                        pr($value_array_n3);
-//                        pr($controlador);
-                    if (is_array($value_array_n2) AND array_key_exists($llave, $value_array_n2)) {//Verifica que sea un array y que se encuentrá la llave
-                        $valor_analizar =  $value_array_n2[$llave];
-//                        pr('eeeeeeeeeeeeeeee');
-                        if ($valor_analizar === $controlador) {//Si la llave es diferente de null y no es vacia
-                            $array_result = $value_array_n3;//Retorna el array encontrado
-                            break 3;
-                        }
+                if (is_array($value_array_n2) AND array_key_exists($llave, $value_array_n2)) {//Verifica que sea un array y que se encuentrá la llave
+                    $valor_analizar = $value_array_n2[$llave];
+                    if ($valor_analizar === $controlador) {//Si la llave es diferente de null y no es vacia
+                        $array_result = $value_array_n2; //Retorna el array encontrado
+                        break 2;
                     }
                 }
             }

@@ -16,12 +16,13 @@ class Iniciar_sesion {
 
         $logeado = $CI->session->userdata('usuario_logeado'); ///Obtener datos de sesión
 //        $matricula = $CI->session->userdata('matricula');
-        $tipo_admin = $CI->session->userdata('lista_roles'); //tipo de usuario que inicio sesión
+//        $tipo_admin = $CI->session->userdata('lista_roles'); //tipo de usuario que inicio sesión
         $privilegios = $CI->session->userdata('lista_roles_modulos'); //tipo de usuario que inicio sesión
 //        $modulos_permitidos = $CI->session->userdata('rol_seleccionado'); //tipo de usuario que inicio sesión
 //        pr($modulos_permitidos);
-        pr($privilegios);
+//        pr($privilegios);
 //        pr($tipo_admin);
+
         $controlador = $CI->uri->segment(1);  //Controlador actual o dirección actual
         $funcion_controlador = $CI->uri->segment(2);  //Función que se llama en el controlador
 
@@ -42,32 +43,16 @@ class Iniciar_sesion {
             //Si ya inicio sesión, verifica el acceso al controlador o la URL 
             $is_acceso_pagina = get_busca_acceso_controlador_funcion($modulos_sesion_generales, $controlador, $funcion_controlador); //Pregunta si tiene acceso a modulos generales
             if (!$is_acceso_pagina) {//Si no existe, buscará en rol_seleccionado
-//                $is_acceso_rol = FALSE;
-          
-                
-//                foreach ($privilegios as $value_array_privilegios) {
-//                    foreach ($value_array_privilegios as $value_array) {
-//                        $is_acceso_tmp = get_busca_acceso_controlador_funcion($value_array, $controlador, $funcion_controlador);
-//                        if (!$is_acceso_tmp) {
-//                            $is_acceso_rol = TRUE;
-//                            break 2;
-//                        }
-//
-//                    }
-//                }
-//                if (!$is_acceso_rol) {
-//                    redirect('pagina_no_encontrada');
-//                    exit();
-//                }
-                pr('hola.................');
-                $valor_array = get_busca_array_nivel_profundidad_tres($privilegios, $controlador, $funcion_controlador, 'ruta');
-                pr($valor_array);
-                if (empty($valor_array)) {
-//                    redirect('pagina_no_encontrada');
+            /**Nota: buscar en la ruta, no solo el controlador, si no tambien la funcion del controlador, como index algun otro método
+             * eso en la función  "get_busca_array_nivel_profundidad_dos" 
+             * 
+             */
+                $valor_array = get_busca_array_nivel_profundidad_dos($privilegios, $controlador, $funcion_controlador, 'ruta'); //Busca la primera incidencia con del controlador con la ruta seleccionada
+//                pr($valor_array);
+                if (empty($valor_array)) {//Si el array es vacio, manda a pagina no encontrada
+                    redirect('pagina_no_encontrada');
                     exit();
                 }
-//                    redirect('pagina_no_encontrada');
-//                    exit();
             }
         }
     }

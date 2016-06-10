@@ -41,7 +41,6 @@ class Rol extends MY_Controller {
             $this->lang->load('interface', 'spanish');
             $mensajes = $this->lang->line('interface');
             $tipo_msg = $this->config->item('alert_msg');
-            
             $value = $this->input->post('seleciion_role', TRUE);
 //            pr($value);
             if (empty($value)) {
@@ -54,12 +53,10 @@ class Rol extends MY_Controller {
                 $lista_roles_modulos = $this->session->userdata('lista_roles_modulos'); //Módulos de acceso del usuario
                 $rol_seleccionado = get_array_valor($lista_roles_modulos, $value);
                 $this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
-                
                 redirect('perfil');
             }
         }
 //        pr($this->session->userdata('rol_seleccionado'));
-
         $lista_roles = $this->session->userdata('lista_roles');
         $data['lista_roles'] = $lista_roles;
         $main_contet = $this->load->view('login/Selection_role_tpl', $data, true);
