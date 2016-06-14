@@ -30,7 +30,7 @@
                     array(
                         'id'=>'perfil_apellido_paterno',
                         'type'=>'text',
-                        'value' => $apellidoPaterno,
+                        'value' => !empty($apellidoPaterno) ? $apellidoPaterno : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_apellido_paterno'],
@@ -59,7 +59,7 @@
                     array(
                         'id'=>'perfil_apellido_materno',
                         'type'=>'text',
-                        'value' => $apellidoMaterno,
+                        'value' => !empty($apellidoMaterno) ? $apellidoMaterno : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_apellido_materno'],
@@ -87,7 +87,7 @@
                     array(
                         'id'=>'perfil_nombre',
                         'type'=>'text',
-                        'value' => $nombre,
+                        'value' => !empty($nombre) ? $nombre : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_nombre'],
@@ -125,7 +125,7 @@
                     array(
                         'id'=>'perfil_edad',
                         'type'=>'text',
-                        'value' => $edad,
+                        'value' => !empty($edad) ? $edad : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_edad'],
@@ -215,7 +215,7 @@
                     array(
                         'id'=>'perfil_correo_electronico',
                         'type'=>'text',
-                        'value' => $correoElectronico,
+                        'value' => !empty($correoElectronico) ? $correoElectronico : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_correo_electronico'],
@@ -247,7 +247,7 @@
                     array(
                         'id'=>'perfil_telefono_particular',
                         'type'=>'text',
-                        'value'=>$telParticular,
+                        'value' => !empty($telParticular) ? $telParticular : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_telefono_particular'],
@@ -277,7 +277,7 @@
                     array(
                         'id'=>'perfil_telefono_laboral',
                         'type'=>'text',
-                        'value'=>$telLaboral,
+                        'value' => !empty($telLaboral) ? $telLaboral : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_telefono_laboral'],
@@ -308,7 +308,7 @@
                     array(
                         'id'=>'perfil_empleos_actuales',
                         'type'=>'text',
-                        'value'=>$empleosFueraImss,
+                        'value' => !empty($empleosFueraImss) ? $empleosFueraImss : 0,
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_empleos_actuales'],
@@ -349,7 +349,7 @@
                     array(
                         'id'=>'perfil_matricula',
                         'type'=>'text',
-                        'value'=>$matricula,
+                        'value' => !empty($matricula) ? $matricula : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -375,7 +375,7 @@
                     array(
                         'id'=>'perfil_delegacion',
                         'type'=>'text',
-                        'value'=>$delegacion,
+                        'value' => !empty($delegacion) ? $delegacion : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -403,7 +403,7 @@
                     array(
                         'id'=>'perfil_nombre_categoria',
                         'type'=>'text',
-                        'value'=>$nombreCategoria,
+                        'value' => !empty($nombreCategoria) ? $nombreCategoria : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -429,7 +429,7 @@
                     array(
                         'id'=>'perfil_clave_categoria',
                         'type'=>'text',
-                        'value'=>$claveCategoria,
+                        'value' => !empty($claveCategoria) ? $claveCategoria : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -457,7 +457,7 @@
                     array(
                         'id'=>'perfil_nombre_area_adscripcion',
                         'type'=>'text',
-                        'value'=>$nombreAreaAdscripcion,
+                        'value' => !empty($nombreAreaAdscripcion) ? $nombreAreaAdscripcion : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -483,7 +483,7 @@
                     array(
                         'id'=>'perfil_nombre_unidad_adscripcion',
                         'type'=>'text',
-                        'value'=>$nombreUnidadAdscripcion,
+                        'value' => !empty($nombreUnidadAdscripcion) ? $nombreUnidadAdscripcion : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -511,7 +511,7 @@
                     array(
                         'id'=>'perfil_nombre_clave_adscripcion',
                         'type'=>'text',
-                        'value'=>$claveAdscripcion,
+                        'value' => !empty($claveAdscripcion) ? $claveAdscripcion : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -538,7 +538,7 @@
                                 array(
                                     'id'=>'perfil_antiguedad_anios',
                                     'type'=>'text',
-                                    'value'=>$antiguedadAnios,
+                                    'value' => !empty($antiguedadAnios) ? $antiguedadAnios : '',
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
@@ -561,7 +561,7 @@
                                 array(
                                     'id'=>'perfil_antiguedad_quincenas',
                                     'type'=>'text',
-                                    'value'=>$antiguedadQuincenas,
+                                    'value' => !empty($antiguedadQuincenas) ? $antiguedadQuincenas : '',
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
@@ -584,7 +584,7 @@
                                 array(
                                     'id'=>'perfil_antiguedad_dias',
                                     'type'=>'text',
-                                    'value'=>$antiguedadDias,
+                                    'value' => !empty($antiguedadDias) ? $antiguedadDias : '',
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
@@ -615,7 +615,7 @@
                     array(
                         'id'=>'perfil_tipo_contratacion',
                         'type'=>'text',
-                        'value'=>$tipoContratacion,
+                        'value' => !empty($tipoContratacion) ? $tipoContratacion : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -640,7 +640,7 @@
                     array(
                         'id'=>'perfil_estatus_empleado',
                         'type'=>'text',
-                        'value'=>$estatusEmpleado,
+                        'value' => !empty($estatusEmpleado) ? $estatusEmpleado : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -667,7 +667,7 @@
                     array(
                         'id'=>'perfil_clave_presupuestal',
                         'type'=>'text',
-                        'value'=>$clavePresupuestal,
+                        'value' => !empty($clavePresupuestal) ? $clavePresupuestal : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',
@@ -693,7 +693,7 @@
                     array(
                         'id'=>'perfil_curp',
                         'type'=>'text',
-                        'value'=>$curp,
+                        'value' => !empty($curp) ? $curp : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
                             'autocomplete'=>'off',

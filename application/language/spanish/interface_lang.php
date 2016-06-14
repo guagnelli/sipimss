@@ -106,12 +106,16 @@ $lang['interface'] = array(
         'lbl_informacion_general_estatus_empleado' => 'Estatus del empleado',
         'lbl_informacion_general_clave_presupuestal' => 'Clave presupuestal',
         'lbl_informacion_general_curp' => 'CURP',
-        'lbl_formacion_salud_formacion_profesional' => 'Formación profesional',
-        'lbl_formacion_salud_cedula_profesional' => 'Cedula profesional / Comprobante',
+        'lbl_formacion_salud_formacion_profesional' => 'Tipo formación profesional',
+        'lbl_formacion_salud_subtipo_formacion_profesional' => 'Subtipo formación profesional',
+        'lbl_formacion_salud_comprobante' => 'Cedula profesional / Comprobante',
+        'lbl_formacion_salud_tipo_comprobante' => 'Tipo de comprobante',
+        'plh_formacion_salud_tipo_comprobante' => 'Tipo de comprobante',
         'lbl_formacion_salud_editar' => 'Editar',
         'lbl_formacion_salud_borrar' => 'Borrar',
         'btn_formacion_salud_agregar_formacion_profesional' => 'Agregar formación profesional',
         'plh_formacion_salud_formacion_profesional' => 'Seleccione una formación profesional',
+        'plh_formacion_salud_subtipo_formacion_profesional' => 'Seleccione un subtipo de formación profesional',
     ),
     //Selección de roles del usuario 
     'rol' => array(

@@ -123,7 +123,7 @@ class Login_model extends CI_Model {
         $query = $this->db->get();
 //        $result = $query->row();
         $result = $query->result_array();
-        pr($this->db->last_query());
+       // pr($this->db->last_query());
         if (!isset($result)) {
             $result = null;
         } else if (empty($result)) {

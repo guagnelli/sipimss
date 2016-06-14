@@ -41,7 +41,10 @@ $string_values = $this->lang->line('interface');
                                             <?php echo $string_values['perfil']['lbl_formacion_salud_formacion_profesional']; ?>
                                         </th>
                                         <th>
-                                            <?php echo $string_values['perfil']['lbl_formacion_salud_cedula_profesional']; ?>
+                                            <?php echo $string_values['perfil']['lbl_formacion_salud_subtipo_formacion_profesional']; ?>
+                                        </th>
+                                        <th>
+                                            <?php echo $string_values['perfil']['lbl_formacion_salud_comprobante']; ?>
                                         </th>
                                         <th>
                                             <?php echo $string_values['perfil']['lbl_formacion_salud_editar']; ?>
@@ -87,7 +90,7 @@ $string_values = $this->lang->line('interface');
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-xs-8 col-md-8 col-md-offset-2">
+                        <div class="form-group col-xs-12 col-md-12">
                             <label for='formacion_profesional' class="control-label">
                                 <b class="rojo">*</b>
                                 <?php echo $string_values['perfil']['lbl_formacion_salud_formacion_profesional']; ?>
@@ -113,13 +116,72 @@ $string_values = $this->lang->line('interface');
                                 );
                                 ?>
                             </div>
-                        </div>   
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-xs-8 col-md-8 col-md-offset-2">
-                            <label for='cedula_profesional' class="control-label">
+                        </div>
+                        <div class="form-group col-xs-12 col-md-12">
+                            <label for='formacion_profesional' class="control-label">
                                 <b class="rojo">*</b>
-                                <?php echo $string_values['perfil']['lbl_formacion_salud_cedula_profesional']; ?>
+                                <?php echo $string_values['perfil']['lbl_formacion_salud_subtipo_formacion_profesional']; ?>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-pencil"> </span>
+                                </span>
+                                <?php
+                                echo $this->form_complete->create_element(
+                                        array(
+                                            'id' => 'formacion_profesional',
+                                            'type' => 'dropdown',
+                                            'options' => $formacionProfesionalOptions,
+                                            'first' => array('' => $string_values['perfil']['plh_formacion_salud_subtipo_formacion_profesional']),
+                                            'attributes' => array(
+                                                'autocomplete' => 'off',
+                                                'data-toggle' => 'tooltip',
+                                                'data-placement' => 'bottom',
+                                                'title' => $string_values['perfil']['plh_formacion_salud_subtipo_formacion_profesional'],
+                                            )
+                                        )
+                                );
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                       Duracion
+                       <hr>
+                       Formacion inicial
+                       <hr>
+                    <div class="row">
+                        <div class="form-group col-xs-5 col-md-5">
+                            <label for='formacion_salud_tipo_comprobante' class="control-label">
+                                <b class="rojo">*</b>
+                                <?php echo $string_values['perfil']['lbl_formacion_salud_tipo_comprobante']; ?>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-pencil"> </span>
+                                </span>
+                                <?php
+                                echo $this->form_complete->create_element(
+                                        array(
+                                            'id' => 'formacion_salud_tipo_comprobante',
+                                            'type' => 'dropdown',
+                                            'options' => $tipoComprobanteOptions,
+                                            'first' => array('' => $string_values['perfil']['plh_formacion_salud_tipo_comprobante']),
+                                            'attributes' => array(
+                                                'autocomplete' => 'off',
+                                                'data-toggle' => 'tooltip',
+                                                'data-placement' => 'bottom',
+
+                                            )
+                                        )
+                                );
+                                ?>
+                            </div>
+                        </div> 
+                        <div class="form-group col-xs-6 col-md-6 col-md-offset-1">
+                            <label for='formacion_salud_comprobante' class="control-label">
+                                <b class="rojo">*</b>
+                                <?php echo $string_values['perfil']['lbl_formacion_salud_comprobante']; ?>
                             </label>
                             <div class="input-group">
                                 <span class="input-group-addon">
@@ -130,7 +192,7 @@ $string_values = $this->lang->line('interface');
                                     <?php
                                     echo $this->form_complete->create_element(
                                             array(
-                                                'id' => 'cedula_profesional',
+                                                'id' => 'formacion_salud_tipo_comprobante',
                                                 'type' => 'upload',
                                                 'attributes' => array(
                                                     'autocomplete' => 'off',

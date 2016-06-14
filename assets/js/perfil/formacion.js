@@ -6,6 +6,6 @@ $(function () {
         console.log(idFormacion);
         console.log(opcion);
         
-    });
-    
+        //store data as JSON, beware of enclose it with double quotes     
+    });    
 });
