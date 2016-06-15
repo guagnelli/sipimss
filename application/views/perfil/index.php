@@ -4,7 +4,11 @@ $this->lang->load('interface','spanish');
 $string_values = $this->lang->line('interface');
 //pr($array_menu);
 ?>
-
+<script>
+    var array_menu_perfil = new Array(15);
+    var hrutes = new Object();//Objeto que almacena las rutas del controlador 
+</script>
+    
 <div class="row" id="contenedor_formulario">
     <div class="col-sm-12 col-md-12 col-lg-12">
         <div class="panel">
@@ -25,15 +29,24 @@ $string_values = $this->lang->line('interface');
                         if($pos>0){
                             $separa = explode(":", $value['ruta']);
                             $array_quitar = array('(', ')');
-                            $val = str_replace($array_quitar, "", $separa[0]);
+                            $val = $separa[0];
+//                            $array_quitar = array('(', ')');
+//                            $val = str_replace($array_quitar, "", $separa[0]);
+                        ?>
+                            <script>
+                                //Guarda los datos de configuración para el uso de ajax en javascript
+                                hrutes['<?php echo $val; ?>'] = '<?php echo $value['ruta_padre'].":".$value['ruta']; ?>';
+                            </script>
+                        <?php        
                         }else{
-                            $val = str_replace($array_quitar, "", $value['ruta']);
-                            $separa = array();
+//                            $val = str_replace($array_quitar, "", $value['ruta']);
+                            $val =  $value['ruta'];
+                            $separa = array(); 
                         }
                         
                         ?>
                         <li>
-                            <a data-toggle="tab" href="#<?php echo $val ?>">
+                            <a data-toggle="tab" href="#<?php echo $val?>" >
                                 <?php echo $value['nombre_modulo']; ?>
                             </a>
                         </li>
@@ -45,9 +58,11 @@ $string_values = $this->lang->line('interface');
                         $pos = strpos($value['ruta'], ':');
                         if($pos>0){
                             $separa = explode(":", $value['ruta']);
-                            $val = str_replace($array_quitar, "", $separa[0]);
+//                            $val = str_replace($array_quitar, "", $separa[0]);
+                            $val = $separa[0];
                         }else{
-                            $val = str_replace($array_quitar, "", $value['ruta']);
+//                            $val = str_replace($array_quitar, "", $value['ruta']);
+                            $val = $value['ruta'];
                         }
                         ?>
                     <div id = '<?php echo $val; ?>' class = 'tab-pane fade'>
@@ -55,13 +70,10 @@ $string_values = $this->lang->line('interface');
                             <?php 
                                 $busca_cadena = strpos($value['ruta'], 'ajax'); //Busca si el metodo a invocar es un ajax
 //                                    pr('Invoca ajax' . $busca_cadena);
-                                if(!$busca_cadena){//Si no existe, llama a una vista 
+                                if(!$busca_cadena){//Si no existe un ajax, llama a una vista 
                                     $this->load->view($value['ruta_padre']."/".$value['ruta']); 
-                                }else{//Si existe el metodo ajax, llama al ajax?>
-                            <javascript>
-                                    data_ajax(site_url+'/<?php echo $value['ruta_padre']; ?>/<?php echo $separa[0];?>', '<?php echo $separa[1];?>', '<?php echo $separa[2];?>');
-                            </javascript>    
-                            <?php } ?>
+                                } 
+                            ?>
                         </div>
                     </div>
                     <?php } ?>

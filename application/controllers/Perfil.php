@@ -62,9 +62,12 @@ class Perfil extends MY_Controller {
 
     public function get_data_ajax_actividad() {
         $data['matricula'] = $this->session->userdata('matricula');
-        $main_contet = $this->load->view('perfil/actividad_tpl', $data, true);
-        $this->template->setMainContent($main_contet);
-        $this->template->getTemplate();
+        $data['lista_roles'] = $this->session->userdata('lista_roles');
+        
+          $main_contet  = $this->load->view('perfil/actividad_tpl', $data, false);
+//        $this->template->setMainContent($main_contet);
+//        $this->template->getTemplate();
+//        $this->CI->load->view('perfil/actividad_tpl', $data, true);
     }
 
 }

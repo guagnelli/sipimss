@@ -138,6 +138,13 @@ $lang['interface'] = array(
         'btn_add_cp' => 'Asignar curso principal',
         'btn_add_new_actividad' => 'Agregar nueva actividad',
         'btn_add_investigacion' => 'Agregar investigación',
+        'tab_titulo_form_prof' => 'Formación profesional',
+        'tab_titulo_cedula_prof' => 'Cédula profesional / Complobante',
+        'tab_titulo_editar' => 'Editar',
+        'tab_titulo_eliminar' => 'Eliminar',
+        'tab_titulo_pro_salud_actividad' => 'Actividad',
+        'tab_titulo_pro_salud_anio' => 'Año',
+        'tab_titulo_pro_salud_duracion' => 'Año',
         '' => '',
     ),
 );
