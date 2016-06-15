@@ -67,8 +67,9 @@ class Login_model extends CI_Model {
             return null;
         }
         $select = array('cr.ROL_CVE "cve_rol"', 'cr.ROL_NOMBRE "nombre_rol"',
-            'm.MOD_NOMBRE "nombre_modulo"', 'm.MOD_RUTA "ruta"', 'm.MODULO_CVE_PADRE "padre"',
-            'm.MODULO_CVE "cve_modulo"'
+            'm.MOD_NOMBRE "nombre_modulo"', 'm.MOD_RUTA "ruta"', 'm.IS_CONTROLADOR "is_controlador"',
+            'm.MODULO_CVE_PADRE "padre"', 'mh.MOD_RUTA "ruta_padre"', 'mh.MOD_NOMBRE "nombre_padre"',
+            'mh.IS_CONTROLADOR "is_controlador_padre"', 'm.MODULO_CVE "cve_modulo"'
         );
 
         $this->db->select($select);
@@ -76,7 +77,7 @@ class Login_model extends CI_Model {
         $this->db->join('modulo as m', 'm.MODULO_CVE = rm.MODULO_CVE');
         $this->db->join('crol as cr', 'cr.ROL_CVE = rm.ROL_CVE');
         $this->db->join('usuario_rol as urm', 'urm.ROL_CVE = cr.ROL_CVE');
-        //$this->db->join('usuario as us', 'u.USUARIO_CVE = urm.USUARIO_CVE');  
+        $this->db->join('modulo as mh', 'mh.MODULO_CVE = m.MODULO_CVE_PADRE', 'left');
         $this->db->where('m.MOD_EST_CVE', 1);
         $this->db->where('urm.USUARIO_CVE', $cve_usuario);
         $this->db->order_by('cr.ROL_CVE', 'ASC');
@@ -112,18 +113,21 @@ class Login_model extends CI_Model {
         }
 
         $select = array('m.MODULO_CVE "cve_modulo"', 'm.MOD_NOMBRE "nombre_modulo"',
-            'um.ACCESO "acceso_modulo"', 'm.MOD_RUTA "ruta"', 'm.MODULO_CVE_PADRE "padre"'
+            'um.ACCESO "acceso_modulo"', 'm.MOD_RUTA "ruta"', 'm.IS_CONTROLADOR "is_controlador"',
+            'mh.MOD_NOMBRE "nombre_padre"', 'm.MODULO_CVE_PADRE "padre"', 'mh.MOD_RUTA "ruta_padre"',
+            'mh.IS_CONTROLADOR "is_controlador_padre"'
         );
 
         $this->db->select($select);
         $this->db->from('usuario_modulo as um');
         $this->db->join('modulo as m', 'm.MODULO_CVE = um.MODULO_CVE');
+        $this->db->join('modulo as mh', 'mh.MODULO_CVE = m.MODULO_CVE_PADRE', 'left');
         $this->db->where('um.USUARIO_CVE', $cve_usuario);
         $this->db->order_by('m.MODULO_CVE', 'ASC');
         $query = $this->db->get();
 //        $result = $query->row();
         $result = $query->result_array();
-       // pr($this->db->last_query());
+        // pr($this->db->last_query());
         if (!isset($result)) {
             $result = null;
         } else if (empty($result)) {

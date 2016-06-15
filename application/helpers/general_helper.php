@@ -551,6 +551,36 @@ if (!function_exists('get_busca_array_nivel_profundidad_dos')) {
 
 }
 
+if (!function_exists('get_busca_hijos')) {
+
+    /**
+     * 
+     * @param type $array_busqueda
+     * @param type $controlador
+     * @return array
+     */
+    function get_busca_hijos($array_busqueda = null, $controlador = null) {
+        //Si el arreglo es null y vacio, retorna false 
+        $array_result = array();
+
+        if (is_null($array_busqueda) AND empty($array_busqueda)) {
+            return $array_result;
+        }
+        
+        foreach ($array_busqueda as $keys => $valores) {
+            $cad1 = strtolower($controlador);
+            $cad2 = strtolower($valores['nombre_padre']);
+            if (!empty($valores['padre']) AND ($cad1 === $cad2)) {
+                $array_result[$keys] = $valores;
+            }
+        }
+
+        //Si no existe el controlador, retorna false
+        return $array_result;
+    }
+
+}
+
 
 
 

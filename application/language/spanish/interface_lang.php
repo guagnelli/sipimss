@@ -125,6 +125,21 @@ $lang['interface'] = array(
     'general' => array(
         
     ),
+    //Actividad del docente
+    'actividad_docente' => array(
+        'tl_titulo' => 'Actividad del docente',
+        'stl_actividad_salud' => 'Actividad en salud',
+        'stl_actividad_docente' => 'Actividad del docente',
+        'lbl_actividad_di' => 'Desarrollo de investigación',
+        'lbl_actividad_eps' => 'Ejercicio profesional en salud',
+        'lbl_anios_dad' => 'Años dedicados a la actividad docente',
+        'lbl_ejercicio_pd' => 'Ejercicio predominante como docente',
+        'lbl_curso_principal' => 'Curso principal que imparte el profesor/a',
+        'btn_add_cp' => 'Asignar curso principal',
+        'btn_add_new_actividad' => 'Agregar nueva actividad',
+        'btn_add_investigacion' => 'Agregar investigación',
+        '' => '',
+    ),
 );
 
 

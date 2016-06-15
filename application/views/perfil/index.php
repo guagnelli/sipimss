@@ -2,7 +2,7 @@
 
 $this->lang->load('interface','spanish');
 $string_values = $this->lang->line('interface');
-
+//pr($array_menu);
 ?>
 
 <div class="row" id="contenedor_formulario">
@@ -19,59 +19,54 @@ $string_values = $this->lang->line('interface');
             </div>
             <div class="panel-body">
                 <ul class="nav nav-pills nav-stacked col-md-3">
-                    <li class="active">
-                        <a data-toggle="tab" href="#informacionGeneral">
-                            <?php echo $string_values['perfil']['lbl_informacion_general']; ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#formacion">
-                            <?php echo $string_values['perfil']['lbl_formacion']; ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#becasComisiones">
-                            <?php echo $string_values['perfil']['lbl_becas_comisiones']; ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#actividad">
-                            <?php echo $string_values['perfil']['lbl_actividad']; ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#comisionesAcademicas">
-                            <?php echo $string_values['perfil']['lbl_comisiones_academicas']; ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#elaboracionMaterial">
-                            <?php echo $string_values['perfil']['lbl_elaboracion_material']; ?>
-                        </a>
-                    </li>
+                    <?php foreach ($array_menu as $value) { 
+                        $pos = strpos($value['ruta'], ':');
+                        $array_quitar = array('(', ')');
+                        if($pos>0){
+                            $separa = explode(":", $value['ruta']);
+                            $array_quitar = array('(', ')');
+                            $val = str_replace($array_quitar, "", $separa[0]);
+                        }else{
+                            $val = str_replace($array_quitar, "", $value['ruta']);
+                            $separa = array();
+                        }
+                        
+                        ?>
+                        <li>
+                            <a data-toggle="tab" href="#<?php echo $val ?>">
+                                <?php echo $value['nombre_modulo']; ?>
+                            </a>
+                        </li>
+                    <?php } ?>
                 </ul>
+                
                 <div id = 'tabContent' class='tab-content col-md-9'>
-                    <div id = 'informacionGeneral' class = 'tab-pane fade in active'>
+                    <?php foreach ($array_menu as $value) { 
+                        $pos = strpos($value['ruta'], ':');
+                        if($pos>0){
+                            $separa = explode(":", $value['ruta']);
+                            $val = str_replace($array_quitar, "", $separa[0]);
+                        }else{
+                            $val = str_replace($array_quitar, "", $value['ruta']);
+                        }
+                        ?>
+                    <div id = '<?php echo $val; ?>' class = 'tab-pane fade'>
                         <div class ="row">
-                            <?php $this->load->view('perfil/informacionGeneral'); ?>
+                            <?php 
+                                $busca_cadena = strpos($value['ruta'], 'ajax'); //Busca si el metodo a invocar es un ajax
+//                                    pr('Invoca ajax' . $busca_cadena);
+                                if(!$busca_cadena){//Si no existe, llama a una vista 
+                                    $this->load->view($value['ruta_padre']."/".$value['ruta']); 
+                                }else{//Si existe el metodo ajax, llama al ajax?>
+                            <javascript>
+                                    data_ajax(site_url+'/<?php echo $value['ruta_padre']; ?>/<?php echo $separa[0];?>', '<?php echo $separa[1];?>', '<?php echo $separa[2];?>');
+                            </javascript>    
+                            <?php } ?>
                         </div>
                     </div>
-                    <div id = 'formacion' class = 'tab-pane fade'>
-                        <?php $this->load->view('perfil/formacion'); ?>
-                    </div>
-                    <div id = 'becasComisiones' class = 'tab-pane fade'>
-                        <?php $this->load->view('perfil/becasComisiones'); ?>
-                    </div>
-                    <div id = 'actividad' class = 'tab-pane fade'>
-                        <?php $this->load->view('perfil/actividad'); ?>
-                    </div>
-                    <div id = 'comisionesAcademicas' class = 'tab-pane fade'>
-                        <?php $this->load->view('perfil/comisionesAcademicas'); ?>
-                    </div>
-                    <div id = 'elaboracionMaterial' class = 'tab-pane fade'>
-                        <?php $this->load->view('perfil/elaboracionMaterial'); ?>
-                    </div>
+                    <?php } ?>
                 </div>
+                
             </div>
         </div>
     </div>

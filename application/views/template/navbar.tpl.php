@@ -25,7 +25,7 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
 
         <?php echo '</div></div> <ul class="nav navbar-nav navbar-right">  '; ?>
         <li><a href="<?php echo site_url('dashboard'); ?>"  ><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-        <li><a href="<?php echo site_url('bonos_titular'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de candidatos</a></li>
+        <li><a href="<?php echo site_url('rol'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de roles</a></li>
         <li><a href="<?php echo site_url('login/cerrar_session'); ?>"  ><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a></li>
 
         <?php
@@ -48,7 +48,7 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
 
         <?php echo '</div></div> <ul class="nav navbar-nav navbar-right">  '; ?>
         <li><a href="<?php echo site_url('dashboard'); ?>"  ><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-        <li><a href="<?php echo site_url('bonos_titular'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de candidatos</a></li>
+        <li><a href="<?php echo site_url('rol'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de Roles</a></li>
         <li><a href="<?php echo site_url('login/cerrar_session'); ?>"  ><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a></li>
 
         <?php
@@ -70,7 +70,7 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
 
         <?php echo '</div></div> <ul class="nav navbar-nav navbar-right">  '; ?>
         <li><a href="<?php echo site_url('dashboard'); ?>"  ><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-        <li><a href="<?php echo site_url('bonos_titular'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de candidatos</a></li>
+        <li><a href="<?php echo site_url('rol'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de roles</a></li>
         <li><a href="<?php echo site_url('login/cerrar_session'); ?>"  ><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a></li>
 
         <?php

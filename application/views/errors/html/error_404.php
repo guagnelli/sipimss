@@ -61,7 +61,7 @@ p {
 		<?php echo $message; ?>
 	</div>
 	<div id="container">
-            <p class="help-block">Regresar</p>
+            <a href="javascript:history.back()" target="_top"><p class="help-block">Regresar</p></a>
 	</div>
 </body>
 </html>
