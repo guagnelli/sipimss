@@ -41,4 +41,35 @@ class Catalogos_generales extends CI_Model {
         return $resultado;
     }
 
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cejercicio_profesional" 
+     * 
+     * 
+     */
+    public function get_ejercicios_profesionales() {
+//        $this->db->select(array(''));
+        $query = $this->db->get('cejercicio_profesional'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+
+        $query->free_result(); //Libera la memoria
+//        pr($resultado);
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "ccurso" 
+     * 
+     * 
+     */
+    public function get_cursos() {
+//        $this->db->select(array(''));
+        $query = $this->db->get('ccurso'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+
+        $query->free_result(); //Libera la memoria
+//        pr($resultado);
+        return $resultado;
+    }
+
 }

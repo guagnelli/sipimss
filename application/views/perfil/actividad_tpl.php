@@ -1,6 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
     $this->lang->load('interface','spanish');
     $string_values = $this->lang->line('interface')['actividad_docente'];
+    $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
 ?>
 
     <style type="text/css">
@@ -15,19 +16,29 @@
     
     <div class="list-group">
         <div class="list-group-item">
-            <?php if(isset($error)){ ?>
-                    <div class="row">
-                        <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                        <div class="col-md-10 col-sm-10 col-xs-10">
-                                <?php echo html_message($error, $tipo_msg); ?>
+            <div class='row text-right'>
+                <font size=1><?php  echo $fecha_ultima_actualizacion; ?></font>
+            </div>
+            <div class='row'>
+                <?php if(isset($error)){ ?>
+                        <div class="row">
+                            <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                            <div class="col-md-10 col-sm-10 col-xs-10">
+                                    <?php echo html_message($error, $tipo_msg); ?>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1"></div>
                         </div>
-                        <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                    </div>
-             <?php } ?>
+                 <?php } ?>
+            </div>
         </div>
         <div class="list-group-item">
             
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                 <div>
+                    <br>
+                    <h4>Actividad en salud</h4>
+                    <br>
+                </div>
                 <div class="panel panel-default">
                   <div class="panel-heading" role="tab" id="headingOne">
                     <h4 class="panel-title">
@@ -87,7 +98,11 @@
                   </div>
                 </div>
                 
-                
+                <div>
+                    <br>
+                    <h4>Actividad docente</h4>
+                    <br>
+                </div>
                 <div class="panel panel-default">
                   <div class="panel-heading" role="tab" id="headingThree">
                     <h4 class="panel-title">
@@ -108,7 +123,7 @@
                                 </label>
                                 <div class="input-group">
                                 <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-inbox"> </span>
+                                    <span class="glyphicon glyphicon-calendar"> </span>
                                 </span>
                                 <?php
                                     echo $this->form_complete->create_element(
@@ -129,17 +144,19 @@
                             </div>
                             
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-                                <label for='perfil_ejercicio_predominante' class="control-label">
+                                <label for='lbl_ejercicio_pd' class="control-label">
                                     <b class="rojo">*</b>
                                     <?php echo $string_values['lbl_ejercicio_pd']; ?>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-inbox"> </span>
+                                        <span class="glyphicon glyphicon-user"> </span>
                                     </span>
                                     <?php 
-                                        echo $this->form_complete->create_element(array('id' => 'ejercicio_predominante', 'type' => 'dropdown', 'options' => array(''), 
+                                        echo $this->form_complete->create_element(array('id' => 'ejercicio_predominante', 'type' => 'dropdown', 
+                                            'options' => $ejercicios_profesionales, 
                                             'first' => array('' => 'Selecciona ejercicio'), 
+                                            'value' => '',
                                             'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                             'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                             'title' => $string_values['lbl_ejercicio_pd'] ))); 
@@ -155,11 +172,13 @@
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-inbox"> </span>
+                                        <span class="glyphicon glyphicon-book"> </span>
                                     </span>
                                     <?php 
-                                      echo $this->form_complete->create_element(array('id' => 'curso_principal_imapare', 'type' => 'dropdown', 'options' => array(''), 
-                                            'first' => array('' => 'Selecciona curso'), 
+                                      echo $this->form_complete->create_element(array('id' => 'curso_principal_imapare', 
+                                            'type' => 'dropdown', 'options' => $cursos,
+                                            'first' => array('' => 'Selecciona curso'),
+                                            'value' => '',
                                             'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                             'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                             'title' => $string_values['lbl_curso_principal'] )));
@@ -167,6 +186,11 @@
                                 </div>
                             </div>
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
+                                
+                                <a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >
+                                    <?php echo $string_values['btn_guardar_cp']; ?>
+                                </a>
+                                
                                 
                             </div>
                         </div>

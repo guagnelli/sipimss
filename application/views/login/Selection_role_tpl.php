@@ -29,16 +29,14 @@
                             echo $this->form_complete->create_element(array('id' => 'seleciion_role', 'type' => 'dropdown', 'options' => $lista_roles, 'first' => array('' => 'Seleccione rol'), 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Categorías', 'onchange' => "data_ajax(site_url+'/listado_empleados_c/get_data_ajax', '#form_empleado', '#listado_resultado_empleado')"))); 
                             ?>
                             <span class="text-danger"> <?php echo form_error('rol','','');?> </span>
-                        </div>
-                        <div class="list-group-item">
-                            <?php
-                                echo $this->form_complete->create_element(array('id'=>'btn_cargar_rol', 'type'=>'submit', 'value'=>'Cargar rol', 'attributes'=>array('class'=>'btn btn-amarillo btn-block espacio')));
+                    </div>
+                    <div class="list-group-item">
+                        <?php
+                            echo $this->form_complete->create_element(array('id'=>'btn_cargar_rol', 'type'=>'submit', 'value'=>'Cargar rol', 'attributes'=>array('class'=>'btn btn-amarillo btn-block espacio')));
 
-                            ?>
-                        </div>
-                        <div class="list-group-item">
-                        </div>
-
+                        ?>
+                    </div>
+                    
                 </div>  <!-- /panel-body-->
             </div> <!-- /panel panel-amarillo-->
         </div> <!-- /col 12-->

@@ -19,6 +19,7 @@ class Perfil extends MY_Controller {
         $this->load->library('seguridad');
         $this->load->library('empleados_siap');
         $this->load->model('Perfil_model', 'modPerfil');
+        $this->load->model('Catalogos_generales', 'cg');
         $this->load->config('general');
         //$this->lang->load('interface');
     }
@@ -64,7 +65,18 @@ class Perfil extends MY_Controller {
         $data['matricula'] = $this->session->userdata('matricula');
         $data['lista_roles'] = $this->session->userdata('lista_roles');
         
-          $main_contet  = $this->load->view('perfil/actividad_tpl', $data, false);
+        if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
+            pr('soy post');
+        }
+        
+        
+        $curso = $this->cg->get_cursos(); //Obtiene delegaciones del modelo
+        $data['cursos'] = dropdown_options($curso, 'CURSO_CVE', 'CUR_NOMBRE'); //Manipulamos la información a mostrar de delegación
+        $ejp = $this->cg->get_ejercicios_profesionales(); //Obtiene delegaciones del modelo
+        $data['ejercicios_profesionales'] = dropdown_options($ejp, 'EJE_PRO_CVE', 'EJE_PRO_NOMBRE'); //Manipulamos la información a mostrar de delegación
+        
+        
+          $main_contet  = $this->load->view('perfil/actividad_tpl', $data, FALSE);
 //        $this->template->setMainContent($main_contet);
 //        $this->template->getTemplate();
 //        $this->CI->load->view('perfil/actividad_tpl', $data, true);

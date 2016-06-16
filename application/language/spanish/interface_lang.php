@@ -136,6 +136,8 @@ $lang['interface'] = array(
         'lbl_ejercicio_pd' => 'Ejercicio predominante como docente',
         'lbl_curso_principal' => 'Curso principal que imparte el profesor/a',
         'btn_add_cp' => 'Asignar curso principal',
+        'btn_guardar_cp' => 'Guardar curso principal',
+        'btn_actualizar_cp' => 'Actualizar curso principal',
         'btn_add_new_actividad' => 'Agregar nueva actividad',
         'btn_add_investigacion' => 'Agregar investigación',
         'tab_titulo_form_prof' => 'Formación profesional',
@@ -144,7 +146,7 @@ $lang['interface'] = array(
         'tab_titulo_eliminar' => 'Eliminar',
         'tab_titulo_pro_salud_actividad' => 'Actividad',
         'tab_titulo_pro_salud_anio' => 'Año',
-        'tab_titulo_pro_salud_duracion' => 'Año',
+        'tab_titulo_pro_salud_duracion' => 'Duración',
         '' => '',
     ),
 );
