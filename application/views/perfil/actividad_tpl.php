@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-    $this->lang->load('interface','spanish');
-    $string_values = $this->lang->line('interface')['actividad_docente'];
-    $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
+        $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
+//    pr($tipo_msg);
+        $colapso_div_ejercicio_profesional = 'collapse';
 ?>
 
     <style type="text/css">
@@ -24,7 +24,10 @@
                         <div class="row">
                             <div class="col-md-1 col-sm-1 col-xs-1"></div>
                             <div class="col-md-10 col-sm-10 col-xs-10">
-                                    <?php echo html_message($error, $tipo_msg); ?>
+                                <?php  if($tipo_msg==='danger' || $tipo_msg==='warning'){
+                                         $colapso_div_ejercicio_profesional = 'collapse in';
+                                       } 
+                                       echo html_message($error, $tipo_msg); ?>
                             </div>
                             <div class="col-md-1 col-sm-1 col-xs-1"></div>
                         </div>
@@ -112,7 +115,7 @@
                     </h4>
                   </div>
                     
-                  <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <div id="collapseThree" class="panel-collapse <?php echo $colapso_div_ejercicio_profesional; ?>" role="tabpanel" aria-labelledby="headingThree" >
                     <div class="panel-body">
                         <!--Ejercicio profecional en salud-->
                         <div class='row'>
@@ -127,7 +130,8 @@
                                 </span>
                                 <?php
                                     echo $this->form_complete->create_element(
-                                    array('id'=>'actividad_anios_dedicados_docencia','type'=>'number','value' => '',
+                                    array('id'=>'actividad_anios_dedicados_docencia','type'=>'number',
+                                            'value' => empty($actividad_docente)?'':$actividad_docente[0]['ANIOS_DEDICADOS'],
                                             'attributes'=>array(
                                             'class'=>'form-control',
                                             'placeholder'=>$string_values['lbl_anios_dad'],
@@ -141,6 +145,7 @@
                                     );
                                 ?>
                                 </div>
+                                <?php   echo form_error_format('actividad_anios_dedicados_docencia'); ?>
                             </div>
                             
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
@@ -156,16 +161,17 @@
                                         echo $this->form_complete->create_element(array('id' => 'ejercicio_predominante', 'type' => 'dropdown', 
                                             'options' => $ejercicios_profesionales, 
                                             'first' => array('' => 'Selecciona ejercicio'), 
-                                            'value' => '',
+                                            'value' => empty($actividad_docente)?'':$actividad_docente[0]['EJER_PREDOMI_CVE'],
                                             'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                             'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                             'title' => $string_values['lbl_ejercicio_pd'] ))); 
                                     ?>
                                 </div>
+                                <?php   echo form_error_format('ejercicio_predominante'); ?>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
+                            <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
                                 <label for='perfil_ejercicio_predominante' class="control-label">
                                     <b class="rojo">*</b>
                                     <?php echo $string_values['lbl_curso_principal']; ?>
@@ -178,20 +184,37 @@
                                       echo $this->form_complete->create_element(array('id' => 'curso_principal_imapare', 
                                             'type' => 'dropdown', 'options' => $cursos,
                                             'first' => array('' => 'Selecciona curso'),
-                                            'value' => '',
+                                            'value' => empty($actividad_docente)?'':$actividad_docente[0]['CURSO_PRINC_IMPARTE'],
                                             'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                             'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                             'title' => $string_values['lbl_curso_principal'] )));
                                     ?>
                                 </div>
+                                <?php   echo form_error_format('curso_principal_imapare'); ?>
                             </div>
+                            <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
+                                
+                                <!--<a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >-->
+                                    <?php // echo $string_values['btn_guardar_cp']; ?>
+                                <!--</a>-->
+                                
+                                <button type="button" class="btn btn-success" id="btn_guardar_actividad" value="ajax">
+                                    <?php echo $string_values['btn_guardar_cp']; ?>
+                                    <?php // echo $string_values['perfil']['btn_informacion_general_editar_nombre']; ?> 
+                                </button>
+                                
+                                
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
                                 
-                                <a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >
-                                    <?php echo $string_values['btn_guardar_cp']; ?>
-                                </a>
-                                
-                                
+                            </div>
+                            <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
+                                <button type="button" class="btn btn-success" id="btn_agregar_actividad_modal" value="ajax">
+                                    <?php echo $string_values['btn_add_new_actividad']; ?>
+                                    <?php // echo $string_values['perfil']['btn_informacion_general_editar_nombre']; ?> 
+                                </button>
                             </div>
                         </div>
                         <div class="row">

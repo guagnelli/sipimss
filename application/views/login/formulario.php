@@ -30,7 +30,7 @@
 
                             ?>
                             <span class="text-danger"> <?php echo form_error('matricula','','');?> </span>
-                            <p class="help-block">Matriculas: 10004696</p>
+                            <p class="help-block">Matriculas: 10004696, 10010629</p>
                         </div>
 
                         <div class="list-group-item">

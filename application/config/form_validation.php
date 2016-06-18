@@ -248,6 +248,23 @@ $config = array(
             'rules' => 'required'
         ),
     ),
+    'form_actividad_docente_general' => array(
+        array(
+            'field' => 'actividad_anios_dedicados_docencia',
+            'label' => 'años dedicados',
+            'rules' => 'required|greater_than[1]|numeric'
+        ),
+        array(
+            'field' => 'ejercicio_predominante',
+            'label' => 'ejercicio predominante',
+            'rules' => 'required' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'curso_principal_imapare',
+            'label' => 'curso principal',
+            'rules' => 'required'
+        ),
+    ),
 );
 
 

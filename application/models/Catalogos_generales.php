@@ -12,6 +12,22 @@ class Catalogos_generales extends CI_Model {
 
     /**
      * 
+     * @param type $id_usuario identificador del usuario
+     * 
+     */
+    public function getDatos_empleado($id_usuario) {
+        $query = $this->db->where('USUARIO_CVE', $id_usuario); //Condicion del usuario 
+        $query = $this->db->get('empleado'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+
+        $query->free_result(); //Libera la memoria
+//        pr($resultado);
+        return $resultado;
+    }
+    
+    
+    /**
+     * 
      * @return type array retorna los datos del catálogo "rist_delegacion"
      * 
      */
@@ -50,6 +66,16 @@ class Catalogos_generales extends CI_Model {
     public function get_ejercicios_profesionales() {
 //        $this->db->select(array(''));
         $query = $this->db->get('cejercicio_profesional'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+
+        $query->free_result(); //Libera la memoria
+//        pr($resultado);
+        return $resultado;
+    }
+   
+    public function get_ejercicios_predominante() {
+//        $this->db->select(array(''));
+        $query = $this->db->get('cejercicio_predominante'); //Obtener conjunto de registros
         $resultado = $query->result_array();
 
         $query->free_result(); //Libera la memoria

@@ -123,10 +123,15 @@ $lang['interface'] = array(
     ),
     //Textos generales
     'general' => array(
-        
+        'msg_no_existe_empleado'=>'No se encontrarón datos del empleado. Por favor registre sus datos',
+        'advertencia_agregar_todos_los_datos'=>'Debe llenar todos los campos obligatorios'
     ),
     //Actividad del docente
     'actividad_docente' => array(
+        'error_insertar' => 'No se pudierón almacenar los datos de la actividad del docente',
+        'error_actualizar' => 'No se pudierón actualizar los datos de la actividad del docente',
+        'succesfull_insertar' => 'Los datos datos de la actividad del docente se almacenarón correctamente',
+        'succesfull_actualizar' => 'Los datos datos de la actividad del docente se actualizarón correctamente',
         'tl_titulo' => 'Actividad del docente',
         'stl_actividad_salud' => 'Actividad en salud',
         'stl_actividad_docente' => 'Actividad del docente',
