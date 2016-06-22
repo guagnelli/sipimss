@@ -153,6 +153,27 @@ class Registro_model extends CI_Model {
         $this->db->where('USU_MATRICULA', $matricula);
         $query = $this->db->get('usuario');
         $cantidad = $query->num_rows();
+//        pr($this->db->last_query());
+        if ($cantidad > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    /**
+     * @author LEAS 
+     * @fecha creación 06-06-2016 
+     * @param type String: $matricula
+     * @return int si el usuario existe devuelve "1" de lo contrario devuelve "0"
+     */
+    public function get_existe_empleado($id_usuario = null) {
+        if (is_null($id_usuario)) {
+            return 0;
+        }
+        $this->db->where('USUARIO_CVE', $id_usuario);
+        $query = $this->db->get('empleado');
+        $cantidad = $query->num_rows();
+//        pr($this->db->last_query());
         if ($cantidad > 0) {
             return 1;
         } else {
@@ -173,6 +194,21 @@ class Registro_model extends CI_Model {
             return null;
         }
         $this->db->insert('usuario', $datos_usuario); //Almacena usuario
+        $obtiene_id_usuario = $this->db->insert_id();
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return -1;
+        } else {
+
+            return $obtiene_id_usuario;
+        }
+    }
+    
+    public function insert_registro_empleado($datos_empleado = null) {
+        if (is_null($datos_empleado)) {
+            return null;
+        }
+        $this->db->insert('empleado', $datos_empleado); //Almacena usuario
         $obtiene_id_usuario = $this->db->insert_id();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();

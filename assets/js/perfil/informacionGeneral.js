@@ -3,19 +3,6 @@ $(function() {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
     });
-    
-    $('#btn_guardar_actividad').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información
-        var isReadOnly = $('.nameFields').prop('readonly');
-        $('.nameFields').prop('readonly', !isReadOnly);
-        var a =hrutes['get_data_ajax_actividad'];
-        var cad_split = a.split(":");
-        data_ajax(site_url + '/'+cad_split[0]+'/'+cad_split[1], cad_split[2], cad_split[3]);
-    });
-    
-    $('#btn_agregar_actividad_modal').on('click', function() {
-        var isReadOnly = $('.nameFields').prop('readonly');
-        $('.nameFields').prop('readonly', !isReadOnly);
-    });
 
     $("ul.nav-pills > li > a").on("shown.bs.tab", function(e) {
         var scrollposition = $(document).scrollTop();

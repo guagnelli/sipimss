@@ -23,7 +23,8 @@ class Template {
             "main_content" => null,
             "css_files" => null,
             "js_files" => null,
-            "css_script" => null
+            "css_script" => null,
+            "cuerpo_modal"=>null
         );
     }
 
@@ -64,6 +65,7 @@ class Template {
         $this->elements['css_files'] = (array_key_exists('css_files', $elements)) ? $elements['css_files'] : null;
         $this->elements['js_files'] = (array_key_exists('js_files', $elements)) ? $elements['js_files'] : null;
         $this->elements['css_script'] = (array_key_exists('css_script', $elements)) ? $elements['css_script'] : null;
+        $this->elements['cuerpo_modal'] = (array_key_exists('cuerpo_modal', $elements)) ? $elements['cuerpo_modal'] : null;
     }
 
     /**
@@ -151,6 +153,16 @@ class Template {
 
     function setMainContent($main_content = null) {
         $this->elements["main_content"] = $main_content;
+    }
+    
+    /*
+    * Asigna la propiedad de cuerpo_modal de la sección en la plantilla
+    * @author  : Pablo José
+    * @method: void setMainTitle($cuerpo_modal)
+    * @param: string $cuerpo_modal Modal de la sección en la que se encuentra el usuario
+    */
+    function setCuerpoModal($cuerpo_modal = null){
+        $this->elements["cuerpo_modal"] = $cuerpo_modal;
     }
 
     /*

@@ -24,8 +24,7 @@ class Catalogos_generales extends CI_Model {
 //        pr($resultado);
         return $resultado;
     }
-    
-    
+
     /**
      * 
      * @return type array retorna los datos del catálogo "rist_delegacion"
@@ -72,7 +71,7 @@ class Catalogos_generales extends CI_Model {
 //        pr($resultado);
         return $resultado;
     }
-   
+
     public function get_ejercicios_predominante() {
 //        $this->db->select(array(''));
         $query = $this->db->get('cejercicio_predominante'); //Obtener conjunto de registros
@@ -82,19 +81,119 @@ class Catalogos_generales extends CI_Model {
 //        pr($resultado);
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "ccurso" 
      * 
      * 
      */
-    public function get_cursos() {
+    public function get_ccurso() {
 //        $this->db->select(array(''));
         $query = $this->db->get('ccurso'); //Obtener conjunto de registros
         $resultado = $query->result_array();
 
         $query->free_result(); //Libera la memoria
 //        pr($resultado);
+        return $resultado;
+    }
+
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "ctipo_actividad_docente" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_tipo_actividad_docente() {
+        $query = $this->db->get('ctipo_actividad_docente'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    
+    /////*******Checar campos
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cmaterial" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_cmaterial() {
+        $query = $this->db->get('cmaterial'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "licenciatura" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_licenciatura() {
+        $query = $this->db->get('licenciatura'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cmodulo" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_cmodulo() {
+        $query = $this->db->get('cmodulo'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "carea" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_carea() {
+        $query = $this->db->get('carea'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cinstitucion_avala" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_cinstitucion_avala() {
+        $query = $this->db->get('cinstitucion_avala'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "crol_desempenia" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_crol_desempenia() {
+        $query = $this->db->get('crol_desempenia'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "crol_desempenia" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_cmodalidad() {
+        $query = $this->db->get('cmodalidad'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
         return $resultado;
     }
 

@@ -48,18 +48,21 @@ class Registro extends MY_Controller {
             if ($this->form_validation->run()) { //Se ejecuta la validación de datos
                 $datos_registro = $this->input->post(null, true); //cargamos el array post en una variable
 //                pr($datos_registro);
+//                pr($verifica_existe_user_local);
                 $verifica_existe_user_local = $this->mod_registro->get_existe_usuario(trim($datos_registro['reg_matricula'])); //Verifica que no exista el usuario localmente
-//                if ($verifica_existe_user_local == 0) {//Si el usuario no exixte localmente, lo debe guardar 
-                if ($verifica_existe_user_local > 0) {
+                if ($verifica_existe_user_local == 0) {//Si el usuario no exixte localmente, lo debe guardar 
+//                if ($verifica_existe_user_local < 1) {
                     if ($datos_registro['reg_contrasenia'] === $datos_registro['reg_confirma_contrasenia']) {//Valida contraseña
 //                      $exists = $this->validarUsuarioCupo($datos_registro['reg_matricula'], $datos_registro['reg_sesion']); //Validar que el usuario no este registrado
                         // obtenemos los datos del sistema de personal (SIAP)
                         $datos_siap = $this->empleados_siap->buscar_usuario_siap(array("reg_delegacion" => $datos_registro['reg_delegacion'], "asp_matricula" => $datos_registro['reg_matricula']));
+//                        pr($datos_siap);
                         if (is_array($datos_siap) && !empty($datos_siap)) {//Si el usuario que que se quiere registrar no existe en el "SIAP" no se puede registrar
                             //pr($datos_siap);
                             if ($datos_siap['status'] == 1) { //si el status del empleado esta activo (1)
 //                        $usuario = $this->usuarioFactory($datos_siap, $datos_registro);//Aún no se implementa 
 //                        $taller = $this->tallerFactory($datos_siap, $datos_registro);//Aún no se implementa
+//                                echo "<script>alert('cambié de red a externa'); </script>";
                                 $datos_usuario = array();
                                 $datos_usuario['USU_MATRICULA'] = $datos_registro['reg_matricula'];
                                 $datos_usuario['DELEGACION_CVE'] = $datos_registro['reg_delegacion'];
@@ -75,55 +78,72 @@ class Registro extends MY_Controller {
                                 $datos_usuario['ESTADO_USUARIO_CVE'] = 1;
                                 $datos_usuario['USU_FCH_REGISTRO'] = $datos_siap['fecha_ingreso'];
 //                                $datos_usuario['USU_FCH_NACIMIENTO'] = $datos_siap['nacimiento'];
-                                $result_id_user = $guardar_taller = $this->mod_registro->insert_registro_usuario($datos_usuario); //Retorna id usuario
+                                $result_id_user = $this->mod_registro->insert_registro_usuario($datos_usuario); //Retorna id usuario
                                 if ($result_id_user > -1) {//si el id del usuario es mayor que -1, entonces se inserto correctamente el registro
+                                    $verifica_existe_empleado_local = $this->mod_registro->get_existe_empleado($result_id_user); //Verifica que no exista el empleado
+                                    if ($verifica_existe_empleado_local == 0) {//Si no existe el empleado registrado, lo registra
+                                        //Guardar también empleado    
+                                        $datos_empleados = array();
+                                        $datos_empleados['EMP_NOMBRE'] = $datos_usuario['USU_NOMBRE'];
+                                        $datos_empleados['EMP_APE_PATERNO'] = $datos_usuario['USU_PATERNO'];
+                                        $datos_empleados['EMP_APE_MATERNO'] = $datos_usuario['USU_MATERNO'];
+                                        $datos_empleados['EMP_MATRICULA'] = $datos_usuario['USU_MATRICULA'];
+                                        $datos_empleados['EMP_CURP'] = $datos_usuario['USU_CURP'];
+                                        $datos_empleados['DELEGACION_CVE'] = $datos_siap['delegacion'];
+                                        $datos_empleados['USUARIO_CVE'] = $result_id_user;
+                                        $datos_empleados['ADSCRIPCION_CVE'] = $datos_usuario['ADSCRIPCION_CVE'];
+                                        $datos_empleados['EMP_GENERO'] = $datos_usuario['USU_GENERO'];
+                                        $datos_empleados['EMP_EMAIL'] = $datos_usuario['USU_CORREO'];
+                                        $result_id_emp = $this->mod_registro->insert_registro_empleado($datos_empleados); //Retorna id usuario
+                                        if ($result_id_emp < 1) {//si el id del empleado es mayor que -1, entonces existe un error
+                                            $this->session->set_flashdata('error', $string_values['registro']['phl_registro_correcto']);
+                                        }
+                                    }
+
+
                                     //Datos de bitacora el registro del usuario
                                     $parametros = $this->config->item('parametros_bitacora');
                                     $parametros['USUARIO_CVE'] = $result_id_user; //Asigna id del usuario
 //                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
                                     $parametros['BIT_RUTA'] = '/registro/';
                                     $result = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
-                                }
+                                    //Envia correo electrÓnico de datos de registro
+                                    $plantilla = $this->load->view('template/email/enviar_confirmacion.tpl.php', $datos_usuario, true);
+                                    $sentMail = $this->enviar_confirmacion_registro_usuario($datos_usuario + array('plantilla' => $plantilla)); //Enviar correo
 
-//                                if ($guardar_taller['result'] === TRUE) { // si guardar aspirante fue verdadero
-//                                    $agendaData = $this->mod_registro->getSesion(array('conditions' => array('agenda_id' => $taller->agenda_id))); //Datos de la fecha programada
-//                                    $datos = array('usuario' => $usuario, 'taller' => $taller, 'agenda' => $agendaData, 'agendas' => $sesiones_programadas);
-//                                    $plantilla = $this->load->view('template/email/enviar_confirmacion.tpl.php', $datos, true);
-//
-//                                    $sentMail = $this->enviar_confirmacion($datos + array('plantilla' => $plantilla)); //Enviar correo
-//
-//                                    $this->session->unset_userdata('token'); //Eliminar token
-//                                    $this->session->set_flashdata('success', $plantilla);
-//                                    if (!$sentMail["result"]) {
-//                                        $this->session->set_flashdata('error', $sentMail['error']);
-//                                    }
-//                                    redirect('/registro/confirmacion', 'refresh');
-//                                    exit();
-//                                } else {
-//                                    $error = $guardar_taller['msg'];
-//                                }
+                                    if (!$sentMail["result"]) {
+                                        $this->session->set_flashdata('error', $sentMail['error']);
+                                    }
+                                    $datos_registro['error'] = $string_values['registro']['phl_registro_correcto'];
+                                    $datos_registro['tipo_msg'] = $tipo_msg['SUCCESS']['class'];
+                                    echo '<script type="text/javascript">
+                                    window.setTimeout(function(){ 
+                                    document.location.reload(true); }, 3000);
+                                    </script>';
+                                }
                             } else {
-                                $error = "La matrícula {$datos_registro['reg_matricula']} no se encuentra en estado activo IMSS.";
+                                $datos_registro['error'] = str_replace('[field]', $datos_registro['reg_matricula'], $string_values['registro']['phl_la_matricula_existe']); //Remplaza
+                                $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
                             }
                         } else {
                             //Mosttrar mensaje de que no existe el registro en "SIAP"
-                            $error = "La matrícula {$datos_registro['reg_matricula']} no se encuentra registrada en la base de datos de personal IMSS ó la Delegación seleccionada no corresponde con el número de Matrícula proporcionada. Por favor verifíquelo.";
+                            $datos_registro['error'] = str_replace('[field]', $datos_registro['reg_matricula'], $string_values['registro']['phl_la_matricula_existe']); //Remplaza
+                            $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
                         }
                     } else {
                         //La contraseña no coinside, verificar  queda pendiente
 //                         form_error('reg_contrasenia','La contraseña no coinside');
 //                        $this->form_validation->set_message('reg_contrasenia', 'La contraseña no coincide');
-                        $error = $string_values['registro']['lbl_contrasenia'];
-                        $tipo_msg = $tipo_msg['DANGER']['class'];
+                        $datos_registro['error'] = $string_values['registro']['lbl_contrasenia'];
+                        $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
                     }
                 } else {
                     //Manda advertencia, el usuario ya existe en el sistema
 //                    pr('El usuario ya se encuentra registrado');
-                        $error = $string_values['registro']['lbl_existe_registro'];
-                        $tipo_msg = $tipo_msg['DANGER']['class'];
+                    $datos_registro['error'] = str_replace('[field]', $datos_registro['reg_matricula'], $string_values['registro']['phl_la_matricula_existe']); //Remplaza
+                    $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
                 }
             }
-            $datos_registro['error'] = $error;
         }
         /* Carga delegaciones */
         $this->load->model('Catalogos_generales', 'cg');
@@ -138,8 +158,23 @@ class Registro extends MY_Controller {
 
     public function imprime_texto_lang() {
         $this->lang->load('interface', 'spanish');
-        pr($this->lang->line('interface'));
+//        pr($this->lang->line('interface'));
         echo "Hola";
+    }
+
+    private function enviar_confirmacion_registro_usuario($data) {
+        $this->load->library('My_phpmailer');
+        $mail = $this->my_phpmailer->phpmailerclass(); //Se cargan datos por default definidos en config/email
+        $resultado = array('result' => 1, 'error' => null);
+        $mail->addAddress($data['USU_CORREO'], utf8_decode($data['USU_NOMBRE'] . $data['USU_PATERNO'] . $data['USU_MATERNO']));
+        $mail->Subject = utf8_decode('Confirmación de registro :: Censo IMSS');
+        $mail->msgHTML(utf8_decode($data['plantilla']));
+//        pr($mail);
+        if (!$mail->send()) { //send the message, check for errors
+            $resultado['result'] = 0;
+            $resultado['error'] = $mail->ErrorInfo;
+        }
+        return $resultado;
     }
 
     /**

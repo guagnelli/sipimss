@@ -1,7 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
         $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
 //    pr($tipo_msg);
-        $colapso_div_ejercicio_profesional = 'collapse';
+        $colapso_div_ejercicio_profesional = 'collapse in';
+//        $colapso_div_ejercicio_profesional = 'collapse';
 ?>
 
     <style type="text/css">
@@ -9,7 +10,7 @@
         .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
     </style>
 
-    <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/informacionGeneral.js"></script>
+    <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/actividad_docente.js"></script>
     
     <!-- Inicio informacion personal -->
     <?php echo form_open('', array('id'=>'form_actividad_docente')); ?>
@@ -169,6 +170,7 @@
                                 </div>
                                 <?php   echo form_error_format('ejercicio_predominante'); ?>
                             </div>
+                            
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
@@ -184,9 +186,10 @@
                                       echo $this->form_complete->create_element(array('id' => 'curso_principal_imapare', 
                                             'type' => 'dropdown', 'options' => $cursos,
                                             'first' => array('' => 'Selecciona curso'),
-                                            'value' => empty($actividad_docente)?'':$actividad_docente[0]['CURSO_PRINC_IMPARTE'],
+//                                            'value' => empty($actividad_docente)?'':$actividad_docente[0]['CURSO_PRINC_IMPARTE'],
+                                            'value' => 1,
                                             'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                            'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                            'placeholder' => 'Categoría','data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                             'title' => $string_values['lbl_curso_principal'] )));
                                     ?>
                                 </div>
@@ -194,26 +197,28 @@
                             </div>
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
                                 
-                                <!--<a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >-->
-                                    <?php // echo $string_values['btn_guardar_cp']; ?>
-                                <!--</a>-->
-                                
-                                <button type="button" class="btn btn-success" id="btn_guardar_actividad" value="ajax">
-                                    <?php echo $string_values['btn_guardar_cp']; ?>
-                                    <?php // echo $string_values['perfil']['btn_informacion_general_editar_nombre']; ?> 
-                                </button>
-                                
-                                
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
+                                    <!--<a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >-->
+                                        <?php // echo $string_values['btn_guardar_cp']; ?>
+                                    <!--</a>-->
+
+                                    <button type="button" class="btn btn-success" id="btn_guardar_actividad" value="ajax">
+                                        <?php echo $string_values['btn_guardar_cp']; ?>
+                                        <?php // echo $string_values['perfil']['btn_informacion_general_editar_nombre']; ?> 
+                                    </button>
+                             </div>    
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
                                 
+                                
                             </div>
                             <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-                                <button type="button" class="btn btn-success" id="btn_agregar_actividad_modal" value="ajax">
+                                <button type="button" class="btn btn-success btn-lg" id="btn_agregar_actividad_modal" data-toggle="modal" data-target="#modal_censo">
                                     <?php echo $string_values['btn_add_new_actividad']; ?>
-                                    <?php // echo $string_values['perfil']['btn_informacion_general_editar_nombre']; ?> 
                                 </button>
                             </div>
                         </div>

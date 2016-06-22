@@ -1,9 +1,10 @@
 <?php   defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Clase de prueba para las ventanas modales
+ * Clase de prueba para las ventanas modales 
  * @version 	: 1.0.0
  * @autor 		: Pablo José J.
+ * @route       :libraries
  */
 class Ventana_modal
 {
@@ -19,8 +20,8 @@ class Ventana_modal
               'ver_titulo'    => true,
               'ver_mensaje'   => false,
               'ver_footer'    => false,
-              'titulo_modal'  => '',
-              'cuerpo_modal'  => '',
+              'titulo_modal'  => 'Default',
+              'cuerpo_modal'  => 'No tiene aún',
               'msg_modal'     => '',
               'pie_modal'     => ''
           );

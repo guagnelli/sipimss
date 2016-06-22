@@ -248,6 +248,7 @@ $config = array(
             'rules' => 'required'
         ),
     ),
+    //***Inicio  de Validaciones de formularios de actividad docente************
     'form_actividad_docente_general' => array(
         array(
             'field' => 'actividad_anios_dedicados_docencia',
@@ -259,12 +260,39 @@ $config = array(
             'label' => 'ejercicio predominante',
             'rules' => 'required' //|callback_valid_pass
         ),
-        array(
-            'field' => 'curso_principal_imapare',
-            'label' => 'curso principal',
-            'rules' => 'required'
-        ),
+
     ),
+    'form_ccl' => array(
+    ),
+    'form_ime' => array(
+    ),
+    'form_sso' => array(
+    ),
+    'form_lic' => array(
+    ),
+    'form_eme' => array(
+    ),
+    'form_mas' => array(
+    ),
+    'form_doc' => array(
+    ),
+    'form_tec' => array(
+    ),
+    'form_pos' => array(
+    ),
+    'form_eco' => array(
+    ),
+    'form_dplsa' => array(
+    ),
+    'form_efdp' => array(
+    ),
+    'form_fdpei' => array(
+    ),
+    'form_ead' => array(
+    ),
+    'form_adie' => array(
+    ),
+    //**Fin de validación de actividad docenete********************************
 );
 
 

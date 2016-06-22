@@ -21,6 +21,7 @@ class Perfil extends MY_Controller {
         $this->load->model('Perfil_model', 'modPerfil');
         $this->load->model('Catalogos_generales', 'cg');
         $this->load->model('Actividad_docente_model', 'adm');
+        $this->load->library('Ventana_modal');
         $this->load->config('general');
 
         //$this->lang->load('interface');
@@ -44,6 +45,7 @@ class Perfil extends MY_Controller {
 
 
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
+        $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
     }
@@ -68,7 +70,7 @@ class Perfil extends MY_Controller {
         $tipo_msg = $this->config->item('alert_msg');
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['actividad_docente'];
-        $result_id_user = $this->session->userdata('identificador');//Asignamos id usuario a variable
+        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
         $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
 //        pr($actividad_docente);
         if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
@@ -132,7 +134,7 @@ class Perfil extends MY_Controller {
                 $data['tipo_msg'] = $tipo_msg['WARNING']['class']; //Tipo de mensaje de advertencia
             }
         }
-        $curso = $this->cg->get_cursos(); //Obtiene delegaciones del modelo
+        $curso = $this->cg->get_ccurso(); //Obtiene delegaciones del modelo
         $data['cursos'] = dropdown_options($curso, 'CURSO_CVE', 'CUR_NOMBRE'); //Manipulamos la información a mostrar de delegación
 
         $data['string_values'] = $string_values; //Array de textos que muestra el formulario para actividad
@@ -142,7 +144,47 @@ class Perfil extends MY_Controller {
 
         $data['actividad_docente'] = $actividad_docente; //
 
-        $main_contet = $this->load->view('perfil/actividad_tpl', $data, FALSE);
+        $main_contet = $this->load->view('perfil/actividad_docente/actividad_tpl', $data, FALSE);
     }
+
+    public function get_data_ajax_actividad_modal() {
+        if ($this->input->is_ajax_request()) {
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar 
+            $data_actividad['string_values'] = $string_values; //Crea la variable 
+
+            if ($this->input->post()) {//Después de cargar el formulario
+                if ($this->input->post('tipo_actividad_docente', false) > 0) {
+                    
+                }
+            }
+
+            $tipo_actividad_docente = $this->cg->get_tipo_actividad_docente(); //Obtiene delegaciones del modelo
+            $data_actividad['tipo_actividad_docente'] = dropdown_options($tipo_actividad_docente, 'TIP_ACT_DOC_CVE', 'TIP_ACT_DOC_NOMBRE'); //Manipulamos la información a mostrar de delegación
+
+            $data = array(
+                'titulo_modal' => 'Actividad docente',
+                'cuerpo_modal' => $this->load->view('perfil/actividad_docente/actividad_modal_tpl', $data_actividad, TRUE),
+            );
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        }
+    }
+
+    public function get_data_ajax_actividad_cuerpo_modal($index = null) {
+        if ($this->input->is_ajax_request() && $index!=null) {//Si es un ajax
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar
+            $datos['string_values'] = $string_values;
+            $propiedades_vista = $this->config->item('actividad_docente_componentes')[$index];
+            //Carga catalogos 
+            $datos = carga_catalogos_censo($propiedades_vista['catalogos_indexados'], $datos);//Carga los catálogos de la configuración
+//            pr($datos);
+            echo $this->load->view($propiedades_vista['vista'],$datos, TRUE); //Carga la vista correspondiente al index
+            
+        }
+    }
+    
+   
+    
 
 }

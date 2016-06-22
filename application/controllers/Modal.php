@@ -14,7 +14,6 @@ class Modal extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-
         $this->load->database();
         $this->load->helper(array('form','captcha','general'));
         $this->load->library('form_complete');
@@ -31,9 +30,21 @@ class Modal extends CI_Controller {
      */
     public function index()
     {
-        $abrir_modal = "<a data-toggle='modal' data-target='#modal_censo' onclick='data_ajax(site_url+\"/modal/ajax_ejemplo_modal\", \"null\", \"#modal_content\")'>Modal uno</a>";// linea de codigo en HTML necesaria para cargar una ventana modal
-        $this->template->setMainContent($abrir_modal);
+        //$abrir_modal = "<a data-toggle='modal' data-target='#modal_censo' onclick='data_ajax(site_url+\"/modal/ajax_ejemplo_modal\", \"null\", \"#modal_content\")'>Modal uno</a>";// linea de codigo en HTML necesaria para cargar una ventana modal
+        //echo "";// linea de codigo en HTML necesaria para cargar una ventana modal
+            $datos['cuerpo_modal']="<h1>Hola mundo</h1>";
+
+            $parametros = array(); // se crea una variable parametros de ejemplo para llenar algun metodo
+            $datos['titulo_modal'] = "Prueba ventana modal"; // las variables importantes son titulo_modal y cuerpo_modal
+            $datos['cuerpo_modal'] = $this->algun_metodo($parametros);// uso de algún metodo para llenar el cuerpo de la ventana modal
+
+            //$cuerpo_modal = $this->ventana_modal->carga_modal($datos);
+            $this->ventana_modal->carga_modal($datos); 
+            $this->template->setCuerpoModal($this->ventana_modal->carga_modal($datos));   
+            
+        $this->template->setMainContent("<a data-toggle='modal' data-target='#modal_censo'>Modal uno</a>");
         $this->template->getTemplate();
+             
 
     }
 

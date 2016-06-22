@@ -3,10 +3,7 @@
 	<p>Le agradecemos por participar en los censos de docente para el uso de los recursos de informaci&oacute;n en salud. Su registro al censo fue realizado exitosamente, a continuaci&oacute;n, le mostramos el detalle de su inscripci&oacute;n:</p>
 	<p>Nombre: <b><?php echo $USU_NOMBRE.' '.$USU_PATERNO.' '.$USU_MATERNO; ?></b></p>
 	<p>Matricula: <b><?php echo $USU_MATRICULA; ?></b></p>
-	<p>CURP: <b><?php echo $USU_CURP; ?></b></p>
-        <p>Delegaci&oacute;n: <b><?php echo $DELEGACION_CVE; ?></b></p>
-        <p>Categor&iacute;a: <b><?php echo $ADSCRIPCION_CVE; ?></b></p>
-	<p>Contrase&ntildea: <b><?php echo $USU_CONTRASENIA; ?></b></p>
+	
 	<table class="table table-striped" style="background-color: #AAA">
 		<tr>
 			<td>
