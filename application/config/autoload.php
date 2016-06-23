@@ -83,7 +83,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url','asset','general','manejocenso');
+$autoload['helper'] = array('url','asset','general','manejo_general_model');
 
 /*
 | -------------------------------------------------------------------

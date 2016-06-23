@@ -19,16 +19,25 @@ $(function() {
 //        data_ajax(site_url + '/perfil    /get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
         data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
     });
-   $('#datetimepicker1').datetimepicker({
-        format: 'LT'
+    $('#datetimepicker1').datetimepicker({
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        }
     });
 });
 
-document.getElementById("tipo_actividad_docente").onchange = function() {
-    tipo_actividad_docente()
-};
+//document.getElementById("tipo_actividad_docente").onchange = function() {
+//    tipo_actividad_docente();
+//};
 
-function tipo_actividad_docente() {
+//function tipo_actividad_docente() {
+//    var x = document.getElementById("tipo_actividad_docente");
+//}
+
+function myFunctionActividad() {
     var x = document.getElementById("tipo_actividad_docente");
     data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + x.value, '#form_actividad_docente_especifico', '#info_actividad_docente');
 }

@@ -28,7 +28,7 @@
                             'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                             'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                             'title' => $string_values['lbl_ejercicio_pd'], 
-//                            'onchange' => "data_ajax(site_url+'/perfil/get_data_ajax_actividad_cuerpo_modal/', '#form_actividad_docente_especifico', '#info_actividad_docente')"    
+                            'onchange' =>  "myFunctionActividad()"   
                             )
                        )); 
                     ?>

@@ -169,8 +169,10 @@ $lang['interface'] = array(
         'drop_modalidad' => 'Seleccione modalidad',
         'lbl_anio_que_impartio_curso' => 'Año que se impartió',
         'lbl_duracion' => 'Duración',
-        'radio_duracion_horas' => 'Horas',
-        'radio_duracion_fecha' => 'Fecha',
+        'radio_duracion_horas' => 'Hora(s)',
+        'radio_duracion_fecha' => 'Fecha(s)',
+        'lbl_duracion_fecha_inicio' => 'Fecha de inicio',
+        'lbl_duracion_fecha_final' => 'Fecha de termino',
         '' => '',
     ),
 );
