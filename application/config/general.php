@@ -109,7 +109,7 @@ $config['parametros_log'] = array('USUARIO_CVE' => 'NULL', 'LOG_INI_SES_IP' => '
 
 
 $config['actividad_docente_componentes'] = array(//Arreglo que se utilizará para leer las configuraciones de cada formularío de actividad docente
-    1=>array('vista'=>'perfil/actividad_docente/actividad_d_ciclos_clinicos','validaciones' => 'form_ccl', 'catalogos_indexados'=>array(1,2,6,7,9)),
+    1=>array('vista'=>'perfil/actividad_docente/actividad_d_ciclos_clinicos','validaciones' => 'form_ccl', 'catalogos_indexados'=>array(1,2,6,7,9,10)),
     2=>array('vista'=>'perfil/actividad_docente/actividad_d_internado_medico','validaciones' => 'form_ime', 'actividad_docente_campos'=>array()),
     3=>array('vista'=>'perfil/actividad_docente/actividad_d_servicio_social','validaciones' => 'form_sso', 'actividad_docente_campos'=>array()),
     4=>array('vista'=>'perfil/actividad_docente/actividad_d_licenciatura','validaciones' => 'form_lic', 'actividad_docente_campos'=>array()),

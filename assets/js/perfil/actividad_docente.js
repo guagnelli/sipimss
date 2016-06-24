@@ -27,6 +27,15 @@ $(function() {
             down: "fa fa-arrow-down"
         }
     });
+    $('#datetimepicker1').datetimepicker({
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        }
+    });
+    
 });
 
 //document.getElementById("tipo_actividad_docente").onchange = function() {
@@ -40,4 +49,16 @@ $(function() {
 function myFunctionActividad() {
     var x = document.getElementById("tipo_actividad_docente");
     data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + x.value, '#form_actividad_docente_especifico', '#info_actividad_docente');
+}
+
+function mostrar_horas_fechas(horas) {
+    if (horas == 'none') {
+        document.getElementById('div_horas_dedicadas').style.display = 'none';
+        document.getElementById('fecha_inicio').style.display = 'block';
+        document.getElementById('fecha_fin').style.display = 'block';
+    } else {
+        document.getElementById('div_horas_dedicadas').style.display = 'block';
+        document.getElementById('fecha_inicio').style.display = 'none';
+        document.getElementById('fecha_fin').style.display = 'none';
+    }
 }

@@ -162,7 +162,7 @@
                             </div>
                         <br>
                             <div class='row'>
-                                <div class="col-md-12 text-center">
+                                <div class="col-md-6 text-center">
                                     <div class='row'>
                                         <div class="col-md-4 text-right">
                                             <label for='lbl_curso' class="control-label">
@@ -171,17 +171,14 @@
                                             </label>
                                         </div>
                                         <div class="col-md-4 text-center">
-                                            <input type="radio" name="duracion" > <?php echo $string_values['radio_duracion_horas'] ?>
+                                            <input type="radio" id="rad_horas" name="duracion" onchange ="mostrar_horas_fechas('block')"> <?php echo $string_values['radio_duracion_horas'] ?>
                                         </div>
                                         <div class="col-md-4 text-left">
-                                            <input type="radio" name="duracion" > <?php echo $string_values['radio_duracion_fecha'] ?>
+                                            <input type="radio" id="rad_fechas" name="duracion" onchange ="mostrar_horas_fechas('none')" > <?php echo $string_values['radio_duracion_fecha'] ?>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        <br>
-                            <div class="row">
-                                <div class='col-sm-2'>
+                                <div class='col-sm-3' id="div_horas_dedicadas" style="display: none">
                                         <label for='lbl_duracion_horas' class="control-label">
                                             <?php echo $string_values['radio_duracion_horas']; ?>
                                         </label>
@@ -206,41 +203,96 @@
                                             );
                                         ?>
                                         </div>
-                                        <?php echo form_error_format('actividad_anios_dedicados_docencia'); ?>
                                 </div>
-                                <div class='col-sm-5'>
+                                <?php echo form_error_format('hora_dedicadas'); ?>
+                                <div class='col-sm-3 text-center' id="fecha_inicio" style="display: none">
                                     <label for='radio_duracion_fecha' class="control-label">
                                         <?php echo $string_values['lbl_duracion_fecha_inicio']; ?>
                                     </label>
 
                                     <div class="form-group">
-                                        <div class="input-group date" id="datetimepicker1">
-                                            <input type="text" class="form-control">
+                                        <div class="input-group date" id="datetimepicker1" >
+                                            <input type="text" class="form-control" id='fecha_inicio_pick'>
                                             <span class="input-group-addon">
-                                                <span class="fa fa-calendar">
-                                                </span>
+                                                <span class="fa fa-calendar"></span>
                                             </span>
                                         </div>
                                     </div>
 
                                 </div>
+                                <?php echo form_error_format('fecha_inicio_pick'); ?>
 
-                                <div class='col-sm-5'>
+                                <div class='col-sm-3 text-center' id="fecha_fin" style="display: none">
                                     <label for='radio_duracion_fecha' class="control-label">
                                         <?php echo $string_values['lbl_duracion_fecha_final']; ?>
                                     </label>
                                     <div class="form-group">
-                                        <div class='input-group date' id='datetimepicker1'>
+                                        <div class='input-group date' id='datetimepicker2'>
+                                            <input type='text' class="form-control" id='fecha_fin_pick'/>
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
-                                            <input type='text' class="form-control" />
                                         </div>
                                     </div>
                                 </div>
+                                <?php echo form_error_format('fecha_fin_pick'); ?>
+                            
                             </div>
+                        <br>
                             <div class="row">
-                                
+                                <div class="col-md-6">
+                                        <label for='radio_duracion_fecha' class="control-label">
+                                            <?php echo $string_values['lbl_tipo_comprobante']; ?>
+                                        </label>
+                                         <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'tipo-comprobante', 
+                                                'type' => 'dropdown', 
+                                                'options' => $ctipo_comprobante, 
+                                                'first' => array('' => $string_values['drop_tipo_comprobante']), 
+                                                'value' => '',
+                                                'class'=>'form-control',
+                                                'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
+                                                'placeholder' => $string_values['title_tipo_comprobante'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['title_tipo_comprobante'] ))); 
+                                        ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <!--<li class="list-group-item">-->
+                                        <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
+                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo
+                                        <label for='radio_duracion_fecha' class="control-label">
+                                            <?php echo $string_values['lbl_comprobante']; ?>
+                                        </label>
+                                        <div class="input-group">                                           
+                                             <?php
+                                                echo $this->form_complete->create_element(
+                                                array('id'=>'text_comprobante','type'=>'text',
+                                                        'value' => '',
+                                                        'attributes'=>array(
+                                                        'class'=>'form-control',
+                                                        'placeholder'=>$string_values['title_cargar_comprobante'],
+                                                        'min'=> '0',
+                                                        'max'=> '100',
+                                                        'data-toggle'=>'tooltip',
+                                                        'data-placement'=>'bottom',
+                                                        'title'=>$string_values['title_cargar_comprobante'],
+                                                        'readonly'=>'readonly',
+                                                        )
+                                                    )
+                                                );
+                                             ?>
+                                           
+                                          <div class="input-group-btn">
+                                            <button type="button" aria-expanded="false" class="btn btn-default browse">
+                                                <span aria-hidden="true" class="glyphicon glyphicon-file"> </span>
+                                            </button>
+                                            <a role="button" tabindex="0" data-container="body" data-trigger="focus" data-toggle="popover" data-placement="top" data-title="Comprobante" data-content="Aquí usted puede seleccionar el tipo de comprobante que se le otorgo en el curso y posteriormente subirlo al sistema para su verificación" class="btn btn-default" data-original-title="" title="">
+                                                <span aria-hidden="true" class="glyphicon glyphicon-question-sign"> </span>
+                                            </a>
+                                          </div>
+                                        </div><span id="help-tipo-comprobante" class="help-block">Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en el curso</span>
+                                    <!--</li>-->
+                                </div>
                             </div>
                             
                     </div>

@@ -196,5 +196,17 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "crol_desempenia" 
+     * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
+     * 
+     */
+    public function get_ctipo_comprobante() {
+        $query = $this->db->get('ctipo_comprobante'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
 
 }

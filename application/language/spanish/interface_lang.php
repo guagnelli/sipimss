@@ -173,7 +173,11 @@ $lang['interface'] = array(
         'radio_duracion_fecha' => 'Fecha(s)',
         'lbl_duracion_fecha_inicio' => 'Fecha de inicio',
         'lbl_duracion_fecha_final' => 'Fecha de termino',
-        '' => '',
+        'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
+        'title_tipo_comprobante' => 'Tipo de comprobante',
+        'lbl_tipo_comprobante' => 'Tipo de comprobante',
+        'title_cargar_comprobante' => 'Cargar comprobante',
+        'lbl_comprobante' => 'Comprobante',
     ),
 );
 
