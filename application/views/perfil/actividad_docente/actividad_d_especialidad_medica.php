@@ -68,23 +68,23 @@
                                 <div class="col-md-6">
                                     <label for='lbl_modulo' class="control-label">
                                         <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_modulo']; ?>
+                                         <?php echo $string_values['lbl_especialidad']; ?>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-book"> </span>
+                                            <span class="glyphicon glyphicon-plus"> </span>
                                         </span>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cmodulo', 'type' => 'dropdown', 
-                                                'options' => $cmodulo,
-                                                'first' => array('' => $string_values['drop_modulo']), 
+                                            echo $this->form_complete->create_element(array('id' => 'ctipo_especialidad', 'type' => 'dropdown', 
+                                                'options' => $ctipo_especialidad,
+                                                'first' => array('' => $string_values['drop_especialidad']), 
                                                 'value' => '',
-                                                'attributes' => array('name' => 'modulo_name', 'class' => 'form-control', 
-                                                'placeholder' => 'Módulo', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'attributes' => array('name' => 'ctipo_especialidad_name', 'class' => 'form-control', 
+                                                'placeholder' => 'Especialidad', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_modulo'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('cmodulo'); ?>
+                                   <?php   echo form_error_format('ctipo_especialidad'); ?>
                                 </div>
                             </div>
                             <div class='row'>
@@ -110,9 +110,9 @@
                                    <?php   echo form_error_format('cmodalidad'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                        <label for='lbl_anio_que_impartio_curso' class="control-label">
+                                        <label for='lbl_anio_fungio' class="control-label">
                                             <b class="rojo">*</b>
-                                            <?php echo $string_values['lbl_anio_que_impartio_curso']; ?>
+                                            <?php echo $string_values['lbl_anio_fungio']; ?>
                                         </label>
                                         <div class="input-group">
                                         <span class="input-group-addon">
@@ -125,12 +125,12 @@
                                                     'value' => '',
                                                     'attributes'=>array(
                                                     'class'=>'form-control',
-                                                    'placeholder'=>$string_values['lbl_anio_que_impartio_curso'],
+                                                    'placeholder'=>$string_values['lbl_anio_fungio'],
                                                     'min'=> '1900',
                                                     'max'=> '2050',
                                                     'data-toggle'=>'tooltip',
                                                     'data-placement'=>'bottom',
-                                                    'title'=>$string_values['lbl_anio_que_impartio_curso'],
+                                                    'title'=>$string_values['lbl_anio_fungio'],
                                                     )
                                                 )
                                             );

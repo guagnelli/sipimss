@@ -208,5 +208,29 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "ctipo_especialidad" 
+     * "TIP_ESP_MEDICA_CVE"  y  "TIP_ESP_MED_NOMBRE"
+     * 
+     */
+    public function get_ctipo_especialidad() {
+        $query = $this->db->get('ctipo_especialidad'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "ctipo_especialidad" 
+     * "TIP_FOR_PROF_CVE"  ,  "TIP_FOR_PRO_NOMBRE"   y "SUB_FOR_PRO_CVE"
+     * 
+     */
+    public function get_ctipo_formacion_profesional() {
+        $query = $this->db->get('ctipo_formacion_profesional'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
 
 }

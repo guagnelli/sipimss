@@ -175,20 +175,34 @@ class Perfil extends MY_Controller {
      * @param type $index_tipo_actividad_docente 
      */
     public function get_data_ajax_actividad_cuerpo_modal($index_tipo_actividad_docente = null) {
-        if ($this->input->is_ajax_request() && $index_tipo_actividad_docente!=null) {//Si es un ajax
+        if ($this->input->is_ajax_request() && $index_tipo_actividad_docente != null) {//Si es un ajax
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar
-            $datos['string_values'] = $string_values;//Almacena textos de actividad en el arreglo
-            $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente];//Carga la configuracion de
+            $datos['string_values'] = $string_values; //Almacena textos de actividad en el arreglo
+            $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuracion de
             //Carga catalogos 
-            $datos = carga_catalogos_censo($configuracion_formularios_actividad_docente['catalogos_indexados'], $datos);//Carga los catálogos de la configuración
+            $datos = carga_catalogos_censo($configuracion_formularios_actividad_docente['catalogos_indexados'], $datos); //Carga los catálogos de la configuración
 //            pr($datos);
-            echo $this->load->view($configuracion_formularios_actividad_docente['vista'],$datos, TRUE); //Carga la vista correspondiente al index
-            
+            echo $this->load->view($configuracion_formularios_actividad_docente['vista'], $datos, TRUE); //Carga la vista correspondiente al index
         }
+
+
     }
     
-   
-    
+    private function cargar_comprobante(){
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = 'csv';
+        $config['max_size'] = '1000';
+
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload()) {
+            $data['error'] = $this->upload->display_errors();
+        } else {
+
+            $file_data = $this->upload->data();
+            $file_path = './uploads/' . $file_data['file_name'];
+        }
+        
+    }
 
 }

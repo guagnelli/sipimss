@@ -178,6 +178,17 @@ $lang['interface'] = array(
         'lbl_tipo_comprobante' => 'Tipo de comprobante',
         'title_cargar_comprobante' => 'Cargar comprobante',
         'lbl_comprobante' => 'Comprobante',
+        'lbl_modulo' => 'Módulo',
+        'drop_modulo' => 'Seleccione módulo',
+        'lbl_periodo' => 'Período',
+        'lbl_especialidad' => 'Especialidad',
+        'drop_especialidad' => 'Seleccione una especialidad',
+        'lbl_anio_fungio' => 'Año en que fungió',
+        'lbl_nombre_materia' => 'Nombre de la materia que impartió',
+        'lbl_area' => 'Área',
+        'drop_area' => 'Seleccione área',
+        'drop_tipo_formacion_profesional' => 'Seleccione tipo de formación profesional',
+        'lbl_tipo_formacion_profesional' => 'Formación profesional',
     ),
 );
 

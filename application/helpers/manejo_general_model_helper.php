@@ -70,6 +70,14 @@ if (!function_exists('carga_catalogos')) {
                     $tmp_result = $CI->cg->get_ctipo_curso();
                     $data['ctipurso'] = dropdown_options($tmp_result, 'TIP_CURSO_CVE', 'TIP_CUR_NOMBRE');
                     break;
+                case 13://ctipo_especialidad
+                    $tmp_result = $CI->cg->get_ctipo_especialidad();
+                    $data['ctipo_especialidad'] = dropdown_options($tmp_result, 'TIP_ESP_MEDICA_CVE', 'TIP_ESP_MED_NOMBRE');
+                    break;
+                case 14://ctipo_formacion_profesional
+                    $tmp_result = $CI->cg->get_ctipo_formacion_profesional();
+                    $data['ctipo_formacion_profesional'] = dropdown_options($tmp_result, 'TIP_FOR_PROF_CVE', 'TIP_FOR_PRO_NOMBRE');
+                    break;
             }
         }
         return $data;

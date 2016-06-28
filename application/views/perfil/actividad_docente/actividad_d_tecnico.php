@@ -5,8 +5,54 @@
         <div class="list-group-item">
                 <div class="panel-body">
                             <div class='row'>
+                                <!--<div class="form-group col-xs-10 col-md-10 col-md-offset-1 col-md-offset-1">-->
                                 <div class="col-md-6">
-                                     <label for='lbl_curso' class="control-label">
+                                    <label for='lbl_area' class="control-label">
+                                        <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_area']; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-plus"> </span>
+                                        </span>
+                                        <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'carea', 'type' => 'dropdown', 
+                                                'options' => $carea, 
+                                                'first' => array('' => $string_values['drop_area']), 
+                                                'value' => '',
+                                                'attributes' => array('name' => 'carea_name', 'class' => 'form-control', 
+                                                'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_nombre_materia'] ))); 
+                                        ?>
+                                   </div>
+                                   <?php   echo form_error_format('carea'); ?>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for='lbl_curso' class="control-label">
+                                        <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_curso']; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-education"> </span>
+                                        </span>
+                                        <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'ccurso', 'type' => 'dropdown', 
+                                                'options' => $ccurso, 
+                                                'first' => array('' => $string_values['drop_curso']), 
+                                                'value' => '',
+                                                'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
+                                                'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_nombre_materia'] ))); 
+                                        ?>
+                                   </div>
+                                   <?php   echo form_error_format('ccurso'); ?>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class="col-md-6">
+                                     <label for='lbl_rol_desempenia' class="control-label">
                                          <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_rol_desempenia']; ?>
                                     </label>
@@ -27,7 +73,7 @@
                                    <?php   echo form_error_format('crol_desempenia'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for='lbl_curso' class="control-label">
+                                    <label for='lbl_institucion_edu_avala' class="control-label">
                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_institucion_edu_avala']; ?>
                                     </label>
@@ -41,17 +87,16 @@
                                                 'first' => array('' => $string_values['drop_institucion_edu_avala']), 
                                                 'value' => '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => 'Institución avala', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_institucion_edu_avala'] ))); 
                                         ?>
                                    </div>
                                    <?php   echo form_error_format('cinstitucion_avala'); ?>
                                 </div>
                             </div>
-                    
                             <div class='row'>
-                                <div class="col-md-6">
-                                    <label for='lbl_curso' class="control-label">
+                                 <div class="col-md-6">
+                                    <label for='lbl_recibe_pago_extra' class="control-label">
                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_recibe_pago_extra']; ?>
                                     </label>
@@ -62,32 +107,8 @@
                                         <div class="col-md-6 text-left">
                                             <input type="radio" name="pago_extra" > No
                                         </div>
-                                        <?php   echo form_error_format('pago_extra'); ?>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for='lbl_modulo' class="control-label">
-                                        <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_modulo']; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-book"> </span>
-                                        </span>
-                                        <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cmodulo', 'type' => 'dropdown', 
-                                                'options' => $cmodulo,
-                                                'first' => array('' => $string_values['drop_modulo']), 
-                                                'value' => '',
-                                                'attributes' => array('name' => 'modulo_name', 'class' => 'form-control', 
-                                                'placeholder' => 'Módulo', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_modulo'] ))); 
-                                        ?>
-                                   </div>
-                                   <?php   echo form_error_format('cmodulo'); ?>
-                                </div>
-                            </div>
-                            <div class='row'>
                                 <div class="col-md-6">
                                     <label for='lbl_modalidad' class="control-label">
                                          <b class="rojo">*</b>
@@ -95,7 +116,7 @@
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <span class="fa fa-dot-circle-o"> </span>
+                                            <span class="glyphicon glyphicon-user"> </span>
                                         </span>
                                         <?php 
                                             echo $this->form_complete->create_element(array('id' => 'cmodalidad', 'type' => 'dropdown', 
@@ -107,8 +128,10 @@
                                                 'title' => $string_values['lbl_modalidad'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('cmodalidad'); ?>
+                                   <?php   echo form_error_format('cinstitucion_avala'); ?>
                                 </div>
+                            </div>
+                            <div class='row'>
                                 <div class="col-md-6">
                                         <label for='lbl_anio_que_impartio_curso' class="control-label">
                                             <b class="rojo">*</b>
@@ -116,8 +139,7 @@
                                         </label>
                                         <div class="input-group">
                                         <span class="input-group-addon">
-                                            <!--<span class="glyphicon glyphicon-calendar"> </span>-->
-                                            <span class="fa fa-calendar"> </span>
+                                            <span class="glyphicon glyphicon-calendar"> </span>
                                         </span>
                                         <?php
                                             echo $this->form_complete->create_element(
@@ -141,15 +163,57 @@
                             </div>
                         <br>
                             <div class='row'>
-                                
-                                <div class='col-sm-3 text-center' id="fecha_inicio">
-                                    <label for='lbl_periodo' class="control-label">
-                                        <?php echo $string_values['lbl_periodo']; ?>
+                                <div class="col-md-6 text-center">
+                                    <div class='row'>
+                                        <div class="col-md-4 text-right">
+                                            <label for='lbl_curso' class="control-label">
+                                                <b class="rojo">*</b>
+                                                 <?php echo $string_values['lbl_duracion']; ?>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <input type="radio" id="rad_horas" name="duracion" onchange ="mostrar_horas_fechas('block')"> <?php echo $string_values['radio_duracion_horas'] ?>
+                                        </div>
+                                        <div class="col-md-4 text-left">
+                                            <input type="radio" id="rad_fechas" name="duracion" onchange ="mostrar_horas_fechas('none')" > <?php echo $string_values['radio_duracion_fecha'] ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-sm-3' id="div_horas_dedicadas" style="display: none">
+                                        <label for='lbl_duracion_horas' class="control-label">
+                                            <?php echo $string_values['radio_duracion_horas']; ?>
+                                        </label>
+                                        <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"> </span>
+                                        </span>
+                                        <?php
+                                            echo $this->form_complete->create_element(
+                                            array('id'=>'hora_dedicadas','type'=>'number',
+                                                    'value' => '',
+                                                    'attributes'=>array(
+                                                    'class'=>'form-control',
+                                                    'placeholder'=>$string_values['radio_duracion_horas'],
+                                                    'min'=> '0',
+                                                    'max'=> '100',
+                                                    'data-toggle'=>'tooltip',
+                                                    'data-placement'=>'bottom',
+                                                    'title'=>$string_values['radio_duracion_horas'],
+                                                    )
+                                                )
+                                            );
+                                        ?>
+                                        </div>
+                                </div>
+                                <?php echo form_error_format('hora_dedicadas'); ?>
+                                <div class='col-sm-3 text-center' id="fecha_inicio" style="display: none">
+                                    <label for='radio_duracion_fecha' class="control-label">
+                                        <?php echo $string_values['lbl_duracion_fecha_inicio']; ?>
                                     </label>
 
                                     <div class="form-group">
                                         <div class="input-group date" id="datetimepicker1" >
-                                            <input type="text" class="form-control" id='fecha_inicio_pick' placeholder="<?php echo $string_values['lbl_duracion_fecha_inicio']; ?>" >
+                                            <input type="text" class="form-control" id='fecha_inicio_pick'>
                                             <span class="input-group-addon">
                                                 <span class="fa fa-calendar"></span>
                                             </span>
@@ -159,14 +223,15 @@
                                 </div>
                                 <?php echo form_error_format('fecha_inicio_pick'); ?>
 
-                                <div class='col-sm-3 text-center' id="fecha_fin">
-                                    <label for='lbl_periodo' class="control-label">
+                                <div class='col-sm-3 text-center' id="fecha_fin" style="display: none">
+                                    <label for='radio_duracion_fecha' class="control-label">
+                                        <?php echo $string_values['lbl_duracion_fecha_final']; ?>
                                     </label>
                                     <div class="form-group">
                                         <div class='input-group date' id='datetimepicker2'>
-                                            <input type='text' class="form-control" id='fecha_fin_pick' placeholder="<?php echo $string_values['lbl_duracion_fecha_final']; ?>">
+                                            <input type='text' class="form-control" id='fecha_fin_pick'/>
                                             <span class="input-group-addon">
-                                                <span class="fa fa-calendar"></span>
+                                                <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -177,7 +242,7 @@
                         <br>
                             <div class="row">
                                 <div class="col-md-6">
-                                        <label for='lbl_tipo_comprobante' class="control-label">
+                                        <label for='radio_duracion_fecha' class="control-label">
                                             <?php echo $string_values['lbl_tipo_comprobante']; ?>
                                         </label>
                                          <?php 

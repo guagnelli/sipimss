@@ -51,7 +51,7 @@
                     
                             <div class='row'>
                                 <div class="col-md-6">
-                                    <label for='lbl_curso' class="control-label">
+                                    <label for='lbl_recibe_pago_extra' class="control-label">
                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_recibe_pago_extra']; ?>
                                     </label>
@@ -65,26 +65,27 @@
                                         <?php   echo form_error_format('pago_extra'); ?>
                                     </div>
                                 </div>
+                                
                                 <div class="col-md-6">
-                                    <label for='lbl_modulo' class="control-label">
+                                    <label for='lbl_licenciatura' class="control-label">
                                         <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_modulo']; ?>
+                                         <?php echo $string_values['lbl_licenciatura']; ?>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-book"> </span>
                                         </span>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cmodulo', 'type' => 'dropdown', 
-                                                'options' => $cmodulo,
-                                                'first' => array('' => $string_values['drop_modulo']), 
+                                            echo $this->form_complete->create_element(array('id' => 'licenciatura', 'type' => 'dropdown', 
+                                                'options' => $licenciatura, 
+                                                'first' => array('' => $string_values['drop_licenciatura']), 
                                                 'value' => '',
-                                                'attributes' => array('name' => 'modulo_name', 'class' => 'form-control', 
-                                                'placeholder' => 'Módulo', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_modulo'] ))); 
+                                                'attributes' => array('name' => 'licenciatura_name', 'class' => 'form-control', 
+                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_licenciatura'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('cmodulo'); ?>
+                                   <?php   echo form_error_format('cinstitucion_avala'); ?>
                                 </div>
                             </div>
                             <div class='row'>
@@ -142,7 +143,7 @@
                         <br>
                             <div class='row'>
                                 
-                                <div class='col-sm-3 text-center' id="fecha_inicio">
+                                <div class='col-sm-3' id="fecha_inicio">
                                     <label for='lbl_periodo' class="control-label">
                                         <?php echo $string_values['lbl_periodo']; ?>
                                     </label>

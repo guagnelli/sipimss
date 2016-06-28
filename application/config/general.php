@@ -110,20 +110,20 @@ $config['parametros_log'] = array('USUARIO_CVE' => 'NULL', 'LOG_INI_SES_IP' => '
 
 $config['actividad_docente_componentes'] = array(//Arreglo que se utilizará para leer las configuraciones de cada formularío de actividad docente
     1=>array('vista'=>'perfil/actividad_docente/actividad_d_ciclos_clinicos','validaciones' => 'form_ccl', 'catalogos_indexados'=>array(1,2,6,7,9,10)),
-    2=>array('vista'=>'perfil/actividad_docente/actividad_d_internado_medico','validaciones' => 'form_ime', 'actividad_docente_campos'=>array()),
-    3=>array('vista'=>'perfil/actividad_docente/actividad_d_servicio_social','validaciones' => 'form_sso', 'actividad_docente_campos'=>array()),
-    4=>array('vista'=>'perfil/actividad_docente/actividad_d_licenciatura','validaciones' => 'form_lic', 'actividad_docente_campos'=>array()),
-    5=>array('vista'=>'perfil/actividad_docente/actividad_d_especialidad_medica','validaciones' => 'form_eme', 'actividad_docente_campos'=>array()),
-    6=>array('vista'=>'perfil/actividad_docente/actividad_d_maestria','validaciones' => 'form_mas', 'actividad_docente_campos'=>array()),
-    7=>array('vista'=>'perfil/actividad_docente/actividad_d_doctorado','validaciones' => 'form_doc', 'actividad_docente_campos'=>array()),
-    8=>array('vista'=>'perfil/actividad_docente/actividad_d_tecnico','validaciones' => 'form_tec', 'actividad_docente_campos'=>array()),
-    9=>array('vista'=>'perfil/actividad_docente/actividad_d_postecnico','validaciones' => 'form_pos', 'actividad_docente_campos'=>array()),
-    10=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_continua','validaciones' => 'form_eco', 'actividad_docente_campos'=>array()),
-    11=>array('vista'=>'perfil/actividad_docente/actividad_d_directivos_para_la_salud','validaciones' => 'form_dplsa', 'actividad_docente_campos'=>array()),
-    12=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_formacin_de_profesores','validaciones' => 'form_efdp', 'actividad_docente_campos'=>array()),
-    13=>array('vista'=>'perfil/actividad_docente/actividad_d_formacion_de_profesores_en_investigacion','validaciones' => 'form_fdpei', 'actividad_docente_campos'=>array()),
-    14=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_a_distancia','validaciones' => 'form_ead', 'actividad_docente_campos'=>array()),
-    15=>array('vista'=>'perfil/actividad_docente/actividad_d_actividades_de_investigacion_educativa','validaciones' => 'form_adie', 'actividad_docente_campos'=>array())
+    2=>array('vista'=>'perfil/actividad_docente/actividad_d_internado_medico','validaciones' => 'form_ime', 'catalogos_indexados'=>array(9,7,3,1,10)),
+    3=>array('vista'=>'perfil/actividad_docente/actividad_d_servicio_social','validaciones' => 'form_sso', 'catalogos_indexados'=>array(1,2,7,9,10)),
+    4=>array('vista'=>'perfil/actividad_docente/actividad_d_licenciatura','validaciones' => 'form_lic', 'catalogos_indexados'=>array(1,2,6,7,9,10)),
+    5=>array('vista'=>'perfil/actividad_docente/actividad_d_especialidad_medica','validaciones' => 'form_eme', 'catalogos_indexados'=>array(9,7,3,1,10,13)),
+    6=>array('vista'=>'perfil/actividad_docente/actividad_d_maestria','validaciones' => 'form_mas', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
+    7=>array('vista'=>'perfil/actividad_docente/actividad_d_doctorado','validaciones' => 'form_doc', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
+    8=>array('vista'=>'perfil/actividad_docente/actividad_d_tecnico','validaciones' => 'form_tec', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
+    9=>array('vista'=>'perfil/actividad_docente/actividad_d_postecnico','validaciones' => 'form_pos', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
+    10=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_continua','validaciones' => 'form_eco', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
+    11=>array('vista'=>'perfil/actividad_docente/actividad_d_directivos_para_la_salud','validaciones' => 'form_dplsa', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
+    12=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_formacin_de_profesores','validaciones' => 'form_efdp', 'catalogos_indexados'=>array(4,6,9,7,1,10,14)),
+    13=>array('vista'=>'perfil/actividad_docente/actividad_d_formacion_de_profesores_en_investigacion','validaciones' => 'form_fdpei', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
+    14=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_a_distancia','validaciones' => 'form_ead', 'catalogos_indexados'=>array()),
+    15=>array('vista'=>'perfil/actividad_docente/actividad_d_actividades_de_investigacion_educativa','validaciones' => 'form_adie', 'catalogos_indexados'=>array())
 );
 
 $config['actividad_docente_campos'] = array(
@@ -141,14 +141,14 @@ $config['actividad_docente_campos'] = array(
     12=>array('name'=>'Área', 'tipe'=>'dropdown'),
     13=>array('name'=>'Nombre de la materia que impartió', 'tipe'=>''),
     14=>array('name'=>'Tipo de material', 'tipe'=>''),//duda
-    14=>array('name'=>'Tipo de Formación docente', 'tipe'=>''),//duda
-    14=>array('name'=>'Tipo de participación', 'tipe'=>''),//duda
-    14=>array('name'=>'Nombre del trabajo de investigación', 'tipe'=>''),//duda
-    14=>array('name'=>'Número de Folio de aceptación de SIRELCIS', 'tipe'=>''),//duda
-    14=>array('name'=>'Tipo de estudio', 'tipe'=>''),//duda
-    14=>array('name'=>'Medio de divulgación', 'tipe'=>''),//duda
-    14=>array('name'=>'En caso de publicación, anotar cita', 'tipe'=>''),//duda
-    14=>array('name'=>'Comprobante en caso de no ser publicación', 'tipe'=>''),//duda
+    15=>array('name'=>'Tipo de Formación docente', 'tipe'=>''),//duda
+    16=>array('name'=>'Tipo de participación', 'tipe'=>''),//duda
+    17=>array('name'=>'Nombre del trabajo de investigación', 'tipe'=>''),//duda
+    18=>array('name'=>'Número de Folio de aceptación de SIRELCIS', 'tipe'=>''),//duda
+    19=>array('name'=>'Tipo de estudio', 'tipe'=>''),//duda
+    20=>array('name'=>'Medio de divulgación', 'tipe'=>''),//duda
+    21=>array('name'=>'En caso de publicación, anotar cita', 'tipe'=>''),//duda
+    22=>array('name'=>'Comprobante en caso de no ser publicación', 'tipe'=>''),//duda
     
 );
 
@@ -165,6 +165,8 @@ $config['catalogos_indexados'] = array(
     10=>'ctipo_comprobante',
     11=>'ctipo_licenciatura',
     12=>'ctipo_curso',
+    13=>'ctipo_especialidad',
+    14=>'ctipo_formacion_profesional',
 );
     
 
