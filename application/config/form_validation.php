@@ -121,7 +121,6 @@ $config = array(
             'rules' => 'required|less_than_equal_to[100]|integer|greater_than[1]'
         )
     ),
-
     'form_cancelacion' => array(
         array(
             'field' => 'reg_matricula',
@@ -216,7 +215,6 @@ $config = array(
             'rules' => 'required|radio_buttom_validation'
 //            'rules' => 'radio_buttom_validation'
         )
-
     ),
     'form_correo_e' => array(
         array(
@@ -258,11 +256,80 @@ $config = array(
         array(
             'field' => 'ejercicio_predominante',
             'label' => 'ejercicio predominante',
-            'rules' => 'required' //|callback_valid_pass
+            'rules' => 'required' //
         ),
-
     ),
     'form_ccl' => array(
+        'ccurso' => array(
+            'field' => 'ccurso',
+            'label' => 'Nombre del curso',
+            'rules' => 'required' //
+        ),
+        'crol_desempenia' => array(
+            'field' => 'crol_desempenia',
+            'label' => 'Rol que desempeña',
+            'rules' => 'required' //
+        ),
+        'cinstitucion_avala' => array(
+            'field' => 'cinstitucion_avala',
+            'label' => 'Institución que avala',
+            'rules' => 'required' //
+        ),
+        'pago_extra' => array(
+            'field' => 'pago_extra',
+            'label' => 'Indicar pago extra',
+            'rules' => 'required' //
+        ),
+        'licenciatura' => array(
+            'field' => 'licenciatura',
+            'label' => 'Licenciatura',
+            'rules' => 'required' //
+        ),
+        'cmodalidad' => array(
+            'field' => 'cmodalidad',
+            'label' => 'modalidad',
+            'rules' => 'required' //
+        ),
+        'actividad_anios_dedicados_docencia' => array(
+            'field' => 'actividad_anios_dedicados_docencia',
+            'label' => 'modalidad',
+            'rules' => 'required|numeric' //
+        ),
+        'hora_dedicadas' => array(
+            'field' => 'hora_dedicadas',
+            'label' => 'horas dedicadas',
+            'rules' => 'required|numeric' //
+        ),
+        'hora_dedicadas' => array(
+            'field' => 'hora_dedicadas',
+            'label' => 'horas dedicadas',
+            'rules' => 'required|numeric' //
+        ),
+        'fecha_inicio_pick' => array(
+            'field' => 'fecha_inicio_pick',
+            'label' => 'fecha de inicio',
+            'rules' => 'required' //
+        ),
+        'fecha_fin_pick' => array(
+            'field' => 'fecha_fin_pick',
+            'label' => 'fecha de fin',
+            'rules' => 'required' //
+        ),
+        'ctipo_comprobante' => array(
+            'field' => 'ctipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required' //
+        ),
+        'text_comprobante' => array(
+            'field' => 'text_comprobante',
+            'label' => 'Nombre de comprobante',
+            'rules' => 'required' //
+        ),
+        'duracion' => array(
+            'field' => 'duracion',
+            'label' => 'Debe elegir duración de curso',
+            'rules' => 'required' //
+        ),
     ),
     'form_ime' => array(
     ),
@@ -292,7 +359,7 @@ $config = array(
     ),
     'form_adie' => array(
     ),
-    //**Fin de validación de actividad docenete********************************
+        //**Fin de validación de actividad docenete********************************
 );
 
 

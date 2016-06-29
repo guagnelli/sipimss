@@ -4,7 +4,7 @@
     <style type="text/css">
         .button-padding {padding-top: 30px}
         .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
-        .file {visibility: hidden;  position: absolute;}//Oculta el file para cargar comprobante y deja asi solo muestra un botón
+        .file {visibility: hidden;  position: absolute;}/*Oculta el file para cargar comprobante y deja asi solo muestra un botón*/
     </style>
 
     <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/actividad_docente.js"></script>
@@ -38,7 +38,7 @@
            </div>
                <?php echo form_close(); ?>
                 <?php echo form_open('', array('id'=>'form_actividad_docente_especifico')); ?>
-        <div class="list-group-item" id="info_actividad_docente">
+            <div class="list-group-item" id="info_actividad_docente">
                <!--Carga la vista correspondiente al elemento tipo de actividad del docente-->
                <?php   if(isset($formulario)){ echo $formulario; } ?>
            </div>

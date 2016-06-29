@@ -78,12 +78,13 @@
                                     </label>
                                     <div class='row'>
                                         <div class="col-md-6 text-right">
-                                            <input type="radio" name="pago_extra" > SI
+                                            <input id="pago_extra" type="radio" name="pago_extra" value="Si">Si 
                                         </div>
                                         <div class="col-md-6 text-left">
-                                            <input type="radio" name="pago_extra" > No
+                                            <input id="pago_extra" type="radio" name="pago_extra" value = "No">No 
                                         </div>
                                     </div>
+                                   <?php   echo form_error_format('pago_extra'); ?>
                                 </div>
                             </div>
                             <div class='row'>
@@ -127,7 +128,7 @@
                                                 'title' => $string_values['lbl_modalidad'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('cinstitucion_avala'); ?>
+                                   <?php   echo form_error_format('cmodalidad'); ?>
                                 </div>
                             </div>
                             <div class='row'>
@@ -166,19 +167,51 @@
                                     <div class='row'>
                                         <div class="col-md-4 text-right">
                                             <label for='lbl_curso' class="control-label">
-                                                <b class="rojo">*</b>
+                                                <b class="rojo ">*</b>
                                                  <?php echo $string_values['lbl_duracion']; ?>
                                             </label>
                                         </div>
                                         <div class="col-md-4 text-center">
-                                            <input type="radio" id="rad_horas" name="duracion" onchange ="mostrar_horas_fechas('block')"> <?php echo $string_values['radio_duracion_horas'] ?>
+                                            <label>
+                                                <?php
+                                                echo $this->form_complete->create_element(
+                                                array('id'=>'duracion', 'type'=>'radio',
+                                                        'value' => 'hora_dedicadas',
+                                                        'attributes'=>array(
+                                                        'class'=>'radio-inline m-r-sm',
+                                                        'title'=> $string_values['radio_duracion_horas'],
+    //                                                    'disabled'=> '',
+                                                        'checked'=>"checked",
+                                                        'onchange' =>"mostrar_horas_fechas('block')"    
+                                                        )
+                                                    )
+                                                );
+                                                echo $string_values['radio_duracion_horas'];
+                                                ?>
+                                            </label>
                                         </div>
                                         <div class="col-md-4 text-left">
-                                            <input type="radio" id="rad_fechas" name="duracion" onchange ="mostrar_horas_fechas('none')" > <?php echo $string_values['radio_duracion_fecha'] ?>
+                                            <label>
+                                                <?php
+                                               echo $this->form_complete->create_element(
+                                               array('id'=>'duracion', 'type'=>'radio',
+                                                       'value' => 'fecha_dedicadas',
+                                                       'attributes'=>array(
+                                                       'class'=>'radio-inline m-r-sm',
+                                                       'title'=> $string_values['radio_duracion_fecha'],
+   //                                                    'disabled'=> '',
+                                                       'onchange' =>"mostrar_horas_fechas('none')"    
+                                                       )
+                                                   )
+                                               );
+                                               echo $string_values['radio_duracion_fecha'];
+                                               ?>
+                                            </label>
                                         </div>
+                                        <?php echo form_error_format('duracion'); ?>
                                     </div>
                                 </div>
-                                <div class='col-sm-3' id="div_horas_dedicadas" style="display: none">
+                                <div class='col-sm-3' id="div_horas_dedicadas" >
                                         <label for='lbl_duracion_horas' class="control-label">
                                             <?php echo $string_values['radio_duracion_horas']; ?>
                                         </label>
@@ -212,7 +245,19 @@
 
                                     <div class="form-group">
                                         <div class="input-group date" id="datetimepicker1" >
-                                            <input type="text" class="form-control" id='fecha_inicio_pick'>
+                                            <?php
+                                            echo $this->form_complete->create_element(
+                                            array('id'=>'fecha_inicio_pick','type'=>'text',
+                                                    'value' => '',
+                                                    'attributes'=>array(
+                                                    'class'=>'form-control',
+                                                    'placeholder'=>$string_values['lbl_duracion_fecha_inicio'],
+                                                    'data-toggle'=>'tooltip',
+                                                    'title'=>$string_values['lbl_duracion_fecha_inicio'],
+                                                    )
+                                                )
+                                            );
+                                            ?>
                                             <span class="input-group-addon">
                                                 <span class="fa fa-calendar"></span>
                                             </span>
@@ -228,7 +273,19 @@
                                     </label>
                                     <div class="form-group">
                                         <div class='input-group date' id='datetimepicker2'>
-                                            <input type='text' class="form-control" id='fecha_fin_pick'/>
+                                            <?php
+                                            echo $this->form_complete->create_element(
+                                            array('id'=>'fecha_fin_pick','type'=>'text',
+                                                    'value' => '',
+                                                    'attributes'=>array(
+                                                    'class'=>'form-control',
+                                                    'placeholder'=>$string_values['lbl_duracion_fecha_final'],
+                                                    'data-toggle'=>'tooltip',
+                                                    'title'=>$string_values['lbl_duracion_fecha_final'],
+                                                    )
+                                                )
+                                            );
+                                            ?>
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
@@ -245,7 +302,7 @@
                                             <?php echo $string_values['lbl_tipo_comprobante']; ?>
                                         </label>
                                          <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'tipo-comprobante', 
+                                            echo $this->form_complete->create_element(array('id' => 'ctipo_comprobante', 
                                                 'type' => 'dropdown', 
                                                 'options' => $ctipo_comprobante, 
                                                 'first' => array('' => $string_values['drop_tipo_comprobante']), 
@@ -255,6 +312,7 @@
                                                 'placeholder' => $string_values['title_tipo_comprobante'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['title_tipo_comprobante'] ))); 
                                         ?>
+                                        <?php echo form_error_format('ctipo_comprobante'); ?>
                                 </div>
                                 <div class="col-md-6">
                                     <!--<li class="list-group-item">-->
@@ -297,9 +355,5 @@
                             
                     </div>
                 </div>
+                <?php if(isset($pie_pag)){ echo $pie_pag; }//Carga boton para guardar datos?>
             </div>
-        </div>
-    </div>
-    
-    
-    <?php echo form_close(); ?>

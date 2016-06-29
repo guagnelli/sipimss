@@ -149,13 +149,14 @@ class Perfil extends MY_Controller {
 
     public function get_data_ajax_actividad_modal() {
         if ($this->input->is_ajax_request()) {
+
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar 
             $data_actividad['string_values'] = $string_values; //Crea la variable 
-
+            $data_actividad['boton_guardar'] = 0;
             if ($this->input->post()) {//Después de cargar el formulario
                 if ($this->input->post('tipo_actividad_docente', false) > 0) {
-                    
+                    $data_actividad['boton_guardar'] = 1;
                 }
             }
 
@@ -174,22 +175,68 @@ class Perfil extends MY_Controller {
      * 
      * @param type $index_tipo_actividad_docente 
      */
-    public function get_data_ajax_actividad_cuerpo_modal($index_tipo_actividad_docente = null) {
+    public function get_data_ajax_actividad_cuerpo_modal($index_tipo_actividad_docente = null, $combo=0) {
         if ($this->input->is_ajax_request() && $index_tipo_actividad_docente != null) {//Si es un ajax
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar
             $datos['string_values'] = $string_values; //Almacena textos de actividad en el arreglo
+
+
+
+            if ($this->input->post() AND $combo ==='1') {
+                $datos_registro = $this->input->post(null, true);
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                $validations = $this->config->item('form_ccl'); //Obtener validaciones de archivo
+                $validations = $this->analiza_validacion($validations, $datos_registro);
+                $this->form_validation->set_rules($validations);
+                if ($this->form_validation->run()) {
+                    
+                }
+            }
+            if ($index_tipo_actividad_docente > 0) {//Checa si debe aparecer el botòn de guardar 
+                $valores['identificador'] = $index_tipo_actividad_docente;
+                $datos['pie_pag'] = $this->load->view('perfil/actividad_docente/actividad_pie', $valores, true); //Carga la vista correspondiente al index
+            }
             $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuracion de
             //Carga catalogos 
             $datos = carga_catalogos_censo($configuracion_formularios_actividad_docente['catalogos_indexados'], $datos); //Carga los catálogos de la configuración
 //            pr($datos);
             echo $this->load->view($configuracion_formularios_actividad_docente['vista'], $datos, TRUE); //Carga la vista correspondiente al index
         }
-
-
     }
     
-    private function cargar_comprobante(){
+    private function analiza_validacion($array_validacion, $array_componentes){
+//        pr($array_componentes);
+//        pr($array_validacion);
+        $array_result = array();
+        foreach ($array_componentes as $key => $value) {
+            switch ($key){
+                case 'fecha_inicio_pick'://No carga si no hasta duraciòn 
+                    break;
+                case 'fecha_inicio_pick'://No carga si no hasta duraciòn
+                    break;
+                case 'duracion':
+                    pr('ssss' );
+                    if($value === 'hora_dedicadas'){
+                        $array_result['hora_dedicadas'] .= $array_validacion['hora_dedicadas'];
+                    }else{//fechas_dedicadas
+                        $array_result['fecha_inicio_pick'] .= $array_validacion['fecha_inicio_pick'];
+                        $array_result['fecha_fin_pick'] .= $array_validacion['fecha_fin_pick'];
+                    }
+                    break;
+                default :
+                    array_push($array_result,$value);
+//                        $array_result[$key] 
+//                        .= $array_validacion[$key];
+                    
+            }
+            
+        }
+//        pr($array_result);
+        return $array_result;
+    }
+
+    private function cargar_comprobante() {
         $config['upload_path'] = './uploads/';
         $config['allowed_types'] = 'csv';
         $config['max_size'] = '1000';
@@ -202,7 +249,6 @@ class Perfil extends MY_Controller {
             $file_data = $this->upload->data();
             $file_path = './uploads/' . $file_data['file_name'];
         }
-        
     }
 
 }

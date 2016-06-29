@@ -298,9 +298,6 @@
                             
                     </div>
                 </div>
+                    <?php if(isset($pie_pag)){ echo $pie_pag; }?>
             </div>
-        </div>
-    </div>
-    
-    
-    <?php echo form_close(); ?>
+     
