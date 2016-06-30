@@ -267,7 +267,7 @@ $config = array(
         ),
         'crol_desempenia' => array(
             'field' => 'crol_desempenia',
-            'label' => 'Rol que desempeña',
+            'label' => 'rol que desempeña',
             'rules' => 'required' //
         ),
         'cinstitucion_avala' => array(
@@ -292,7 +292,7 @@ $config = array(
         ),
         'actividad_anios_dedicados_docencia' => array(
             'field' => 'actividad_anios_dedicados_docencia',
-            'label' => 'modalidad',
+            'label' => 'de años',
             'rules' => 'required|numeric' //
         ),
         'hora_dedicadas' => array(
@@ -320,6 +320,21 @@ $config = array(
             'label' => 'Tipo de comprobante',
             'rules' => 'required' //
         ),
+        'cmodulo' => array(
+            'field' => 'cmodulo',
+            'label' => 'módulo',
+            'rules' => 'required' //
+        ),
+        'carea' => array(
+            'field' => 'carea',
+            'label' => 'área',
+            'rules' => 'required' //
+        ),
+        'ctipo_formacion_profesional' => array(
+            'field' => 'ctipo_formacion_profesional',
+            'label' => 'formación profesional',
+            'rules' => 'required' //
+        ),
         'text_comprobante' => array(
             'field' => 'text_comprobante',
             'label' => 'Nombre de comprobante',
@@ -330,34 +345,26 @@ $config = array(
             'label' => 'Debe elegir duración de curso',
             'rules' => 'required' //
         ),
-    ),
-    'form_ime' => array(
-    ),
-    'form_sso' => array(
-    ),
-    'form_lic' => array(
-    ),
-    'form_eme' => array(
-    ),
-    'form_mas' => array(
-    ),
-    'form_doc' => array(
-    ),
-    'form_tec' => array(
-    ),
-    'form_pos' => array(
-    ),
-    'form_eco' => array(
-    ),
-    'form_dplsa' => array(
-    ),
-    'form_efdp' => array(
-    ),
-    'form_fdpei' => array(
-    ),
-    'form_ead' => array(
-    ),
-    'form_adie' => array(
+        'nombre_curso' => array(
+            'field' => 'nombre_curso',
+            'label' => 'nombre del curso', 
+           'rules' => 'required|max_length[20]' //
+        ),
+        'material_elaborado' => array(
+            'field' => 'material_elaborado',
+            'label' => 'nombre del material elaborado',
+            'rules' => 'required|max_length[100]' //
+        ),
+        'ctipo_participacion' => array(
+            'field' => 'ctipo_participacion',
+            'label' => 'tipo de participacón',
+            'rules' => 'required' //
+        ),
+        'ctipo_material' => array(
+            'field' => 'ctipo_material',
+            'label' => 'tipo de material',
+            'rules' => 'required' //
+        ),
     ),
         //**Fin de validación de actividad docenete********************************
 );

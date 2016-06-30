@@ -80,10 +80,16 @@ $db['default'] = array(
 //     'username' => 'root',
 //      'password' => '',
 
+//    'hostname' => 'vps-1214838-x.dattaweb.com',
+//    'username' => 'censo_user',
+//    'password' => 'el#:(vlaluna',
+//    'database' => 'censo_v678',
+    
     'hostname' => 'localhost',
     'username' => 'root',
-    'password' => '',
+    'password' => 'mysql',
     'database' => 'censo_v678',
+    
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,

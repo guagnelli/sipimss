@@ -143,6 +143,7 @@ $lang['interface'] = array(
         'lbl_anios_dad' => 'Años dedicados a la actividad docente',
         'lbl_ejercicio_pd' => 'Ejercicio predominante como docente',
         'lbl_curso_principal' => 'Curso principal que imparte el profesor/a',
+        'text_name_curso_imparte' => 'Nombre del curso',
         'btn_add_cp' => 'Asignar curso principal',
         'btn_guardar_cp' => 'Guardar curso principal',
         'btn_actualizar_cp' => 'Actualizar curso principal',
@@ -189,6 +190,12 @@ $lang['interface'] = array(
         'drop_area' => 'Seleccione área',
         'drop_tipo_formacion_profesional' => 'Seleccione tipo de formación profesional',
         'lbl_tipo_formacion_profesional' => 'Formación profesional',
+        'lbl_nombre_material_elaborado' => 'Nombre del material elaborado',
+        'ph_material_elaborado' => 'Nombre del material',
+        'lbl_tipo_material' => 'Tipo de material elaborado',
+        'drop_tipo_material' => 'Seleccione tipo de material',
+        'lbl_tipo_participacion' => 'Tipo de participación',
+        'drop_tipo_participacion' => 'Seleccione tipo de participación',
     ),
 );
 

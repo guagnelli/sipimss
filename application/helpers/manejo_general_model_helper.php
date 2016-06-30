@@ -77,6 +77,13 @@ if (!function_exists('carga_catalogos')) {
                 case 14://ctipo_formacion_profesional
                     $tmp_result = $CI->cg->get_ctipo_formacion_profesional();
                     $data['ctipo_formacion_profesional'] = dropdown_options($tmp_result, 'TIP_FOR_PROF_CVE', 'TIP_FOR_PRO_NOMBRE');
+                case 15://ctipo_participacion
+                    $tmp_result = $CI->cg->get_ctipo_participacion();
+                    $data['ctipo_participacion'] = dropdown_options($tmp_result, 'TIP_PARTICIPACION_CVE', 'TIP_PAR_NOMBRE');
+                    break;
+                case 16://ctipo_material
+                    $tmp_result = $CI->cg->get_ctipo_material();
+                    $data['ctipo_material'] = dropdown_options($tmp_result, 'TIP_MATERIAL_CVE', 'TIP_MAT_NOMBRE');
                     break;
             }
         }

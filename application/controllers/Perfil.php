@@ -206,33 +206,36 @@ class Perfil extends MY_Controller {
     }
     
     private function analiza_validacion($array_validacion, $array_componentes){
-//        pr($array_componentes);
+        pr($array_componentes);
 //        pr($array_validacion);
         $array_result = array();
         foreach ($array_componentes as $key => $value) {
             switch ($key){
                 case 'fecha_inicio_pick'://No carga si no hasta duraciòn 
                     break;
-                case 'fecha_inicio_pick'://No carga si no hasta duraciòn
+                case 'fecha_fin_pick'://No carga si no hasta duraciòn
+                    break;
+                case 'hora_dedicadas'://No carga si no hasta duraciòn
                     break;
                 case 'duracion':
                     pr('ssss' );
                     if($value === 'hora_dedicadas'){
-                        $array_result['hora_dedicadas'] .= $array_validacion['hora_dedicadas'];
+                        $array_result[] = $array_validacion['hora_dedicadas'];
                     }else{//fechas_dedicadas
-                        $array_result['fecha_inicio_pick'] .= $array_validacion['fecha_inicio_pick'];
-                        $array_result['fecha_fin_pick'] .= $array_validacion['fecha_fin_pick'];
+                        $array_result[] = $array_validacion['fecha_inicio_pick'];
+                        $array_result[] = $array_validacion['fecha_fin_pick'];
                     }
                     break;
                 default :
-                    array_push($array_result,$value);
-//                        $array_result[$key] 
-//                        .= $array_validacion[$key];
+                        $array_result[] =  $array_validacion[$key];
                     
             }
             
         }
-//        pr($array_result);
+        //Especiales de radio buttón pago extrá
+        if(!array_key_exists('pago_extra', $array_componentes)){
+            $array_result[] = $array_validacion['pago_extra'];
+        }
         return $array_result;
     }
 

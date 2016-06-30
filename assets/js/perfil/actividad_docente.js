@@ -1,6 +1,6 @@
-$(function() {
+$(function () {
 
-    $('#btn_agregar_actividad_modal').on('click', function() {
+    $('#btn_agregar_actividad_modal').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
         var a = hrutes['get_data_ajax_actividad'];
@@ -11,7 +11,7 @@ $(function() {
 
     });
 
-    $('#btn_guardar_actividad').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información
+    $('#btn_guardar_actividad').on('click', function () {//Llama agetget_"data_ajax_actividad" para guardar información
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
         var a = hrutes['get_data_ajax_actividad'];
@@ -40,7 +40,7 @@ $(function() {
             down: "fa fa-arrow-down"
         }
     });
-    
+
 });
 
 //document.getElementById("tipo_actividad_docente").onchange = function() {
@@ -52,7 +52,7 @@ $(function() {
 //}
 
 function funcion_guargar(index) {
-     data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1', '#form_actividad_docente_especifico', '#info_actividad_docente');
+    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1', '#form_actividad_docente_especifico', '#info_actividad_docente');
 }
 function myFunctionActividad() {
     var x = document.getElementById("tipo_actividad_docente");
@@ -70,3 +70,17 @@ function mostrar_horas_fechas(horas) {
         document.getElementById('fecha_fin').style.display = 'none';
     }
 }
+function verifica_hora_extras() {
+    var val = document.getElementById('duracion').is(':checked');
+    alert('qué ' + val);
+
+}
+$(document).ready(function () {
+    $("#duracion").click(function () {
+        if ($("#radio").is(':checked')) {
+            alert("Está activado");
+        } else {
+            alert("No está activado");
+        }
+    });
+});

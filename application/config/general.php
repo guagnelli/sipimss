@@ -107,6 +107,24 @@ $config['parametros_bitacora'] = array('USUARIO_CVE' => 'NULL', 'BIT_VALORES' =>
 $config['parametros_log'] = array('USUARIO_CVE' => 'NULL', 'LOG_INI_SES_IP' => 'NULL', 
     'INICIO_SATISFACTORIO'=>'NULL');
 
+$config['catalogos_indexados'] = array(//Catógos que existen actualmente y su identificación
+    1=>'cmodalidad',
+    2=>'licenciatura',
+    3=>'cmodulo',
+    4=>'carea',
+    5=>'cmateria',
+    6=>'ccurso',
+    7=>'cinstitucion_avala',
+    8=>'ctipo_actividad_docente',
+    9=>'crol_desempenia',
+    10=>'ctipo_comprobante',
+    11=>'ctipo_licenciatura',
+    12=>'ctipo_curso',
+    13=>'ctipo_especialidad',
+    14=>'ctipo_formacion_profesional',
+    15=>'ctipo_participacion',
+    16=>'ctipo_material',
+);
 
 $config['actividad_docente_componentes'] = array(//Arreglo que se utilizará para leer las configuraciones de cada formularío de actividad docente
     1=>array('vista'=>'perfil/actividad_docente/actividad_d_ciclos_clinicos','validaciones' => 'form_ccl', 'catalogos_indexados'=>array(1,2,6,7,9,10)),
@@ -122,7 +140,7 @@ $config['actividad_docente_componentes'] = array(//Arreglo que se utilizará par
     11=>array('vista'=>'perfil/actividad_docente/actividad_d_directivos_para_la_salud','validaciones' => 'form_dplsa', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
     12=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_formacin_de_profesores','validaciones' => 'form_efdp', 'catalogos_indexados'=>array(4,6,9,7,1,10,14)),
     13=>array('vista'=>'perfil/actividad_docente/actividad_d_formacion_de_profesores_en_investigacion','validaciones' => 'form_fdpei', 'catalogos_indexados'=>array(4,6,9,7,1,10)),
-    14=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_a_distancia','validaciones' => 'form_ead', 'catalogos_indexados'=>array()),
+    14=>array('vista'=>'perfil/actividad_docente/actividad_d_educacion_a_distancia','validaciones' => 'form_ead', 'catalogos_indexados'=>array(1,15,16,10)),
     15=>array('vista'=>'perfil/actividad_docente/actividad_d_actividades_de_investigacion_educativa','validaciones' => 'form_adie', 'catalogos_indexados'=>array())
 );
 
@@ -152,22 +170,69 @@ $config['actividad_docente_campos'] = array(
     
 );
 
-$config['catalogos_indexados'] = array(
-    1=>'cmodalidad',
-    2=>'licenciatura',
-    3=>'cmodulo',
-    4=>'carea',
-    5=>'cmateria',
-    6=>'ccurso',
-    7=>'cinstitucion_avala',
-    8=>'ctipo_actividad_docente',
-    9=>'crol_desempenia',
-    10=>'ctipo_comprobante',
-    11=>'ctipo_licenciatura',
-    12=>'ctipo_curso',
-    13=>'ctipo_especialidad',
-    14=>'ctipo_formacion_profesional',
+
+$config['name_campos_actividad_docente'] = array(
+    'cmodalidad'=>'MODALIDAD_CVE',
+    'licenciatura'=>'LICENCIATURA_CVE',
+    'cmodulo'=>'MODULO_CVE',
+    'carea'=>'AREA_CVE',
+    'cmateria'=>'TIP_MATERIAL_CVE',
+    'cinstitucion_avala'=>'INS_AVALA_CVE',
+    'crol_desempenia'=>'ROL_DESEMPENIA_CVE',
+    'ctipo_comprobante'=>'TIPO_COMPROBANTE_CVE', //comprobante
+    'ctipo_curso'=>'CURSO_CVE',
+    'ctipo_formacion_profesional'=>'',
+    'actividad_anios_dedicados_docencia'=>'EAD_ANIO_CURSO',
+    'comprobante' => 'COMPROBANTE_CVE',
+    'nombre_curso' => 'EAD_CURSO_PRIN_IMPARTE',
+    'actividad_docente_general' =>'TIP_ACT_DOC_CVE',
+    'ctipo_especialidad'=>'',
+    'ctipo_actividad_docente'=>'',
+);
+$config['name_campos_actividad_docente_select'] = array(
+    'cmodalidad'=>'MODALIDAD_CVE',
+    'licenciatura'=>'LICENCIATURA_CVE',
+    'cmodulo'=>'MODULO_CVE',
+    'carea'=>'AREA_CVE',
+    'cmateria'=>'TIP_MATERIAL_CVE',
+    'cinstitucion_avala'=>'INS_AVALA_CVE',
+    'crol_desempenia'=>'ROL_DESEMPENIA_CVE',
+    'ctipo_comprobante'=>'TIPO_COMPROBANTE_CVE', //comprobante
+    'ctipo_curso'=>'CURSO_CVE',
+    'ctipo_formacion_profesional'=>'',
+    'actividad_anios_dedicados_docencia'=>'EAD_ANIO_CURSO',
+    'comprobante' => 'COMPROBANTE_CVE',
+    'nombre_curso' => 'EAD_CURSO_PRIN_IMPARTE as "nombre_curso"',
+    'actividad_docente_general' =>'TIP_ACT_DOC_CVE',
+    'ctipo_especialidad'=>'',
+    'ctipo_actividad_docente'=>'',
+    ''=>'EAD_NOMBRE_MATERIA_IMPARTIO',
+);
+$config['name_campos_comprobante'] = array(
+    'ctipo_comprobante'=>'TIPO_COMPROBANTE_CVE', //comprobante
+    'text_comprobante'=>'COM_NOMBRE', //comprobante
 );
     
-
+//    EAD_DURACION
+//    EAD_FCH_INICIO
+//    EAD_FCH_FIN
+//    MODALIDAD_CVE *
+//    LICENCIATURA_CVE *
+//    COMPROBANTE_CVE
+//    EAD_EXTRA_INS_AVALA
+//    EAD_CURSO_PRIN_IMPARTE
+//    ROL_DESEMPENIA_CVE
+//    TIP_ACT_DOC_CVE *
+//    INS_AVALA_CVE
+//    CURSO_CVE
+//    EMP_ACT_DOCENTE_CVE
+//    TIP_MATERIAL_CVE *
+//    AREA_CVE *
+//    ACT_DOC_GRAL_CVE
+//    MODULO_CVE *
+//    EAD_ANIO_CURSO *
     
+//tabla comprobante
+//COMPROBANTE_CVE * 
+//COM_NOMBRE *
+//TIPO_COMPROBANTE_CVE *

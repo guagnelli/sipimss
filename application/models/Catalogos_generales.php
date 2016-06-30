@@ -220,6 +220,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+    
     /**
      * 
      * @return type array retorna los datos del catálogo "ctipo_especialidad" 
@@ -228,6 +229,31 @@ class Catalogos_generales extends CI_Model {
      */
     public function get_ctipo_formacion_profesional() {
         $query = $this->db->get('ctipo_formacion_profesional'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "ctipo_participacion" 
+     * "TIP_PARTICIPACION_CVE"  ,  "TIP_PAR_NOMBRE" 
+     * 
+     */
+    public function get_ctipo_participacion() {
+        $query = $this->db->get('ctipo_participacion'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "ctipo_participacion" 
+     * "TIP_MATERIAL_CVE"  ,  "TIP_MAT_NOMBRE"  y "TIP_MAT_TIPO"
+     * 
+     */
+    public function get_ctipo_material() {
+        $query = $this->db->get('ctipo_material'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
         return $resultado;

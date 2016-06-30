@@ -6,7 +6,7 @@
                 <div class="panel-body">
                             <div class='row'>
                                 <div class="col-md-6">
-                                     <label for='lbl_curso' class="control-label">
+                                     <label for='lbl_rol_desempenia' class="control-label">
                                          <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_rol_desempenia']; ?>
                                     </label>
@@ -27,7 +27,7 @@
                                    <?php   echo form_error_format('crol_desempenia'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for='lbl_curso' class="control-label">
+                                    <label for='lbl_institucion_edu_avala' class="control-label">
                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_institucion_edu_avala']; ?>
                                     </label>
@@ -51,19 +51,51 @@
                     
                             <div class='row'>
                                 <div class="col-md-6">
-                                    <label for='lbl_curso' class="control-label">
+                                    <label for='lbl_recibe_pago_extra' class="control-label">
                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_recibe_pago_extra']; ?>
                                     </label>
                                     <div class='row'>
                                         <div class="col-md-6 text-right">
-                                            <input type="radio" name="pago_extra" > SI
+                                            <label>
+                                                <?php
+                                                echo $this->form_complete->create_element(
+                                                array('id'=>'pago_extra', 'type'=>'radio',
+                                                        'value' => 'Si',
+                                                        'attributes'=>array(
+                                                        'class'=>'radio-inline m-r-sm',
+                                                        'title'=> $string_values['radio_duracion_horas'],
+    //                                                    'disabled'=> '',
+//                                                        'checked'=>"checked",
+                                                        'onchange' =>"mostrar_horas_fechas('block')"    
+                                                        )
+                                                    )
+                                                );
+                                                ?>
+                                                Si
+                                            </label>
                                         </div>
                                         <div class="col-md-6 text-left">
-                                            <input type="radio" name="pago_extra" > No
+                                            <label>
+                                                <?php
+                                                echo $this->form_complete->create_element(
+                                                array('id'=>'pago_extra', 'type'=>'radio',
+                                                        'value' => 'No',
+                                                        'attributes'=>array(
+                                                        'class'=>'radio-inline m-r-sm',
+                                                        'title'=> $string_values['radio_duracion_horas'],
+    //                                                    'disabled'=> '',
+//                                                        'checked'=>"checked",
+                                                        'onchange' =>"mostrar_horas_fechas('block')"    
+                                                        )
+                                                    )
+                                                );
+                                                ?>
+                                                No
+                                            </label>
                                         </div>
-                                        <?php   echo form_error_format('pago_extra'); ?>
                                     </div>
+                                   <?php   echo form_error_format('pago_extra'); ?>
                                 </div>
                                 <div class="col-md-6">
                                     <label for='lbl_modulo' class="control-label">
@@ -177,11 +209,11 @@
                         <br>
                             <div class="row">
                                 <div class="col-md-6">
-                                        <label for='lbl_tipo_comprobante' class="control-label">
+                                        <label for='radio_duracion_fecha' class="control-label">
                                             <?php echo $string_values['lbl_tipo_comprobante']; ?>
                                         </label>
                                          <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'tipo-comprobante', 
+                                            echo $this->form_complete->create_element(array('id' => 'ctipo_comprobante', 
                                                 'type' => 'dropdown', 
                                                 'options' => $ctipo_comprobante, 
                                                 'first' => array('' => $string_values['drop_tipo_comprobante']), 
@@ -191,6 +223,7 @@
                                                 'placeholder' => $string_values['title_tipo_comprobante'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['title_tipo_comprobante'] ))); 
                                         ?>
+                                        <?php echo form_error_format('ctipo_comprobante'); ?>
                                 </div>
                                 <div class="col-md-6">
                                     <!--<li class="list-group-item">-->
@@ -227,7 +260,7 @@
                                             </a>
                                           </div>
                                         </div><span id="help-tipo-comprobante" class="help-block">Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en el curso</span>
-                                    <!--</li>-->
+                                        <?php echo form_error_format('text_comprobante'); ?>
                                 </div>
                             </div>
                             
