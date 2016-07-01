@@ -173,37 +173,62 @@
                             </div>
                         <br>
                             <div class='row'>
-                                
-                                <div class='col-sm-3 text-center' id="fecha_inicio">
+                                <div class='col-sm-12 text-center' id="fecha_inicio">
                                     <label for='lbl_periodo' class="control-label">
                                         <?php echo $string_values['lbl_periodo']; ?>
                                     </label>
-
+                                </div>
+                            </div>
+                        <br>
+                            <div class='row'>
+                                <div class='col-sm-6' id="fecha_inicio">
                                     <div class="form-group">
                                         <div class="input-group date" id="datetimepicker1" >
-                                            <input type="text" class="form-control" id='fecha_inicio_pick' placeholder="<?php echo $string_values['lbl_duracion_fecha_inicio']; ?>" >
+                                            <?php
+                                            echo $this->form_complete->create_element(
+                                            array('id'=>'periodo_fecha_inicio_pick','type'=>'text',
+                                                    'value' => '',
+                                                    'attributes'=>array(
+                                                    'class'=>'form-control',
+                                                    'placeholder'=>$string_values['lbl_duracion_fecha_inicio'],
+                                                    'data-toggle'=>'tooltip',
+                                                    'title'=>$string_values['lbl_duracion_fecha_inicio'],
+                                                    )
+                                                )
+                                            );
+                                            ?>
                                             <span class="input-group-addon">
                                                 <span class="fa fa-calendar"></span>
                                             </span>
                                         </div>
                                     </div>
+                                    <?php echo form_error_format('periodo_fecha_inicio_pick'); ?>
 
                                 </div>
-                                <?php echo form_error_format('fecha_inicio_pick'); ?>
 
-                                <div class='col-sm-3 text-center' id="fecha_fin">
-                                    <label for='lbl_periodo' class="control-label">
-                                    </label>
+                                <div class='col-sm-6 ' id="fecha_fin">
                                     <div class="form-group">
                                         <div class='input-group date' id='datetimepicker2'>
-                                            <input type='text' class="form-control" id='fecha_fin_pick' placeholder="<?php echo $string_values['lbl_duracion_fecha_final']; ?>">
+                                            <?php
+                                            echo $this->form_complete->create_element(
+                                            array('id'=>'periodo_fecha_fin_pick','type'=>'text',
+                                                    'value' => '',
+                                                    'attributes'=>array(
+                                                    'class'=>'form-control',
+                                                    'placeholder'=>$string_values['lbl_duracion_fecha_final'],
+                                                    'data-toggle'=>'tooltip',
+                                                    'title'=>$string_values['lbl_duracion_fecha_final'],
+                                                    )
+                                                )
+                                            );
+                                            ?>
                                             <span class="input-group-addon">
                                                 <span class="fa fa-calendar"></span>
                                             </span>
                                         </div>
                                     </div>
+                                    <?php echo form_error_format('periodo_fecha_fin_pick'); ?>
                                 </div>
-                                <?php echo form_error_format('fecha_fin_pick'); ?>
                             
                             </div>
                         <br>
@@ -228,7 +253,7 @@
                                 <div class="col-md-6">
                                     <!--<li class="list-group-item">-->
                                         <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
-                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo
+                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">
                                         <label for='radio_duracion_fecha' class="control-label">
                                             <?php echo $string_values['lbl_comprobante']; ?>
                                         </label>

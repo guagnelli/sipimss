@@ -30,7 +30,7 @@
                                    <?php   echo form_error_format('nombre_curso'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                     <label for='lbl_curso' class="control-label">
+                                     <label for='lbl_rol_desempenia' class="control-label">
                                          <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_rol_desempenia']; ?>
                                     </label>
@@ -90,7 +90,6 @@
                                                         'title'=> $string_values['radio_duracion_horas'],
     //                                                    'disabled'=> '',
 //                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );
@@ -109,7 +108,6 @@
                                                         'title'=> $string_values['radio_duracion_horas'],
     //                                                    'disabled'=> '',
 //                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );
@@ -196,64 +194,58 @@
                                 </div>
                             </div>
                         <br>
-<!--                        <script language= javascript type= text/javascript>
-                            verifica_hora_extras();
-                        </script>-->
-                            <?php
-                                echo "<script>";
-                                echo "verifica_hora_extras();";
-                                echo "</script>";
-                            ?>
                             <div class='row'>
-                                <div class="col-md-6 text-center">
-                                    <div class='row'>
-                                        <div class="col-md-4 text-right">
-                                            <label for='lbl_duracion' class="control-label">
-                                                <b class="rojo ">*</b>
-                                                 <?php echo $string_values['lbl_duracion']; ?>
-                                            </label>
-                                        </div>
-                                        <div class="col-md-4 text-center">
-                                            <label>
-                                                <?php
-                                                echo $this->form_complete->create_element(
-                                                array('id'=>'duracion', 'type'=>'radio',
-                                                        'value' => 'hora_dedicadas',
-                                                        'attributes'=>array(
-                                                        'class'=>'radio-inline m-r-sm',
-                                                        'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
-                                                        )
-                                                    )
-                                                );
-                                                echo $string_values['radio_duracion_horas'];
-                                                ?>
-                                            </label>
-                                        </div>
-                                        <div class="col-md-4 text-left">
-                                            <label>
-                                                <?php
-                                               echo $this->form_complete->create_element(
-                                               array('id'=>'duracion', 'type'=>'radio',
-                                                       'value' => 'fecha_dedicadas',
-                                                       'attributes'=>array(
-                                                       'class'=>'radio-inline m-r-sm',
-                                                       'title'=> $string_values['radio_duracion_fecha'],
-   //                                                    'disabled'=> '',
-                                                       'onchange' =>"mostrar_horas_fechas('none')"    
-                                                       )
-                                                   )
-                                               );
-                                               echo $string_values['radio_duracion_fecha'];
-                                               ?>
-                                            </label>
-                                        </div>
-                                        <?php // echo form_error_format('duracion'); ?>
-                                    </div>
+                                <div class="col-md-4 text-right">
+                                    <label for='lbl_duracion' class="control-label">
+                                        <b class="rojo ">*</b>
+                                         <?php echo $string_values['lbl_duracion']; ?>
+                                    </label>
                                 </div>
-                                <div class='col-sm-3' id="div_horas_dedicadas" >
+                                <div class="col-md-4 text-center">
+                                    <label>
+                                        <?php
+                                        echo $this->form_complete->create_element(
+                                        array('id'=>'duracion', 'type'=>'radio',
+                                                'value' => 'hora_dedicadas',
+                                                'attributes'=>array(
+                                                'class'=>'radio-inline m-r-sm',
+                                                'title'=> $string_values['radio_duracion_horas'],
+    //                                                    'disabled'=> '',
+    //                                                        'checked'=>"checked",
+                                                'onchange' =>"mostrar_horas_fechas('block')"    
+                                                )
+                                            )
+                                        );
+                                        echo $string_values['radio_duracion_horas'];
+                                        ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-4 text-left">
+                                    <label>
+                                        <?php
+                                       echo $this->form_complete->create_element(
+                                       array('id'=>'duracion', 'type'=>'radio',
+                                               'value' => 'fecha_dedicadas',
+                                               'attributes'=>array(
+                                               'class'=>'radio-inline m-r-sm',
+                                               'title'=> $string_values['radio_duracion_fecha'],
+    //                                                    'disabled'=> '',
+                                               'onchange' =>"mostrar_horas_fechas('none')"    
+                                               )
+                                           )
+                                       );
+                                       echo $string_values['radio_duracion_fecha'];
+                                       ?>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-md-12 col-sm-12 col-lg-12' >
+                                    <?php echo form_error_format('duracion'); ?>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-6 col-lg-6' id="div_horas_dedicadas" style="<?php echo $mostrar_hora_fecha_duracion==='hora_dedicadas'?'display: block':'display: none';?>">
                                         <label for='lbl_duracion_horas' class="control-label">
                                             <?php echo $string_values['radio_duracion_horas']; ?>
                                         </label>
@@ -273,14 +265,15 @@
                                                     'data-toggle'=>'tooltip',
                                                     'data-placement'=>'bottom',
                                                     'title'=>$string_values['radio_duracion_horas'],
+//                                                    'style'=>"display: none"
                                                     )
                                                 )
                                             );
                                         ?>
                                         </div>
+                                        <?php echo form_error_format('hora_dedicadas'); ?>
                                 </div>
-                                <?php echo form_error_format('hora_dedicadas'); ?>
-                                <div class='col-sm-3 text-center' id="fecha_inicio" style="display: none">
+                                <div class='col-sm-6 col-lg-6 text-center' id="fecha_inicio" style="<?php echo $mostrar_hora_fecha_duracion==='fecha_dedicadas'?'display: block':'display: none';?>">
                                     <label for='lbl_duracion_fecha_inicio' class="control-label">
                                         <?php echo $string_values['lbl_duracion_fecha_inicio']; ?>
                                     </label>
@@ -296,6 +289,7 @@
                                                     'placeholder'=>$string_values['lbl_duracion_fecha_inicio'],
                                                     'data-toggle'=>'tooltip',
                                                     'title'=>$string_values['lbl_duracion_fecha_inicio'],
+//                                                    'style'=>"display: none"
                                                     )
                                                 )
                                             );
@@ -305,11 +299,10 @@
                                             </span>
                                         </div>
                                     </div>
-
+                                    <?php echo form_error_format('fecha_inicio_pick'); ?>
                                 </div>
-                                <?php echo form_error_format('fecha_inicio_pick'); ?>
 
-                                <div class='col-sm-3 text-center' id="fecha_fin" style="display: none">
+                                <div class='col-sm-6 text-center' id="fecha_fin" style="<?php echo $mostrar_hora_fecha_duracion==='fecha_dedicadas'?'display: block':'display: none';?>">
                                     <label for='radio_duracion_fecha' class="control-label">
                                         <?php echo $string_values['lbl_duracion_fecha_final']; ?>
                                     </label>
@@ -324,6 +317,7 @@
                                                     'placeholder'=>$string_values['lbl_duracion_fecha_final'],
                                                     'data-toggle'=>'tooltip',
                                                     'title'=>$string_values['lbl_duracion_fecha_final'],
+//                                                    'style'=>"display: none"
                                                     )
                                                 )
                                             );
@@ -333,9 +327,8 @@
                                             </span>
                                         </div>
                                     </div>
+                                    <?php echo form_error_format('fecha_fin_pick'); ?>
                                 </div>
-                                <?php echo form_error_format('fecha_fin_pick'); ?>
-                            
                             </div>
                         <br>
                             <div class="row">
@@ -359,7 +352,7 @@
                                 <div class="col-md-6">
                                     <!--<li class="list-group-item">-->
                                         <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
-                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo
+                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">
                                         <label for='radio_duracion_fecha' class="control-label">
                                             <?php echo $string_values['lbl_comprobante']; ?>
                                         </label>
@@ -390,7 +383,7 @@
                                                 <span aria-hidden="true" class="glyphicon glyphicon-question-sign"> </span>
                                             </a>
                                           </div>
-                                        </div><span id="help-tipo-comprobante" class="help-block">Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en el curso</span>
+                                        </div><span id="help-tipo-comprobante" class="help-block">Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en el curso en formato pdf</span>
                                         <?php echo form_error_format('text_comprobante'); ?>
                                 </div>
                             </div>

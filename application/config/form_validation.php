@@ -260,7 +260,17 @@ $config = array(
         ),
     ),
     'form_ccl' => array(
-        'ccurso' => array(
+        'duracion' => array(//radio button *************************************
+            'field' => 'duracion',
+            'label' => 'duración de curso',
+            'rules' => 'required'//
+        ),
+        'pago_extra' => array(
+            'field' => 'pago_extra',
+            'label' => 'Indicar pago extra',
+            'rules' => 'required' //
+        ),
+        'ccurso' => array(//*****Catálogos**************************************
             'field' => 'ccurso',
             'label' => 'Nombre del curso',
             'rules' => 'required' //
@@ -275,11 +285,6 @@ $config = array(
             'label' => 'Institución que avala',
             'rules' => 'required' //
         ),
-        'pago_extra' => array(
-            'field' => 'pago_extra',
-            'label' => 'Indicar pago extra',
-            'rules' => 'required' //
-        ),
         'licenciatura' => array(
             'field' => 'licenciatura',
             'label' => 'Licenciatura',
@@ -290,34 +295,9 @@ $config = array(
             'label' => 'modalidad',
             'rules' => 'required' //
         ),
-        'actividad_anios_dedicados_docencia' => array(
-            'field' => 'actividad_anios_dedicados_docencia',
-            'label' => 'de años',
-            'rules' => 'required|numeric' //
-        ),
-        'hora_dedicadas' => array(
-            'field' => 'hora_dedicadas',
-            'label' => 'horas dedicadas',
-            'rules' => 'required|numeric' //
-        ),
-        'hora_dedicadas' => array(
-            'field' => 'hora_dedicadas',
-            'label' => 'horas dedicadas',
-            'rules' => 'required|numeric' //
-        ),
-        'fecha_inicio_pick' => array(
-            'field' => 'fecha_inicio_pick',
-            'label' => 'fecha de inicio',
-            'rules' => 'required' //
-        ),
-        'fecha_fin_pick' => array(
-            'field' => 'fecha_fin_pick',
-            'label' => 'fecha de fin',
-            'rules' => 'required' //
-        ),
         'ctipo_comprobante' => array(
             'field' => 'ctipo_comprobante',
-            'label' => 'Tipo de comprobante',
+            'label' => 'tipo de comprobante',
             'rules' => 'required' //
         ),
         'cmodulo' => array(
@@ -335,26 +315,6 @@ $config = array(
             'label' => 'formación profesional',
             'rules' => 'required' //
         ),
-        'text_comprobante' => array(
-            'field' => 'text_comprobante',
-            'label' => 'Nombre de comprobante',
-            'rules' => 'required' //
-        ),
-        'duracion' => array(
-            'field' => 'duracion',
-            'label' => 'Debe elegir duración de curso',
-            'rules' => 'required' //
-        ),
-        'nombre_curso' => array(
-            'field' => 'nombre_curso',
-            'label' => 'nombre del curso', 
-           'rules' => 'required|max_length[20]' //
-        ),
-        'material_elaborado' => array(
-            'field' => 'material_elaborado',
-            'label' => 'nombre del material elaborado',
-            'rules' => 'required|max_length[100]' //
-        ),
         'ctipo_participacion' => array(
             'field' => 'ctipo_participacion',
             'label' => 'tipo de participacón',
@@ -364,6 +324,56 @@ $config = array(
             'field' => 'ctipo_material',
             'label' => 'tipo de material',
             'rules' => 'required' //
+        ),
+        'ctipo_especialidad' => array(
+            'field' => 'ctipo_especialidad',
+            'label' => 'tipo de especialidad',
+            'rules' => 'required' //
+        ),
+        'material_elaborado' => array(//  Textos********************************
+            'field' => 'material_elaborado',
+            'label' => 'nombre del material elaborado',
+            'rules' => 'required|max_length[100]' //
+        ),
+        'text_comprobante' => array(
+            'field' => 'text_comprobante',
+            'label' => 'Nombre de comprobante',
+            'rules' => 'required'                                                                                                                                                                                                                                                                      //
+        ),
+        'nombre_curso' => array(
+            'field' => 'nombre_curso',
+            'label' => 'nombre del curso', 
+           'rules' => 'required|max_length[20]' //
+        ),
+        'actividad_anios_dedicados_docencia' => array(
+            'field' => 'actividad_anios_dedicados_docencia',
+            'label' => 'de años',
+            'rules' => 'required|numeric' //
+        ),
+        'fecha_inicio_pick' => array(
+            'field' => 'fecha_inicio_pick',
+            'label' => 'fecha de inicio',
+            'rules' => 'required' //
+        ),
+        'fecha_fin_pick' => array(
+            'field' => 'fecha_fin_pick',
+            'label' => 'fecha de fin',
+            'rules' => 'required' //
+        ),
+        'periodo_fecha_inicio_pick' => array(
+            'field' => 'periodo_fecha_inicio_pick',
+            'label' => 'fecha de inicio',
+            'rules' => 'required' //
+        ),
+        'periodo_fecha_fin_pick' => array(
+            'field' => 'periodo_fecha_fin_pick',
+            'label' => 'fecha de fin',
+            'rules' => 'required' //
+        ),
+        'hora_dedicadas' => array(
+            'field' => 'hora_dedicadas',
+            'label' => 'horas dedicadas',
+            'rules' => 'required|numeric' //
         ),
     ),
         //**Fin de validación de actividad docenete********************************

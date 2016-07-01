@@ -160,8 +160,8 @@ class Perfil extends MY_Controller {
                 }
             }
 
-            $tipo_actividad_docente = $this->cg->get_tipo_actividad_docente(); //Obtiene delegaciones del modelo
-            $data_actividad['tipo_actividad_docente'] = dropdown_options($tipo_actividad_docente, 'TIP_ACT_DOC_CVE', 'TIP_ACT_DOC_NOMBRE'); //Manipulamos la información a mostrar de delegación
+            $tipo_actividad_docente = $this->cg->get_tipo_actividad_docente(); //Obtiene tipos de actividad del docente
+            $data_actividad['tipo_actividad_docente'] = dropdown_options($tipo_actividad_docente, 'TIP_ACT_DOC_CVE', 'TIP_ACT_DOC_NOMBRE'); //Indicamos que muestré los siguientes datos index y descripción
 
             $data = array(
                 'titulo_modal' => 'Actividad docente',
@@ -175,42 +175,51 @@ class Perfil extends MY_Controller {
      * 
      * @param type $index_tipo_actividad_docente 
      */
-    public function get_data_ajax_actividad_cuerpo_modal($index_tipo_actividad_docente = null, $combo=0) {
+    public function get_data_ajax_actividad_cuerpo_modal($index_tipo_actividad_docente = null, $combo = '0') {
         if ($this->input->is_ajax_request() && $index_tipo_actividad_docente != null) {//Si es un ajax
+            $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuración  del formularío
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar
             $datos['string_values'] = $string_values; //Almacena textos de actividad en el arreglo
+            $valores['mostrar_hora_fecha_duracion'] = 0; //
 
 
-
-            if ($this->input->post() AND $combo ==='1') {
+            if ($this->input->post() AND $combo === '1') {
                 $datos_registro = $this->input->post(null, true);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_ccl'); //Obtener validaciones de archivo
-                $validations = $this->analiza_validacion($validations, $datos_registro);
-                $this->form_validation->set_rules($validations);
-                if ($this->form_validation->run()) {
-                    
+                $valores['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_registro, 'duracion'); //Muestrá validaciónes de hora fechas de inicio y termino según la opción de duración
+                $array_validaciones_extra_actividad = $configuracion_formularios_actividad_docente['validaciones_extra']; //Carga las validaciones extrá de archivo config->general que no se pudieron automatizar con el post, es decir radio button etc
+                $validations = $this->analiza_validacion($validations, $datos_registro, $array_validaciones_extra_actividad); //Genera las validaciones del formulario que realmente deben ser tomadas en cuenta 
+                $this->form_validation->set_rules($validations); //Carga las validaciones
+                if ($this->form_validation->run()) {//Ejecuta validaciones
                 }
             }
             if ($index_tipo_actividad_docente > 0) {//Checa si debe aparecer el botòn de guardar 
                 $valores['identificador'] = $index_tipo_actividad_docente;
                 $datos['pie_pag'] = $this->load->view('perfil/actividad_docente/actividad_pie', $valores, true); //Carga la vista correspondiente al index
-            }
-            $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuracion de
-            //Carga catalogos 
-            $datos = carga_catalogos_censo($configuracion_formularios_actividad_docente['catalogos_indexados'], $datos); //Carga los catálogos de la configuración
+                //Carga catalogos 
+                $datos = carga_catalogos_censo($configuracion_formularios_actividad_docente['catalogos_indexados'], $datos); //Carga los catálogos de la configuración
 //            pr($datos);
-            echo $this->load->view($configuracion_formularios_actividad_docente['vista'], $datos, TRUE); //Carga la vista correspondiente al index
+                echo $this->load->view($configuracion_formularios_actividad_docente['vista'], $datos, TRUE); //Carga la vista correspondiente al index
+            }
         }
     }
-    
-    private function analiza_validacion($array_validacion, $array_componentes){
-        pr($array_componentes);
+
+    private function get_valor_validacion($validaciones, $key) {
+        if (array_key_exists($key, $validaciones)) {
+            return $validaciones[$key];
+        }
+
+        return 0;
+    }
+
+    private function analiza_validacion($array_validacion, $array_componentes, $validacion_extra) {
+//        pr($array_componentes);
 //        pr($array_validacion);
         $array_result = array();
         foreach ($array_componentes as $key => $value) {
-            switch ($key){
+            switch ($key) {
                 case 'fecha_inicio_pick'://No carga si no hasta duraciòn 
                     break;
                 case 'fecha_fin_pick'://No carga si no hasta duraciòn
@@ -218,24 +227,24 @@ class Perfil extends MY_Controller {
                 case 'hora_dedicadas'://No carga si no hasta duraciòn
                     break;
                 case 'duracion':
-                    pr('ssss' );
-                    if($value === 'hora_dedicadas'){
+                    if ($value === 'hora_dedicadas') {
                         $array_result[] = $array_validacion['hora_dedicadas'];
-                    }else{//fechas_dedicadas
+                    } else {//fechas_dedicadas
                         $array_result[] = $array_validacion['fecha_inicio_pick'];
                         $array_result[] = $array_validacion['fecha_fin_pick'];
                     }
                     break;
                 default :
-                        $array_result[] =  $array_validacion[$key];
-                    
+                    $array_result[] = $array_validacion[$key];
             }
-            
         }
-        //Especiales de radio buttón pago extrá
-        if(!array_key_exists('pago_extra', $array_componentes)){
-            $array_result[] = $array_validacion['pago_extra'];
+        //Busca si existen validaciones extra
+        foreach ($validacion_extra as $value_extra) {
+            if (!array_key_exists($value_extra, $array_componentes)) {
+                $array_result[] = $array_validacion[$value_extra];
+            }
         }
+//        pr($array_result);
         return $array_result;
     }
 
