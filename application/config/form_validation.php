@@ -330,50 +330,65 @@ $config = array(
             'label' => 'tipo de especialidad',
             'rules' => 'required' //
         ),
+        'ctipo_curso' => array(
+            'field' => 'ctipo_curso',
+            'label' => 'tipo de curso',
+            'rules' => 'required' //
+        ),
         'material_elaborado' => array(//  Textos********************************
             'field' => 'material_elaborado',
             'label' => 'nombre del material elaborado',
-            'rules' => 'required|max_length[100]' //
+            'rules' => 'trim|required|max_length[100]' //
         ),
         'text_comprobante' => array(
             'field' => 'text_comprobante',
             'label' => 'Nombre de comprobante',
-            'rules' => 'required'                                                                                                                                                                                                                                                                      //
+            'rules' => 'trim|required'                                                                                                                                                                                                                                                                      //
         ),
         'nombre_curso' => array(
             'field' => 'nombre_curso',
             'label' => 'nombre del curso', 
-           'rules' => 'required|max_length[20]' //
+           'rules' => 'trim|required|max_length[100]' //
+        ),
+        'nombre_materia_impartio' => array(
+           'field' => 'nombre_materia_impartio',
+           'label' => 'nombre de la materia que impartió', 
+           'rules' => 'trim|required|max_length[100]' //
+        ),
+        'folio_constancia' => array(
+            'field' => 'folio_constancia',
+            'label' => 'folio', 
+           'rules' => 'trim|required|max_length[35]' //alfanumerico y guión
         ),
         'actividad_anios_dedicados_docencia' => array(
             'field' => 'actividad_anios_dedicados_docencia',
             'label' => 'de años',
-            'rules' => 'required|numeric' //
+            'rules' => 'trim|required|numeric' //
         ),
         'fecha_inicio_pick' => array(
             'field' => 'fecha_inicio_pick',
             'label' => 'fecha de inicio',
-            'rules' => 'required' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'fecha_fin_pick' => array(
             'field' => 'fecha_fin_pick',
             'label' => 'fecha de fin',
-            'rules' => 'required' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'periodo_fecha_inicio_pick' => array(
             'field' => 'periodo_fecha_inicio_pick',
             'label' => 'fecha de inicio',
-            'rules' => 'required' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'periodo_fecha_fin_pick' => array(
             'field' => 'periodo_fecha_fin_pick',
             'label' => 'fecha de fin',
-            'rules' => 'required' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'hora_dedicadas' => array(
             'field' => 'hora_dedicadas',
             'label' => 'horas dedicadas',
-            'rules' => 'required|numeric' //
+            'rules' => 'trim|required|numeric' //
         ),
     ),
         //**Fin de validación de actividad docenete********************************

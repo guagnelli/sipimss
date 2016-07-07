@@ -4,6 +4,15 @@
     <div class="list-group">
         <div class="list-group-item">
                 <div class="panel-body">
+                            <?php if(isset($error)){ ?>
+                            <div class="row">
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                                <div class="col-md-10 col-sm-10 col-xs-10">
+                                           <?php echo html_message($error, $tipo_msg); ?>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                            </div>
+                            <?php } ?>
                             <div class='row'>
                                 <div class="col-md-6">
                                      <label for='lbl_rol_desempenia' class="control-label">
@@ -65,9 +74,6 @@
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );
@@ -84,9 +90,6 @@
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );

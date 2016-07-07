@@ -12,6 +12,7 @@
     <!-- Inicio informacion personal -->
     
     <div class="list-group">
+            <?php if(isset($tipo_actividad_docente)){ ?>
            <div class="list-group-item">
                 <?php echo form_open('', array('id'=>'form_actividad_docente_general')); ?>
                 <label for='lbl_tipo_actividad_docente_' class="control-label">
@@ -36,7 +37,7 @@
                </div>
                <?php   echo form_error_format('tipo_actividad_docente'); ?>
            </div>
-               <?php echo form_close(); ?>
+            <?php echo form_close(); }?>
                 <?php echo form_open('', array('id'=>'form_actividad_docente_especifico')); ?>
             <div class="list-group-item" id="info_actividad_docente">
                <!--Carga la vista correspondiente al elemento tipo de actividad del docente-->

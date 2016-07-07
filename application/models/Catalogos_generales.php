@@ -110,7 +110,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
-    
+
     /////*******Checar campos
     /**
      * 
@@ -124,6 +124,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "licenciatura" 
@@ -136,6 +137,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "cmodulo" 
@@ -148,6 +150,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "carea" 
@@ -160,6 +163,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "cinstitucion_avala" 
@@ -172,6 +176,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "crol_desempenia" 
@@ -184,6 +189,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "crol_desempenia" 
@@ -196,6 +202,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "crol_desempenia" 
@@ -208,6 +215,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "ctipo_especialidad" 
@@ -220,7 +228,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
-    
+
     /**
      * 
      * @return type array retorna los datos del catálogo "ctipo_especialidad" 
@@ -233,7 +241,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
-    
+
     /**
      * 
      * @return type array retorna los datos del catálogo "ctipo_participacion" 
@@ -246,6 +254,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "ctipo_participacion" 
@@ -257,6 +266,32 @@ class Catalogos_generales extends CI_Model {
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
         return $resultado;
+    }
+
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "ctipo_curso" 
+     * "TIP_CURSO_CVE"  ,  "TIP_CUR_NOMBRE"
+     * 
+     */
+    public function get_ctipo_curso() {
+        $query = $this->db->get('ctipo_curso'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        return $resultado;
+    }
+    
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cestado_civil" 
+     * "CESTADO_CIVIL_CVE"  ,  "EDO_CIV_NOMBRE"
+     * 
+     */
+    public function get_cestado_civil() {
+        $query = $this->db->get('cestado_civil');
+        $estadoCivil = $query->result_array();
+        $query->free_result();
+        return $estadoCivil;
     }
 
 }

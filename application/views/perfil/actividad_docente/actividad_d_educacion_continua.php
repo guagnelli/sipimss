@@ -4,6 +4,15 @@
     <div class="list-group">
         <div class="list-group-item">
                 <div class="panel-body">
+                            <?php if(isset($error)){ ?>
+                            <div class="row">
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                                <div class="col-md-10 col-sm-10 col-xs-10">
+                                           <?php echo html_message($error, $tipo_msg); ?>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                            </div>
+                            <?php } ?>
                             <div class='row'>
                                 <div class="col-md-6">
                                     <label for='lbl_curso' class="control-label">

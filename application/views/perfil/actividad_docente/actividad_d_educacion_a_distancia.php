@@ -4,95 +4,136 @@
     <div class="list-group">
         <div class="list-group-item">
                 <div class="panel-body">
+                            <?php if(isset($error)){ ?>
+                            <div class="row">
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                                <div class="col-md-10 col-sm-10 col-xs-10">
+                                           <?php echo html_message($error, $tipo_msg); ?>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                            </div>
+                            <?php } ?>
                             <div class='row'>
                                 <!--<div class="form-group col-xs-10 col-md-10 col-md-offset-1 col-md-offset-1">-->
-                                <div class="col-md-6">
-                                    <label for='lbl_nombre_material_elaborado' class="control-label">
+                                 <div class="col-md-6">
+                                    <label for='lbl_curso' class="control-label">
                                         <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_nombre_material_elaborado']; ?>
+                                         <?php echo $string_values['lbl_curso']; ?>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-education"> </span>
                                         </span>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'material_elaborado', 
+                                            echo $this->form_complete->create_element(array('id' => 'nombre_curso', 
                                                 'type' => 'text', 
-                                                'value' => isset($material_elaborado) ? $material_elaborado : '',
+                                                'value' => isset($nombre_curso) ? $nombre_curso : '',
                                                 'attributes' => array( 
                                                 'class' => 'form-control', 
-                                                'placeholder' => $string_values['ph_material_elaborado'], 
+                                                'placeholder' => $string_values['text_name_curso_imparte'], 
                                                 'data-toggle' => 'tooltip', 
                                                 'data-placement' => 'top', 
-                                                'title' => $string_values['ph_material_elaborado'] ))); 
+                                                'title' => $string_values['text_name_curso_imparte'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('material_elaborado'); ?>
+                                   <?php   echo form_error_format('nombre_curso'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                     <label for='lbl_tipo_material' class="control-label">
+                                     <label for='lbl_tipo_curso' class="control-label">
                                          <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_tipo_material']; ?>
+                                         <?php echo $string_values['lbl_tipo_curso']; ?>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-user"> </span>
                                         </span>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'ctipo_material', 'type' => 'dropdown', 
-                                                'options' => $ctipo_material, 
-                                                'first' => array('' => $string_values['drop_tipo_material']), 
+                                            echo $this->form_complete->create_element(array('id' => 'ctipo_curso', 'type' => 'dropdown', 
+                                                'options' => $ctipo_curso, 
+                                                'first' => array('' => $string_values['drop_tipo_curso']), 
                                                 'value' => '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                                 'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_tipo_material'] ))); 
+                                                'title' => $string_values['lbl_tipo_curso'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('ctipo_material'); ?>
+                                   <?php   echo form_error_format('ctipo_curso'); ?>
                                 </div>
                             </div>
                             <div class='row'>
                                 <div class="col-md-6">
-                                    <label for='lbl_modalidad' class="control-label">
-                                         <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_modalidad']; ?>
-                                    </label>
-                                    <div class="input-group">
+                                        <label for='lbl_anio_que_impartio_curso' class="control-label">
+                                            <b class="rojo">*</b>
+                                            <?php echo $string_values['lbl_anio_que_impartio_curso']; ?>
+                                        </label>
+                                        <div class="input-group">
                                         <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-user"> </span>
+                                            <span class="glyphicon glyphicon-calendar"> </span>
                                         </span>
-                                        <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cmodalidad', 'type' => 'dropdown', 
-                                                'options' => $cmodalidad, 
-                                                'first' => array('' => $string_values['drop_modalidad']), 
-                                                'value' => '',
-                                                'attributes' => array('name' => 'modalidad_name', 'class' => 'form-control', 
-                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_modalidad'] ))); 
+                                        <?php
+                                            echo $this->form_complete->create_element(
+                                            array('id'=>'actividad_anios_dedicados_docencia','type'=>'number',
+                                                    'value' => '',
+                                                    'attributes'=>array(
+                                                    'class'=>'form-control',
+                                                    'placeholder'=>$string_values['lbl_anio_que_impartio_curso'],
+                                                    'min'=> '1900',
+                                                    'max'=> '2050',
+                                                    'data-toggle'=>'tooltip',
+                                                    'data-placement'=>'bottom',
+                                                    'title'=>$string_values['lbl_anio_que_impartio_curso'],
+                                                    )
+                                                )
+                                            );
                                         ?>
-                                   </div>
-                                   <?php   echo form_error_format('cmodalidad'); ?>
+                                        </div>
+                                        <?php echo form_error_format('actividad_anios_dedicados_docencia'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for='lbl_tipo_participacion' class="control-label">
+                                    <label for='lbl_folio' class="control-label">
+                                        <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_folio']; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-education"> </span>
+                                        </span>
+                                        <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'folio_constancia', 
+                                                'type' => 'text', 
+                                                'value' => isset($folio_constancia) ? $folio_constancia : '',
+                                                'attributes' => array( 
+                                                'class' => 'form-control', 
+                                                'placeholder' => $string_values['text_folio_constancia'], 
+                                                'data-toggle' => 'tooltip', 
+                                                'data-placement' => 'top', 
+                                                'title' => $string_values['text_folio_constancia'] ))); 
+                                        ?>
+                                   </div>
+                                   <?php   echo form_error_format('folio_constancia'); ?>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class="col-md-6">
+                                     <label for='lbl_rol_desempenia' class="control-label">
                                          <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_tipo_participacion']; ?>
+                                         <?php echo $string_values['lbl_rol_desempenia']; ?>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-user"> </span>
                                         </span>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'ctipo_participacion', 'type' => 'dropdown', 
-                                                'options' => $ctipo_participacion, 
-                                                'first' => array('' => $string_values['drop_tipo_participacion']), 
+                                            echo $this->form_complete->create_element(array('id' => 'crol_desempenia', 'type' => 'dropdown', 
+                                                'options' => $crol_desempenia, 
+                                                'first' => array('' => $string_values['drop_rol_desempenia']), 
                                                 'value' => '',
-                                                'attributes' => array('name' => 'ctipo_participacion_name', 'class' => 'form-control', 
-                                                'placeholder' => '', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_tipo_participacion'] ))); 
+                                                'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
+                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_rol_desempenia'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('ctipo_participacion'); ?>
+                                   <?php   echo form_error_format('crol_desempenia'); ?>
                                 </div>
                             </div>
                         <br>
@@ -235,7 +276,7 @@
                         <br>
                             <div class="row">
                                 <div class="col-md-6">
-                                        <label for='radio_duracion_fecha' class="control-label">
+                                        <label for='lbl_tipo_comprobante' class="control-label">
                                             <?php echo $string_values['lbl_tipo_comprobante']; ?>
                                         </label>
                                          <?php 

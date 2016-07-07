@@ -6,7 +6,7 @@ $(function () {
         var a = hrutes['get_data_ajax_actividad'];
         var cad_split = a.split(":");
 //        data_ajax(site_url + '/perfil    /get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
-        data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal', '#form_actividad_docente_general', '#modal_content');
+        data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/0   ', '#form_actividad_docente_general', '#modal_content');
 //        data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal', '#form_actividad_docente_general', '#modal_content');
 
     });
@@ -51,11 +51,14 @@ $(function () {
 //}
 
 function funcion_guargar(index) {
-    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1', '#form_actividad_docente_especifico', '#info_actividad_docente');
+    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
+}
+function funcion_editar(index, id_actividad) {
+    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/' + id_actividad, '#form_actividad_docente_especifico', '#info_actividad_docente');
 }
 function myFunctionActividad() {
     var x = document.getElementById("tipo_actividad_docente");
-    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + x.value + '/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
+    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + x.value + '/0/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
 }
 
 function mostrar_horas_fechas(horas) {

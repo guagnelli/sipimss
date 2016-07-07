@@ -15,17 +15,6 @@ class Actividad_docente_model extends CI_Model {
 
     /**
      * 
-     * @return Array
-     */
-    public function getEstadoCivil() {
-        $query = $this->db->get('cestado_civil');
-        $estadoCivil = $query->result_array();
-        $query->free_result();
-        return $estadoCivil;
-    }
-
-    /**
-     * 
      * @param int $usuario_id
      */
     public function get_actividad_docente_general($usuario_id) {
@@ -60,6 +49,24 @@ class Actividad_docente_model extends CI_Model {
         $this->db->update('actividad_docente_gral', $datos_actividad_docente);
 //        pr($error);
         return 1;
+    }
+
+    public function insert_emp_actividad_docente_gen($name_entidad = null, $array_campos) {
+        if (is_null($name_entidad)) {
+            return -1;
+        }
+        if (is_null($array_campos)) {
+            return -1;
+        }
+        $this->db->insert($name_entidad, $array_campos); //Almacena tipo de actividad, según nombre de la entidad enviado
+        $obtiene_id_entidad_actividad_docente = $this->db->insert_id();
+        pr($this->db->last_query());
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return -1;
+        } else {
+            return $obtiene_id_entidad_actividad_docente;
+        }
     }
 
 }

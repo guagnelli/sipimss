@@ -68,7 +68,8 @@ if (!function_exists('carga_catalogos')) {
                     break;
                 case 12://ctipo_curso
                     $tmp_result = $CI->cg->get_ctipo_curso();
-                    $data['ctipurso'] = dropdown_options($tmp_result, 'TIP_CURSO_CVE', 'TIP_CUR_NOMBRE');
+                    $data['ctipo_curso'] = dropdown_options($tmp_result, 'TIP_CURSO_CVE', 'TIP_CUR_NOMBRE');
+//                    pr($tmp_result);
                     break;
                 case 13://ctipo_especialidad
                     $tmp_result = $CI->cg->get_ctipo_especialidad();
@@ -84,6 +85,10 @@ if (!function_exists('carga_catalogos')) {
                 case 16://ctipo_material
                     $tmp_result = $CI->cg->get_ctipo_material();
                     $data['ctipo_material'] = dropdown_options($tmp_result, 'TIP_MATERIAL_CVE', 'TIP_MAT_NOMBRE');
+                    break;
+                case 17://ctipo_material
+                    $tmp_result = $CI->cg->get_cestado_civil();
+                    $data['cestado_civil'] = dropdown_options($tmp_result, 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
                     break;
             }
         }

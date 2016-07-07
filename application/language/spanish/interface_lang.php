@@ -127,7 +127,9 @@ $lang['interface'] = array(
     //Textos generales
     'general' => array(
         'msg_no_existe_empleado'=>'No se encontrarón datos del empleado. Por favor registre sus datos',
-        'advertencia_agregar_todos_los_datos'=>'Debe llenar todos los campos obligatorios'
+        'advertencia_agregar_todos_los_datos'=>'Debe llenar todos los campos obligatorios',
+        'datos_almacenados_correctamente'=>'Los datos se almacenaron correctamente',
+        'error_guardar'=>'Los datos no se almacenaron. Por favor intentemo más tarde'
     ),
     //Actividad del docente
     'actividad_docente' => array(
@@ -186,6 +188,7 @@ $lang['interface'] = array(
         'drop_especialidad' => 'Seleccione una especialidad',
         'lbl_anio_fungio' => 'Año en que fungió',
         'lbl_nombre_materia' => 'Nombre de la materia que impartió',
+        'text_nombre_materia' => 'Nombre de la materia',
         'lbl_area' => 'Área',
         'drop_area' => 'Seleccione área',
         'drop_tipo_formacion_profesional' => 'Seleccione tipo de formación profesional',
@@ -196,6 +199,10 @@ $lang['interface'] = array(
         'drop_tipo_material' => 'Seleccione tipo de material',
         'lbl_tipo_participacion' => 'Tipo de participación',
         'drop_tipo_participacion' => 'Seleccione tipo de participación',
+        'lbl_tipo_curso' => 'Tipo de curso',
+        'drop_tipo_curso' => 'Seleccione tipo de curso',
+        'lbl_folio' => 'Folío constancia',
+        'text_folio_constancia' => 'Folío',
     ),
 );
 

@@ -6,18 +6,18 @@ if (!defined('BASEPATH'))
 $config['salt'] = "B0no5"; ///SALT
 
 $config['modulos_no_sesion'] = array(
-                           'login' => array('index','cerrar_session', 'cerrar_session_ajax'), 
-                           'registro' => array('*'), 
-                           'pagina_no_encontrada' => array('index'),
-                           'recuperar_contrasenia' => '*',
-                           'captcha'=>'*'
-                           );
+    'login' => array('index', 'cerrar_session', 'cerrar_session_ajax'),
+    'registro' => array('*'),
+    'pagina_no_encontrada' => array('index'),
+    'recuperar_contrasenia' => '*',
+    'captcha' => '*'
+);
 $config['modulos_sesion_generales'] = array(
-                           'login' => array('cerrar_session', 'cerrar_session_ajax'), 
-                           'rol' => '*',
-                           'pagina_no_encontrada' => array('index'),
-                           'pruebas' => '*' 
-                           );
+    'login' => array('cerrar_session', 'cerrar_session_ajax'),
+    'rol' => '*',
+    'pagina_no_encontrada' => array('index'),
+    'pruebas' => '*'
+);
 
 /////Ruta de solicitudes
 $config['ruta_documentacion'] = $_SERVER["DOCUMENT_ROOT"] . "/sipimss_bonos/assets/files/archivos_bono/";
@@ -96,202 +96,173 @@ $config['buscador_listado'] = array(6, 5, 4, 14, 15);
 //$config['buscador_listado'] = array(                     'vista'=>array(array('vista'=>1,10,13,14,15,16,17,18,19)));
 
 $config['alert_msg'] = array(
-                'SUCCESS' => array('id_msg' => 1 , 'class' => 'success') ,
-                'DANGER' => array('id_msg' => 2 , 'class' => 'danger'),
-                'WARNING' => array('id_msg' => 3 , 'class' => 'warning'),
-                'INFO' => array('id_msg' => 4 , 'class' => 'info')
-              );
+    'SUCCESS' => array('id_msg' => 1, 'class' => 'success'),
+    'DANGER' => array('id_msg' => 2, 'class' => 'danger'),
+    'WARNING' => array('id_msg' => 3, 'class' => 'warning'),
+    'INFO' => array('id_msg' => 4, 'class' => 'info')
+);
 
 $config['parametros_bitacora'] = array('USUARIO_CVE' => 'NULL', 'BIT_VALORES' => 'NULL',
     'BIT_IP' => 'NULL', 'BIT_RUTA' => 'NULL', 'MODULO_CVE' => 'NULL');
-$config['parametros_log'] = array('USUARIO_CVE' => 'NULL', 'LOG_INI_SES_IP' => 'NULL', 
-    'INICIO_SATISFACTORIO'=>'NULL');
+$config['parametros_log'] = array('USUARIO_CVE' => 'NULL', 'LOG_INI_SES_IP' => 'NULL',
+    'INICIO_SATISFACTORIO' => 'NULL');
 
-$config['catalogos_indexados'] = array(//Catógos que existen actualmente y su identificación
-    1=>'cmodalidad',
-    2=>'licenciatura',
-    3=>'cmodulo',
-    4=>'carea',
-    5=>'cmateria',
-    6=>'ccurso',
-    7=>'cinstitucion_avala',
-    8=>'ctipo_actividad_docente',
-    9=>'crol_desempenia',
-    10=>'ctipo_comprobante',
-    11=>'ctipo_licenciatura',
-    12=>'ctipo_curso',
-    13=>'ctipo_especialidad',
-    14=>'ctipo_formacion_profesional',
-    15=>'ctipo_participacion',
-    16=>'ctipo_material',
+$config['catalogos_indexados'] = array(//Catógos generales que existen actualmente y su identificación
+    1 => 'cmodalidad',
+    2 => 'licenciatura',
+    3 => 'cmodulo',
+    4 => 'carea',
+    5 => 'cmateria',
+    6 => 'ccurso',
+    7 => 'cinstitucion_avala',
+    8 => 'ctipo_actividad_docente',
+    9 => 'crol_desempenia',
+    10 => 'ctipo_comprobante',
+    11 => 'ctipo_licenciatura',
+    12 => 'ctipo_curso',
+    13 => 'ctipo_especialidad',
+    14 => 'ctipo_formacion_profesional',
+    15 => 'ctipo_participacion',
+    16 => 'ctipo_material',
+    17 => 'cestado_civil',
 );
 
 $config['actividad_docente_componentes'] = array(//Arreglo que se utilizará para leer las configuraciones de cada formularío de actividad docente
-    0=>array('tabla_guardado'=>'','vista'=>'','validaciones' => '', 'catalogos_indexados'=>array(), 'validaciones_extra'=>array()),
-    1=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_ciclos_clinicos','validaciones' => 'form_ccl', 'catalogos_indexados'=>array(1,2,6,7,9,10), 'validaciones_extra'=>array('duracion','pago_extra')),
-    2=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_internado_medico','validaciones' => 'form_ime', 'catalogos_indexados'=>array(9,7,3,1,10),'validaciones_extra'=>array('pago_extra')),
-    3=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_servicio_social','validaciones' => 'form_sso', 'catalogos_indexados'=>array(1,2,7,9,10),'validaciones_extra'=>array('pago_extra')),
-    4=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_licenciatura','validaciones' => 'form_lic', 'catalogos_indexados'=>array(1,2,6,7,9,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    5=>array('tabla_guardado'=>'emp_esp_medica','vista'=>'perfil/actividad_docente/actividad_d_especialidad_medica','validaciones' => 'form_eme', 'catalogos_indexados'=>array(9,7,3,1,10,13),'validaciones_extra'=>array('pago_extra')),
-    6=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_maestria','validaciones' => 'form_mas', 'catalogos_indexados'=>array(4,6,9,7,1,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    7=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_doctorado','validaciones' => 'form_doc', 'catalogos_indexados'=>array(4,6,9,7,1,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    8=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_tecnico','validaciones' => 'form_tec', 'catalogos_indexados'=>array(4,6,9,7,1,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    9=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_postecnico','validaciones' => 'form_pos', 'catalogos_indexados'=>array(4,6,9,7,1,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    10=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_educacion_continua','validaciones' => 'form_eco', 'catalogos_indexados'=>array(4,6,9,7,1,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    11=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_directivos_para_la_salud','validaciones' => 'form_dplsa', 'catalogos_indexados'=>array(4,6,9,7,1,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    12=>array('tabla_guardado'=>'emp_formacion_profesional','vista'=>'perfil/actividad_docente/actividad_d_educacion_formacin_de_profesores','validaciones' => 'form_efdp', 'catalogos_indexados'=>array(4,6,9,7,1,10,14),'validaciones_extra'=>array('duracion','pago_extra')),
-    13=>array('tabla_guardado'=>'emp_actividad_docente','vista'=>'perfil/actividad_docente/actividad_d_formacion_de_profesores_en_investigacion','validaciones' => 'form_fdpei', 'catalogos_indexados'=>array(4,6,9,7,1,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    14=>array('tabla_guardado'=>'emp_educacion_distancia','vista'=>'perfil/actividad_docente/actividad_d_educacion_a_distancia','validaciones' => 'form_ead', 'catalogos_indexados'=>array(1,15,16,10),'validaciones_extra'=>array('duracion','pago_extra')),
-    15=>array('tabla_guardado'=>'emp_educacion_distancia','vista'=>'perfil/actividad_docente/actividad_d_actividades_de_investigacion_educativa','validaciones' => 'form_adie', 'catalogos_indexados'=>array(),'validaciones_extra'=>array('duracion','pago_extra'))
+    0 => array('tabla_guardado' => '', 'vista' => '', 'validaciones' => '', 'catalogos_indexados' => array(), 'validaciones_extra' => array()),
+    1 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_ciclos_clinicos', 'validaciones' => 'form_ccl', 'catalogos_indexados' => array(1, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    2 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_internado_medico', 'validaciones' => 'form_ime', 'catalogos_indexados' => array(9, 7, 3, 1, 10), 'validaciones_extra' => array('pago_extra')),
+    3 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_servicio_social', 'validaciones' => 'form_sso', 'catalogos_indexados' => array(1, 2, 7, 9, 10), 'validaciones_extra' => array('pago_extra')),
+    4 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_licenciatura', 'validaciones' => 'form_lic', 'catalogos_indexados' => array(1, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    5 => array('tabla_guardado' => 'emp_esp_medica', 'vista' => 'perfil/actividad_docente/actividad_d_especialidad_medica', 'validaciones' => 'form_eme', 'catalogos_indexados' => array(9, 7, 3, 1, 10, 13), 'validaciones_extra' => array('pago_extra')),
+    6 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_maestria', 'validaciones' => 'form_mas', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    7 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_doctorado', 'validaciones' => 'form_doc', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    8 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_tecnico', 'validaciones' => 'form_tec', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    9 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_postecnico', 'validaciones' => 'form_pos', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    10 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_continua', 'validaciones' => 'form_eco', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    11 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_directivos_para_la_salud', 'validaciones' => 'form_dplsa', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    12 => array('tabla_guardado' => 'emp_formacion_profesional', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_formacion_de_profesores', 'validaciones' => 'form_efdp', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10, 14), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    13 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_formacion_de_profesores_en_investigacion', 'validaciones' => 'form_fdpei', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    14 => array('tabla_guardado' => 'emp_educacion_distancia', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_a_distancia', 'validaciones' => 'form_ead', 'catalogos_indexados' => array(9, 12, 10), 'validaciones_extra' => array('duracion')),
+    15 => array('tabla_guardado' => 'emp_educacion_distancia', 'vista' => 'perfil/actividad_docente/actividad_d_actividades_de_investigacion_educativa', 'validaciones' => 'form_adie', 'catalogos_indexados' => array(), 'validaciones_extra' => array('duracion'))
 );
 
 $config['actividad_docente_campos'] = array(
-    1=>array('name'=>'Nombre del curso', 'tipe'=>'dropdown'), 
-    2=>array('name'=>'Rol que desempeña como profesor/tutor', 'tipe'=>'dropdown'),
-    3=>array('name'=>'Institución educativa que avala', 'tipe'=>'dropdown'),
-    4=>array('name'=>'Recibe pago extra por la Institución que avala', 'tipe'=>'radio'),
-    5=>array('name'=>'Licenciatura', 'tipe'=>'dropdown'),
-    6=>array('name'=>'Modalidad', 'tipe'=>'dropdown'),
-    7=>array('name'=>'Año en que se impartió', 'tipe'=>'number'),
-    8=>array('name'=>'Duración ', 'tipe'=>'text'),
-    9=>array('name'=>'Módulo', 'tipe'=>'dropdown'),
-    10=>array('name'=>'Período (fechas de inicio y término)', 'tipe'=>'text'),
-    11=>array('name'=>'Especialidad', 'tipe'=>'dropdown'),
-    12=>array('name'=>'Área', 'tipe'=>'dropdown'),
-    13=>array('name'=>'Nombre de la materia que impartió', 'tipe'=>''),
-    14=>array('name'=>'Tipo de material', 'tipe'=>''),//duda
-    15=>array('name'=>'Tipo de Formación docente', 'tipe'=>''),//duda
-    16=>array('name'=>'Tipo de participación', 'tipe'=>''),//duda
-    17=>array('name'=>'Nombre del trabajo de investigación', 'tipe'=>''),//duda
-    18=>array('name'=>'Número de Folio de aceptación de SIRELCIS', 'tipe'=>''),//duda
-    19=>array('name'=>'Tipo de estudio', 'tipe'=>''),//duda
-    20=>array('name'=>'Medio de divulgación', 'tipe'=>''),//duda
-    21=>array('name'=>'En caso de publicación, anotar cita', 'tipe'=>''),//duda
-    22=>array('name'=>'Comprobante en caso de no ser publicación', 'tipe'=>''),//duda
-    
+    1 => array('name' => 'Nombre del curso', 'tipe' => 'dropdown'),
+    2 => array('name' => 'Rol que desempeña como profesor/tutor', 'tipe' => 'dropdown'),
+    3 => array('name' => 'Institución educativa que avala', 'tipe' => 'dropdown'),
+    4 => array('name' => 'Recibe pago extra por la Institución que avala', 'tipe' => 'radio'),
+    5 => array('name' => 'Licenciatura', 'tipe' => 'dropdown'),
+    6 => array('name' => 'Modalidad', 'tipe' => 'dropdown'),
+    7 => array('name' => 'Año en que se impartió', 'tipe' => 'number'),
+    8 => array('name' => 'Duración ', 'tipe' => 'text'),
+    9 => array('name' => 'Módulo', 'tipe' => 'dropdown'),
+    10 => array('name' => 'Período (fechas de inicio y término)', 'tipe' => 'text'),
+    11 => array('name' => 'Especialidad', 'tipe' => 'dropdown'),
+    12 => array('name' => 'Área', 'tipe' => 'dropdown'),
+    13 => array('name' => 'Nombre de la materia que impartió', 'tipe' => ''),
+    14 => array('name' => 'Tipo de material', 'tipe' => ''), //duda
+    15 => array('name' => 'Tipo de Formación docente', 'tipe' => ''), //duda
+    16 => array('name' => 'Tipo de participación', 'tipe' => ''), //duda
+    17 => array('name' => 'Nombre del trabajo de investigación', 'tipe' => ''), //duda
+    18 => array('name' => 'Número de Folio de aceptación de SIRELCIS', 'tipe' => ''), //duda
+    19 => array('name' => 'Tipo de estudio', 'tipe' => ''), //duda
+    20 => array('name' => 'Medio de divulgación', 'tipe' => ''), //duda
+    21 => array('name' => 'En caso de publicación, anotar cita', 'tipe' => ''), //duda
+    22 => array('name' => 'Comprobante en caso de no ser publicación', 'tipe' => ''), //duda
+);
+
+$config['emp_actividad_docente'] = array(
+    'hora_dedicadas' => array('select' => 'EAD_DURACION', 'insert' => 'EAD_DURACION'),
+    'fecha_inicio_pick' => array('select' => 'EAD_FCH_INICIO', 'insert' => 'EAD_FCH_INICIO'),
+    'fecha_fin_pick' => array('select' => 'EAD_FCH_FIN', 'insert' => 'EAD_FCH_FIN'),
+    'periodo_fecha_inicio_pick' => array('select' => 'EAD_FCH_INICIO', 'insert' => 'EAD_FCH_INICIO'),
+    'periodo_fecha_fin_pick' => array('select' => 'EAD_FCH_FIN', 'insert' => 'EAD_FCH_FIN'),
+    'cmodalidad' => array('select' => 'MODALIDAD_CVE', 'insert' => 'MODALIDAD_CVE'),
+    'licenciatura' => array('select' => 'LICENCIATURA_CVE', 'insert' => 'LICENCIATURA_CVE'),
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'),
+    'pago_extra' => array('select' => 'EAD_EXTRA_INS_AVALA', 'insert' => 'EAD_EXTRA_INS_AVALA'),
+    'curso_principal' => array('select' => 'EAD_CURSO_PRIN_IMPARTE', 'insert' => 'EAD_CURSO_PRIN_IMPARTE'),
+    'crol_desempenia' => array('select' => 'ROL_DESEMPENIA_CVE', 'insert' => 'ROL_DESEMPENIA_CVE'),
+    'ctipo_actividad_docente' => array('select' => 'TIP_ACT_DOC_CVE', 'insert' => 'TIP_ACT_DOC_CVE'),
+    'cinstitucion_avala' => array('select' => 'INS_AVALA_CVE', 'insert' => 'INS_AVALA_CVE'),
+    'ctipo_curso' => array('select' => 'CURSO_CVE', 'insert' => 'CURSO_CVE'),
+    'actividad_docente_general' => array('select' => 'ACT_DOC_GRAL_CVE', 'insert' => 'ACT_DOC_GRAL_CVE'),
+    'cmateria' => array('select' => 'TIP_MATERIAL_CVE', 'insert' => 'TIP_MATERIAL_CVE'),
+    'carea' => array('select' => 'AREA_CVE', 'insert' => 'AREA_CVE'),
+    'actividad_docente_gral' => array('select' => 'ACT_DOC_GRAL_CVE', 'insert' => 'ACT_DOC_GRAL_CVE'),
+    'cmodulo' => array('select' => 'MODULO_CVE', 'insert' => 'MODULO_CVE'),
+    'actividad_anios_dedicados_docencia' => array('select' => 'EAD_ANIO_CURSO', 'insert' => 'EAD_ANIO_CURSO'),
+    'nombre_curso' => array('select' => 'EAD_NOMBRE_CURSO', 'insert' => 'EAD_NOMBRE_CURSO'),
+    'nombre_materia_impartio' => array('select' => 'EAD_NOMBRE_MATERIA_IMPARTIO', 'insert' => 'EAD_NOMBRE_MATERIA_IMPARTIO'),
+);
+
+$config['emp_educacion_distancia'] = array(
+    'hora_dedicadas' => array('select' => 'EED_DURACION', 'insert' => 'EED_DURACION'),
+    'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
+    'crol_desempenia' => array('select' => 'ROL_DESEMPENIA_CVE', 'insert' => 'ROL_DESEMPENIA_CVE'),
+    'fecha_fin_pick' => array('select' => 'EED_FCH_FIN', 'insert' => 'EED_FCH_FIN'),
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'),
+    'ccurso' => array('select' => 'CURSO_CVE', 'insert' => 'CURSO_CVE'),
+    'fecha_inicio_pick' => array('select' => 'EDD_FCH_INICIO', 'insert' => 'EDD_FCH_INICIO'),
+    'actividad_anios_dedicados_docencia' => array('select' => 'EDD_CUR_ANIO', 'insert' => 'EDD_CUR_ANIO'),
+    '' => array('select' => 'EDD_CUR_PUN_ROL', 'insert' => 'EDD_CUR_PUN_ROL'),
+    '' => array('select' => 'EDD_CUR_PUN_ALCANCE', 'insert' => 'EDD_CUR_PUN_ALCANCE'),
+    '' => array('select' => 'EDD_CUR_PUN_DURACION', 'insert' => 'EDD_CUR_PUN_DURACION'),
+    '' => array('select' => 'EDD_CUR_SUM_TOT_ACT', 'insert' => 'EDD_CUR_SUM_TOT_ACT'),
+    '' => array('select' => 'EDD_CUR_PROM_EVALUACIONES', 'insert' => 'EDD_CUR_PROM_EVALUACIONES'),
+    'ctipo_actividad_docente' => array('select' => 'TIP_ACT_DOC_CVE', 'insert' => 'TIP_ACT_DOC_CVE'),
+    'folio_constancia' => array('select' => 'FOLIO_CONSTANCIA', 'insert' => 'FOLIO_CONSTANCIA'),
+    'ctipo_curso' => array('select' => 'TIPO_CURSO_CVE', 'insert' => 'TIPO_CURSO_CVE'),
+    'nombre_curso' => array('select' => 'EED_NOMBRE_CURSO', 'insert' => 'EED_NOMBRE_CURSO'),
+    'actividad_docente_general' => array('select' => 'ACT_DOC_GRAL_CVE', 'insert' => 'ACT_DOC_GRAL_CVE'),
+);
+
+$config['emp_esp_medica'] = array(
+    'ctipo_especialidad' => array('select' => 'TIP_ESP_MEDICA_CVE', 'insert' => 'TIP_ESP_MEDICA_CVE'),
+    'crol_desempenia' => array('select' => 'ROL_DESEMPENIA_CVE', 'insert' => 'ROL_DESEMPENIA_CVE'),
+    'cinstitucion_avala' => array('select' => 'INS_AVALA_CVE', 'insert' => 'INS_AVALA_CVE'),
+    'cmodalidad' => array('select' => 'MODALIDAD_CVE', 'insert' => 'MODALIDAD_CVE'),
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'),
+    'periodo_fecha_inicio_pick' => array('select' => 'EEM_FCH_INICIO', 'insert' => 'EEM_FCH_INICIO'),
+    'periodo_fecha_fin_pick' => array('select' => 'EEM_FCH_FIN', 'insert' => 'EEM_FCH_FIN'),
+    'pago_extra' => array('select' => 'EEM_PAGO_EXTRA', 'insert' => 'EEM_PAGO_EXTRA'),
+    'actividad_anios_dedicados_docencia' => array('select' => 'EEM_ANIO_FUNGIO', 'insert' => 'EEM_ANIO_FUNGIO'),
+    'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
+    'hora_dedicadas' => array('select' => 'EEM_DURACION', 'insert' => 'EEM_DURACION'),
+    'actividad_docente_general' => array('select' => 'ACT_DOC_GRAL_CVE', 'insert' => 'ACT_DOC_GRAL_CVE'),
+);
+
+$config['emp_formacion_profesional'] = array(
+    'hora_dedicadas' => array('select' => 'EFP_DURACION', 'insert' => 'EFP_DURACION'),
+    'ctematica' => array('select' => 'TEMATICA_CVE', 'insert' => 'TEMATICA_CVE'),
+    'cmodalidad' => array('select' => 'MODALIDAD_CVE', 'insert' => 'MODALIDAD_CVE'),
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'),
+    'cinstitucion_avala' => array('select' => 'INS_AVALA_CVE', 'insert' => 'INS_AVALA_CVE'),
+    'fecha_inicio_pick' => array('select' => 'EFP_FCH_INICIO', 'insert' => 'EFP_FCH_INICIO'),
+    'fecha_fin_pick' => array('select' => 'EFP_FCH_FIN', 'insert' => 'EFP_FCH_FIN'),
+    'pago_extra' => array('select' => 'EFP_EXTRA_INS_AVALA', 'insert' => 'EFP_EXTRA_INS_AVALA'),
+    'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
+    'nd_a' => array('select' => 'EFP_TIENE_FORMA_EDU', 'insert' => 'EFP_TIENE_FORMA_EDU'),
+    'ctipo_curso' => array('select' => 'CURSO_CVE', 'insert' => 'CURSO_CVE'),
+    'cejercicio_profesional' => array('select' => 'EJE_PRO_CVE', 'insert' => 'EJE_PRO_CVE'),
+    'nd_b' => array('select' => 'EMP_FORMACION_PROFESIONAL_CVE', 'insert' => 'EMP_FORMACION_PROFESIONAL_CVE'),
+    'licenciatura' => array('select' => 'LICENCIATURA_CVE', 'insert' => 'LICENCIATURA_CVE'),
+    'actividad_docente_gral' => array('select' => 'ACT_DOC_GRAL_CVE', 'insert' => 'ACT_DOC_GRAL_CVE'),
+    'ctipo_formacion_profesional' => array('select' => 'TIP_FOR_PROF_CVE', 'insert' => 'TIP_FOR_PROF_CVE'),
+    'actividad_anios_dedicados_docencia' => array('select' => 'EFO_ANIO_CURSO', 'insert' => 'EFO_ANIO_CURSO'),
+    'nombre_curso' => array('select' => 'EFP_NOMBRE_CURSO', 'insert' => 'EFP_NOMBRE_CURSO'),
+    'actividad_docente_general' => array('select' => 'ACT_DOC_GRAL_CVE', 'insert' => 'ACT_DOC_GRAL_CVE'),
+    'crol_desempenia' => array('select' => 'ROL_DESEMPENIA_CVE', 'insert' => 'ROL_DESEMPENIA_CVE'),
 );
 
 
-$config['name_campos_actividad_docente'] = array(
-		'duracion'  => array(//radio button *************************************
-            'campo' => 'duracion',
-            'tabla' => 'duración de curso',
-        ),
-        'pago_extra' => array(
-            'campo' => 'pago_extra',
-            'tabla' => 'Indicar pago extra',
-        ),
-        'ccurso' => array(//*****Catálogos**************************************
-            'campo' => 'ccurso',
-            'tabla' => 'Nombre del curso',
-        ),
-        'crol_desempenia' => array(
-            'campo' => 'crol_desempenia',
-            'tabla' => 'rol que desempeña',
-        ),
-        'cinstitucion_avala' => array(
-            'campo' => 'cinstitucion_avala',
-            'tabla' => 'Institución que avala',
-        ),
-        'licenciatura' => array(
-            'campo' => 'licenciatura',
-            'tabla' => 'Licenciatura',
-        ),
-        'cmodalidad' => array(
-            'campo' => 'cmodalidad',
-            'tabla' => 'modalidad',
-        ),
-        'ctipo_comprobante' => array(
-            'campo' => 'ctipo_comprobante',
-            'tabla' => 'tipo de comprobante',
-        ),
-        'cmodulo' => array(
-            'campo' => 'cmodulo',
-            'tabla' => 'módulo',
-        ),
-        'carea' => array(
-            'campo' => 'carea',
-            'tabla' => 'área',
-        ),
-        'ctipo_formacion_profesional' => array(
-            'campo' => 'ctipo_formacion_profesional',
-            'tabla' => 'formación profesional',
-        ),
-        'ctipo_participacion' => array(
-            'campo' => 'ctipo_participacion',
-            'tabla' => 'tipo de participacón',
-        ),
-        'ctipo_material' => array(
-            'campo' => 'ctipo_material',
-            'tabla' => 'tipo de material',
-        ),
-        'ctipo_especialidad' => array(
-            'campo' => 'ctipo_especialidad',
-            'tabla' => 'tipo de especialidad',
-        ),
-        'material_elaborado' => array(//  Textos********************************
-            'campo' => 'material_elaborado',
-            'tabla' => 'nombre del material elaborado',
-        ),
-        'text_comprobante' => array(
-            'campo' => 'text_comprobante',
-            'tabla' => 'Nombre de comprobante',
-        ),
-        'nombre_curso' => array(
-            'campo' => 'nombre_curso',
-            'tabla' => 'nombre del curso', 
-        ),
-        'actividad_anios_dedicados_docencia' => array(
-            'campo' => 'actividad_anios_dedicados_docencia',
-            'tabla' => 'de años',
-        ),
-        'fecha_inicio_pick' => array(
-            'campo' => 'fecha_inicio_pick',
-            'tabla' => 'fecha de inicio',
-        ),
-        'fecha_fin_pick' => array(
-            'campo' => 'fecha_fin_pick',
-            'tabla' => 'fecha de fin',
-        ),
-        'periodo_fecha_inicio_pick' => array(
-            'campo' => 'periodo_fecha_inicio_pick',
-            'tabla' => 'fecha de inicio',
-        ),
-        'periodo_fecha_fin_pick' => array(
-            'campo' => 'periodo_fecha_fin_pick',
-            'tabla' => 'fecha de fin',
-        ),
-        'hora_dedicadas' => array(
-            'campo' => 'hora_dedicadas',
-            'tabla' => 'horas dedicadas',
-        ),
+
+
+$config['comprobante'] = array(
+    'ctipo_comprobante' => array('select' => 'TIPO_COMPROBANTE_CVE', 'insert' => 'TIPO_COMPROBANTE_CVE'), //comprobante
+    'text_comprobante' => array('select' => 'COM_NOMBRE', 'insert' => 'COM_NOMBRE'), //comprobante
 );
 
-$config['name_campos_actividad_docente_select'] = array(
-    'cmodalidad'=>'MODALIDAD_CVE',
-    'licenciatura'=>'LICENCIATURA_CVE',
-    'cmodulo'=>'MODULO_CVE',
-    'carea'=>'AREA_CVE',
-    'cmateria'=>'TIP_MATERIAL_CVE',
-    'cinstitucion_avala'=>'INS_AVALA_CVE',
-    'crol_desempenia'=>'ROL_DESEMPENIA_CVE',
-    'ctipo_comprobante'=>'TIPO_COMPROBANTE_CVE', //comprobante
-    'ctipo_curso'=>'CURSO_CVE',
-    'ctipo_formacion_profesional'=>'',
-    'actividad_anios_dedicados_docencia'=>'EAD_ANIO_CURSO',
-    'comprobante' => 'COMPROBANTE_CVE',
-    'nombre_curso' => 'EAD_CURSO_PRIN_IMPARTE as "nombre_curso"',
-    'actividad_docente_general' =>'TIP_ACT_DOC_CVE',
-    'ctipo_especialidad'=>'',
-    'ctipo_actividad_docente'=>'',
-    ''=>'EAD_NOMBRE_MATERIA_IMPARTIO',
-);
-
-$config['name_campos_comprobante'] = array(
-    'ctipo_comprobante'=>'TIPO_COMPROBANTE_CVE', //comprobante
-    'text_comprobante'=>'COM_NOMBRE', //comprobante
-);
-    
 //    EAD_DURACION
 //    EAD_FCH_INICIO
 //    EAD_FCH_FIN

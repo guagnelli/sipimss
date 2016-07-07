@@ -4,6 +4,15 @@
     <div class="list-group">
         <div class="list-group-item">
                 <div class="panel-body">
+                            <?php if(isset($error)){ ?>
+                            <div class="row">
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                                <div class="col-md-10 col-sm-10 col-xs-10">
+                                           <?php echo html_message($error, $tipo_msg); ?>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                            </div>
+                            <?php } ?>
                             <div class='row'>
                                 <!--<div class="form-group col-xs-10 col-md-10 col-md-offset-1 col-md-offset-1">-->
                                 <div class="col-md-6">
@@ -16,16 +25,18 @@
                                             <span class="glyphicon glyphicon-education"> </span>
                                         </span>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'ccurso', 'type' => 'dropdown', 
-                                                'options' => $ccurso, 
-                                                'first' => array('' => $string_values['drop_curso']), 
-                                                'value' => '',
-                                                'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_curso'] ))); 
+                                            echo $this->form_complete->create_element(array('id' => 'nombre_curso', 
+                                                'type' => 'text', 
+                                                'value' => isset($nombre_curso) ? $nombre_curso : '',
+                                                'attributes' => array( 
+                                                'class' => 'form-control', 
+                                                'placeholder' => $string_values['text_name_curso_imparte'], 
+                                                'data-toggle' => 'tooltip', 
+                                                'data-placement' => 'top', 
+                                                'title' => $string_values['text_name_curso_imparte'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('ccurso'); ?>
+                                   <?php   echo form_error_format('nombre_curso'); ?>
                                 </div>
                                 <div class="col-md-6">
                                      <label for='lbl_rol_desempenia' class="control-label">

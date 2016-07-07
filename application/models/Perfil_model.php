@@ -2,32 +2,28 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Perfil_model extends CI_Model
-{
-    
-    public function __construct()
-    {
+class Perfil_model extends CI_Model {
+
+    public function __construct() {
         parent::__construct();
         $this->load->database();
     }
-    
-    public function getGeneros()
-    {
+
+    public function getGeneros() {
         
     }
-    
+
     /**
      * 
      * @return Array
      */
-    public function getEstadoCivil()
-    {
+    public function getEstadoCivil() {
         $query = $this->db->get('cestado_civil');
         $estadoCivil = $query->result_array();
         $query->free_result();
         return $estadoCivil;
     }
-    
+
     /**
      * 
      * @param int $identificador
@@ -56,7 +52,7 @@ class Perfil_model extends CI_Model
             'EMP_TEL_PARTICULAR as estatusEmpleado',
             'CP.PRE_NOMBRE as clavePresupuestal',
             ''
-            ));
+        ));
         $this->db->from('empleado AS EM');
         $this->db->join('cdelegacion AS CDEL', 'CDEL.DELEGACION_CVE = EM.DELEGACION_CVE', 'left');
         $this->db->join('ccategoria AS CCAT', 'CCAT.CATEGORIA_CVE = EM.CATEGORIA_CVE', 'left');
@@ -67,6 +63,21 @@ class Perfil_model extends CI_Model
         $this->db->where('EM.USUARIO_CVE', $identificador);
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function insert_comprobante($array_campos) {
+        if (is_null($array_campos)) {
+            return -1;
+        }
+        $this->db->insert('comprobante', $array_campos); //Almacena usuario
+        $obtiene_id_comprobante = $this->db->insert_id();
+        pr($this->db->last_query());
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return -1;
+        } else {
+            return $obtiene_id_comprobante;
+        }
     }
 
 }
