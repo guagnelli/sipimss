@@ -554,9 +554,9 @@ if (!function_exists('get_busca_array_nivel_profundidad_dos')) {
 if (!function_exists('get_busca_hijos')) {
 
     /**
-     * 
-     * @param type $array_busqueda
-     * @param type $controlador
+     * @author LEAS
+     * @param  type $array_busqueda
+     * @param  type $controlador
      * @return array
      */
     function get_busca_hijos($array_busqueda = null, $controlador = null) {

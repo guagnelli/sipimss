@@ -80,6 +80,7 @@ class Perfil extends MY_Controller {
         if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
             $this->config->load('form_validation'); //Cargar archivo con validaciones
             $validations = $this->config->item('form_actividad_docente_general'); //Obtener validaciones de archivo
+//            pr($validations);
             $this->form_validation->set_rules($validations);
 //            pr($this->input->post(null, true));
             if ($this->form_validation->run()) { //Se ejecuta la validación de datos
@@ -90,7 +91,7 @@ class Perfil extends MY_Controller {
                     if (!empty($empleado)) {
                         $actividad_docente_up['ANIOS_DEDICADOS'] = $datos_registro['actividad_anios_dedicados_docencia'];
                         $actividad_docente_up['EJER_PREDOMI_CVE'] = $datos_registro['ejercicio_predominante'];
-                        $actividad_docente_up['CURSO_PRINC_IMPARTE'] = $datos_registro['curso_principal_imapare'];
+//                        $actividad_docente_up['CURSO_PRINC_IMPARTE'] = $datos_registro['curso_principal_imapare'];
                         $actividad_docente_up['EMPLEADO_CVE'] = $empleado[0]['EMPLEADO_CVE']; //Asigna cve del empleado
                         $resultado = $this->adm->insert_actividad_docente_general($actividad_docente_up); //Inserta datos del docente
                         if ($resultado == -1) {//hubo un error a la hora de insertar un registro
@@ -115,7 +116,7 @@ class Perfil extends MY_Controller {
                     //Preguntar si, existira mas de una actividad general por ususario, y si no, como se distingue 
                     $actividad_docente_up['ANIOS_DEDICADOS'] = $datos_registro['actividad_anios_dedicados_docencia'];
                     $actividad_docente_up['EJER_PREDOMI_CVE'] = $datos_registro['ejercicio_predominante'];
-                    $actividad_docente_up['CURSO_PRINC_IMPARTE'] = $datos_registro['curso_principal_imapare'];
+//                    $actividad_docente_up['CURSO_PRINC_IMPARTE'] = $datos_registro['curso_principal_imapare'];
                     $actividad_docente_up['EMPLEADO_CVE'] = $actividad_docente[0]['EMPLEADO_CVE']; //Asigna cve del empleado
                     $resultado = $this->adm->update_actividad_docente_general($actividad_docente_up); //Verifica si existe el ususario ya contiene datos de actividad
                     if ($resultado == -1) {//hubo un error a la hora de insertar un registro
@@ -138,17 +139,36 @@ class Perfil extends MY_Controller {
                 $data['tipo_msg'] = $tipo_msg['WARNING']['class']; //Tipo de mensaje de advertencia
             }
         }
-        $curso = $this->cg->get_ccurso(); //Obtiene delegaciones del modelo
-        $data['cursos'] = dropdown_options($curso, 'CURSO_CVE', 'CUR_NOMBRE'); //Manipulamos la información a mostrar de delegación
 
         $data['string_values'] = $string_values; //Array de textos que muestra el formulario para actividad
-
-        $ejp = $this->cg->get_ejercicios_profesionales(); //Obtiene delegaciones del modelo
-        $data['ejercicios_profesionales'] = dropdown_options($ejp, 'EJE_PRO_CVE', 'EJE_PRO_NOMBRE'); //Manipulamos la información a mostrar de delegación
+        //Carga catálogos según array, visto en config->general->catalogos_indexados 
+        $data = carga_catalogos_censo(array(enum_ecg::cejercicio_predominante), $data); //Carga el catálogo de ejercicio predominante
 
         $data['actividad_docente'] = $actividad_docente; //
 
+        if (!empty($actividad_docente)) {
+//            pr($actividad_docente);
+            $data['curso_principal'] = $actividad_docente[0]['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
+            $data['curso_principal_entidad_contiene'] = $actividad_docente[0]['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
+            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE']); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
+//            pr($data['datos_tabla_actividades_docente']);
+        }
+
         $main_contet = $this->load->view('perfil/actividad_docente/actividad_tpl', $data, FALSE);
+    }
+
+    public function get_data_ajax_liscta_actividades() {
+        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+        $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
+        $string_values = $this->lang->line('interface')['actividad_docente'];
+        $data['string_values'] = $string_values;
+        if (!empty($actividad_docente)) {
+//            pr($actividad_docente);
+            $data['curso_principal'] = $actividad_docente[0]['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
+            $data['curso_principal_entidad_contiene'] = $actividad_docente[0]['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
+            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE']); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
+        }
+        echo $this->load->view('perfil/actividad_docente/tabla_actividades_docentes', $data, FALSE);
     }
 
     /**
@@ -198,21 +218,20 @@ class Perfil extends MY_Controller {
 
             if ($this->input->post() AND $combo === '1') {
                 $datos_registro = $this->input->post(null, true);
-                pr($datos_registro);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_ccl'); //Obtener validaciones de archivo
                 $valores['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_registro, 'duracion'); //Muestrá validaciones de hora y fecha de inicio y termino según la opción de duración
                 $array_validaciones_extra_actividad = $configuracion_formularios_actividad_docente['validaciones_extra']; //Carga las validaciones extrá de archivo config->general que no se pudieron automatizar con el post, es decir radio button etc
                 $validations = $this->analiza_validacion($validations, $datos_registro, $array_validaciones_extra_actividad); //Genera las validaciones del formulario que realmente deben ser tomadas en cuenta 
-                pr($validations);
                 $this->form_validation->set_rules($validations); //Carga las validaciones
                 if ($this->form_validation->run()) {//Ejecuta validaciones
                     if ($id_tipo_actividad === '0') {//Guardar un nuevo registro
                         $result_guardar_actividad = $this->guardar_actividad($configuracion_formularios_actividad_docente, $datos_registro, array('TIP_ACT_DOC_CVE' => $index_tipo_actividad_docente));
 //                        $result_guardar_actividad = -1;
+                        $resultado = array();
                         if ($result_guardar_actividad > 0) {//Se guardo correctamente, asignna mensaje success y registra en bitacora
-                            $valores['error'] = $this->lang->line('interface')['general']['datos_almacenados_correctamente']; //Mensaje de que no encontro empleado
-                            $valores['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                            $resultado['error'] = $this->lang->line('interface')['general']['datos_almacenados_correctamente']; //Mensaje de que no encontro empleado
+                            $resultado['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
                             //Guarda bitacora
                             //Datos de bitacora el actividad general del docente del usuario
                             $parametros = $this->config->item('parametros_bitacora');
@@ -220,16 +239,19 @@ class Perfil extends MY_Controller {
 //                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
                             $this->load->model('Login_model', 'lm');
                             $parametros['BIT_RUTA'] = '/perfil/get_data_ajax_actividad_cuerpo_modal/ insertar';
-                            $result = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
-                            //Recargar página despues de 5 segundos
-                            echo '<script type="text/javascript">
-                                setTimeout("parent.window.location.reload()", 5000);
-                                parent.window.location.reload(true);
-                            </script>';
+                            $resultado = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
+                            //obtener datos del último registro guardado en la entidad correspondiente
+                            $entidad_guardado = $configuracion_formularios_actividad_docente['tabla_guardado'];
+//                            pr($entidad_guardado.' -> '. $result_guardar_actividad);
+                            $rs= $this->adm->get_datos_actividad_docente($entidad_guardado, $result_guardar_actividad);
+//                            pr($rs);
+                            $resultado['insertar'] = $rs[0];
                         } else {
-                            $valores['error'] = $this->lang->line('interface')['general']['error_guardar']; //Mensaje de que no encontro empleado
-                            $valores['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                            $resultado['error'] = $this->lang->line('interface')['general']['error_guardar']; //Mensaje de que no encontro empleado
+                            $resultado['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                         }
+//                        echo json_encode($resultado);
+                        exit();
                     } else {//Editar valor actividad docente especificada
                     }
                 }
@@ -257,7 +279,7 @@ class Perfil extends MY_Controller {
         }
         return 0;
     }
-    
+
     /**
      * author LEAS
      * @param type $array_validacion
@@ -316,14 +338,13 @@ class Perfil extends MY_Controller {
             return -1;
         }
         $entidad_guardado = $array_propiedades_actividad['tabla_guardado']; //Se obtiene el nombre de la entidad de guardado
-        
         //Asignar actividad docente general "actividad_docente_general" ********
         $result_id_user = $this->session->userdata('identificador');
         $actividad_docente_general = $this->adm->get_actividad_docente_general($result_id_user);
-        if(empty($actividad_docente_general)){
+        if (empty($actividad_docente_general)) {
             return -1;
-        }else{
-        $arrar_datos_post['actividad_docente_general'] = $actividad_docente_general[0]['ACT_DOC_GRAL_CVE']; ;
+        } else {
+            $arrar_datos_post['actividad_docente_general'] = $actividad_docente_general[0]['ACT_DOC_GRAL_CVE'];
             
         }
         //Guardar comprobante **************************************************
@@ -378,13 +399,83 @@ class Perfil extends MY_Controller {
                     $campos_insert[$keys_] = $value;
             }
         }
-        
+
         //Agrega campos que no se optienen por post como tipo_actividad_cve 
         $result = $this->adm->insert_emp_actividad_docente_gen($entidad_guardado, $campos_insert); //Guardar valores en entidad
         return $result;
-//        pr($entidad_guardado);
-//        pr($campos_insert);
-        return -1;
+    }
+
+    public function get_data_ajax_eliminar_actividad_modal() {
+//        pr('tipo de actividad ' . $index_tp_actividad);
+//        pr('tipo de actividad ' . $index_entidad);
+//        pr('tipo de actividad ' . $is_cur_principal);
+        $datos_registro = $this->input->post(null, true);
+        //pr($datos_registro);  
+        //exit();
+        $propiedades_formulario_actividad = $this->config->item('actividad_docente_componentes')[$datos_registro['index_entidad']]; //Propiedades de la tabla de referencia
+//        pr('tipo de actividad name entidad: ' . $propiedades_formulario_actividad['tabla_guardado']);
+        $data = array();
+        $tipo_msg = $this->config->item('alert_msg');
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface')['actividad_docente'];
+        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+        $texto_tipo_actividad = $propiedades_formulario_actividad['texto'];
+//        if ($post === '1') {//Indica que debe intentar eliminar el curso
+        if ($this->input->post()) {//Indica que debe intentar eliminar el curso
+//            if ($this->form_validation->run()) {}
+            $entidad_eliminacion = $propiedades_formulario_actividad['tabla_guardado'];
+            $campo_where = $propiedades_formulario_actividad['llave_primaria'];
+            $resul_delete = $this->adm->delete_actividad_docente($entidad_eliminacion, $campo_where, $datos_registro['index_tp_actividad']); //Verifica si existe el ususario ya contiene datos de actividad
+            if ($resul_delete === -1) {//Manda mensaje de que no se pudo borrar el registro
+                $valor_msj = str_replace('[field]', $texto_tipo_actividad, $string_values['error_eliminar']); //Agrega nombre de la actividad de docente
+                $data['error'] = $valor_msj; //Mensaje de que no encontro empleado
+                $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                $this->output->set_status_header('400');
+            } else {
+                $valor_msj = str_replace('[field]', $texto_tipo_actividad, $string_values['succesfull_eliminar']); //Agrega nombre de la actividad de docente
+                $data['error'] = $valor_msj; //Mensaje de que no encontro empleado
+                $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                $data['borrado_correcto'] = 1; //Tipo de mensaje de error
+            }
+            echo json_encode($data);
+        }
+
+//        $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
+//        if (!empty($actividad_docente)) {//Verifica datos del usuario, es decir, que exista un registro en la tabla actividad_docente_gral
+//            $data['actividad_general_cve'] = $actividad_docente[0]['ACT_DOC_GRAL_CVE'];
+//            $data['index_tp_actividad'] = $index_tp_actividad; //Envía index de actividad a la vista 
+//            $data['index_entidad'] = $index_entidad; //Envía index de entidad a la vista 
+//            $data['is_cur_principal'] = $is_cur_principal; //Envía si es curso principal a la vista
+//            if ($is_cur_principal === '1') {//Valida que no sea un curso principal
+//                //Curso principal
+//                $valor_msj = str_replace('[field]', $texto_tipo_actividad, $string_values['lbl_info_no_elimina_actividad_curso_principal']); //Agrega nombre de la actividad de docente
+//                $data['error'] = $valor_msj; //Mensaje de que es curso principal, por lo tanto, no se puede eliminar la actividad 
+//                $data['tipo_msg'] = $tipo_msg['WARNING']['class']; //Tipo de mensaje de error
+//            } else {
+//                //Confirmar que desea eliminar curso
+//                $data['pregunta'] = str_replace('[field]', $texto_tipo_actividad, $string_values['lbl_pregunta_eliminar_actividad_docente']);
+//            }
+//        } else {
+//            $data['error'] = $string_values['error_no_registro']; //Mensaje de que no encontró de actividad docente general para el usuario
+//        }
+//
+//        $vista = array(
+//            'titulo_modal' => 'Eliminar actividad docente',
+//            'cuerpo_modal' => $this->load->view('perfil/actividad_docente/actividad_eliminar_tpl', $data, TRUE),
+//        );
+//        echo $this->ventana_modal->carga_modal($vista); //Carga los div de modal
+    }
+
+    private function verifica_curso_principal_actividad_docente($index_tp_actividad = '0', $index_entidad = '0', $id_user = '0') {
+        if ($index_entidad === '0' || $index_tp_actividad = '0' || $id_user = '0') {
+            return -1; //No es curso principal
+        }
+        $actividad_docente = $this->adm->get_actividad_docente_general($id_user); //Verifica si existe el ususario ya contiene datos de actividad
+        if (!empty($actividad_docente)) {//Existe la actividad docente general
+            $actividad_docente = $this->adm->get_verifica_curso_principal_actividad_general($index_tp_actividad, $index_entidad, $actividad_docente); //Verifica si es curso principal
+        } else {
+            return -1; //No es curso principal
+        }
     }
 
     private function cargar_comprobante() {

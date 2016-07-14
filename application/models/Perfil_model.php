@@ -71,7 +71,7 @@ class Perfil_model extends CI_Model {
         }
         $this->db->insert('comprobante', $array_campos); //Almacena usuario
         $obtiene_id_comprobante = $this->db->insert_id();
-        pr($this->db->last_query());
+//        pr($this->db->last_query());
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return -1;

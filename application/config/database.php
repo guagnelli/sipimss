@@ -87,7 +87,7 @@ $db['default'] = array(
     
     'hostname' => 'localhost',
     'username' => 'root',
-    'password' => 'mysql',
+    'password' => '',
     'database' => 'censo_v678',
     
     'dbdriver' => 'mysqli',

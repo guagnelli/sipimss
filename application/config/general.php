@@ -125,50 +125,27 @@ $config['catalogos_indexados'] = array(//Catógos generales que existen actualme
     15 => 'ctipo_participacion',
     16 => 'ctipo_material',
     17 => 'cestado_civil',
+    18 => 'cejercicio_predominante',
+    19 => 'cejercicio_profesional',
 );
 
 $config['actividad_docente_componentes'] = array(//Arreglo que se utilizará para leer las configuraciones de cada formularío de actividad docente
-    0 => array('tabla_guardado' => '', 'vista' => '', 'validaciones' => '', 'catalogos_indexados' => array(), 'validaciones_extra' => array()),
-    1 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_ciclos_clinicos', 'validaciones' => 'form_ccl', 'catalogos_indexados' => array(1, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    2 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_internado_medico', 'validaciones' => 'form_ime', 'catalogos_indexados' => array(9, 7, 3, 1, 10), 'validaciones_extra' => array('pago_extra')),
-    3 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_servicio_social', 'validaciones' => 'form_sso', 'catalogos_indexados' => array(1, 2, 7, 9, 10), 'validaciones_extra' => array('pago_extra')),
-    4 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_licenciatura', 'validaciones' => 'form_lic', 'catalogos_indexados' => array(1, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    5 => array('tabla_guardado' => 'emp_esp_medica', 'vista' => 'perfil/actividad_docente/actividad_d_especialidad_medica', 'validaciones' => 'form_eme', 'catalogos_indexados' => array(9, 7, 3, 1, 10, 13), 'validaciones_extra' => array('pago_extra')),
-    6 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_maestria', 'validaciones' => 'form_mas', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    7 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_doctorado', 'validaciones' => 'form_doc', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    8 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_tecnico', 'validaciones' => 'form_tec', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    9 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_postecnico', 'validaciones' => 'form_pos', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    10 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_continua', 'validaciones' => 'form_eco', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    11 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_directivos_para_la_salud', 'validaciones' => 'form_dplsa', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    12 => array('tabla_guardado' => 'emp_formacion_profesional', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_formacion_de_profesores', 'validaciones' => 'form_efdp', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10, 14), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    13 => array('tabla_guardado' => 'emp_actividad_docente', 'vista' => 'perfil/actividad_docente/actividad_d_formacion_de_profesores_en_investigacion', 'validaciones' => 'form_fdpei', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
-    14 => array('tabla_guardado' => 'emp_educacion_distancia', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_a_distancia', 'validaciones' => 'form_ead', 'catalogos_indexados' => array(9, 12, 10), 'validaciones_extra' => array('duracion')),
-    15 => array('tabla_guardado' => 'emp_educacion_distancia', 'vista' => 'perfil/actividad_docente/actividad_d_actividades_de_investigacion_educativa', 'validaciones' => 'form_adie', 'catalogos_indexados' => array(), 'validaciones_extra' => array('duracion'))
-);
-
-$config['actividad_docente_campos'] = array(
-    1 => array('name' => 'Nombre del curso', 'tipe' => 'dropdown'),
-    2 => array('name' => 'Rol que desempeña como profesor/tutor', 'tipe' => 'dropdown'),
-    3 => array('name' => 'Institución educativa que avala', 'tipe' => 'dropdown'),
-    4 => array('name' => 'Recibe pago extra por la Institución que avala', 'tipe' => 'radio'),
-    5 => array('name' => 'Licenciatura', 'tipe' => 'dropdown'),
-    6 => array('name' => 'Modalidad', 'tipe' => 'dropdown'),
-    7 => array('name' => 'Año en que se impartió', 'tipe' => 'number'),
-    8 => array('name' => 'Duración ', 'tipe' => 'text'),
-    9 => array('name' => 'Módulo', 'tipe' => 'dropdown'),
-    10 => array('name' => 'Período (fechas de inicio y término)', 'tipe' => 'text'),
-    11 => array('name' => 'Especialidad', 'tipe' => 'dropdown'),
-    12 => array('name' => 'Área', 'tipe' => 'dropdown'),
-    13 => array('name' => 'Nombre de la materia que impartió', 'tipe' => ''),
-    14 => array('name' => 'Tipo de material', 'tipe' => ''), //duda
-    15 => array('name' => 'Tipo de Formación docente', 'tipe' => ''), //duda
-    16 => array('name' => 'Tipo de participación', 'tipe' => ''), //duda
-    17 => array('name' => 'Nombre del trabajo de investigación', 'tipe' => ''), //duda
-    18 => array('name' => 'Número de Folio de aceptación de SIRELCIS', 'tipe' => ''), //duda
-    19 => array('name' => 'Tipo de estudio', 'tipe' => ''), //duda
-    20 => array('name' => 'Medio de divulgación', 'tipe' => ''), //duda
-    21 => array('name' => 'En caso de publicación, anotar cita', 'tipe' => ''), //duda
-    22 => array('name' => 'Comprobante en caso de no ser publicación', 'tipe' => ''), //duda
+    0 => array('texto' => '', 'tabla_guardado' => '', 'llave_primaria' => '', 'vista' => '', 'validaciones' => '', 'catalogos_indexados' => array(), 'validaciones_extra' => array()),
+    1 => array('texto' => 'Ciclos Clínicos', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_ciclos_clinicos', 'validaciones' => 'form_ccl', 'catalogos_indexados' => array(enum_ecg::cmodalidad, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    2 => array('texto' => 'Internado Médico', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_internado_medico', 'validaciones' => 'form_ime', 'catalogos_indexados' => array(9, 7, 3, 1, 10), 'validaciones_extra' => array('pago_extra')),
+    3 => array('texto' => 'Servicio Social', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_servicio_social', 'validaciones' => 'form_sso', 'catalogos_indexados' => array(1, 2, 7, 9, 10), 'validaciones_extra' => array('pago_extra')),
+    4 => array('texto' => 'Licenciatura', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_licenciatura', 'validaciones' => 'form_lic', 'catalogos_indexados' => array(1, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    5 => array('texto' => 'Especialidad Médica', 'tabla_guardado' => 'emp_esp_medica', 'llave_primaria' => 'EMP_ESP_MEDICA_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_especialidad_medica', 'validaciones' => 'form_eme', 'catalogos_indexados' => array(9, 7, 3, 1, 10, 13), 'validaciones_extra' => array('pago_extra')),
+    6 => array('texto' => 'Maestría', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_maestria', 'validaciones' => 'form_mas', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    7 => array('texto' => 'Doctorado', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_doctorado', 'validaciones' => 'form_doc', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    8 => array('texto' => 'Técnico', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_tecnico', 'validaciones' => 'form_tec', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    9 => array('texto' => 'Postécnico', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_postecnico', 'validaciones' => 'form_pos', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    10 => array('texto' => 'Educación continua', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_continua', 'validaciones' => 'form_eco', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    11 => array('texto' => 'Directivos para la salud', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_directivos_para_la_salud', 'validaciones' => 'form_dplsa', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    12 => array('texto' => 'Educación / Formación de Profesores', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_formacion_de_profesores', 'validaciones' => 'form_efdp', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10, 14), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    13 => array('texto' => 'Formacionde Profesoresen Investigación', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_formacion_de_profesores_en_investigacion', 'validaciones' => 'form_fdpei', 'catalogos_indexados' => array(4, 6, 9, 7, 1, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    14 => array('texto' => 'Educacióna Distancia', 'tabla_guardado' => 'emp_educacion_distancia', 'llave_primaria' => 'EMP_EDU_DISTANCIA_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_educacion_a_distancia', 'validaciones' => 'form_ead', 'catalogos_indexados' => array(9, 12, 10), 'validaciones_extra' => array('duracion')),
+    15 => array('texto' => '', 'tabla_guardado' => 'emp_educacion_distancia', 'llave_primaria' => 'EMP_EDU_DISTANCIA_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_actividades_de_investigacion_educativa', 'validaciones' => 'form_adie', 'catalogos_indexados' => array(), 'validaciones_extra' => array('duracion'))
 );
 
 $config['emp_actividad_docente'] = array(
@@ -194,6 +171,7 @@ $config['emp_actividad_docente'] = array(
     'actividad_anios_dedicados_docencia' => array('select' => 'EAD_ANIO_CURSO', 'insert' => 'EAD_ANIO_CURSO'),
     'nombre_curso' => array('select' => 'EAD_NOMBRE_CURSO', 'insert' => 'EAD_NOMBRE_CURSO'),
     'nombre_materia_impartio' => array('select' => 'EAD_NOMBRE_MATERIA_IMPARTIO', 'insert' => 'EAD_NOMBRE_MATERIA_IMPARTIO'),
+    'ctipo_formacion_profesional' => array('select' => 'TIP_FOR_PROF_CVE', 'insert' => 'TIP_FOR_PROF_CVE'),
 );
 
 $config['emp_educacion_distancia'] = array(

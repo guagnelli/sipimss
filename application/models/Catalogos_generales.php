@@ -56,31 +56,6 @@ class Catalogos_generales extends CI_Model {
         return $resultado;
     }
 
-    /**
-     * 
-     * @return type array retorna los datos del catálogo "cejercicio_profesional" 
-     * 
-     * 
-     */
-    public function get_ejercicios_profesionales() {
-//        $this->db->select(array(''));
-        $query = $this->db->get('cejercicio_profesional'); //Obtener conjunto de registros
-        $resultado = $query->result_array();
-
-        $query->free_result(); //Libera la memoria
-//        pr($resultado);
-        return $resultado;
-    }
-
-    public function get_ejercicios_predominante() {
-//        $this->db->select(array(''));
-        $query = $this->db->get('cejercicio_predominante'); //Obtener conjunto de registros
-        $resultado = $query->result_array();
-
-        $query->free_result(); //Libera la memoria
-//        pr($resultado);
-        return $resultado;
-    }
 
     /**
      * 
@@ -289,6 +264,31 @@ class Catalogos_generales extends CI_Model {
      */
     public function get_cestado_civil() {
         $query = $this->db->get('cestado_civil');
+        $estadoCivil = $query->result_array();
+        $query->free_result();
+        return $estadoCivil;
+    }
+    
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cestado_civil" 
+     * "EJE_PRO_CVE"  ,  "EJE_PRO_NOMBRE"
+     * 
+     */
+    public function get_cejercicio_profesional() {
+        $query = $this->db->get('cejercicio_profesional');
+        $estadoCivil = $query->result_array();
+        $query->free_result();
+        return $estadoCivil;
+    }
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cestado_civil" 
+     * "EJER_PREDOMI_CVE"  ,  "EJE_PRE_NOMBRE"
+     * 
+     */
+    public function get_cejercicio_predominante() {
+        $query = $this->db->get('cejercicio_predominante');
         $estadoCivil = $query->result_array();
         $query->free_result();
         return $estadoCivil;

@@ -90,6 +90,14 @@ if (!function_exists('carga_catalogos')) {
                     $tmp_result = $CI->cg->get_cestado_civil();
                     $data['cestado_civil'] = dropdown_options($tmp_result, 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
                     break;
+                case 18://cejercicio_predominante
+                    $tmp_result = $CI->cg->get_cejercicio_predominante();
+                    $data['cejercicio_predominante'] = dropdown_options($tmp_result, 'EJER_PREDOMI_CVE', 'EJE_PRE_NOMBRE');
+                    break;
+                case 19://cejercicio_profesional
+                    $tmp_result = $CI->cg->get_cejercicio_profesional();
+                    $data['cejercicio_profesional'] = dropdown_options($tmp_result, 'EJE_PRO_CVE', 'EJE_PRO_NOMBRE');
+                    break;
             }
         }
         return $data;

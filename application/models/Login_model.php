@@ -80,6 +80,7 @@ class Login_model extends CI_Model {
         $this->db->join('modulo as mh', 'mh.MODULO_CVE = m.MODULO_CVE_PADRE', 'left');
         $this->db->where('m.MOD_EST_CVE', 1);
         $this->db->where('urm.USUARIO_CVE', $cve_usuario);
+        $this->db->order_by('m.ORDEN_MODULO', 'ASC');
         $this->db->order_by('cr.ROL_CVE', 'ASC');
         $this->db->order_by('m.MODULO_CVE', 'ASC');
         $query = $this->db->get();

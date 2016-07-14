@@ -20,8 +20,7 @@
 
 		<!-- Custom and plugin javascript -->
 		<?php echo css("custom.css"); ?>
-
-
+		<?php echo css("apprise.css"); ?>
 		<?php echo css("bonos.css"); ?>
 		<?php // echo js("jquery.min.js"); ?>
 		<?php echo js("jquery-2.1.4.min.js"); ?>
@@ -29,6 +28,7 @@
 		<?php echo js("collapse.js"); ?>
 		<?php echo js("transition.js"); ?>
 		<?php echo js("file-browse.js"); ?>
+		<?php echo js("apprise.js"); ?>
 
 		<?php echo js("bootstrap.min.js"); ?>
 		<?php echo js("jasny-bootstrap.min.js"); ?>
