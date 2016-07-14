@@ -101,12 +101,14 @@ class Registro extends MY_Controller {
                                     }
 
 
-                                    //Datos de bitacora el registro del usuario
-                                    $parametros = $this->config->item('parametros_bitacora');
-                                    $parametros['USUARIO_CVE'] = $result_id_user; //Asigna id del usuario
-//                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
-                                    $parametros['BIT_RUTA'] = '/registro/';
-                                    $result = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
+//                                    //Datos de bitacora el registro del usuario
+//                                    $parametros = $this->config->item('parametros_bitacora');
+//                                    $parametros['USUARIO_CVE'] = $result_id_user; //Asigna id del usuario
+////                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
+//                                    $parametros['BIT_RUTA'] = '/registro/';
+//                                    $result = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
+                                    registro_bitacora($result_id_user, null, 'usuario, empleado', $result_id_user . ',' . $result_id_emp, null, 'insert');
+
                                     //Envia correo electrÓnico de datos de registro
                                     $plantilla = $this->load->view('template/email/enviar_confirmacion.tpl.php', $datos_usuario, true);
                                     $sentMail = $this->enviar_confirmacion_registro_usuario($datos_usuario + array('plantilla' => $plantilla)); //Enviar correo

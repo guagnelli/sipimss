@@ -12,12 +12,12 @@ $(function() {
     });
 
     $('#btn_guardar_actividad').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información
-        var isReadOnly = $('.nameFields').prop('readonly');
-        $('.nameFields').prop('readonly', !isReadOnly);
-        var a = hrutes['get_data_ajax_actividad'];
-        var cad_split = a.split(":");
+//        var isReadOnly = $('.nameFields').prop('readonly');
+//        $('.nameFields').prop('readonly', !isReadOnly);
+//        var a = hrutes['get_data_ajax_actividad'];
+//        var cad_split = a.split(":");
         data_ajax(site_url + '/perfil/get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
-        document.getElementById('div_horas_dedicadas').style.display = 'block';
+        //document.getElementById('div_horas_dedicadas').style.display = 'block';
     });
 
 //    $('#btn_guardar_actividad_especifica').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información

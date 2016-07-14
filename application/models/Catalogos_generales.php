@@ -12,6 +12,69 @@ class Catalogos_generales extends CI_Model {
 
     /**
      * 
+     * @autor       : LEAS.
+     * @Fecha       : 09052016.
+     * @param array $parametros 'USUARIO_CVE', 'BIT_VALORES', 'MODULO_CVE', 'BIT_IP' 
+     * y 'BIT_RUTA'
+     * @return boolean Si se inserta el registro de bitacora con los parametros 
+     * correspondientes. Devuelve 1 si todo se cumplio satisfactoriamente, si no, 
+     * en el caso de que el usuario sea nullo o algo ocurrio en la base de datos, devuelve 0
+     */
+    public function set_bitacora_gral($parametros = null) {
+        if (!isset($parametros)) {
+            return false;
+        }
+
+        if (is_null($parametros)) {
+            return false;
+        }
+        if (!isset($parametros['USUARIO_CVE']) || is_null($parametros['USUARIO_CVE'])) {
+            return false;
+        }
+        if (!isset($parametros['BIT_VALORES']) || is_null($parametros['BIT_VALORES'])) {
+            $parametros['BIT_VALORES'] = 'NULL';
+        }
+        if (!isset($parametros['BIT_IP'])|| is_null($parametros['BIT_IP'])) {
+            $parametros['BIT_IP'] = 'NULL';
+        }
+        if (!isset($parametros['BIT_RUTA'])|| is_null($parametros['BIT_RUTA'])) {
+            $parametros['BIT_RUTA'] = 'NULL';
+        }
+        if (!isset($parametros['MODULO_CVE'])AND is_null($parametros['MODULO_CVE'])) {
+            $parametros['MODULO_CVE'] = 'NULL';
+        }
+        if (!isset($parametros['ENTIDAD'])|| is_null($parametros['ENTIDAD'])) {
+            $parametros['ENTIDAD'] = 'NULL';
+        }
+        if (!isset($parametros['REGISTRO_ENTIDAD_CVE'])|| is_null($parametros['REGISTRO_ENTIDAD_CVE'])) {
+            $parametros['REGISTRO_ENTIDAD_CVE'] = 'NULL';
+        }
+        if (!isset($parametros['PARAMETROS_JSON']) || is_null($parametros['PARAMETROS_JSON'])) {
+            $parametros['PARAMETROS_JSON'] = 'NULL';
+        }
+        $usuario_cve = $parametros['USUARIO_CVE'];
+        $bit_valores = $parametros['BIT_VALORES'];
+        $bit_ip = $parametros['BIT_IP'];
+        $bit_ruta = $parametros['BIT_RUTA'];
+        $modulo_cve = $parametros['MODULO_CVE'];
+        $entidad = $parametros['ENTIDAD'];
+        $registro_entidad_cve = $parametros['REGISTRO_ENTIDAD_CVE'];
+        $parametros_json = $parametros['PARAMETROS_JSON'];
+        $res = '@res';
+        $this->db->reconnect();
+        //genera la llamada al procedimiento
+        $llamada = "call bitacora_ejecuta_historico($usuario_cve, '$bit_valores', '$bit_ip', '$bit_ruta', $modulo_cve, '$entidad', '$registro_entidad_cve', '$parametros_json', $res )";
+        $procedimiento = $this->db->query($llamada); //Ejecuta el procedimiento almacenado
+        $resultado = isset($procedimiento->result()[0]->res);
+        $resultado = $resultado && $procedimiento->result()[0]->res;
+        $procedimiento->free_result(); //Libera el resultado
+        $this->db->close();
+
+        return $resultado;
+    }
+
+    /**
+     * 
      * @param type $id_usuario identificador del usuario
      * 
      */
@@ -55,7 +118,6 @@ class Catalogos_generales extends CI_Model {
 //        pr($resultado);
         return $resultado;
     }
-
 
     /**
      * 
@@ -255,7 +317,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result(); //Libera la memoria
         return $resultado;
     }
-    
+
     /**
      * 
      * @return type array retorna los datos del catálogo "cestado_civil" 
@@ -268,7 +330,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result();
         return $estadoCivil;
     }
-    
+
     /**
      * 
      * @return type array retorna los datos del catálogo "cestado_civil" 
@@ -281,6 +343,7 @@ class Catalogos_generales extends CI_Model {
         $query->free_result();
         return $estadoCivil;
     }
+
     /**
      * 
      * @return type array retorna los datos del catálogo "cestado_civil" 

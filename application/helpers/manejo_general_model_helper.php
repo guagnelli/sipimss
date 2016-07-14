@@ -2,7 +2,7 @@
 
 /**
  * Método que valida una variable; que exista, no sea nula o vacía
- * @autor 		: luis Eduardo Aguilera Soto.
+ * @autor 		: LEAS.
  * @modified 	: 
  * @param 		: mixed $valor Parámetro a validar
  * @return 		: bool. TRUE en caso de que exista, no sea vacía o nula de lo contrario devolverá FALSE
@@ -104,3 +104,41 @@ if (!function_exists('carga_catalogos')) {
     }
 
 }
+
+
+if (!function_exists('registro_bitacora')) {
+
+    /**
+     * @autor : LEAS
+     * @param type $usuario_cve : identificador del usuario que hizo la modificación
+     * @param type $ruta : Ruta (controlador) donde se efectuo el cambio
+     * @param type $entidad
+     * @param type $reg_entidad_cve
+     * @param type $parametros_json
+     * @param type $operacion
+     * @return type
+     */
+    function registro_bitacora($usuario_cve = null, $ruta = null, $entidad = null, $reg_entidad_cve = null, $parametros_json = null, $operacion = null) {
+        $CI = & get_instance();
+        $CI->load->config('general');
+        
+        $parametros = $CI->config->item('parametros_bitacora');
+        $parametros['USUARIO_CVE'] = $usuario_cve; //Asigna id del usuario
+        $parametros['BIT_OPERACION'] = $operacion; //insert,update o delete
+        if (is_null($ruta) AND empty($ruta)) {
+            $parametros['BIT_RUTA'] = $_SERVER['REQUEST_URI'];//Obtiene la ruta URI actual 
+        }
+        // Obtener ip del cliente
+        $parametros['BIT_IP'] = get_ip_cliente(); //Le manda la ip del cliente
+        $parametros['ENTIDAD'] = $entidad; //Le manda la ip del cliente
+        $parametros['REGISTRO_ENTIDAD_CVE'] = $reg_entidad_cve; //Id del registro agregado, modificado 
+        $parametros['PARAMETROS_JSON'] = $parametros_json; //Le manda valor de json
+
+pr($parametros);
+        $CI->load->model('Catalogos_generales', 'cg');
+        $result = $CI->cg->set_bitacora_gral($parametros); //Invoca la función para guardar bitacora
+        return $result;
+    }
+
+}
+    

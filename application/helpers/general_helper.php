@@ -566,7 +566,7 @@ if (!function_exists('get_busca_hijos')) {
         if (is_null($array_busqueda) AND empty($array_busqueda)) {
             return $array_result;
         }
-        
+
         foreach ($array_busqueda as $keys => $valores) {
             $cad1 = strtolower($controlador);
             $cad2 = strtolower($valores['nombre_padre']);
@@ -577,6 +577,31 @@ if (!function_exists('get_busca_hijos')) {
 
         //Si no existe el controlador, retorna false
         return $array_result;
+    }
+
+}
+
+if (!function_exists('get_ip_cliente')) {
+
+    /**
+     * @author LEAS
+     * @return ip del cliente: obtiene la ip del cliente, por tres tipos de casos, 
+     * hasta obtener una ip: 
+     * 1 por IP compartido = HTTP_CLIENT_IP;
+     * 2 por IP Proxy = HTTP_X_FORWARDED_FOR;
+     * 3 por IP Acceso = REMOTE_ADDR;
+     * 
+     */
+    function get_ip_cliente() {
+        $ip_cliente = '';
+        $conexiones_ip = array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR');
+        foreach ($conexiones_ip as $value) {
+            if (isset($_SERVER[$value]) AND !empty($_SERVER[$value])) {
+                $ip_cliente = $_SERVER[$value];
+                break;
+            }
+        }
+        return $ip_cliente;
     }
 
 }

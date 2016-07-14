@@ -28,28 +28,35 @@ class Actividad_docente_model extends CI_Model {
     }
 
     public function insert_actividad_docente_general($datos_actividad_docente) {
+        $result['return'] = -1;
+        $result['parametros'] = '';
         if (is_null($datos_actividad_docente)) {
-            return -1;
+            return $result;
         }
         $this->db->insert('actividad_docente_gral', $datos_actividad_docente); //Almacena usuario
-        $obtiene_id_usuario = $this->db->insert_id();
+        $index += $this->db->insert_id();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
-            return -1;
+            $result['return'] = -1;
         } else {
-            return $obtiene_id_usuario;
+            $datos_actividad_docente['ACT_DOC_GRAL_CVE'] = $index;
+            $result['actualizados'] = $datos_actividad_docente;
         }
+        return $result;
     }
 
     public function update_actividad_docente_general($datos_actividad_docente) {
+        $result['return'] = -1;
+        $result['actualizados'] = '';
         if (is_null($datos_actividad_docente)) {
-            return -1;
+            return $result;
         }
         //Actualiza
         $error = $this->db->where("EMPLEADO_CVE", $datos_actividad_docente['EMPLEADO_CVE']);
         $this->db->update('actividad_docente_gral', $datos_actividad_docente);
-//        pr($this->db->last_query());
-        return 1;
+        $result['return'] = 1;
+        $result['actualizados'] = $datos_actividad_docente;
+        return $result;
     }
 
     public function insert_emp_actividad_docente_gen($name_entidad = null, $array_campos) {

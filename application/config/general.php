@@ -102,8 +102,15 @@ $config['alert_msg'] = array(
     'INFO' => array('id_msg' => 4, 'class' => 'info')
 );
 
-$config['parametros_bitacora'] = array('USUARIO_CVE' => 'NULL', 'BIT_VALORES' => 'NULL',
-    'BIT_IP' => 'NULL', 'BIT_RUTA' => 'NULL', 'MODULO_CVE' => 'NULL');
+$config['parametros_bitacora'] = array(
+        'USUARIO_CVE' => 'NULL', 
+        'BIT_OPERACION' => 'NULL',
+        'BIT_IP' => 'NULL', 
+        'BIT_RUTA' => 'NULL', 
+        'MODULO_CVE' => 'NULL',
+        'ENTIDAD' => 'NULL', 
+        'REGISTRO_ENTIDAD_CVE' => 'NULL',
+        'PARAMETROS_JSON' => 'NULL');
 $config['parametros_log'] = array('USUARIO_CVE' => 'NULL', 'LOG_INI_SES_IP' => 'NULL',
     'INICIO_SATISFACTORIO' => 'NULL');
 
