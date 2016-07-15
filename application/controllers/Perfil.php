@@ -101,13 +101,6 @@ class Perfil extends MY_Controller {
                             $data['error'] = $string_values['succesfull_insertar']; //Mensaje de que los datos se insertaron correctamente
                             $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de éxito
                             //Datos de bitacora el actividad general del docente del usuario
-                            $parametros = $this->config->item('parametros_bitacora');
-                            $parametros['USUARIO_CVE'] = $result_id_user; //Asigna id del usuario
-//                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
-                            $this->load->model('Login_model', 'lm');
-                            $parametros['BIT_RUTA'] = '/perfil#get_data_ajax_actividad/ inserta';
-                            $result = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
-
                             $json = json_encode($resultado['parametros']);
                             $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'ACT_DOC_GRAL_CVE:' . $resultado['ACT_DOC_GRAL_CVE'], $json, 'insert');
                         }
@@ -133,9 +126,9 @@ class Perfil extends MY_Controller {
                         $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'EMPLEADO_CVE', $json, 'update');
                     }
                 }
-            } else {
-                $data['error'] = $this->lang->line('interface')['general']['advertencia_agregar_todos_los_datos']; //Mensaje de que no encontro empleado
-                $data['tipo_msg'] = $tipo_msg['WARNING']['class']; //Tipo de mensaje de advertencia
+//                $parse = json_encode($data);
+//                echo $parse;
+//                exit();
             }
         }
 
@@ -228,28 +221,31 @@ class Perfil extends MY_Controller {
                         $result_guardar_actividad = $this->guardar_actividad($configuracion_formularios_actividad_docente, $datos_registro, array('TIP_ACT_DOC_CVE' => $index_tipo_actividad_docente));
 //                        $result_guardar_actividad = -1;
                         $resultado = array();
-                        if ($result_guardar_actividad > 0) {//Se guardo correctamente, asignna mensaje success y registra en bitacora
+                        if (is_array($result_guardar_actividad)) {//Se guardo correctamente, asignna mensaje success y registra en bitacora
                             $resultado['error'] = $this->lang->line('interface')['general']['datos_almacenados_correctamente']; //Mensaje de que no encontro empleado
                             $resultado['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
                             //Guarda bitacora
                             //Datos de bitacora el actividad general del docente del usuario
-                            $parametros = $this->config->item('parametros_bitacora');
-                            $parametros['USUARIO_CVE'] = $this->session->userdata('identificador'); //Asigna id del usuario
-//                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
-                            $this->load->model('Login_model', 'lm');
-                            $parametros['BIT_RUTA'] = '/perfil/get_data_ajax_actividad_cuerpo_modal/ insertar';
-                            $resultado = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
+                            $result_id_user = $this->session->userdata('identificador'); //Asigna id del usuario
+                            $entity = $configuracion_formularios_actividad_docente['tabla_guardado'];
+                            $pk = $configuracion_formularios_actividad_docente['llave_primaria'];
+                            $index_pk = $result_guardar_actividad[$entity][$pk];
+                            $json = json_encode($result_guardar_actividad);
+                            $result = registro_bitacora($result_id_user, null, $entity, $pk.":".$index_pk, $json, 'insert');
+
                             //obtener datos del último registro guardado en la entidad correspondiente
                             $entidad_guardado = $configuracion_formularios_actividad_docente['tabla_guardado'];
-//                            pr($entidad_guardado.' -> '. $result_guardar_actividad);
-                            $rs = $this->adm->get_datos_actividad_docente($entidad_guardado, $result_guardar_actividad);
+//                            pr($entidad_guardado);
+//                            pr( $result_guardar_actividad);
+                            $rs = $this->adm->get_datos_actividad_docente($entidad_guardado, $index_pk);
 //                            pr($rs);
-                            $resultado['insertar'] = $rs[0];
+                            $resultado['insertar'] = $rs;
                         } else {
                             $resultado['error'] = $this->lang->line('interface')['general']['error_guardar']; //Mensaje de que no encontro empleado
                             $resultado['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                         }
-//                        echo json_encode($resultado);
+                        
+                        echo json_encode($resultado);
                         exit();
                     } else {//Editar valor actividad docente especificada
                     }
@@ -337,6 +333,7 @@ class Perfil extends MY_Controller {
             return -1;
         }
         $entidad_guardado = $array_propiedades_actividad['tabla_guardado']; //Se obtiene el nombre de la entidad de guardado
+        $entidad_guardado_pk = $array_propiedades_actividad['llave_primaria']; //Se obtiene la llave primaria de la entidad de guardado
         //Asignar actividad docente general "actividad_docente_general" ********
         $result_id_user = $this->session->userdata('identificador');
         $actividad_docente_general = $this->adm->get_actividad_docente_general($result_id_user);
@@ -399,7 +396,7 @@ class Perfil extends MY_Controller {
         }
 
         //Agrega campos que no se optienen por post como tipo_actividad_cve 
-        $result = $this->adm->insert_emp_actividad_docente_gen($entidad_guardado, $campos_insert); //Guardar valores en entidad
+        $result = $this->adm->insert_emp_actividad_docente_gen($entidad_guardado, $campos_insert, $entidad_guardado_pk); //Guardar valores en entidad
         return $result;
     }
 

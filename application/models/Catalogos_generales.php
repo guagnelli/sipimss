@@ -31,8 +31,8 @@ class Catalogos_generales extends CI_Model {
         if (!isset($parametros['USUARIO_CVE']) || is_null($parametros['USUARIO_CVE'])) {
             return false;
         }
-        if (!isset($parametros['BIT_VALORES']) || is_null($parametros['BIT_VALORES'])) {
-            $parametros['BIT_VALORES'] = 'NULL';
+        if (!isset($parametros['BIT_OPERACION']) || is_null($parametros['BIT_OPERACION'])) {
+            $parametros['BIT_OPERACION'] = 'NULL';
         }
         if (!isset($parametros['BIT_IP'])|| is_null($parametros['BIT_IP'])) {
             $parametros['BIT_IP'] = 'NULL';
@@ -53,7 +53,7 @@ class Catalogos_generales extends CI_Model {
             $parametros['PARAMETROS_JSON'] = 'NULL';
         }
         $usuario_cve = $parametros['USUARIO_CVE'];
-        $bit_valores = $parametros['BIT_VALORES'];
+        $bit_operacion = $parametros['BIT_OPERACION'];
         $bit_ip = $parametros['BIT_IP'];
         $bit_ruta = $parametros['BIT_RUTA'];
         $modulo_cve = $parametros['MODULO_CVE'];
@@ -63,7 +63,7 @@ class Catalogos_generales extends CI_Model {
         $res = '@res';
         $this->db->reconnect();
         //genera la llamada al procedimiento
-        $llamada = "call bitacora_ejecuta_historico($usuario_cve, '$bit_valores', '$bit_ip', '$bit_ruta', $modulo_cve, '$entidad', '$registro_entidad_cve', '$parametros_json', $res )";
+        $llamada = "call bitacora_ejecuta_historico($usuario_cve, '$bit_operacion', '$bit_ip', '$bit_ruta', $modulo_cve, '$entidad', '$registro_entidad_cve', '$parametros_json', $res )";
         $procedimiento = $this->db->query($llamada); //Ejecuta el procedimiento almacenado
         $resultado = isset($procedimiento->result()[0]->res);
         $resultado = $resultado && $procedimiento->result()[0]->res;

@@ -134,7 +134,6 @@ if (!function_exists('registro_bitacora')) {
         $parametros['REGISTRO_ENTIDAD_CVE'] = $reg_entidad_cve; //Id del registro agregado, modificado 
         $parametros['PARAMETROS_JSON'] = $parametros_json; //Le manda valor de json
 
-pr($parametros);
         $CI->load->model('Catalogos_generales', 'cg');
         $result = $CI->cg->set_bitacora_gral($parametros); //Invoca la función para guardar bitacora
         return $result;

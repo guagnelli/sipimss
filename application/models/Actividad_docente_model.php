@@ -59,7 +59,7 @@ class Actividad_docente_model extends CI_Model {
         return $result;
     }
 
-    public function insert_emp_actividad_docente_gen($name_entidad = null, $array_campos) {
+    public function insert_emp_actividad_docente_gen($name_entidad = null, $array_campos, $pk) {
         if (is_null($name_entidad)) {
             return -1;
         }
@@ -67,13 +67,16 @@ class Actividad_docente_model extends CI_Model {
             return -1;
         }
         $this->db->insert($name_entidad, $array_campos); //Almacena tipo de actividad, según nombre de la entidad enviado
-        $obtiene_id_entidad_actividad_docente = $this->db->insert_id();
+        $index = $obtiene_id_entidad_actividad_docente = $this->db->insert_id();
 //        pr($this->db->last_query());
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return -1;
         } else {
-            return $obtiene_id_entidad_actividad_docente;
+            $array_campos[$pk] = $index;
+                    
+            $result[$name_entidad] = $array_campos; 
+            return $result;
         }
     }
 

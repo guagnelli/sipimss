@@ -12,12 +12,35 @@ $(function() {
     });
 
     $('#btn_guardar_actividad').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información
-//        var isReadOnly = $('.nameFields').prop('readonly');
-//        $('.nameFields').prop('readonly', !isReadOnly);
-//        var a = hrutes['get_data_ajax_actividad'];
-//        var cad_split = a.split(":");
-        data_ajax(site_url + '/perfil/get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
-        //document.getElementById('div_horas_dedicadas').style.display = 'block';
+//        data_ajax(site_url + '/perfil/get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
+        apprise('Confirme que realmente desea actualizar los datos', {verify: true}, function(btnClick) {
+            if (btnClick) {
+                $.ajax({
+                    url: site_url + '/perfil/get_data_ajax_actividad',
+                    data: $('#form_actividad_docente').serialize(),
+                    method: 'POST',
+                    beforeSend: function(xhr) {
+                        $('#get_data_ajax_actividad').html(create_loader());
+                    }
+                })
+                        .done(function(response) {
+//                            alert(response);
+                            $('#get_data_ajax_actividad').html(response);
+                            $('#mensaje_error').html('Los datos se almacenaron correctamente');
+                            $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
+                            $('#div_error').show();
+                            setTimeout("$('#div_error').hide()", 5000);//desaparece div
+                        })
+                        .fail(function(jqXHR, response) {
+                            $('#get_data_ajax_actividad').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                        })
+                        .always(function() {
+                            remove_loader();
+                        });
+            } else {
+                return false;
+            }
+        });
     });
 
 //    $('#btn_guardar_actividad_especifica').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información
@@ -59,10 +82,10 @@ function funcion_eliminar_actividad_docente(element) {
     var index_entidad = button_obj.data('tacve');
     var is_curso_principal = button_obj.data('cp');
     if (is_curso_principal) {
-        apprise('Es un curso principal');
+        apprise('Es un curso principal, no es posible eliminar');
     } else {
 
-        apprise('Desea eliminar?', {verify: true}, function(btnClick) {
+        apprise('Confirme que realmente desea eliminar la actividad', {verify: true}, function(btnClick) {
             if (btnClick) {
                 var button_obj = $(element);
                 $.ajax({
@@ -79,15 +102,18 @@ function funcion_eliminar_actividad_docente(element) {
                 })
                         .done(function(response) {
                             var response = $.parseJSON(response);
-                            $('#div_error').show();
                             $('#mensaje_error').html(response.error);
                             $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
                             $('#id_row_' + button_obj.data('idrow')).remove();
+                            $('#div_error').show();
+                            setTimeout("$('#div_error').hide()", 5000);
+
                         })
                         .fail(function(jqXHR, response) {
-                            $('#div_error').show();
                             $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
                             $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
+                            $('#div_error').show();
+                            setTimeout("$('#div_error').hide()", 6000);
                         })
                         .always(function() {
                             remove_loader();
@@ -112,9 +138,11 @@ function funcion_asignar_curso_principal(element) {
 //    alert(entidad_tpa_cve + ' ' + actividad_general_cve + ' ' + actividad_docente_cve + ' ' + cp);
     //Busca el row de la tabla que contiene el curso principal
     var cur_principal = curso_principal_actividad_docente();
-//    alert(key_row_select + ' : ' + cur_principal);
+    alert(key_row_select + ' : ' + cur_principal);
     $('#id_row_' + cur_principal).removeClass('success').addClass('');
+    $('#id_row_' + cur_principal).attr("data-cp", "0");
     $('#id_row_' + key_row_select).removeClass('').addClass('success');
+    $('#id_row_' + key_row_select).attr("data-cp", "1");
 
 
 }
@@ -131,7 +159,7 @@ function curso_principal_actividad_docente() {
     var obj_row;
     for (var i = 0; i < document.getElementById('tabla_actividades').rows.length; i++) {
         obj_row = $(document.getElementById('tabla_actividades').rows[i]);
-        if (obj_row.data('cp') === 1) {
+        if (obj_row.data('cp') == '1') {
             cur_prin_actual = obj_row.data('keyrow');
             break;
         }
@@ -201,43 +229,48 @@ function funcion_guargar(index) {
         }
     })
             .done(function(response) {
-                var is_html = response.indexOf('<div class=');//si existe la cadena, entonces es un html
-                alert(is_html + ' ' + response);
+                var is_html = response.indexOf('<div class=\"list-group\">');//si existe la cadena, entonces es un html
+//                alert(is_html + ' ' + response);
                 if (is_html > -1) {
                     $('#info_actividad_docente').html(response);
 //                    $('#modal_censo').modal(toggle);
                 } else {
-                    alert('asda--> ' + response);
-                    var response_json = $.parseJSON(response);
-                    var valor_radio_curso = '123';
-                    var titulo_tipo_actividad = response_json.insertar.nombre_tp_actividad;
-                    var anio = response_json.insertar.anio;
-                    var duracion = response_json.insertar.duracion;
-                    var fecha_inicio = response_json.insertar.fecha_inicio;
-                    var fecha_fin = response_json.insertar.fecha_fin;
-                    var tacve = response_json.insertar.ta_cve;
-                    var cvead = response_json.insertar.cve_actividad_docente;
-                    var cp = '0';
-                    var idrow = funcion_obtener_max_id_row_table_actividad() + 1;//Obtiene el maximo index de el row de la tabla de actividades
-                    ////////////
+                    if (response) {
+                            
+                        var response_json = $.parseJSON(response);//
+                        var valor_radio_curso = '123';
+                        var titulo_tipo_actividad = response_json.insertar[0].nombre_tp_actividad;
+                        var anio = response_json.insertar[0].anio;
+                        var duracion = response_json.insertar[0].duracion;
+                        var fecha_inicio = response_json.insertar[0].fecha_inicio;
+                        var fecha_fin = response_json.insertar[0].fecha_fin;
+                        var tacve = response_json.insertar[0].ta_cve;
+                        var cvead = response_json.insertar[0].cve_actividad_docente;
+                        var cp = '0';
+                        var idrow = funcion_obtener_max_id_row_table_actividad() + 1;//Obtiene el maximo index de el row de la tabla de actividades
+                        ////////////
+                        duracion = (duracion===null)?'':duracion;
+                        fecha_inicio = (fecha_inicio===null)?'':fecha_inicio;
+                        fecha_fin = (fecha_fin===null)?'':fecha_fin;
 
-                    var htmlRowTemplate = $('#template_row_nueva_act').html();
-                    var htmlNewRow = htmlRowTemplate.replace(/\$\$valor_radio_curso\$\$/g, valor_radio_curso)
-                            .replace(/\$\$titulo_tipo_actividad\$\$/g, titulo_tipo_actividad)
-                            .replace(/\$\$anio\$\$/g, anio)
-                            .replace(/\$\$duracion\$\$/g, duracion)
-                            .replace(/\$\$fecha_inicio\$\$/g, fecha_inicio)
-                            .replace(/\$\$fecha_fin\$\$/g, fecha_fin)
-                            .replace(/\$\$tacve\$\$/g, tacve)
-                            .replace(/\$\$cvead\$\$/g, cvead)
-                            .replace(/\$\$cp\$\$/g, cp)
-                            .replace(/\$\$idrow\$\$/g, idrow)
-                            .replace(/\$\$key\$\$/g, idrow);//identificador unitario de el row
-                    $('#tabla_actividades').append($(htmlNewRow))
-                    $('#div_error').show();
-                    $('#mensaje_error').html(response.error);
-                    $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
-
+                        var htmlRowTemplate = $('#template_row_nueva_act').html();
+                        var htmlNewRow = htmlRowTemplate.replace(/\$\$valor_radio_curso\$\$/g, valor_radio_curso)
+                                .replace(/\$\$titulo_tipo_actividad\$\$/g, titulo_tipo_actividad)
+                                .replace(/\$\$anio\$\$/g, anio)
+                                .replace(/\$\$duracion\$\$/g, duracion)
+                                .replace(/\$\$fecha_inicio\$\$/g, fecha_inicio)
+                                .replace(/\$\$fecha_fin\$\$/g, fecha_fin)
+                                .replace(/\$\$tacve\$\$/g, tacve)
+                                .replace(/\$\$cvead\$\$/g, cvead)
+                                .replace(/\$\$cp\$\$/g, cp)
+                                .replace(/\$\$idrow\$\$/g, idrow)
+                                .replace(/\$\$key\$\$/g, idrow);//identificador unitario de el row
+                        $('#tabla_actividades').append($(htmlNewRow))
+                        $('#mensaje_error').html(response_json.error);
+                        $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
+                        $('#div_error').show();
+                        setTimeout("$('#div_error').hide()", 5000);
+                    }
                 }
             })
             .fail(function(jqXHR, response) {

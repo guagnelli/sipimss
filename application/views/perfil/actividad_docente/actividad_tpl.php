@@ -194,7 +194,7 @@
                                                             $reg_principal = 'success';
                                                             $cp = '1';
                                                         }else{
-                                                            $checked = '';
+                                                            $checked = 'none';
                                                             $reg_principal = '';
                                                             $cp = '0';
                                                         }
@@ -211,7 +211,7 @@
                                                                         'data-entidadtpacve'=>"'".$value['ta_cve']."'",//cve del catalogo tipo de actividad (ctipo_actividad)
                                                                         'data-actividadgeneralcve'=>"'".$value['actividad_general_cve']."'",//actividad general cve
                                                                         'data-actividaddocentecve'=>"'".$value['cve_actividad_docente']."'",//actividad de docente cve, según la entidad (emp_actividad_docente, emp_esp_med o emp_educacion_distancia)
-                                                                        'data-cp'=>"'".$is_cur_principal."'", //indica si es un curso principal, 0-no; 1-si;
+                                                                        'data-cp'=>"'".$cp."'", //indica si es un curso principal, 0-no; 1-si;
                                                                         'data-keyrowselect'=>$key, //indica si es un curso principal, 0-no; 1-si;
                                                                         )
                                                                     )).
@@ -332,7 +332,7 @@
     <script type="text/template" id="template_row_nueva_act">
         <tr id="id_row_$$idrow$$" data-cp="$$cp$$" data-keyrow="$$key$$">
         <td>
-        <input type="radio" name="radio_curso_principal" value="$$valor_radio_curso$$" checked="checked" id="radio_curso_principal" class="radio-inline m-r-sm" title="Hora(s)">
+        <input type="radio" name="radio_curso_principal" value="$$valor_radio_curso$$" id="radio_curso_principal" class="radio-inline m-r-sm" title="Hora(s)">
         </td>
         <td class='class_titulo'>$$titulo_tipo_actividad$$</td>
         <td>$$anio$$</td>
