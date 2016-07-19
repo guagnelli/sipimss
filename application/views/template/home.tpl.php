@@ -17,6 +17,7 @@
 		<!-- Custom Theme files -->
 		<?php echo css("style.css"); ?>
 		<?php echo css("font-awesome.css"); ?>
+		<?php echo css("bootstrap-datetimepicker.css"); ?>
 
 		<!-- Custom and plugin javascript -->
 		<?php echo css("custom.css"); ?>
@@ -24,16 +25,16 @@
 		<?php echo css("bonos.css"); ?>
 		<?php // echo js("jquery.min.js"); ?>
 		<?php echo js("jquery-2.1.4.min.js"); ?>
+		<?php echo js("moment.js"); ?>
+		<?php echo js("transition.js"); ?>
 		<?php echo js("bootstrap-datetimepicker.js"); ?>
 		<?php echo js("collapse.js"); ?>
-		<?php echo js("transition.js"); ?>
 		<?php echo js("file-browse.js"); ?>
 		<?php echo js("apprise.js"); ?>
 
 		<?php echo js("bootstrap.min.js"); ?>
 		<?php echo js("jasny-bootstrap.min.js"); ?>
 		<?php echo js("general.js"); ?>
-		<?php echo js("moment.js"); ?>
 
 		<script type="text/javascript">
 			var img_url_loader = "<?php echo img_url_loader(); ?>";

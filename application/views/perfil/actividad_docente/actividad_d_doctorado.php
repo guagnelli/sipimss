@@ -1,5 +1,31 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+    <script type='text/javascript'>
+        $(function() {
+            $('#datetimepicker1').datetimepicker({
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-arrow-up",
+                down: "fa fa-arrow-down"
+            },
+            format:'DD-MM-YYYY', 
+            locale: 'es',
+            useCurrent: false
+        });
+        $('#datetimepicker2').datetimepicker({
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-arrow-up",
+                down: "fa fa-arrow-down"
+            },
+            format:'DD-MM-YYYY', 
+            locale: 'es',
+            useCurrent: false
+        });
+    });
+    </script>
     
     <div class="list-group">
         <div class="list-group-item">

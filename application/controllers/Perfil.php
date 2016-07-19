@@ -214,8 +214,14 @@ class Perfil extends MY_Controller {
                 $validations = $this->config->item('form_ccl'); //Obtener validaciones de archivo
                 $valores['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_registro, 'duracion'); //Muestrá validaciones de hora y fecha de inicio y termino según la opción de duración
                 $array_validaciones_extra_actividad = $configuracion_formularios_actividad_docente['validaciones_extra']; //Carga las validaciones extrá de archivo config->general que no se pudieron automatizar con el post, es decir radio button etc
-                $validations = $this->analiza_validacion($validations, $datos_registro, $array_validaciones_extra_actividad); //Genera las validaciones del formulario que realmente deben ser tomadas en cuenta 
+                $result_validacion = $this->analiza_validacion($validations, $datos_registro, $array_validaciones_extra_actividad); //Genera las validaciones del formulario que realmente deben ser tomadas en cuenta
+                $validations = $result_validacion['validacion'];
                 $this->form_validation->set_rules($validations); //Carga las validaciones
+//                pr($result_validacion['fechas']);
+//                if (!empty($result_validacion['fechas'])) {//Si hay fechas que validar, se modifican los datos de fechas ya volteadas
+//                    $this->form_validation->set_data($result_validacion['fechas']); //Carga las validaciones
+//                }
+
                 if ($this->form_validation->run()) {//Ejecuta validaciones
                     if ($id_tipo_actividad === '0') {//Guardar un nuevo registro
                         $result_guardar_actividad = $this->guardar_actividad($configuracion_formularios_actividad_docente, $datos_registro, array('TIP_ACT_DOC_CVE' => $index_tipo_actividad_docente));
@@ -231,7 +237,7 @@ class Perfil extends MY_Controller {
                             $pk = $configuracion_formularios_actividad_docente['llave_primaria'];
                             $index_pk = $result_guardar_actividad[$entity][$pk];
                             $json = json_encode($result_guardar_actividad);
-                            $result = registro_bitacora($result_id_user, null, $entity, $pk.":".$index_pk, $json, 'insert');
+                            $result = registro_bitacora($result_id_user, null, $entity, $pk . ":" . $index_pk, $json, 'insert');
 
                             //obtener datos del último registro guardado en la entidad correspondiente
                             $entidad_guardado = $configuracion_formularios_actividad_docente['tabla_guardado'];
@@ -244,7 +250,7 @@ class Perfil extends MY_Controller {
                             $resultado['error'] = $this->lang->line('interface')['general']['error_guardar']; //Mensaje de que no encontro empleado
                             $resultado['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                         }
-                        
+
                         echo json_encode($resultado);
                         exit();
                     } else {//Editar valor actividad docente especificada
@@ -293,29 +299,32 @@ class Perfil extends MY_Controller {
         foreach ($array_componentes as $key => $value) {
             switch ($key) {
                 case 'fecha_inicio_pick'://No carga si no hasta duraciòn 
+//                    $array_fechas['fecha_inicio_pick'] = date("Y-m-d", strtotime($value));
                     break;
                 case 'fecha_fin_pick'://No carga si no hasta duraciòn
+//                    $array_fechas['fecha_fin_pick'] = date("Y-m-d", strtotime($value));
                     break;
                 case 'hora_dedicadas'://No carga si no hasta duraciòn
                     break;
                 case 'duracion':
                     if ($value === 'hora_dedicadas') {
-                        $array_result[] = $array_validacion['hora_dedicadas'];
+                        $array_result['validacion'][] = $array_validacion['hora_dedicadas'];
                     } else {//fechas_dedicadas
-                        $array_result[] = $array_validacion['fecha_inicio_pick'];
-                        $array_result[] = $array_validacion['fecha_fin_pick'];
+                        $array_result['validacion'][] = $array_validacion['fecha_inicio_pick'];
+                        $array_result['validacion'][] = $array_validacion['fecha_fin_pick'];
                     }
                     break;
                 default :
-                    $array_result[] = $array_validacion[$key];
+                    $array_result['validacion'][] = $array_validacion[$key];
             }
         }
         //Busca si existen validaciones extra
         foreach ($validacion_extra as $value_extra) {
             if (!array_key_exists($value_extra, $array_componentes)) {
-                $array_result[] = $array_validacion[$value_extra];
+                $array_result['validacion'][] = $array_validacion[$value_extra];
             }
         }
+//        $array_result['fechas'] = $array_fechas;
 //        pr($array_result);
         return $array_result;
     }
@@ -459,6 +468,43 @@ class Perfil extends MY_Controller {
 //            'cuerpo_modal' => $this->load->view('perfil/actividad_docente/actividad_eliminar_tpl', $data, TRUE),
 //        );
 //        echo $this->ventana_modal->carga_modal($vista); //Carga los div de modal
+    }
+
+    public function get_data_ajax_actualiza_curso_principal() {
+        if ($this->input->post()) {//Datos mandados por post
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['actividad_docente'];
+            $tipo_msg = $this->config->item('alert_msg');
+            $value = $this->input->post(null, FALSE);
+            $actividad_general_cve = str_replace("'", '', $value['actividad_general_cve']);
+            $actividad_general_cve = str_replace("/", '', $actividad_general_cve);
+            $index_tp_actividad = str_replace("'", '', $value['index_tp_actividad']);
+            $index_tp_actividad = str_replace("/", '', $index_tp_actividad);
+            $actividad_docente = str_replace("'", '', $value['actividad_docente_cve']);
+            $actividad_docente = str_replace("/", '', $actividad_docente);
+
+            $datos['ACT_DOC_GRAL_CVE'] = $actividad_general_cve;
+            $datos['TIP_ACT_DOC_PRINCIPAL_CVE'] = $index_tp_actividad;
+            $datos['CURSO_PRINC_IMPARTE'] = $actividad_docente;
+//            pr($datos);
+            $result = $this->adm->update_curso_principal_actividad_docente($datos);
+//            pr($result);
+            if ($result['return'] === 1) {
+                $data['error'] = $string_values['save_curso_principal_modificado']; //
+                $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                $data['result'] = 1; //Error resultado success
+            } else if ($result['return'] < 0) {
+                $data['error'] = $string_values['error_curso_principal_modificado']; //
+                $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                $data['result'] = 0; //Error resultado mal
+            } else {
+                $this->output->set_status_header('400');
+            }
+//            pr(json_encode($data));
+            echo json_encode($data);
+
+            exit();
+        }
     }
 
     private function verifica_curso_principal_actividad_docente($index_tp_actividad = '0', $index_entidad = '0', $id_user = '0') {

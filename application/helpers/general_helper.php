@@ -605,6 +605,33 @@ if (!function_exists('get_ip_cliente')) {
     }
 
 }
+if (!function_exists('limpiar_cadena_javascript')) {
+
+    function limpiar_cadena_javascript($array_datos, $caracteres_limpiar) {
+        $array_result = array();
+        if (isset($array_datos)) {
+            return $array_datos;
+        }
+
+        if (isset($caracteres_limpiar) AND empty($caracteres_limpiar)) {
+            return $array_datos;
+        }
+        pr('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        foreach ($array_datos as $key => $value) {
+            for ($i = 0; $i < strlen($caracteres_limpiar); $i++) {
+                $char = substr($caracteres_limpiar, $i, $i + 1);
+                if ($i === 0) {
+                    $array_datos[$key] = str_replace($char, '', $value);
+                } else {
+                    $valtmp = $array_datos[$key];
+                    $array_datos[$key] = str_replace($char, '', $valtmp);
+                }
+            }
+        }
+        return $array_result;
+    }
+
+}
 
 
 

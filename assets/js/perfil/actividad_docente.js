@@ -49,7 +49,8 @@ $(function() {
 //        //data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/1', '#form_actividad_docente_especifico', '#info_actividad_docente');
 //    });
 });
-//$('#datetimepicker1').datetimepicker({
+
+//$('#fecha_inicio_pick').datetimepicker({
 //    icons: {
 //        time: "fa fa-clock-o",
 //        date: "fa fa-calendar",
@@ -57,7 +58,7 @@ $(function() {
 //        down: "fa fa-arrow-down"
 //    }
 //});
-//$('#datetimepicker1').datetimepicker({
+//$('#fecha_fin_pick').datetimepicker({
 //    icons: {
 //        time: "fa fa-clock-o",
 //        date: "fa fa-calendar",
@@ -81,7 +82,7 @@ function funcion_eliminar_actividad_docente(element) {
     var index_tp_actividad = button_obj.data('cvead');
     var index_entidad = button_obj.data('tacve');
     var is_curso_principal = button_obj.data('cp');
-    if (is_curso_principal) {
+    if (is_curso_principal===1) {
         apprise('Es un curso principal, no es posible eliminar');
     } else {
 
@@ -130,20 +131,62 @@ function funcion_asignar_curso_principal(element) {
     var radio_curso_principal = $(element);
     var a = hrutes['get_data_ajax_actividad'];
     var cad_split = a.split(":");
-    var entidad_tpa_cve = radio_curso_principal.data('entidadtpacve');
-    var actividad_general_cve = radio_curso_principal.data('actividadgeneralcve');
-    var actividad_docente_cve = radio_curso_principal.data('actividaddocentecve');
+    var entidad_tp_a_cve = radio_curso_principal.data('entidadtpacve');
+    var act_general_cve = radio_curso_principal.data('actividadgeneralcve');
+    var act_docente_cve = radio_curso_principal.data('actividaddocentecve');
     var cp = radio_curso_principal.data('cp');
     var key_row_select = radio_curso_principal.data('keyrowselect');
-//    alert(entidad_tpa_cve + ' ' + actividad_general_cve + ' ' + actividad_docente_cve + ' ' + cp);
+//    alert(act_general_cve + ' ' + entidad_tp_a_cve + ' ' + act_docente_cve + ' ' + cp);
     //Busca el row de la tabla que contiene el curso principal
-    var cur_principal = curso_principal_actividad_docente();
-    alert(key_row_select + ' : ' + cur_principal);
-    $('#id_row_' + cur_principal).removeClass('success').addClass('');
-    $('#id_row_' + cur_principal).attr("data-cp", "0");
-    $('#id_row_' + key_row_select).removeClass('').addClass('success');
-    $('#id_row_' + key_row_select).attr("data-cp", "1");
 
+
+
+    $.ajax({
+        url: site_url + '/perfil/get_data_ajax_actualiza_curso_principal',
+        data: {
+            actividad_general_cve: act_general_cve,
+            index_tp_actividad: entidad_tp_a_cve,
+            actividad_docente_cve: act_docente_cve,
+        },
+        method: 'POST',
+        beforeSend: function(xhr) {
+//            $('#tabla_actividades_docente').html(create_loader());
+        }
+    })
+            .done(function(response) {
+                var response = $.parseJSON(response);//
+                $('#mensaje_error_div').removeClass('alert-danger').removeClass('alert-success');
+                if (response.result === 1) {
+                    //Actializa vista de curso principal
+                    $('#mensaje_error').html(response.error);
+                    var cur_principal = curso_principal_actividad_docente();
+                    $('#id_row_' + cur_principal).removeClass('success').addClass('');
+                    $('#id_row_' + cur_principal).data("cp", 0);
+                    $('#id_row_' + cur_principal).find('td').find('button[id=btn_eliminar_actividad_modal]').data("cp", 0);
+                    $('#id_row_' + key_row_select).removeClass('').addClass('success');
+                    $('#id_row_' + key_row_select).data("cp", 1);
+                    $('#id_row_' + key_row_select).find('td').find('button[id=btn_eliminar_actividad_modal]').data("cp", 1);
+
+
+                }
+                $('#mensaje_error_div').addClass('alert-' + response.tipo_msg);
+                $('#mensaje_error').html(response.error);
+                $('#div_error').show();
+                setTimeout("$('#div_error').hide()", 5000);
+            })
+            .fail(function(jqXHR, response) {
+                $('#mensaje_error_div').removeClass('alert-danger').removeClass('alert-success');
+                $('#mensaje_error_div').addClass('alert-danger');
+                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                $('#div_error').show();
+                setTimeout("$('#div_error').hide()", 5000);
+//                $('#div_error').show();
+//                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+//                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
+            })
+            .always(function() {
+                remove_loader();
+            });
 
 }
 
@@ -159,7 +202,7 @@ function curso_principal_actividad_docente() {
     var obj_row;
     for (var i = 0; i < document.getElementById('tabla_actividades').rows.length; i++) {
         obj_row = $(document.getElementById('tabla_actividades').rows[i]);
-        if (obj_row.data('cp') == '1') {
+        if (obj_row.data('cp') === '1' || obj_row.data('cp') === 1) {
             cur_prin_actual = obj_row.data('keyrow');
             break;
         }
@@ -236,9 +279,9 @@ function funcion_guargar(index) {
 //                    $('#modal_censo').modal(toggle);
                 } else {
                     if (response) {
-                            
+
                         var response_json = $.parseJSON(response);//
-                        var valor_radio_curso = '123';
+                        var valor_radio_curso = response_json.insertar[0].cve_actividad_docente;
                         var titulo_tipo_actividad = response_json.insertar[0].nombre_tp_actividad;
                         var anio = response_json.insertar[0].anio;
                         var duracion = response_json.insertar[0].duracion;
@@ -249,9 +292,9 @@ function funcion_guargar(index) {
                         var cp = '0';
                         var idrow = funcion_obtener_max_id_row_table_actividad() + 1;//Obtiene el maximo index de el row de la tabla de actividades
                         ////////////
-                        duracion = (duracion===null)?'':duracion;
-                        fecha_inicio = (fecha_inicio===null)?'':fecha_inicio;
-                        fecha_fin = (fecha_fin===null)?'':fecha_fin;
+                        duracion = (duracion === null) ? '' : duracion;
+                        fecha_inicio = (fecha_inicio === null) ? '' : fecha_inicio;
+                        fecha_fin = (fecha_fin === null) ? '' : fecha_fin;
 
                         var htmlRowTemplate = $('#template_row_nueva_act').html();
                         var htmlNewRow = htmlRowTemplate.replace(/\$\$valor_radio_curso\$\$/g, valor_radio_curso)
@@ -301,5 +344,7 @@ function mostrar_horas_fechas(horas) {
         document.getElementById('fecha_fin').style.display = 'none';
     }
 }
+
+
 
 

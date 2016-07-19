@@ -43,7 +43,7 @@ class Perfil_model extends CI_Model {
             'EMP_NUM_FUE_IMSS as empleosFueraImss',
             'EMP_MATRICULA as matricula',
             'DEL_NOMBRE as delegacion',
-            'CAT_NOMBRE as nombreCategoria',
+            'NOM_CATEGORIA as nombreCategoria',
             'EM.CATEGORIA_CVE as claveCategoria',
             'ADS_NOM_AREA as nombreAreaAdscripcion',
             'ADS_NOM_UNIDAD as nombreUnidadAdscripcion',
@@ -55,7 +55,7 @@ class Perfil_model extends CI_Model {
         ));
         $this->db->from('empleado AS EM');
         $this->db->join('cdelegacion AS CDEL', 'CDEL.DELEGACION_CVE = EM.DELEGACION_CVE', 'left');
-        $this->db->join('ccategoria AS CCAT', 'CCAT.CATEGORIA_CVE = EM.CATEGORIA_CVE', 'left');
+        $this->db->join('ccategoria AS CCAT', 'CCAT.ID_CAT = EM.CATEGORIA_CVE', 'left');
         $this->db->join('adscripcion AS ADS', 'ADS.ADSCRIPCION_CVE = EM.ADSCRIPCION_CVE', 'left');
         $this->db->join('ctipo_contratacion AS CTC', 'EM.tip_contratacion_cve =  CTC.tip_contratacion_cve', 'left');
         $this->db->join('cdepartamento AS CD', 'CD.DEPARTAMENTO_CVE =  EM.DEPARTAMENTO_CVE', 'left');

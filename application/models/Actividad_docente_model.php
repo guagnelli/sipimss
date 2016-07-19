@@ -54,8 +54,33 @@ class Actividad_docente_model extends CI_Model {
         //Actualiza
         $error = $this->db->where("EMPLEADO_CVE", $datos_actividad_docente['EMPLEADO_CVE']);
         $this->db->update('actividad_docente_gral', $datos_actividad_docente);
+        pr($this->db->last_query());
         $result['return'] = 1;
         $result['actualizados'] = $datos_actividad_docente;
+        return $result;
+    }
+
+    public function update_curso_principal_actividad_docente($datos_cur_principal = null) {
+        $result['return'] = -1;
+        $result['actualizados'] = '';
+        if (is_null($datos_cur_principal)) {
+            return $result;
+        }
+        //'\'
+        
+        //Actualiza
+        $this->db->where("ACT_DOC_GRAL_CVE", $datos_cur_principal['ACT_DOC_GRAL_CVE']);
+        $query = $this->db->update('actividad_docente_gral', $datos_cur_principal);
+//        $num_row = $this->db->num_rows();
+//        pr($query);
+//        pr($this->db->last_query());
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $result['return'] = 0;
+        }else{
+            $result['return'] = 1;
+            $result['actualizados'] = $datos_cur_principal;
+        }
         return $result;
     }
 
@@ -74,8 +99,8 @@ class Actividad_docente_model extends CI_Model {
             return -1;
         } else {
             $array_campos[$pk] = $index;
-                    
-            $result[$name_entidad] = $array_campos; 
+
+            $result[$name_entidad] = $array_campos;
             return $result;
         }
     }
