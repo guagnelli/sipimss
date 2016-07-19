@@ -391,6 +391,23 @@ $config = array(
             'rules' => 'trim|required|numeric' //
         ),
     ),
+    'form_convocatoria_evaluacion' => array(
+        'FCH_FIN_REG_DOCENTE' => array(
+            'field' => 'FCH_FIN_REG_DOCENTE',
+            'label' => 'fecha fin de registro docente',
+            'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
+        ),
+        'FCH_FIN_VALIDACION_1' => array(
+            'field' => 'FCH_FIN_VALIDACION_1',
+            'label' => 'fecha fin de validación 1',
+            'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
+        ),
+        'FCH_FIN_VALIDACION_2' => array(
+            'field' => 'FCH_FIN_VALIDACION_2',
+            'label' => 'fecha fin de validación 2',
+            'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
+        ),
+    )
         //**Fin de validación de actividad docenete********************************
 );
 

@@ -98,6 +98,11 @@ class MY_Form_validation extends CI_Form_validation {
         return (!preg_match($exp, $date)) ? FALSE : TRUE;
     }
 
+    public function validate_date_dd_mm_yyyy($date) {
+        $exp = '/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/';
+        return (!preg_match($exp, $date)) ? FALSE : TRUE;
+    }
+
     public function radio_buttom_validation($str) {
 //        $exp = '/^[0-9]+$/';
 //        return (!preg_match($exp, $value)) ? FALSE : TRUE;
