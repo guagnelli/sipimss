@@ -4,7 +4,7 @@
     <style type="text/css">
         .button-padding {padding-top: 30px}
         .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
-        .file {visibility: hidden;  position: absolute;}/*Oculta el file para cargar comprobante y deja asi solo muestra un botón*/
+        /*.userfile {visibility: hidden;  position: absolute;}Oculta el file para cargar comprobante y deja asi solo muestra un botón*/
     </style>
 
     <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/actividad_docente.js"></script>
@@ -14,7 +14,7 @@
     <div class="list-group">
             <?php if(isset($tipo_actividad_docente)){ ?>
            <div class="list-group-item">
-                <?php echo form_open('', array('id'=>'form_actividad_docente_general')); ?>
+                <?php echo form_open('perfil/get_data_ajax_actividad_cuerpo_modal', array('id'=>'form_actividad_docente_general')); ?>
                 <label for='lbl_tipo_actividad_docente_' class="control-label">
                      <?php echo $string_values['lbl_tipo_actividad_docente']; ?>
                 </label>
@@ -38,7 +38,7 @@
                <?php   echo form_error_format('tipo_actividad_docente'); ?>
            </div>
             <?php echo form_close(); }?>
-                <?php echo form_open('', array('id'=>'form_actividad_docente_especifico')); ?>
+                <?php echo form_open_multipart('', array('id'=>'form_actividad_docente_especifico')); ?>
             <div class="list-group-item" id="info_actividad_docente">
                <!--Carga la vista correspondiente al elemento tipo de actividad del docente-->
                <?php   if(isset($formulario)){ echo $formulario; } ?>

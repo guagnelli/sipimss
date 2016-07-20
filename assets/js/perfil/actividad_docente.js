@@ -281,7 +281,6 @@ function funcion_guargar(index) {
                     if (response) {
 
                         var response_json = $.parseJSON(response);//
-                        var valor_radio_curso = response_json.insertar[0].cve_actividad_docente;
                         var titulo_tipo_actividad = response_json.insertar[0].nombre_tp_actividad;
                         var anio = response_json.insertar[0].anio;
                         var duracion = response_json.insertar[0].duracion;
@@ -289,7 +288,8 @@ function funcion_guargar(index) {
                         var fecha_fin = response_json.insertar[0].fecha_fin;
                         var tacve = response_json.insertar[0].ta_cve;
                         var cvead = response_json.insertar[0].cve_actividad_docente;
-                        var cp = '0';
+                        var cve_actividad_general = response_json.insertar[0].actividad_general_cve;
+                        var cp = 0;
                         var idrow = funcion_obtener_max_id_row_table_actividad() + 1;//Obtiene el maximo index de el row de la tabla de actividades
                         ////////////
                         duracion = (duracion === null) ? '' : duracion;
@@ -297,8 +297,7 @@ function funcion_guargar(index) {
                         fecha_fin = (fecha_fin === null) ? '' : fecha_fin;
 
                         var htmlRowTemplate = $('#template_row_nueva_act').html();
-                        var htmlNewRow = htmlRowTemplate.replace(/\$\$valor_radio_curso\$\$/g, valor_radio_curso)
-                                .replace(/\$\$titulo_tipo_actividad\$\$/g, titulo_tipo_actividad)
+                        var htmlNewRow = htmlRowTemplate.replace(/\$\$titulo_tipo_actividad\$\$/g, titulo_tipo_actividad)
                                 .replace(/\$\$anio\$\$/g, anio)
                                 .replace(/\$\$duracion\$\$/g, duracion)
                                 .replace(/\$\$fecha_inicio\$\$/g, fecha_inicio)
@@ -307,7 +306,8 @@ function funcion_guargar(index) {
                                 .replace(/\$\$cvead\$\$/g, cvead)
                                 .replace(/\$\$cp\$\$/g, cp)
                                 .replace(/\$\$idrow\$\$/g, idrow)
-                                .replace(/\$\$key\$\$/g, idrow);//identificador unitario de el row
+                                .replace(/\$\$key\$\$/g, idrow)//identificador unitario de el row
+                                .replace(/\$\$actividadgeneralcve\$\$/g, cve_actividad_general);//identificador unitario de el row
                         $('#tabla_actividades').append($(htmlNewRow))
                         $('#mensaje_error').html(response_json.error);
                         $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');

@@ -17,7 +17,8 @@ listado de variables
 */
 ?>
 
-<div class="modal-header">
+
+<div id="modal_header_censo" class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title" id="modal_censo_label"><?php if(isset($titulo_modal) && !empty($titulo_modal)) echo $titulo_modal;//se verifica que exista la variable $titulo_modal. despues se imprime ?></h4>
 </div>

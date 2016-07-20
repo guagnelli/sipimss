@@ -121,9 +121,6 @@
                                                         'value' => 'Si',
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
-                                                        'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
                                                         )
                                                     )
                                                 );
@@ -139,9 +136,6 @@
                                                         'value' => 'No',
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
-                                                        'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
                                                         )
                                                     )
                                                 );
@@ -386,15 +380,17 @@
                                 <div class="col-md-6">
                                     <!--<li class="list-group-item">-->
                                         <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
-                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">
-                                        <label for='radio_duracion_fecha' class="control-label">
+                                        <!--<input type="file" name="userfile" id="userfile" accept="application/pdf">-->
+                                        <input type="file" id="userfile" name="userfile" class ="userfile" accept="application/pdf">
+                                        
+                                        <label for='lbl_comprobante' class="control-label">
                                             <?php echo $string_values['lbl_comprobante']; ?>
                                         </label>
                                         <div class="input-group">                                           
                                              <?php
                                                 echo $this->form_complete->create_element(
                                                 array('id'=>'text_comprobante','type'=>'text',
-                                                        'value' => '',
+                                                        'value' => 'cv',
                                                         'attributes'=>array(
                                                         'class'=>'form-control',
                                                         'placeholder'=>$string_values['title_cargar_comprobante'],

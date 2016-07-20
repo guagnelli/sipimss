@@ -239,6 +239,27 @@ class Perfil extends MY_Controller {
                             $json = json_encode($result_guardar_actividad);
                             $result = registro_bitacora($result_id_user, null, $entity, $pk . ":" . $index_pk, $json, 'insert');
 
+                            //Cargar comprobante 
+                            $config['upload_path'] = './uploads/';
+                            $config['allowed_types'] = 'pdf';
+                            $config['remove_spaces'] = TRUE;
+                            $config['max_size'] = '50000';
+                            $config['file_name'] = 'algo_nada';
+
+                            pr('que traes $_FILES');
+                            pr($_FILES);
+                            pr('fin ------------>');
+
+                            $this->load->library('upload', $config);
+                            if (!$this->upload->do_upload()) {
+                                $data['error'] = $this->upload->display_errors();
+                            } else {
+                                $file_data = $this->upload->data();
+                                $data['file_path'] = './uploads/' . $file_data['file_name'];
+                            }
+                            pr($datos_registro);
+                            pr($data);
+
                             //obtener datos del último registro guardado en la entidad correspondiente
                             $entidad_guardado = $configuracion_formularios_actividad_docente['tabla_guardado'];
 //                            pr($entidad_guardado);
@@ -293,11 +314,13 @@ class Perfil extends MY_Controller {
      * @return type
      */
     private function analiza_validacion($array_validacion, $array_componentes, $validacion_extra) {
-//        pr($array_componentes);
+        pr($array_componentes);
 //        pr($array_validacion);
         $array_result = array();
         foreach ($array_componentes as $key => $value) {
             switch ($key) {
+                case 'enctype':
+                    break;
                 case 'fecha_inicio_pick'://No carga si no hasta duraciòn 
 //                    $array_fechas['fecha_inicio_pick'] = date("Y-m-d", strtotime($value));
                     break;
@@ -315,6 +338,7 @@ class Perfil extends MY_Controller {
                     }
                     break;
                 default :
+//                    pr($key);
                     $array_result['validacion'][] = $array_validacion[$key];
             }
         }
@@ -361,6 +385,8 @@ class Perfil extends MY_Controller {
             }
             //Guarda comprobante
             $index_comprobante = $this->modPerfil->insert_comprobante($array_comprobante); //Guardar valores en entidad
+//            $res = guardar_archivos('algo_pasara', 'file');
+//            $res = $this->cargar_comprobante($arrar_datos_post);
         }//*********************************************************************
         //Guardar actividad
         $array_entidad_guardado = $this->config->item($entidad_guardado); //Se obtiene los campos de la entidad donde se almacenarán los datos 
@@ -372,6 +398,8 @@ class Perfil extends MY_Controller {
         $campos_insert['TIP_ACT_DOC_CVE'] = $array_elementos_no_post['TIP_ACT_DOC_CVE'];
         foreach ($arrar_datos_post as $key => $value) {//Genera array de campos y valores para insertar
             switch ($key) {
+                case 'enctype':
+                    break;
                 case 'comprobante':
                     break;
                 case 'ctipo_comprobante':
@@ -519,18 +547,24 @@ class Perfil extends MY_Controller {
         }
     }
 
-    private function cargar_comprobante() {
-        $config['upload_path'] = './uploads/';
-        $config['allowed_types'] = 'pdf';
-        $config['max_size'] = '20000';
+    public function cargar_comprobante() {
+        pr('queueuee');
+        if ($this->input->post()) {
+            pr($this->input->post());
+            $config['upload_path'] = './uploads/';
+            $config['allowed_types'] = 'pdf';
+            $config['max_size'] = '50000';
+//        $config['file_name'] = $file_name;
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload()) {
+                $data['error'] = $this->upload->display_errors();
+            } else {
 
-        $this->load->library('upload', $config);
-        if (!$this->upload->do_upload()) {
-            $data['error'] = $this->upload->display_errors();
-        } else {
-
-            $file_data = $this->upload->data();
-            $file_path = './uploads/' . $file_data['file_name'];
+                $file_data = $this->upload->data();
+                $data['file_path'] = './uploads/' . $file_data['file_name'];
+            }
+            pr($this->upload->data());
+            return $data;
         }
     }
 

@@ -185,7 +185,7 @@
                                         <!--Mostrará la tabla de actividad docente --> 
                                         <table class="table table-striped table-hover table-bordered" id="tabla_actividades">
                                             <thead>
-                                                <tr class='success'>
+                                                <tr class='btn-default'>
                                                     <th><?php echo $string_values['tab_titulo_pro_salud_cur_principal'] ?></th>
                                                     <th><?php echo $string_values['tab_titulo_pro_salud_actividad'] ?></th>
                                                     <th><?php echo $string_values['tab_titulo_pro_salud_anio'] ?></th>
@@ -221,7 +221,6 @@
                                                                                 'value' => $value['cve_actividad_docente'],
                                                                                 'attributes'=>array(
                                                                                 'class'=>'radio-inline m-r-sm',
-                                                                                'title'=> $string_values['radio_duracion_horas'],
                                         //                                                    'disabled'=> '',
                                                                                 $checked=>$checked,
                                                                                 'onchange'=>'funcion_asignar_curso_principal(this)',
@@ -311,17 +310,14 @@
                 
             </div>
         </div>
-        _____________________
-        <span id="simular" onclick="funcion_agregar_nueva_actividad()">
-            simular
-        </span>
-        ____________________
     </div>
   
     <script type="text/template" id="template_row_nueva_act">
         <tr id="id_row_$$idrow$$" data-cp="$$cp$$" data-keyrow="$$key$$">
         <td>
-        <input type="radio" name="radio_curso_principal" value="$$valor_radio_curso$$" id="radio_curso_principal" class="radio-inline m-r-sm" title="Hora(s)">
+        <input type="radio" name="radio_curso_principal" value="$$actividadgeneralcve$$" id="radio_curso_principal" class="radio-inline m-r-sm" 
+        onchange="funcion_asignar_curso_principal(this)" data-entidadtpacve=$$tacve$$ data-actividadgeneralcve=$$actividadgeneralcve$$ 
+        data-actividaddocentecve=$$cvead$$ data-cp=$$cp$$ data-keyrowselect=$$key$$>
         </td>
         <td class='class_titulo'>$$titulo_tipo_actividad$$</td>
         <td>$$anio$$</td>
@@ -333,8 +329,8 @@
         </td>
         <td>
             <button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow="$$idrow$$" data-tacve="$$tacve$$" data-cvead="$$cvead$$" data-cp="$$cp$$" onclick="funcion_eliminar_actividad_docente(this)">
-        Eliminar
-        </button>
+                Eliminar
+            </button>
         </td>
         </tr>
     </script>

@@ -179,7 +179,7 @@
 		<div class="clearfix"> </div>
 		
 		<!-- Se declara una ventana modal llamada modal_censo -->
-		<div class="modal fade" id="modal_censo" tabindex="-1" role="dialog" aria-labelledby="modal_censo_label">
+		<div class="modal fade" id="modal_censo" tabindex="-1" role="dialog" aria-labelledby="modal_censo_label" data-backdrop="static">
 		    <div class="modal-dialog modal-lg" role="document">
 		        <div class="modal-content" id="modal_content">
 							<!-- Cuerpo de la ventana modal -->
