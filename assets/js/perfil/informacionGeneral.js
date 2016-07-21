@@ -40,7 +40,7 @@ $(function() {
 function cargar_datos_menu_perfil(id) {
     var cad = hrutes[id];
     var cad_split = cad.split(":");
-//    alert('si me llamo');
+//    alert('si me llamo' + cad_split[0] + '/' + cad_split[1] + cad_split[2] + cad_split[3]);
 //            data_ajax(site_url + '/perfil/get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
     data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
 }

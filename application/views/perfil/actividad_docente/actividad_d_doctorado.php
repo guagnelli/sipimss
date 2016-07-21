@@ -147,7 +147,7 @@
                                                         'title'=> $string_values['radio_duracion_horas'],
     //                                                    'disabled'=> '',
 //                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
+//                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );
@@ -166,7 +166,7 @@
                                                         'title'=> $string_values['radio_duracion_horas'],
     //                                                    'disabled'=> '',
 //                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
+//                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );

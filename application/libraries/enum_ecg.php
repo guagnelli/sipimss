@@ -28,26 +28,28 @@ abstract class MyEnum3 {
 class enum_ecg extends MyEnum3 {
 
     const
-            __default = 0,
-            cmodalidad = 1,
-            licenciatura = 2,
-            cmodulo = 3,
-            carea = 4,
-            cmateria = 5,
-            ccurso = 6,
-            cinstitucion_avala = 7,
-            ctipo_actividad_docente = 8,
-            crol_desempenia = 9,
-            ctipo_comprobante = 10,
-            ctipo_licenciatura =11,
-            ctipo_curso = 12,
-            ctipo_especialidad = 13,
-            ctipo_formacion_profesional = 14,
-            ctipo_participacion = 15,
-            ctipo_material = 16,
-            cestado_civil = 17,
-            cejercicio_predominante = 18,
-            cejercicio_profesional = 19
+            __default = '',
+            cmodalidad = 'cmodalidad',
+            licenciatura = 'licenciatura',
+            cmodulo = 'cmodulo',
+            carea = 'carea',
+            cmateria = 'cmateria',
+            ccurso = 'ccurso',
+            cinstitucion_avala = 'cinstitucion_avala',
+            ctipo_actividad_docente = 'ctipo_actividad_docente',
+            crol_desempenia = 'crol_desempenia',
+            ctipo_comprobante = 'ctipo_comprobante',
+            ctipo_licenciatura ='ctipo_licenciatura',
+            ctipo_curso = 'ctipo_curso',
+            ctipo_especialidad = 'ctipo_especialidad',
+            ctipo_formacion_profesional = 'ctipo_formacion_profesional',
+            ctipo_participacion = 'ctipo_participacion',
+            ctipo_material = 'ctipo_material',
+            cestado_civil = 'cestado_civil',
+            cejercicio_predominante = 'cejercicio_predominante',
+            cejercicio_profesional = 'cejercicio_profesional',
+            cmedio_divulgacion = 'cmedio_divulgacion',
+            ctipo_estudio = 'ctipo_estudio'
 
     ;
     /*

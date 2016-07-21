@@ -93,7 +93,7 @@ class Catalogos_generales extends CI_Model {
      * @return type array retorna los datos del catálogo "rist_delegacion"
      * 
      */
-    public function getDelegaciones_rist() {
+    public function getDelegaciones_rist($array_where = null) {
 //        $this->db->select(array(''));
         $query = $this->db->get('rist_delegacion'); //Obtener conjunto de registros
         $resultado = $query->result_array();
@@ -109,7 +109,7 @@ class Catalogos_generales extends CI_Model {
      * tabla principal de delegaciones
      * 
      */
-    public function getDelegaciones() {
+    public function getDelegaciones($array_where = null) {
 //        $this->db->select(array(''));
         $query = $this->db->get('cdelegacion'); //Obtener conjunto de registros
         $resultado = $query->result_array();
@@ -125,7 +125,7 @@ class Catalogos_generales extends CI_Model {
      * 
      * 
      */
-    public function get_ccurso() {
+    public function get_ccurso($array_where = null) {
 //        $this->db->select(array(''));
         $query = $this->db->get('ccurso'); //Obtener conjunto de registros
         $resultado = $query->result_array();
@@ -141,7 +141,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_tipo_actividad_docente() {
+    public function get_tipo_actividad_docente($array_where = null) {
         $query = $this->db->get('ctipo_actividad_docente'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -155,7 +155,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_cmaterial() {
+    public function get_cmaterial($array_where = null) {
         $query = $this->db->get('cmaterial'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -168,7 +168,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_licenciatura() {
+    public function get_licenciatura($array_where = null) {
         $query = $this->db->get('licenciatura'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -181,7 +181,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_cmodulo() {
+    public function get_cmodulo($array_where = null) {
         $query = $this->db->get('cmodulo'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -194,7 +194,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_carea() {
+    public function get_carea($array_where = null) {
         $query = $this->db->get('carea'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -207,7 +207,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_cinstitucion_avala() {
+    public function get_cinstitucion_avala($array_where = null) {
         $query = $this->db->get('cinstitucion_avala'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -220,7 +220,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_crol_desempenia() {
+    public function get_crol_desempenia($array_where = null) {
         $query = $this->db->get('crol_desempenia'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -233,8 +233,8 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_cmodalidad() {
-        $query = $this->db->get('cmodalidad'); //Obtener conjunto de registros
+    public function get_cmodalidad($array_where = null) {
+        $query = $this->db->get_where('cmodalidad', $array_where); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
         return $resultado;
@@ -246,7 +246,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ACT_DOC_CVE"  y  "TIP_ACT_DOC_NOMBRE"
      * 
      */
-    public function get_ctipo_comprobante() {
+    public function get_ctipo_comprobante($array_where = null) {
         $query = $this->db->get('ctipo_comprobante'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -259,7 +259,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_ESP_MEDICA_CVE"  y  "TIP_ESP_MED_NOMBRE"
      * 
      */
-    public function get_ctipo_especialidad() {
+    public function get_ctipo_especialidad($array_where = null) {
         $query = $this->db->get('ctipo_especialidad'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -272,7 +272,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_FOR_PROF_CVE"  ,  "TIP_FOR_PRO_NOMBRE"   y "SUB_FOR_PRO_CVE"
      * 
      */
-    public function get_ctipo_formacion_profesional() {
+    public function get_ctipo_formacion_profesional($array_where = null) {
         $query = $this->db->get('ctipo_formacion_profesional'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -285,7 +285,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_PARTICIPACION_CVE"  ,  "TIP_PAR_NOMBRE" 
      * 
      */
-    public function get_ctipo_participacion() {
+    public function get_ctipo_participacion($array_where = null) {
         $query = $this->db->get('ctipo_participacion'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -298,7 +298,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_MATERIAL_CVE"  ,  "TIP_MAT_NOMBRE"  y "TIP_MAT_TIPO"
      * 
      */
-    public function get_ctipo_material() {
+    public function get_ctipo_material($array_where = null) {
         $query = $this->db->get('ctipo_material'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -311,7 +311,7 @@ class Catalogos_generales extends CI_Model {
      * "TIP_CURSO_CVE"  ,  "TIP_CUR_NOMBRE"
      * 
      */
-    public function get_ctipo_curso() {
+    public function get_ctipo_curso($array_where = null) {
         $query = $this->db->get('ctipo_curso'); //Obtener conjunto de registros
         $resultado = $query->result_array();
         $query->free_result(); //Libera la memoria
@@ -324,7 +324,7 @@ class Catalogos_generales extends CI_Model {
      * "CESTADO_CIVIL_CVE"  ,  "EDO_CIV_NOMBRE"
      * 
      */
-    public function get_cestado_civil() {
+    public function get_cestado_civil($array_where = null) {
         $query = $this->db->get('cestado_civil');
         $estadoCivil = $query->result_array();
         $query->free_result();
@@ -337,7 +337,7 @@ class Catalogos_generales extends CI_Model {
      * "EJE_PRO_CVE"  ,  "EJE_PRO_NOMBRE"
      * 
      */
-    public function get_cejercicio_profesional() {
+    public function get_cejercicio_profesional($array_where = null) {
         $query = $this->db->get('cejercicio_profesional');
         $estadoCivil = $query->result_array();
         $query->free_result();
@@ -350,8 +350,21 @@ class Catalogos_generales extends CI_Model {
      * "EJER_PREDOMI_CVE"  ,  "EJE_PRE_NOMBRE"
      * 
      */
-    public function get_cejercicio_predominante() {
+    public function get_cejercicio_predominante($array_where = null) {
         $query = $this->db->get('cejercicio_predominante');
+        $estadoCivil = $query->result_array();
+        $query->free_result();
+        return $estadoCivil;
+    }
+    
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cestado_civil" 
+     * "EJER_PREDOMI_CVE"  ,  "EJE_PRE_NOMBRE"
+     * 
+     */
+    public function get_catalogo_general($entidad, $array_where = null) {
+        $query = $this->db->get_where($entidad, $array_where);
         $estadoCivil = $query->result_array();
         $query->free_result();
         return $estadoCivil;

@@ -100,9 +100,6 @@
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );
@@ -119,9 +116,6 @@
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
-                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );

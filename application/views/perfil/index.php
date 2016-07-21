@@ -22,6 +22,7 @@ $string_values = $this->lang->line('interface');
                 </h1>
             </div>
             <div class="panel-body">
+                <!--**************Generá menu*************-->
                 <ul class="nav nav-pills nav-stacked col-md-3">
                     <?php foreach ($array_menu as $value) { 
                         $pos = strpos($value['ruta'], ':');
@@ -52,7 +53,7 @@ $string_values = $this->lang->line('interface');
                         </li>
                     <?php } ?>
                 </ul>
-                
+                <!-- genera div por opción de menu -->
                 <div id = 'tabContent' class='tab-content col-md-9'>
                     <?php foreach ($array_menu as $value) { 
                         $pos = strpos($value['ruta'], ':');
@@ -68,9 +69,11 @@ $string_values = $this->lang->line('interface');
                     <div id = '<?php echo $val; ?>' class = 'tab-pane fade'>
                         <div class ="row">
                             <?php 
+//                                    pr('--> ruta' . $value['ruta']);
                                 $busca_cadena = strpos($value['ruta'], 'ajax'); //Busca si el metodo a invocar es un ajax
-//                                    pr('Invoca ajax' . $busca_cadena);
-                                if(!$busca_cadena){//Si no existe un ajax, llama a una vista 
+                                $busca_cadena = ($busca_cadena===0)?1:$busca_cadena;
+//                                    pr('Invoca ajax ' . $busca_cadena);
+                                if(!$busca_cadena){//Si no existe un ajax, llama a una vista, es importante que exista, para que muestré la pantalla correctamente
                                     $this->load->view($value['ruta_padre']."/".$value['ruta']); 
                                 } 
                             ?>

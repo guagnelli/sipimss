@@ -12,7 +12,7 @@
     <!-- Inicio informacion personal -->
     
     <div class="list-group">
-            <?php if(isset($tipo_actividad_docente)){ ?>
+            <?php if(isset($ctipo_actividad_docente)){ ?>
            <div class="list-group-item">
                 <?php echo form_open('perfil/get_data_ajax_actividad_cuerpo_modal', array('id'=>'form_actividad_docente_general')); ?>
                 <label for='lbl_tipo_actividad_docente_' class="control-label">
@@ -23,19 +23,18 @@
                         <span class="glyphicon glyphicon-user"> </span>
                     </span>
                     <?php 
-                        echo $this->form_complete->create_element(array('id' => 'tipo_actividad_docente', 'type' => 'dropdown', 
-                            'options' => $tipo_actividad_docente, 
+                        echo $this->form_complete->create_element(array('id' => 'ctipo_actividad_docente', 'type' => 'dropdown', 
+                            'options' => $ctipo_actividad_docente, 
                             'first' => array('' => 'Selecciona tipo de actividad'), 
                             'value' => '',
                             'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                             'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                            'title' => $string_values['lbl_ejercicio_pd'], 
                             'onchange' =>  "myFunctionActividad()"   
                             )
                        )); 
                     ?>
                </div>
-               <?php   echo form_error_format('tipo_actividad_docente'); ?>
+               <?php   echo form_error_format('ctipo_actividad_docente'); ?>
            </div>
             <?php echo form_close(); }?>
                 <?php echo form_open_multipart('', array('id'=>'form_actividad_docente_especifico')); ?>

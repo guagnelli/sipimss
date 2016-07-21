@@ -135,10 +135,35 @@ $config['catalogos_indexados'] = array(//Catógos generales que existen actualme
     18 => 'cejercicio_predominante',
     19 => 'cejercicio_profesional',
 );
+//ejemplo para enviar un where $condiciones = array(enum_ecg::cejercicio_predominante=>array('EJER_PREDOMI_CVE '=>'2'));                  
+$config['catalogos_definidos'] = array(//Catógos generales que existen actualmente y su identificación
+    'cmodalidad' => array('id' => 'MODALIDAD_CVE', 'nombre' => 'MOD_NOMBRE' , 'where' => null),
+    'licenciatura' => array('id' => 'LICENCIATURA_CVE', 'nombre' => 'LIC_NOMBRE' , 'where' => null),
+    'cmodulo' => array('id' => 'MODULO_CVE', 'nombre' => 'MODULO_NOMBRE' , 'where' => null),
+    'carea' => array('id' => 'AREA_CVE', 'nombre' => 'AREA_NOMBRE' , 'where' => null),
+    'cmateria' => array('id' => 'MATERIA_CVE', 'nombre' => 'MATERIA_NOMBRE' , 'where' => null),
+    'ccurso' => array('id' => 'CURSO_CVE', 'nombre' => 'CUR_NOMBRE' , 'where' => null),
+    'cinstitucion_avala' => array('id' => 'INS_AVALA_CVE', 'nombre' => 'IA_NOMBRE' , 'where' => null),
+    'ctipo_actividad_docente' => array('id' => 'TIP_ACT_DOC_CVE', 'nombre' => 'TIP_ACT_DOC_NOMBRE' , 'where' => null),
+    'crol_desempenia' => array('id' => 'ROL_DESEMPENIA_CVE', 'nombre' => 'ROL_DESEMPENIA' , 'where' => null),
+    'ctipo_comprobante' => array('id' => 'TIPO_COMPROBANTE_CVE', 'nombre' => 'TIP_COM_NOMBRE' , 'where' => null),
+    'ctipo_licenciatura' => array('id' => 'TIP_LICENCIATURA_CVE', 'nombre' => 'TIP_LIC_NOMBRE' , 'where' => null),
+    'ctipo_curso' => array('id' => 'TIP_CURSO_CVE', 'nombre' => 'TIP_CUR_NOMBRE' , 'where' => null),
+    'ctipo_especialidad' => array('id' => 'TIP_ESP_MEDICA_CVE', 'nombre' => 'TIP_ESP_MED_NOMBRE' , 'where' => null),
+    'ctipo_formacion_profesional' => array('id' => 'TIP_FOR_PROF_CVE', 'nombre' => 'TIP_FOR_PRO_NOMBRE' , 'where' => null),
+    'ctipo_participacion' => array('id' => 'TIP_PARTICIPACION_CVE', 'nombre' => 'TIP_PAR_NOMBRE' , 'where' => null),
+    'ctipo_material' => array('id' => 'TIP_MATERIAL_CVE', 'nombre' => 'TIP_MAT_NOMBRE' , 'where' => null),
+    'cestado_civil' => array('id' => 'CESTADO_CIVIL_CVE', 'nombre' => 'EDO_CIV_NOMBRE' , 'where' => null),
+    'cejercicio_predominante' => array('id' => 'EJER_PREDOMI_CVE', 'nombre' => 'EJE_PRE_NOMBRE' , 'where' => null),
+    'cejercicio_profesional' => array('id' => 'EJE_PRO_CVE', 'nombre' => 'EJE_PRO_NOMBRE' , 'where' => null),
+    'cmedio_divulgacion' => array('id' => 'MED_DIVULGACION_CVE', 'nombre' => 'MED_DIV_NOMBRE' , 'where' => null),
+    'ctipo_estudio' => array('id' => 'TIP_ESTUDIO_CVE', 'nombre' => 'TIP_EST_NOMBRE' , 'where' => null),
+    '' => array('id' => '', 'nombre' => '' , 'where' => null),
+);
 
 $config['actividad_docente_componentes'] = array(//Arreglo que se utilizará para leer las configuraciones de cada formularío de actividad docente
     0 => array('texto' => '', 'tabla_guardado' => '', 'llave_primaria' => '', 'vista' => '', 'validaciones' => '', 'catalogos_indexados' => array(), 'validaciones_extra' => array()),
-    1 => array('texto' => 'Ciclos Clínicos', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_ciclos_clinicos', 'validaciones' => 'form_ccl', 'catalogos_indexados' => array(enum_ecg::cmodalidad, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
+    1 => array('texto' => 'Ciclos Clínicos', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_ciclos_clinicos', 'validaciones' => 'form_ccl', 'catalogos_indexados' => array(1, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),
     2 => array('texto' => 'Internado Médico', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_internado_medico', 'validaciones' => 'form_ime', 'catalogos_indexados' => array(9, 7, 3, 1, 10), 'validaciones_extra' => array('pago_extra')),
     3 => array('texto' => 'Servicio Social', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_servicio_social', 'validaciones' => 'form_sso', 'catalogos_indexados' => array(1, 2, 7, 9, 10), 'validaciones_extra' => array('pago_extra')),
     4 => array('texto' => 'Licenciatura', 'tabla_guardado' => 'emp_actividad_docente', 'llave_primaria' => 'EMP_ACT_DOCENTE_CVE', 'vista' => 'perfil/actividad_docente/actividad_d_licenciatura', 'validaciones' => 'form_lic', 'catalogos_indexados' => array(1, 2, 6, 7, 9, 10), 'validaciones_extra' => array('duracion', 'pago_extra')),

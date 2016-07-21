@@ -121,8 +121,6 @@
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
                                                         )
                                                     )
                                                 );
@@ -139,8 +137,6 @@
                                                         'attributes'=>array(
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
                                                         )
                                                     )
                                                 );

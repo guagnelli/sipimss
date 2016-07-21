@@ -1,5 +1,41 @@
 <?php
 
+if (!function_exists('carga_catalogos_generales')) {
+    /**
+     * @autor  : LEAS   
+     * @fecha creacion : 20/07/2016
+     * @param array $array_entidades Nombre de las entidades que se van a cargar
+     * @param array $data //array que va a devolver, si es vacio, lo devuelve con 
+     * los catalogos cargados, si no, devuelve además lo que ya traía
+     * @param array $array_where  //Conciciones por catálogo, requiere el nombre de la entidad como llave 
+     * y un array como datos que contenga las condiciones involucradas, es decir, nombre del campo y valor
+     * Importante registrar en catalogos_definidos
+     * @return  array con los catálogos  cargados
+     */
+    function carga_catalogos_generales($array_entidades = array(), $data = array(), $array_where = null) {
+        if (isset($array_entidades) AND is_null($array_entidades)) {
+            $array_entidades = array();
+        }
+        if (isset($data) AND is_null($data)) {
+            $data = array();
+        }
+        $CI = & get_instance();
+        $CI->load->model('Catalogos_generales', 'cg');
+//        $CI->load->config('general');//Requerido cargar
+        $catalogos_propertis = $CI->config->item('catalogos_definidos');//Contiene los campos de "id" y "descripcion" de los campos que forman el "dropdown_options" 
+        $where = null;
+
+        foreach ($array_entidades as $entidad) {
+            $where = (isset($array_where[$entidad])) ? $array_where[$entidad] : null; //Verifica que exista un where relacionado a la entidad
+            $tmp_result = $CI->cg->get_catalogo_general($entidad, $where);//Funcion general que consulta la base de datos
+            $data[$entidad] = dropdown_options($tmp_result, $catalogos_propertis[$entidad]['id'], $catalogos_propertis[$entidad]['nombre']);//genera el "dropdown_options" y lo guarda en el array que retornará la función·
+        }
+
+        return $data;
+    }
+
+}
+
 /**
  * Método que valida una variable; que exista, no sea nula o vacía
  * @autor 		: LEAS.
@@ -9,7 +45,7 @@
  */
 if (!function_exists('carga_catalogos')) {
 
-    function carga_catalogos_censo($array_catalogos = array(), $data = array()) {
+    function carga_catalogos_censo($array_catalogos = array(), $data = array(), $array_where = null) {
         if (isset($array_catalogos) AND is_null($array_catalogos)) {
             $array_catalogos = array();
         }
@@ -121,12 +157,12 @@ if (!function_exists('registro_bitacora')) {
     function registro_bitacora($usuario_cve = null, $ruta = null, $entidad = null, $reg_entidad_cve = null, $parametros_json = null, $operacion = null) {
         $CI = & get_instance();
         $CI->load->config('general');
-        
+
         $parametros = $CI->config->item('parametros_bitacora');
         $parametros['USUARIO_CVE'] = $usuario_cve; //Asigna id del usuario
         $parametros['BIT_OPERACION'] = $operacion; //insert,update o delete
         if (is_null($ruta) AND empty($ruta)) {
-            $parametros['BIT_RUTA'] = $_SERVER['REQUEST_URI'];//Obtiene la ruta URI actual 
+            $parametros['BIT_RUTA'] = $_SERVER['REQUEST_URI']; //Obtiene la ruta URI actual 
         }
         // Obtener ip del cliente
         $parametros['BIT_IP'] = get_ip_cliente(); //Le manda la ip del cliente

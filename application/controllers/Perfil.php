@@ -133,8 +133,9 @@ class Perfil extends MY_Controller {
         }
 
         $data['string_values'] = $string_values; //Array de textos que muestra el formulario para actividad
+//        $condiciones = array(enum_ecg::cejercicio_predominante=>array('EJER_PREDOMI_CVE '=>'3'));//A manera de ejemplo
         //Carga catálogos según array, visto en config->general->catalogos_indexados 
-        $data = carga_catalogos_censo(array(enum_ecg::cejercicio_predominante), $data); //Carga el catálogo de ejercicio predominante
+        $data = carga_catalogos_generales(array(enum_ecg::cejercicio_predominante), $data); //Carga el catálogo de ejercicio predominante
 
         $data['actividad_docente'] = $actividad_docente; //
 
@@ -146,7 +147,7 @@ class Perfil extends MY_Controller {
 //            pr($data['datos_tabla_actividades_docente']);
         }
 
-        $main_contet = $this->load->view('perfil/actividad_docente/actividad_tpl', $data, FALSE);
+        $this->load->view('perfil/actividad_docente/actividad_tpl', $data, FALSE);
     }
 
     public function get_data_ajax_liscta_actividades() {
@@ -182,8 +183,10 @@ class Perfil extends MY_Controller {
             }
 
             if ($insertar === '0') {//Muestra el combo para seleccionar tipo de actividad docente 
-                $tipo_actividad_docente = $this->cg->get_tipo_actividad_docente(); //Obtiene tipos de actividad del docente
-                $data_actividad['tipo_actividad_docente'] = dropdown_options($tipo_actividad_docente, 'TIP_ACT_DOC_CVE', 'TIP_ACT_DOC_NOMBRE'); //Indicamos que muestré los siguientes datos index y descripción
+//                $tipo_actividad_docente = $this->cg->get_tipo_actividad_docente(); //Obtiene tipos de actividad del docente
+//                $data_actividad['tipo_actividad_docente'] = dropdown_options($tipo_actividad_docente, 'TIP_ACT_DOC_CVE', 'TIP_ACT_DOC_NOMBRE'); //Indicamos que muestré los siguientes datos index y descripción
+                $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE < ' => 15));
+                $data_actividad = carga_catalogos_generales(array(enum_ecg::ctipo_actividad_docente), $data_actividad, $condiciones_);
             }
 
             $data = array(
@@ -472,6 +475,7 @@ class Perfil extends MY_Controller {
             echo json_encode($data);
         }
 
+
 //        $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
 //        if (!empty($actividad_docente)) {//Verifica datos del usuario, es decir, que exista un registro en la tabla actividad_docente_gral
 //            $data['actividad_general_cve'] = $actividad_docente[0]['ACT_DOC_GRAL_CVE'];
@@ -548,7 +552,7 @@ class Perfil extends MY_Controller {
     }
 
     public function cargar_comprobante() {
-        pr('queueuee');
+//        pr('queueuee');
         if ($this->input->post()) {
             pr($this->input->post());
             $config['upload_path'] = './uploads/';
@@ -565,6 +569,46 @@ class Perfil extends MY_Controller {
             }
             pr($this->upload->data());
             return $data;
+        }
+    }
+
+//********************Investigación educativa ******************************************************************************/
+    public function ajax_investigacion() {
+        $data = array();
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface')['investigacion_docente'];
+        $data['string_values'] = $string_values;
+        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+        $empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
+        if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
+            $this->load->model('Investigacion_docente_model', 'id');
+            $lista_investigacion = $this->id->get_lista_datos_investigacion_docente($empleado[0]['EMPLEADO_CVE']);
+            $data['lista_investigaciones'] = $lista_investigacion;
+            $this->load->view('perfil/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrán la lista
+        } else {
+            //Error, No existe el empleado
+        }
+        //Consulta datos de empleado en investigación
+    }
+
+    public function ajax_add_investigacion() {
+        if ($this->input->is_ajax_request()) {
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
+            $data_investigacion['string_values'] = $string_values; //Crea la variable 
+            if ($this->input->post()) {//Después de cargar el formulario
+                
+            }
+
+            $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
+            $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
+            $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
+
+            $data = array(
+                'titulo_modal' => 'Investigación',
+                'cuerpo_modal' => $this->load->view('perfil/investigacion/investigacion_formulario', $data_investigacion, TRUE),
+            );
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         }
     }
 

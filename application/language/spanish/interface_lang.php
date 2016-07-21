@@ -92,8 +92,8 @@ $lang['interface'] = array(
         'lbl_informacion_general_empleos_actuales' => 'Número de empleos actuales fuera del IMSS',
         'plh_informacion_general_empleos_actuales' => 'Introduzca su número de empleos actuales fuera del IMSS',
         'btn_informacion_general_editar_nombre' => 'Editar nombre',
-        'btn_informacion_general_guardar_informacion_personal' => 'Guardar información personal',        
-        'lbl_informacion_general_informacion_imss' => 'Información IMSS',        
+        'btn_informacion_general_guardar_informacion_personal' => 'Guardar información personal',
+        'lbl_informacion_general_informacion_imss' => 'Información IMSS',
         'lbl_informacion_general_matricula' => 'Matrícula',
         'lbl_informacion_general_delegacion' => 'Delegación',
         'lbl_informacion_general_nombre_categoria' => 'Nombre de la categoría/Puesto',
@@ -126,10 +126,10 @@ $lang['interface'] = array(
     ),
     //Textos generales
     'general' => array(
-        'msg_no_existe_empleado'=>'No se encontrarón datos del empleado. Por favor registre sus datos',
-        'advertencia_agregar_todos_los_datos'=>'Debe llenar todos los campos obligatorios',
-        'datos_almacenados_correctamente'=>'Los datos se almacenaron correctamente',
-        'error_guardar'=>'Los datos no se almacenaron. Por favor intentemo más tarde'
+        'msg_no_existe_empleado' => 'No se encontrarón datos del empleado. Por favor registre sus datos',
+        'advertencia_agregar_todos_los_datos' => 'Debe llenar todos los campos obligatorios',
+        'datos_almacenados_correctamente' => 'Los datos se almacenaron correctamente',
+        'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde'
     ),
     //Actividad del docente
     'actividad_docente' => array(
@@ -214,6 +214,36 @@ $lang['interface'] = array(
         'tab_titulo_pro_salud_anio' => 'Año',
         'tab_titulo_editar' => 'Editar',
         'tab_titulo_eliminar' => 'Eliminar',
+    ),
+    'investigacion_docente' => array(
+        'Texto_de_ayuda_divulgacion' => 'Si selecciona comprobante o foro, deberá cargar un archivo en pdf. Para las demás opciónes debera llenar un formato que generará la ficha bibliografica',
+        'texto_ayuda_comprobante' => 'Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en la investigación en formato pdf',
+        'tab_titulo_nombre_trabajo_investigacion' => 'Nombre de la investigación',
+        'tab_titulo_tipo_investigacion' => 'Tipo de investigación',
+        'tab_titulo_cita_bibliografica' => 'Cita bibliografica',
+        'tab_titulo_folio' => 'Folio',
+        'tab_titulo_editar' => 'Editar',
+        'tab_titulo_eliminar' => 'Eliminar',
+        'btn_add_new_investigacion' => 'Agregar una investigación',
+        'text_sin_cita' => 'Comprobante',
+        'text_con_cita' => 'Cita bibliografica',
+        'lbl_name_trabajo_investigacion' => 'Nombre del trabajo de investigación',
+        'text_name_trabajo_investigacion' => 'Trabajo de investigación',
+        'lbl_num_folio' => 'Número de Folio de aceptación de SIRELCIS',
+        'txt_num_folio' => 'Folio',
+        'lbl_tipo_estudio' => 'Tipo de estudio',
+        'drop_tipo_estudio' => 'Seleccione el tipo de estudio',
+        'lbl_tipo_participacion' => 'Tipo de participación',
+        'drop_tipo_participacion' => 'Seleccione el tipo de participación',
+        'lbl_tipo_divulgacion' => 'Tipo de divulgación',
+        'drop_tipo_divulgacion' => 'Seleccione el tipo de divulgación',
+        'radio_btn_publicacion' => 'Hubo publicación',
+        'lbl_tipo_actividad_docente' => 'Tipo de actividad',
+        'lbl_tipo_comprobante' => 'Tipo de comprobante',
+        'lbl_comprobante' => 'Comprobante',
+        'title_cargar_comprobante' => 'Cargar comprobante',
+        'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
+        'title_tipo_comprobante' => 'Tipo de comprobante',
     ),
 );
 
