@@ -48,6 +48,7 @@ $lang['interface'] = array(
         'lbl_existe_registro' => 'El usuario ya se encuentra registrado',
         'phl_la_matricula_existe' => 'El usuario con matricula: [field] ya se encuentrá registrado',
         'phl_registro_correcto' => 'El registro se efectuo correctamente',
+        'phl_registro_incorrecto_del_empleado' => 'El registro del empleado no se pudo validar',
         'error_no_inserto_empleado' => 'No se pudieron guardar los datos del empleado'
     ),
     'restablecer_contrasenia' => array(

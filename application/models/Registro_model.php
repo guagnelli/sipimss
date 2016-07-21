@@ -160,24 +160,26 @@ class Registro_model extends CI_Model {
             return 0;
         }
     }
+
     /**
      * @author LEAS 
      * @fecha creación 06-06-2016 
+     * @fecha modificación 21-07-2016 
      * @param type String: $matricula
      * @return int si el usuario existe devuelve "1" de lo contrario devuelve "0"
      */
-    public function get_existe_empleado($id_usuario = null) {
-        if (is_null($id_usuario)) {
-            return 0;
+    public function get_existe_empleado($matricula = null) {
+        if (is_null($matricula)) {
+            return -1;
         }
-        $this->db->where('USUARIO_CVE', $id_usuario);
+        $this->db->where('EMP_MATRICULA', $matricula);
         $query = $this->db->get('empleado');
         $cantidad = $query->num_rows();
 //        pr($this->db->last_query());
         if ($cantidad > 0) {
             return 1;
         } else {
-            return 0;
+            return -1;
         }
     }
 
@@ -203,10 +205,10 @@ class Registro_model extends CI_Model {
             return $obtiene_id_usuario;
         }
     }
-    
+
     public function insert_registro_empleado($datos_empleado = null) {
         if (is_null($datos_empleado)) {
-            return null;
+            return -1;
         }
         $this->db->insert('empleado', $datos_empleado); //Almacena usuario
         $obtiene_id_usuario = $this->db->insert_id();
@@ -216,6 +218,27 @@ class Registro_model extends CI_Model {
         } else {
 
             return $obtiene_id_usuario;
+        }
+    }
+    
+    /**
+     * 
+     * @param type $datos_empleado
+     * @param type $where
+     * @return int
+     */
+    public function update_registro_empleado($datos_empleado = null, $where  = null ) {
+        if (is_null($datos_empleado) AND is_null($where)) {
+            return -1;
+        }
+        $this->db->where('EMP_MATRICULA', $where);
+        $this->db->update('empleado', $datos_empleado); //Actualización de correo solamente
+        
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return -1;
+        } else {
+            return 1;;
         }
     }
 
