@@ -157,11 +157,12 @@ class Login_model extends CI_Model {
             'us.USU_PATERNO "usr_paterno"', 'us.USU_MATERNO "usr_materno"',
             'us.USU_CONTRASENIA "usr_passwd"', 'us.CATEGORIA_CVE "usr_categoria"',
             'us.ADSCRIPCION_CVE "usr_adscripcion"', 'us.DELEGACION_CVE "usr_delegacion"',
-            'us.USU_CORREO "usr_correo"'
+            'us.USU_CORREO "usr_correo"', 'emp.EMPLEADO_CVE "empleado_cve"'
         );
 
         $this->db->select($select);
 //        $this->db->from('usuario as us');
+        $this->db->join('empleado emp', 'emp.USUARIO_CVE = us.USUARIO_CVE');
         $this->db->where('us.USU_MATRICULA', $matricula);
 //        $this->db->where('us.USU_CONTRASENIA', $password_encrypt); //Aplica condición password
         $this->db->limit(1);

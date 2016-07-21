@@ -115,8 +115,6 @@ class Registro extends MY_Controller {
                                         $ope_emp = ($verifica_existe_empleado_local === -1)? 'insert':'update';
                                         $id_emp = ($verifica_existe_empleado_local === -1)? $result_id_emp:$verifica_existe_empleado_local;//Obtiene id del registro de la entidad empleado
                                         $operacion_entidades['empleado'] = array($ope_emp=>$id_emp);//Registro de operacion de usuario 
-                                        
-                                        $result_id_emp = $this->mod_registro->insert_registro_empleado($datos_empleados); //Retorna id usuario
                                     }
                                     $json_datos_entidad = json_encode($operacion_entidades);//Codifica a json datos de entidad
                                     $json_registro_bitacora = json_encode($array_to_json);//Codifica a json la actualización o insersión a las entidades involucradas

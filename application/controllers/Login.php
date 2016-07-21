@@ -60,6 +60,7 @@ class Login extends CI_Controller {
                             $datosSession = array(
                                 'usuario_logeado' => TRUE,
                                 'identificador' => $login_user->user_cve,
+                                'idempleado' => $login_user->empleado_cve,
                                 'matricula' => $login_user->usr_matricula,
                                 'nombre' => $login_user->usr_nombre,
                                 'apaterno' => $login_user->usr_paterno,
