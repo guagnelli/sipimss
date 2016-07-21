@@ -26,6 +26,11 @@ function html_message(message, tipo) {
     return "<div class='alert alert-" + tipo + "' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" + message + "</div>";
 }
 
+function imprimir_resultado(resultado){
+	var tipo_mensaje = (resultado.result==true) ? 'success' : 'danger';
+    return "<div class='row'><div class='col-lg-12 alert alert-"+tipo_mensaje+"'>"+resultado.msg+"</div></div>";
+}
+
 
 function data_ajax(path, form_recurso, elemento_resultado) {
     $.ajax({

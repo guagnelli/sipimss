@@ -36,20 +36,50 @@ $lang['interface_evaluacion'] = array(
             'tab_head_fecha_fin_validacion2' => 'Fin validación 2',
             'tab_head_fecha_dictamen' => 'Dictamen',
             'tab_head_fecha_inconformidad' => 'Inconformidad',
-            'tab_head_acciones' => 'Acciones',
-            'lbl_editar' => 'Editar',
-            'lbl_eliminar' => 'Eliminar',
-            'titulo_agregar' => 'Agregar convocatoria',            
+            'titulo_agregar' => 'Agregar convocatoria',
+            'eliminacion_imposible' => 'Imposible eliminar la convocatoria, tiene dictamen(es) asociado(s). Eliminelos primero.'
         ),
         'agregar' => array(
-            'titulo_agregar' => 'Agregar convocatoria',
+            'titulo_agregar' => 'Administrar convocatoria',
             'tab_head_fecha_fin_registro' => 'Fecha fin de registro docente',
             'tab_head_fecha_fin_validacion1' => 'Fecha fin validación 1',
             'tab_head_fecha_fin_validacion2' => 'Fecha fin validación 2',
-            'btn_enviar' => 'Enviar',
-            'btn_cancelar' => 'Cancelar',
         ),
-    ),    
+        'model' => array(
+            'insercion' => 'Se ha insertado correctamente la información.',
+            'actualizacion' => 'Se ha actualizado correctamente la información.',
+            'eliminacion' => 'Se ha eliminado correctamente.',
+            'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
+        ),
+        'buscador_dictamen' => array(
+            'titulo_dictamen' => 'Administrar dictamen',
+            'agregar_dictamen' => 'Agregar dictamen',
+            'tab_head_fecha_inicia_evaluacion' => 'Fecha inicio de evaluación',
+            'tab_head_fecha_fin_evaluacion' => 'Fecha final de evaluación',
+            'tab_head_fecha_fin_inconformidad' => 'Fecha final de inconformidad',
+        ),
+        'general' => array(
+            'acciones' => 'Acciones',
+            'editar' => 'Editar',
+            'eliminar' => 'Eliminar',
+            'enviar' => 'Enviar',
+            'cancelar' => 'Cancelar',
+            'no_existe_datos' => 'No existen datos.',
+            'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
+            'compare_date' => 'El campo %s debería ser menor o igual que el campo predecesor.',
+        ),
+    ),
+    'evaluacion' => array(
+        'docente' => array(
+            'titulo' => 'Evaluación de carrera docente institucional',
+        ),
+        'model' => array(
+            'insercion' => 'Se ha insertado correctamente la información.',
+            'actualizacion' => 'Se ha actualizado correctamente la información.',
+            'eliminacion' => 'Se ha eliminado correctamente.',
+            'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
+        ),
+    )
 );
 //$lang['interface_registro_profesor'] = 'Impresión de texto prueba';
 //$lang['interface_otro_mensaje'] = '&lsaquo; Primero';

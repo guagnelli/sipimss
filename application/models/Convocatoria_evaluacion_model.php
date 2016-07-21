@@ -2,10 +2,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Convocatoria_evaluacion_model extends CI_Model {
+    var $string_values;
+
 	public function __construct() {
         // Call the CI_Model constructor
         parent::__construct();
         $this->load->database();
+        $this->lang->load('interface_evaluacion');
+        $this->string_values = $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['model']; //Cargar textos utilizados en vista
     }
 
 	/*public function get_convocatoria_evaluacion($params=null){
@@ -35,6 +39,54 @@ class Convocatoria_evaluacion_model extends CI_Model {
 
         return $resultado;
     }*/
+
+    public function delete_convocatoria_evaluacion($params=null){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        
+        $this->db->delete('admin_validador');
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['result'] = TRUE;
+            $resultado['msg'] = $this->string_values['eliminacion'];
+        }
+        
+        return $resultado;
+    }
+
+    public function delete_dictamen_evaluacion($params=null){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        
+        $this->db->delete('admin_dictamen_evaluacion');
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['result'] = TRUE;
+            $resultado['msg'] = $this->string_values['eliminacion'];
+        }
+        
+        return $resultado;
+    }
 
     public function get_convocatoria_evaluacion($params=null){
         $resultado = array();
@@ -80,6 +132,100 @@ class Convocatoria_evaluacion_model extends CI_Model {
         $resultado=$query->result_array();
 
         $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
+
+    public function insert_convocatoria_evaluacion($datos){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        $this->db->insert('admin_validador', $datos); //Inserción de registro
+        
+        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $data_id;
+            $resultado['msg'] = $this->string_values['insercion'];
+            $resultado['result'] = TRUE;
+        }
+        
+        return $resultado;
+    }
+
+    public function insert_dictamen_evaluacion($datos){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        $this->db->insert('admin_dictamen_evaluacion', $datos); //Inserción de registro
+        
+        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $data_id;
+            $resultado['msg'] = $this->string_values['insercion'];
+            $resultado['result'] = TRUE;
+        }
+        
+        return $resultado;
+    }
+
+    public function update_convocatoria_evaluacion($identificador, $datos){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        $this->db->where('ADMIN_VALIDADOR_CVE', $identificador);
+        $this->db->update('admin_validador', $datos); //Inserción de registro
+
+        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $identificador;
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
+
+        return $resultado;
+    }
+
+    public function update_dictamen_evaluacion($identificador, $datos){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        $this->db->where('ADMIN_DICTAMEN_EVA_CVE', $identificador);
+        $this->db->update('admin_dictamen_evaluacion', $datos); //Inserción de registro
+
+        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $identificador;
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
 
         return $resultado;
     }

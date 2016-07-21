@@ -407,7 +407,24 @@ $config = array(
             'label' => 'fecha fin de validación 2',
             'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
         ),
-    )
+    ),
+    'form_dictamen_evaluacion' => array(
+        'FCH_INICIO_EVALUACION' => array(
+            'field' => 'FCH_INICIO_EVALUACION',
+            'label' => 'fecha inicio de evaluación',
+            'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
+        ),
+        'FCH_FIN_EVALUACION' => array(
+            'field' => 'FCH_FIN_EVALUACION',
+            'label' => 'fecha final de evaluación',
+            'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
+        ),
+        'FCH_FIN_INCONFORMIDAD' => array(
+            'field' => 'FCH_FIN_INCONFORMIDAD',
+            'label' => 'fecha final de inconformidad',
+            'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
+        ),
+    ),
         //**Fin de validación de actividad docenete********************************
 );
 

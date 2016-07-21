@@ -240,6 +240,26 @@ if (!function_exists('html_message')) {
 }
 
 /**
+ * Método que define una plantilla para los mensajes que se mostrarán con bootstrap
+ * @autor     : Jesús Díaz P.
+ * @modified  : 
+ * @param     : string $message Texto a mostrar
+ * @param     : string $tipo Posibles valores('success','info','warning','danger')
+ * @return    : string Mensaje de alerta con formato predefinido
+ */
+if (!function_exists('imprimir_resultado')) {
+    function imprimir_resultado($resultado){
+        $tipo_mensaje = ($resultado['result']===true) ? 'success' : 'danger';
+
+        return '<div id="js_msg" class="row">
+                <div class="col-lg-12 alert alert-'.$tipo_mensaje.'">
+                    '.$resultado['msg'].'
+                </div>
+            </div>';
+    }
+}
+
+/**
  * Método que obtiene un listado de archivos de la ruta otorgada
  * @autor 		: Jesús Díaz P.
  * @modified 	: 

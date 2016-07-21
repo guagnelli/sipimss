@@ -3,24 +3,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Clase que contiene la gestión de convocatorias de evaluación
+ * Clase que contiene la petición, vista de estatus y envío de evaluación docente.
  * @version 	: 1.0.0
  * @author      : Jesús Z. Díaz P.
  * */
-class Convocatoria_evaluacion extends MY_Controller {
-
+class Evaluacion_docente extends MY_Controller {
     /*     * *********Costructor
      * Función inicial que carga los elementos utilizados en todos los métodos de la clase
      */
     function __construct() {
         parent::__construct();
-        /*
-        $this->load->config('general');
-        $this->config->load('general');*/
-        $this->load->library('form_complete');
+        /*$this->load->library('form_complete');
         $this->load->library('form_validation');
-        $this->load->library('seguridad');
-        $this->load->model('Convocatoria_evaluacion_model','conv_eval_model');
+        $this->load->library('seguridad');*/
+        $this->load->model('evaluacion_docente_model','eval_doce_model');
         $this->lang->load('interface_evaluacion');
         $this->load->helper('date');
     }
@@ -34,22 +30,13 @@ class Convocatoria_evaluacion extends MY_Controller {
         $main_content = null;
         $datos = array();
         $anio_actual = $this->anio_actual(); //Obtener año seleccionado para mostrar convocatorias
-        
-        ////Obtener años, para mostrar en listado desplegable
-        $anio_convocatoria_dictamen_evaluacion = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('fields'=>'distinct(YEAR(FCH_INICIO_EVALUACION)) AS anio'));
-        $datos['anio_convocatoria_dictamen_evaluacion'] = dropdown_options($anio_convocatoria_dictamen_evaluacion, 'anio', 'anio');
-        
-        ////Obtener próxima evaluación
-        $datos['proxima_convocatoria_evaluacion'] = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('conditions'=>"FCH_FIN_EVALUACION>NOW()", 'fields'=>'MIN(FCH_FIN_EVALUACION) AS anio'));
-
+        $datos['string_values'] = $this->lang->line('interface_evaluacion')['evaluacion']; //Cargar textos utilizados en vista
+        //pr($_SESSION);
+        $empleado_cve = $this->session->get_userdata('empleado_cve'); //Identificador de usuario logueado
+        $empleado_cve = 1;
         ////Obtener listado de evaluaciones de acuerdo al año seleccionado
-        //$datos['convocatoria_evaluacion'] = $this->conv_eval_model->get_convocatoria_evaluacion(array('conditions'=>"YEAR(admin_dictamen_evaluacion.FCH_INICIO_EVALUACION)='".$anio_actual."'", 'fields'=>array('distinct admin_validador.*', false)));
-        $datos['convocatoria_evaluacion'] = $this->conv_eval_model->get_convocatoria_evaluacion(array('conditions'=>"YEAR(FCH_FIN_VALIDACION_2)='".$anio_actual."'"));
-        foreach ($datos['convocatoria_evaluacion'] as $key_ce => $ce) {
-            $datos['convocatoria_evaluacion'][$key_ce]['dictamen'] = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('conditions'=>"ADMIN_VALIDADOR_CVE=".$ce['ADMIN_VALIDADOR_CVE']));
-        }
+        $datos['dictamen'] = $this->eval_doce_model->get_evaluacion_docente(array('conditions'=>"EMPLEADO_CVE='".$empleado_cve."'"));
         
-        $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['buscador'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['general'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['model']); //Cargar textos utilizados en vista
         //pr($datos);
         $main_content = $this->load->view('evaluacion/convocatoria/buscador_listado', $datos, true);
         $this->template->setMainContent($main_content);
@@ -210,7 +197,7 @@ class Convocatoria_evaluacion extends MY_Controller {
             if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
                 $datos['dato_dictamen'] = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('conditions'=>array('ADMIN_DICTAMEN_EVA_CVE'=>$dictamen_id))); //Obtener datos
             }
-            
+
             echo $this->load->view('evaluacion/convocatoria/dictamen_formulario', $datos, true);
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
