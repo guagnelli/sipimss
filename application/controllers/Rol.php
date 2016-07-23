@@ -53,7 +53,9 @@ class Rol extends MY_Controller {
                 $lista_roles_modulos = $this->session->userdata('lista_roles_modulos'); //Módulos de acceso del usuario
                 $rol_seleccionado = get_array_valor($lista_roles_modulos, $value);
                 $this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
+//                pr($rol_seleccionado);
                 redirect('perfil');
+                exit();
             }
         }
 //        pr($this->session->userdata('rol_seleccionado'));

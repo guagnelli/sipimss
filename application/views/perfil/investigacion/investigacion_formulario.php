@@ -1,9 +1,28 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-
+    <script>
+        var nextinput = 0;
+        var nextinput = 0;
+        control_generados = new Object();//Control de elementos agregados
+        var htipos_bibliografia = new Object();
+        //0-> Cantidad, de objetos permitidos, numericamente, es decir 0 = 0; 1 = 1; 11 = 11; y -1 = n-cantidad indefinida; |
+        //1-> Nombre de las propiedades, las contiene el boton agregar, es importante "sin espacios ni caractres especiales" |
+        //2-> Id del "div" que mostrará los cambios |
+        //3-> Id del  boton agregar  |
+        //4-> Nombre de los input separados por $ y al final |
+        //5-> placeholder de los input, debe ser de igual tamaño de argumentos que el punto 4, separado por $ y al final |
+        //6-> Titulo del parrafo o del "li" y al final |
+        htipos_bibliografia["autor"] = "-1|autor|div_autores_1|btn_add_autor|autornom_$autorap_$|Nombre(s)$Apellido paterno$|Agregar autor";
+        htipos_bibliografia["titulolibro"] = "1|titulolibro|div_tit_lib|btn_add_tit_libro|titulolibro_$|Titulo del libro$|Titulo de libro";
+        htipos_bibliografia["edicion"] = "1|edicion|div_edicion_lib|btn_add_edicion_lib|edicionlib_$|Agregar edición$|Edición";
+        htipos_bibliografia["editor"] = "1|editor|div_editor_lib|btn_add_editor_lib|editorlib_$|Agregar editor$|Editor";
+        htipos_bibliografia["lugaredicion"] = "1|lugaredicion|div_lugar_edicion_lib|btn_add_lugar_edicion_lib|lugaredicionlib_$|Agregar lugar de edició$|Lugar de edición";
+        htipos_bibliografia["editorial"] = "1|editorial|div_editorial_lib|btn_add_editorial_lib|editoriallib_$|Agregar editorial$|Editorial";
+        htipos_bibliografia["anio"] = "3|anio|div_anio_lib|btn_add_anio_lib|aniolib_$|Agregar año de edición$|Agregar año|";
+    </script>
     <div class="list-group">
         <div class="list-group-item">
-                <div class="panel-body">
+                    <div class="panel-body">
                             <?php if(isset($error)){ ?>
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -224,14 +243,64 @@
                     </div>
                 </div>
                 <div id="div_libro" class="list-group-item" style="display: none">
+                    <div class="alert alert-danger" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        El campo Nombre de comprobante es obligatorio.
+                    </div>
                     <div class='row'>
-                         <div class="col-md-6">
-                            <label for='lbl_libro' class="control-label">
-                                Bibliografia de libro
-                            </label>
+                         <div class="col-md-6" ><!--Columna 1-->
+                             <!--Columna 1_1 "3|autor|div_autores_1|btn_add_autor|autornom_$autorap_$|Nombre(s)$Apellido paterno$"-->
+                            <div class='row'>
+                                <div class="col-md-12" id="div_autores_1">
+                                    <button type="button" class="btn btn-link btn-sm" id="btn_add_autor" data-keyname ="autor" onclick="funcion_agregar_elemento(this);" >Agregar autor</button>
+                                </div>
+                            </div>
+                             <!--Columna 1_2 "1|titulolibro|div_tit_lib|btn_add_tit_libro|titulo_li_$|Titulo del libro$";-->
+                            <div class='row'>
+                                <div class="col-md-12" id = 'div_tit_lib'>
+                                    <button type="button" class="btn btn-link btn-sm" id="btn_add_tit_libro" data-keyname ="titulolibro" onclick="funcion_agregar_elemento(this);" >Agregar titulo del libro</button>
+                                </div>
+                            </div>
+                             <!--Columna 1_3 "1|edicion|div_edicion_lib|btn_add_edicion_lib|edicionlib_$|Agregar edición$|Edición";-->
+                            <div class='row'>
+                                <div class="col-md-12" id = 'div_edicion_lib'>
+                                    <button type="button" class="btn btn-link btn-sm" id="btn_add_edicion_lib" data-keyname ="edicion" onclick="funcion_agregar_elemento(this);" >Agregar edición</button>
+                                </div>
+                            </div>
+                             <!--Columna 1_4 "1|editor|div_editor_lib|btn_add_editor_lib|editorlib_$|Agregar editor$|Editor";-->
+                            <div class='row'>
+                                <div class="col-md-12" id = 'div_editor_lib'>
+                                    <button type="button" class="btn btn-link btn-sm" id="btn_add_editor_lib" data-keyname ="editor" onclick="funcion_agregar_elemento(this);" >Agregar editor</button>
+                                </div>
+                            </div>
+                             
                          </div>
+                         <div class="col-md-6">
+                             <!--Columna 2_1 "1|lugaredicion|div_lugar_edicion_lib|btn_add_lugar_edicion_lib|lugaredicionlib_$|Agregar lugar de edició$|Lugar de edición";-->
+                            <div class='row'>
+                               <div class="col-md-12" id = 'div_lugar_edicion_lib'>
+                                   <button type="button" class="btn btn-link btn-sm" id="btn_add_lugar_edicion_lib" data-keyname ="lugaredicion" onclick="funcion_agregar_elemento(this);" >Agregar lugar de edició</button>
+                               </div>
+                            </div>
+                             <!--Columna 2_2 "1|editorial|div_editorial_lib|btn_add_editorial_lib|editoriallib_$|Agregar editorial$|Editorial";-->
+                            <div class='row'>
+                               <div class="col-md-12" id = 'div_editorial_lib'>
+                                   <button type="button" class="btn btn-link btn-sm" id="btn_add_editorial_lib" data-keyname ="editorial" onclick="funcion_agregar_elemento(this);" >Agregar editorial</button>
+                               </div>
+                            </div>
+                             <!--Columna 2_3 "1|anio|div_anio_lib|btn_add_anio_lib|aniolib_$|Agregar año de edición$|Agregar año";-->
+                            <div class='row'>
+                               <div class="col-md-12" id = 'div_anio_lib'>
+                                   <button type="button" class="btn btn-link btn-sm" id="btn_add_anio_lib" data-keyname ="anio" onclick="funcion_agregar_elemento(this);" >Agregar año de edición</button>
+                               </div>
+                            </div>
+                             
+                        </div>
                     </div>
                 </div>
+                    
                 <div id="div_revista" class="list-group-item" style="display: none">
                     <div class='row'>
                          <div class="col-md-6">

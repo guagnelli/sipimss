@@ -34,14 +34,14 @@ class Perfil extends MY_Controller {
         $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
 
         $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1));
-        $datosPerfil = $this->loadInfo($this->session->userdata('identificador'));
 
+        $datosPerfil = $this->loadInfo($this->session->userdata('identificador'));
         $datosPerfil['generos'] = array('F' => 'Femenino', 'M' => 'Masculino');
         $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
         $datosPerfil['formacionProfesionalOptions'] = array();
         $datosPerfil['tipoComprobanteOptions'] = array();
         $datosPerfil['array_menu'] = $array_menu;
-
+//        pr($datosPerfil);
 
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());

@@ -2,8 +2,8 @@
 ?>
 
     <style type="text/css">
-        .button-padding {padding-top: 30px}
-        .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
+        /*.button-padding {padding-top: 30px}*/
+        /*.rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}*/
         /*.userfile {visibility: hidden;  position: absolute;}Oculta el file para cargar comprobante y deja asi solo muestra un botón*/
     </style>
 

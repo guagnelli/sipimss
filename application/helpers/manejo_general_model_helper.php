@@ -1,6 +1,7 @@
 <?php
 
 if (!function_exists('carga_catalogos_generales')) {
+
     /**
      * @autor  : LEAS   
      * @fecha creacion : 20/07/2016
@@ -22,13 +23,13 @@ if (!function_exists('carga_catalogos_generales')) {
         $CI = & get_instance();
         $CI->load->model('Catalogos_generales', 'cg');
 //        $CI->load->config('general');//Requerido cargar
-        $catalogos_propertis = $CI->config->item('catalogos_definidos');//Contiene los campos de "id" y "descripcion" de los campos que forman el "dropdown_options" 
+        $catalogos_propertis = $CI->config->item('catalogos_definidos'); //Contiene los campos de "id" y "descripcion" de los campos que forman el "dropdown_options" 
         $where = null;
 
         foreach ($array_entidades as $entidad) {
             $where = (isset($array_where[$entidad])) ? $array_where[$entidad] : null; //Verifica que exista un where relacionado a la entidad
-            $tmp_result = $CI->cg->get_catalogo_general($entidad, $where);//Funcion general que consulta la base de datos
-            $data[$entidad] = dropdown_options($tmp_result, $catalogos_propertis[$entidad]['id'], $catalogos_propertis[$entidad]['nombre']);//genera el "dropdown_options" y lo guarda en el array que retornará la función·
+            $tmp_result = $CI->cg->get_catalogo_general($entidad, $where); //Funcion general que consulta la base de datos
+            $data[$entidad] = dropdown_options($tmp_result, $catalogos_propertis[$entidad]['id'], $catalogos_propertis[$entidad]['nombre']); //genera el "dropdown_options" y lo guarda en el array que retornará la función·
         }
 
         return $data;
@@ -166,7 +167,7 @@ if (!function_exists('registro_bitacora')) {
         }
         // Obtener ip del cliente
         $parametros['BIT_IP'] = get_ip_cliente(); //Le manda la ip del cliente
-        $parametros['ENTIDAD'] = $entidad; //Le manda la ip del cliente
+        $parametros['ENTIDAD'] = $entidad; //
         $parametros['REGISTRO_ENTIDAD_CVE'] = $reg_entidad_cve; //Id del registro agregado, modificado 
         $parametros['PARAMETROS_JSON'] = $parametros_json; //Le manda valor de json
 
@@ -176,4 +177,138 @@ if (!function_exists('registro_bitacora')) {
     }
 
 }
+
+if (!function_exists('iniciar_sesion')) {
+
+    /**
+     * 
+     * @param type $directorio 
+     * @param type $file_name
+     * @param type $extencion
+     */
+    function iniciar_sesion($matricula, $passwd) {
+        $CI = & get_instance();
+        $CI->load->model('Login_model', 'lm');
+        $result = array();
+        $login_user = $CI->lm->set_login_user($matricula, $passwd); ///Verificar contra base de datos
+        if ($login_user->cantidad_reg == 1) { ///Usuario existe en base de datos
+            $password_encrypt = hash('sha512', $passwd);
+            if ($login_user->usr_passwd == $password_encrypt) {
+                $roles = $CI->lm->get_usuario_rol_modulo_sesion($login_user->user_cve); //Módulos por rol 
+                $modulos_extra = $CI->lm->get_usuario_modulo_extra_sesion($login_user->user_cve); //Módulos extra por usuario 
+//                            pr($roles);
+                $datos_session = array(
+                    'usuario_logeado' => TRUE,
+                    'identificador' => $login_user->user_cve,
+                    'idempleado' => $login_user->empleado_cve,
+                    'matricula' => $login_user->usr_matricula,
+                    'nombre' => $login_user->usr_nombre,
+                    'apaterno' => $login_user->usr_paterno,
+                    'amaterno' => $login_user->usr_materno,
+                    'mail' => $login_user->usr_correo,
+                    'categoria_cve' => $login_user->usr_categoria,
+                    'adscripcion_cve' => $login_user->usr_adscripcion,
+                    'delegacion_cve' => $login_user->usr_delegacion,
+                    'lista_roles' => crear_lista_asociativa_valores($roles, 'cve_rol', 'nombre_rol'), //Listado de roles del usuario
+                    'lista_roles_modulos' => generar_propiedades_permisos($roles, $modulos_extra), //Permisos por rol (modulos de acceso)
+                    'rol_seleccionado' => array() //Si tiene más de un rol asignado el usuario, permite que pueda seleccionar entre uno y otro
+                );
+                $result['datos_session'] = $datos_session;
+
+                $parametros_log = $CI->config->item('parametros_log');
+                $parametros_log['INICIO_SATISFACTORIO'] = 1;
+                $parametros_log['USUARIO_CVE'] = $login_user->user_cve;
+                $CI->lm->set_log_ususario_doc($parametros_log);
+                $result['success'] = 1;
+            } else {
+                $result['success'] = 0;
+            }
+        } else {
+            $result['success'] = 0;
+        }
+        $result['login'] = $login_user;
+        return $result;
+    }
+
+}
+if (!function_exists('generar_propiedades_permisos')) {
+
+    function generar_propiedades_permisos($roles, $modulos_extra) {
+        $existe_mod_extra = isset($modulos_extra) and is_null($modulos_extra) and empty($modulos_extra);
+        $array_result = array();
+        if (isset($roles) and ! is_null($roles) and ! empty($roles)) {//Debe existir rol
+            if ($existe_mod_extra) {//Si existen roles extra (usuario-módulo)
+                $array_result = evaluar_rol_con_modulos($roles, $modulos_extra);
+//            pr($this->evaluar_rol($roles));
+            } else {//Evalua unicamente la tabla de usuario - rol
+                $array_result = evaluar_rol($roles);
+            }
+        }
+        return $array_result;
+    }
+
+}
+
+if (!function_exists('evaluar_rol')) {
+
+    function evaluar_rol($roles) {
+        $roles_formato = crear_formato_array($roles, 'cve_rol', FALSE);
+        foreach ($roles_formato as $key => $value) {
+//            $thiscrear_formato_modulos($value);
+            $modulos_formatos = crear_formato_array($value, 'cve_modulo', TRUE);
+//            pr($modulos_formatos);
+            $roles_formato[$key] = $modulos_formatos;
+        }
+        return $roles_formato;
+    }
+
+}
+
+if (!function_exists('crear_formato_array')) {
+
+    function crear_formato_array($array_value, $key_ref, $not_index_auto_incrementables) {
+        $array_modulo = array();
+        $index = -1;
+        if ($not_index_auto_incrementables) {
+            /* Le asigna la llave de referencia $key_ref al formato y no le agrega 
+             * index autoincrementables
+             */
+            for ($i = 0; $i < count($array_value); $i++) {
+                $index = $array_value[$i][$key_ref];
+                if (array_key_exists($index, $array_modulo)) {
+                    $index_num_siguiente = count($array_modulo[$index]);
+                    $array_modulo[$index] = array();
+                } else {
+                    $array_modulo[$index] = array();
+                }
+                foreach ($array_value[$i] as $key => $value) {
+                    if ($key != $key_ref) {
+                        $array_modulo[$index][$key] = $value;
+                    }
+                }
+            }
+        } else {
+            /* Le  asigna un index auto incrementable que va desde "0" ,...., "n"
+              al formato del array */
+            for ($i = 0; $i < count($array_value); $i++) {
+                $index = $array_value[$i][$key_ref];
+                if (array_key_exists($index, $array_modulo)) {
+                    $index_num_siguiente = count($array_modulo[$index]);
+                    $array_modulo[$index][$index_num_siguiente] = array();
+                } else {
+                    $index_num_siguiente = 0;
+                    $array_modulo[$index][$index_num_siguiente] = array();
+                }
+                foreach ($array_value[$i] as $key => $value) {
+                    if ($key != $key_ref) {
+                        $array_modulo[$index][$index_num_siguiente][$key] = $value;
+                    }
+                }
+            }
+        }
+        return $array_modulo;
+    }
+
+}
+
     

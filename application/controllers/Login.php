@@ -44,47 +44,28 @@ class Login extends CI_Controller {
             if (($this->form_validation->run() == true) && ($token_html == $token_session)) { //Aplicamos validaciones a la matrícula, contraseña, captcha; además se verifica que el token obtenido por el formulario sea el mismo que el que se encuentra en sesión
                 $matricula = $this->input->post('matricula', true);
                 $passwd = $this->input->post('passwd', true);
-
                 //if($this->input->post('btn_login', true) == "Login"){
 
-                $login_user = $this->lm->set_login_user($matricula, $passwd); ///Verificar contra base de datos
+//                $login_user = $this->lm->set_login_user($matricula, $passwd); ///Verificar contra base de datos
 //                pr('id---->' . $login_user->cantidad_reg);
-                if ($login_user->cantidad_reg == 1) { ///Usuario existe en base de datos
+                $resultado = iniciar_sesion($matricula, $passwd);//Valida sesión correcta
+                if ($resultado['login']->cantidad_reg == 1) { ///Usuario existe en base de datos
                     if (!$this->checkbrute($matricula)) { //Verificamos que no exista ataque de fuerza bruta
+//                            pr('inicia sesión');
                         //pr($check_user);
-                        $password_encrypt = hash('sha512', $passwd);
-                        if ($login_user->usr_passwd == $password_encrypt) {
-                            $roles = $this->lm->get_usuario_rol_modulo_sesion($login_user->user_cve); //Módulos por rol 
-                            $modulos_extra = $this->lm->get_usuario_modulo_extra_sesion($login_user->user_cve); //Módulos extra por usuario 
-//                            pr($roles);
-                            $datosSession = array(
-                                'usuario_logeado' => TRUE,
-                                'identificador' => $login_user->user_cve,
-                                'idempleado' => $login_user->empleado_cve,
-                                'matricula' => $login_user->usr_matricula,
-                                'nombre' => $login_user->usr_nombre,
-                                'apaterno' => $login_user->usr_paterno,
-                                'amaterno' => $login_user->usr_materno,
-                                'mail' => $login_user->usr_correo,
-                                'categoria_cve' => $login_user->usr_categoria,
-                                'adscripcion_cve' => $login_user->usr_adscripcion,
-                                'delegacion_cve' => $login_user->usr_delegacion,
-                                'lista_roles' => crear_lista_asociativa_valores($roles, 'cve_rol', 'nombre_rol'), //Listado de roles del usuario
-                                'lista_roles_modulos' => $this->generar_propiedades_permisos($roles, $modulos_extra), //Permisos por rol (modulos de acceso)
-                                'rol_seleccionado' => array() //Si tiene más de un rol asignado el usuario, permite que pueda seleccionar entre uno y otro
-                            );
+                        if ($resultado['success']===1) {//Passwor correcto
+//                            generar_propiedades_permisos()
 
-
-                            $this->session->set_userdata($datosSession); ///Si es correcto iniciamos sesión
+                            $this->session->set_userdata($resultado['datos_session']); ///Si es correcto iniciamos sesión
                             $this->session->unset_userdata('token'); //Eliminar token
                             //Ejecuta el log del usuario
-                            $this->config->load('general');
+//                            $this->config->load('general');
 
 
-                            $parametros_log = $this->config->item('parametros_log');
-                            $parametros_log['INICIO_SATISFACTORIO'] = 1;
-                            $parametros_log['USUARIO_CVE'] = $login_user->user_cve;
-                            $resultado = $this->lm->set_log_ususario_doc($parametros_log);
+//                            $parametros_log = $this->config->item('parametros_log');
+//                            $parametros_log['INICIO_SATISFACTORIO'] = 1;
+//                            $parametros_log['USUARIO_CVE'] = $login_user->user_cve;
+//                            $resultado = $this->lm->set_log_ususario_doc($parametros_log);
                             //$this->bitacora->bitacora_login_insertar($check_user['data']->usr_matricula); //Registrar inicio de sesión correcto
                             redirect('rol/index');
 //                            redirect('dashboard');
@@ -97,14 +78,14 @@ class Login extends CI_Controller {
                         $error = $string_values['login']['er_general'];
                     }
                 } else {
-                    if ($login_user->cantidad_reg == 0) {
+                    if ($resultado['login']->cantidad_reg == 0) {
                         //La matrícula es incorrecta (no existe en el sistema)
                         $error = $string_values['login']['er_no_usuario'];
                     } else {
                         //si "$login_user->cantidad_reg" = -1, el usuario existe pero el password es incorrecto 
                         $this->config->load('general');
                         $parametros_log = $this->config->item('parametros_log');
-                        $parametros_log['USUARIO_CVE'] = $login_user->user_cve;
+                        $parametros_log['USUARIO_CVE'] = $resultado['login']->user_cve;
                         $parametros_log['INICIO_SATISFACTORIO'] = 0;
                         $resultado = $this->lm->set_log_ususario_doc($parametros_log); //ejecuta procedimiento almacenado de lo
                         $error = $string_values['login']['er_contrasenia_incorrecta'];
@@ -155,11 +136,11 @@ class Login extends CI_Controller {
     }
 
     private function checkbrute($matricula) {
-        $ahora = time(); ///Tiempo actual
+//        $ahora = time(); ///Tiempo actual
 
         $lapso_intentos = $this->config->item('tiempo_fuerza_bruta');
         $intentos_default_fuerza_bruta = $this->config->item('intentos_fuerza_bruta');
-        $numero_intentos_usuario = $this->lm->set_checkbrute_usuario($matricula, $lapso_intentos);
+        $numero_intentos_usuario = $this->lm->set_checkbrute_usuario(intval($matricula), intval($lapso_intentos));
 //        $numero_intentos_usuario = 1;
         if ($numero_intentos_usuario > $intentos_default_fuerza_bruta) {
             return true;

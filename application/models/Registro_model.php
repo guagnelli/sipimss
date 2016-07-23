@@ -220,6 +220,20 @@ class Registro_model extends CI_Model {
             return $obtiene_id_usuario;
         }
     }
+    public function insert_ususario_rol($datos_usuario_rol = null) {
+        if (is_null($datos_usuario_rol)) {
+            return -1;
+        }
+        $this->db->insert('usuario_rol', $datos_usuario_rol); //Almacena usuario
+        $obtiene_id_rol__usuario = $this->db->insert_id();
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return -1;
+        } else {
+
+            return $obtiene_id_rol__usuario;  
+        }
+    }
     
     /**
      * 

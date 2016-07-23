@@ -202,7 +202,7 @@ class Login_model extends CI_Model {
         $this->db->join('usuario as us', 'us.USUARIO_CVE = ises.USUARIO_CVE');
         $this->db->where('us.USU_MATRICULA', $matricula);
         $this->db->where('ises.INICIO_SATISFACTORIO', 0);
-        $this->db->where("LOG_INI_SES_FCH_INICIO > now() - " . $lapso_intentos);
+        $this->db->where("LOG_INI_SES_FCH_INICIO > now() - " . intval($lapso_intentos));
         $query = $this->db->get(); //Obtener número de registros
         /* pr($this->db->last_query());
           pr($query->num_rows());

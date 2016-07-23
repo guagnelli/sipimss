@@ -4,6 +4,13 @@ $this->lang->load('interface','spanish');
 $string_values = $this->lang->line('interface');
 //pr($array_menu);
 ?>
+<style type="text/css">
+        .button-padding {padding-top: 30px}
+        .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
+</style>
+
+<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/informacionGeneral.js"></script>
+
 <script>
     var array_menu_perfil = new Array(15);
     var hrutes = new Object();//Objeto que almacena las rutas del controlador 
@@ -26,16 +33,16 @@ $string_values = $this->lang->line('interface');
                 <ul class="nav nav-pills nav-stacked col-md-3">
                     <?php foreach ($array_menu as $value) { 
                         $pos = strpos($value['ruta'], ':');
-                        $array_quitar = array('(', ')');
+//                        $array_quitar = array('(', ')');
                         if($pos>0){
                             $separa = explode(":", $value['ruta']);
-                            $array_quitar = array('(', ')');
+//                            $array_quitar = array('(', ')');
                             $val = $separa[0];
 //                            $array_quitar = array('(', ')');
 //                            $val = str_replace($array_quitar, "", $separa[0]);
                         ?>
-                            <script>
-                                //Guarda los datos de configuración para el uso de ajax en javascript
+                            <script >
+                                /*Guarda los datos de configuración para el uso de ajax en javascript*/
                                 hrutes['<?php echo $val; ?>'] = '<?php echo $value['ruta_padre'].":".$value['ruta']; ?>';
                             </script>
                         <?php        
@@ -69,8 +76,8 @@ $string_values = $this->lang->line('interface');
                     <div id = '<?php echo $val; ?>' class = 'tab-pane fade'>
                         <div class ="row">
                             <?php 
-//                                    pr('--> ruta' . $value['ruta']);
                                 $busca_cadena = strpos($value['ruta'], 'ajax'); //Busca si el metodo a invocar es un ajax
+//                                    pr('--> ruta ' . $value['ruta'] . ' busca_ajax ' . $busca_cadena);
                                 $busca_cadena = ($busca_cadena===0)?1:$busca_cadena;
 //                                    pr('Invoca ajax ' . $busca_cadena);
                                 if(!$busca_cadena){//Si no existe un ajax, llama a una vista, es importante que exista, para que muestré la pantalla correctamente

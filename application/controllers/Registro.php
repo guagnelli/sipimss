@@ -80,7 +80,7 @@ class Registro extends MY_Controller {
 //                                $datos_usuario['USU_FCH_NACIMIENTO'] = $datos_siap['nacimiento'];
                                 $result_id_user = $this->mod_registro->insert_registro_usuario($datos_usuario); //Retorna id usuario
                                 if ($result_id_user > -1) {//si el id del usuario es mayor que -1, entonces se inserto correctamente el registro
-                                    $verifica_existe_empleado_local = $this->mod_registro->get_existe_empleado($result_id_user); //Verifica que no exista el empleado
+                                    $verifica_existe_empleado_local = $this->mod_registro->get_existe_empleado($datos_registro['reg_matricula']); //Verifica que no exista el empleado
                                     if ($verifica_existe_empleado_local === -1) {//Si no existe el empleado registrado, lo registra
                                         //Guardar también empleado    
                                         $datos_empleados = array();
@@ -95,38 +95,42 @@ class Registro extends MY_Controller {
                                         $datos_empleados['EMP_GENERO'] = $datos_usuario['USU_GENERO'];
                                         $datos_empleados['EMP_EMAIL'] = $datos_usuario['USU_CORREO'];
                                         $result_id_emp = $this->mod_registro->insert_registro_empleado($datos_empleados); //Retorna id usuario
-                                        
                                     } else {//Si existe el empleado, le asigna el id del usuario
                                         $datos_empleados['USUARIO_CVE'] = $result_id_user;
                                         $where = $datos_usuario['USU_MATRICULA'];
                                         $result_id_emp = $this->mod_registro->update_registro_empleado($datos_empleados, $where); //Retorna id usuario
                                         $datos_empleados['EMP_MATRICULA'] = $where;
                                     }
-                                    
-                                    if (isset($result_id_emp) AND $result_id_emp < 1) {//si el id del empleado es mayor que -1, entonces existe un error
+                                    //Asocia rol al usuario
+                                    $datos_usuario_rol ['USUARIO_CVE'] = $result_id_user;
+                                    $datos_usuario_rol ['ROL_CVE'] = 1;
+                                    $result_id_rol_modulo = $this->mod_registro->insert_ususario_rol($datos_usuario_rol); //Retorna id usuario
+
+                                    if (isset($result_id_emp) AND $result_id_emp < 1) {//si el id del empleado es menor que 1, entonces existe un error
                                         $this->session->set_flashdata('error', $string_values['registro']['phl_registro_incorrecto_del_empleado']);
                                         $array_to_json['usuario'] = $datos_usuario;
-                                        $operacion_entidades['usuario'] = array('insert'=>$result_id_user);//Registro de usuario 
-                                    }else{//Codificamos json con usuario y empleado
+                                        $array_operacion_entidades['usuario'] = array('insert' => $result_id_user); //Registro de usuario 
+                                        $id_emp = $result_id_emp;
+                                    } else {//Codificamos json con usuario y empleado
                                         $array_to_json['usuario'] = $datos_usuario;
                                         $array_to_json['empleado'] = $datos_empleados;
-                                        
-                                        $operacion_entidades['usuario'] = array('insert'=>$result_id_user);//Registro de usuario 
-                                        $ope_emp = ($verifica_existe_empleado_local === -1)? 'insert':'update';
-                                        $id_emp = ($verifica_existe_empleado_local === -1)? $result_id_emp:$verifica_existe_empleado_local;//Obtiene id del registro de la entidad empleado
-                                        $operacion_entidades['empleado'] = array($ope_emp=>$id_emp);//Registro de operacion de usuario 
+
+                                        $array_operacion_entidades['usuario'] = array('insert' => $result_id_user); //Registro de usuario 
+                                        $ope_emp = ($verifica_existe_empleado_local < 1) ? 'insert' : 'update';
+                                        $id_emp = ($verifica_existe_empleado_local < 1) ? $result_id_emp : $verifica_existe_empleado_local; //Obtiene id del registro de la entidad empleado
+                                        $array_operacion_entidades['empleado'] = array($ope_emp => $id_emp); //Registro de operacion de usuario 
                                     }
-                                    $json_datos_entidad = json_encode($operacion_entidades);//Codifica a json datos de entidad
-                                    $json_registro_bitacora = json_encode($array_to_json);//Codifica a json la actualización o insersión a las entidades involucradas
 
 
+                                    $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
+                                    $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
 //                                    //Datos de bitacora el registro del usuario
 //                                    $parametros = $this->config->item('parametros_bitacora');
 //                                    $parametros['USUARIO_CVE'] = $result_id_user; //Asigna id del usuario
 ////                                    $parametros['BIT_IP'] = $this->get_real_ip();//Le manda la ip del cliente
 //                                    $parametros['BIT_RUTA'] = '/registro/';
 //                                    $result = $this->lm->set_bitacora($parametros); //Invoca la función para guardar bitacora
-                                    registro_bitacora($result_id_user, null, $json_datos_entidad, $result_id_user . ',' . $result_id_emp, $json_registro_bitacora);
+                                    registro_bitacora($result_id_user, null, $json_datos_entidad, $result_id_user . ':' . $id_emp, $json_registro_bitacora, null);
 
                                     //Envia correo electrÓnico de datos de registro
                                     $plantilla = $this->load->view('template/email/enviar_confirmacion.tpl.php', $datos_usuario, true);
@@ -134,13 +138,26 @@ class Registro extends MY_Controller {
 
                                     if (!$sentMail["result"]) {
                                         $this->session->set_flashdata('error', $sentMail['error']);
+//                                        $this->session->set_flashdata('success', 'bien');
                                     }
                                     $datos_registro['error'] = $string_values['registro']['phl_registro_correcto'];
                                     $datos_registro['tipo_msg'] = $tipo_msg['SUCCESS']['class'];
-                                    echo '<script type="text/javascript">
+                                    $resultado = iniciar_sesion(intval($datos_usuario['USU_MATRICULA']), $datos_registro['reg_confirma_contrasenia']); //Valida sesión correcta
+//                                    pr($resultado['login']);
+                                    if ($resultado['success'] === 1) {//Passwor correcto
+                                        $this->session->set_userdata($resultado['datos_session']); ///Si es correcto iniciamos sesión
+                                        $this->session->unset_userdata('token'); //Eliminar token
+
+                                        redirect("rol/index");
+                                        exit();
+                                    } else {
+                                        echo '<script type="text/javascript">
                                     window.setTimeout(function(){ 
-                                    document.location.reload(true); }, 3000);
+                                    }, 3000);
                                     </script>';
+                                        redirect("login/");
+                                        exit();
+                                    }
                                 }
                             } else {
                                 $datos_registro['error'] = str_replace('[field]', $datos_registro['reg_matricula'], $string_values['registro']['phl_la_matricula_existe']); //Remplaza

@@ -3,12 +3,7 @@
     $this->lang->load('interface','spanish');
     $string_values = $this->lang->line('interface');
 ?>
-    <style type="text/css">
-        .button-padding {padding-top: 30px}
-        .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
-    </style>
-
-    <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/informacionGeneral.js"></script>
+    
     
     <!-- Inicio informacion personal -->
     <div class='row'>
