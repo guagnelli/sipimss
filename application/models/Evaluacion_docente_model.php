@@ -54,6 +54,8 @@ class Evaluacion_docente_model extends CI_Model {
             $this->db->order_by($params['order']);
         }
 
+        $this->db->join('ccategoria_dictamen', 'dictamen.CATEGORIA_CVE=ccategoria_dictamen.CATEGORIA_CVE', 'left');
+
         $query = $this->db->get('dictamen'); //Obtener conjunto de registros
         //pr($this->db->last_query());
         $resultado=$query->result_array();

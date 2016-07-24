@@ -25,21 +25,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 //$lang['interface_'][''][''] = '';
 //$lang['interface']['registro']['texto_bienvenida'] = 'Hola mundo';
-$lang['interface_evaluacion'] = array(
-    'convocatoria_evaluacion' => array(
+$lang['interface_administracion'] = array(
+    'usuario' => array(
         'buscador' => array(
-            'titulo' => 'Administrar fechas de evaluación',
-            'proxima_evaluacion' => 'Próxima evaluación:',
-            'agregar_convocatoria' => 'Agregar fecha',
-            'tab_head_fecha_fin_registro' => 'Fecha fin de registro docente',
-            'tab_head_fecha_fin_validacion1' => 'Fin validación 1',
-            'tab_head_fecha_fin_validacion2' => 'Fin validación 2',
-            'tab_head_fecha_dictamen' => 'Dictamen',
-            'tab_head_fecha_inconformidad' => 'Inconformidad',
-            'titulo_agregar' => 'Agregar convocatoria',
-            'eliminacion_imposible' => 'Imposible eliminar la convocatoria, tiene dictamen(es) asociado(s). Eliminelos primero.'
+            'titulo' => 'Administración de usuarios',
+            'titulo_agregar' => 'Agregar usuario',
+            'tab_head_matricula' => 'Matrícula',
+            'tab_head_nombre' => 'Nombre',
+            'tab_head_delegacion' => 'Delegación',
+            'tab_head_adscripcion' => 'Adscripción',
+            'tab_head_rol' => 'Rol',
+            'tab_head_estado' => 'Estado',
+            'fil_mat_nom' => 'Nombre del usuario o matricula',
+            'fil_delegacion' => 'Delegación',
+            'fil_rol' => 'Rol',
+            'fil_estado' => 'Estado del usuario'
         ),
-        'agregar' => array(
+        /*'agregar' => array(
             'titulo_agregar' => 'Administrar convocatoria',
             'tab_head_fecha_fin_registro' => 'Fecha fin de registro docente',
             'tab_head_fecha_fin_validacion1' => 'Fecha fin validación 1',
@@ -57,7 +59,7 @@ $lang['interface_evaluacion'] = array(
             'tab_head_fecha_inicia_evaluacion' => 'Fecha inicio de evaluación',
             'tab_head_fecha_fin_evaluacion' => 'Fecha final de evaluación',
             'tab_head_fecha_fin_inconformidad' => 'Fecha final de inconformidad',
-        ),
+        ),*/
         'general' => array(
             'acciones' => 'Acciones',
             'editar' => 'Editar',
@@ -69,26 +71,8 @@ $lang['interface_evaluacion'] = array(
             'compare_date' => 'El campo %s debería ser menor o igual que el campo predecesor.',
         ),
     ),
-    'evaluacion' => array(
-        'docente' => array(
-            'titulo' => 'Evaluación de carrera docente institucional',            
-            'tab_head_fch_dictamen' => 'Fecha de dictamen',
-            'tab_head_estado_dictamen' => 'Estado actual de la evaluación',
-            'tab_head_fch_ultimo_estado' => 'Fecha del estado actual',
-            'tab_head_dictamen' => 'Dictamen *',
-            'tab_head_constancia' => 'Constancia',
-            'tab_head_categoria' => 'Categoría',
-            'tab_head_vigencia' => 'Vigencia',
-            'tab_head_periodo_inconformidad' => 'Periodo de inconformidad **',
-            'tab_head_inconformidad' => 'Inconformidad **',
-            'enviar_inconformidad' => 'Enviar inconformidad'
-        ),
-        'model' => array(
-            'insercion' => 'Se ha insertado correctamente la información.',
-            'actualizacion' => 'Se ha actualizado correctamente la información.',
-            'eliminacion' => 'Se ha eliminado correctamente.',
-            'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
-        ),
+    'catalogos' => array(
+        'cdelegacion' => 'Delegación: '
     ),
     'general' => array(
         'acciones' => 'Acciones',
