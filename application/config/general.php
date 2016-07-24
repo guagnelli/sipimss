@@ -158,6 +158,11 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'cejercicio_profesional' => array('id' => 'EJE_PRO_CVE', 'nombre' => 'EJE_PRO_NOMBRE' , 'where' => null),
     'cmedio_divulgacion' => array('id' => 'MED_DIVULGACION_CVE', 'nombre' => 'MED_DIV_NOMBRE' , 'where' => null),
     'ctipo_estudio' => array('id' => 'TIP_ESTUDIO_CVE', 'nombre' => 'TIP_EST_NOMBRE' , 'where' => null),
+    'cdelegacion' => array('id' => 'DELEGACION_CVE', 'nombre' => 'DEL_NOMBRE' , 'where' => null),
+    'ccategoria' => array('id' => 'des_clave', 'nombre' => 'nom_categoria' , 'where' => null),
+    'cdepartamento' => array('id' => 'departamento_cve', 'nombre' => 'dep_nombre' , 'where' => null),
+    'crol' => array('id' => 'ROL_CVE', 'nombre' => 'ROL_NOMBRE' , 'where' => null),
+    'cestado_usuario' => array('id' => 'ESTADO_USUARIO_CVE', 'nombre' => 'EDO_USUARIO_DESC' , 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 

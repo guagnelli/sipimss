@@ -20,7 +20,7 @@ abstract class MyEnum3 {
     }
 
     function getTextoEnum($value = null) {
-        return "algo";
+        return "";
     }
 
 }
@@ -49,8 +49,12 @@ class enum_ecg extends MyEnum3 {
             cejercicio_predominante = 'cejercicio_predominante',
             cejercicio_profesional = 'cejercicio_profesional',
             cmedio_divulgacion = 'cmedio_divulgacion',
-            ctipo_estudio = 'ctipo_estudio'
-
+            ctipo_estudio = 'ctipo_estudio',
+            cdelegacion = 'cdelegacion',
+            ccategoria = 'ccategoria',
+            cdepartamento = 'cdepartamento',
+            crol = 'crol',
+            cestado_usuario = 'cestado_usuario'
     ;
     /*
       guardar actuación (evaluaciones)

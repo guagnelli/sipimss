@@ -102,9 +102,24 @@ class Template {
         $config['base_url'] = site_url(array('buscador', 'get_data_ajax')); //Path que se utilizará en la generación de los links
         $config['total_rows'] = $pagination_data['total']; //Número total de registros
         $config['per_page'] = $pagination_data['per_page']; //Sobreescribir número de registros a mostrar
+        $config['full_tag_open'] = '<ul class="pagination">';
+        $config['full_tag_close'] = '</ul>';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="disabled"><span><strong>';
+        $config['cur_tag_close'] = '</strong></span></li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+
         $this->CI->pagination->initialize($config);
 
-        return array('links' => "<div class='dataTables_paginate paging_simple_numbers'>" . $this->CI->pagination->create_links() . "</div>",
+        return array('links' => "<div class='dataTables_paginate paging_simple_numbers  pull-right'>" . $this->CI->pagination->create_links() . "</div>",
             'total' => "Mostrando " . ($pagination_data['current_row'] + 1) . " a " . ((($pagination_data['current_row'] + $config['per_page']) > $pagination_data['total']) ? $pagination_data['total'] : $pagination_data['current_row'] + $config['per_page']) . " de " . $pagination_data['total']
         );
     }
