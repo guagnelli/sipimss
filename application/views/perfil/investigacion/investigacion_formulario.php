@@ -1,4 +1,21 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+        $div_stile_display_comprobante = ' none'; 
+        $div_stile_display_libro = ' none'; 
+        $div_stile_display_revista = ' none'; 
+        if(!empty($divulgacion)){
+            pr('no es vacio');
+            switch ($divulgacion){
+                case '3':
+                    $div_stile_display_revista = ' block'; 
+                    break;
+                case '4':
+                    $div_stile_display_libro = ' block'; 
+                    break;
+                default :
+                    $div_stile_display_comprobante = ' block'; 
+            }
+        }
 ?>
     <script>
         var nextinput = 0;
@@ -20,6 +37,7 @@
         htipos_bibliografia["editorial"] = "1|editorial|div_editorial_lib|btn_add_editorial_lib|editoriallib_$|Agregar editorial$|Editorial";
         htipos_bibliografia["anio"] = "3|anio|div_anio_lib|btn_add_anio_lib|aniolib_$|Agregar año de edición$|Agregar año|";
     </script>
+    <?php echo form_open('', array('id' => 'form_investigacion_docente')); ?>
     <div class="list-group">
         <div class="list-group-item">
                     <div class="panel-body">
@@ -51,7 +69,7 @@
                                           )); 
                                        ?>
                                     </div>
-                                    <?php   echo form_error_format('ctipo_actividad_docente'); ?>
+                                    <?php echo form_error_format('ctipo_actividad_docente'); ?>
                                 </div>
                                 <div class="col-md-3"></div>
                             </div>
@@ -181,7 +199,9 @@
                             
                     </div>
                 </div>
-                <div id="div_comprobante" class="list-group-item" style="display: none">
+                
+                <!--div que muestra el comprobante-->
+                <div id="div_comprobante" class="list-group-item" style="display: <?php echo $div_stile_display_comprobante; ?>">
                     <!--Mostrará comprobante -->
                     <div class='row'>
                          <div class="col-md-6">
@@ -242,13 +262,39 @@
                         </div>
                     </div>
                 </div>
-                <div id="div_libro" class="list-group-item" style="display: none">
-                    <div class="alert alert-danger" role="alert">
+                <div id="div_libro" class="list-group-item" style="display: <?php echo $div_stile_display_libro; ?>">
+<!--                    <div class="alert alert-danger" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                         El campo Nombre de comprobante es obligatorio.
+                    </div>-->
+                    <div class='row'>
+                        <div class="col-md-12">
+                            <label for='lbl_bb_libro' class="control-label">
+                                <b class="rojo">*</b>
+                                 <?php echo $string_values['lbl_bb_libro']; ?>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-education"> </span>
+                                </span>
+                                <?php 
+                                    echo $this->form_complete->create_element(array('id' => 'bibliografia_libro', 
+                                        'type' => 'textarea', 
+                                        'value' => (isset($bibliografia_libro)) ? $bibliografia_libro : '',
+                                        'attributes' => array( 
+                                        'class' => 'form-control', 
+                                        'placeholder' => $string_values['txt_bb_libro'], 
+                                        'data-toggle' => 'tooltip', 
+                                        'data-placement' => 'top', 
+                                        'title' => $string_values['txt_bb_libro'] ))); 
+                                ?>
+                           </div>
+                           <?php   echo form_error_format('bibliografia_libro'); ?>
+                        </div>
                     </div>
+
                     <div class='row'>
                          <div class="col-md-6" ><!--Columna 1-->
                              <!--Columna 1_1 "3|autor|div_autores_1|btn_add_autor|autornom_$autorap_$|Nombre(s)$Apellido paterno$"-->
@@ -301,15 +347,33 @@
                     </div>
                 </div>
                     
-                <div id="div_revista" class="list-group-item" style="display: none">
+                <div id="div_revista" class="list-group-item" style="display: <?php echo $div_stile_display_revista; ?>">
                     <div class='row'>
-                         <div class="col-md-6">
-                            <label for='lbl_libro' class="control-label">
-                                Bibliografia de revista
+                        <div class="col-md-12">
+                            <label for='lbl_bb_revista' class="control-label">
+                                <b class="rojo">*</b>
+                                 <?php echo $string_values['lbl_bb_revista']; ?>
                             </label>
-                         </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-education"> </span>
+                                </span>
+                                <?php 
+                                    echo $this->form_complete->create_element(array('id' => 'bibliografia_revista', 
+                                        'type' => 'textarea', 
+                                        'value' => (isset($bibliografia_revista)) ? $bibliografia_revista : '',
+                                        'attributes' => array( 
+                                        'class' => 'form-control', 
+                                        'placeholder' => $string_values['txt_bb_revista'], 
+                                        'data-toggle' => 'tooltip', 
+                                        'data-placement' => 'top', 
+                                        'title' => $string_values['txt_bb_revista'] ))); 
+                                ?>
+                           </div>
+                           <?php   echo form_error_format('bibliografia_revista'); ?>
+                        </div>
                     </div>
                 </div>
         
-                <?php if(isset($pie_pag)){ echo $pie_pag; }//Carga boton para guardar datos?>
     </div>
+    <?php echo form_close(); ?>

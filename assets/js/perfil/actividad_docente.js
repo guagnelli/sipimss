@@ -198,16 +198,16 @@ function funcion_asignar_curso_principal(element) {
  * el curso principal 
  */
 function curso_principal_actividad_docente() {
-    var cur_prin_actual = -1;
+    var row_cur_prin_actual = -1;
     var obj_row;
     for (var i = 0; i < document.getElementById('tabla_actividades').rows.length; i++) {
         obj_row = $(document.getElementById('tabla_actividades').rows[i]);
         if (obj_row.data('cp') === '1' || obj_row.data('cp') === 1) {
-            cur_prin_actual = obj_row.data('keyrow');
+            row_cur_prin_actual = obj_row.data('keyrow');
             break;
         }
     }
-    return cur_prin_actual;
+    return row_cur_prin_actual;
 }
 
 function funcion_agregar_nueva_actividad() {
@@ -251,7 +251,7 @@ function funcion_obtener_max_id_row_table_actividad() {
     for (var i = 0; i < document.getElementById('tabla_actividades').rows.length; i++) {
         obj_row = $(document.getElementById('tabla_actividades').rows[i]);
         if (index_macx < obj_row.data('keyrow')) {
-            index_macx = cur_prin_actual = obj_row.data('keyrow');
+            index_macx = obj_row.data('keyrow');
         }
     }
     return index_macx;

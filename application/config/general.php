@@ -273,6 +273,18 @@ $config['comprobante'] = array(
     'text_comprobante' => array('select' => 'COM_NOMBRE', 'insert' => 'COM_NOMBRE'), //comprobante
 );
 
+$config['emp_act_inv_edu'] = array(
+    'ctipo_actividad_docente' => array('select' => 'TIP_ACT_DOC_CVE', 'insert' => 'TIP_ACT_DOC_CVE'), 
+    'nombre_investigacion' => array('select' => 'EIAE_NOMBRE_INV', 'insert' => 'EIAE_NOMBRE_INV'), 
+    'folio_investigacion' => array('select' => 'EAIE_FOLIO_ACEPTACION', 'insert' => 'EAIE_FOLIO_ACEPTACION'), 
+    'ctipo_estudio' => array('select' => '', 'insert' => 'TIP_ESTUDIO_CVE'), 
+    'ctipo_participacion' => array('select' => 'TIP_PARTICIPACION_CVE', 'insert' => 'TIP_PARTICIPACION_CVE'), 
+    'cmedio_divulgacion' => array('select' => '', 'insert' => 'MED_DIVULGACION_CVE'), 
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'), 
+    'bibliografia_revista' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'), 
+    'bibliografia_libro' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'), 
+);
+
 //    EAD_DURACION
 //    EAD_FCH_INICIO
 //    EAD_FCH_FIN

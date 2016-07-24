@@ -245,6 +245,16 @@ $lang['interface'] = array(
         'title_cargar_comprobante' => 'Cargar comprobante',
         'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
         'title_tipo_comprobante' => 'Tipo de comprobante',
+        'error_no_elimino_reg_invest' => 'Error, no se pudo eliminar el registro de investigación',
+        'succesfull_eliminar' => 'El registro de investigación fue eliminado correctamente',
+        'lbl_bb_libro' => 'Bibliografía',
+        'txt_bb_libro' => 'Bibliografía del libro',
+        'lbl_bb_revista' => 'Bibliografía',
+        'txt_bb_revista' => 'Bibliografía de la revista',
+        'insert_investigacion_docente' => 'La información de investigación docente se agrego correctamente',
+        'update_investigacion_docente' => 'La información de investigación docente se actualizo correctamente',
+        'error_investigacion_docente_insert' => 'No fue posible registrar la información de investigación docente',
+        'error_investigacion_docente_update' => 'No fue posible actualizar la información de investigación docente',
     ),
 );
 

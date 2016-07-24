@@ -10,6 +10,22 @@ class Catalogos_generales extends CI_Model {
         $this->load->database();
     }
 
+    //******************************************************************************************************************
+    /**
+     * 
+     * @return type array retorna los datos del catálogo "cestado_civil" 
+     * "EJER_PREDOMI_CVE"  ,  "EJE_PRE_NOMBRE"
+     * 
+     */
+    public function get_catalogo_general($entidad, $array_where = null) {
+        $query = $this->db->get_where($entidad, $array_where);
+        $estadoCivil = $query->result_array();
+        $query->free_result();
+        return $estadoCivil;
+    }
+
+    //******************************************************************************************************************
+
     /**
      * 
      * @autor       : LEAS.
@@ -34,19 +50,19 @@ class Catalogos_generales extends CI_Model {
         if (!isset($parametros['BIT_OPERACION']) || is_null($parametros['BIT_OPERACION'])) {
             $parametros['BIT_OPERACION'] = 'NULL';
         }
-        if (!isset($parametros['BIT_IP'])|| is_null($parametros['BIT_IP'])) {
+        if (!isset($parametros['BIT_IP']) || is_null($parametros['BIT_IP'])) {
             $parametros['BIT_IP'] = 'NULL';
         }
-        if (!isset($parametros['BIT_RUTA'])|| is_null($parametros['BIT_RUTA'])) {
+        if (!isset($parametros['BIT_RUTA']) || is_null($parametros['BIT_RUTA'])) {
             $parametros['BIT_RUTA'] = 'NULL';
         }
         if (!isset($parametros['MODULO_CVE'])AND is_null($parametros['MODULO_CVE'])) {
             $parametros['MODULO_CVE'] = 'NULL';
         }
-        if (!isset($parametros['ENTIDAD'])|| is_null($parametros['ENTIDAD'])) {
+        if (!isset($parametros['ENTIDAD']) || is_null($parametros['ENTIDAD'])) {
             $parametros['ENTIDAD'] = 'NULL';
         }
-        if (!isset($parametros['REGISTRO_ENTIDAD_CVE'])|| is_null($parametros['REGISTRO_ENTIDAD_CVE'])) {
+        if (!isset($parametros['REGISTRO_ENTIDAD_CVE']) || is_null($parametros['REGISTRO_ENTIDAD_CVE'])) {
             $parametros['REGISTRO_ENTIDAD_CVE'] = 'NULL';
         }
         if (!isset($parametros['PARAMETROS_JSON']) || is_null($parametros['PARAMETROS_JSON'])) {
@@ -356,18 +372,65 @@ class Catalogos_generales extends CI_Model {
         $query->free_result();
         return $estadoCivil;
     }
-    
+
+    public function delete_comprobante($id_comprobante = null) {
+        $result_comprobante['result'] = -1;
+        $result_comprobante['entidad'] = '';
+        if (is_null($id_comprobante)) {
+            return $result_comprobante;
+        }
+
+        $res = $this->get_comprobante($id_comprobante);
+        if (!empty($res)) {
+            $res = $res[0];
+            $res = $this->get_comprobante($id_comprobante);
+            $this->db->where('COMPROBANTE_CVE', $id_comprobante);
+            $this->db->delete('comprobante');
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            } else {
+                $result_comprobante['result'] = $id_comprobante;
+                $result_comprobante['entidad'] = $res;
+            }
+        }
+        return $result_comprobante;
+    }
+
     /**
      * 
-     * @return type array retorna los datos del catálogo "cestado_civil" 
-     * "EJER_PREDOMI_CVE"  ,  "EJE_PRE_NOMBRE"
-     * 
+     * @param autor LEAS
+     * @param type $id_comprobante
+     * @return type
      */
-    public function get_catalogo_general($entidad, $array_where = null) {
-        $query = $this->db->get_where($entidad, $array_where);
-        $estadoCivil = $query->result_array();
+    public function get_comprobante($id_comprobante = null) {
+        if (!is_null($id_comprobante)) {
+            $this->db->where('COMPROBANTE_CVE', $id_comprobante);
+        }
+        $query = $this->db->get('comprobante');
+        $array_comprobante = $query->result_array();
         $query->free_result();
-        return $estadoCivil;
+        return $array_comprobante;
+    }
+
+    /**
+     * 
+     * @param autor LEAS
+     * @param type $array_campos
+     * @return type
+     */
+    public function insert_comprobante($array_campos) {
+        if (is_null($array_campos)) {
+            return -1;
+        }
+        $this->db->insert('comprobante', $array_campos); //Almacena usuario
+        $obtiene_id_comprobante = $this->db->insert_id();
+//        pr($this->db->last_query());
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return -1;
+        } else {
+            return $obtiene_id_comprobante;
+        }
     }
 
 }

@@ -21,6 +21,7 @@ class Perfil extends MY_Controller {
         $this->load->model('Perfil_model', 'modPerfil');
         $this->load->model('Catalogos_generales', 'cg');
         $this->load->model('Actividad_docente_model', 'adm');
+        $this->load->model('Investigacion_docente_model', 'idm');
         $this->load->library('Ventana_modal');
         $this->load->config('general');
         //$this->lang->load('interface');
@@ -217,7 +218,7 @@ class Perfil extends MY_Controller {
                 $validations = $this->config->item('form_ccl'); //Obtener validaciones de archivo
                 $valores['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_registro, 'duracion'); //Muestrá validaciones de hora y fecha de inicio y termino según la opción de duración
                 $array_validaciones_extra_actividad = $configuracion_formularios_actividad_docente['validaciones_extra']; //Carga las validaciones extrá de archivo config->general que no se pudieron automatizar con el post, es decir radio button etc
-                $result_validacion = $this->analiza_validacion($validations, $datos_registro, $array_validaciones_extra_actividad); //Genera las validaciones del formulario que realmente deben ser tomadas en cuenta
+                $result_validacion = $this->analiza_validacion_actividades_docentes($validations, $datos_registro, $array_validaciones_extra_actividad); //Genera las validaciones del formulario que realmente deben ser tomadas en cuenta
                 $validations = $result_validacion['validacion'];
                 $this->form_validation->set_rules($validations); //Carga las validaciones
 //                pr($result_validacion['fechas']);
@@ -228,7 +229,7 @@ class Perfil extends MY_Controller {
                 if ($this->form_validation->run()) {//Ejecuta validaciones
                     if ($id_tipo_actividad === '0') {//Guardar un nuevo registro
                         $result_guardar_actividad = $this->guardar_actividad($configuracion_formularios_actividad_docente, $datos_registro, array('TIP_ACT_DOC_CVE' => $index_tipo_actividad_docente));
-//                        $result_guardar_actividad = -1;
+//                      $result_guardar_actividad = -1;
                         $resultado = array();
                         if (is_array($result_guardar_actividad)) {//Se guardo correctamente, asignna mensaje success y registra en bitacora
                             $resultado['error'] = $this->lang->line('interface')['general']['datos_almacenados_correctamente']; //Mensaje de que no encontro empleado
@@ -249,9 +250,9 @@ class Perfil extends MY_Controller {
                             $config['max_size'] = '50000';
                             $config['file_name'] = 'algo_nada';
 
-                            pr('que traes $_FILES');
-                            pr($_FILES);
-                            pr('fin ------------>');
+//                            pr('que traes $_FILES');
+//                            pr($_FILES);
+//                            pr('fin ------------>');
 
                             $this->load->library('upload', $config);
                             if (!$this->upload->do_upload()) {
@@ -260,9 +261,8 @@ class Perfil extends MY_Controller {
                                 $file_data = $this->upload->data();
                                 $data['file_path'] = './uploads/' . $file_data['file_name'];
                             }
-                            pr($datos_registro);
-                            pr($data);
-
+//                            pr($datos_registro);
+//                            pr($data);
                             //obtener datos del último registro guardado en la entidad correspondiente
                             $entidad_guardado = $configuracion_formularios_actividad_docente['tabla_guardado'];
 //                            pr($entidad_guardado);
@@ -316,7 +316,7 @@ class Perfil extends MY_Controller {
      * y son de tipo textuales,
      * @return type
      */
-    private function analiza_validacion($array_validacion, $array_componentes, $validacion_extra) {
+    private function analiza_validacion_actividades_docentes($array_validacion, $array_componentes, $validacion_extra) {
         pr($array_componentes);
 //        pr($array_validacion);
         $array_result = array();
@@ -387,7 +387,7 @@ class Perfil extends MY_Controller {
                 $array_comprobante[$inser] = $arrar_datos_post[$key_com]; //Crea el array para guardar comprobante
             }
             //Guarda comprobante
-            $index_comprobante = $this->modPerfil->insert_comprobante($array_comprobante); //Guardar valores en entidad
+            $index_comprobante = $this->cg->insert_comprobante($array_comprobante); //Guardar valores en entidad
 //            $res = guardar_archivos('algo_pasara', 'file');
 //            $res = $this->cargar_comprobante($arrar_datos_post);
         }//*********************************************************************
@@ -596,10 +596,69 @@ class Perfil extends MY_Controller {
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
             $data_investigacion['string_values'] = $string_values; //Crea la variable 
+            $divulgacion = '';
+            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+            $result_id_empleado = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             if ($this->input->post()) {//Después de cargar el formulario
+                $datos_registro = $this->input->post(null, true);
+                $divulgacion = $datos_registro['cmedio_divulgacion']; //Para mostrar los divs de bibliografia o comprobante
+
+
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                $validations = $this->config->item('form_investigacion_docente'); //Obtener validaciones de archivo
+                $validations = $this->analiza_validacion_investigacion_docente($validations, $datos_registro);
+//                pr($validations['emp_act_inv_edu_inser']);
+                $this->form_validation->set_rules($validations['validacion']);
+                if ($this->form_validation->run()) { //Si pasa todas las validaciones, guardar
+                    $array_to_json = array(); //name_entidad => array(campos con valores)
+                    $array_operacion_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
+                    if (isset($validations['comprobante'])) {//Si existe el comprobante
+                        $index_comprobante = $this->cg->insert_comprobante($validations['comprobante']);
+                        if ($index_comprobante > 0) {//el comprobante se guardo correctamente
+                            $validations['comprobante']['COMPROBANTE_CVE'] = $index_comprobante; //Agrega identificador del registro de comprobante 
+                            $validations['emp_act_inv_edu_inser'][$this->config->item('emp_act_inv_edu')['comprobante']['insert']] = $index_comprobante; //Agrega index del comprobante
+                        }
+                        $result_insert_investigacion = $this->idm->insert_investigacion_docente($validations['emp_act_inv_edu_inser']); //Inserta investigación 
+                    } else {
+
+                        $result_insert_investigacion = $this->idm->insert_investigacion_docente($validations['emp_act_inv_edu_inser']); //Inserta investigación 
+                    }
+//                } else if ($result['return'] < 0) {
+
+                    if ($result_insert_investigacion > 0) {//se inserto correctamente, se debe registrar en bitacora
+                        $validations['emp_act_inv_edu_inser']['EAID_CVE'] = $result_insert_investigacion; //Agrega identificador del registro de investigación insertado 
+
+                        $array_to_json['emp_act_inv_edu'] = $validations['emp_act_inv_edu_inser']; //Pertenece a bitacora
+                        $array_operacion_entidades['emp_act_inv_edu'] = 'insert:' . $result_insert_investigacion; //Pertenece a bitacora
+
+                        $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
+                        $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
+                        registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
+
+
+                        $rs = $this->idm->get_datos_investigacion_docente($result_insert_investigacion);
+                        if (!empty($pr[0]['cita_publicada'])) {
+                            $pr[0]['comprobante_cve'] = 0;
+                            $pr[0]['tiene_publicacion'] = $string_values['text_con_cita'];
+                        } else {
+                            $pr[0]['tiene_publicacion'] = $string_values['text_sin_cita'];
+                        }
+//                            pr($rs);
+                        $resultado['result_datos'] = $rs;
+                        $resultado['error'] = $string_values['insert_investigacion_docente']; //
+                        $resultado['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                    } else {//No se pudo registrar los datos de investigación
+                        $resultado['error'] = $string_values['error_investigacion_docente_insert']; //
+                        $resultado['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                    }
+                    echo json_encode($resultado);
+                    exit();
+                }
+            } else {
                 
             }
 
+            $data_investigacion['divulgacion'] = $divulgacion; //Crea la variable 
             $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
             $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
             $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
@@ -607,8 +666,114 @@ class Perfil extends MY_Controller {
             $data = array(
                 'titulo_modal' => 'Investigación',
                 'cuerpo_modal' => $this->load->view('perfil/investigacion/investigacion_formulario', $data_investigacion, TRUE),
+                'pie_modal' => $this->load->view('perfil/investigacion/investigacion_pie', null, true)
             );
+
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        }
+    }
+
+    /**
+     * author LEAS
+     * @param type $array_validaciones
+     * @param type $array_elementos_post
+     * @param type $validacion_extra Las validaciones extra estan pensadas más 
+     *             para "radio button" validaciones_extra, es un array de reglas 
+     *             que se encuentrá en 
+     * "config"->"general"->"actividad_docente_componentes"->"validaciones_extra"
+     * y son de tipo textuales,
+     * @return type
+     */
+    private function analiza_validacion_investigacion_docente($array_validaciones, $array_elementos_post) {
+//        pr($array_validaciones);
+//        pr($array_elementos_post);
+        $array_result = array();
+        $emp_act_inv_edu = $this->config->item('emp_act_inv_edu'); //Campos de la tabla
+        $comprobante = $this->config->item('comprobante'); //Campos de la tabla
+        foreach ($array_elementos_post as $key => $value) {
+            switch ($key) {
+                case 'bibliografia_revista':
+                    break;
+                case 'bibliografia_libro':
+                    break;
+                case 'ctipo_comprobante':
+                    break;
+                case 'text_comprobante':
+                    break;
+                case 'cmedio_divulgacion'://Sólo en divulgación existen algunas reglas de negoció en cuanto a publicación o comprobante
+                    $array_result['validacion'][] = $array_validaciones['cmedio_divulgacion'];
+                    $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu['cmedio_divulgacion']['insert']] = $array_elementos_post['cmedio_divulgacion'];
+                    if (!empty($value)) {
+                        switch ($value) {
+                            case 3://Revista
+                                $array_result['validacion'][] = $array_validaciones['bibliografia_revista'];
+                                $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu['bibliografia_revista']['insert']] = $array_elementos_post['bibliografia_revista'];
+                                break;
+                            case 4://Libro
+                                $array_result['validacion'][] = $array_validaciones['bibliografia_libro'];
+                                $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu['bibliografia_libro']['insert']] = $array_elementos_post['bibliografia_libro'];
+                                break;
+                            default ://Comprobante
+                                $array_result['validacion'][] = $array_validaciones['ctipo_comprobante'];
+                                $array_result['validacion'][] = $array_validaciones['text_comprobante'];
+                                $array_result['comprobante'][$comprobante['ctipo_comprobante']['insert']] = $array_elementos_post['ctipo_comprobante'];
+                                $array_result['comprobante'][$comprobante['text_comprobante']['insert']] = $array_elementos_post['text_comprobante'];
+                        }
+                    }
+                    break;
+                default :
+                    $array_result['validacion'][] = $array_validaciones[$key];
+                    $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu[$key]['insert']] = $value;
+            }
+        }
+//                    pr($array_result);
+        return $array_result;
+    }
+
+    public function get_data_ajax_eliminar_investigacion() {
+        $datos_registro = $this->input->post(null, true);
+        $data = array();
+        $tipo_msg = $this->config->item('alert_msg');
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface')['investigacion_docente'];
+
+        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+//        $data['borrado_correcto'] = 0;
+//        $data['error'] = $datos_registro;
+////        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class'];
+//        $data['tipo_msg'] = $tipo_msg['DANGER']['class'];
+//        echo json_encode($data);
+//        exit();
+
+        if ($this->input->post()) {//Indica que debe intentar eliminar el curso
+            $resul_delete_inv = $this->idm->delete_investigacion_docente($datos_registro['index_inv']); //Verifica si existe el ususario ya contiene datos de actividad
+            if ($resul_delete_inv['result'] === -1) {//Manda mensaje de que no se pudo borrar el registro
+                $data['error'] = $string_values['error_no_elimino_reg_invest']; //Mensaje de que no pudo borrar registro
+                $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                $this->output->set_status_header('400');
+            } else {
+                $array_to_json['emp_act_inv_edu'] = $resul_delete_inv['entidad'];
+                $array_operacion_entidades['emp_act_inv_edu'] = array('delete' => $resul_delete_inv['result']);
+                $reg_entidad_cve = 'emp_act_inv_edu:' + $resul_delete_inv['result'];
+                if (intval($datos_registro['comprobante_cve']) > 0) {
+                    $resul_delete_comprobante = $this->cg->delete_comprobante($datos_registro['comprobante_cve']); //Elimina comprobante, si existe
+                    if ($resul_delete_comprobante['result'] > 0) {//Elimino correctamente el comprobante
+                        $array_to_json['comprobante'] = $resul_delete_comprobante['entidad'];
+                        $array_operacion_entidades['comprobante'] = array('delete' => $resul_delete_comprobante['entidad']);
+                        $reg_entidad_cve += ',comprobante:' + $resul_delete_comprobante['result'];
+                        //eliminar archivo comprobante 
+//                      $nombre_comprobante = $resul_delete_comprobante['entidad']['COM_NOMBRE'];
+                    }
+                }
+                $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
+                $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
+                registro_bitacora($result_id_user, null, $json_datos_entidad, $reg_entidad_cve, $json_registro_bitacora, null);
+
+                $data['error'] = $string_values['succesfull_eliminar']; //mensaje Guardado correcto
+                $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                $data['borrado_correcto'] = 1; //Tipo de mensaje de error
+            }
+            echo json_encode($data);
         }
     }
 

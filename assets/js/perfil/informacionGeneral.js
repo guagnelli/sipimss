@@ -5,10 +5,10 @@ $(function() {
     });
 
     $("ul.nav-pills > li > a").on("shown.bs.tab", function(e) {
+//      alert(window.location.href);
         var scrollposition = $(document).scrollTop();
         var id = jQuery(e.target).attr("href").substr(1);//Obtiene el texto del href
         window.location.hash = id;
-//        alert(window.location.href);
         if (id.indexOf('ajax') > -1 && array_menu_perfil.indexOf(id) < 0) {
             array_menu_perfil.push(id);
             //Separar en 4, 0controlador; 1nombre del método ajax; 2nombre del formulario; 3nombre del div
@@ -18,7 +18,7 @@ $(function() {
 //            data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
             cargar_datos_menu_perfil(id);
         }
-        $(document).scrollTop(scrollposition);
+//        $(document).scrollTop(scrollposition);
     });
 
     var hash = window.location.hash;

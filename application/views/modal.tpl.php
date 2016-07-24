@@ -32,5 +32,5 @@ listado de variables
     </div>
 </div>
 <div class="modal-footer">
-  <?php if(isset($ver_pie_modal) && $ver_pie_modal) echo $pie_modal;//se verifica que exista la variable $pie_modal. despues se imprime ?>
+  <?php if(isset($pie_modal) && $pie_modal) echo $pie_modal;//se verifica que exista la variable $pie_modal. despues se imprime ?>
 </div>

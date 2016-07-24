@@ -347,18 +347,18 @@ $config = array(
         ),
         'nombre_curso' => array(
             'field' => 'nombre_curso',
-            'label' => 'nombre del curso', 
-           'rules' => 'trim|required|max_length[100]' //
+            'label' => 'nombre del curso',
+            'rules' => 'trim|required|max_length[100]' //
         ),
         'nombre_materia_impartio' => array(
-           'field' => 'nombre_materia_impartio',
-           'label' => 'nombre de la materia que impartió', 
-           'rules' => 'trim|required|max_length[100]' //
+            'field' => 'nombre_materia_impartio',
+            'label' => 'nombre de la materia que impartió',
+            'rules' => 'trim|required|max_length[100]' //
         ),
         'folio_constancia' => array(
             'field' => 'folio_constancia',
-            'label' => 'folio', 
-           'rules' => 'trim|required|max_length[35]' //alfanumerico y guión
+            'label' => 'folio',
+            'rules' => 'trim|required|max_length[35]' //alfanumerico y guión
         ),
         'actividad_anios_dedicados_docencia' => array(
             'field' => 'actividad_anios_dedicados_docencia',
@@ -424,6 +424,60 @@ $config = array(
             'label' => 'fecha final de inconformidad',
             'rules' => 'trim|required|validate_date_dd_mm_yyyy'//
         ),
+    ),
+    'form_investigacion_docente' => array(
+        'ctipo_actividad_docente' => array(
+            'field' => 'ctipo_actividad_docente',
+            'label' => 'fecha fin de registro docente',
+            'rules' => 'required'//
+        ),
+        'nombre_investigacion' => array(
+            'field' => 'nombre_investigacion',
+            'label' => 'nombre del trabajo de investigacion',
+            'rules' => 'trim|required'//
+        ),
+        'folio_investigacion' => array(
+            'field' => 'folio_investigacion',
+            'label' => 'folio de aceptacion',
+            'rules' => 'trim|required'//
+        ),
+        'ctipo_estudio' => array(
+            'field' => 'ctipo_estudio',
+            'label' => 'Tipo de estudio',
+            'rules' => 'required'//
+        ),
+        'ctipo_participacion' => array(
+            'field' => 'ctipo_participacion',
+            'label' => 'tipo de participacion',
+            'rules' => 'required'//
+        ),
+        'cmedio_divulgacion' => array(
+            'field' => 'cmedio_divulgacion',
+            'label' => 'divulgación',
+            'rules' => 'required'//
+        ),
+        
+        'ctipo_comprobante' => array(
+            'field' => 'ctipo_comprobante',
+            'label' => 'tipo de comprobante',
+            'rules' => 'required' //
+        ),
+        'text_comprobante' => array(
+            'field' => 'text_comprobante',
+            'label' => 'Nombre de comprobante',
+            'rules' => 'trim|required'                                                                                                                                                                                                                                                                      //
+        ),
+        'bibliografia_revista' => array(
+            'field' => 'bibliografia_revista',
+            'label' => 'bibliografia de la revista',
+            'rules' => 'required'//
+        ),
+        'bibliografia_libro' => array(
+            'field' => 'bibliografia_libro',
+            'label' => 'bibliografia del libro',
+            'rules' => 'required'//
+        ),
+        
     ),
         //**Fin de validación de actividad docenete********************************
 );
