@@ -37,6 +37,8 @@ $config['bon_pro_eva_min'] = (float) 80.00;
 
 $config['bon_sum_act_min'] = 26;
 
+$config['cestado_usuario'] = array('ACTIVO'=>array('id'=>1), 'INACTIVO'=>array('id'=>2), 'RESTABLECERCONTRASENIA'=>array('id'=>3), 'RESTABLECERCMA'=>array('id'=>4));
+
 $config['categoria_participante'] = array('36112580', '35312180');
 //, 'attributes' => array('class' => 'btn btn-info btn-sm espacio'
 $config['listado_tareas'] = array(

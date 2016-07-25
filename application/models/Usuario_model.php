@@ -9,7 +9,7 @@ class Usuario_model extends CI_Model {
         parent::__construct();
         $this->load->database();
         $this->lang->load('interface_administracion');
-        $this->string_values = $this->lang->line('interface_administracion'); //Cargar textos utilizados en vista
+        $this->string_values = $this->lang->line('interface_administracion')['usuario']['model']; //Cargar textos utilizados en vista
     }
 
     /*public function delete_convocatoria_evaluacion($params=null){
@@ -36,7 +36,36 @@ class Usuario_model extends CI_Model {
         return $resultado;
     }*/
 
-    public function get_usuario($params=array()){
+    public function get_usuario($params=null){
+        $resultado = array();
+
+        if(array_key_exists('fields', $params)){
+            if(is_array($params['fields'])){
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        if(array_key_exists('order', $params)){
+            $this->db->order_by($params['order']);
+        }
+
+        $this->db->join('cdepartamento', 'usuario.ADSCRIPCION_CVE=cdepartamento.departamento_cve', 'left');
+        $this->db->join('cestado_usuario', 'usuario.ESTADO_USUARIO_CVE=cestado_usuario.ESTADO_USUARIO_CVE', 'left');
+
+        $query = $this->db->get('usuario'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado=$query->result_array();
+
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
+
+    public function get_usuario_listado($params=array()){
         $resultado = array();
 
         $query_usuario_rol = "";
@@ -157,17 +186,15 @@ class Usuario_model extends CI_Model {
         }
         
         return $resultado;
-    }
+    }*/
 
-    public function update_convocatoria_evaluacion($identificador, $datos){
+    public function update_usuario($identificador, $datos){
         $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
         
         $this->db->trans_begin(); //Definir inicio de transacción
         
-        $this->db->where('ADMIN_VALIDADOR_CVE', $identificador);
-        $this->db->update('admin_validador', $datos); //Inserción de registro
-
-        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        $this->db->where('USUARIO_CVE', $identificador);
+        $this->db->update('usuario', $datos); //Inserción de registro
         
         if ($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
@@ -181,5 +208,5 @@ class Usuario_model extends CI_Model {
         }
 
         return $resultado;
-    }*/
+    }
 }

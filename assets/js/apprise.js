@@ -17,6 +17,7 @@ function apprise(string, args, callback)
 	var aHeight = $(document).height();
 	var aWidth = $(document).width();
 	$('body').append('<div class="appriseOverlay" id="aOverlay"></div>');
+	$('.appriseOverlay').attr('style', 'z-index: 2;'); ///Fix, permite observar las listas deplegables por detrás del overlay
 	$('.appriseOverlay').css('height', aHeight).css('width', aWidth).fadeIn(100);
 	$('body').append('<div class="appriseOuter"></div>');
 	$('.appriseOuter').append('<div class="appriseInner"></div>');

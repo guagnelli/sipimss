@@ -99,7 +99,7 @@ class Template {
      */
     function pagination_data($pagination_data) {
         $this->CI->load->library(array('pagination', 'table'));
-        $config['base_url'] = site_url(array('buscador', 'get_data_ajax')); //Path que se utilizará en la generación de los links
+        $config['base_url'] = (array_key_exists('controller', $pagination_data) && array_key_exists('action', $pagination_data)) ? site_url(array($pagination_data['controller'], $pagination_data['action'])) : site_url(array('buscador', 'get_data_ajax')); //Path que se utilizará en la generación de los links
         $config['total_rows'] = $pagination_data['total']; //Número total de registros
         $config['per_page'] = $pagination_data['per_page']; //Sobreescribir número de registros a mostrar
         $config['full_tag_open'] = '<ul class="pagination">';

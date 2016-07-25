@@ -9,9 +9,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Usuario extends MY_Controller {
     function __construct() {
         parent::__construct();
-        /*
-        $this->load->config('general');
-        $this->config->load('general');*/
         $this->load->library('form_complete');
         $this->load->library('form_validation');
         $this->load->library('seguridad');
@@ -40,7 +37,7 @@ class Usuario extends MY_Controller {
         }*/
         
         //pr($datos);
-        $datos['order_columns'] = array('USU_PATERNO'=>'Nombre', 'USU_MATRICULA'=>'Matricula', 'dep_nombre'=>'Adscripción', 'nom_delegacion'=>'Delegación', 'EDO_USUARIO_DESC'=>'Estado solicitud');
+        $datos['order_columns'] = array('USU_MATRICULA'=>$datos['string_values']['buscador']['tab_head_matricula'], 'USU_PATERNO'=>$datos['string_values']['buscador']['tab_head_nombre'], 'nom_delegacion'=>$datos['string_values']['buscador']['tab_head_delegacion'], 'dep_nombre'=>$datos['string_values']['buscador']['tab_head_adscripcion'], 'EDO_USUARIO_DESC'=>$datos['string_values']['buscador']['tab_head_estado']);
         $main_content = $this->load->view('administracion/usuario/buscador_listado', $datos, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
@@ -61,8 +58,8 @@ class Usuario extends MY_Controller {
 
                 $datos_busqueda['current_row'] = (isset($current_row) && !empty($current_row)) ? $current_row : 0; //Registro actual, donde inicia la visualización de registros
                 
-                $datos['usuario'] = $this->usuario->get_usuario($datos_busqueda); ////Obtener listado de evaluaciones de acuerdo al año seleccionado
-                $datos['usuario']['string_values'] = $this->lang->line('interface_administracion')['usuario']; //Cargar textos utilizados en vista
+                $datos['usuario'] = $this->usuario->get_usuario_listado($datos_busqueda); ////Obtener listado de evaluaciones de acuerdo al año seleccionado
+                $datos['usuario']['string_values'] = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general']); //Cargar textos utilizados en vista
 
                 $datos['usuario']['current_row'] = $datos_busqueda['current_row'];
                 $datos['usuario']['per_page'] = $this->input->post('per_page'); //Número de registros a mostrar por página
@@ -95,9 +92,11 @@ class Usuario extends MY_Controller {
      */
     private function resultado_listado($data, $form){
         //$this->load->library('seguridad');
+        $data['controller'] = 'usuario';
+        $data['action'] = 'get_data_ajax';
         $pagination = $this->template->pagination_data($data); //Crear mensaje y links de paginación
         $links = "<div class='col-sm-5 dataTables_info'>".$pagination['total']."</div>
-                <div class='col-sm-7'>".$pagination['links']."</div>";
+                <div class='col-sm-7'>".$pagination['links']."</div><input type='hidden' id='cr', name='cr' value='".$data['current_row']."'>";
         echo $links.$this->load->view('administracion/usuario/resultado_busqueda', $data, TRUE).$links.'
             <script>
             $("ul.pagination li a").click(function(event){
@@ -107,19 +106,36 @@ class Usuario extends MY_Controller {
             </script>';
     }
 
+    public function desactivar_usuario($identificador){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $datos['identificador'] = $identificador; //Identificador de usuario
+            $datos['msg'] = null;
+            $usuario_id = $this->seguridad->decrypt_base64($identificador); //Identificador del usuario
+
+            $datos['usuario']['string_values'] = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general']); //Cargar textos utilizados en vista
+            $cestado_usuario = $this->config->item('cestado_usuario');
+            //pr($cestado_usuario);
+            $resultado = $this->usuario->update_usuario($usuario_id, array('ESTADO_USUARIO_CVE'=>$cestado_usuario['INACTIVO']['id'])); //Desactivar usuario
+            
+            echo json_encode($resultado); ///Muestra mensaje
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
     /**
-     * Función que permite agregar y actualizar convocatorias
-     * @method: void gestionar_convocatoria()
+     * Función que permite agregar y actualizar usuarios
+     * @method: void gestionar_usuario()
      * @author: Jesús Z. Díaz P.
      */
-    /*public function gestionar_convocatoria($identificador = null){
+    public function gestionar_usuario($identificador = null){
         if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
             $datos['identificador'] = $identificador;
             $datos['msg'] = null;
-            $convocatoria_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
-            $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['agregar'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['general']); //Cargar textos utilizados en vista
+            $usuario_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la usuario
+            $datos['string_values'] = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general']); //Cargar textos utilizados en vista
 
-            if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
+            /*if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
                 $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
                 //pr($datos_formulario);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
@@ -149,45 +165,17 @@ class Usuario extends MY_Controller {
                     }
                     $datos['msg'] = imprimir_resultado($resultado); ///Muestra mensaje
                 }
-            }
+            }*/
             if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
-                $datos['dato_convocatoria'] = $this->conv_eval_model->get_convocatoria_evaluacion(array('conditions'=>array('ADMIN_VALIDADOR_CVE'=>$convocatoria_id))); //Obtener datos
+                $datos['dato_usuario'] = $this->usuario->get_usuario(array('conditions'=>array('USUARIO_CVE'=>$usuario_id))); //Obtener datos
             }            
             echo $this->load->view('evaluacion/convocatoria/convocatoria_formulario', $datos, true);
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }*/
-
-    /**
-     * Función que permite listar dictamenes
-     * @method: void eliminar_convocatoria()
-     * @param: $Identificador   string en base64    Identificador de la convocatoria codificado en base64
-     * @author: Jesús Z. Díaz P.
-     */
-    /*public function eliminar_convocatoria($identificador){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            $datos['identificador'] = $identificador; //Identificador de convocatoria
-            $datos['msg'] = null;
-            $convocatoria_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
-
-            $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['buscador'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['general']); //Cargar textos utilizados en vista
-
-            $datos['dictamen_evaluacion'] = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('conditions'=>array('ADMIN_VALIDADOR_CVE'=>$convocatoria_id))); //Obtener datos
-            if(empty($datos['dictamen_evaluacion'])){ //En caso de que este vacío se elimina
-                $resultado = $this->conv_eval_model->delete_convocatoria_evaluacion(array('conditions'=>array('ADMIN_VALIDADOR_CVE'=>$convocatoria_id))); //Eliminar datos
-            } else {
-                $resultado = array('result'=>FALSE, 'msg'=>$datos['string_values']['eliminacion_imposible']);
-            }            
-            
-            //echo json_encode(imprimir_resultado($resultado)); ///Muestra mensaje
-            echo json_encode($resultado); ///Muestra mensaje
-            
-            //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
-        } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
-        }
     }
+
+    /*
     private function convocatoria_evaluacion_vo($convocatoria){
         $ce = new Convocatoria_evaluacion_dao;
         $ce->FCH_FIN_REG_DOCENTE = (isset($convocatoria['FCH_FIN_REG_DOCENTE']) && isset($convocatoria['FCH_FIN_REG_DOCENTE'])) ? $convocatoria['FCH_FIN_REG_DOCENTE'] : NULL;

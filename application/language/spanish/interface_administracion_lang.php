@@ -46,20 +46,20 @@ $lang['interface_administracion'] = array(
             'tab_head_fecha_fin_registro' => 'Fecha fin de registro docente',
             'tab_head_fecha_fin_validacion1' => 'Fecha fin validación 1',
             'tab_head_fecha_fin_validacion2' => 'Fecha fin validación 2',
-        ),
+        ),*/
         'model' => array(
             'insercion' => 'Se ha insertado correctamente la información.',
             'actualizacion' => 'Se ha actualizado correctamente la información.',
             'eliminacion' => 'Se ha eliminado correctamente.',
             'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
         ),
-        'buscador_dictamen' => array(
+        /*'buscador_dictamen' => array(
             'titulo_dictamen' => 'Administrar dictamen',
             'agregar_dictamen' => 'Agregar dictamen',
             'tab_head_fecha_inicia_evaluacion' => 'Fecha inicio de evaluación',
             'tab_head_fecha_fin_evaluacion' => 'Fecha final de evaluación',
             'tab_head_fecha_fin_inconformidad' => 'Fecha final de inconformidad',
-        ),*/
+        ),
         'general' => array(
             'acciones' => 'Acciones',
             'editar' => 'Editar',
@@ -69,7 +69,7 @@ $lang['interface_administracion'] = array(
             'no_existe_datos' => 'No existen datos.',
             'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
             'compare_date' => 'El campo %s debería ser menor o igual que el campo predecesor.',
-        ),
+        ),*/
     ),
     'catalogos' => array(
         'cdelegacion' => 'Delegación: '
@@ -81,7 +81,7 @@ $lang['interface_administracion'] = array(
         'enviar' => 'Enviar',
         'cancelar' => 'Cancelar',
         'no_existe_datos' => 'No existen datos.',
-        'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
+        'confirmar_eliminacion' => 'Confirme que desea desactivar el registro',
         'compare_date' => 'El campo %s debería ser menor o igual que el campo predecesor.',
         'detalle_fechas' => 'Detalle de fechas'
     ),

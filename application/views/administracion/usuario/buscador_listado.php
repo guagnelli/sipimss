@@ -1,7 +1,3 @@
-<script type="text/javascript">
-    //var confirmar_eliminacion = "<?php //echo $string_values['confirmar_eliminacion']; ?>"; //Texto de confirmación
-    //var error_eliminacion = "<?php //echo $string_values['error']; ?>"; //Texto de confirmación
-</script>
 <?php echo js('administracion/usuario.js'); ?>
 
 <h1><?php echo $string_values['buscador']['titulo']; ?></h1><br>
@@ -86,66 +82,19 @@
         </div>
     </div>
 </div>
-<?php echo form_close(); ?> 
+<?php echo form_close(); ?>
 <script type="text/javascript">
     $( document ).ready(function() {
         data_ajax(site_url+"/usuario/get_data_ajax", "#form_search", "#resultado_busqueda");
         
         $("#btn_submit").click(function(event){
             data_ajax(site_url+"/usuario/get_data_ajax", "#form_search", "#resultado_busqueda");
-            event.preventDefault();            
+            event.preventDefault();
         });
-        $("#btn_reset").click(function(event){
+        /*$("#btn_agregar_usu").click(function(event){
             this.form.reset();
             data_ajax(site_url+"/usuario/get_data_ajax", "#form_search", "#resultado_busqueda");
             event.preventDefault();
-            
-        });
-        
+        });*/
     });
 </script>
-<!-- <div class="row">
-    <div class="col-lg-12 col-md-12">
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th class="text-center"><?php //echo $string_values['buscador']['tab_head_matricula'] ?></th>
-                    <th class="text-center"><?php //echo $string_values['buscador']['tab_head_nombre'] ?></th>
-                    <th class="text-center"><?php //echo $string_values['buscador']['tab_head_delegacion'] ?></th>
-                    <th class="text-center"><?php //echo $string_values['buscador']['tab_head_adscripcion'] ?></th>
-                    <th class="text-center"><?php //echo $string_values['buscador']['tab_head_rol'] ?></th>
-                    <th class="text-center"><?php //echo $string_values['buscador']['tab_head_estado'] ?></th>
-                    <th class="text-center"><?php //echo $string_values['general']['acciones'] ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                    <?php //Generará la tabla que muestrá las actividades del docente
-                    /*$html = "";
-                    foreach ($usuario as $usu) {
-                        $html_rol = "";
-                        foreach ($usu['rol'] as $rol) {
-                            $html_rol .= '- '.$rol['ROL_NOMBRE'].'<br>';
-                        }
-                        $html .= '<tr id="tr_'.$this->seguridad->encrypt_base64($usu['USUARIO_CVE']).'">
-                                <td>'.$usu['USU_MATRICULA'].'</td>
-                                <td>'.$usu['USU_NOMBRE'].' '.$usu['USU_PATERNO'].' '.$usu['USU_MATERNO'].'</td>
-                                <td>'.$usu['nom_delegacion'].'</td>
-                                <td>'.$usu['dep_nombre'].'</td>
-                                <td>'.$html_rol.'</td>
-                                <td>'.$usu['EDO_USUARIO_DESC'].'</td>
-                                <td><button type="button" class="btn btn-link btn-sm btn_editar_usu" data-toggle="modal" data-target="#modal_censo" data-value="'.$this->seguridad->encrypt_base64($usu['USUARIO_CVE']).'">'.
-                                       $string_values['general']['editar'].
-                                    '</button>
-                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_usu" data-value="'.$this->seguridad->encrypt_base64($usu['USUARIO_CVE']).'">'.
-                                           $string_values['general']['eliminar'].
-                                        '</button>
-                                </td>
-                            </tr>';
-                    }
-                    echo $html; */
-                    ?>
-            </tbody>
-        </table>
-    </div>
-</div> -->
-
