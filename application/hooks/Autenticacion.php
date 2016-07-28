@@ -18,7 +18,7 @@ class Iniciar_sesion {
 //        $matricula = $CI->session->userdata('matricula');
 //        $tipo_admin = $CI->session->userdata('lista_roles'); //tipo de usuario que inicio sesión
         $privilegios = $CI->session->userdata('lista_roles_modulos'); //tipo de usuario que inicio sesión
-//        $modulos_permitidos = $CI->session->userdata('rol_seleccionado'); //tipo de usuario que inicio sesión
+//        $rol_seleccionado = $CI->session->userdata('rol_seleccionado'); //tipo de usuario que inicio sesión
 //        pr($modulos_permitidos);
 //        pr($privilegios);
 //        pr($tipo_admin);
@@ -50,6 +50,7 @@ class Iniciar_sesion {
                 $valor_array = get_busca_array_nivel_profundidad_dos($privilegios, $controlador, $funcion_controlador, 'ruta'); //Busca la primera incidencia con del controlador con la ruta seleccionada
 //                pr($valor_array);
                 if (empty($valor_array)) {//Si el array es vacio, manda a pagina no encontrada
+//                    pr($rol_seleccionado);
                     redirect('pagina_no_encontrada');
                     exit();
                 }

@@ -85,7 +85,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                 $c_bb = $val['cita_publicada'];
                                 if (is_null($c_bb)) {//Pone texto referente a que no existe una cita bibliografica
                                     $tiene_cita = $string_values['text_sin_cita'];
-                                    $comprobante = (is_null($val['comprobante_cve'])) ? $val['comprobante_cve'] : 0;
+                                    $comprobante = (is_null($val['comprobante_cve'])) ?  0 : $val['comprobante_cve'];
                                     //Nota: agregar vinculo para mostrar el documento cargado
                                 } else {//Crea boton vinculo para ver cita bibliografica
                                     $comprobante = 0;
@@ -110,19 +110,22 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                 . 'class="btn btn-link btn-sm" '
                                 . 'id="btn_eliminar_actividad_modal" '
                                 . 'data-idrow ="' . $key_ai . '"'
-                                . 'data-cve ="' . $key . '"'
+                                . 'data-invcve ="' . $key . '"'
+                                . 'data-comprobantecve ="' . $comprobante . '"'
+                                . 'data-toggle="modal"'
+                                . 'data-target="#modal_censo"'
                                 . 'onclick="funcion_editar_reg_investigacion(this)" >' .
                                 $string_values['tab_titulo_editar']
                                 . '</button>'
                                 . "</td>";
-                                echo "<td>"
+                                echo "<td>"//Botón eliminar
                                 . '<button '
                                 . 'type="button" '
                                 . 'class="btn btn-link btn-sm"'
                                 . 'id="btn_eliminar_actividad_modal" '
                                 . 'data-idrow ="' . $key_ai . '"'
                                 . 'data-invcve ="' . $key . '"'
-                                . 'data-comprovantecve ="' . $comprobante . '"'
+                                . 'data-comprobantecve ="' . $comprobante . '"'
                                 . 'onclick="funcion_eliminar_reg_investigacion(this)" >' .
                                 $string_values['tab_titulo_eliminar']
                                 . '</button>'
@@ -138,19 +141,23 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 
     </div>
 </div>
-
+--------------
+<button type="button" class="btn btn-link btn-sm" id="btn_update_actividad_modal" data-idrow = "$$key_ai$$"  data-toggle="modal" data-target="#modal_censo"> 
+    Boton prueba 
+</button>
+--------------
 <script type="text/template" id="template_row_nueva_investigacion">
     <tr id='id_row_"$$key_ai$$"' data-keyrow="$$key_ai$$">
-        <td>"$$tpad_nombre$$"</td>
-        <td>"$$nombre_investigacion$$"</td>
+        <td><p id="p_inv_nombre">"$$tpad_nombre$$"</p></td>
+        <td id="td_nom_investigacion">"$$nombre_investigacion$$"</td>
         <td>"$$folio_investigacion$$"</td>
         <td>"$$tiene_cita$$"</td>
         <td>
-        <button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow = "$$key_ai$$" 
-        data-cve ="$$key$$" onclick="funcion_editar_reg_investigacion(this)" >Editar</button>
+        <button type="button" class="btn btn-link btn-sm" id="btn_update_actividad_modal" data-idrow = "$$key_ai$$"  data-toggle="modal" data-target="#modal_censo"
+        data-invcve ="$$key$$" data-comprobantecve ="$$comprobante$$" onclick="funcion_editar_reg_investigacion(this)" >Editar</button>
         </td>
         <td><button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="$$key_ai$$"
-           data-invcve = "$$key$$" data-comprovantecve ="$$comprobante$$"
+           data-invcve = "$$key$$" data-comprobantecve ="$$comprobante$$"
             onclick="funcion_eliminar_reg_investigacion(this)" >Eliminar</button>
         </td>
     </tr>;

@@ -1,13 +1,29 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
+        if(isset($select_inv)){
+//            pr($select_inv);
+            //Convertimos los index del array en variables
+            extract($select_inv[0], EXTR_OVERWRITE);//EXTR_IF_EXISTS; EXTR_PREFIX_ALL; EXTR_OVERWRITE; EXTR_PREFIX_INVALID
+            if(!empty($cita_publicada)){
+                 switch ($divulgacion){
+                    case '3':
+                    $bibliografia_revista = $cita_publicada;
+                        break;
+                    case '4':
+                    $bibliografia_libro = $cita_publicada;
+                        break;
+                }
+            }
 
+//            $algo = implode($glue, $pieces)
+        }
+        
         $div_stile_display_comprobante = ' none'; 
         $div_stile_display_libro = ' none'; 
         $div_stile_display_revista = ' none'; 
         if(!empty($divulgacion)){
-            pr('no es vacio');
             switch ($divulgacion){
                 case '3':
-                    $div_stile_display_revista = ' block'; 
+                    $div_stile_display_revista = ' block';
                     break;
                 case '4':
                     $div_stile_display_libro = ' block'; 
@@ -37,7 +53,7 @@
         htipos_bibliografia["editorial"] = "1|editorial|div_editorial_lib|btn_add_editorial_lib|editoriallib_$|Agregar editorial$|Editorial";
         htipos_bibliografia["anio"] = "3|anio|div_anio_lib|btn_add_anio_lib|aniolib_$|Agregar año de edición$|Agregar año|";
     </script>
-    <?php echo form_open('', array('id' => 'form_investigacion_docente')); ?>
+    <?php echo form_open_multipart('', array('id' => 'form_investigacion_docente')); ?>
     <div class="list-group">
         <div class="list-group-item">
                     <div class="panel-body">
@@ -62,7 +78,7 @@
                                            echo $this->form_complete->create_element(array('id' => 'ctipo_actividad_docente', 'type' => 'dropdown', 
                                                'options' => $ctipo_actividad_docente, 
                                                'first' => array('' => 'Selecciona tipo de actividad'), 
-                                               'value' => '',
+                                               'value' => (isset($tpad_cve))?$tpad_cve:'',
                                                'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                )
@@ -155,7 +171,7 @@
                                         </span>
                                         <?php 
                                             echo $this->form_complete->create_element(array('id' => 'ctipo_participacion', 'type' => 'dropdown', 
-                                                'options' => $ctipo_estudio, 
+                                                'options' => $ctipo_participacion, 
                                                 'first' => array('' => $string_values['drop_tipo_participacion']), 
                                                 'value' => (isset($tip_participacion_cve))?$tip_participacion_cve:'',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
@@ -181,7 +197,7 @@
                                             echo $this->form_complete->create_element(array('id' => 'cmedio_divulgacion', 'type' => 'dropdown', 
                                                 'options' => $cmedio_divulgacion, 
                                                 'first' => array('' => $string_values['drop_tipo_divulgacion']), 
-                                                'value' => (isset($tip_estudio_cve))?$tip_estudio_cve:'',
+                                                'value' => (isset($med_divulgacion_cve))?$med_divulgacion_cve:'',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                                 'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_tipo_divulgacion'],
@@ -213,7 +229,7 @@
                                         'type' => 'dropdown', 
                                         'options' => $ctipo_comprobante, 
                                         'first' => array('' => $string_values['drop_tipo_comprobante']), 
-                                        'value' => '',
+                                        'value' => (isset($tip_comprobante_cve))?$tip_comprobante_cve:'',
                                         'class'=>'form-control',
                                         'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
                                         'placeholder' => $string_values['title_tipo_comprobante'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
@@ -234,7 +250,7 @@
                                      <?php
                                         echo $this->form_complete->create_element(
                                         array('id'=>'text_comprobante','type'=>'text',
-                                                'value' => '',
+                                                'value' => (isset($text_comprobante)) ? $text_comprobante: '',
                                                 'attributes'=>array(
                                                 'class'=>'form-control',
                                                 'placeholder'=>$string_values['title_cargar_comprobante'],

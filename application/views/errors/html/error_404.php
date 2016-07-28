@@ -64,6 +64,8 @@ p {
             <?php } ?>    
 
             <div class="navbar-btn">
+                <pre><?php? 
+                echo if(isset($rol_seleccionado){ echo $rol_seleccionado; ?></pre>
                 <ul class="nav nav-pills nav-stacked col-md-3">
                     <h2><a data-toggle="tab" href="javascript:history.back()" >Regresar</a></h2>
                 </ul>

@@ -35,7 +35,7 @@ class Rol extends MY_Controller {
      */
 
     public function index() {
-        $data= array();
+        $data = array();
         if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
             //Carga herramientas de mensajes de texto al usuario 
             $this->lang->load('interface', 'spanish');
@@ -53,8 +53,14 @@ class Rol extends MY_Controller {
                 $lista_roles_modulos = $this->session->userdata('lista_roles_modulos'); //Módulos de acceso del usuario
                 $rol_seleccionado = get_array_valor($lista_roles_modulos, $value);
                 $this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
-//                pr($rol_seleccionado);
-                redirect('perfil');
+                pr($rol_seleccionado);
+                switch ($value) {
+                    case 1:
+                        redirect('perfil');
+                    case 2:
+                    case 5:
+                        redirect('designar_validador');
+                }
                 exit();
             }
         }

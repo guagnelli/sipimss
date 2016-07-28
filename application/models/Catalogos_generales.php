@@ -383,7 +383,6 @@ class Catalogos_generales extends CI_Model {
         $res = $this->get_comprobante($id_comprobante);
         if (!empty($res)) {
             $res = $res[0];
-            $res = $this->get_comprobante($id_comprobante);
             $this->db->where('COMPROBANTE_CVE', $id_comprobante);
             $this->db->delete('comprobante');
             if ($this->db->trans_status() === FALSE) {
@@ -431,6 +430,30 @@ class Catalogos_generales extends CI_Model {
         } else {
             return $obtiene_id_comprobante;
         }
+    }
+
+    public function update_comprobante($id_comprobante = null, $parametros_comprobante = null) {
+        $result_comprobante['result'] = -1;
+        $result_comprobante['entidad'] = '';
+        if (is_null($id_comprobante)) {
+            return $result_comprobante;
+        }
+        if (is_null($parametros_comprobante)) {
+            return $result_comprobante;
+        }
+
+        if (!empty($res)) {
+            $this->db->where('COMPROBANTE_CVE', $id_comprobante);
+            $this->db->update('comprobante');
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+            } else {
+                $result_comprobante['result'] = $id_comprobante;
+                $parametros_comprobante['COMPROBANTE_CVE'] = $id_comprobante;
+                $result_comprobante['entidad'] = $parametros_comprobante;
+            }
+        }
+        return $result_comprobante;
     }
 
 }

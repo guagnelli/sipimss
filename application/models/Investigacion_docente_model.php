@@ -38,11 +38,14 @@ class Investigacion_docente_model extends CI_Model {
             , 'eaid.MED_DIVULGACION_CVE "med_divulgacion_cve"'
             , 'eaid.TIP_PARTICIPACION_CVE "tip_participacion_cve"'
             , 'eaid.TIP_ESTUDIO_CVE "tip_estudio_cve"'
-            , 'eaid.TIP_ACT_DOC_CVE "tpad_cve"', 'ctad.TIP_ACT_DOC_NOMBRE "tpad_nombre"');
+            , 'eaid.TIP_ACT_DOC_CVE "tpad_cve"', 'ctad.TIP_ACT_DOC_NOMBRE "tpad_nombre"'
+            , 'c.COM_NOMBRE "text_comprobante"', 'c.TIPO_COMPROBANTE_CVE "tip_comprobante_cve"'
+        );
 
         $this->db->select($select);
         $this->db->from('emp_act_inv_edu as eaid');
         $this->db->join('ctipo_actividad_docente as ctad', 'ctad.TIP_ACT_DOC_CVE = eaid.TIP_ACT_DOC_CVE');
+        $this->db->join('comprobante as c', 'c.COMPROBANTE_CVE = eaid.COMPROBANTE_CVE', 'left');
         $this->db->where('eaid.EAID_CVE', $EAID_cve);
         $query = $this->db->get();
         return $query->result_array();
@@ -77,6 +80,28 @@ class Investigacion_docente_model extends CI_Model {
         } else {
             return $obtiene_id_usuario;
         }
+    }
+
+    public function update_investigacion_docente($investigacion_docente = null, $datos_investigacion_docente = null) {
+        $result_investigacion['result'] = -1;
+        $result_investigacion['entidad'] = '';
+        if (is_null($investigacion_docente)) {
+            return $result_investigacion;
+        }
+        if (is_null($datos_investigacion_docente)) {
+            return $result_investigacion;
+        }
+        
+        $this->db->where('EAID_CVE', $investigacion_docente);
+        $this->db->update('emp_act_inv_edu', $datos_investigacion_docente);
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+        } else {
+            $result_investigacion['result'] = $investigacion_docente;
+            $datos_investigacion_docente['EAID_CVE'] = $investigacion_docente;
+            $result_investigacion['entidad'] = $datos_investigacion_docente;
+        }
+        return $result_investigacion;
     }
 
 }
