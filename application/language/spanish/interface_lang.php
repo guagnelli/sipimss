@@ -256,6 +256,28 @@ $lang['interface'] = array(
         'error_investigacion_docente_insert' => 'No fue posible registrar la información de investigación docente',
         'error_investigacion_docente_update' => 'No fue posible actualizar la información de investigación docente',
     ),
+    'designar_validador' => array(
+        'resp_sin_resultados' => '<div class="jumbotron"><h1>No se encontraron resultados</h1></div>',
+        'tab_titulo_unidades' => 'unidades',
+        'tab_titulo_designado' => 'Designado',
+        'tab_titulo_matricula' => 'matricula',
+        'tab_titulo_nombre' => 'Nombre',
+        'tab_titulo_seleccionar_validador' => 'Seleccionar validador',
+        'lbl_buscar_otro_usuario' => 'Buscar otro usuario',
+        'lbl_matricula' => 'Matrícula',
+        'lbl_nombre' => 'Nombre',
+        'lbl_adscripcion' => 'Adscripción',
+        'lbl_unidad' => 'Unidad',
+        'btn_asignar' => 'Asignar',
+        'btn_buscar_usuario' => 'Buscar',
+        'txt_buscar_unidad' => 'Buscar unidad',
+        'btn_buscar_unidad' => 'Buscar',
+        'drop_selecciona_unidad' => 'Buscar',
+        'lbl_validador' => 'Candidatos a validador',
+        'drop_selecciona_validador' => 'Selecciona validador',
+        'lbl_delegacion' => 'Delegación',
+        'drop_delegacion' => 'Seleccione delegación',
+    ),
 );
 
 

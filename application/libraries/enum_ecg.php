@@ -54,7 +54,8 @@ class enum_ecg extends MyEnum3 {
             ccategoria = 'ccategoria',
             cdepartamento = 'cdepartamento',
             crol = 'crol',
-            cestado_usuario = 'cestado_usuario'
+            cestado_usuario = 'cestado_usuario',
+            cunidad = 'cunidad'
     ;
     /*
       guardar actuación (evaluaciones)

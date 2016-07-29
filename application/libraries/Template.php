@@ -237,5 +237,28 @@ class Template {
         );
 //            
     }
+    
+    public function pagination_data_buscador_asignar_validador($pagination_data) {
+        $this->CI->load->library(array('pagination', 'table'));
+        $config['base_url'] = site_url(array('bonos_titular', 'get_data_ajax')); //Path que se utilizará en la generación de los links
+        //        $config['total_rows'] = $pagination_data['alumnos']['total']; //Número total de registros
+        $config['total_rows'] = $pagination_data['total_unidades']; //Número total de registros $pagination_data['alumnos']['total'];
+        //        $config['per_page'] = $pagination_data['per_page']; //Sobreescribir número de registros a mostrar
+        $config['per_page'] = $pagination_data['per_page']; //Sobreescribir número de registros a mostrar  $pagination_data['per_page'];
+        $this->CI->pagination->initialize($config);
+//        pr($pagination_data);
+//        exit();
+        //        return array('links'=>"<div class='dataTables_paginate paging_simple_numbers'>".$this->CI->pagination->create_links()."</div>",
+        //                'total'=>"Mostrando ".($pagination_data['current_row']+1)." a ".((($pagination_data['current_row']+$config['per_page'])>$pagination_data['alumnos']['total']) ? $pagination_data['alumnos']['total'] : $pagination_data['current_row']+$config['per_page'])." de ".$pagination_data['alumnos']['total']
+        //            );
+        /* return array('links' => "<div class='dataTables_paginate paging_simple_numbers'>" . $this->CI->pagination->create_links() . "</div>",
+          'total' => "Mostrando " . ($pagination_data['current_row'] + 1) . " a 6 de 6"
+          ); */
+        return array('links' => "<div class='dataTables_paginate paging_simple_numbers'>" . $this->CI->pagination->create_links() . "</div>",
+            'total' => "Mostrando " . ($pagination_data['current_row'] + 1) . " a " . ((($pagination_data['current_row'] + $config['per_page']) > $pagination_data['total_unidades']) ? $pagination_data['total_unidades'] : $pagination_data['current_row'] + $config['per_page']) . " de " . $pagination_data['total_unidades']
+        );
+//            
+    }
+      
 
 }

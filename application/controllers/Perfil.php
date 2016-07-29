@@ -33,7 +33,7 @@ class Perfil extends MY_Controller {
      */
     public function index() {
         $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
-        pr($rol_seleccionado);
+//        pr($rol_seleccionado);
         $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1));
 
         $datosPerfil = $this->loadInfo($this->session->userdata('identificador'));

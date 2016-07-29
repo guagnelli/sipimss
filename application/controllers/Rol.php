@@ -58,6 +58,8 @@ class Rol extends MY_Controller {
                     case 1:
                         redirect('perfil');
                     case 2:
+                    case 14:
+                        redirect('designar_validador');
                     case 5:
                         redirect('designar_validador');
                 }
@@ -71,5 +73,6 @@ class Rol extends MY_Controller {
         $this->template->setMainContent($main_contet);
         $this->template->getTemplate();
     }
+    
 
 }
