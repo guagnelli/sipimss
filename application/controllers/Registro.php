@@ -57,6 +57,11 @@ class Registro extends MY_Controller {
                         // obtenemos los datos del sistema de personal (SIAP)
                         $datos_siap = $this->empleados_siap->buscar_usuario_siap(array("reg_delegacion" => $datos_registro['reg_delegacion'], "asp_matricula" => $datos_registro['reg_matricula']));
 //                        pr($datos_siap);
+//                        $res_cat = $this->mod_registro->get_categoria($datos_siap['emp_keypue']);
+//                        pr($res_cat);
+//                        
+//                        exit();
+//                        pr($datos_siap);
                         if (is_array($datos_siap) && !empty($datos_siap)) {//Si el usuario que que se quiere registrar no existe en el "SIAP" no se puede registrar
                             //pr($datos_siap);
                             if ($datos_siap['status'] == 1) { //si el status del empleado esta activo (1)
@@ -73,8 +78,12 @@ class Registro extends MY_Controller {
                                 $datos_usuario['USU_MATERNO'] = $datos_siap['materno'];
                                 $datos_usuario['USU_GENERO'] = $datos_siap['sexo'];
                                 $datos_usuario['USU_CURP'] = $datos_siap['curp'];
+                                $datos_usuario['USU_ANTIGUEDAD'] = $datos_siap['antiguedad'];
+                                $datos_usuario['EDO_LABORAL_CVE'] = $datos_siap['status'];
                                 $datos_usuario['ADSCRIPCION_CVE'] = $datos_siap['adscripcion'];
-                                $datos_usuario['CATEGORIA_CVE'] = $datos_siap['emp_keypue'];
+                                $res_cat = $this->mod_registro->get_categoria($datos_siap['emp_keypue']);
+                                $id_cat = (empty($res_cat)) ? 0 : $res_cat[0]['id_cat'];
+                                $datos_usuario['CATEGORIA_CVE'] = $id_cat;
                                 $datos_usuario['ESTADO_USUARIO_CVE'] = 1;
                                 $datos_usuario['USU_FCH_REGISTRO'] = $datos_siap['fecha_ingreso'];
 //                                $datos_usuario['USU_FCH_NACIMIENTO'] = $datos_siap['nacimiento'];
@@ -85,11 +94,14 @@ class Registro extends MY_Controller {
                                         //Guardar también empleado    
                                         $datos_empleados = array();
                                         $datos_empleados['EMP_NOMBRE'] = $datos_usuario['USU_NOMBRE'];
+                                        $datos_empleados['EDO_LABORAL_CVE'] = $datos_usuario['EDO_LABORAL_CVE'];
                                         $datos_empleados['EMP_APE_PATERNO'] = $datos_usuario['USU_PATERNO'];
+                                        $datos_empleados['EMP_ANTIGUEDAD'] = $datos_usuario['USU_ANTIGUEDAD'];
                                         $datos_empleados['EMP_APE_MATERNO'] = $datos_usuario['USU_MATERNO'];
                                         $datos_empleados['EMP_MATRICULA'] = $datos_usuario['USU_MATRICULA'];
                                         $datos_empleados['EMP_CURP'] = $datos_usuario['USU_CURP'];
                                         $datos_empleados['DELEGACION_CVE'] = $datos_siap['delegacion'];
+                                        $datos_empleados['CATEGORIA_CVE'] = $datos_usuario['CATEGORIA_CVE'];
                                         $datos_empleados['USUARIO_CVE'] = $result_id_user;
                                         $datos_empleados['ADSCRIPCION_CVE'] = $datos_usuario['ADSCRIPCION_CVE'];
                                         $datos_empleados['EMP_GENERO'] = $datos_usuario['USU_GENERO'];

@@ -135,6 +135,7 @@ $lang['interface'] = array(
     //Actividad del docente
     'actividad_docente' => array(
         'error_no_registro' => 'No existe un registro',
+        'alert_no_existe_actividad_principal' => 'No existe una actividad principal',
         'lbl_pregunta_eliminar_actividad_docente' => 'Confirme que realmente desea eliminar la actividad [field]',
         'lbl_info_no_elimina_actividad_curso_principal' => 'La actividad [field] no puede ser removida. <br>Debe seleccionar otra actividad como curso principal',
         'save_curso_principal_modificado' => 'El curso principal se actualizo correctamente',
@@ -267,15 +268,18 @@ $lang['interface'] = array(
         'lbl_matricula' => 'Matrícula',
         'lbl_nombre' => 'Nombre',
         'lbl_adscripcion' => 'Adscripción',
+        'lbl_categoria' => 'Categoría',
         'lbl_unidad' => 'Unidad',
         'btn_asignar' => 'Asignar',
-        'btn_buscar_usuario' => 'Buscar',
+        'btn_buscar_usuario' => 'Buscar ',
         'txt_buscar_unidad' => 'Buscar unidad',
         'btn_buscar_unidad' => 'Buscar',
+        'txt_buscar_matricula' => 'Buscar por matrícula',
         'drop_selecciona_unidad' => 'Buscar',
         'lbl_validador' => 'Candidatos a validador',
         'drop_selecciona_validador' => 'Selecciona validador',
         'lbl_delegacion' => 'Delegación',
+        'lbl_no_existe_usuario' => 'El empleado no existe',
         'drop_delegacion' => 'Seleccione delegación',
     ),
 );

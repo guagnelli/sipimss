@@ -174,13 +174,17 @@
 
 
                                     </div>
+                                     <?php if(isset($datos_tabla_actividades_docente)){?>
                                     <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
                                         <button type="button" class="btn btn-success btn-lg" id="btn_agregar_actividad_modal" data-toggle="modal" data-target="#modal_censo">
                                             <?php echo $string_values['btn_add_new_actividad']; ?>
                                         </button>
                                     </div>
+                                     <?php }?>
                                 </div>
+                                <?php if(isset($datos_tabla_actividades_docente)){?>
                                 <div class="row" >
+                                   
                                     <div id="tabla_actividades_docente" class="table-responsive">
                                         <!--Mostrará la tabla de actividad docente --> 
                                         <table class="table table-striped table-hover table-bordered" id="tabla_actividades">
@@ -264,6 +268,14 @@
                                         </table>
                                     </div>
                                 </div>
+                                <?php }else{?>
+                                <div class="row">
+                                    <div id='mensaje_error_div' class='alert'>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <span id='mensaje_error'><?php echo $string_values['alert_no_existe_actividad_principal']; ?></span>
+                                    </div>
+                                </div>
+                                <?php }?>
                             </div>
 
                     </div><!--Termina primer tab-->

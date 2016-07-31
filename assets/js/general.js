@@ -50,7 +50,7 @@ function data_ajax(path, form_recurso, elemento_resultado) {
             })
             .always(function() {
                 remove_loader();
-            });
+    });
 
 }
 

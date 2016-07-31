@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+ 
 $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
 ?>
 
@@ -7,9 +8,13 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
     .button-padding {padding-top: 30px}
     .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
     /*Oculta el file para cargar comprobante y deja asi solo muestra un botón*/
+    .borderlist {    list-style-position:inside; border: 1px solid #8c9494}
+    .lip { cursor: pointer;
+           display:block; }
 </style>
 
-<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/designar_validador/designar_validador.js"></script>
+<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/designar_validador/designar_validador.js">
+</script>
 
 <!-- Inicio informacion personal -->
 
@@ -51,9 +56,8 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
-                    <label for='lbl_delegacion' class="control-label">
-                        <?php echo $string_values['lbl_delegacion']; ?>
-                    </label>
+                    <div class="panel-body input-group ">
+                        <span class="input-group-addon"><?php echo $string_values['lbl_delegacion']; ?></span>
                      <?php 
                         echo $this->form_complete->create_element(array('id' => 'delegacion_cve', 
                             'type' => 'dropdown', 
@@ -67,6 +71,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                             'data-placement' => 'top', 
                             'title' => $string_values['lbl_delegacion'] ))); 
                     ?>
+                    </div>
                 </div>
                 <div class="col-md-3"></div>
             </div>
@@ -74,33 +79,60 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
-                    <label for='lbl_unidad' class="control-label">
-                        <?php echo $string_values['lbl_unidad']; ?>
-                    </label>
-                    <div class="input-group">                                           
+                    <div class="panel-body input-group">
+                            <input type="hidden" id="menu_select" name="menu_busqueda" value="unidad">
+                            <div class="input-group-btn">
+                              <button id="btn_buscar_por" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle " data-toggle="tooltip" data-original-title="Buscar por">Unidad <span class="caret"> </span></button>
+                              <ul id="ul_menu_buscar_por" data-seleccionado='unidad' class="dropdown-menu borderlist">
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('unidad')">Unidad</li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('matricula')">Matrícula</li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('nombre')">Nombre empleado</li>
+                              </ul>
+
+                            </div>
+                          
                          <?php
                             echo $this->form_complete->create_element(
                             array('id'=>'buscar_unidad_medica','type'=>'text',
                                     'value' => '',
                                     'attributes'=>array(
                                     'placeholder'=>$string_values['txt_buscar_unidad'],
-                                    'min'=> '0',
-                                    'max'=> '100',
                                     'data-toggle'=>'tooltip',
                                     'data-placement'=>'bottom',
+                                    'onkeypress'=>'return runScript(event);',
                                     'title'=>$string_values['txt_buscar_unidad'],
 //                                        'readonly'=>'readonly',
                                     )
                                 )
                             );
                          ?>
-                        <div class="input-group-btn">
-                            <button type="button" aria-expanded="false" class="btn btn-default browse" title="<?php echo$string_values['txt_buscar_unidad'];?>" data-toggle="tooltip" onclick="funcion_buscar_elementos()" >                                <span aria-hidden="true" class="glyphicon glyphicon-search"></span>
+                        <div class="input-group-btn" >
+                            <button type="button" id="btn_buscar_b" aria-expanded="false" class="btn btn-default browse" title="<?php echo$string_values['txt_buscar_unidad'];?>" data-toggle="tooltip" onclick="funcion_buscar_elementos()" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3"></div>
+            </div>
+            <div class="row">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="panel-body input-group">
+                            <span class="input-group-addon">Número de registros a mostrar:</span>
+                            <?php echo $this->form_complete->create_element(array('id'=>'per_page', 'type'=>'dropdown', 'options'=>array(10=>10, 20=>20, 50=>50, 100=>100, 500=>500), 'attributes'=>array('class'=>'form-control', 'placeholder'=>'Número de registros a mostrar', 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>'Número de registros a mostrar', 'onchange'=>"funcion_buscar_elementos()"))); ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="panel-body input-group input-group-sm">
+                            <span class="input-group-addon">Ordenar por:</span>
+                            <?php echo $this->form_complete->create_element(array('id'=>'order', 'type'=>'dropdown', 'options'=>$order_columns, 'attributes'=>array('class'=>'form-control', 'placeholder'=>'Ordernar por', 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>'Ordenar por', 'onchange'=>"funcion_buscar_elementos()"))); ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="panel-body input-group input-group-sm">
+                            <span class="input-group-addon">Tipo de orden:</span>
+                            <?php echo $this->form_complete->create_element(array('id'=>'order_type', 'type'=>'dropdown', 'options'=>array('ASC'=>'Ascendente', 'DESC'=>'Descendente'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>'Ordernar por', 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>'Ordenar por', 'onchange'=>"funcion_buscar_elementos()"))); ?>
+                        </div>
+                    </div>
             </div>
             <div class="row" >
                 <div id="div_result_unidades_medicas" class="row" style="padding:0 20px;">

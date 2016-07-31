@@ -161,6 +161,17 @@ class Registro_model extends CI_Model {
         }
     }
 
+    public function get_categoria($categoria = null) {
+        if (!is_null($categoria)) {
+            $this->db->where('des_clave', $categoria);
+        }
+        $query = $this->db->get('ccategoria');
+//        pr($this->db->last_query());
+        $res = $query->result_array();
+        
+        return $res;
+    }
+
     /**
      * @author LEAS 
      * @fecha creación 06-06-2016 
@@ -220,6 +231,7 @@ class Registro_model extends CI_Model {
             return $obtiene_id_usuario;
         }
     }
+
     public function insert_ususario_rol($datos_usuario_rol = null) {
         if (is_null($datos_usuario_rol)) {
             return -1;
@@ -231,28 +243,29 @@ class Registro_model extends CI_Model {
             return -1;
         } else {
 
-            return $obtiene_id_rol__usuario;  
+            return $obtiene_id_rol__usuario;
         }
     }
-    
+
     /**
      * 
      * @param type $datos_empleado
      * @param type $where
      * @return int
      */
-    public function update_registro_empleado($datos_empleado = null, $where  = null ) {
+    public function update_registro_empleado($datos_empleado = null, $where = null) {
         if (is_null($datos_empleado) AND is_null($where)) {
             return -1;
         }
         $this->db->where('EMP_MATRICULA', $where);
         $this->db->update('empleado', $datos_empleado); //Actualización de correo solamente
-        
+
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return -1;
         } else {
-            return 1;;
+            return 1;
+            ;
         }
     }
 

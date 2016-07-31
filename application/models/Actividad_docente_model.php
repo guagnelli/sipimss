@@ -34,7 +34,7 @@ class Actividad_docente_model extends CI_Model {
             return $result;
         }
         $this->db->insert('actividad_docente_gral', $datos_actividad_docente); //Almacena usuario
-        $index += $this->db->insert_id();
+        $index = $this->db->insert_id();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             $result['return'] = -1;

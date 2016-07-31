@@ -33,11 +33,17 @@ class Designar_validador extends MY_Controller {
 //        $filtros['buscar_unidad_medica'] = 'al';
 //           $resutlado = $this->dvm->get_buscar_unidades($filtros);
 //           pr($resutlado);
+//        $array_siap = array("reg_delegacion" => $datos_registro['reg_delegacion'], 
+//            "asp_matricula" => $datos_registro['reg_matricula']);
+//        $datos_siap = $this->empleados_siap->buscar_usuario_siap($array_siap);
+//        pr();
+//        exit();
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['designar_validador'];
         $data = array();
 
         $data['string_values'] = $string_values;
+        $data['order_columns'] = array('dp.nom_dependencia'=>'Nombre del departamento', 'dp.nom_delegacion' => 'Nombre de la delegación', 'fullname' => 'Nombre del validador');
         $data = carga_catalogos_generales(array(enum_ecg::cdelegacion), $data); //Carga el catálogo de ejercicio predominante
         $main_contet = $this->load->view('designar_validador/designarvalidador_tpl', $data, true);
         $this->template->setMainContent($main_contet);
@@ -50,22 +56,24 @@ class Designar_validador extends MY_Controller {
         if (!is_null($this->input->post())) {
             $filtros = $this->input->post(null, true); //Obtenemos el post o los valores 
             $data_selecciona_validador['string_values'] = $string_values;
+            $data_selecciona_validador['lista_candidaros'] = $result_candidatos;
             $data = array(
-                'titulo_modal' => 'Actividad docente',
+                'titulo_modal' => $string_values['tab_titulo_seleccionar_validador'],
                 'cuerpo_modal' => $this->load->view('designar_validador/seleccionar_validador', $data_selecciona_validador, true),
 //                'pie_modal' => $this->load->view('designar_validador/', $datos_pie, true)
             );
-            echo $this->ventana_modal->carga_modal($data); 
+            echo $this->ventana_modal->carga_modal($data);
         }
     }
 
     public function get_data_buscar_unidades($current_row = null) {
-//        pr('holaaaaaaaaaaaaa');
         if (!is_null($this->input->post())) {
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['designar_validador'];
             $filtros = $this->input->post(null, true); //Obtenemos el post o los valores 
             $filtros['current_row'] = (isset($current_row) && !empty($current_row)) ? $current_row : 0;
+//            $filtros['per_page'] = 10;
+//            pr($filtros);
             $resutlado = $this->dvm->get_buscar_unidades($filtros);
 //                pr($resutlado);
             $data['string_values'] = $string_values;
@@ -93,7 +101,7 @@ class Designar_validador extends MY_Controller {
         echo $links . $this->load->view('designar_validador/tabla_resultados_dv', $datos, TRUE) . $links . '
                 <script>
                 $("ul.pagination li a").click(function(event){
-                    data_ajax(this, "' . $form['form_recurso'] . '", "' . $form['elemento_resultado'] . '");
+                    data_ajax(this, "'.$form['form_recurso'].'", "'.$form['elemento_resultado'].'");
                     event.preventDefault();
                 });
                 </script>';
