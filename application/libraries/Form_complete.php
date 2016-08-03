@@ -175,8 +175,8 @@ class Form_complete {
 					$options = (array_key_exists('first', $element) && is_array($element['first'])) ? ($element['first'] + $options) : $options;
 					//$value = $this->selected_option_element($element['id'], $options);
 					$option_selected = $this->selected_option_element($element['id'], $options);
-					$value = (!empty($option_selected)) ? $option_selected : array($value);
-					$elemento =  form_dropdown($element['id']."[]", $options, $value, array_merge(array('id'=>$element['id'], 'multiple'=>'multiple'), $attributes));
+					$value = (!empty($option_selected)) ? $option_selected : $value;
+					$elemento =  form_multiselect($element['id']."[]", $options, $value, array_merge(array('id'=>$element['id'], 'multiple'=>'multiple'), $attributes));
 				break;
 				case 'password':
 					$elemento = form_password(array_merge(array('id'=>$element['id'], 'name'=>$name), $attributes)); //No se retoma valor, ni se permite especificarlo por default

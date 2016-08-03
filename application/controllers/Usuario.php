@@ -9,11 +9,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Usuario extends MY_Controller {
     function __construct() {
         parent::__construct();
+        $this->lang->load('interface_administracion');
         $this->load->library('form_complete');
         $this->load->library('form_validation');
         $this->load->library('seguridad');
         $this->load->model('Usuario_model','usuario');
-        $this->lang->load('interface_administracion');
     }
 
     /** 
@@ -115,8 +115,35 @@ class Usuario extends MY_Controller {
             $datos['usuario']['string_values'] = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general']); //Cargar textos utilizados en vista
             $cestado_usuario = $this->config->item('cestado_usuario');
             //pr($cestado_usuario);
-            $resultado = $this->usuario->update_usuario($usuario_id, array('ESTADO_USUARIO_CVE'=>$cestado_usuario['INACTIVO']['id'])); //Desactivar usuario
+            $resultado = $this->usuario->update_usuario_estado($usuario_id, array('ESTADO_USUARIO_CVE'=>$cestado_usuario['INACTIVO']['id'])); //Desactivar usuario
             
+            echo json_encode($resultado); ///Muestra mensaje
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function validar_usuario_siap(){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $resultado = array('result'=>false, 'msg'=>'');
+            if(!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido información por método post
+                $this->load->library('Empleados_siap');
+                $string_values = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general']); //Cargar textos utilizados en vista
+                $datos_post = $this->input->post(null, true); //Datos del formulario
+                
+                $empleado = $this->empleados_siap->buscar_usuario_siap(array('reg_delegacion'=>$datos_post['d'], 'asp_matricula'=>$datos_post['m']));
+                //pr($empleado);
+                if($empleado==false){
+                    $resultado['msg'] = $string_values['formulario']['error_del_mat'];
+                } else {
+                    //$cestado_usuario = $this->config->item('cestado_usuario');
+                    $resultado['result'] = true;
+                    //pr($empleado);
+                    $empleado['sexo'] = $this->config->item('USU_GENERO')[$empleado['sexo']];
+                    $empleado['antiguedad'] = antiguedad_format($empleado['antiguedad']);
+                    $resultado['data'] = $empleado;
+                }
+            }
             echo json_encode($resultado); ///Muestra mensaje
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
@@ -129,81 +156,202 @@ class Usuario extends MY_Controller {
      * @author: Jesús Z. Díaz P.
      */
     public function gestionar_usuario($identificador = null){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            $datos['identificador'] = $identificador;
-            $datos['msg'] = null;
-            $usuario_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la usuario
-            $datos['string_values'] = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general']); //Cargar textos utilizados en vista
+        $this->lang->load('interface');
 
-            /*if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
-                $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                //pr($datos_formulario);
-                $this->config->load('form_validation'); //Cargar archivo con validaciones
-                
-                $validations = $this->config->item('form_convocatoria_evaluacion'); //Obtener validaciones de archivo
-                $this->form_validation->set_rules($validations);
+        $datos['identificador'] = $identificador;
+        $datos['msg'] = null;
+        $usuario_id = $this->seguridad->decrypt_base64($identificador); //Identificador del usuario
+        $datos['string_values'] = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general'], $this->lang->line('interface')['perfil'], $this->lang->line('interface')['registro']); //Cargar textos utilizados en vista
 
-                if(!empty($datos_formulario['FCH_FIN_REG_DOCENTE']) && !empty($datos_formulario['FCH_FIN_VALIDACION_1']) && !empty($datos_formulario['FCH_FIN_VALIDACION_2'])){ ///Agregar validación de comparación de fechas
-                    $this->form_validation->set_rules(array(
-                        array('field' => 'FCH_FIN_VALIDACION_1', 'label' => $datos['string_values']['tab_head_fecha_fin_validacion1'], 'rules' => 'required|callback_compare_date['.$datos_formulario['FCH_FIN_REG_DOCENTE'].']'),
-                        array('field' => 'FCH_FIN_VALIDACION_2', 'label' => $datos['string_values']['tab_head_fecha_fin_validacion2'], 'rules' => 'required|callback_compare_date['.$datos_formulario['FCH_FIN_VALIDACION_1'].']')
-                    ));
-                    $this->form_validation->set_message('compare_date', $datos['string_values']['compare_date']);
-                }
+        $entidades_ = array(enum_ecg::cdelegacion, enum_ecg::cestado_usuario, enum_ecg::cestado_civil, enum_ecg::crol);
+        $condiciones_ = array(enum_ecg::crol=>array('ROL_CVE!='=>$this->config->item('superadmin')));
+        $datos['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
 
-                if($this->form_validation->run() == TRUE){ //Validar datos
-                    ///Se forma el objeto para ser insertado
-                    $ce_vo = $this->convocatoria_evaluacion_vo(array('FCH_FIN_REG_DOCENTE'=>(!empty($datos_formulario['FCH_FIN_REG_DOCENTE']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_REG_DOCENTE'])) : null ),
-                        'FCH_FIN_VALIDACION_1'=>(!empty($datos_formulario['FCH_FIN_VALIDACION_1']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_VALIDACION_1'])) : null ),
-                        'FCH_FIN_VALIDACION_2'=>(!empty($datos_formulario['FCH_FIN_VALIDACION_2']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_VALIDACION_2'])) : null )));
+        if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
+            $this->load->library('Empleados_siap'); //Cargar librería que permite validar con webservice SIAP
+            $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
+            //pr($datos_formulario);
+            $this->config->load('form_validation'); //Cargar archivo con validaciones
+            
+            ///Obtener el arreglo de validaciones de acuerdo a acción (insert or update)
+            $validations = (is_null($identificador)) ? $this->config->item('form_usuario_alta') : $this->config->item('form_usuario_edicion'); //Obtener validaciones de archivo
 
-                    if(!is_null($convocatoria_id) && !empty($convocatoria_id)){ //Se almacena en la base de datos
-                        $resultado = $this->conv_eval_model->update_convocatoria_evaluacion($convocatoria_id, $ce_vo); //Actualización
-                    } else {
-                        $resultado = $this->conv_eval_model->insert_convocatoria_evaluacion($ce_vo); //Inserción
-                        $datos['identificador'] = $this->seguridad->encrypt_base64($resultado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
+            $this->form_validation->set_rules($validations);
+            if(!is_null($identificador) && !empty($datos_formulario['contrasenia'])) { //Añadir opción en caso de ser edición y exista información en campo de contraseñia
+                $this->form_validation->set_rules('contrasenia','Contraseña','callback_valid_pass|max_length[30]|min_length[8]');
+            }
+            $matricula = (!is_null($identificador)) ? $this->usuario->get_usuario(array('fields'=>'USU_MATRICULA', 'conditions'=>array('USUARIO_CVE'=>$usuario_id)))[0]['USU_MATRICULA'] : $datos_formulario['matricula'];
+            $empleado = $this->empleados_siap->buscar_usuario_siap(array('reg_delegacion'=>$datos_formulario['delegacion'], 'asp_matricula'=>$matricula)); //Validar datos con webservice SIAP
+            //pr($matricula);
+            //pr($empleado);
+            if($this->form_validation->run() == TRUE ){ //Validar datos
+                if(!is_null($usuario_id) && !empty($usuario_id)) { //Se almacena en la base de datos
+                    $usu_vo = $this->usuario_vo($datos_formulario); ///Se forma el objeto para ser actualizado
+                    $usu_rol_vo = $this->usuario_rol_vo($usuario_id, $datos_formulario['roles']);
+
+                    $usu_vo->USU_CONTRASENIA = contrasenia_formato($usu_vo->USU_MATRICULA, $usu_vo->USU_CONTRASENIA);
+                    unset($usu_vo->USU_MATRICULA); //Se elimina matrícula porque no se actualiza en una edición
+                    if(empty($usu_vo->USU_CONTRASENIA)){ //Se elimina contraseña de objeto si se envía vacía
+                        unset($usu_vo->USU_CONTRASENIA);
                     }
-                    $datos['msg'] = imprimir_resultado($resultado); ///Muestra mensaje
+                    $resultado = $this->usuario->update_usuario($usuario_id, $usu_vo, $usu_rol_vo); //Actualización de información
+                } else {
+                    $usu_vo = $this->usuario_vo($datos_formulario, true, $empleado); ///Se forma el objeto para ser insertado
+                    ///Verificar si el usuario existe en la BD
+                    //$existe_usuario = $this->usuario->get_usuario(array('conditions'=>array('USU_MATRICULA'=>$usu_vo->USU_MATRICULA)));
+
+                    $resultado = $this->usuario->insert_usuario($usu_vo, $datos_formulario['roles']); //Inserción
+                    
+                    $datos['identificador'] = $this->seguridad->encrypt_base64($resultado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
+                    $datos['accion'] = 'insert';
                 }
-            }*/
-            if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
-                $datos['dato_usuario'] = $this->usuario->get_usuario(array('conditions'=>array('USUARIO_CVE'=>$usuario_id))); //Obtener datos
-            }            
-            echo $this->load->view('evaluacion/convocatoria/convocatoria_formulario', $datos, true);
-        } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+                //pr($usu_vo); pr($usu_rol_vo); exit();
+                $datos['msg'] = imprimir_resultado($resultado); ///Muestra mensaje */
+            }
         }
+        if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria
+            $datos['dato_usuario'] = $this->usuario->get_usuario(array('conditions'=>array('USUARIO_CVE'=>$usuario_id)))[0]; //Obtener datos
+            $dr = $this->usuario->get_usuario_rol(array('conditions'=>array("USUARIO_CVE"=>$usuario_id))); //Roles disponibles para el usuario
+            $datos['dato_usuario']['rol'] = dropdown_options($dr, 'ROL_CVE', 'ROL_CVE');
+        } else {
+            $datos['dato_usuario'] = (array)$this->usuario_vo(); //Generar objeto para ser enviado al formulario
+            $datos['dato_usuario']['rol'] = null;
+        }
+        $main_content = $this->load->view('administracion/usuario/usuario_formulario', $datos, true);
+        $this->template->setMainContent($main_content);
+        $this->template->getTemplate();
     }
 
-    /*
-    private function convocatoria_evaluacion_vo($convocatoria){
-        $ce = new Convocatoria_evaluacion_dao;
-        $ce->FCH_FIN_REG_DOCENTE = (isset($convocatoria['FCH_FIN_REG_DOCENTE']) && isset($convocatoria['FCH_FIN_REG_DOCENTE'])) ? $convocatoria['FCH_FIN_REG_DOCENTE'] : NULL;
-        $ce->FCH_FIN_VALIDACION_1 = (isset($convocatoria['FCH_FIN_VALIDACION_1']) && isset($convocatoria['FCH_FIN_VALIDACION_1'])) ? $convocatoria['FCH_FIN_VALIDACION_1'] : NULL;
-        $ce->FCH_FIN_VALIDACION_2 = (isset($convocatoria['FCH_FIN_VALIDACION_2']) && isset($convocatoria['FCH_FIN_VALIDACION_2'])) ? $convocatoria['FCH_FIN_VALIDACION_2'] : NULL;
-        return $ce;
-    }
-    private function convocatoria_evaluacion_dictamen_vo($dictamen){
-        $ced = new Convocatoria_evaluacion_dictamen_dao;
-        $ced->FCH_INICIO_EVALUACION = (isset($dictamen['FCH_INICIO_EVALUACION']) && isset($dictamen['FCH_INICIO_EVALUACION'])) ? $dictamen['FCH_INICIO_EVALUACION'] : NULL;
-        $ced->FCH_FIN_EVALUACION = (isset($dictamen['FCH_FIN_EVALUACION']) && isset($dictamen['FCH_FIN_EVALUACION'])) ? $dictamen['FCH_FIN_EVALUACION'] : NULL;
-        $ced->FCH_FIN_INCONFORMIDAD = (isset($dictamen['FCH_FIN_INCONFORMIDAD']) && isset($dictamen['FCH_FIN_INCONFORMIDAD'])) ? $dictamen['FCH_FIN_INCONFORMIDAD'] : NULL;
-        $ced->ADMIN_VALIDADOR_CVE = (isset($dictamen['ADMIN_VALIDADOR_CVE']) && isset($dictamen['ADMIN_VALIDADOR_CVE'])) ? $dictamen['ADMIN_VALIDADOR_CVE'] : NULL;
-        return $ced;
+    /*public function rol_modulo(){
+        $this->load->library('grocery_CRUD');
+        $crud = new grocery_CRUD();
+
+        $crud->set_table('rol_modulo');
+        $crud->columns('ROL_CVE', 'MODULO_CVE');
+        
+        $main_content = $crud->render();
+         
+        $this->template->setMainContent($this->load->view('administracion/rol_modulo/rol_modulo.php', $main_content, TRUE));
+        $this->template->getTemplate();
     }*/
-}
-/*
-class Convocatoria_evaluacion_dao {
-    //public $ADMIN_VALIDADOR_CVE;
-    public $FCH_FIN_REG_DOCENTE;
-    public $FCH_FIN_VALIDACION_1;
-    public $FCH_FIN_VALIDACION_2;
+    
+    public function rol_modulo(){
+        $datos['string_values'] = array_merge($this->lang->line('interface_administracion')['usuario'], $this->lang->line('interface_administracion')['general']); //Cargar textos utilizados en vista
+        $entidades_ = array(enum_ecg::modulo, enum_ecg::crol);
+        $datos['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+        
+        if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
+            $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
+            
+            $roles_modulos = $this->rol_modulo_vo($datos_formulario);
+            
+            $resultado = $this->usuario->update_rol_modulo($roles_modulos); //Actualización de información
+            
+            $datos['msg'] = imprimir_resultado($resultado); ///Muestra mensaje
+            //pr($this->rol_modulo_vo($datos_formulario));
+            //pr($datos_formulario);
+        }
+        //$condiciones_ = array(enum_ecg::crol=>array('ROL_CVE!='=>$this->config->item('superadmin')));
+        $datos['rol_modulo'] = $this->usuario->get_rol_modulo();
+        
+        //pr($datos);
+        $this->template->setMainContent($this->load->view('administracion/rol_modulo/rol_modulo.php', $datos, TRUE));
+        $this->template->getTemplate();
+    }
+    
+    private function usuario_vo($usuario=array(), $extendido = false, $usuario_siap = array()){
+        $result = new Usuario_dao;
+        $result->USU_MATRICULA = (isset($usuario['matricula']) && !empty($usuario['matricula'])) ? $usuario['matricula'] : NULL;
+        $result->DELEGACION_CVE = (isset($usuario['delegacion']) && !empty($usuario['delegacion'])) ? $usuario['delegacion'] : NULL;
+        $result->USU_NOMBRE = (isset($usuario['nombre']) && !empty($usuario['nombre'])) ? $usuario['nombre'] : NULL;
+        $result->USU_PATERNO = (isset($usuario['apaterno']) && !empty($usuario['apaterno'])) ? $usuario['apaterno'] : NULL;
+        $result->USU_MATERNO = (isset($usuario['amaterno']) && !empty($usuario['amaterno'])) ? $usuario['amaterno'] : NULL;
+        $result->USU_CONTRASENIA = (isset($usuario['contrasenia']) && !empty($usuario['contrasenia'])) ? $usuario['contrasenia'] : NULL;
+        $result->USU_CORREO = (isset($usuario['correo']) && !empty($usuario['correo'])) ? $usuario['correo'] : NULL;
+        $result->USU_CORREO_ALTERNATIVO = (isset($usuario['correo_alt']) && !empty($usuario['correo_alt'])) ? $usuario['correo_alt'] : NULL;
+        $result->USU_TEL_LABORAL = (isset($usuario['tel_laboral']) && !empty($usuario['tel_laboral'])) ? $usuario['tel_laboral'] : NULL;
+        $result->USU_TEL_PARTICULAR = (isset($usuario['tel_particular']) && !empty($usuario['tel_particular'])) ? $usuario['tel_particular'] : NULL;
+        $result->ESTADO_USUARIO_CVE = (isset($usuario['estado_usuario']) && !empty($usuario['estado_usuario'])) ? $usuario['estado_usuario'] : NULL;
+        $result->CESTADO_CIVIL_CVE = (isset($usuario['estado_civil']) && !empty($usuario['estado_civil'])) ? $usuario['estado_civil'] : NULL;
+        if($extendido===true){
+            $ext = new Usuario_ext_dao;
+            $ext->CATEGORIA_CVE = (isset($usuario_siap['emp_keypue']) && !empty($usuario_siap['emp_keypue'])) ? $usuario_siap['emp_keypue'] : NULL;
+            $ext->USU_CURP = (isset($usuario_siap['curp']) && !empty($usuario_siap['curp'])) ? $usuario_siap['curp'] : NULL;
+            $ext->ADSCRIPCION_CVE = (isset($usuario_siap['adscripcion']) && !empty($usuario_siap['adscripcion'])) ? $usuario_siap['adscripcion'] : NULL;
+            $ext->TIP_CONTRATACION_CVE = (isset($usuario_siap['tipo_contratacion']) && !empty($usuario_siap['tipo_contratacion'])) ? $usuario_siap['tipo_contratacion'] : NULL;
+            $ext->PRESUPUESTAL_ADSCRIPCION_CVE = (isset($usuario_siap['presupuestal']) && !empty($usuario_siap['presupuestal'])) ? $usuario_siap['presupuestal'] : NULL;
+            $ext->EDO_LABORAL_CVE = (isset($usuario_siap['status']) && !empty($usuario_siap['status'])) ? $usuario_siap['status'] : NULL;
+            //$ext->ROL_DESEMPENIA_CVE = (isset($usuario_siap['emp_keypue']) && !empty($usuario_siap['emp_keypue'])) ? $usuario_siap['emp_keypue'] : NULL;
+            $ext->USU_GENERO = (isset($usuario_siap['sexo']) && !empty($usuario_siap['sexo'])) ? $usuario_siap['sexo'] : NULL;
+            $ext->USU_ANTIGUEDAD = (isset($usuario_siap['antiguedad']) && !empty($usuario_siap['antiguedad'])) ? $usuario_siap['antiguedad'] : NULL;
+            $result = (object)array_merge((array)$result, (array)$ext);
+        }
+        //pr($usuario_siap); pr($result); exit();
+        return $result;
+    }
+
+    private function usuario_rol_vo($usuario_id, $roles){
+        $result = array();
+        foreach ($roles as $key_rol => $rol) {
+            $ur = new Usuario_rol_dao;
+            $ur->USUARIO_CVE = $usuario_id;
+            $ur->ROL_CVE = $rol;
+            $result[] = $ur;
+        }
+        
+        return $result;
+    }
+
+    private function rol_modulo_vo($datos){
+        $result = array();
+        foreach ($datos as $key_rol => $rolt) {
+            $rol = str_replace('rm_', '', $key_rol);
+            foreach ($rolt as $key_mod => $modulo) {
+                $ur = new Rol_modulo_dao;
+                $ur->MODULO_CVE = $modulo;
+                $ur->ROL_CVE = $rol;
+                $result[] = $ur;
+            }
+        }
+        
+        return $result;
+    }
 }
 
-class Convocatoria_evaluacion_dictamen_dao {
-    //public $ADMIN_VALIDADOR_CVE;
-    public $FCH_INICIO_EVALUACION;
-    public $FCH_FIN_EVALUACION;
-    public $FCH_FIN_INCONFORMIDAD;
-    public $ADMIN_VALIDADOR_CVE;
-}*/
+class Usuario_dao {
+    //public $USUARIO_CVE;
+    public $USU_MATRICULA;
+    public $DELEGACION_CVE;
+    public $USU_NOMBRE;
+    public $USU_PATERNO;
+    public $USU_MATERNO;
+    public $USU_CONTRASENIA;
+    public $USU_CORREO;
+    public $USU_CORREO_ALTERNATIVO;
+    public $USU_TEL_LABORAL;
+    public $USU_TEL_PARTICULAR;
+    public $ESTADO_USUARIO_CVE;
+    public $CESTADO_CIVIL_CVE;
+}
+
+class Usuario_ext_dao{
+    public $CATEGORIA_CVE;
+    public $USU_CURP;
+    public $ADSCRIPCION_CVE;
+    public $TIP_CONTRATACION_CVE;
+    public $PRESUPUESTAL_ADSCRIPCION_CVE;
+    public $EDO_LABORAL_CVE;
+    public $ROL_DESEMPENIA_CVE;
+    public $USU_GENERO;
+    public $USU_ANTIGUEDAD;
+}
+
+class Usuario_rol_dao{
+    public $USUARIO_CVE;
+    public $ROL_CVE;
+}
+
+class Rol_modulo_dao{
+    public $MODULO_CVE;
+    public $ROL_CVE;
+}

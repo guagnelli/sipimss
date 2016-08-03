@@ -6,8 +6,9 @@ $(document).ready(function() {
  *	Método que muestra una imagen (gif animado) que indica que algo esta cargando
  *	@return	string	Contenedor e imagen del cargador.
  */
-function create_loader() {
-    return '<div id="ajax_loader" align="center" style="padding-top:200px; padding-bottom:200px;"><img src="' + img_url_loader + '" alt="Cargando..." title="Cargando..." /></div>';
+function create_loader(optionalPadding = '200px') {
+    optionalPadding = (typeof optionalPadding === 'undefined') ? '200px' : optionalPadding;
+    return '<div id="ajax_loader" align="center" style="padding-top:'+optionalPadding+'; padding-bottom:'+optionalPadding+';"><img src="' + img_url_loader + '" alt="Cargando..." title="Cargando..." /></div>';
 }
 
 /**

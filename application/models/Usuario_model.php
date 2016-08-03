@@ -55,6 +55,7 @@ class Usuario_model extends CI_Model {
 
         $this->db->join('cdepartamento', 'usuario.ADSCRIPCION_CVE=cdepartamento.departamento_cve', 'left');
         $this->db->join('cestado_usuario', 'usuario.ESTADO_USUARIO_CVE=cestado_usuario.ESTADO_USUARIO_CVE', 'left');
+        $this->db->join('ccategoria', 'usuario.CATEGORIA_CVE=ccategoria.des_clave', 'left');
 
         $query = $this->db->get('usuario'); //Obtener conjunto de registros
         //pr($this->db->last_query());
@@ -165,14 +166,48 @@ class Usuario_model extends CI_Model {
         return $resultado;
     }
 
-    /*public function insert_convocatoria_evaluacion($datos){
+    public function get_rol_modulo($params=array()){
+        $resultado = array();
+
+        if(array_key_exists('fields', $params)){
+            if(is_array($params['fields'])){
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        if(array_key_exists('order', $params)){
+            $this->db->order_by($params['order']);
+        }
+
+        //$this->db->join('crol', 'usuario_rol.ROL_CVE=crol.ROL_CVE');
+
+        $query = $this->db->get('rol_modulo'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado=$query->result_array();
+
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
+
+    public function insert_usuario($datos, $datos_rol=array()){
         $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
         
         $this->db->trans_begin(); //Definir inicio de transacción
         
-        $this->db->insert('admin_validador', $datos); //Inserción de registro
+        $this->db->insert('usuario', $datos); //Inserción de registro
         
         $data_id = $this->db->insert_id(); //Obtener identificador insertado
+
+        if(!empty($datos_rol)){ //Se verifica que exista información de roles para ser almacenada
+            foreach ($datos_rol as $rol) { //Insertar nuevos roles relacionados
+                $this->db->insert('usuario_rol', array('USUARIO_CVE'=>$data_id , 'ROL_CVE'=>$rol)); //Inserción de registro
+            }
+        }
         
         if ($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
@@ -186,9 +221,37 @@ class Usuario_model extends CI_Model {
         }
         
         return $resultado;
-    }*/
+    }
 
-    public function update_usuario($identificador, $datos){
+    public function update_usuario($identificador, $datos, $datos_rol=array()){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        $this->db->where('USUARIO_CVE', $identificador);
+        $this->db->update('usuario', $datos); //Inserción de registro
+        if(!empty($datos_rol)){ //Se verifica que exista información de roles para ser almacenada
+            $this->db->where('USUARIO_CVE', $identificador); //Eliminar roles relacionados a usuario
+            $this->db->delete('usuario_rol');
+            foreach ($datos_rol as $rol) { //Insertar nuevos roles relacionados
+                $this->db->insert('usuario_rol', $rol); //Inserción de registro
+            }
+        }
+
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $identificador;
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
+
+        return $resultado;
+    }
+
+    public function update_usuario_estado($identificador, $datos){
         $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
         
         $this->db->trans_begin(); //Definir inicio de transacción
@@ -202,7 +265,32 @@ class Usuario_model extends CI_Model {
             $resultado['msg'] = $this->string_values['error'];
         } else {
             $this->db->trans_commit();
-            $resultado['data']['identificador'] = $identificador;
+            //$resultado['data']['identificador'] = $identificador;
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
+
+        return $resultado;
+    }
+
+    public function update_rol_modulo($datos){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        $this->db->truncate('rol_modulo'); //Borrar todos los datos
+
+        foreach ($datos as $rm) {
+            $this->db->insert('rol_modulo', $rm); //Inserción de registros
+        }
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            //$resultado['data']['identificador'] = $identificador;
             $resultado['msg'] = $this->string_values['actualizacion'];
             $resultado['result'] = TRUE;
         }

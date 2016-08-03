@@ -39,14 +39,16 @@ $lang['interface_administracion'] = array(
             'fil_mat_nom' => 'Nombre del usuario o matricula',
             'fil_delegacion' => 'Delegación',
             'fil_rol' => 'Rol',
-            'fil_estado' => 'Estado del usuario'
+            'fil_estado' => 'Estado del usuario',
+            'lbl_por_validar' => 'Matrícula por validar',
+            'txt_del_mat' => 'Debe seleccionar la delegación y escribir la matrícula.'
         ),
-        /*'agregar' => array(
-            'titulo_agregar' => 'Administrar convocatoria',
-            'tab_head_fecha_fin_registro' => 'Fecha fin de registro docente',
-            'tab_head_fecha_fin_validacion1' => 'Fecha fin validación 1',
-            'tab_head_fecha_fin_validacion2' => 'Fecha fin validación 2',
-        ),*/
+        'formulario' => array(
+            'titulo_formulario' => 'Gestionar usuario',
+            'error_del_mat' => 'No existe usuario registrado con esos datos, favor de verificarlo.',
+            'btn_administrar_rol' => 'Administrar rol',
+            'btn_administrar_modulo' => 'Administrar modulo',
+        ),
         'model' => array(
             'insercion' => 'Se ha insertado correctamente la información.',
             'actualizacion' => 'Se ha actualizado correctamente la información.',
@@ -70,6 +72,10 @@ $lang['interface_administracion'] = array(
             'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
             'compare_date' => 'El campo %s debería ser menor o igual que el campo predecesor.',
         ),*/
+        'rol_modulo' => array(
+            'titulo' => 'Administración rol - modulo',
+            'texto' => '¿Esta seguro de modificar los permisos?\n<br>Los cambios realizados afectaran a todos los <br>usuarios que pertecezcan a los roles modificados.'
+        )
     ),
     'catalogos' => array(
         'cdelegacion' => 'Delegación: '

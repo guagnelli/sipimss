@@ -5,6 +5,8 @@ if (!defined('BASEPATH'))
 
 $config['salt'] = "B0no5"; ///SALT
 
+$config['superadmin'] = 5;
+
 $config['modulos_no_sesion'] = array(
     'login' => array('index', 'cerrar_session', 'cerrar_session_ajax'),
     'registro' => array('*'),
@@ -40,6 +42,8 @@ $config['bon_pro_eva_min'] = (float) 80.00;
 $config['bon_sum_act_min'] = 26;
 
 $config['cestado_usuario'] = array('ACTIVO'=>array('id'=>1), 'INACTIVO'=>array('id'=>2), 'RESTABLECERCONTRASENIA'=>array('id'=>3), 'RESTABLECERCMA'=>array('id'=>4));
+
+$config['USU_GENERO'] = array('M'=>'Masculino', 'F'=>'Femenino', 'H'=>'Masculino');
 
 $config['categoria_participante'] = array('36112580', '35312180');
 //, 'attributes' => array('class' => 'btn btn-info btn-sm espacio'
@@ -166,6 +170,7 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'ccategoria' => array('id' => 'des_clave', 'nombre' => 'nom_categoria' , 'where' => null),
     'cdepartamento' => array('id' => 'departamento_cve', 'nombre' => 'dep_nombre' , 'where' => null),
     'crol' => array('id' => 'ROL_CVE', 'nombre' => 'ROL_NOMBRE' , 'where' => null),
+    'modulo' => array('id' => 'MODULO_CVE', 'nombre' => 'MOD_NOMBRE' , 'where' => null),
     'cestado_usuario' => array('id' => 'ESTADO_USUARIO_CVE', 'nombre' => 'EDO_USUARIO_DESC' , 'where' => null),
     'cunidad' => array('id' => 'UNIDAD_CVE', 'nombre' => 'UNI_DESC' , 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),

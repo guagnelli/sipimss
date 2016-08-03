@@ -55,6 +55,7 @@ class enum_ecg extends MyEnum3 {
             cdepartamento = 'cdepartamento',
             crol = 'crol',
             cestado_usuario = 'cestado_usuario',
+            modulo = 'modulo'
             cunidad = 'cunidad'
     ;
     /*

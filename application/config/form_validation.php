@@ -476,9 +476,161 @@ $config = array(
             'field' => 'bibliografia_libro',
             'label' => 'bibliografia del libro',
             'rules' => 'required'//
-        ),
-        
+        ),    
     ),
+    'form_usuario_alta' => array(
+        array(
+            'field' => 'matricula',
+            'label' => 'Matrícula',
+            'rules' => 'required|max_length[12]|alpha_dash|is_unique[usuario.USU_MATRICULA]'
+        ),
+        array(
+            'field' => 'delegacion',
+            'label' => 'Delegación',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'nombre',
+            'label' => 'Nombre',
+            'rules' => 'required|alpha_accent_space_dot_quot|max_length[20]'
+        ),
+        array(
+            'field' => 'apaterno',
+            'label' => 'Apellido paterno',
+            'rules' => 'required|alpha_accent_space_dot_quot|max_length[20]'
+        ),
+        array(
+            'field' => 'amaterno',
+            'label' => 'Apellido materno',
+            'rules' => 'required|alpha_accent_space_dot_quot|max_length[20]'
+        ),
+        array(
+            'field' => 'contrasenia',
+            'label' => 'Contraseña',
+            'rules' => 'required|callback_valid_pass|max_length[30]|min_length[8]'
+        ),
+        array(
+            'field' => 'confirma_contrasenia',
+            'label' => 'Confirmar contraseña',
+            'rules' => 'required|matches[contrasenia]'
+        ),
+        array(
+            'field' => 'correo',
+            'label' => 'Correo electrónico',
+            'rules' => 'trim|required|valida_correo_electronico'
+        ),
+        array(
+            'field' => 'correo_alt',
+            'label' => 'Correo electrónico alternativo',
+            'rules' => 'trim|valida_correo_electronico'
+        ),
+        array(
+            'field' => 'tel_laboral',
+            'label' => 'Teléfono laboral',
+            'rules' => 'min_length[10]|max_length[20]|alpha_numeric_accent_space_dot_parent'
+        ),
+        array(
+            'field' => 'tel_particular',
+            'label' => 'Teléfono particular',
+            'rules' => 'min_length[10]|max_length[20]|alpha_numeric_accent_space_dot_parent'
+        ),
+        array(
+            'field' => 'estado_usuario',
+            'label' => 'Estado del usuario',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'roles[]',
+            'label' => 'Rol',
+            'rules' => 'required'
+        )
+    ),
+    'form_usuario_edicion' => array(
+        array(
+            'field' => 'delegacion',
+            'label' => 'Delegación',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'nombre',
+            'label' => 'Nombre',
+            'rules' => 'required|alpha_accent_space_dot_quot|max_length[20]'
+        ),
+        array(
+            'field' => 'apaterno',
+            'label' => 'Apellido paterno',
+            'rules' => 'required|alpha_accent_space_dot_quot|max_length[20]'
+        ),
+        array(
+            'field' => 'amaterno',
+            'label' => 'Apellido materno',
+            'rules' => 'required|alpha_accent_space_dot_quot|max_length[20]'
+        ),
+        /*array(
+            'field' => 'contrasenia',
+            'label' => 'Contraseña',
+            'rules' => 'max_length[30]|min_length[8]'
+        ),*/
+        array(
+            'field' => 'confirma_contrasenia',
+            'label' => 'Confirmar contraseña',
+            'rules' => 'matches[contrasenia]'
+        ),
+        array(
+            'field' => 'correo',
+            'label' => 'Correo electrónico',
+            'rules' => 'trim|required|valida_correo_electronico'
+        ),
+        array(
+            'field' => 'correo_alt',
+            'label' => 'Correo electrónico alternativo',
+            'rules' => 'trim|valida_correo_electronico'
+        ),
+        array(
+            'field' => 'tel_laboral',
+            'label' => 'Teléfono laboral',
+            'rules' => 'min_length[10]|max_length[20]|alpha_numeric_accent_space_dot_parent'
+        ),
+        array(
+            'field' => 'tel_particular',
+            'label' => 'Teléfono particular',
+            'rules' => 'min_length[10]|max_length[20]|alpha_numeric_accent_space_dot_parent'
+        ),
+        array(
+            'field' => 'estado_usuario',
+            'label' => 'Estado del usuario',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'roles[]',
+            'label' => 'Rol',
+            'rules' => 'required'
+        )
+    ),
+
+    /*matricula
+    delegacion
+    nombre
+    apaterno
+    amaterno
+    contrasenia
+    correo
+    correo_alt
+    tel_laboral
+    tel_particular
+    estado_usuario
+
+    public $USU_MATRICULA;
+    public $DELEGACION_CVE;
+    public $USU_NOMBRE;
+    public $USU_PATERNO;
+    public $USU_MATERNO;
+    public $USU_CONTRASENIA;
+    public $USU_CORREO;
+    public $USU_CORREO_ALTERNATIVO;
+    public $USU_TEL_LABORAL;
+    public $USU_TEL_PARTICULAR;
+    public $ESTADO_USUARIO_CVE;*/
         //**Fin de validación de actividad docenete********************************
 );
 

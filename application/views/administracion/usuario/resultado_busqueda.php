@@ -35,7 +35,7 @@
                                 <td>'.$usu['dep_nombre'].'</td>
                                 <td>'.$html_rol.'</td>
                                 <td>'.$usu['EDO_USUARIO_DESC'].'</td>
-                                <td><button type="button" class="btn btn-link btn-sm btn_editar_usu" data-toggle="modal" data-target="#modal_censo" data-value="'.$this->seguridad->encrypt_base64($usu['USUARIO_CVE']).'">'.
+                                <td><button type="button" class="btn btn-link btn-sm btn_editar_usu" data-value="'.$this->seguridad->encrypt_base64($usu['USUARIO_CVE']).'">'.
                                        $string_values['editar'].
                                     '</button>
                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_usu" data-value="'.$this->seguridad->encrypt_base64($usu['USUARIO_CVE']).'">'.
@@ -87,7 +87,7 @@ $(document).ready(function(){
         });
     });
 	$(".btn_editar_usu").click(function(event){
-        data_ajax(site_url+"/usuario/get_data_ajax", "#form_search", "#resultado_busqueda");
+        //data_ajax(site_url+"/usuario/get_data_ajax", "#form_search", "#resultado_busqueda");
         document.location.href=site_url+"/usuario/gestionar_usuario/"+$(this).attr('data-value');
     });
 });

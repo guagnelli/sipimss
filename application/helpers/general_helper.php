@@ -679,6 +679,19 @@ if (!function_exists('eliminar_archivo')) {
 
 }
 
+/**
+ * Método que da formato a la antiguedad del usuario
+ * @autor     : Jesús Díaz P.
+ * @modified  : 
+ * @param     : string $antiguedad Cadena que representa la antiguedad
+ * @return    : string $result Cadena con nuevo formato
+ */
+if (!function_exists('antiguedad_format')) {
 
-    /* End of file general_helper.php */
+    function antiguedad_format($antiguedad) {
+        $result = explode('_', $antiguedad);
+        return (count($result)===3) ? $result[0].' a&ntilde;os '.$result[1].' quincenas '.$result[2].' d&iacute;as' : $antiguedad;
+    }
+}
+/* End of file general_helper.php */
     
