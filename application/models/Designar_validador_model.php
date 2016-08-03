@@ -11,10 +11,10 @@ class Designar_validador_model extends CI_Model {
     }
 
     public function get_buscar_unidades($params) {
-
         $arra_buscar_por = array('unidad' => 'dp.nom_dependencia',
             'matricula' => 'e.EMP_MATRICULA',
-            'nombre' => array('e.EMP_NOMBRE','e.EMP_APE_PATERNO','e.EMP_APE_MATERNO')
+            'claveadscripcion' => 'dp.departamento_cve',
+            'nombre' => array('e.EMP_NOMBRE', 'e.EMP_APE_PATERNO', 'e.EMP_APE_MATERNO')
         );
         $busqueda_text = $arra_buscar_por[$params['menu_busqueda']];
 
@@ -73,6 +73,83 @@ class Designar_validador_model extends CI_Model {
         $result['result'] = $query;
         $result['total'] = $num_rows[0]->total;
         return $result;
+    }
+
+    public function get_obtener_empleado($id_empleado = null) {
+        if (is_null($id_empleado)) {
+            return array();
+        }
+        $select = array('e.EMP_MATRICULA "matricula"', 'e.EMPLEADO_CVE "empleado_cve"', 'e.EDO_LABORAL_CVE "status"'
+            , 'concat(e.EMP_MATRICULA, "  " ,e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO) as "nom_empleado"'
+            , 'e.EMP_NOMBRE "nombre"', 'e.EMP_APE_PATERNO "paterno"', 'e.EMP_APE_MATERNO "materno"'
+            , 'id_cat "categoria_id"', 'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"'
+            , 'e.DELEGACION_CVE "delegacion_cve"', 'dl.DEL_NOMBRE "nom_delegacion"'
+            , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"'
+        );
+
+        $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
+        $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
+        $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = dp.cve_delegacion');
+
+        $this->db->where('e.EMPLEADO_CVE', $id_empleado);
+        $this->db->select($select);
+
+        $ejecuta = $this->db->get('ccategoria as c'); //
+        $query = $ejecuta->result_array();
+        return $query;
+    }
+
+    public function get_buscar_candidatos_validador_por_unidad_delegacion_categoria($params) {
+        if (!empty($params['departamento_cve']) AND ! empty($params['delegacion_cve'] AND ! empty($params['categorias']))) {
+
+            $select = array('e.EMP_MATRICULA "matricula"', 'e.EMPLEADO_CVE "empleado_cve"'
+                , 'concat(e.EMP_MATRICULA, "  " ,e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO) as "nom_empleado"'
+                , 'id_cat "categoria_id"', 'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"'
+                , 'e.DELEGACION_CVE "delegacion_cve"', 'dl.DEL_NOMBRE "nom_delegacion"'
+                , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"'
+            );
+
+            $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
+            $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
+            $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = dp.cve_delegacion');
+
+            $this->db->where('e.EDO_LABORAL_CVE=', 1);
+            $this->db->where('dp.departamento_cve', $params['departamento_cve']);
+            $this->db->where('dl.DELEGACION_CVE', $params['delegacion_cve']);
+        }
+
+        $this->db->where_in('c.des_clave', $params['categorias']);
+
+        $this->db->select($select);
+        $orden = 'e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO';
+        $this->db->order_by($orden, 'asc');
+
+        $ejecuta = $this->db->get('ccategoria as c'); //
+        $query = $ejecuta->result_array();
+        return $query;
+    }
+
+    public function get_buscar_usuarios_categoria_sied($params = null) {
+        $result = array();
+        if (is_null($params)) {
+            return $result;
+        }
+
+        $result = array('resp_info' => null, 'resultado' => 'false');
+        $params = array("Delegacion" => "{$data_siap['reg_delegacion']}", "Matricula" => "{$data_siap['asp_matricula']}", "RFC" => '');
+
+        $client = new SoapClient("http://172.26.18.156/ServiciosWeb/wsSIED.asmx?WSDL");
+        $resultado_siap = $client->__soapCall("ConsultaSIED", array($params));
+        $resultado = simplexml_load_string($resultado_siap->ConsultaSIEDResult->any); //obtenemos la consulta xml
+        $res_json = json_encode($resultado); // la codificamos en json
+        $array_result = json_decode($res_json); // y la decodificamos en un arreglo compatible php
+
+        $result['resp_info'] = $array_result;
+        if (isset($resultado->EMPLEADOS)) {
+            $result['resultado'] = true;
+            $return_info = $this->regresa_datos($result, $data_siap['reg_delegacion']);
+        }
+        return $return_info;
     }
 
 }

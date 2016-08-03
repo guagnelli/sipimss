@@ -45,7 +45,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
         </div>
     </div>
     <div class="list-group-item">
-
+        
         <div class="panel-body">
             <div>
                 <br>
@@ -84,9 +84,10 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                             <div class="input-group-btn">
                               <button id="btn_buscar_por" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle " data-toggle="tooltip" data-original-title="Buscar por">Unidad <span class="caret"> </span></button>
                               <ul id="ul_menu_buscar_por" data-seleccionado='unidad' class="dropdown-menu borderlist">
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('unidad')">Unidad</li>
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('matricula')">Matrícula</li>
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('nombre')">Nombre empleado</li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('unidad')"><?php echo $string_values['li_unidad'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('claveadscripcion')"><?php echo $string_values['li_clave_adscripcion'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('matricula')"><?php echo $string_values['li_matricula'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('nombre')"><?php echo $string_values['li_emp_nombre'];?></li>
                               </ul>
 
                             </div>

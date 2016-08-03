@@ -19,6 +19,8 @@ $config['modulos_sesion_generales'] = array(
     'pruebas' => '*'
 );
 
+$config['categorias_designar_validador'] = array('36112580','35312180');
+
 /////Ruta de solicitudes
 $config['ruta_documentacion'] = $_SERVER["DOCUMENT_ROOT"] . "/sipimss_bonos/assets/files/archivos_bono/";
 $config['ruta_documentacion_web'] = asset_url() . 'files/archivos_bono/'; //base_url()."assets/files/solicitudes/";

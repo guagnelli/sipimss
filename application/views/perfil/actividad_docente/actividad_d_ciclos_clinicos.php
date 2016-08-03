@@ -390,7 +390,7 @@
                                              <?php
                                                 echo $this->form_complete->create_element(
                                                 array('id'=>'text_comprobante','type'=>'text',
-                                                        'value' => 'cv',
+                                                        'value' => '',
                                                         'attributes'=>array(
                                                         'class'=>'form-control',
                                                         'placeholder'=>$string_values['title_cargar_comprobante'],

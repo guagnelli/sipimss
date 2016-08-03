@@ -47,8 +47,12 @@ class Registro extends MY_Controller {
             $this->form_validation->set_rules($validations);
             if ($this->form_validation->run()) { //Se ejecuta la validación de datos
                 $datos_registro = $this->input->post(null, true); //cargamos el array post en una variable
-//                pr($datos_registro);
-//                pr($verifica_existe_user_local);
+
+//                $datos_siap = $this->empleados_siap->buscar_usuario_siap(array("reg_delegacion" => $datos_registro['reg_delegacion'], "asp_matricula" => $datos_registro['reg_matricula']));
+//                        pr($datos_siap);
+//                        $res_cat = $this->mod_registro->get_categoria($datos_siap['emp_keypue']);
+//                        pr($res_cat);
+//                        
                 $verifica_existe_user_local = $this->mod_registro->get_existe_usuario(trim($datos_registro['reg_matricula'])); //Verifica que no exista el usuario localmente
                 if ($verifica_existe_user_local == 0) {//Si el usuario no exixte localmente, lo debe guardar 
 //                if ($verifica_existe_user_local < 1) {

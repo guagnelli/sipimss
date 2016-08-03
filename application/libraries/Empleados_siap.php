@@ -81,8 +81,6 @@ class Empleados_siap {
         }else{
             return false;
         }
-        
-        
     }
     
 }
