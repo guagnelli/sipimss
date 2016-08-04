@@ -162,7 +162,7 @@ class Login_model extends CI_Model {
 
         $this->db->select($select);
 //        $this->db->from('usuario as us');
-        $this->db->join('empleado emp', 'emp.USUARIO_CVE = us.USUARIO_CVE');
+        $this->db->join('empleado emp', 'emp.USUARIO_CVE = us.USUARIO_CVE');    
         $this->db->where('us.USU_MATRICULA', $matricula);
 //        $this->db->where('us.USU_CONTRASENIA', $password_encrypt); //Aplica condición password
         $this->db->limit(1);
