@@ -1,8 +1,7 @@
 <?php 
 foreach($css_files as $file): ?>
 	<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
-<?php endforeach;  
-//echo js('jquery-migrate-1.0.0.js');
+<?php endforeach;
 foreach($js_files as $file): ?>
 	<script src="<?php echo $file; ?>"></script>
 <?php endforeach; ?>

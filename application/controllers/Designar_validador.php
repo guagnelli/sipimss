@@ -333,7 +333,7 @@ class Designar_validador extends MY_Controller {
 //                pr($resutlado);
             $data['string_values'] = $string_values;
             $data['lista_unidades'] = $resutlado['result'];
-            $data['total_unidades'] = $resutlado['total'];
+            $data['total'] = $resutlado['total'];
             $data['current_row'] = $filtros['current_row'];
             $data['per_page'] = $this->input->post('per_page');
 
@@ -348,7 +348,11 @@ class Designar_validador extends MY_Controller {
     }
 
     private function listado_resultado_unidades($data, $form) {
-        $pagination = $this->template->pagination_data_buscador_asignar_validador($data); //Crear mensaje y links de paginación
+        $data['controller'] = 'designar_validador';
+        $data['action'] = 'get_data_buscar_unidades';
+        $pagination = $this->template->pagination_data($data); //Crear mensaje y links de paginación
+
+        //$pagination = $this->template->pagination_data_buscador_asignar_validador($data); //Crear mensaje y links de paginación
         $links = "<div class='col-sm-5 dataTables_info' style='line-height: 50px;'>" . $pagination['total'] . "</div>
                     <div class='col-sm-7 text-right'>" . $pagination['links'] . "</div>";
         $datos['lista_unidades'] = $data['lista_unidades'];
