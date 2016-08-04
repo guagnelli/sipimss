@@ -98,6 +98,31 @@ class Designar_validador_model extends CI_Model {
         $query = $ejecuta->result_array();
         return $query;
     }
+    
+    public function get_buscar_empleado_delegacion($id_empleado= null, $id_delegacion = null) {
+        if (is_null($id_empleado)) {
+            return array();
+        }
+        $select = array('e.EMP_MATRICULA "matricula"', 'e.EMPLEADO_CVE "empleado_cve"', 'e.EDO_LABORAL_CVE "status"'
+            , 'concat(e.EMP_MATRICULA, "  " ,e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO) as "nom_empleado"'
+            , 'e.EMP_NOMBRE "nombre"', 'e.EMP_APE_PATERNO "paterno"', 'e.EMP_APE_MATERNO "materno"'
+            , 'id_cat "categoria_id"', 'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"'
+            , 'e.DELEGACION_CVE "delegacion_cve"', 'dl.DEL_NOMBRE "nom_delegacion"'
+            , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"'
+        );
+
+        $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
+        $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
+        $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = dp.cve_delegacion');
+
+        $this->db->where('e.EMP_MATRICULA', $id_empleado);
+        $this->db->where('e.DELEGACION_CVE', $id_delegacion);
+        $this->db->select($select);
+        $ejecuta = $this->db->get('ccategoria as c'); //
+        $query = $ejecuta->result_array();
+//        pr($this->db->last_query());
+        return $query;
+    }
 
     public function get_buscar_candidatos_validador_por_unidad_delegacion_categoria($params) {
         if (!empty($params['departamento_cve']) AND ! empty($params['delegacion_cve'] AND ! empty($params['categorias']))) {

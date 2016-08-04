@@ -76,7 +76,7 @@ class Registro extends MY_Controller {
                                 $datos_usuario['USU_MATRICULA'] = $datos_registro['reg_matricula'];
                                 $datos_usuario['DELEGACION_CVE'] = $datos_registro['reg_delegacion'];
                                 $datos_usuario['USU_CORREO'] = $datos_registro['reg_correo'];
-                                $datos_usuario['USU_CONTRASENIA'] = hash('sha512', $datos_registro['reg_confirma_contrasenia']);
+                                $datos_usuario['USU_CONTRASENIA'] = contrasenia_formato($datos_registro['reg_matricula'], $datos_registro['reg_confirma_contrasenia']); //
                                 $datos_usuario['USU_NOMBRE'] = $datos_siap['nombre'];
                                 $datos_usuario['USU_PATERNO'] = $datos_siap['paterno'];
                                 $datos_usuario['USU_MATERNO'] = $datos_siap['materno'];

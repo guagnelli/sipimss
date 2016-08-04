@@ -47,7 +47,12 @@ function runScript(e) {
 //        var tb = document.getElementById("scriptBox");
 //        eval(tb.value);
         funcion_buscar_elementos();
-
+        return false;
+    }
+}
+function runScriptBuscador_sied(e) {
+    if (e.keyCode == 13) {
+        $("#btn_buscar_validador_siep").trigger("click");//Dispara el onclic del botón buscar validador en el sied
         return false;
     }
 }
@@ -176,19 +181,19 @@ function funcion_seleccionar_validador(element) {
     datos_form_serializados += '&candidato_a_validador=' + candidato_a_validador + '&tipo_evento=' + tipo_evento + '&id_validaor=' + id_validaor + '&delegacion_cve=' + delegacion_cve + '&departamento_desc=' + departamento_desc;
 //    alert(datos_form_serializados);
     $.ajax({
-        url: site_url + '/designar_validador/get_data__buscar_sied_validador',
+        url: site_url + '/designar_validador/get_data_seleccionar_validador',
 //        data: {cve_inv: cve_inv, carga_datos: 1, idrow: idrow, comprobantecve: comprobantecve},
         data: datos_form_serializados,
         method: 'POST',
         beforeSend: function (xhr) {
-            $('#resultados_validadores').html(create_loader());
+            $('#div_resultados_validadores').html(create_loader());
         }
     })
             .done(function (response) {
 //                var is_html = response.indexOf('<div class=\"list-group\">');//si existe la cadena, entonces es un html
 //                if (is_html > -1) {
 //                }
-                $('#resultados_validadores').html(response);
+                $('#div_resultados_validadores').html(response);
             })
             .fail(function (jqXHR, response) {
 //                $('#div_error').show();

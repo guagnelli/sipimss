@@ -5,7 +5,7 @@
             <div class="modal-footer  col-xs-6 col-sm-6 col-md-6 text-left ">
               <button type="button" id="close_modal_censo" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 text-left" >
+        <div class="col-xs-6 col-sm-6 col-md-6 text-left">
             <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-success" 
                     data-tipoevento ="asignar"
                     data-idvalidador ="<?php echo $reg_id_validador;?>"

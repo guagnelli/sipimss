@@ -173,7 +173,9 @@ class Login_model extends CI_Model {
         } else if (empty($result)) {
             $result = null;
         } else if ($result->cantidad_reg == 1) {
-            $password_encrypt = hash('sha512', $password); //aplica algoritmo de seguridad
+//            $password_encrypt = hash('sha512', $password.$matricula); //aplica algoritmo de seguridad
+            $password_encrypt = contrasenia_formato($matricula, $password); //aplica algoritmo de seguridad
+            //
             //Si las contraseñas son diferentes
 //            pr('aa '.$password_encrypt);
 //            pr($result->usr_passwd);

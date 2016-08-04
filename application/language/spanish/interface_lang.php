@@ -295,6 +295,7 @@ $lang['interface'] = array(
         'lbl_delegacion' => 'Delegación',
         'lbl_no_existe_usuario' => 'El empleado no existe',
         'lbl_status_empleado_cero' => 'El empleado se encuentrá dado de baja del sistema por el momento ',
+        'lbl_no_se_encontro_empleado_sied' => 'No se encontraron datos asociados a la matrícula o la delegación.<br>Por favor verifique que la información que ingreso es correcta o que la red se encuentá habilitata.',
         'drop_delegacion' => 'Seleccione delegación',
         'li_unidad' => 'Unidad',
         'li_clave_adscripcion' => 'Clave de adscripción',

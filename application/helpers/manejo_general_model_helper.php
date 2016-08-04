@@ -198,7 +198,7 @@ if (!function_exists('iniciar_sesion')) {
         $result = array();
         $login_user = $CI->lm->set_login_user($matricula, $passwd); ///Verificar contra base de datos
         if ($login_user->cantidad_reg == 1) { ///Usuario existe en base de datos
-            $password_encrypt = hash('sha512', $passwd);
+            $password_encrypt = contrasenia_formato($matricula, $passwd);
             if ($login_user->usr_passwd == $password_encrypt) {
                 $roles = $CI->lm->get_usuario_rol_modulo_sesion($login_user->user_cve); //Módulos por rol 
                 $modulos_extra = $CI->lm->get_usuario_modulo_extra_sesion($login_user->user_cve); //Módulos extra por usuario 
