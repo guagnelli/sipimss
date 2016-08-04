@@ -50,7 +50,6 @@ class Catalogo extends MY_Controller {
         $crud->required_fields('ROL_NOMBRE');
 
         $crud->unset_delete(); //Remover la acción borrar
-        $crud->set_js('assets/js/jquery-migrate-1.0.0.js');
         
         $main_content = $crud->render();
         //pr($main_content);
@@ -64,7 +63,7 @@ class Catalogo extends MY_Controller {
 
         $crud->set_table('modulo')
             ->set_subject('Modulos')
-            ->columns('MODULO_CVE', 'MOD_NOMBRE', 'MOD_RUTA')
+            ->columns('MODULO_CVE', 'MODULO_CVE_PADRE', 'MOD_NOMBRE', 'MOD_RUTA', 'MOD_EST_CVE', 'IS_CONTROLADOR')
             ->display_as('MODULO_CVE', 'Identificador del modulo')
             ->display_as('MOD_NOMBRE', 'Módulo')
             ->display_as('MOD_RUTA', 'Ruta')
@@ -85,7 +84,6 @@ class Catalogo extends MY_Controller {
         //$crud->required_fields('ROL_NOMBRE');
 
         $crud->unset_delete(); //Remover la acción borrar
-        $crud->set_js('assets/js/jquery-migrate-1.0.0.js');
         
         $main_content = $crud->render();
          

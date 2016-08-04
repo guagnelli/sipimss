@@ -1808,6 +1808,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	protected function showAddForm()
 	{
 		$this->set_js_lib($this->default_javascript_path.'/'.grocery_CRUD::JQUERY);
+		$this->set_js_lib($this->default_javascript_path.'/'.grocery_CRUD::JQUERY_MIGRATE);
 
 		$data 				= $this->get_common_data();
 		$data->types 		= $this->get_field_types();
@@ -1832,6 +1833,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	protected function showEditForm($state_info)
 	{
 		$this->set_js_lib($this->default_javascript_path.'/'.grocery_CRUD::JQUERY);
+		$this->set_js_lib($this->default_javascript_path.'/'.grocery_CRUD::JQUERY_MIGRATE);
 
 		$data 				= $this->get_common_data();
 		$data->types 		= $this->get_field_types();
@@ -1863,6 +1865,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	protected function showReadForm($state_info)
 	{
 		$this->set_js_lib($this->default_javascript_path.'/'.grocery_CRUD::JQUERY);
+		$this->set_js_lib($this->default_javascript_path.'/'.grocery_CRUD::JQUERY_MIGRATE);
 
 		$data 				= $this->get_common_data();
 		$data->types 		= $this->get_field_types();
@@ -2109,6 +2112,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 		if ($this->unset_jquery) {
 			unset($js_files[sha1($this->default_javascript_path.'/'.grocery_CRUD::JQUERY)]);
+			unset($js_files[sha1($this->default_javascript_path.'/'.grocery_CRUD::JQUERY_MIGRATE)]);
 		}
 
 		if ($this->unset_jquery_ui) {
@@ -3432,6 +3436,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	const	VERSION = "1.5.4";
 
 	const	JQUERY 			= "jquery-1.11.1.min.js";
+	const	JQUERY_MIGRATE 	= "jquery-migrate-1.0.0.js";
 	const	JQUERY_UI_JS 	= "jquery-ui-1.10.3.custom.min.js";
 	const	JQUERY_UI_CSS 	= "jquery-ui-1.10.1.custom.min.css";
 
