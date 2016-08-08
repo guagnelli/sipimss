@@ -153,6 +153,142 @@ class Perfil extends MY_Controller {
 
         $this->load->view('perfil/actividad_docente/actividad_tpl', $data, FALSE);
     }
+    
+    ////////////////////////Inicio Dirección de tesis ////////////////////////
+    public function ajax_direccion_tesis(){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            
+            $this->lang->load('interface');
+            $data['string_values'] = array_merge($this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general']);
+            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+            $empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
+            
+            if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
+                $this->load->model('Direccion_tesis_model', 'dt');
+                $data['lista_direccion'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions'=>array('EMPLEADO_CVE'=>$empleado[0]['EMPLEADO_CVE'], 'TIP_COMISION_CVE'=>$this->config->item('tipo_comision')['DIRECCION_TESIS']['id'])));
+                //pr($data);
+                echo $this->load->view('perfil/direccionTesis', $data, true); //Valores que muestrán la lista
+            }
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function direccion_tesis_formulario($identificador = null){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $this->load->model('Direccion_tesis_model', 'dt');
+            $this->lang->load('interface');
+            $data['identificador'] = $identificador;
+            $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
+            $data['string_values'] = array_merge($this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general']);
+
+            //$condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
+            $entidades_ = array(enum_ecg::comision_area, enum_ecg::ctipo_comprobante, enum_ecg::cnivel_academico);
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+            if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
+                $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
+                pr($datos_formulario);
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                
+                ///Obtener el arreglo de validaciones de acuerdo a acción (insert or update)
+                $validations = (is_null($identificador)) ? $this->config->item('form_usuario_alta') : $this->config->item('form_direccion_tesis'); //Obtener validaciones de archivo
+
+                $this->form_validation->set_rules($validations);
+                
+            }
+
+            if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
+                $data['dir_tes'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions'=>array('EMP_COMISION_CVE'=>$dt_id)))[0]; //Obtener datos
+            }
+            pr($data);
+            $data = array(
+                'titulo_modal' => $data['string_values']['title'],
+                'cuerpo_modal' => $this->load->view('perfil/direccionTesis/direccion_tesis_formulario', $data, TRUE),
+                //'pie_modal' => $this->load->view('perfil/direccionTesis/direccion_tesis_pie', $data, true)
+            );
+
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+    
+    public function cargar_archivo(){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            if($_FILES && $this->input->post()){
+                $this->load->library('Seguridad');
+                $solicitud = $this->input->post('s', true); //Identificador de la solicitud
+                $solicitud_encrypt = $this->input->post('e', true); //Identificador de la solicitud encriptado
+                $requisito_encrypt = $this->input->post('req', true); //Identificador del requisito encriptado
+                $valor_minimo = $this->input->post('valor_minimo', true); //Identificador del valor mínimo establecido para el requisito
+                
+                $resultado = array('resultado'=>FALSE, 'error'=>'', 'data'=>'');
+                foreach ($_FILES as $key_file => $file) {
+                    if(exist_and_not_null_array($file, 'name') && exist_and_not_null_array($file,'tmp_name') && $file['error']==0){ ////Validar la carga de archivo
+                        $requisito = str_replace("requisito_", "", $key_file); //Obtener identificador del requisito cargado
+                        if($this->seguridad->encrypt_sha512($this->config->item('salt').$requisito)==$requisito_encrypt && $this->seguridad->encrypt_sha512($this->config->item('salt').$solicitud)==$solicitud_encrypt) { //Comprobar que el requisito y la solicitud seleccionadas sean los correctos (Seguridad)
+                            $insert = true;
+
+                            $ruta_archivos = $this->config->item('ruta_documentacion').$solicitud."/";
+                            if(!file_exists($ruta_archivos) && !is_dir($ruta_archivos)){ //Si no existe la carpeta se crea
+                                mkdir($ruta_archivos);
+                            }
+
+                            $archivo_actual = $this->mod_solicitud->documentacion_por_solicitud(array('conditions'=>array('archivo.solicitud_id'=>$solicitud, 'archivo.requisito_id'=>$requisito)));
+                            $requisito_actual = $this->mod_solicitud->documentacion_requerida(array('conditions'=>array('requisito.requisito_id'=>$requisito)));
+                            /*pr($archivo_actual);
+                            pr($requisito_actual);
+                            pr($valor_minimo);*/
+                            if((!empty($requisito_actual) && $requisito_actual[0]['req_obligatorio']==true && !empty($requisito_actual[0]['req_val_minimo']) && empty($valor_minimo))
+                             || (!empty($requisito_actual) && $requisito_actual[0]['req_obligatorio']==true && !empty($requisito_actual[0]['req_especifico']) && empty($valor_minimo)) ) { ///Verificar si el valor mínimo es requerido y fue seleccionado por el usuario
+                                $resultado['error'] = "Para cargar el archivo es necesario que seleccione la calificación a corroborar en el documento.";
+                            } else {
+                                if(!empty($archivo_actual)){ //En caso de existir registro en la BD se define que se realizará una actualización y se elimina el archivo
+                                    unlink($ruta_archivos.$archivo_actual[0]['arc_nombre']);
+                                    $insert = false;
+                                }
+
+                                $config['upload_path']          = $ruta_archivos;
+                                $config['allowed_types']        = $this->config->item('extension_documentacion');
+                                $config['max_size']             = $this->config->item('max_size_documentacion'); // Definir tamaño máximo de archivo
+                                $config['detect_mime']          = TRUE; // Validar mime type
+                                $config['file_name']            = $this->nombrar_archivo($solicitud, $requisito); ///Renombrar archivo
+                                
+                                $this->load->library('upload', $config); ///Librería que carga y valida los archivos
+
+                                if(!$this->upload->do_upload($key_file)) {
+                                    $resultado['error'] = $this->upload->display_errors();
+                                } else {
+                                    $resultado['data']['name'] = $this->upload->data('raw_name');
+                                    $resultado['data']['filename'] = $this->upload->data('file_name');
+                                    if($insert===true){
+                                        $archivo = $this->formato_archivo(array('requisito'=>$requisito, 'solicitud'=>$solicitud, 'nombre'=>$resultado['data']['filename'], 'valor'=>$valor_minimo));
+                                        $resultado_almacenado = $this->mod_solicitud->guardar_documentacion($archivo);
+                                    } else {
+                                        $resultado_almacenado = $this->mod_solicitud->actualizar_documentacion((object)array('requisito_id'=>$requisito, 'solicitud_id'=>$solicitud, 'arc_fecha'=>"now", 'arc_nombre'=>$resultado['data']['filename'], 'arc_valor'=>$valor_minimo));
+                                    }
+                                    if($resultado_almacenado['result']==TRUE){
+                                        $resultado['resultado'] = TRUE;
+                                    } else {
+                                        unlink($ruta_archivos);
+                                    }
+                                }                                    
+                            }
+                            echo json_encode($resultado);
+                            exit();
+                        } else {
+                            $resultado['error'] = "Ocurrió un error durante la carga del archivo, recargue la página por favor.";
+                        }
+                    }
+                }
+            } else {
+                redirect(site_url()); //Redirigir al inicio del sistema si no se recibio información por método post
+            }
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+    /////////////////////////Fin dirección de tesis //////////////////////////
 
     public function get_data_ajax_liscta_actividades() {
         $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable

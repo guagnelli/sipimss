@@ -322,6 +322,26 @@ $lang['interface'] = array(
         'li_clave_adscripcion' => 'Clave de adscripción',
         'li_unidad' => 'Unidad',
     ),
+    'direccion_tesis' => array(
+        'title' => 'Dirección de tesis',
+        't_h_anio' => 'Año en que fue dirigida',
+        't_h_nivel_academico' => 'Nivel académico',
+        't_h_area' => 'Área',
+        'btn_add_new_direccion' => 'Agregar nueva dirección de tesis',
+
+    ),
+    'general' => array(
+        'cerrar' => 'Cerrar',
+        'guardar' => 'Guardar',
+        'editar' => 'Editar',
+        'eliminar' => 'Eliminar',
+        'subir_archivo' => 'Subir archivo',
+        'lbl_tipo_comprobante' => 'Tipo de comprobante',
+        'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
+        'title_tipo_comprobante' => 'Tipo de comprobante',
+        'lbl_comprobante' => 'Comprobante',
+        'title_cargar_comprobante' => 'Cargar comprobante',
+    )
 );
 
 

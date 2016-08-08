@@ -17,6 +17,8 @@ $config['upload_config'] = array(
         ),
     );
 
+$config['extension_comprobante'] = array('pdf');
+
 $config['modulos_no_sesion'] = array(
     'login' => array('index', 'cerrar_session', 'cerrar_session_ajax'),
     'registro' => array('*'),
@@ -120,6 +122,10 @@ $config['alert_msg'] = array(
     'INFO' => array('id_msg' => 4, 'class' => 'info')
 );
 
+$config['tipo_comision'] = array(
+    'DIRECCION_TESIS' => array('id'=>1)
+);
+
 $config['parametros_bitacora'] = array(
         'USUARIO_CVE' => 'NULL', 
         'BIT_OPERACION' => 'NULL',
@@ -184,6 +190,8 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'cestado_usuario' => array('id' => 'ESTADO_USUARIO_CVE', 'nombre' => 'EDO_USUARIO_DESC' , 'where' => null),
     'cunidad' => array('id' => 'UNIDAD_CVE', 'nombre' => 'UNI_DESC' , 'where' => null),
     'cestado_validacion' => array('id' => 'EST_VALIDACION_CVE', 'nombre' => 'EST_VALIDA_DESC' , 'where' => null),
+    'comision_area' => array('id' => 'COM_AREA_CVE', 'nombre' => 'COM_ARE_NOMBRE' , 'where' => null),
+    'cnivel_academico' => array('id' => 'NIV_ACADEMICO_CVE', 'nombre' => 'NIV_ACA_NOMBRE' , 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 
