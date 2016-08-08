@@ -53,6 +53,8 @@
         htipos_bibliografia["editorial"] = "1|editorial|div_editorial_lib|btn_add_editorial_lib|editoriallib_$|Agregar editorial$|Editorial";
         htipos_bibliografia["anio"] = "3|anio|div_anio_lib|btn_add_anio_lib|aniolib_$|Agregar año de edición$|Agregar año|";
     </script>
+    
+    
     <?php echo form_open_multipart('', array('id' => 'form_investigacion_docente')); ?>
     <div class="list-group">
         <div class="list-group-item">
@@ -238,11 +240,8 @@
                                 <?php echo form_error_format('ctipo_comprobante'); ?>
                         </div>
                         <div class="col-md-6">
-                            <!--<li class="list-group-item">-->
-                                <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
-                                <!--<input type="file" name="userfile" id="userfile" accept="application/pdf">-->
-                                <input type="file" id="userfile" name="userfile" class ="userfile" accept="application/pdf">
-
+                                
+                                <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">
                                 <label for='lbl_comprobante' class="control-label">
                                     <?php echo $string_values['lbl_comprobante']; ?>
                                 </label>
@@ -255,7 +254,7 @@
                                                 'class'=>'form-control',
                                                 'placeholder'=>$string_values['title_cargar_comprobante'],
                                                 'min'=> '0',
-                                                'max'=> '100',
+                                                'max'=> '500',
                                                 'data-toggle'=>'tooltip',
                                                 'data-placement'=>'bottom',
                                                 'title'=>$string_values['title_cargar_comprobante'],
@@ -264,6 +263,7 @@
                                             )
                                         );
                                      ?>
+                                     
 
                                   <div class="input-group-btn">
                                     <button type="button" aria-expanded="false" class="btn btn-default browse">
@@ -273,8 +273,10 @@
                                         <span aria-hidden="true" class="glyphicon glyphicon-question-sign"> </span>
                                     </a>
                                   </div>
-                                </div><span id="help-tipo-comprobante" class="help-block"><?php echo $string_values['texto_ayuda_comprobante'];?></span>
+                                </div><span id="help-tipo-comprobante" class="help-block"><?php // echo $string_values['texto_ayuda_comprobante'];?></span>
                                 <?php echo form_error_format('text_comprobante'); ?>
+                                <input type="hidden" name="carga_file" value="">
+                                <?php echo form_error_format('carga_file'); ?>
                         </div>
                     </div>
                 </div>

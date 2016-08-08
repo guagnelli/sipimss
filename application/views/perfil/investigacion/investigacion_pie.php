@@ -2,7 +2,7 @@
 <div class="list-group-item text-center center">
     <div class="row">
         <!--<div class="col-xs-12 col-sm-12 col-md-6 text-right rightSpring" >-->
-            <div class="modal-footer  col-xs-6 col-sm-6 col-md-6 text-left ">
+            <div class="col-xs-6 col-sm-6 col-md-6 text-right ">
               <button type="button" id="close_modal_censo" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         <!--</div>-->
@@ -23,26 +23,3 @@
 
     </div>
 </div>
-
-
-<!--        <div class="col-md-6">
-            <label for='lbl_curso' class="control-label">
-                <b class="rojo">*</b>
-<?php // echo $string_values['lbl_curso']; ?>
-            </label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-education"> </span>
-                </span>
-<?php
-//                    echo $this->form_complete->create_element(array('id' => 'ccurso', 'type' => 'dropdown', 
-//                        'options' => $ccurso, 
-//                        'first' => array('' => $string_values['drop_curso']), 
-//                        'value' => '',
-//                        'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-//                        'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-//                        'title' => $string_values['lbl_curso'] ))); 
-?>
-           </div>
-<?php //   echo form_error_format('ccurso'); ?>
-        </div>-->

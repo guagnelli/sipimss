@@ -13,7 +13,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
            display:block; }
 </style>
 
-<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/designar_validador/designar_validador.js">
+<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_docente/validar_censo.js">
 </script>
 
 <!-- Inicio informacion personal -->
@@ -22,24 +22,25 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 <div class="list-group">
 
     <div class="list-group-item">
+        <div class='row text-right'>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <font size=1><?php echo $fecha_ultima_actualizacion; ?></font>
+            </div>
+        </div>
         <div class='row' >
-            <div class="row" style='display:hidden;' id='div_error_inv_doc'>
-                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                <div class="col-md-10 col-sm-10 col-xs-10">
-                    <?php /*  if($tipo_msg==='danger' || $tipo_msg==='warning'){
-                      $colapso_div_ejercicio_profesional = 'collapse in';
-                      }
-                      echo html_message($error, $tipo_msg); */ ?>
+            <div class="row" id='div_error_inv_doc'>
+                <div class="col-md-10 col-sm-10 col-xs-10" style="display:hidden">
                     <div id='mensaje_error_inv_doc_div' class='alert'>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="false">&times;</span>
+                        </button>
                         <span id='mensaje_error_inv_doc'></span>
                     </div>
                 </div>
-                <div class="col-md-1 col-sm-1 col-xs-1"></div>
             </div>
-
         </div>
     </div>
+    
     <div class="list-group-item">
         
         <div class="panel-body">
@@ -53,19 +54,19 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <div class="panel-body input-group ">
-                        <span class="input-group-addon"><?php echo $string_values['lbl_delegacion']; ?></span>
+                        <span class="input-group-addon"><?php echo $string_values['lbl_estado_validacion']; ?></span>
                      <?php 
-                        echo $this->form_complete->create_element(array('id' => 'delegacion_cve', 
+                        echo $this->form_complete->create_element(array('id' => 'estado_cve', 
                             'type' => 'dropdown', 
-                            'options' => $cdelegacion, 
-                            'first' => array('' => $string_values['drop_delegacion']), 
+                            'options' => $cestado_validacion, 
+                            'first' => array('' => $string_values['drop_estado_validacion']), 
                             'value' => '',
                             'class'=>'form-control',
                             'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
-                            'placeholder' => $string_values['lbl_delegacion'], 
+                            'placeholder' => $string_values['lbl_estado_validacion'], 
                             'data-toggle' => 'tooltip', 
                             'data-placement' => 'top', 
-                            'title' => $string_values['lbl_delegacion'] ))); 
+                            'title' => $string_values['lbl_estado_validacion'] ))); 
                     ?>
                     </div>
                 </div>
@@ -76,35 +77,34 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <div class="panel-body input-group">
-                            <input type="hidden" id="menu_select" name="menu_busqueda" value="unidad">
+                            <input type="hidden" id="menu_select" name="menu_busqueda" value="matricula">
                             <div class="input-group-btn">
-                              <button id="btn_buscar_por" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle " data-toggle="tooltip" data-original-title="Buscar por">Unidad <span class="caret"> </span></button>
+                              <button id="btn_buscar_por" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle " data-toggle="tooltip" data-original-title="Buscar por"><?php echo $string_values['li_matricula'];?><span class="caret"> </span></button>
                               <ul id="ul_menu_buscar_por" data-seleccionado='unidad' class="dropdown-menu borderlist">
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('unidad')"><?php echo $string_values['li_unidad'];?></li>
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('claveadscripcion')"><?php echo $string_values['li_clave_adscripcion'];?></li>
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('matricula')"><?php echo $string_values['li_matricula'];?></li>
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda('nombre')"><?php echo $string_values['li_emp_nombre'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('matricula')"><?php echo $string_values['li_matricula'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('nombre')"><?php echo $string_values['li_emp_nombre'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('claveadscripcion')"><?php echo $string_values['li_clave_adscripcion'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('unidad')"><?php echo $string_values['li_unidad'];?></li>
                               </ul>
 
                             </div>
                           
                          <?php
                             echo $this->form_complete->create_element(
-                            array('id'=>'buscar_unidad_medica','type'=>'text',
+                            array('id'=>'buscador_docente','type'=>'text',
                                     'value' => '',
                                     'attributes'=>array(
-                                    'placeholder'=>$string_values['txt_buscar_unidad'],
+                                    'placeholder'=>$string_values['txt_buscar_docentes'],
                                     'data-toggle'=>'tooltip',
                                     'data-placement'=>'bottom',
                                     'onkeypress'=>'return runScript(event);',
-                                    'title'=>$string_values['txt_buscar_unidad'],
-//                                        'readonly'=>'readonly',
+                                    'title'=>$string_values['txt_buscar_docentes'],
                                     )
                                 )
                             );
                          ?>
                         <div class="input-group-btn" >
-                            <button type="button" id="btn_buscar_b" aria-expanded="false" class="btn btn-default browse" title="<?php echo$string_values['txt_buscar_unidad'];?>" data-toggle="tooltip" onclick="funcion_buscar_elementos()" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span>
+                            <button type="button" id="btn_buscar_b" aria-expanded="false" class="btn btn-default browse" title="<?php echo$string_values['txt_buscar_docentes'];?>" data-toggle="tooltip" onclick="funcion_buscar_elementos()" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span>
                             </button>
                         </div>
                     </div>

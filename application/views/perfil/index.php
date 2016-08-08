@@ -17,7 +17,9 @@ $string_values = $this->lang->line('interface');
 </script>
     
 <div class="row" id="contenedor_formulario">
+    
     <div class="col-sm-12 col-md-12 col-lg-12">
+        
         <div class="panel">
             <div class="breadcrumbs6 panel-heading" style="padding-left:20px;">
                 <h1 id="titulo_registro">
@@ -62,6 +64,13 @@ $string_values = $this->lang->line('interface');
                 </ul>
                 <!-- genera div por opción de menu -->
                 <div id = 'tabContent' class='tab-content col-md-9'>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                            <span id="fecha_ultima_actualizacion" class="text-right">
+                                <?php  echo (isset($fecha_ultima_actualizacion))? $fecha_ultima_actualizacion:''; ?>
+                            </span>
+                        </div>
+                    </div>
                     <?php foreach ($array_menu as $value) { 
                         $pos = strpos($value['ruta'], ':');
                         if($pos>0){

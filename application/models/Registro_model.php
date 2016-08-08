@@ -222,13 +222,13 @@ class Registro_model extends CI_Model {
             return -1;
         }
         $this->db->insert('empleado', $datos_empleado); //Almacena usuario
-        $obtiene_id_usuario = $this->db->insert_id();
+        $obtiene_id_emleado = $this->db->insert_id();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return -1;
         } else {
 
-            return $obtiene_id_usuario;
+            return $obtiene_id_emleado;
         }
     }
 

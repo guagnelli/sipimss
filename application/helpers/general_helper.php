@@ -248,15 +248,17 @@ if (!function_exists('html_message')) {
  * @return    : string Mensaje de alerta con formato predefinido
  */
 if (!function_exists('imprimir_resultado')) {
-    function imprimir_resultado($resultado){
-        $tipo_mensaje = ($resultado['result']===true) ? 'success' : 'danger';
+
+    function imprimir_resultado($resultado) {
+        $tipo_mensaje = ($resultado['result'] === true) ? 'success' : 'danger';
 
         return '<div id="js_msg" class="row">
-                <div class="col-lg-12 alert alert-'.$tipo_mensaje.'">
-                    '.$resultado['msg'].'
+                <div class="col-lg-12 alert alert-' . $tipo_mensaje . '">
+                    ' . $resultado['msg'] . '
                 </div>
             </div>';
     }
+
 }
 
 /**
@@ -590,7 +592,7 @@ if (!function_exists('get_busca_hijos')) {
         foreach ($array_busqueda as $keys => $valores) {
             $cad1 = strtolower($controlador);
             $cad2 = strtolower($valores['nombre_padre']);
-            if (!empty($valores['padre']) AND ($cad1 === $cad2)) {
+            if (!empty($valores['padre']) AND ( $cad1 === $cad2)) {
                 $array_result[$keys] = $valores;
             }
         }
@@ -616,7 +618,7 @@ if (!function_exists('get_ip_cliente')) {
         $ip_cliente = '';
         $conexiones_ip = array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR');
         foreach ($conexiones_ip as $value) {
-            if (isset($_SERVER[$value]) AND !empty($_SERVER[$value])) {
+            if (isset($_SERVER[$value]) AND ! empty($_SERVER[$value])) {
                 $ip_cliente = $_SERVER[$value];
                 break;
             }
@@ -657,24 +659,16 @@ if (!function_exists('eliminar_archivo')) {
 
     /**
      * 
-     * @param type $directorio 
+     * @param type $path
      * @param type $file_name
      * @param type $extencion
      */
-    function eliminar_archivo($directorio = './uploads/', $file_name = null, $extencion = 'pdf', $max_size_file = '5000') {
-        $config['upload_path'] = $directorio;
-        $config['allowed_types'] = $extencion;
-        $config['max_size'] = $max_size_file;
-        $config['file_name'] = $filename;
-        $CI = & get_instance();
-        $CI->load->library('upload', $config);
-        if (!$CI->upload->do_upload()) {
-            $data['error'] = $CI->upload->display_errors();
-        } else {
-
-            $file_data = $CI->upload->data();
-            $data['file_path'] = $directorio . $file_data['file_name'];
+    function eliminar_archivo($path, $file_name, $extencion = '.pdf') {
+        $path .= $file_name . $extencion;
+        if (file_exists($path)) {
+            return unlink($path);
         }
+        return FALSE;
     }
 
 }
@@ -690,8 +684,9 @@ if (!function_exists('antiguedad_format')) {
 
     function antiguedad_format($antiguedad) {
         $result = explode('_', $antiguedad);
-        return (count($result)===3) ? $result[0].' a&ntilde;os '.$result[1].' quincenas '.$result[2].' d&iacute;as' : $antiguedad;
+        return (count($result) === 3) ? $result[0] . ' a&ntilde;os ' . $result[1] . ' quincenas ' . $result[2] . ' d&iacute;as' : $antiguedad;
     }
+
 }
 /* End of file general_helper.php */
     

@@ -1,8 +1,8 @@
 $(document).on('click', '.browse', function() {
-    var file = $(this).parent().parent().parent().find('.userfile');
+    var file = $(this).parent().parent().parent().find('.file');
     file.trigger('click');
 });
-$(document).on('change', '.userfile', function() {
+$(document).on('change', '.file', function() {
     var nombre_nuevo_ = $(this).val();
     var nombre_nuevo = nombre_nuevo_.replace(/C:\\fakepath\\/i, '');
     $(this).parent().find('.form-control').val(nombre_nuevo);

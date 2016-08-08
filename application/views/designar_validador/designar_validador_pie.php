@@ -11,6 +11,7 @@
                     data-idvalidador ="<?php echo $reg_id_validador;?>"
                     data-delcve="<?php echo $reg_delegacion_cve;?>"
                     data-depcve="<?php echo $reg_departamento_desc;?>"
+                    data-idrow="<?php echo $reg_idrow; ?>"
                     onclick="funcion_seleccionar_validador(this)" >
                 Asignar validador
             </button>

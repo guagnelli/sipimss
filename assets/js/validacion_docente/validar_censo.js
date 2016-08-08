@@ -1,8 +1,9 @@
-var menu_tipo_busqueda = new Object();
-menu_tipo_busqueda['matricula'] = 'Matrícula';
-menu_tipo_busqueda['nombre'] = 'Nombre empleado';
-menu_tipo_busqueda['claveadscripcion'] = 'Clave de adscripción';
-menu_tipo_busqueda['unidad'] = 'Unidad';
+var menu_busqueda_validar_censo = new Object();
+menu_busqueda_validar_censo['matricula'] = 'Matrícula';
+menu_busqueda_validar_censo['nombre'] = 'Nombre empleado';
+menu_busqueda_validar_censo['claveadscripcion'] = 'Clave de adscripción';
+menu_busqueda_validar_censo['unidad'] = 'Unidad';
+
 
 
 function funcion_buscar_elementos() {
@@ -33,9 +34,8 @@ function funcion_buscar_elementos() {
  * @param {type} name Menu de opciónes de filtro
  * @returns {undefined}
  */
-function funcion_menu_tipo_busqueda(name) {
-//function funcion_menu_tipo_busqueda_validar_censo(name) {
-    var text = menu_tipo_busqueda[name];//Busca en el hashmap el nombre indicado
+function funcion_menu_tipo_busqueda_validar_censo(name) {
+    var text = menu_busqueda_validar_censo[name];//Busca en el hashmap el nombre indicado
     $("#menu_select").val(name);//Modifica el valor del menu
     $("#btn_buscar_por").text(text);//Cambia el texto del botón
     $("#btn_buscar_por").append('<span class="caret"> </span>');//Agregar span al botón para mostrar icono flechita

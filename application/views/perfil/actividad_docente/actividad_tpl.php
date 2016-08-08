@@ -20,9 +20,6 @@
     <div class="list-group">
         
         <div class="list-group-item">
-            <div class='row text-right'>
-                <font size=1><?php  echo $fecha_ultima_actualizacion; ?></font>
-            </div>
             <div class='row' >
                 
                         <div class="row" style='display:hidden;' id='div_error'>

@@ -47,6 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         data-idvalidador="<?php echo $reg_id_validador; ?>"
                         data-delcve="<?php echo $reg_delegacion_cve; ?>"
                         data-depcve="<?php echo $reg_departamento_desc; ?>"
+                        data-idrow="<?php echo $reg_idrow; ?>"
                         onclick="funcion_buscar_validador(this)" >
                     <span aria-hidden="true" class="glyphicon glyphicon-search"></span>
                 </button>

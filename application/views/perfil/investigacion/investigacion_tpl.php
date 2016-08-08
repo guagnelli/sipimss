@@ -7,7 +7,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
     .button-padding {padding-top: 30px}
     .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
     /*Oculta el file para cargar comprobante y deja asi solo muestra un botón*/
-    .userfile {visibility: hidden;  position: absolute;}
+    .file {visibility: hidden;  position: absolute;}
 </style>
 
 <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/investigacion_docente.js"></script>
@@ -18,9 +18,6 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 <div class="list-group">
 
     <div class="list-group-item">
-        <div class='row text-right'>
-            <font size=1><?php echo $fecha_ultima_actualizacion; ?></font>
-        </div>
         <div class='row' >
 
             <div class="row" style='display:hidden;' id='div_error_inv_doc'>

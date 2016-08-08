@@ -477,6 +477,11 @@ $config = array(
             'label' => 'bibliografia del libro',
             'rules' => 'required'//
         ),    
+        'carga_file' => array(
+            'field' => 'carga_file',
+            'label' => 'archivo',
+            'rules' => 'required'//
+        ),    
     ),
     'form_usuario_alta' => array(
         array(

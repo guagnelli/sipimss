@@ -7,6 +7,16 @@ $config['salt'] = "B0no5"; ///SALT
 
 $config['superadmin'] = 5;
 
+$config['upload_config'] = array(
+        'comprobantes'=>array(
+            'upload_path'=>'./upload/comprobantes/',
+            'allowed_types'=>'pdf',
+            'remove_spaces'=>TRUE,
+            'max_size'=>1024 * 15,
+            'file_name'=>'tmp_comprobante',
+        ),
+    );
+
 $config['modulos_no_sesion'] = array(
     'login' => array('index', 'cerrar_session', 'cerrar_session_ajax'),
     'registro' => array('*'),
@@ -173,6 +183,7 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'modulo' => array('id' => 'MODULO_CVE', 'nombre' => 'MOD_NOMBRE' , 'where' => null),
     'cestado_usuario' => array('id' => 'ESTADO_USUARIO_CVE', 'nombre' => 'EDO_USUARIO_DESC' , 'where' => null),
     'cunidad' => array('id' => 'UNIDAD_CVE', 'nombre' => 'UNI_DESC' , 'where' => null),
+    'cestado_validacion' => array('id' => 'EST_VALIDACION_CVE', 'nombre' => 'EST_VALIDA_DESC' , 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 

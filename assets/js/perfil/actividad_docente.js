@@ -108,6 +108,7 @@ function funcion_eliminar_actividad_docente(element) {
                             $('#id_row_' + button_obj.data('idrow')).remove();
                             $('#div_error').show();
                             setTimeout("$('#div_error').hide()", 5000);
+                            recargar_fecha_ultima_actualizacion();//Recarga la fecha de la ultima actualización del modulo perfil
 
                         })
                         .fail(function(jqXHR, response) {

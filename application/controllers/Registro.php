@@ -124,22 +124,22 @@ class Registro extends MY_Controller {
 
                                     if (isset($result_id_emp) AND $result_id_emp < 1) {//si el id del empleado es menor que 1, entonces existe un error
                                         $this->session->set_flashdata('error', $string_values['registro']['phl_registro_incorrecto_del_empleado']);
-                                        $array_to_json['usuario'] = $datos_usuario;
-                                        $array_operacion_entidades['usuario'] = array('insert' => $result_id_user); //Registro de usuario 
+                                        $array_datos_entidad['usuario'] = $datos_usuario;
+                                        $array_operacion_id_entidades['usuario'] = array('insert' => $result_id_user); //Registro de usuario 
                                         $id_emp = $result_id_emp;
                                     } else {//Codificamos json con usuario y empleado
-                                        $array_to_json['usuario'] = $datos_usuario;
-                                        $array_to_json['empleado'] = $datos_empleados;
+                                        $array_datos_entidad['usuario'] = $datos_usuario;
+                                        $array_datos_entidad['empleado'] = $datos_empleados;
 
-                                        $array_operacion_entidades['usuario'] = array('insert' => $result_id_user); //Registro de usuario 
+                                        $array_operacion_id_entidades['usuario'] = array('insert' => $result_id_user); //Registro de usuario 
                                         $ope_emp = ($verifica_existe_empleado_local < 1) ? 'insert' : 'update';
                                         $id_emp = ($verifica_existe_empleado_local < 1) ? $result_id_emp : $verifica_existe_empleado_local; //Obtiene id del registro de la entidad empleado
-                                        $array_operacion_entidades['empleado'] = array($ope_emp => $id_emp); //Registro de operacion de usuario 
+                                        $array_operacion_id_entidades['empleado'] = array($ope_emp => $id_emp); //Registro de operacion de usuario 
                                     }
 
 
-                                    $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
-                                    $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
+                                    $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
+                                    $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
 //                                    //Datos de bitacora el registro del usuario
 //                                    $parametros = $this->config->item('parametros_bitacora');
 //                                    $parametros['USUARIO_CVE'] = $result_id_user; //Asigna id del usuario

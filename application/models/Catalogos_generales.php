@@ -441,7 +441,7 @@ class Catalogos_generales extends CI_Model {
         if (is_null($parametros_comprobante)) {
             return $result_comprobante;
         }
-
+        
         if (!empty($res)) {
             $this->db->where('COMPROBANTE_CVE', $id_comprobante);
             $this->db->update('comprobante');

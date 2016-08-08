@@ -26,11 +26,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 echo "<td>" . $val['nom_departamento'] . "</td>";
                 echo "<td text-center>" .
                 $this->form_complete->create_element(
-                        array('id' => 'pago_extra', 'type' => 'checkbox',
+                        array('id' => 'pago_extra', 'type' => 'checkbox', 'class' => 'text-center',
                             'value' => $val['validador_cve'],
                             'attributes' => array(
                             'checked' => ($id_validador===0) ? '' : 'checked',
-                            'class' => 'text-center',
+                            'data-idvalidador' => $id_validador,
+                            'data-idrow' => $id_validador,
+                            'onchange'=>'funcion_designar_validador(this)',
                             )
                         )
                 )
@@ -49,6 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 . 'data-target="#modal_censo"'
                 . 'data-idvalidador="' . $id_validador . '"'
                 . 'data-delcve="' . $val['delegacion_cve'] . '"'
+                . 'data-idrow="' . $key_ai . '"'
                 . 'data-depcve="' . $val['departamento_cve'] . '"'
                 . 'data-tipoevento="cargarseleccion"'
                 . 'onclick="funcion_carga_elemento(this)" >' .

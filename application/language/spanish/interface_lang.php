@@ -62,6 +62,7 @@ $lang['interface'] = array(
     ),
     //perfil string values
     'perfil' => array(
+        'span_fecha_last_update' => 'Fecha de última actualización: ',
         'lbl_titulo_seccion' => 'Mi perfil',
         'lbl_informacion_general' => 'Información general',
         'lbl_formacion' => 'Formación',
@@ -260,6 +261,7 @@ $lang['interface'] = array(
         'error_investigacion_docente_update' => 'No fue posible actualizar la información de investigación docente',
     ),
     'designar_validador' => array(
+        'titulo_template' => 'Designación de validadores',
         'resp_sin_resultados' => '<div class="jumbotron"><h1>No se encontraron resultados</h1></div>',
         'tab_titulo_unidades' => 'unidades',
         'tab_titulo_designado' => 'Designado',
@@ -296,11 +298,29 @@ $lang['interface'] = array(
         'lbl_no_existe_usuario' => 'El empleado no existe',
         'lbl_status_empleado_cero' => 'El empleado se encuentrá dado de baja del sistema por el momento ',
         'lbl_no_se_encontro_empleado_sied' => 'No se encontraron datos asociados a la matrícula o la delegación.<br>Por favor verifique que la información que ingreso es correcta o que la red se encuentá habilitata.',
+        'lbl_fallo_designar_validador' => 'No se pudo designar el validador, por favor intentelo de nuevo.',
+        'lbl_no_selecciono_validador' => 'Debe seleccionar un validador',
         'drop_delegacion' => 'Seleccione delegación',
         'li_unidad' => 'Unidad',
         'li_clave_adscripcion' => 'Clave de adscripción',
         'li_matricula' => 'Matrícula',
         'li_emp_nombre' => 'Nombre de empleado',
+        'insert_validador_asignacion' => 'La asignación de validador se realizo correctamente',
+    ),
+    'validador_censo' => array(
+        'titulo_template' => 'Validación de censo de profesores',
+        'titulo_tab_matricula' => 'Matrícula',
+        'titulo_tab_nombre' => 'Nombre',
+        'titulo_tab_estado_validacion' => 'Estado de la validación',
+        'titulo_tab_fecha_ultimo_estado' => 'Fecha de último estado',
+        'titulo_tab_validar' => 'Fecha de último estado',
+        'lbl_estado_validacion' => 'Estado de validación',
+        'drop_estado_validacion' => 'Filtro por estado de validación',
+        'txt_buscar_docentes' => 'Buscar docente',
+        'li_matricula' => 'Matrícula',
+        'li_emp_nombre' => 'Nombre de empleado',
+        'li_clave_adscripcion' => 'Clave de adscripción',
+        'li_unidad' => 'Unidad',
     ),
 );
 

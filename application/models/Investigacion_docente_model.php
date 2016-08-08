@@ -91,7 +91,7 @@ class Investigacion_docente_model extends CI_Model {
         if (is_null($datos_investigacion_docente)) {
             return $result_investigacion;
         }
-        
+
         $this->db->where('EAID_CVE', $investigacion_docente);
         $this->db->update('emp_act_inv_edu', $datos_investigacion_docente);
         if ($this->db->trans_status() === FALSE) {
@@ -102,6 +102,22 @@ class Investigacion_docente_model extends CI_Model {
             $result_investigacion['entidad'] = $datos_investigacion_docente;
         }
         return $result_investigacion;
+    }
+    
+      public function get_ultimo_registro_investigacion($id_empleado) {
+        $select = array('MAX(eaid.EAID_CVE) "ultimo_id"');
+        $this->db->select($select);
+        $this->db->from('emp_act_inv_edu as eaid');
+        $this->db->where('eaid.EMPLEADO_CVE', $id_empleado);
+        $query = $this->db->get();
+        $query = $query->result_array();
+//        pr($this->db->last_query());
+        if(empty($query)){
+            $query = 0;
+        }else{
+            $query = $query[0]['ultimo_id'];
+        }
+        return $query;
     }
 
 }

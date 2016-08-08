@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Designar_validador_model extends CI_Model {
+class Validacion_docente_model extends CI_Model {
 
     public function __construct() {
         // Call the CI_Model constructor
@@ -10,7 +10,7 @@ class Designar_validador_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_buscar_unidades($params) {
+    public function get_buscar_docentes_validar($params) {
         $arra_buscar_por = array('unidad' => 'dp.nom_dependencia',
             'matricula' => 'e.EMP_MATRICULA',
             'claveadscripcion' => 'dp.departamento_cve',
