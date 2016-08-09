@@ -10,7 +10,7 @@ $(function () {
         var id = jQuery(e.target).attr("href").substr(1);//Obtiene el texto del href
         window.location.hash = id;
         if ((id.indexOf('ajax') > -1 || id.indexOf('seccion') > -1) && array_menu_perfil.indexOf(id) < 0) {
-            alert();
+            //alert();
             array_menu_perfil.push(id);
             //Separar en 4, 0controlador; 1nombre del método ajax; 2nombre del formulario; 3nombre del div
 //            var cad = hrutes[id];

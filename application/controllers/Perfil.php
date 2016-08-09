@@ -32,6 +32,7 @@ class Perfil extends MY_Controller {
      * @author Ricardo Sanchez S
      */
     public function index() {
+        //echo "SOY UN INDEX....";
         $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
 //        pr($rol_seleccionado);
         $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1));
@@ -49,7 +50,7 @@ class Perfil extends MY_Controller {
         $datosPerfil['array_menu'] = $array_menu;
         
         //modificar formatos
-         //setlocale(LC_ALL,'es_ES'); 
+        setlocale(LC_ALL,'es_ES'); 
         $upDate = $this->modPerfil->get_fecha_ultima_actualizacion($id_usuario)->fecha_bitacora;
         $datosPerfil['fecha_ultima_actualizacion'] = $string_values['span_fecha_last_update'] . strftime("%d de %B de %G a las %H:%M:%S", strtotime($upDate));
         //pr($datosPerfil);
@@ -60,6 +61,29 @@ class Perfil extends MY_Controller {
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
+    }
+    
+    /**/
+    public function seccion_info_general(){
+        //pr("hello hell!");
+        
+        $data = array();
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface')['perfil'];
+        /*
+        $data['string_values'] = $string_values;
+        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+        $empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
+        if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
+            $this->load->model('Investigacion_docente_model', 'id');
+            $lista_investigacion = $this->id->get_lista_datos_investigacion_docente($empleado[0]['EMPLEADO_CVE']);
+            $data['lista_investigaciones'] = $lista_investigacion;
+            $this->load->view('perfil/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrán la lista
+        } else {
+            //Error, No existe el empleado
+        }
+        //Consulta datos de empleado en investigación
+        */
     }
 
     /**
