@@ -76,9 +76,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => '11.32.41.238',
-    'username' => 'luis',
-    'password' => 'luis',
+    'hostname' => 'localhost',
+    'username' => 'sipimss',
+    'password' => 'sipimss',
     'database' => 'sipimss',
 
 //    'hostname' => 'vps-1214838-x.dattaweb.com',

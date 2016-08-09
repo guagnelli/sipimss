@@ -38,14 +38,23 @@ class Perfil extends MY_Controller {
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['perfil'];
         $id_usuario = $this->session->userdata('identificador');
+       
+/*Esto es de información general*/
+        
         $datosPerfil = $this->loadInfo($id_usuario);
         $datosPerfil['generos'] = array('F' => 'Femenino', 'M' => 'Masculino');
         $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
         $datosPerfil['formacionProfesionalOptions'] = array();
         $datosPerfil['tipoComprobanteOptions'] = array();
         $datosPerfil['array_menu'] = $array_menu;
-        $datosPerfil['fecha_ultima_actualizacion'] = $string_values['span_fecha_last_update'] . $this->modPerfil->get_fecha_ultima_actualizacion($id_usuario)->fecha_bitacora;
-//        pr($datosPerfil);
+        
+        //modificar formatos
+         //setlocale(LC_ALL,'es_ES'); 
+        $upDate = $this->modPerfil->get_fecha_ultima_actualizacion($id_usuario)->fecha_bitacora;
+        $datosPerfil['fecha_ultima_actualizacion'] = $string_values['span_fecha_last_update'] . strftime("%d de %B de %G a las %H:%M:%S", strtotime($upDate));
+        //pr($datosPerfil);
+        
+/* fin Esto es de información general*/
 
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());

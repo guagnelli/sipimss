@@ -117,7 +117,7 @@ $string_values = $this->lang->line('interface');
 </div>
 
 
-//<?php
+<?php
 //  if(isset($modal_general)){
 //     echo $modal_general;
 //  }
