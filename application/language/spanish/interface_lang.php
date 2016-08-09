@@ -341,7 +341,11 @@ $lang['interface'] = array(
         'title_tipo_comprobante' => 'Tipo de comprobante',
         'lbl_comprobante' => 'Comprobante',
         'title_cargar_comprobante' => 'Cargar comprobante',
-    )
+    ),
+	  'becas_comisiones' => array(
+        'titulo_b_template' => 'Becas',
+        'titulo_c_template' => 'Comisiones',
+    ),
 );
 
 
