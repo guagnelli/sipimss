@@ -223,7 +223,7 @@
                     <!--Mostrará comprobante -->
                     <div class='row'>
                          <div class="col-md-6">
-                                <label for='radio_duracion_fecha' class="control-label">
+                                <label for='lbl_tipo_comprobante' class="control-label">
                                     <?php echo $string_values['lbl_tipo_comprobante']; ?>
                                 </label>
                                  <?php 
