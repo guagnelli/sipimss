@@ -155,8 +155,8 @@ class Login_model extends CI_Model {
         $select = array('count(*) "cantidad_reg"', 'us.USUARIO_CVE "user_cve"',
             'us.USU_MATRICULA "usr_matricula"', 'us.USU_NOMBRE "usr_nombre"',
             'us.USU_PATERNO "usr_paterno"', 'us.USU_MATERNO "usr_materno"',
-            'us.USU_CONTRASENIA "usr_passwd"', 'us.CATEGORIA_CVE "usr_categoria"',
-            'us.ADSCRIPCION_CVE "usr_adscripcion"', 'us.DELEGACION_CVE "usr_delegacion"',
+            'us.USU_CONTRASENIA "usr_passwd"', 'emp.CATEGORIA_CVE "usr_categoria"',
+            'emp.ADSCRIPCION_CVE "usr_adscripcion"', 'emp.DELEGACION_CVE "usr_delegacion"',
             'us.USU_CORREO "usr_correo"', 'emp.EMPLEADO_CVE "empleado_cve"'
         );
 

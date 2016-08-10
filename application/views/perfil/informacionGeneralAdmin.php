@@ -11,7 +11,7 @@
     </div>
     <?php echo form_open('', array('id'=>'form_informacion_general')); ?>
     <div class='row'> 
-        <div class="form-group col-xs-4 col-md-4">
+        <div class="form-group col-xs-3 col-md-3">
             <label for='perfil_apellido_paterno' class="control-label">
                 <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_apellido_paterno']; ?>
@@ -33,7 +33,9 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_paterno'],
-                            'maxlength'=>15,                              
+                            'maxlength'=>15,
+                            'readonly' => 'readonly',
+                              
                             )
                         )
                     );
@@ -41,7 +43,7 @@
             </div>
             <?php echo form_error_format('perfil_apellido_paterno'); ?>
         </div>
-        <div class="form-group col-xs-4 col-md-4">
+        <div class="form-group col-xs-3 col-md-3">
             <label for='perfil_apellido_materno' class="control-label">
                 <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_apellido_materno']; ?>
@@ -61,6 +63,7 @@
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_materno'],
                             'maxlength'=>15,
+                            'readonly' => 'readonly'
                             )
                         )
                     );
@@ -68,7 +71,7 @@
             </div>
             <?php   echo form_error_format('perfil_apellido_materno'); ?>
         </div>
-        <div class="form-group col-xs-4 col-md-4">
+        <div class="form-group col-xs-3 col-md-3">
             <label for='perfil_nombre' class="control-label">
                 <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre']; ?>
@@ -88,12 +91,18 @@
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_nombre'],
                             'maxlength'=>15,
+                            'readonly' => 'readonly'
                             )
                         )
                     );
             ?>
             </div>
             <?php   echo form_error_format('perfil_nombre'); ?>
+        </div>
+        <div class="form-group col-xs-3 col-md-3 button-padding">
+            <button type="button" class="btn btn-primary btn-xs" id="btnEditarNombre">
+               <?php echo $string_values['perfil']['btn_informacion_general_editar_nombre']; ?> 
+            </button>
         </div>
     </div>
     <div class="row">

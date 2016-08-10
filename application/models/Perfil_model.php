@@ -3,6 +3,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Perfil_model extends CI_Model {
+    
+    var $genero = array('F' => 'Femenino', 'M' => 'Masculino');
 
     public function __construct() {
         parent::__construct();
@@ -54,6 +56,8 @@ class Perfil_model extends CI_Model {
             'EMP_APE_MATERNO as apellidoMaterno',
             'EMP_CURP as curp',
             'EMP_EDAD as edad',
+            'EMP_ANTIGUEDAD as antiguedad',
+            'usu_fch_nacimiento as fecha_nacimiento',
             'EMP_GENERO as generoSelected',
             'CESTADO_CIVIL_CVE as estadoCivilSelected',
             'EMP_EMAIL as correoElectronico',

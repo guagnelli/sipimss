@@ -63,12 +63,17 @@ class Perfil extends MY_Controller {
        
         /*Esto es de información general*/
         if (!$this->input->post()) {
-            pr("Just showing a preview");
+           // pr("Just showing a preview");
             $datosPerfil = $this->loadInfo($id_usuario);
-            $datosPerfil['generos'] = array('F' => 'Femenino', 'M' => 'Masculino');
+            
+            //solo se manda el combo de sexo cuando es el usuario admin
+            $datosPerfil['genero'] = $this->modPerfil->genero[$datosPerfil['generoSelected']];
             $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
             $datosPerfil['formacionProfesionalOptions'] = array();
             $datosPerfil['tipoComprobanteOptions'] = array();
+            
+            $datosPerfil['antiguedad'] = explode('_',$datosPerfil['antiguedad']);
+            pr($datosPerfil);
             //$datosPerfil['array_menu'] = $array_menu;
             $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista
         }else{
