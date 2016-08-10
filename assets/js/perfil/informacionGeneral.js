@@ -1,6 +1,6 @@
 $(document).ready(function (){
     $("#btn_informacion_general_personal").on('click',function (){
-        alert($("#form_informacion_general").attr("action"));
+        //alert($("#form_informacion_general").attr("action"));
         var action = $("#form_informacion_general").attr("action");
         var form_data = $("#form_informacion_general").serialize();
         $.ajax({
