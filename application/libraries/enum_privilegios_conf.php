@@ -1,4 +1,4 @@
-<?php
+2<?php
 
 abstract class MyEnum {
 
@@ -25,7 +25,7 @@ abstract class MyEnum {
 
 }
 
-class enum_privilegios_conf extends MyEnum {
+class Enum_privilegios_conf extends MyEnum {
 
     const
             __default = 0

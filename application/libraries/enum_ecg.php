@@ -25,7 +25,7 @@ abstract class MyEnum3 {
 
 }
 
-class enum_ecg extends MyEnum3 {
+class Enum_ecg extends MyEnum3 {
 
     const
             __default = '',

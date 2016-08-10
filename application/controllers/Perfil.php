@@ -32,36 +32,27 @@ class Perfil extends MY_Controller {
      * @author Ricardo Sanchez S
      */
     public function index() {
-        //echo "SOY UN INDEX....";
         $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
 //        pr($rol_seleccionado);
         $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1));
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['perfil'];
         $id_usuario = $this->session->userdata('identificador');
-       
-/*Esto es de información general
-        
         $datosPerfil = $this->loadInfo($id_usuario);
         $datosPerfil['generos'] = array('F' => 'Femenino', 'M' => 'Masculino');
         $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
         $datosPerfil['formacionProfesionalOptions'] = array();
-        $datosPerfil['tipoComprobanteOptions'] = array();*/
+        $datosPerfil['tipoComprobanteOptions'] = array();
         $datosPerfil['array_menu'] = $array_menu;
-        
-        //modificar formatos
-        setlocale(LC_ALL,'es_ES'); 
-        $upDate = $this->modPerfil->get_fecha_ultima_actualizacion($id_usuario)->fecha_bitacora;
-        $datosPerfil['fecha_ultima_actualizacion'] = $string_values['span_fecha_last_update'] . strftime("%d de %B de %G a las %H:%M:%S", strtotime($upDate));
-        //pr($datosPerfil);
-        
-/* fin Esto es de información general*/
+        $datosPerfil['fecha_ultima_actualizacion'] = $string_values['span_fecha_last_update'] . $this->modPerfil->get_fecha_ultima_actualizacion($id_usuario)->fecha_bitacora;
+//        pr($datosPerfil);
 
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
     }
+<<<<<<< HEAD
     
     /**/
     public function seccion_info_general(){
@@ -83,6 +74,8 @@ class Perfil extends MY_Controller {
         $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista
         
     }
+=======
+>>>>>>> a3d241adde49cdbd68e1bda7cccbf74d798d957c
 
     /**
      * 

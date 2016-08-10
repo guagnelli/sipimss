@@ -25,7 +25,7 @@ abstract class MyEnum2 {
 
 }
 
-class enum_estados_empleado extends MyEnum2 {
+class Enum_estados_empleado extends MyEnum2 {
 
     const
             __default = 0,

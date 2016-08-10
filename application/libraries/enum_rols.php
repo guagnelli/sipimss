@@ -25,7 +25,7 @@ abstract class MyEnumRols {
 
 }
 
-class enum_rols extends MyEnumRols {
+class Enum_rols extends MyEnumRols {
 
     const
             __default = 0,

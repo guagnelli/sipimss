@@ -3,13 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
 ?>
 
-<style type="text/css">
-    .button-padding {padding-top: 30px}
-    .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
-    /*Oculta el file para cargar comprobante y deja asi solo muestra un botón*/
-    .file {visibility: hidden;  position: absolute;}
-</style>
-
 <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/investigacion_docente.js"></script>
 
 <!-- Inicio informacion personal -->

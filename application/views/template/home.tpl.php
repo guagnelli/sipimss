@@ -13,6 +13,7 @@
 		</script>
 
 		<?php echo css("bootstrap.min.css"); ?>
+		<?php echo css("general_censo.css"); ?>
 		<?php echo css("jasny-bootstrap.min.css"); ?>
 		<!-- Custom Theme files -->
 		<?php echo css("style.css"); ?>
