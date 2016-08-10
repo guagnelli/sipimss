@@ -81,20 +81,7 @@ class Perfil extends MY_Controller {
         $datosPerfil['tipoComprobanteOptions'] = array();
         //$datosPerfil['array_menu'] = $array_menu;
         $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista
-        /*
-        $data['string_values'] = $string_values;
-        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
-        $empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
-        if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
-            $this->load->model('Investigacion_docente_model', 'id');
-            $lista_investigacion = $this->id->get_lista_datos_investigacion_docente($empleado[0]['EMPLEADO_CVE']);
-            $data['lista_investigaciones'] = $lista_investigacion;
-            $this->load->view('perfil/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrán la lista
-        } else {
-            //Error, No existe el empleado
-        }
-        //Consulta datos de empleado en investigación
-        */
+        
     }
 
     /**

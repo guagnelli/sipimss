@@ -705,3 +705,4 @@
         </div>
     </div>
     <!--Fin informacion IMSS-->
+<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/informacionGeneral.js"></script>
