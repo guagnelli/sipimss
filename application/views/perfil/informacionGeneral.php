@@ -322,7 +322,7 @@
     </div>
     <div class="row">
         <div class="form-group col-xs-4 col-md-4 col-md-offset-4 text-center">
-            <button type="button" class="btn btn-success">
+            <button type="button" class="btn btn-success" id="btn_informacion_general_personal">
                <?php echo $string_values['perfil']['btn_informacion_general_guardar_informacion_personal']; ?> 
             </button>
         </div>    

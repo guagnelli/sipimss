@@ -1,3 +1,30 @@
+$(document).ready(function (){
+    $("#btn_informacion_general_personal").on('click',function (){
+        alert($("#form_informacion_general").attr("action"));
+        var action = $("#form_informacion_general").attr("action");
+        var form_data = $("#form_informacion_general").serialize();
+        $.ajax({
+            url: action,
+            data: form_data,
+            method: 'POST',
+            beforeSend: function(xhr) {
+                $('#get_data_ajax_actividad').html(create_loader());
+            }
+        })
+        .done(function(response) {
+            $("#seccion_info_general").html(response);
+        })
+        .fail(function(jqXHR, response) {
+                $('#get_data_ajax_actividad').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+        })
+        .always(function() {
+            remove_loader();
+        });
+    });
+});
+
+
+
 $(function () {
     $('#btnEditarNombre').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');

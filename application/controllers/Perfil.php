@@ -56,22 +56,26 @@ class Perfil extends MY_Controller {
     
     /**/
     public function seccion_info_general(){
-        //pr("hello hell!");
-        
         $data = array();
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['perfil'];
         $id_usuario = $this->session->userdata('identificador');
        
         /*Esto es de información general*/
-        
-        $datosPerfil = $this->loadInfo($id_usuario);
-        $datosPerfil['generos'] = array('F' => 'Femenino', 'M' => 'Masculino');
-        $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
-        $datosPerfil['formacionProfesionalOptions'] = array();
-        $datosPerfil['tipoComprobanteOptions'] = array();
-        //$datosPerfil['array_menu'] = $array_menu;
-        $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista
+        if (!$this->input->post()) {
+            pr("Just showing a preview");
+            $datosPerfil = $this->loadInfo($id_usuario);
+            $datosPerfil['generos'] = array('F' => 'Femenino', 'M' => 'Masculino');
+            $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
+            $datosPerfil['formacionProfesionalOptions'] = array();
+            $datosPerfil['tipoComprobanteOptions'] = array();
+            //$datosPerfil['array_menu'] = $array_menu;
+            $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista
+        }else{
+            pr("Validating-data, Saving-data");
+            pr($this->input->post());
+        }
+
         
     }
 
