@@ -80,16 +80,6 @@ $db['default'] = array(
     'username' => 'sipimss',
     'password' => 'sipimss',
     'database' => 'sipimss',
-
-//    'hostname' => 'vps-1214838-x.dattaweb.com',
-//    'username' => 'censo_user',
-//    'password' => 'el#:(vlaluna',
-//    'database' => 'censo_v678',
-    
-//    'hostname' => 'localhost',
-//    'username' => 'root',
-//    'password' => 'mysql',
-//    'database' => 'censo_v678',
     
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
