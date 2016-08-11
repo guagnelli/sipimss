@@ -22,6 +22,8 @@ class Perfil extends MY_Controller {
         $this->load->model('Catalogos_generales', 'cg');
         $this->load->model('Actividad_docente_model', 'adm');
         $this->load->model('Investigacion_docente_model', 'idm');
+		$this->load->model('Becas_comisiones_laborales_model', 'bcl');
+        $this->load->model('Material_educativo_model', 'mem');
         $this->load->library('Ventana_modal');
         $this->load->config('general');
         //$this->lang->load('interface');
@@ -279,7 +281,7 @@ class Perfil extends MY_Controller {
 
             $resultado = $this->dt->delete_comision(array('conditions'=>array('EMP_COMISION_CVE'=>$dt_id))); //Eliminar datos
             
-            $resultado['COM_NOMBRE'] //Eliminar archivo
+            $resultado['COM_NOMBRE'] ;//Eliminar archivo
             echo json_encode($resultado); ///Muestra mensaje
             exit();
             //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
@@ -1267,6 +1269,302 @@ class Perfil extends MY_Controller {
         
         return $com;
     }
+	
+	/*     * *********************************** Material educativo **************************** */
+
+    public function seccion_material_educativo() {
+        if ($this->input->is_ajax_request()) {
+            $data = array();
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['material_educativo'];
+            $data['string_values'] = $string_values;
+            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+            $empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+            if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
+                $lista_material_educativo = $this->mem->get_lista_material_educativo($empleado);
+                $data['lista_material_educativo'] = $lista_material_educativo;
+                $this->load->view('perfil/material_educativo/elaboracion_material_edu_tpl', $data, FALSE); //Valores que muestrán la lista
+            }
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function get_form_general_material_educativo() {
+        if ($this->input->is_ajax_request()) {
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['material_educativo']; //Carga textos a utilizar 
+            $datos_mat_edu['string_values'] = $string_values; //Crea la variable
+            $condiciones_ = array(enum_ecg::ctipo_material => array('TIP_MAT_TIPO =' => NULL));
+            $entidades_ = array(enum_ecg::ctipo_material);
+            $datos_mat_edu = carga_catalogos_generales($entidades_, $datos_mat_edu, $condiciones_);
+            $datos_pie = array();
+            $data = array(
+                'titulo_modal' => $string_values['title_material_eduacativo'],
+                'cuerpo_modal' => $this->load->view('perfil/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE),
+                'pie_modal' => $this->load->view('perfil/material_educativo/material_edu_pie', $datos_pie, true)
+            );
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function get_cargar_tipo_material() {
+        if ($this->input->is_ajax_request()) {
+//            pr($this->input->post(null, TRUE));
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['material_educativo']; //Carga textos a utilizar 
+            $datos_mat_edu['string_values'] = $string_values; //Crea la variable
+
+            if ($this->input->post()) {//Después de cargar el formulario
+                $datos_registro = $this->input->post(null, true);
+                pr($datos_registro);
+                if (!empty($datos_registro['ctipo_material'])) {
+                    $index_tipo_mat = $datos_registro['ctipo_material'];
+                    $datos_tipo_material ['string_values'] = $string_values;
+                    $datos_tipo_material ['cantidad_hojas'] = $this->config->item('opciones_tipo_material')['cantidad_hojas'];
+                    $datos_tipo_material ['numero_horas'] = $this->config->item('opciones_tipo_material')['numero_horas'];
+                    $datos_mat_edu['formulario_complemento'] = $this->load->view('perfil/material_educativo/formulario_mat_edu_' . $index_tipo_mat, $datos_tipo_material, TRUE);
+                }
+            }
+            $condiciones_ = array(enum_ecg::ctipo_material => array('TIP_MAT_TIPO =' => NULL));
+            $entidades_ = array(enum_ecg::ctipo_material);
+            $datos_mat_edu = carga_catalogos_generales($entidades_, $datos_mat_edu, $condiciones_);
+            echo $this->load->view('perfil/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE);
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    private function analiza_validacion_material_educativo($array_validacion, $array_post, $file = null) {
+//        pr($array_post);
+//        pr($array_validacion);
+        $array_result = array();
+        $insert_emp_materia_educativo = $this->config->item('emp_materia_educativo');
+        $insert_ctipo_material = $this->config->item('ctipo_material');
+//        pr($insert_emp_materia_educativo);
+//        pr($array_post);
+        foreach ($array_post as $key => $value) {
+            switch ($key) {
+//                case 'tipo_material_regreso':
+//                    break;
+                default :
+                    if (array_key_exists($key, $array_validacion)) {//Verifica existencia de la llave
+                        $array_result['validacion'][] = $array_validacion[$key];
+                    }
+                    if (array_key_exists($key, $insert_emp_materia_educativo)) {//Verifica existencia de la llave
+                        $array_result['insert_emp_mat_educativo'][$insert_emp_materia_educativo[$key]['insert']] = $value;
+                    }
+                    if (array_key_exists($key, $insert_ctipo_material)) {//Verifica existencia de la llave
+                        $array_result['insert_ctipo_material'][$insert_ctipo_material[$key]['insert']] = $value;
+                    }
+            }
+        }
+        return $array_result;
+    }
+
+    public function add_tipo_material_educativo() {
+        if ($this->input->is_ajax_request()) {
+//            pr($this->input->post(null, true));
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['material_educativo']; //Carga textos a utilizar 
+            $datos_mat_edu['string_values'] = $string_values; //Crea la variable
+            $carga_vista_extra = FALSE;
+            if ($this->input->post()) {//Después de cargar el formulario
+                $datos_post = $this->input->post(null, true);
+                if (!empty($datos_post['ctipo_material'])) {//Condición  para mostrar vista extra
+                    $carga_vista_extra = TRUE;
+                }
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                $validations = $this->config->item('form_material_educativo'); //Carga array de validaciones 
+                $validations = $this->analiza_validacion_material_educativo($validations, $datos_post, $_FILES);
+                $array_datos_entidad = array(); //name_entidad => array(campos con valores)
+                $array_operacion_id_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
+                //Parametros iniciales que deben persistir en el botón de actualización
+                $this->form_validation->set_rules($validations['validacion']);
+                if ($this->form_validation->run()) {//Si pasa todas las validaciones, actualizar
+                    $insert_ctipo_material = $validations['insert_ctipo_material'];
+                    $insert_emp_materia_educativo = $validations['insert_emp_mat_educativo'];
+                    pr($insert_emp_materia_educativo);
+                    pr($insert_ctipo_material);
+                    if (intval($insert_emp_materia_educativo['TIP_MATERIAL_CVE']) === 0) {//Guarda primero el tipo de ctipo_material
+                        $result = $this->mem->insert_material_and_tipo_mat($insert_emp_materia_educativo, $insert_ctipo_material); //Inserta los datos de las dos tablas
+                        if (!empty($result)) {
+                            //LLena los arrays para la bitacora
+                            $array_datos_entidad['emp_materia_educativo'] = $result['emp_materia_educativo']; //Asigna para bitacora las los datos insertados
+                            $array_operacion_id_entidades['emp_materia_educativo'] = array('insert' => $result['emp_materia_educativo']['MATERIA_EDUCATIVO_CVE']); //Asigna operación ejecutada a la entidad
+                            $array_datos_entidad['ctipo_material'] = $result['ctipo_material']; //Asigna para bitacora las los datos insertados
+                            $array_operacion_id_entidades['ctipo_material'] = array('insert' => $result['ctipo_material']['TIP_MATERIAL_CVE']); //Asigna operación ejecutada a la entidad
+                        } else {
+                            //Error al guardar los datos
+                        }
+                    } else {//Guarda directamente en la entidad "emp_materia_educativo", y, no guarda nada en la entidad "ctipo_material"
+                        $this->mem->insert_emp_materia_educativo($insert_emp_materia_educativo);
+                    }
+                }
+            }
+            if ($carga_vista_extra) {
+                $index_tipo_mat = $datos_post['ctipo_material'];
+                $datos_tipo_material ['string_values'] = $string_values;
+                $datos_tipo_material ['cantidad_hojas'] = $this->config->item('opciones_tipo_material')['cantidad_hojas'];
+                $datos_tipo_material ['numero_horas'] = $this->config->item('opciones_tipo_material')['numero_horas'];
+                $datos_mat_edu['formulario_complemento'] = $this->load->view('perfil/material_educativo/formulario_mat_edu_' . $index_tipo_mat, $datos_tipo_material, TRUE);
+            }
+            $condiciones_ = array(enum_ecg::ctipo_material => array('TIP_MAT_TIPO =' => NULL));
+            $entidades_ = array(enum_ecg::ctipo_material);
+            $datos_mat_edu = carga_catalogos_generales($entidades_, $datos_mat_edu, $condiciones_);
+            echo $this->load->view('perfil/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE);
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+	 /*     * *********************************** Becas_ **************************** */
+
+    public function seccion_becas_comisiones() {
+        if ($this->input->is_ajax_request()) {
+            $data = array();
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['becas_comisiones'];
+            $data['string_values'] = $string_values;
+            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+            $empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+            if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
+                $lista_becas = $this->bcl->get_lista_becas($empleado);
+                $lista_comisiones = $this->bcl->get_lista_comisiones($empleado);
+                $data_becas['lista_becas'] = $lista_becas;
+                $data_comision['lista_comisiones'] = $lista_comisiones;
+                $data_becas['string_values'] = $string_values;
+                $data_comision['string_values'] = $string_values;
+                $data['cuerpo_becas'] = $this->load->view('perfil/becas_comisiones/becas_cuerpo', $data_becas, TRUE); //Valores que muestrán la lista
+                $data['cuerpo_comisiones'] = $this->load->view('perfil/becas_comisiones/comisiones_cuerpo', $data_comision, TRUE); //Valores que muestrán la lista
+                $this->load->view('perfil/becas_comisiones/becas_comisiones_tpl', $data, FALSE); //Valores que muestrán la lista
+                //Error, No existe el empleado
+            }
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function get_form_becas() {
+        if ($this->input->is_ajax_request()) {
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
+            $data_becas['string_values'] = $string_values; //Crea la variable
+            $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cclase_beca, enum_ecg::cbeca_interrumpida, enum_ecg::cmotivo_becado);
+            $data_becas = carga_catalogos_generales($entidades_, $data_becas);
+            $datos_pie = array();
+            $data = array(
+                'titulo_modal' => $string_values['title_becas'],
+                'cuerpo_modal' => $this->load->view('perfil/becas_comisiones/formulario_becas', $data_becas, TRUE),
+                'pie_modal' => $this->load->view('perfil/becas_comisiones/becas_pie', $datos_pie, true)
+            );
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function get_form_comisiones() {
+        if ($this->input->is_ajax_request()) {
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
+            $data_comisiones['string_values'] = $string_values; //Crea la variable
+            $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //Sólo comisiones que no son academicas, es decir, puras comisiones laborales
+            $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
+            $data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
+            $datos_pie = array();
+            $data = array(
+                'titulo_modal' => $string_values['title_comisiones'],
+                'cuerpo_modal' => $this->load->view('perfil/becas_comisiones/formulario_comisiones', $data_comisiones, TRUE),
+                'pie_modal' => $this->load->view('perfil/becas_comisiones/comisiones_pie', $datos_pie, true)
+            );
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function get_add_beca() {
+        if ($this->input->is_ajax_request()) {
+            $this->lang->load('interface', 'spanish');
+            $tipo_msg = $this->config->item('alert_msg');
+            $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
+            $data_becas = array();
+            $data_becas['string_values'] = $string_values;
+            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+            $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
+            $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+
+            if ($this->input->post()) {//Después de cargar el formulario
+                $datos_registro = $this->input->post(null, true);
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                $validations = $this->config->item('form_beca'); //Obtener validaciones de archivo
+                $array_to_json = array(); //name_entidad => array(campos con valores)
+                $array_operacion_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
+
+                $this->form_validation->set_rules($validations);
+                if ($this->form_validation->run()) { //Si pasa todas las validaciones, guardar
+                    $array_campos_beca = $this->config->item('emp_beca');
+                }//*************************Termina bloque de insertar nueva beca
+            }
+            $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cclase_beca, enum_ecg::cbeca_interrumpida, enum_ecg::cmotivo_becado);
+            $data_becas = carga_catalogos_generales($entidades_, $data_becas);
+
+
+            echo $this->load->view('perfil/becas_comisiones/formulario_becas', $data_becas, TRUE);
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function get_add_comision() {
+        if ($this->input->is_ajax_request()) {
+            $this->lang->load('interface', 'spanish');
+            $tipo_msg = $this->config->item('alert_msg');
+            $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
+            $data_comisiones = array();
+            $data_comisiones['string_values'] = $string_values;
+            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+            $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
+            $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+//            pr($_FILES);
+            if ($this->input->post()) {//Después de cargar el formulario
+//                pr($this->input->post());
+                $datos_registro = $this->input->post(null, true);
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                $validations = $this->config->item('form_comision'); //Obtener validaciones de archivo
+                $array_to_json = array(); //name_entidad => array(campos con valores)
+                $array_operacion_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
+
+                $this->form_validation->set_rules($validations);
+                if ($this->form_validation->run()) { //Si pasa todas las validaciones, guardar
+                    $array_campos_comision = $this->config->item('emp_comision');
+                }//*************************Termina bloque de insertar nueva beca
+            }
+            $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //Sólo comisiones que no son academicas, es decir, puras comisiones laborales
+            $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
+            $data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
+
+
+            echo $this->load->view('perfil/becas_comisiones/formulario_comisiones', $data_comisiones, TRUE);
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function genera_array($array_validados, $datos_post, $array_campos) {
+        $array_result = array();
+        foreach ($datos_post as $keyp => $val) {
+            switch ($keyp) {
+                case '':
+                    break;
+                default :
+                    $array_result[] = $array_validados[$keyp];
+            }
+        }
+    }
+	
 
 }
 
@@ -1282,3 +1580,6 @@ class Direccion_tesis_dao extends Emp_comision_dao{
     public $COM_AREA_CVE;
     public $NIV_ACADEMICO_CVE;
 }
+
+
+

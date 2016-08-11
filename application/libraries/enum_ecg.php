@@ -59,7 +59,11 @@ class Enum_ecg extends MyEnum3 {
             cunidad = 'cunidad',
             cestado_validacion = 'cestado_validacion',
             comision_area = 'comision_area',
-            cnivel_academico = 'cnivel_academico'
+            cnivel_academico = 'cnivel_academico',
+			ctipo_comision = 'ctipo_comision' ,
+            cmotivo_becado = 'cmotivo_becado' ,
+            cbeca_interrumpida = 'cbeca_interrumpida', 
+            cclase_beca = 'cclase_beca'
     ;
     /*
       guardar actuación (evaluaciones)

@@ -193,6 +193,10 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'cestado_validacion' => array('id' => 'EST_VALIDACION_CVE', 'nombre' => 'EST_VALIDA_DESC' , 'where' => null),
     'comision_area' => array('id' => 'COM_AREA_CVE', 'nombre' => 'COM_ARE_NOMBRE' , 'where' => null),
     'cnivel_academico' => array('id' => 'NIV_ACADEMICO_CVE', 'nombre' => 'NIV_ACA_NOMBRE' , 'where' => null),
+    'ctipo_comision' => array('id' => 'TIP_COMISION_CVE', 'nombre' => 'TIP_COM_NOMBRE', 'where' => 'IS_COMISION_ACADEMICA'),
+    'cmotivo_becado' => array('id' => 'MOTIVO_BECADO_CVE', 'nombre' => 'MOT_BEC_NOMBRE', 'where' => null),
+    'cbeca_interrumpida' => array('id' => 'BECA_INTERRIMPIDA_CVE', 'nombre' => 'MSG_BEC_INTE', 'where' => null),
+    'cclase_beca' => array('id' => 'CLA_BECA_CVE', 'nombre' => 'CLA_BEC_NOMBRE', 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 
@@ -317,7 +321,43 @@ $config['emp_act_inv_edu'] = array(
     'cmedio_divulgacion' => array('select' => '', 'insert' => 'MED_DIVULGACION_CVE'), 
     'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'), 
     'bibliografia_revista' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'), 
-    'bibliografia_libro' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'), 
+    'bibliografia_libro' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'),
+    
+);
+
+$config['emp_beca'] = array(
+    'fecha_inicio' => array('select' => 'EB_FCH_INICIO', 'insert' => 'EB_FCH_INICIO'),
+    'fecha_fin' => array('select' => 'EB_FCH_FIN', 'insert' => 'EB_FCH_FIN'),
+    'cclase_beca' => array('select' => 'CLA_BECA_CVE', 'insert' => 'CLA_BECA_CVE'),
+    'cmotivo_becado' => array('select' => 'MOTIVO_BECADO_CVE', 'insert' => 'MOTIVO_BECADO_CVE'),
+    'cbeca_interrumpida' => array('select' => 'BECA_INTERRUMPIDA_CVE', 'insert' => 'BECA_INTERRUMPIDA_CVE'),
+    'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
+);
+$config['emp_comision'] = array(
+    'fecha_inicio' => array('select' => 'EC_FCH_INICIO', 'insert' => 'EC_FCH_INICIO'),
+    'fecha_fin' => array('select' => 'EC_FCH_FIN', 'insert' => 'EC_FCH_FIN'),
+    'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
+    'tipo_comision_cve' => array('select' => 'TIP_COMISION_CVE', 'insert' => 'TIP_COMISION_CVE'),
+);
+$config['emp_materia_educativo'] = array(
+    'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
+    'emp_material_educativo_cve' => array('select' => 'MATERIA_EDUCATIVO_CVE', 'insert' => 'MATERIA_EDUCATIVO_CVE'),
+    'tipo_material_regreso' => array('select' => 'TIP_MATERIAL_CVE', 'insert' => 'TIP_MATERIAL_CVE'),
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'),
+    'material_educativo_anio' => array('select' => 'MAT_EDU_ANIO', 'insert' => 'MAT_EDU_ANIO'),
+    'nombre_material' => array('select' => 'NOMBRE_MATERIAL_EDUCATIVO', 'insert' => 'NOMBRE_MATERIAL_EDUCATIVO'),
+);
+$config['ctipo_material'] = array(
+    'tipo_material_cve' => array('select' => 'TIP_MATERIAL_CVE', 'insert' => 'TIP_MATERIAL_CVE'),
+    'ctipo_material' => array('select' => 'TIP_MAT_TIPO', 'insert' => 'TIP_MAT_TIPO'),
+    'cantidad_hojas' => array('select' => 'TIP_MAT_OPCION', 'insert' => 'TIP_MAT_OPCION'),
+    'nombre_unidad' => array('select' => 'TIP_MAT_NOMBRE', 'insert' => 'TIP_MAT_NOMBRE'),
+    'numero_horas' => array('select' => 'TIP_MAT_OPCION', 'insert' => 'TIP_MAT_OPCION'),
+    'nombre_objeto_aprendizaje' => array('select' => 'TIP_MAT_NOMBRE', 'insert' => 'TIP_MAT_NOMBRE'),
+);
+$config['opciones_tipo_material'] = array(
+    'cantidad_hojas' => array(1 => 'Menos de 100 hoja', 2 => '100 ó más hojas'),
+    'numero_horas' => array(1 => 'Menor o igual que cuatro horas', 2 => 'Mayor que cuatro horas'),
 );
 
 //    EAD_DURACION
