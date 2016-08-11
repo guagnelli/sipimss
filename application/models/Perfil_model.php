@@ -57,7 +57,7 @@ class Perfil_model extends CI_Model {
             'EMP_CURP as curp',
             'EMP_EDAD as edad',
             'EMP_ANTIGUEDAD as antiguedad',
-            'usu_fch_nacimiento as fecha_nacimiento',
+            'emp_fch_nac as fecha_nacimiento',
             'EMP_GENERO as generoSelected',
             'CESTADO_CIVIL_CVE as estadoCivilSelected',
             'EMP_EMAIL as correoElectronico',

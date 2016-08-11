@@ -1,0 +1,56 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * Clase para identificar información del empleado con base en la CURP
+ * @version 	: 1.0.0
+ * @author      : Guagnelli Mike
+ **/
+class Curp {
+   
+    private $curp;
+    private $genero;
+    private $fecha_nac;
+    private $edad;
+    
+    public function __construct($curp=null) {
+    	$this->CI =& get_instance();
+        if(!is_null($curp)){
+            $this->curp = $curp;
+            $this->_explodeCURP();
+        }
+    }
+    
+    function _explodeCURP(){
+        if(strlen($this->curp) < 10){
+            return false;
+        }
+        $day = substr($this->curp,8,6);
+        $month = substr($this->curp,6,2);
+        $year = strftime("%g",strtotime("1/1/".substr($this->curp,4,2)));   
+        $this->fecha_nac = strtotime("{$year}/{$month}/{$day}"); 
+        $this->edad = date("y")-$year;
+        $this->genero = substr($this->curp,10,1);        
+    }
+    
+    public function setCURP($curp){
+        $this->curp = $curp;
+        if(!$this->_explodeCURP()){
+            return false;
+        }
+        return true;
+    }
+    
+    public function getGenero(){
+        $genero = array("H"=>"Masculino","M"=>"Femenino");
+        return $genero[$this->genero];
+    }
+    
+    public function getEdad(){
+        return $this->edad;
+    }
+    
+    public function getFechaNac(){
+        return $this->fecha_nac;
+    }
+        
+}  

@@ -66,8 +66,10 @@ class Perfil extends MY_Controller {
            // pr("Just showing a preview");
             $datosPerfil = $this->loadInfo($id_usuario);
             
+            $this->load->library("curp");
+            $this->curp->setCURP($datosPerfil["curp"]);
             //solo se manda el combo de sexo cuando es el usuario admin
-            $datosPerfil['genero'] = $this->modPerfil->genero[$datosPerfil['generoSelected']];
+            $datosPerfil['genero'] = $this->curp->getGenero();
             $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
             $datosPerfil['formacionProfesionalOptions'] = array();
             $datosPerfil['tipoComprobanteOptions'] = array();
