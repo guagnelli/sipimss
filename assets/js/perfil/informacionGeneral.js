@@ -1,5 +1,5 @@
-$(document).ready(function (){
-    $("#btn_informacion_general_personal").on('click',function (){
+$(document).ready(function () {
+    $("#btn_informacion_general_personal").on('click', function () {
         //alert($("#form_informacion_general").attr("action"));
         var action = $("#form_informacion_general").attr("action");
         var form_data = $("#form_informacion_general").serialize();
@@ -7,19 +7,19 @@ $(document).ready(function (){
             url: action,
             data: form_data,
             method: 'POST',
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 $('#get_data_ajax_actividad').html(create_loader());
             }
         })
-        .done(function(response) {
-            $("#seccion_info_general").html(response);
-        })
-        .fail(function(jqXHR, response) {
-                $('#get_data_ajax_actividad').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
-        })
-        .always(function() {
-            remove_loader();
-        });
+                .done(function (response) {
+                    $("#seccion_info_general").html(response);
+                })
+                .fail(function (jqXHR, response) {
+                    $('#get_data_ajax_actividad').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                })
+                .always(function () {
+                    remove_loader();
+                });
     });
 });
 
@@ -56,6 +56,19 @@ $(function () {
 
 
 });
+
+function recargar_opcion_menu_mostrar_mensaje(id, is_success, mensaje) {
+    var class_tipo = (is_success) ? 'alert-success' : 'alert-danger';
+    $('#mensaje_error_inv_doc').html(mensaje);
+    $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass(class_tipo);
+    $('#div_error_index').show();
+    $('#modal_censo').modal('toggle');
+    setTimeout("$('#div_error_index').hide()", 6000);
+    if (id.length === 0) {
+        cargar_datos_menu_perfil(id);
+    }
+    recargar_fecha_ultima_actualizacion();
+}
 
 /**
  * 

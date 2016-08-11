@@ -35,43 +35,11 @@ function funcion_guardar_material_educativo() {
         }
     })
             .done(function (response) {
-                var is_html = response.indexOf('<div class=\"list-group\">');//si existe la cadena, entonces es un html
-                if (is_html > -1) {
-                    $('#cuerpo_modal').html(response);
-                } else {
-                    if (response) {
-
-                        var response_json = $.parseJSON(response);//
-                        var investigacion_cve = response_json.result_datos[0].cve_investigacion;
-                        var nombre_investigacion = response_json.result_datos[0].nombre_investigacion;
-                        var nombre_tipo_actividad_docente = response_json.result_datos[0].tpad_nombre;
-                        var cita_publica = response_json.result_datos[0].cita_publicada;
-                        var comprobante_cve = response_json.result_datos[0].comprobante_cve;
-                        var folio = response_json.result_datos[0].folio_investigacion;
-                        var tiene_publicacion = response_json.result_datos[0].tiene_publicacion;
-                        var idrow = funcion_obtener_max_id_row_table_tabla_investigacion_docente() + 1;//Obtiene el maximo index de el row de la tabla de actividades
-
-                        var htmlRowTemplate = $('#template_row_nueva_investigacion').html();
-                        var htmlNewRow = htmlRowTemplate.replace(/\$\$key_ai\$\$/g, idrow)
-                                .replace(/\$\$tpad_nombre\$\$/g, nombre_tipo_actividad_docente)
-                                .replace(/\$\$nombre_investigacion\$\$/g, nombre_investigacion)
-                                .replace(/\$\$folio_investigacion\$\$/g, folio)
-                                .replace(/\$\$tiene_cita\$\$/g, tiene_publicacion)
-                                .replace(/\$\$key\$\$/g, investigacion_cve)
-                                .replace(/\$\$comprobante\$\$/g, comprobante_cve);
-                        $('#tabla_investigacion_docente').append($(htmlNewRow));
-                        $('#mensaje_error_inv_doc').html(response_json.error);
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').addClass('alert-success');
-                        $('#div_error_inv_doc').show();
-//                        $('#close_modal_censo').trigger('onclick');
-                        $('#modal_censo').modal('toggle');
-                        setTimeout("$('#div_error_inv_doc').hide()", 5000);
-                    }
-                }
+                recargar_opcion_menu_mostrar_mensaje('seccion_material_educativo', true, 'Guardado satisfactorio');
             })
             .fail(function (jqXHR, response) {
-//                $('#div_error').show();
-//                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+//                $('#div_error_index').show();
+//                $('#mensaje_error_div_index').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
 //                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
             })
             .always(function () {

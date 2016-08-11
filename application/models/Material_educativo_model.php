@@ -13,25 +13,22 @@ class Material_educativo_model extends CI_Model {
         if ($empleado_cve < 1) {
             return -1;
         }
-        $select = array('eb.EMP_BECA_CVE "emp_beca_cve"', 'eb.EMPLEADO_CVE "empleado_cve"',
-            'eb.EB_FCH_INICIO "fecha_inicio"', 'eb.EB_FCH_FIN "fecha_fin"',
-            'eb.CLA_BECA_CVE "clase_beca_cve"', 'cb.CLA_BEC_NOMBRE "nom_beca"',
-            'eb.COMPROBANTE_CVE "comprobante_cve"', 'c.COM_NOMBRE "nom_comprobante"',
-            'c.TIPO_COMPROBANTE_CVE "tip_comprobante_cve"', 'tc.TIP_COM_NOMBRE "nom_comprobante"',
-            'eb.BECA_INTERRIMPIDA_CVE "beca_interrumpida_cve"', 'bi.MSG_BEC_INTE "msj_beca_interrumpida"',
-            'eb.MOTIVO_BECADO_CVE "motivo_beca_cve"', 'mb.MOT_BEC_NOMBRE "nom_motivo_beca"');
+        $select = array('eme.MATERIA_EDUCATIVO_CVE "emp_material_educativo_cve"' ,
+                        'eme.NOMBRE_MATERIAL_EDUCATIVO "nombre_material"',
+                        'eme.MAT_EDU_ANIO "material_educativo_anio"', 'eme.COMPROBANTE_CVE "comprobante"',
+                        'c.COM_NOMBRE "nom_comprobante"', 'c.TIPO_COMPROBANTE_CVE "ctc_comprobante_cve"', 
+                        'ctc.TIP_COM_NOMBRE "nom_ctp_comprobante"', 'ctm.TIP_MATERIAL_CVE "tipo_material_cve"', 
+                        'ctm.TIP_MAT_TIPO "padre_tp_material"', 'ctm.TIP_MAT_NOMBRE "nom_tipo_material"', 
+                        'ctm.TIP_MAT_OPCION "opt_tipo_material"');
 
         $this->db->select($select);
-        $this->db->from('emp_beca as eb');
-        $this->db->join('cclase_beca cb', 'cb.CLA_BECA_CVE = eb.CLA_BECA_CVE');
-        $this->db->join('cmotivo_becado mb', 'mb.MOTIVO_BECADO_CVE = eb.MOTIVO_BECADO_CVE');
-        $this->db->join('cbeca_interrumpida bi', 'bi.BECA_INTERRIMPIDA_CVE = eb.BECA_INTERRIMPIDA_CVE');
-        $this->db->join('comprobante c', 'c.COMPROBANTE_CVE = eb.COMPROBANTE_CVE');
-        $this->db->join('ctipo_comprobante tc', 'tc.TIPO_COMPROBANTE_CVE = c.TIPO_COMPROBANTE_CVE');
+        $this->db->from('emp_materia_educativo eme');
+        $this->db->join('ctipo_material ctm', 'ctm.TIP_MATERIAL_CVE = eme.TIP_MATERIAL_CVE');
+        $this->db->join('comprobante c', 'c.COMPROBANTE_CVE = eme.COMPROBANTE_CVE', 'left');
+        $this->db->join('ctipo_comprobante ctc', 'ctc.TIPO_COMPROBANTE_CVE = c.TIPO_COMPROBANTE_CVE', 'left');
         $this->db->where('eb.EMPLEADO_CVE', $empleado_cve);
-//        $query = $this->db->get();
-//        return $query->result_array();
-        return array();
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     public function insert_emp_materia_educativo($datos_material_educativo) {
@@ -75,8 +72,9 @@ class Material_educativo_model extends CI_Model {
             } else {
                 $datos_material_educativo['MATERIA_EDUCATIVO_CVE'] = $id_emp_material_educ;
                 $this->db->trans_commit();
-                $result['emp_materia_educativo'] = $datos_material_educativo; 
-                $result['ctipo_material'] = $datos_tipo_material_educativo; 
+                $result['emp_materia_educativo'] = $datos_material_educativo;
+                $result['ctipo_material'] = $datos_tipo_material_educativo;
+                return $result;
             }
         }
     }

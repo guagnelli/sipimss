@@ -1286,7 +1286,7 @@ class Perfil extends MY_Controller {
         }
     }
 
-    private function analiza_validacion_material_educativo($array_validacion, $array_post, $file = null) {
+     private function analiza_validacion_material_educativo($array_validacion, $array_post, $file = null) {
 //        pr($array_post);
 //        pr($array_validacion);
         $array_result = array();
@@ -1296,20 +1296,24 @@ class Perfil extends MY_Controller {
 //        pr($array_post);
         foreach ($array_post as $key => $value) {
             switch ($key) {
-//                case 'tipo_material_regreso':
-//                    break;
-                default :
-                    if (array_key_exists($key, $array_validacion)) {//Verifica existencia de la llave
-                        $array_result['validacion'][] = $array_validacion[$key];
-                    }
-                    if (array_key_exists($key, $insert_emp_materia_educativo)) {//Verifica existencia de la llave
-                        $array_result['insert_emp_mat_educativo'][$insert_emp_materia_educativo[$key]['insert']] = $value;
-                    }
-                    if (array_key_exists($key, $insert_ctipo_material)) {//Verifica existencia de la llave
-                        $array_result['insert_ctipo_material'][$insert_ctipo_material[$key]['insert']] = $value;
-                    }
+                case 'numero_horas'://Cambia el valor a texto del array
+                    $value = $this->config->item('opciones_tipo_material')['numero_horas'][$value];
+                    break;
+                case 'cantidad_hojas'://Cambia el valor a texto del array
+                    $value = $this->config->item('opciones_tipo_material')['cantidad_hojas'][$value];
+                    break;
+            }
+            if (array_key_exists($key, $array_validacion)) {//Verifica existencia de la llave
+                $array_result['validacion'][] = $array_validacion[$key];
+            }
+            if (array_key_exists($key, $insert_emp_materia_educativo)) {//Verifica existencia de la llave
+                $array_result['insert_emp_mat_educativo'][$insert_emp_materia_educativo[$key]['insert']] = $value;
+            }
+            if (array_key_exists($key, $insert_ctipo_material)) {//Verifica existencia de la llave
+                $array_result['insert_ctipo_material'][$insert_ctipo_material[$key]['insert']] = $value;
             }
         }
+
         return $array_result;
     }
 
@@ -1327,6 +1331,8 @@ class Perfil extends MY_Controller {
                 }
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_material_educativo'); //Carga array de validaciones 
+                $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+                $datos_post['empleado_cve'] = $result_id_empleado;//Asigna id del empleado al análisis
                 $validations = $this->analiza_validacion_material_educativo($validations, $datos_post, $_FILES);
                 $array_datos_entidad = array(); //name_entidad => array(campos con valores)
                 $array_operacion_id_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
@@ -1335,8 +1341,11 @@ class Perfil extends MY_Controller {
                 if ($this->form_validation->run()) {//Si pasa todas las validaciones, actualizar
                     $insert_ctipo_material = $validations['insert_ctipo_material'];
                     $insert_emp_materia_educativo = $validations['insert_emp_mat_educativo'];
+                    $guardado_correcto = FALSE;
+                    $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
                     pr($insert_emp_materia_educativo);
                     pr($insert_ctipo_material);
+
                     if (intval($insert_emp_materia_educativo['TIP_MATERIAL_CVE']) === 0) {//Guarda primero el tipo de ctipo_material
                         $result = $this->mem->insert_material_and_tipo_mat($insert_emp_materia_educativo, $insert_ctipo_material); //Inserta los datos de las dos tablas
                         if (!empty($result)) {
@@ -1345,11 +1354,25 @@ class Perfil extends MY_Controller {
                             $array_operacion_id_entidades['emp_materia_educativo'] = array('insert' => $result['emp_materia_educativo']['MATERIA_EDUCATIVO_CVE']); //Asigna operación ejecutada a la entidad
                             $array_datos_entidad['ctipo_material'] = $result['ctipo_material']; //Asigna para bitacora las los datos insertados
                             $array_operacion_id_entidades['ctipo_material'] = array('insert' => $result['ctipo_material']['TIP_MATERIAL_CVE']); //Asigna operación ejecutada a la entidad
-                        } else {
-                            //Error al guardar los datos
+                            $guardado_correcto = TRUE;
+
                         }
                     } else {//Guarda directamente en la entidad "emp_materia_educativo", y, no guarda nada en la entidad "ctipo_material"
-                        $this->mem->insert_emp_materia_educativo($insert_emp_materia_educativo);
+                        $id_emp_material_edu = $this->mem->insert_emp_materia_educativo($insert_emp_materia_educativo); //Inserta los datos de las dos tablas
+                        if ($id_emp_material_edu > 0) {
+                            $insert_emp_materia_educativo['MATERIA_EDUCATIVO_CVE'] = $id_emp_material_edu;
+                            $array_operacion_id_entidades['emp_materia_educativo'] = array('insert' => $id_emp_material_edu); //Asigna operación ejecutada a la entidad
+                            $array_datos_entidad['emp_materia_educativo'] = $insert_emp_materia_educativo; //Asigna para bitacora las los datos insertados
+                            $guardado_correcto = TRUE;
+                        }
+                    }
+                    if ($guardado_correcto) {//Si el guardado fue satisfactorio, guarda bitacora
+                        $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
+                        //Datos de bitacora el registro del usuario
+                        registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
+                    } else {//Error al guardar, manda mensaje de error
+//                        pr('No se pudo guardar');
                     }
                 }
             }

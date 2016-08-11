@@ -5,10 +5,6 @@ $this->lang->load('interface', 'spanish');
 $string_values = $this->lang->line('interface');
 //pr($array_menu);
 ?>
-<style type="text/css">
-    .button-padding {padding-top: 30px}
-    .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
-</style>
 
 <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/informacionGeneral.js"></script>
 
@@ -70,6 +66,18 @@ $string_values = $this->lang->line('interface');
                             <span id="fecha_ultima_actualizacion" class="text-right">
                                 <?php echo (isset($fecha_ultima_actualizacion)) ? $fecha_ultima_actualizacion : ''; ?>
                             </span>
+                        </div>
+                    </div>
+                    <div class="list-group-item" id='div_error_index' style='display:none'>
+                        <div class='row' >
+                            <div class="row" >
+                                <div class="col-md-10 col-sm-10 col-xs-10">
+                                    <div id='mensaje_error_div_index' class='alert'>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <span id='mensaje_error_index'></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <?php
