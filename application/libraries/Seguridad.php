@@ -74,6 +74,17 @@
         return hash('sha512', $string);
     }
 
+    /**
+     * Método que encripta una cadena con el algoritmo md5
+     * @autor       : Jesús Díaz P.
+     * @modified    : 
+     * @param       : string $string Cadena a decodificar
+     * @return      : string Cadena decodificada
+     */
+    public function encrypt_carpeta_nombre($string){
+        return md5($string);
+    }
+
 
     public function folio_random($limit = 6, $anadirEspecial=false)
     {

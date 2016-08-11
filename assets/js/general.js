@@ -148,72 +148,66 @@ function modal_static(is_static_modal) {
 }
 
 function cargar_archivo(req, form){
-    var archivo = $('#userfile_'+req).val();
-    var carga = '#capa_carga_archivo_'+req;
-    var error = "#error_carga_archivo_"+req;
+    var archivo = $('#userfile').val();
+    var carga = '#capa_carga_archivo';
+    var error = "#error_carga_archivo";
     var tipo_comprobante = "";
-    var ed = $('#extension_'+req).val();
+    var ed = $('#extension').val();
     var extension_documentacion = ed.split(',');
-    if ( $("#tipo_comprobante"+req).length ) {
-        tipo_comprobante = $("#tipo_comprobante"+req).val();
+    if ( $("#tipo_comprobante").length ) {
+        tipo_comprobante = $("#tipo_comprobante").val();
     }
-    //console.log(tipo_comprobante);
     if(archivo!=""){ //Validar que contenga archivo
-        //console.log(archivo);
-        //console.log(extension_documentacion);
         if(validate_extension(archivo, extension_documentacion)){ //Validar la extensión, definida en archivo de configuración
-            var formData = new FormData($(form)[0]);
-            formData.append('archivo', req);
-            formData.append('tipo_comprobante', tipo_comprobante);
-            console.log(formData);
-            $.ajax({
-                url: site_url+'/administracion/cargar_archivo',
-                type: 'POST',
-                data: formData,
-                mimeType: "multipart/form-data",
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: 'JSON',
-                beforeSend: function( xhr ) {
-                    $(carga).hide();
-                    $(error).html(create_loader());
-                }
-            })
-            .done(function(response) {
-                if(response.resultado==true){
+            if(tipo_comprobante!=""){
+                var formData = new FormData($(form)[0]);
+                formData.append('identificador', req);
+                formData.append('tipo_comprobante', tipo_comprobante);
+                $.ajax({
+                    url: site_url+'/administracion/cargar_archivo',
+                    type: 'POST',
+                    data: formData,
+                    mimeType: "multipart/form-data",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: 'JSON',
+                    beforeSend: function( xhr ) {
+                        $(carga).hide();
+                        $(error).html(create_loader());
+                    }
+                })
+                .done(function(response) {
+                    var tipo = "";
                     $(carga).show();
-                    //cargar_archivo_listado(val_id);
-                    $(error).html(html_message("El archivo se ha cargado exitosamente.", 'success'));
-                    $('#requisito_'+req).val("");
-                    //link = "<button class='btn-xs btn-block btn-exito btn_requisito btn' value='Descargar' id='btn_d_3' type='button' name='btn_d_3'>Descargar</button>";
-                    //link = "<a href='"+site_url+"/archivo/descarga/"+response.data.filename+"' class='btn-xs btn-block btn-exito btn_requisito btn'><span class='glyphicon glyphicon-download-alt text-right' placeholder='Descargar' title='Descargar' data-toggle='tooltip' data-placement='top'> </span></a>";
-                    link = "<a href='"+site_url+"/archivo/descarga/"+response.data.filename+"' class='btn-xs turqueza'><span class='glyphicon glyphicon-download-alt text-right' placeholder='Descargar' title='Descargar' data-toggle='tooltip' data-placement='top' style='font-size:20px;'> </span></a>";
-                    
-                    
-                    //link = "<a href='"+site_url+"/archivo/descarga/"+response.data.filename+"' class='btn-xs btn-block btn-exito btn_requisito btn'>Descargar</a>";
-                    icon = "<span id='icon_"+req+"' class='input-group-addon glyphicon glyphicon-zoom-in azul' title='Por validar por el administrador' data-toggle='tooltip' data-placement='top'> </span>";
-                    $("#link_descarga_"+req).html(link);
-                    $("#icon_"+req).remove();
-                    $(icon).insertBefore("#requisito_"+req);
-                } else {
-                    $(error).html(html_message(response.error, 'danger'));
-                }
-            })
-            .fail(function( jqXHR, textStatus ) {
-                $(error).html(html_message("Ocurrió un error durante el proceso, inténtelo más tarde.", 'danger'));
-            })
-            .always(function() {
-                remove_loader();
-                $(carga).show();
-                $('#evidencia_archivo').val('');
-                $('[data-toggle="tooltip"]').tooltip();
-            });
+                    if(response.result==true){
+                        tipo = 'success';
+                        $('#capa_archivo_cargado').html("<a href='"+site_url+"/administracion/ver_archivo/"+response.idb+"' target='_blank'>Ver archivo</a><input id='idc' name='idc' type='hidden' value='"+response.idb+"' >");
+                        $('#userfile').val("");
+                        $('#text_comprobante').val("");
+                        $("#btn_subir_archivo").attr('data-key', response.id);
+                    } else {
+                        tipo = 'danger';
+                    }
+                    $("#error_carga_archivo").html(html_message(response.msg, tipo));
+                })
+                .fail(function( jqXHR, textStatus ) {
+                    $(error).html(html_message("Ocurrió un error durante el proceso, inténtelo más tarde.", 'danger'));
+                })
+                .always(function() {
+                    remove_loader();
+                    $(carga).show();
+                    $('#evidencia_archivo').val('');
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+            } else {
+                $(error).html(html_message("Debe seleccionar el tipo de comprobante para poder cargar el archivo.", 'danger'));
+            }
         } else {
             $(error).html(html_message("El archivo seleccionado no esta permitido. Por favor elija un archivo con alguna de las siguientes extensiones: "+extension_documentacion, 'danger'));
         }
     } else {
         $(error).html(create_loader());
-        $(error).html(html_message("Debe seleccionar un archivo para ser almacenado. Por favor elija uno.", 'danger'));
+        $(error).html(html_message("Debe seleccionar un archivo. Por favor elija uno.", 'danger'));
     }
 }

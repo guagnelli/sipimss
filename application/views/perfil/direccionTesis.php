@@ -1,3 +1,6 @@
+<script type="text/javascript">
+var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion']; ?>";
+</script>
 <?php echo js('perfil/direccion_tesis.js'); ?>
 <div class="list-group">
     <div id = 'tab_content_actividad_docente' class='tab-content col-md-12'>
@@ -8,6 +11,7 @@
                        <h4><?php echo $string_values['title']; ?></h4>
                    <br>
                 </div>
+                <div id="mensaje"></div>
                 <div class="row">
 				    <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
 				    	<div>

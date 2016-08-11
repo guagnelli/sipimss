@@ -9,10 +9,11 @@ $config['superadmin'] = 5;
 
 $config['upload_config'] = array(
         'comprobantes'=>array(
-            'upload_path'=>'./upload/comprobantes/',
+            'upload_path'=>'./assets/files/comprobantes/',
             'allowed_types'=>'pdf',
             'remove_spaces'=>TRUE,
             'max_size'=>1024 * 15,
+            'detect_mime'=>true,
             'file_name'=>'tmp_comprobante',
         ),
     );

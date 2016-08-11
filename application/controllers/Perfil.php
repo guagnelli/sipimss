@@ -212,32 +212,47 @@ class Perfil extends MY_Controller {
             $this->load->model('Direccion_tesis_model', 'dt');
             $this->lang->load('interface');
             $data['identificador'] = $identificador;
-            $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
-            $data['string_values'] = array_merge($this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general']);
+            $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
+            $data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
+            $data['string_values'] = array_merge($this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
 
-            //$condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
             $entidades_ = array(enum_ecg::comision_area, enum_ecg::ctipo_comprobante, enum_ecg::cnivel_academico);
             $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
             if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
                 $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                pr($datos_formulario);
+                
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
-                
-                ///Obtener el arreglo de validaciones de acuerdo a acción (insert or update)
-                $validations = (is_null($identificador)) ? $this->config->item('form_usuario_alta') : $this->config->item('form_direccion_tesis'); //Obtener validaciones de archivo
+                $validations = $this->config->item('form_direccion_tesis'); //Obtener validaciones de archivo general
+                $this->form_validation->set_rules($validations); //Añadir validaciones
 
-                $this->form_validation->set_rules($validations);
-                
+                if($this->form_validation->run() == TRUE ){ //Validar datos
+                    $datos_formulario['tipo_comision'] = $this->config->item('tipo_comision')['DIRECCION_TESIS']['id'];
+                    $datos_formulario['empleado'] = $this->session->userdata('idempleado');
+                    $data_com = $this->emp_comision_fac($datos_formulario); //Generar objeto para almacenar
+                    if(empty($data['identificador'])){ //Insertar
+                        $resultado_almacenado = $this->dt->insert_comision($data_com);
+                        $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
+                    } else { //Actualización
+                        $resultado_almacenado = $this->dt->update_comision($dt_id, $data_com);
+                    }
+                    //////Inicio actualizar comprobante
+                    $this->load->model('Administracion_model','admin');
+                    if(!empty($datos_formulario['idc'])){
+                        $resultado_almacenado = $this->admin->update_comprobante($this->seguridad->decrypt_base64($data['idc']), array('TIPO_COMPROBANTE_CVE'=>$datos_formulario['tipo_comprobante']));
+                    }
+                    //////Fin actualizar comprobante
+                    $data['msg'] = imprimir_resultado($resultado_almacenado); ///Muestra mensaje
+                }
             }
-
             if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
                 $data['dir_tes'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions'=>array('EMP_COMISION_CVE'=>$dt_id)))[0]; //Obtener datos
+            } else {
+                $data['dir_tes'] = (array)$this->emp_comision_fac(array('tipo_comision'=>$this->config->item('tipo_comision')['DIRECCION_TESIS']['id'])); //Generar objeto para ser enviado al formulario
             }
-            pr($data);
+            $data['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data, TRUE);
             $data = array(
                 'titulo_modal' => $data['string_values']['title'],
-                'cuerpo_modal' => $this->load->view('perfil/direccionTesis/direccion_tesis_formulario', $data, TRUE),
-                //'pie_modal' => $this->load->view('perfil/direccionTesis/direccion_tesis_pie', $data, true)
+                'cuerpo_modal' => $this->load->view('perfil/direccionTesis/direccion_tesis_formulario', $data, TRUE)
             );
 
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
@@ -246,7 +261,34 @@ class Perfil extends MY_Controller {
         }
     }
     
-    public function cargar_archivo(){
+    /**
+     * Función que permite eliminar la dirección de tesis
+     * @method: void eliminar_convocatoria()
+     * @param: $Identificador   string en base64    Identificador de la dirección de tesis codificado en base64
+     * @author: Jesús Z. Díaz P.
+     */
+    public function eliminar_direccion_tesis($identificador){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $this->load->model('Direccion_tesis_model', 'dt');
+            $datos['identificador'] = $identificador; //Identificador de dirección de tesis
+            $datos['msg'] = null;
+            $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la dirección de tesis
+            $idempleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+            
+            //$datos['string_values'] = $this->lang->line('interface')['general']; //Cargar textos utilizados en vista
+
+            $resultado = $this->dt->delete_comision(array('conditions'=>array('EMP_COMISION_CVE'=>$dt_id))); //Eliminar datos
+            
+            $resultado['COM_NOMBRE'] //Eliminar archivo
+            echo json_encode($resultado); ///Muestra mensaje
+            exit();
+            //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+    
+    /*public function cargar_archivo(){
         if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
             if($_FILES && $this->input->post()){
                 $this->load->library('Seguridad');
@@ -269,9 +311,9 @@ class Perfil extends MY_Controller {
 
                             $archivo_actual = $this->mod_solicitud->documentacion_por_solicitud(array('conditions'=>array('archivo.solicitud_id'=>$solicitud, 'archivo.requisito_id'=>$requisito)));
                             $requisito_actual = $this->mod_solicitud->documentacion_requerida(array('conditions'=>array('requisito.requisito_id'=>$requisito)));
-                            /*pr($archivo_actual);
-                            pr($requisito_actual);
-                            pr($valor_minimo);*/
+                            //pr($archivo_actual);
+                            //pr($requisito_actual);
+                            //pr($valor_minimo);
                             if((!empty($requisito_actual) && $requisito_actual[0]['req_obligatorio']==true && !empty($requisito_actual[0]['req_val_minimo']) && empty($valor_minimo))
                              || (!empty($requisito_actual) && $requisito_actual[0]['req_obligatorio']==true && !empty($requisito_actual[0]['req_especifico']) && empty($valor_minimo)) ) { ///Verificar si el valor mínimo es requerido y fue seleccionado por el usuario
                                 $resultado['error'] = "Para cargar el archivo es necesario que seleccione la calificación a corroborar en el documento.";
@@ -320,7 +362,7 @@ class Perfil extends MY_Controller {
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }
+    }*/
     /////////////////////////Fin dirección de tesis //////////////////////////
 
     public function get_data_ajax_liscta_actividades() {
@@ -1199,5 +1241,44 @@ class Perfil extends MY_Controller {
         }
         return $data;
     }
+    
+    private function emp_comision_fac($comision){
+        $com = new stdClass();
+        switch ($comision['tipo_comision']) {
+            case $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']:
+                $com = $this->direccion_tesis_vo($comision);
+                break;            
+            default:
+                # code...
+                break;
+        }
+        
+        return $com;
+    }
 
+    private function direccion_tesis_vo($comision){
+        $com = new Direccion_tesis_dao;
+        $com->EMPLEADO_CVE = (isset($comision['empleado']) && !empty($comision['empleado'])) ? $comision['empleado'] : NULL;
+        $com->TIP_COMISION_CVE = (isset($comision['tipo_comision']) && !empty($comision['tipo_comision'])) ? $comision['tipo_comision'] : NULL;
+        $com->COMPROBANTE_CVE = (isset($comision['idc']) && !empty($comision['idc'])) ? $this->seguridad->decrypt_base64($comision['idc']) : NULL;
+        $com->EC_ANIO = (isset($comision['dt_anio']) && !empty($comision['dt_anio'])) ? $comision['dt_anio'] : NULL;
+        $com->COM_AREA_CVE = (isset($comision['comision_area']) && !empty($comision['comision_area'])) ? $comision['comision_area'] : NULL;
+        $com->NIV_ACADEMICO_CVE = (isset($comision['nivel_academico']) && !empty($comision['nivel_academico'])) ? $comision['nivel_academico'] : NULL;
+        
+        return $com;
+    }
+
+}
+
+class Emp_comision_dao{
+    //public $EMP_COMISION_CVE;
+    public $EMPLEADO_CVE;
+    public $TIP_COMISION_CVE;
+    public $COMPROBANTE_CVE;
+}
+
+class Direccion_tesis_dao extends Emp_comision_dao{
+    public $EC_ANIO;
+    public $COM_AREA_CVE;
+    public $NIV_ACADEMICO_CVE;
 }

@@ -133,7 +133,20 @@ $lang['interface'] = array(
         'msg_no_existe_empleado' => 'No se encontrarón datos del empleado. Por favor registre sus datos',
         'advertencia_agregar_todos_los_datos' => 'Debe llenar todos los campos obligatorios',
         'datos_almacenados_correctamente' => 'Los datos se almacenaron correctamente',
-        'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde'
+        'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde',
+        'cerrar' => 'Cerrar',
+        'guardar' => 'Guardar',
+        'editar' => 'Editar',
+        'eliminar' => 'Eliminar',
+        'subir_archivo' => 'Subir archivo',
+        'lbl_tipo_comprobante' => 'Tipo de comprobante',
+        'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
+        'title_tipo_comprobante' => 'Tipo de comprobante',
+        'lbl_comprobante' => 'Comprobante',
+        'title_cargar_comprobante' => 'Cargar comprobante',
+        'carga_correcta' => 'Se ha cargado correctamente el archivo. Para persistir los datos, guarde los cambios.',
+        'ver_archivo' => 'Ver archivo',
+        'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
     ),
     //Actividad del docente
     'actividad_docente' => array(
@@ -330,19 +343,17 @@ $lang['interface'] = array(
         'btn_add_new_direccion' => 'Agregar nueva dirección de tesis',
 
     ),
-    'general' => array(
-        'cerrar' => 'Cerrar',
-        'guardar' => 'Guardar',
-        'editar' => 'Editar',
-        'eliminar' => 'Eliminar',
-        'subir_archivo' => 'Subir archivo',
-        'lbl_tipo_comprobante' => 'Tipo de comprobante',
-        'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
-        'title_tipo_comprobante' => 'Tipo de comprobante',
-        'lbl_comprobante' => 'Comprobante',
-        'title_cargar_comprobante' => 'Cargar comprobante',
+    'error' => array(
+        'crear_carpeta' => 'No es posible crear la carpeta, verifique permisos de escritura con administrador.',
+        'falta_carga_archivo' => 'Debe subir el archivo antes de continuar con el guardado.'
     ),
-	  'becas_comisiones' => array(
+    'model' => array(
+        'insercion' => 'Se ha insertado correctamente la información.',
+        'actualizacion' => 'Se ha actualizado correctamente la información.',
+        'eliminacion' => 'Se ha eliminado correctamente.',
+        'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
+    ),
+	'becas_comisiones' => array(
         'titulo_b_template' => 'Becas',
         'titulo_c_template' => 'Comisiones',
     ),

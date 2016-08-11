@@ -612,6 +612,28 @@ $config = array(
             'rules' => 'required'
         )
     ),
+    'form_direccion_tesis' => array(
+        array(
+            'field' => 'dt_anio',
+            'label' => 'Año en que fue dirigida',
+            'rules' => 'trim|required|exact_length[4]|integer'
+        ),
+        array(
+            'field' => 'nivel_academico',
+            'label' => 'Nivel académico',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'comision_area',
+            'label' => 'Área',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        )
+    )
 
     /*matricula
     delegacion

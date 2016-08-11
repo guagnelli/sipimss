@@ -9,6 +9,8 @@ class Perfil_model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->lang->load('interface');
+        $this->string_values = $this->lang->line('interface')['model']; //Cargar textos utilizados en vista
     }
 
     public function getGeneros() {
