@@ -1,6 +1,6 @@
 $(function () {
-    if($('#btn_agregar_actividad_modal').length){
-        $('#btn_agregar_actividad_modal').on('click', function() {
+    if($('#btn_agregar_direccion_tesis_modal').length){
+        $('#btn_agregar_direccion_tesis_modal').on('click', function() {
             data_ajax(site_url+'/perfil/direccion_tesis_formulario/'+$(this).attr('data-value'), null, '#modal_content');
         });
     }

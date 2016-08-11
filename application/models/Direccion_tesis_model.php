@@ -96,8 +96,8 @@ class Direccion_tesis_model extends CI_Model {
             $this->db->where($params['conditions']);
         }
         $this->db->stop_cache();
-        
-        $this->db->join('comprobante', 'emp_comision.COMPROBANTE_CVE=comprobante.COMPROBANTE_CVE', 'left')
+
+        $this->db->join('comprobante', 'emp_comision.COMPROBANTE_CVE=comprobante.COMPROBANTE_CVE', 'left');
         $subSql = $this->db->get('emp_comision', true); //Obtener ID de comprobante para eliminar
         $comp = $subSql->result_array();
 

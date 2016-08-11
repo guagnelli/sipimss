@@ -280,8 +280,9 @@ class Perfil extends MY_Controller {
             //$datos['string_values'] = $this->lang->line('interface')['general']; //Cargar textos utilizados en vista
 
             $resultado = $this->dt->delete_comision(array('conditions'=>array('EMP_COMISION_CVE'=>$dt_id))); //Eliminar datos
+            //pr($resultado);            
+            $this->eliminar_archivo(array('archivo'=>$resultado['data']['COM_NOMBRE'], 'matricula'=>$this->session->userdata('matricula')));
             
-            $resultado['COM_NOMBRE'] ;//Eliminar archivo
             echo json_encode($resultado); ///Muestra mensaje
             exit();
             //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
@@ -290,81 +291,29 @@ class Perfil extends MY_Controller {
         }
     }
     
-    /*public function cargar_archivo(){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            if($_FILES && $this->input->post()){
-                $this->load->library('Seguridad');
-                $solicitud = $this->input->post('s', true); //Identificador de la solicitud
-                $solicitud_encrypt = $this->input->post('e', true); //Identificador de la solicitud encriptado
-                $requisito_encrypt = $this->input->post('req', true); //Identificador del requisito encriptado
-                $valor_minimo = $this->input->post('valor_minimo', true); //Identificador del valor mínimo establecido para el requisito
-                
-                $resultado = array('resultado'=>FALSE, 'error'=>'', 'data'=>'');
-                foreach ($_FILES as $key_file => $file) {
-                    if(exist_and_not_null_array($file, 'name') && exist_and_not_null_array($file,'tmp_name') && $file['error']==0){ ////Validar la carga de archivo
-                        $requisito = str_replace("requisito_", "", $key_file); //Obtener identificador del requisito cargado
-                        if($this->seguridad->encrypt_sha512($this->config->item('salt').$requisito)==$requisito_encrypt && $this->seguridad->encrypt_sha512($this->config->item('salt').$solicitud)==$solicitud_encrypt) { //Comprobar que el requisito y la solicitud seleccionadas sean los correctos (Seguridad)
-                            $insert = true;
-
-                            $ruta_archivos = $this->config->item('ruta_documentacion').$solicitud."/";
-                            if(!file_exists($ruta_archivos) && !is_dir($ruta_archivos)){ //Si no existe la carpeta se crea
-                                mkdir($ruta_archivos);
-                            }
-
-                            $archivo_actual = $this->mod_solicitud->documentacion_por_solicitud(array('conditions'=>array('archivo.solicitud_id'=>$solicitud, 'archivo.requisito_id'=>$requisito)));
-                            $requisito_actual = $this->mod_solicitud->documentacion_requerida(array('conditions'=>array('requisito.requisito_id'=>$requisito)));
-                            //pr($archivo_actual);
-                            //pr($requisito_actual);
-                            //pr($valor_minimo);
-                            if((!empty($requisito_actual) && $requisito_actual[0]['req_obligatorio']==true && !empty($requisito_actual[0]['req_val_minimo']) && empty($valor_minimo))
-                             || (!empty($requisito_actual) && $requisito_actual[0]['req_obligatorio']==true && !empty($requisito_actual[0]['req_especifico']) && empty($valor_minimo)) ) { ///Verificar si el valor mínimo es requerido y fue seleccionado por el usuario
-                                $resultado['error'] = "Para cargar el archivo es necesario que seleccione la calificación a corroborar en el documento.";
-                            } else {
-                                if(!empty($archivo_actual)){ //En caso de existir registro en la BD se define que se realizará una actualización y se elimina el archivo
-                                    unlink($ruta_archivos.$archivo_actual[0]['arc_nombre']);
-                                    $insert = false;
-                                }
-
-                                $config['upload_path']          = $ruta_archivos;
-                                $config['allowed_types']        = $this->config->item('extension_documentacion');
-                                $config['max_size']             = $this->config->item('max_size_documentacion'); // Definir tamaño máximo de archivo
-                                $config['detect_mime']          = TRUE; // Validar mime type
-                                $config['file_name']            = $this->nombrar_archivo($solicitud, $requisito); ///Renombrar archivo
-                                
-                                $this->load->library('upload', $config); ///Librería que carga y valida los archivos
-
-                                if(!$this->upload->do_upload($key_file)) {
-                                    $resultado['error'] = $this->upload->display_errors();
-                                } else {
-                                    $resultado['data']['name'] = $this->upload->data('raw_name');
-                                    $resultado['data']['filename'] = $this->upload->data('file_name');
-                                    if($insert===true){
-                                        $archivo = $this->formato_archivo(array('requisito'=>$requisito, 'solicitud'=>$solicitud, 'nombre'=>$resultado['data']['filename'], 'valor'=>$valor_minimo));
-                                        $resultado_almacenado = $this->mod_solicitud->guardar_documentacion($archivo);
-                                    } else {
-                                        $resultado_almacenado = $this->mod_solicitud->actualizar_documentacion((object)array('requisito_id'=>$requisito, 'solicitud_id'=>$solicitud, 'arc_fecha'=>"now", 'arc_nombre'=>$resultado['data']['filename'], 'arc_valor'=>$valor_minimo));
-                                    }
-                                    if($resultado_almacenado['result']==TRUE){
-                                        $resultado['resultado'] = TRUE;
-                                    } else {
-                                        unlink($ruta_archivos);
-                                    }
-                                }                                    
-                            }
-                            echo json_encode($resultado);
-                            exit();
-                        } else {
-                            $resultado['error'] = "Ocurrió un error durante la carga del archivo, recargue la página por favor.";
-                        }
-                    }
-                }
-            } else {
-                redirect(site_url()); //Redirigir al inicio del sistema si no se recibio información por método post
+    /**
+     * Función que elimina un archivo
+     * @method: void eliminar_archivo()
+     * @param: $data['archivo']   string     Nombre del archivo
+     * @param: $data['matricula']   string      Matrícula del empleado
+     * @author: Jesús Z. Díaz P.
+     */
+    private function eliminar_archivo($data){
+        $resultado = false;
+        //pr($data);
+        if(isset($data['archivo']) && !empty($data['archivo'])){ //Eliminar archivo
+            $ruta = $this->config->item('upload_config')['comprobantes']['upload_path']; //Path de archivos
+            //pr($ruta);
+            $ruta_archivo = $ruta.$this->seguridad->encrypt_carpeta_nombre($data['matricula'])."/".$data['archivo']; ///Definir ruta de almacenamiento, se utiliza la matricula
+            //pr($ruta_archivo);
+            if(file_exists($ruta_archivo)){
+                unlink($ruta_archivo);
+                $resultado = true;
             }
-        } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }*/
+        return $resultado;
+    }
+    
     /////////////////////////Fin dirección de tesis //////////////////////////
 
     public function get_data_ajax_liscta_actividades() {

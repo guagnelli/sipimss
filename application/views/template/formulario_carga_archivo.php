@@ -27,7 +27,7 @@ $userfile = ((!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_s
                 )));
             echo $this->form_complete->create_element(array('id'=>'extension', 'type'=>'hidden', 'value'=>$this->config->item('upload_config')['comprobantes']['allowed_types'])); ?>
             <label for='lbl_comprobante' class="control-label">
-                <?php echo $string_values['lbl_comprobante']; ?>
+                * <?php echo $string_values['lbl_comprobante']; ?>
             </label>
             <div class="input-group">                                           
                 <?php

@@ -15,7 +15,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                 <div class="row">
 				    <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
 				    	<div>
-			                <button type="button" id="btn_agregar_actividad_modal" aria-expanded="false" class="btn btn-success" data-toggle="modal" data-target="#modal_censo" data-value="">
+			                <button type="button" id="btn_agregar_direccion_tesis_modal" aria-expanded="false" class="btn btn-success" data-toggle="modal" data-target="#modal_censo" data-value="">
 			                    <?php echo $string_values['btn_add_new_direccion']; ?>
 			                </button>
 			            </div>
@@ -36,14 +36,15 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                     <tbody>
                                         <?php //Generará la tabla que muestrá las actividades del docente
                                     		foreach ($lista_direccion as $key_ld => $direccion) {
-											echo '<tr>
+                                    			$id = $this->seguridad->encrypt_base64($direccion['EMP_COMISION_CVE']);
+												echo '<tr id="tr_'.$id.'">
 													<td>'.$direccion['EC_ANIO'].'</td>
 													<td>'.$direccion['NIV_ACA_NOMBRE'].'</td>
 													<td>'.$direccion['COM_ARE_NOMBRE'].'</td>
-													<td><button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$this->seguridad->encrypt_base64($direccion['EMP_COMISION_CVE']).'">'.
+													<td><button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
 					                                       $string_values['editar'].
 					                                    '</button>
-					                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$this->seguridad->encrypt_base64($direccion['EMP_COMISION_CVE']).'">'.
+					                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
 					                                           $string_values['eliminar'].
 					                                        '</button>
 					                                </td>
