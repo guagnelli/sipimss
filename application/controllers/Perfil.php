@@ -82,7 +82,7 @@ class Perfil extends MY_Controller {
                 print("<h1>Cambio realizado correctamente</h1>");
             }
         }
-           // pr("Just showing a preview");
+           //pr("Just showing a preview");
             $datosPerfil = $this->loadInfo($id_usuario);
             
             $this->load->library("curp");

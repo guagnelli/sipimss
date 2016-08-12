@@ -551,6 +551,7 @@
                         <?php
                         echo $this->form_complete->create_element(
                                 array(
+                                    'id'=>'perfil_antiguedad_quincena',
                                     'type'=>'text',
                                     'value' => !empty($antiguedad[1]) ? $antiguedad[1] : '',
                                     'attributes'=>array(

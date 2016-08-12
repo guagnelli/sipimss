@@ -115,6 +115,7 @@
                                         <script type="text/javascript">
                                             // inicia codigo javascript necesario para un captcha
                                             $( document ).ready(function() {
+                                                //alert("adfsad")
                                                 data_ajax(site_url+"/captcha/get_new_captcha_ajax", "#null", "#captcha_first"); // cargamos por primera vez el captcha
                                             });
                                             // termina codigo javascript necesario para un captcha
