@@ -612,6 +612,144 @@ $config = array(
             'rules' => 'required'
         )
     ),
+    'form_direccion_tesis' => array(
+        array(
+            'field' => 'dt_anio',
+            'label' => 'Año en que fue dirigida',
+            'rules' => 'trim|required|exact_length[4]|integer'
+        ),
+        array(
+            'field' => 'nivel_academico',
+            'label' => 'Nivel académico',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'comision_area',
+            'label' => 'Área',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        )
+    ),
+      'form_beca' => array(
+         array(
+            'field' => 'periodo_fecha_inicio_pick',
+            'label' => 'fecha inicio comisión',
+            'rules' => 'required|validate_date_dd_mm_yyyy'
+        ),
+        array(
+            'field' => 'periodo_fecha_fin_pick',
+            'label' => 'fecha fin comisión',
+            'rules' => 'required|validate_date_dd_mm_yyyy' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'ctipo_comprobante',
+            'label' => 'tipo de comprobante',
+            'rules' => 'required' 
+        ),
+        array(
+            'field' => 'text_comprobante',
+            'label' => 'comprobante',
+            'rules' => 'required' 
+        ),
+        array(
+            'field' => 'carga_file',
+            'label' => 'carga de comprobante',
+            'rules' => 'required' 
+        ),
+        array(
+            'field' => 'cclase_beca',
+            'label' => 'clase de beca',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'cmotivo_becado',
+            'label' => 'motivo de la beca',
+            'rules' => 'required' 
+        ),
+        array(
+            'field' => 'cbeca_interrumpida',
+            'label' => 'beca interrumpida',
+            'rules' => 'required' 
+        ),
+    ),
+    'form_comision' => array(
+        array(
+            'field' => 'periodo_fecha_inicio_pick',
+            'label' => 'fecha inicio comisión',
+            'rules' => 'required|validate_date_dd_mm_yyyy'
+        ),
+        array(
+            'field' => 'periodo_fecha_fin_pick',
+            'label' => 'fecha fin comisión',
+            'rules' => 'required|validate_date_dd_mm_yyyy' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'tipo_comision_cve',
+            'label' => 'tipo de comisión',
+            'rules' => 'required' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'tipo_comision_cve',
+            'label' => 'tipo de comisión',
+            'rules' => 'required' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'ctipo_comprobante',
+            'label' => 'tipo de comprobante',
+            'rules' => 'required' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'text_comprobante',
+            'label' => 'comprobante',
+            'rules' => 'required' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'carga_file',
+            'label' => 'carga comprobante',
+            'rules' => 'required' //|callback_valid_pass
+        ),
+    ),
+    'form_material_educativo' => array(
+        'ctipo_material' => array(
+            'field' => 'ctipo_material',
+            'label' => 'tipo de material educativo',
+            'rules' => 'required'
+        ),
+        'nombre_material' => array(
+            'field' => 'nombre_material',
+            'label' => 'nombre del material educativo',
+            'rules' => 'trim|required|max_length[100]|alpha_numeric_spaces' 
+        ),
+        'material_educativo_anio' => array(
+            'field' => 'material_educativo_anio',
+            'label' => 'año que alaboro material',
+            'rules' => 'trim|required|max_length[4]|integer' 
+        ),
+        'cantidad_hojas' => array(
+            'field' => 'cantidad_hojas',
+            'label' => 'cantidad de hojas',
+            'rules' => 'required' 
+        ),
+        'numero_horas' => array(
+            'field' => 'numero_horas',
+            'label' => 'número de horas',
+            'rules' => 'required' 
+        ),
+        'nombre_unidad' => array(
+            'field' => 'nombre_unidad',
+            'label' => 'nombre de la unidad',
+            'rules' => 'trim|required|max_length[100]|alpha_numeric_spaces' 
+        ),
+        'nombre_objeto_aprendizaje' => array(
+            'field' => 'nombre_objeto_aprendizaje',
+            'label' => 'nombre del objeto de aprendizaje',
+            'rules' => 'trim|required|max_length[100]|alpha_numeric_spaces' 
+        ),
+    ),
 
     /*matricula
     delegacion

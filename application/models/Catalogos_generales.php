@@ -21,6 +21,7 @@ class Catalogos_generales extends CI_Model {
         $query = $this->db->get_where($entidad, $array_where);
         $estadoCivil = $query->result_array();
         $query->free_result();
+//        pr($this->db->last_query());
         return $estadoCivil;
     }
 
