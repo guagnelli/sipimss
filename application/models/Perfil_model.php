@@ -11,10 +11,6 @@ class Perfil_model extends CI_Model {
         $this->load->database();
     }
 
-    public function getGeneros() {
-        
-    }
-
     /**
      * 
      * @return Array
@@ -51,6 +47,7 @@ class Perfil_model extends CI_Model {
      */
     public function getEmpleadoData($identificador) {
         $this->db->select(array(
+            'EMPLEADO_CVE as emp_id',
             'EMP_NOMBRE as nombre',
             'EMP_APE_PATERNO as apellidoPaterno',
             'EMP_APE_MATERNO as apellidoMaterno',
@@ -87,5 +84,4 @@ class Perfil_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
-
 }

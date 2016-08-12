@@ -26,9 +26,10 @@ class Curp {
         }
         $day = substr($this->curp,8,6);
         $month = substr($this->curp,6,2);
-        $year = strftime("%g",strtotime("1/1/".substr($this->curp,4,2)));   
+        $year = strftime("%Y",strtotime("1/1/".substr($this->curp,4,2)));
+        //echo date("Y");
         $this->fecha_nac = strtotime("{$year}/{$month}/{$day}"); 
-        $this->edad = date("y")-$year;
+        $this->edad = date("Y")-$year;
         $this->genero = substr($this->curp,10,1);        
     }
     

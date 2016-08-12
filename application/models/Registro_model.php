@@ -251,22 +251,25 @@ class Registro_model extends CI_Model {
      * 
      * @param type $datos_empleado
      * @param type $where
-     * @return int
+     * @return int 
      */
-    public function update_registro_empleado($datos_empleado = null, $where = null) {
+    //modificar por id para el caso de registro....
+    public function update_registro_empleado($datos_empleado = null, $id = null) {
         if (is_null($datos_empleado) AND is_null($where)) {
-            return -1;
+            return 0;
         }
-        $this->db->where('EMP_MATRICULA', $where);
-        $this->db->update('empleado', $datos_empleado); //Actualización de correo solamente
-
-        if ($this->db->trans_status() === FALSE) {
+        $this->db->where('empleado_cve', $id);
+        if($this->db->update('empleado', $datos_empleado)){
+             //Actualización de correo solamente
+            return 1;
+        }
+        return 0;
+        /*if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
-            return -1;
+            return 0;
         } else {
             return 1;
-            ;
-        }
+        }*/
     }
 
     public function guardarUsuarioTaller($usuario, $taller) {

@@ -62,7 +62,24 @@ class Perfil extends MY_Controller {
         $id_usuario = $this->session->userdata('identificador');
        
         /*Esto es de información general*/
-        if (!$this->input->post()) {
+        if ($this->input->post()) {
+            //pr("Validating-data, Saving-data");
+            //pr($this->input->post());
+            $this->load->model("Registro_model","reg");
+            $empData = $this->input->post();
+            foreach($empData as $key=>$field){
+                if(empty($field)){
+                    unset($empData[$key]);
+                }
+            }
+            $id = $empData["EMPLEADO_CVE"];
+            unset($empData["EMPLEADO_CVE"]);
+            //pr($empData);
+            //echo $this->reg->update_registro_empleado($empData,$id);
+            if($this->reg->update_registro_empleado($empData,$id) == 1){
+                print("<h1>Cambio realizado correctamente</h1>");
+            }
+        }
            // pr("Just showing a preview");
             $datosPerfil = $this->loadInfo($id_usuario);
             
@@ -70,18 +87,16 @@ class Perfil extends MY_Controller {
             $this->curp->setCURP($datosPerfil["curp"]);
             //solo se manda el combo de sexo cuando es el usuario admin
             $datosPerfil['genero'] = $this->curp->getGenero();
+            $datosPerfil['edad'] = $this->curp->getEdad();
             $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
             $datosPerfil['formacionProfesionalOptions'] = array();
             $datosPerfil['tipoComprobanteOptions'] = array();
             
             $datosPerfil['antiguedad'] = explode('_',$datosPerfil['antiguedad']);
-            pr($datosPerfil);
-            //$datosPerfil['array_menu'] = $array_menu;
+            
+            //pr($datosPerfil);
             $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista
-        }else{
-            pr("Validating-data, Saving-data");
-            pr($this->input->post());
-        }
+        
 
         
     }
