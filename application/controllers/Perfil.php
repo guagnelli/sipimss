@@ -97,10 +97,7 @@ class Perfil extends MY_Controller {
             $datosPerfil['antiguedad'] = explode('_',$datosPerfil['antiguedad']);
             
             //pr($datosPerfil);
-            $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista
-        
-
-        
+            $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista  
     }
 
     /**
