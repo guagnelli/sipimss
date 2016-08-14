@@ -284,6 +284,12 @@ ALTER TABLE `emp_comision` ADD CONSTRAINT `emp_comision_ibfk_7`   /* Asigna llav
 FOREIGN KEY (`CURSO_CVE`) REFERENCES `ccurso`(`CURSO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 /* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+/* ********************modificaci 13/08/2016   **************************************/
+ALTER TABLE sipimss.ctipo_material MODIFY COLUMN TIP_MAT_OPCION varchar(30) NULL; /*Cambio en tamano de tipo de dato 20 to 50 6-16-2016  */
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
 /* *
 ALTER TABLE `emp_esp_medica` CHANGE COLUMN `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;  /* cambia nombre a columna 
 ALTER TABLE `emp_esp_medica` CHANGE `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;

@@ -34,7 +34,7 @@ $userfile = ((!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_s
                 <?php
                     echo $this->form_complete->create_element(
                     array('id'=>'text_comprobante','type'=>'text',
-                            'value' => '',
+                            'value' => isset($dir_tes['COM_NOMBRE']) ? $dir_tes['COM_NOMBRE'] : '',
                             'attributes'=>array(
                             'class'=>'form-control',
                             'placeholder'=>$string_values['title_cargar_comprobante'],

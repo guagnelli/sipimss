@@ -17,6 +17,7 @@
                 <table class="table table-striped table-hover table-bordered" id="tabla_becas">
                     <thead>
                         <tr class="btn-default">
+                            <th><?php echo $string_values['title_tab_comision_tipo_comision']; ?></th>
                             <th><?php echo $string_values['title_tab_comision_fecha_inicio']; ?></th>
                             <th><?php echo $string_values['title_tab_comision_fecha_termino']; ?></th>
                             <th><?php echo $string_values['title_tab_comision_comprobante']; ?></th>
@@ -28,52 +29,46 @@
                         <?php
 //                            pr($lista_becas);
                         foreach ($lista_comisiones as $key_ai => $val) {
-                            $key = $val['cve_investigacion'];
-                            $c_bb = $val['cita_publicada'];
-                            if (is_null($c_bb)) {//Pone texto referente a que no existe una cita bibliografica
-                                $tiene_cita = $string_values['text_sin_cita'];
-                                $comprobante = (is_null($val['comprobante_cve'])) ? 0 : $val['comprobante_cve'];
-                                //Nota: agregar vinculo para mostrar el documento cargado
-                            } else {//Crea boton vinculo para ver cita bibliografica
+
+                            $key = $val['emp_comision_cve'];
+                            $key = $this->seguridad->encrypt_base64($key);
+                            $idcomprobante = $val['comprobante'];
+                            if (!is_null($idcomprobante)) {
+                                //Btn comprobante
+                                $idcomprobante = $this->seguridad->encrypt_base64($idcomprobante); //Encripta
+                                $btn_comprobante = '<a href="' . site_url('administracion/ver_archivo/' . $idcomprobante) . '" target="_blank">' . $string_values['lbl_ver_comprobante'] . '</a>';
+                            } else {
                                 $comprobante = 0;
-                                $tiene_cita = '<button '
-                                        . 'type="button" '
-                                        . 'class="btn btn-link btn-sm" '
-                                        . 'id="btn_ver_cita_bibliografica" '
-                                        . 'data-cita ="' . $c_bb . '"'
-                                        . 'onclick="funcion_ver_cita_bibliografica(this)" >' .
-                                        $string_values['text_con_cita']
-                                        . '</button>';
+                                $btn_comprobante = '';
                             }
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
-                            echo "<td>" . $val['tpad_nombre'] . "</td>";
-                            echo "<td>" . $val['nombre_investigacion'] . "</td>";
-                            echo "<td>" . $val['folio_investigacion'] . "</td>";
-                            echo "<td>" . $tiene_cita . "</td>";
+                            echo "<td>" . $val['nom_tipo_comision'] . "</td>";
+                            echo "<td>" . $val['fecha_inicio'] . "</td>";
+                            echo "<td>" . $val['fecha_fin'] . "</td>";
+                            echo "<td>" . $btn_comprobante . "</td>";
                             echo "<td>"
                             . '<button '
                             . 'type="button" '
                             . 'class="btn btn-link btn-sm" '
-                            . 'id="btn_eliminar_actividad_modal" '
                             . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-invcve ="' . $key . '"'
-                            . 'data-comprobantecve ="' . $comprobante . '"'
+                            . 'data-comisioncve ="' . $key . '"'
+                            . 'data-comprobantecve ="' . $idcomprobante . '"'
                             . 'data-toggle="modal"'
                             . 'data-target="#modal_censo"'
-                            . 'onclick="funcion_editar_reg_investigacion(this)" >' .
-                            $string_values['tab_titulo_editar']
+                            . 'onclick="funcion_editar_reg_comision(this)" >' 
+                            . $string_values['tab_titulo_editar']
                             . '</button>'
                             . "</td>";
                             echo "<td>"//Botón eliminar
                             . '<button '
                             . 'type="button" '
-                            . 'class="btn btn-link btn-sm"'
-                            . 'id="btn_eliminar_actividad_modal" '
+                            . 'class="btn btn-link btn-sm" '
+                            . 'id="btn_editar_mat_educativo" '
                             . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-invcve ="' . $key . '"'
-                            . 'data-comprobantecve ="' . $comprobante . '"'
-                            . 'onclick="funcion_eliminar_reg_investigacion(this)" >' .
+                            . 'data-comisioncve ="' . $key . '"'
+                            . 'data-comprobantecve ="' . $idcomprobante . '"'
+                            . 'onclick="funcion_eliminar_reg_comision(this)" >' .
                             $string_values['tab_titulo_eliminar']
                             . '</button>'
                             . "</td>";

@@ -6,8 +6,10 @@
             </div>
     <?php if (isset($cve_comision)) {//Actualizar?> 
         <div class="col-xs-6 col-sm-6 col-md-6 text-left " >
-            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" data-invcve= "<?php echo $cve_comision; ?>"
-                    data-comprobantecve= "<?php echo $comprobantecve; ?>" data-idrow="<?php echo $idrow; ?>" onclick="funcion_actualizar_comision(this)" >
+            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" 
+                    data-comisioncve= "<?php echo $cve_comision; ?>"
+                    data-comprobantecve= "<?php echo $comprobantecve; ?>" 
+                    onclick="funcion_actualizar_comision(this)" >
                 Actualizar 
             </button>
         </div>

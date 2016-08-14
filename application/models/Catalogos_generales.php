@@ -90,6 +90,18 @@ class Catalogos_generales extends CI_Model {
         return $resultado;
     }
 
+    public function delete_registro_general($entidad, $array_where) {
+        $this->db->where($array_where);
+        $this->db->delete($entidad);
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return -1;
+        } else {
+            return 1;
+        }
+
+    }
+
     /**
      * 
      * @param type $id_usuario identificador del usuario
@@ -442,7 +454,7 @@ class Catalogos_generales extends CI_Model {
         if (is_null($parametros_comprobante)) {
             return $result_comprobante;
         }
-        
+
         if (!empty($res)) {
             $this->db->where('COMPROBANTE_CVE', $id_comprobante);
             $this->db->update('comprobante');
