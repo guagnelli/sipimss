@@ -40,6 +40,10 @@ $config['categorias_designar_validador'] = array('36112580','35312180');
 $config['ruta_documentacion'] = $_SERVER["DOCUMENT_ROOT"] . "/sipimss_bonos/assets/files/archivos_bono/";
 $config['ruta_documentacion_web'] = asset_url() . 'files/archivos_bono/'; //base_url()."assets/files/solicitudes/";
 
+$config['tiempo_eliminar_archivo'] = 60 * 10; //3600 = 1 hora => Tiempo que no será considerado para eliminación de archivo. Referencia administración/eliminar_archivos
+
+$config['numero_registros_eliminar'] = 100;
+
 $config['tiempo_fuerza_bruta'] = 60 * 60; //3600 = 1 hora => Tiempo válido para chequeo de fuerza bruta
 
 $config['intentos_fuerza_bruta'] = 10; ///Número de intentos válidos durante tiempo 'tiempo_fuerza_bruta'
@@ -124,7 +128,11 @@ $config['alert_msg'] = array(
 );
 
 $config['tipo_comision'] = array(
-    'DIRECCION_TESIS' => array('id'=>1)
+    'DIRECCION_TESIS' => array('id'=>1),
+    'COMITE_EDUCACION' => array('id'=>3),
+    'SINODAL_EXAMEN' => array('id'=>4),
+    'COORDINADOR_TUTORES' => array('id'=>5),
+    'COORDINADOR_CURSO' => array('id'=>6)
 );
 
 $config['parametros_bitacora'] = array(

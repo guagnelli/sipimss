@@ -146,7 +146,10 @@ $lang['interface'] = array(
         'title_cargar_comprobante' => 'Cargar comprobante',
         'carga_correcta' => 'Se ha cargado correctamente el archivo. Para persistir los datos, guarde los cambios.',
         'ver_archivo' => 'Ver archivo',
+        'descargar_archivo' => 'Descargar archivo',
         'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
+        'archivo_incorrecto' => 'Archivo incorrecto',
+        'archivo_inexistente' => 'Archivo inexistente',
     ),
     //Actividad del docente
     'actividad_docente' => array(
@@ -341,7 +344,19 @@ $lang['interface'] = array(
         't_h_nivel_academico' => 'Nivel académico',
         't_h_area' => 'Área',
         'btn_add_new_direccion' => 'Agregar nueva dirección de tesis',
-
+    ),
+    'comision_academica' => array(
+        'title' => 'Comisión académica',
+        't_h_anio' => 'Año en que se emite la carta',
+        't_h_anio_' => 'Año',
+        't_h_nivel_academico' => 'Nivel académico',
+        't_h_area' => 'Área',
+        't_h_tipo' => 'Tipo',
+        't_h_duracion' => 'Duración',
+        't_h_fch_inicio' => 'Fecha inicio',
+        't_h_fch_fin' => 'Fecha fin',
+        't_h_tipo_curso' => 'Tipo',
+        'btn_add_new_comision_academica' => 'Agregar nueva comisión',
     ),
     'error' => array(
         'crear_carpeta' => 'No es posible crear la carpeta, verifique permisos de escritura con administrador.',

@@ -38,11 +38,12 @@ $(function () {
                     })
                     .always(function() {
                         remove_loader();
+                        recargar_fecha_ultima_actualizacion();
                     });
                 } else {
                     return false;
                 }
             });
         });
-    }    
+    }
 });

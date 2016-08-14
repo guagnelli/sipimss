@@ -102,8 +102,9 @@ class Login extends CI_Controller {
         }
         $data['string_values'] = $string_values;
         $this->token(); //Crear un token cada vez que se ingresa al formulario de inicio sesión
-        $this->template->setMainContent($this->formulario($data));
-        $this->template->getTemplate();
+        //$this->template->setMainContent($this->formulario($data));
+        //$this->template->getTemplate();
+        echo $this->formulario($data,"login/login.php");
     }
 
     function seleccionar_rol() {
@@ -149,11 +150,11 @@ class Login extends CI_Controller {
         }
     }
 
-    private function formulario($data = array()) {
+    private function formulario($data = array(),$tpl = "login/formulario",$return=TRUE) {
         $data['captcha'] = create_captcha($this->captcha_config());
         $this->session->set_userdata('captchaWord', $data['captcha']['word']);
         //echo $data['token'] = $this->session->userdata('token'); //Se envia token al formulario
-        $form_login = $this->load->view('login/formulario', $data, TRUE);
+        $form_login = $this->load->view($tpl, $data, $return);
         return $form_login;
     }
 

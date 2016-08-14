@@ -16,6 +16,7 @@ $userfile = ((!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_s
                     'placeholder' => $string_values['title_tipo_comprobante'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                     'title' => $string_values['title_tipo_comprobante'] ))); 
             ?>
+            <div class="col-lg-12 col-md-12"></div>
             <?php echo form_error_format('tipo_comprobante'); ?>
     </div>            
     <div class="col-md-6" id="capa_carga_archivo">
@@ -57,7 +58,8 @@ $userfile = ((!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_s
             	<?php
             	if(!empty($dir_tes['COMPROBANTE_CVE']) || !empty($idc)){ //En caso de tener asociado archivo, se muestra link
                     $idcomprobante = (!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_base64($dir_tes['COMPROBANTE_CVE']) : ((!empty($idc)) ? $idc : '');
-            		echo '<a href="'.site_url('administracion/ver_archivo/'.$idcomprobante).'" target="_blank">'.$string_values['ver_archivo'].'</a>';
+            		echo '<a href="'.site_url('administracion/ver_archivo/'.$idcomprobante).'" target="_blank"><span class="glyphicon glyphicon-search"></span> '.$string_values['ver_archivo'].'</a><br>';
+                    echo '<a href="'.site_url('administracion/descarga_archivo/'.$idcomprobante).'" target="_blank"><span class="glyphicon glyphicon-download"></span> '.$string_values['descargar_archivo'].'</a>';
             		echo $this->form_complete->create_element(array('id'=>'idc', 'type'=>'hidden', 'value'=>$idcomprobante));
             	}
             	?>

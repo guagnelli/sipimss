@@ -33,6 +33,7 @@ class Captcha extends CI_Controller {
             $word = $this->new_captcha($error); // actualiza el captcha
       		  echo $word; // se imprime la palabra word del captcha
     		}
+            //echo "chafa";
 	  }
 
     /**

@@ -32,6 +32,7 @@ class Direccion_tesis_model extends CI_Model {
         $this->db->join('cnivel_academico', 'cnivel_academico.niv_academico_cve=emp_comision.niv_academico_cve', 'left');
         $this->db->join('comision_area', 'comision_area.com_area_cve=emp_comision.com_area_cve', 'left');
         $this->db->join('comprobante', 'comprobante.comprobante_cve=emp_comision.comprobante_cve', 'left');
+        $this->db->join('ctipo_curso', 'ctipo_curso.TIP_CURSO_CVE=emp_comision.TIP_CURSO_CVE', 'left');
 
         $query = $this->db->get('emp_comision'); //Obtener conjunto de registros
         //pr($this->db->last_query());

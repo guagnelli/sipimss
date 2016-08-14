@@ -23,7 +23,14 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_apellido_paterno',
+                        'id'=>'EMPLEADO_CVE',
+                        'type'=>'hidden',
+                        'value' => $emp_id
+                    )
+                );
+            echo $this->form_complete->create_element(
+                    array(
+                        'id'=>'emp_ape_paterno',
                         'type'=>'text',
                         'value' => !empty($apellidoPaterno) ? $apellidoPaterno : '',
                         'attributes'=>array(
@@ -39,7 +46,7 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_apellido_paterno'); ?>
+            <?php echo form_error_format('emp_ape_paterno'); ?>
         </div>
         <div class="form-group col-xs-4 col-md-4">
             <label for='perfil_apellido_materno' class="control-label">
@@ -50,7 +57,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_apellido_materno',
+                        'id'=>'emp_ape_materno',
                         'type'=>'text',
                         'value' => !empty($apellidoMaterno) ? $apellidoMaterno : '',
                         'attributes'=>array(
@@ -66,7 +73,7 @@
                     );
             ?>
             </div>
-            <?php   echo form_error_format('perfil_apellido_materno'); ?>
+            <?php   echo form_error_format('emp_ape_materno'); ?>
         </div>
         <div class="form-group col-xs-4 col-md-4">
             <label for='perfil_nombre' class="control-label">
@@ -77,7 +84,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_nombre',
+                        'id'=>'emp_nombre',
                         'type'=>'text',
                         'value' => !empty($nombre) ? $nombre : '',
                         'attributes'=>array(
@@ -93,7 +100,7 @@
                     );
             ?>
             </div>
-            <?php   echo form_error_format('perfil_nombre'); ?>
+            <?php   echo form_error_format('emp_nombre'); ?>
         </div>
     </div>
     <div class="row">
@@ -109,7 +116,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_edad',
+                        'id'=>'',
                         'type'=>'text',
                         'value' => !empty($edad) ? $edad : '',
                         'attributes'=>array(
@@ -139,17 +146,17 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_genero',
-                        'type'=>'dropdown',
-                        'options'=>$generos,
-                        'first' => array('' => $string_values['perfil']['plh_informacion_general_genero'] ),
-                        'value' => $generoSelected,
+                        'id'=>'',
+                        'type'=>'text',
+                        'value' => !empty($genero) ? $genero : '',
                         'attributes'=>array(
                             'class'=>'form-control-personal',
+                            'placeholder'=>$string_values['perfil']['plh_informacion_general_edad'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'title'=>$string_values['perfil']['plh_informacion_general_genero'],
+                            'maxlength'=>30,
+                            'readonly' => 'readonly'
                             )
                         )
                     );
@@ -171,7 +178,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_estado_civil',
+                        'id'=>'CESTADO_CIVIL_CVE',
                         'type'=>'dropdown',
                         'options'=>$estadosCiviles,
                         'first' => array('' => $string_values['perfil']['plh_informacion_general_estado_civil'] ),
@@ -187,7 +194,7 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_estado_civil'); ?>    
+            <?php echo form_error_format('CESTADO_CIVIL_CVE'); ?>    
         </div>
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_correo_electronico' class="control-label">
@@ -199,7 +206,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_correo_electronico',
+                        'id'=>'EMP_EMAIL',
                         'type'=>'text',
                         'value' => !empty($correoElectronico) ? $correoElectronico : '',
                         'attributes'=>array(
@@ -215,7 +222,7 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_correo_electronico'); ?>
+            <?php echo form_error_format('EMP_EMAIL'); ?>
         </div>
     </div>
     <div class="row">
@@ -231,7 +238,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_telefono_particular',
+                        'id'=>'EMP_TEL_PARTICULAR',
                         'type'=>'text',
                         'value' => !empty($telParticular) ? $telParticular : '',
                         'attributes'=>array(
@@ -247,7 +254,7 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_telefono_particular'); ?>
+            <?php echo form_error_format('EMP_TEL_PARTICULAR'); ?>
         </div>
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_telefono_laboral' class="control-label">
@@ -261,7 +268,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_telefono_laboral',
+                        'id'=>'EMP_TEL_LABORAL',
                         'type'=>'text',
                         'value' => !empty($telLaboral) ? $telLaboral : '',
                         'attributes'=>array(
@@ -277,7 +284,7 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_telefono_laboral'); ?>    
+            <?php echo form_error_format('EMP_TEL_LABORAL'); ?>    
         </div>    
     </div>
     <div class="row">
@@ -292,7 +299,7 @@
             <?php
             echo $this->form_complete->create_element(
                     array(
-                        'id'=>'perfil_empleos_actuales',
+                        'id'=>'EMP_NUM_FUE_IMSS',
                         'type'=>'text',
                         'value' => !empty($empleosFueraImss) ? $empleosFueraImss : 0,
                         'attributes'=>array(
@@ -308,7 +315,7 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_empleos_actuales'); ?> 
+            <?php echo form_error_format('EMP_NUM_FUE_IMSS'); ?> 
         </div>
     </div>
     <div class="row">
@@ -488,7 +495,6 @@
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_nombre_clave_adscripcion' class="control-label">
-                
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre_clave_adscripcion']; ?>
             </label>
             <div class="input-group">
@@ -524,7 +530,7 @@
                                 array(
                                     'id'=>'perfil_antiguedad_anios',
                                     'type'=>'text',
-                                    'value' => !empty($antiguedadAnios) ? $antiguedadAnios : '',
+                                    'value' => !empty($antiguedad[0]) ? $antiguedad[0] : '',
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
@@ -545,9 +551,9 @@
                         <?php
                         echo $this->form_complete->create_element(
                                 array(
-                                    'id'=>'perfil_antiguedad_quincenas',
+                                    'id'=>'perfil_antiguedad_quincena',
                                     'type'=>'text',
-                                    'value' => !empty($antiguedadQuincenas) ? $antiguedadQuincenas : '',
+                                    'value' => !empty($antiguedad[1]) ? $antiguedad[1] : '',
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
@@ -570,7 +576,7 @@
                                 array(
                                     'id'=>'perfil_antiguedad_dias',
                                     'type'=>'text',
-                                    'value' => !empty($antiguedadDias) ? $antiguedadDias : '',
+                                    'value' => !empty($antiguedad[2]) ? $antiguedad[2] : '',
                                     'attributes'=>array(
                                         'class'=>'form-control-personal',
                                         'autocomplete'=>'off',
