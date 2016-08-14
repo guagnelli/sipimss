@@ -46,6 +46,7 @@ $lang['interface'] = array(
         'plh_btn_guardar' => 'Registrar',
         'lbl_no_registrado' => '¿No se ha registrado?',
         'lbl_existe_registro' => 'El usuario ya se encuentra registrado',
+        'phl_la_matricula_no_existe' => 'El usuario con matricula: [field] no se encuentrá registrado en el sistema de personal',
         'phl_la_matricula_existe' => 'El usuario con matricula: [field] ya se encuentrá registrado',
         'phl_registro_correcto' => 'El registro se efectuo correctamente',
         'phl_registro_incorrecto_del_empleado' => 'El registro del empleado no se pudo validar',
