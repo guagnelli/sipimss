@@ -182,7 +182,7 @@ function cargar_archivo(req, form){
                     $(carga).show();
                     if(response.result==true){
                         tipo = 'success';
-                        $('#capa_archivo_cargado').html("<a href='"+site_url+"/administracion/ver_archivo/"+response.idb+"' target='_blank'>Ver archivo</a><input id='idc' name='idc' type='hidden' value='"+response.idb+"' >");
+                        $('#capa_archivo_cargado').html("<a href='"+site_url+"/administracion/ver_archivo/"+response.idb+"' target='_blank'><span class='glyphicon glyphicon-search'></span>  Ver archivo</a><br><a href='"+site_url+"/administracion/descarga_archivo/"+response.idb+"' target='_blank'><span class='glyphicon glyphicon-download'></span>  Descargar archivo</a><input id='idc' name='idc' type='hidden' value='"+response.idb+"' >");
                         $('#userfile').val("");
                         $('#text_comprobante').val("");
                         $("#btn_subir_archivo").attr('data-key', response.id);
