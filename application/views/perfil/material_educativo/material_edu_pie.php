@@ -4,14 +4,17 @@
             <div class="col-xs-6 col-sm-6 col-md-6 text-right ">
               <button type="button" id="close_modal_censo" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
-    <?php if (isset($cve_comision)) {//Actualizar?> 
+    <?php if (isset($cve_mat_edu)) {//Actualizar?> 
         <div class="col-xs-6 col-sm-6 col-md-6 text-left " >
-            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" data-invcve= "<?php echo $cve_comision; ?>"
-                    data-comprobantecve= "<?php echo $comprobantecve; ?>" data-idrow="<?php echo $idrow; ?>" onclick="funcion_actualizar_material_educativo(this)" >
+            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" 
+                    data-mateducve= "<?php echo $cve_mat_edu; ?>" 
+                    data-tpmateducve= "<?php echo $cve_tp_mat_edu; ?>"
+                    data-comprobantecve= "<?php echo $comprobantecve; ?>" onclick="funcion_actualizar_material_educativo(this)" >
                 Actualizar 
             </button>
         </div>
-    <?php } else { //Guardar ?> 
+    <?php } else { //Guardar ?>
+       
         <div class="col-xs-6 col-sm-6 col-md-6 text-left" >
             <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-success" onclick="funcion_guardar_material_educativo()" >
                 Guardar

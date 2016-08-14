@@ -17,7 +17,13 @@ $(function() {
         cargar_archivo($(this).attr('data-key'), "#formularioDireccionTesis");
     });
     $('#modal_censo').on('hide.bs.modal', function (e) {
-		cargar_datos_menu_perfil('ajax_direccion_tesis');
+		cargar_datos_menu_perfil('seccion_direccion_tesis');
+		recargar_fecha_ultima_actualizacion();
+		var btn_gdt = $("#btn_guardar_direccion_tesis").attr('data-value');
+		if($('#idc').length && btn_gdt == ""){ ///Eliminar archivo que no hayan sido asociados
+			data_ajax(site_url+'/administracion/eliminar_archivos', null, null);
+		}
+		$(this).off(e);
 	});
 });
 </script>

@@ -635,81 +635,47 @@ $config = array(
         )
     ),
       'form_beca' => array(
-         array(
-            'field' => 'periodo_fecha_inicio_pick',
+        'fecha_inicio' => array(
+            'field' => 'fecha_inicio',
             'label' => 'fecha inicio comisión',
-            'rules' => 'required|validate_date_dd_mm_yyyy'
+            'rules' => 'required|validate_date'
         ),
-        array(
-            'field' => 'periodo_fecha_fin_pick',
+        'fecha_fin' => array(
+            'field' => 'fecha_fin',
             'label' => 'fecha fin comisión',
-            'rules' => 'required|validate_date_dd_mm_yyyy' //|callback_valid_pass
+            'rules' => 'required|validate_date' //|callback_valid_pass
         ),
-        array(
-            'field' => 'ctipo_comprobante',
-            'label' => 'tipo de comprobante',
-            'rules' => 'required' 
-        ),
-        array(
-            'field' => 'text_comprobante',
-            'label' => 'comprobante',
-            'rules' => 'required' 
-        ),
-        array(
-            'field' => 'carga_file',
-            'label' => 'carga de comprobante',
-            'rules' => 'required' 
-        ),
-        array(
+        'cclase_beca' => array(
             'field' => 'cclase_beca',
             'label' => 'clase de beca',
             'rules' => 'required'
         ),
-        array(
+        'cmotivo_becado' => array(
             'field' => 'cmotivo_becado',
             'label' => 'motivo de la beca',
             'rules' => 'required' 
         ),
-        array(
+        'cbeca_interrumpida' => array(
             'field' => 'cbeca_interrumpida',
             'label' => 'beca interrumpida',
             'rules' => 'required' 
         ),
     ),
     'form_comision' => array(
-        array(
-            'field' => 'periodo_fecha_inicio_pick',
+        'fecha_inicio' => array(
+            'field' => 'fecha_inicio',
             'label' => 'fecha inicio comisión',
-            'rules' => 'required|validate_date_dd_mm_yyyy'
+//            'rules' => 'required|validate_date_dd_mm_yyyy'
+            'rules' => 'required|validate_date'
         ),
-        array(
-            'field' => 'periodo_fecha_fin_pick',
+        'fecha_fin' => array(
+            'field' => 'fecha_fin',
             'label' => 'fecha fin comisión',
-            'rules' => 'required|validate_date_dd_mm_yyyy' //|callback_valid_pass
+            'rules' => 'required|validate_date' //|callback_valid_pass
         ),
-        array(
-            'field' => 'tipo_comision_cve',
+        'ctipo_comision' => array(
+            'field' => 'ctipo_comision',
             'label' => 'tipo de comisión',
-            'rules' => 'required' //|callback_valid_pass
-        ),
-        array(
-            'field' => 'tipo_comision_cve',
-            'label' => 'tipo de comisión',
-            'rules' => 'required' //|callback_valid_pass
-        ),
-        array(
-            'field' => 'ctipo_comprobante',
-            'label' => 'tipo de comprobante',
-            'rules' => 'required' //|callback_valid_pass
-        ),
-        array(
-            'field' => 'text_comprobante',
-            'label' => 'comprobante',
-            'rules' => 'required' //|callback_valid_pass
-        ),
-        array(
-            'field' => 'carga_file',
-            'label' => 'carga comprobante',
             'rules' => 'required' //|callback_valid_pass
         ),
     ),
@@ -722,7 +688,7 @@ $config = array(
         'nombre_material' => array(
             'field' => 'nombre_material',
             'label' => 'nombre del material educativo',
-            'rules' => 'trim|required|max_length[100]|alpha_numeric_spaces' 
+            'rules' => 'trim|required|max_length[100]|alpha_numeric_accent_space_dot_parent' 
         ),
         'material_educativo_anio' => array(
             'field' => 'material_educativo_anio',
@@ -742,7 +708,7 @@ $config = array(
         'nombre_unidad' => array(
             'field' => 'nombre_unidad',
             'label' => 'nombre de la unidad',
-            'rules' => 'trim|required|max_length[100]|alpha_numeric_spaces' 
+            'rules' => 'trim|required|max_length[100]|alpha_numeric_accent_space_dot_parent' 
         ),
         'nombre_objeto_aprendizaje' => array(
             'field' => 'nombre_objeto_aprendizaje',
@@ -808,7 +774,12 @@ $config = array(
              * greater_than
              * greater_than_equal_to
              * in_list
-             *
+             * validate_date_dd_mm_yyyy
+             * validate_date
+             * form_validation_match_date  la fecha debe ser mayor que ()
+             * 
+             * 
+             * 
              */
 
 

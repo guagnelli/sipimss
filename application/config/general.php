@@ -40,6 +40,10 @@ $config['categorias_designar_validador'] = array('36112580','35312180');
 $config['ruta_documentacion'] = $_SERVER["DOCUMENT_ROOT"] . "/sipimss_bonos/assets/files/archivos_bono/";
 $config['ruta_documentacion_web'] = asset_url() . 'files/archivos_bono/'; //base_url()."assets/files/solicitudes/";
 
+$config['tiempo_eliminar_archivo'] = 60 * 10; //3600 = 1 hora => Tiempo que no será considerado para eliminación de archivo. Referencia administración/eliminar_archivos
+
+$config['numero_registros_eliminar'] = 100;
+
 $config['tiempo_fuerza_bruta'] = 60 * 60; //3600 = 1 hora => Tiempo válido para chequeo de fuerza bruta
 
 $config['intentos_fuerza_bruta'] = 10; ///Número de intentos válidos durante tiempo 'tiempo_fuerza_bruta'
@@ -124,7 +128,11 @@ $config['alert_msg'] = array(
 );
 
 $config['tipo_comision'] = array(
-    'DIRECCION_TESIS' => array('id'=>1)
+    'DIRECCION_TESIS' => array('id'=>1),
+    'COMITE_EDUCACION' => array('id'=>3),
+    'SINODAL_EXAMEN' => array('id'=>4),
+    'COORDINADOR_TUTORES' => array('id'=>5),
+    'COORDINADOR_CURSO' => array('id'=>6)
 );
 
 $config['parametros_bitacora'] = array(
@@ -308,6 +316,7 @@ $config['emp_formacion_profesional'] = array(
 
 
 $config['comprobante'] = array(
+    'comprobante_cve' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'), //comprobante
     'ctipo_comprobante' => array('select' => 'TIPO_COMPROBANTE_CVE', 'insert' => 'TIPO_COMPROBANTE_CVE'), //comprobante
     'text_comprobante' => array('select' => 'COM_NOMBRE', 'insert' => 'COM_NOMBRE'), //comprobante
 );
@@ -330,14 +339,22 @@ $config['emp_beca'] = array(
     'fecha_fin' => array('select' => 'EB_FCH_FIN', 'insert' => 'EB_FCH_FIN'),
     'cclase_beca' => array('select' => 'CLA_BECA_CVE', 'insert' => 'CLA_BECA_CVE'),
     'cmotivo_becado' => array('select' => 'MOTIVO_BECADO_CVE', 'insert' => 'MOTIVO_BECADO_CVE'),
-    'cbeca_interrumpida' => array('select' => 'BECA_INTERRUMPIDA_CVE', 'insert' => 'BECA_INTERRUMPIDA_CVE'),
+    'cbeca_interrumpida' => array('select' => 'BECA_INTERRIMPIDA_CVE', 'insert' => 'BECA_INTERRIMPIDA_CVE'),
     'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'),
+    'clase_beca_cve' => '',
+    'motivo_beca_cve' => '',
+    'beca_interrumpida_cve' => '',
+    
 );
 $config['emp_comision'] = array(
     'fecha_inicio' => array('select' => 'EC_FCH_INICIO', 'insert' => 'EC_FCH_INICIO'),
     'fecha_fin' => array('select' => 'EC_FCH_FIN', 'insert' => 'EC_FCH_FIN'),
     'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
-    'tipo_comision_cve' => array('select' => 'TIP_COMISION_CVE', 'insert' => 'TIP_COMISION_CVE'),
+    'ctipo_comision' => array('select' => 'TIP_COMISION_CVE', 'insert' => 'TIP_COMISION_CVE'),
+    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'),
+    'tipo_comision_cve' => '',
+    'nom_tipo_comision' => '',
 );
 $config['emp_materia_educativo'] = array(
     'empleado_cve' => array('select' => 'EMPLEADO_CVE', 'insert' => 'EMPLEADO_CVE'),
@@ -350,14 +367,19 @@ $config['emp_materia_educativo'] = array(
 $config['ctipo_material'] = array(
     'tipo_material_cve' => array('select' => 'TIP_MATERIAL_CVE', 'insert' => 'TIP_MATERIAL_CVE'),
     'ctipo_material' => array('select' => 'TIP_MAT_TIPO', 'insert' => 'TIP_MAT_TIPO'),
-    'cantidad_hojas' => array('select' => 'TIP_MAT_OPCION', 'insert' => 'TIP_MAT_OPCION'),
+
     'nombre_unidad' => array('select' => 'TIP_MAT_NOMBRE', 'insert' => 'TIP_MAT_NOMBRE'),
-    'numero_horas' => array('select' => 'TIP_MAT_OPCION', 'insert' => 'TIP_MAT_OPCION'),
+
     'nombre_objeto_aprendizaje' => array('select' => 'TIP_MAT_NOMBRE', 'insert' => 'TIP_MAT_NOMBRE'),
+    'numero_horas' => array('select' => 'TIP_MAT_OPCION', 'insert' => 'TIP_MAT_OPCION'),
+    'cantidad_hojas' => array('select' => 'TIP_MAT_OPCION', 'insert' => 'TIP_MAT_OPCION'),
 );
 $config['opciones_tipo_material'] = array(
-    'cantidad_hojas' => array(1 => 'Menos de 100 hoja', 2 => '100 ó más hojas'),
+    'cantidad_hojas' => array(1 => 'Menos de 100 hojas', 2 => '100 ó más hojas'),
     'numero_horas' => array(1 => 'Menor o igual que cuatro horas', 2 => 'Mayor que cuatro horas'),
+    1=>array('opt_tipo_material'=>'cantidad_hojas'),
+    3=>array('nom_tipo_material'=>'nombre_unidad', 'opt_tipo_material'=>'numero_horas'),
+    4=>array('nom_tipo_material'=>'nombre_objeto_aprendizaje', 'opt_tipo_material'=>'numero_horas'),
 );
 
 //    EAD_DURACION

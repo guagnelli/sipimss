@@ -8,8 +8,9 @@
         <!--</div>-->
     <?php if (isset($cve_beca)) {//Actualizar?> 
         <div class="col-xs-6 col-sm-6 col-md-6 text-left " >
-            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" data-invcve= "<?php echo $cve_beca; ?>"
-                    data-comprobantecve= "<?php echo $comprobantecve; ?>" data-idrow="<?php echo $idrow; ?>" onclick="funcion_actualizar_beca(this)" >
+            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" 
+                    data-becacve= "<?php echo $cve_beca; ?>"
+                    data-comprobantecve= "<?php echo $comprobantecve; ?>" onclick="funcion_actualizar_beca(this)" >
                 Actualizar 
             </button>
         </div>

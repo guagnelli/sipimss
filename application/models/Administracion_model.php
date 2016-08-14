@@ -12,6 +12,30 @@ class Administracion_model extends CI_Model {
         $this->string_values = $this->lang->line('interface')['model']; //Cargar textos utilizados en vista
     }
 
+    public function delete_comprobante($params=null){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        
+        $this->db->delete('comprobante');
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['result'] = TRUE;
+            $resultado['msg'] = $this->string_values['eliminacion'];
+        }
+        
+        return $resultado;
+    }
+
     public function get_comprobante($params=null){
         $resultado = array();
 
@@ -27,6 +51,10 @@ class Administracion_model extends CI_Model {
         }
         if(array_key_exists('order', $params)){
             $this->db->order_by($params['order']);
+        }
+
+        if(array_key_exists('limit', $params)){
+            $this->db->limit($params['limit']);
         }
 
         $query = $this->db->get('comprobante'); //Obtener conjunto de registros

@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+if (isset($info_material_educativo)) {
+    extract($info_material_educativo, EXTR_OVERWRITE); //EXTR_IF_EXISTS; EXTR_PREFIX_ALL; EXTR_OVERWRITE; EXTR_PREFIX_INVALID
+}
 ?>
+
+<script type="text/javascript">
+    $("#datetimepicker1").datetimepicker({
+        format: "YYYY", // Notice the Extra space at the beginning
+        viewMode: "years"
+    });
+    $('.btn_subir_comprobante').click(function () {
+        cargar_archivo($(this).attr('data-key'), "#form_material_educativo");
+    });
+</script>
 <?php echo form_open('', array('id' => 'form_material_educativo')); ?>
 <div class="list-group">
     <div class='row'>
@@ -23,8 +37,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         'placeholder' => $string_values['lbl_tipo_material'],
                         'data-toggle' => 'tooltip', 'data-placement' => 'top',
                         'title' => $string_values['lbl_tipo_material'],
-                        'onchange' =>  "funcion_cargar_campos_tipo_material_educativo()"
-                        )));
+                        'onchange' => "funcion_cargar_campos_tipo_material_educativo()"
+                )));
                 ?>
             </div>
             <?php echo form_error_format('ctipo_material'); ?>
@@ -61,33 +75,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <?php echo $string_values['lbl_tipo_material_anio_elaboro']; ?>
             </label>
             <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"> </span>
-                </span>
-                <?php
-                echo $this->form_complete->create_element(
-                        array('id' => 'material_educativo_anio', 'type' => 'number',
-                            'value' => isset($mat_edu_anio) ? $mat_edu_anio : '',
-                            'attributes' => array(
-                                'class' => 'form-control',
-                                'placeholder' => $string_values['texto_tipo_material_anio_elaboro'],
-                                'min' => '1950',
-                                'max' => '2050',
-                                'data-toggle' => 'tooltip',
-                                'data-placement' => 'bottom',
-                                'title' => $string_values['texto_tipo_material_anio_elaboro'],
+                <div class="input-group date datepicker" id="datetimepicker1">
+                    <?php
+                    echo $this->form_complete->create_element(
+                            array('id' => 'material_educativo_anio', 'type' => 'text',
+                                'value' => isset($material_educativo_anio) ? $material_educativo_anio : '',
+                                'attributes' => array(
+                                    'class' => 'form-control',
+                                    'placeholder' => $string_values['texto_tipo_material_anio_elaboro'],
+                                    'min' => '1950',
+                                    'max' => '2050',
+                                    'data-toggle' => 'tooltip',
+                                    'data-placement' => 'bottom',
+                                    'title' => $string_values['texto_tipo_material_anio_elaboro'],
+                                )
                             )
-                        )
-                );
-                ?>
+                    );
+                    ?>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"> </span>
+                    </span>
+                </div>    
             </div>
             <?php echo form_error_format('material_educativo_anio'); ?>
         </div>
     </div>
-    
+
     <?php
     if (isset($formulario_complemento)) {
         echo $formulario_complemento;
+    }
+    if (isset($formulario_carga_archivo)) {
+        echo $formulario_carga_archivo;
     }
     ?>
 

@@ -147,10 +147,14 @@ $lang['interface'] = array(
         'title_cargar_comprobante' => 'Cargar comprobante',
         'carga_correcta' => 'Se ha cargado correctamente el archivo. Para persistir los datos, guarde los cambios.',
         'ver_archivo' => 'Ver archivo',
+        'descargar_archivo' => 'Descargar archivo',
         'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
+        'archivo_incorrecto' => 'Archivo incorrecto',
+        'archivo_inexistente' => 'Archivo inexistente',
     ),
     //Actividad del docente
     'actividad_docente' => array(
+     'placeholder_formato_fecha' => 'AAAA-MMDD',
         'error_no_registro' => 'No existe un registro',
         'alert_no_existe_actividad_principal' => 'No existe una actividad principal',
         'lbl_pregunta_eliminar_actividad_docente' => 'Confirme que realmente desea eliminar la actividad [field]',
@@ -342,7 +346,19 @@ $lang['interface'] = array(
         't_h_nivel_academico' => 'Nivel académico',
         't_h_area' => 'Área',
         'btn_add_new_direccion' => 'Agregar nueva dirección de tesis',
-
+    ),
+    'comision_academica' => array(
+        'title' => 'Comisión académica',
+        't_h_anio' => 'Año en que se emite la carta',
+        't_h_anio_' => 'Año',
+        't_h_nivel_academico' => 'Nivel académico',
+        't_h_area' => 'Área',
+        't_h_tipo' => 'Tipo',
+        't_h_duracion' => 'Duración',
+        't_h_fch_inicio' => 'Fecha inicio',
+        't_h_fch_fin' => 'Fecha fin',
+        't_h_tipo_curso' => 'Tipo',
+        'btn_add_new_comision_academica' => 'Agregar nueva comisión',
     ),
     'error' => array(
         'crear_carpeta' => 'No es posible crear la carpeta, verifique permisos de escritura con administrador.',
@@ -355,6 +371,7 @@ $lang['interface'] = array(
         'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
     ),
 	'becas_comisiones' => array(
+        'placeholder_formato_fecha' => 'AAAA-MMDD',
         'tabs_becas' => 'Becas',
         'tabs_comisiones' => 'Comisiones',
         'title_becas' => 'Becas',
@@ -376,6 +393,7 @@ $lang['interface'] = array(
         'texto_ayuda_comprobante_comision' => 'Seleccionar y subir al sistema el tipo de comprobante que se le otorgo por la comisión en formato pdf',
         'title_tab_comision_fecha_inicio' => 'Fecha de inicio de la comisión',
         'title_tab_comision_fecha_termino' => 'Fecha de fin de la comisión',
+        'title_tab_comision_tipo_comision' => 'Comisión',
         'title_tab_comision_comprobante' => 'Comprobante',
         'title_tab_comision_editar' => 'Editar',
         'title_tab_comision_eliminar' => 'Eliminar',
@@ -393,14 +411,25 @@ $lang['interface'] = array(
         'lbl_comision_fecha_inicio' => 'Fecha de inicio de la comisión',
         'lbl_comision_fecha_fin' => 'Fecha de fin de la comisión',
         'lbl_tipo_comision' => 'Tipo de comisión',
+        'lbl_ver_comprobante' => 'Ver comprobante',
+        'phl_registro_correcto' => 'El registro se efectuo correctamente',
+        'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde',
+        'tab_titulo_editar' => 'Editar',
+        'tab_titulo_eliminar' => 'Eliminar',
+        'error_eliminar' => 'No se pudo eliminar el archivo. <br>Por favor intente más tarde',
+        'succesfull_eliminar' => 'El registro se elimino correctamente',
+        'succesfull_actualizar' => 'Los datos se actualizarón correctamente',
     ),
     'material_educativo' => array(
+        'placeholder_formato_fecha' => 'AAAA-MMDD',
         'title_material_eduacativo' => 'Material educativo',
         'title_tab_mat_edu_nombre_mat' => 'Nombre del material',
         'title_tab_mat_edu_tipo_mat' => 'Tipo de material',
         'title_tab_mat_edu_anio' => 'Año',
-        'title_tab_mat_edu_tipo_comprobante' => 'Tipo de material',
+        'title_tab_mat_edu_comprobante' => 'Comprobante',
         'title_tab_mat_edu_tipo_eliminar' => 'Eliminar',
+        'tab_titulo_eliminar' => 'Eliminar',
+        'tab_titulo_editar' => 'Editar',
         'title_tab_mat_edu_tipo_editar' => 'Editar',
         'btn_agregar_material_eduactivo' => 'Agregar material educativo',
         'lbl_tipo_comprobante' => 'Tipo de comprobante',
@@ -414,19 +443,24 @@ $lang['interface'] = array(
         'lbl_tipo_material_anio_elaboro' => 'Año que elaboró material educativo',
         'texto_tipo_material_anio_elaboro' => 'Año en que elaboró',
         'drop_tipo_material' => 'Seleccione el tipo de material educativo',
-        
+
         'drop_cantidad_hojas' => 'Seleccione cantidad de hojas',
         'lbl_cantidad_hojas' => 'Cantidad de hojas',
-        
+
         'lbl_nombre_unidad' => 'Nombre de la unidad',
         'text_nombre_unidad' => 'Nombre de la unidad',
         'lbl_numero_horas' => 'Número de horas',
         'text_numero_horas' => 'Horas',
         'drop_numero_horas' => 'Seleccione número de horas',
-        
+        'phl_registro_correcto' => 'El registro se guardo correctamente',
+        'phl_registro_actualizado_correcto' => 'El registro se actualizo correctamente',
+        'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde',
         'lbl_nombre_objeto_aprendizaje' => 'Nombre del objeto de aprendizaje',
         'text_nombre_objeto_aprendizaje' => 'Objeto de aprendizaje',
-        
+        'lbl_ver_comprobante' => 'Ver comprobante',
+        'error_eliminar' => 'No se pudo eliminar el archivo. <br>Por favor intente más tarde',
+        'succesfull_eliminar' => 'El registro se elimino correctamente',
+        'succesfull_actualizar' => 'Los datos de material educativo se actualizarón correctamente',
     ),
 );
 

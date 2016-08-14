@@ -68,15 +68,11 @@ $string_values = $this->lang->line('interface');
                             </span>
                         </div>
                     </div>
-                    <div class="list-group-item" id='div_error_index' style='display:none'>
-                        <div class='row' >
-                            <div class="row" >
-                                <div class="col-md-10 col-sm-10 col-xs-10">
-                                    <div id='mensaje_error_div_index' class='alert'>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <span id='mensaje_error_index'></span>
-                                    </div>
-                                </div>
+                    <div class="row" >
+                        <div class="col-md-12 col-sm-12 col-xs-12 " id='div_error_index' style='display:none'>
+                            <div id='mensaje_error_div_index' class='alert'>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <span id='mensaje_error_index'></span>
                             </div>
                         </div>
                     </div>

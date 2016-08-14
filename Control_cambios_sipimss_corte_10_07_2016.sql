@@ -250,6 +250,45 @@ FOREIGN KEY (`TIP_MAT_TIPO`) REFERENCES `ctipo_material`(`TIP_MATERIAL_CVE`) ON 
 
 /* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+/* ********************modificaci󮥳 11/08/2016   **************************************/
+ALTER TABLE `comprobante` ADD FECHA_INSERSION TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL AFTER `com_extension`;
+ALTER TABLE csubtipo_formacion_profesional MODIFY COLUMN SUB_FOR_PRO_NOMBRE varchar(50) NULL;
+ALTER TABLE csubtipo_formacion_salud MODIFY COLUMN SUBTIP_NOMBRE varchar(50) NULL;
+
+/* Agrega relacion "ctipo_formacion_profesional" a la tabla "csubtipo_formacion_profesional" */   
+ALTER TABLE `csubtipo_formacion_profesional` ADD `TIP_FOR_PROF_CVE` INT(11) NULL AFTER `SUB_FOR_PRO_NOMBRE`;  /*Campo agregado a la tabla "csubtipo_formacion_profesional"*/
+CREATE INDEX XIF10SUBTIPO_FORMACION_PROFESIONAL ON csubtipo_formacion_profesional (TIP_FOR_PROF_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `csubtipo_formacion_profesional` ADD CONSTRAINT `csubtipo_formacion_profesional_cdfpfk`   /* Asigna llave foran*/
+FOREIGN KEY (`TIP_FOR_PROF_CVE`) REFERENCES `ctipo_formacion_profesional`(`TIP_FOR_PROF_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+/* eLIMINA CONSTRAIN "ctipo_formacion_profesional" CON "csubtipo_formacion_profesional"*/
+ALTER TABLE `ctipo_formacion_profesional` DROP FOREIGN KEY `ctipo_formacion_profesional_ibfk_1`; 
+ALTER TABLE `ctipo_formacion_profesional` DROP `SUB_FOR_PRO_CVE`; 
+
+ALTER TABLE emp_comision MODIFY COLUMN EC_ANIO int(11) NULL; 
+
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/* ********************modificaci󮥳 11/08/2016   **************************************/
+/* Agrega relacion "ctipo_curso" a la tabla "emp_comision" */   
+ALTER TABLE `emp_comision` ADD `TIP_CURSO_CVE` INT(11) NULL AFTER `FECHA_INSERSION`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF6EMP_COMISION ON emp_comision (TIP_CURSO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `emp_comision` ADD CONSTRAINT `emp_comision_ibfk_6`   /* Asigna llave foran*/
+FOREIGN KEY (`TIP_CURSO_CVE`) REFERENCES `ctipo_curso`(`TIP_CURSO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+/* Agrega relacion "ctipo_curso" a la tabla "ccurso" */    
+ALTER TABLE `emp_comision` ADD `CURSO_CVE` INT(11) NULL AFTER `TIP_CURSO_CVE`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF7EMP_COMISION ON emp_comision (CURSO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `emp_comision` ADD CONSTRAINT `emp_comision_ibfk_7`   /* Asigna llave foran*/
+FOREIGN KEY (`CURSO_CVE`) REFERENCES `ccurso`(`CURSO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/* ********************modificaci 13/08/2016   **************************************/
+ALTER TABLE sipimss.ctipo_material MODIFY COLUMN TIP_MAT_OPCION varchar(30) NULL; /*Cambio en tamano de tipo de dato 20 to 50 6-16-2016  */
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
 
 /* *
 ALTER TABLE `emp_esp_medica` CHANGE COLUMN `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;  /* cambia nombre a columna 

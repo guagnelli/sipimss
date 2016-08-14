@@ -57,14 +57,21 @@ $(function () {
 
 });
 
+/**
+ * 
+ * @param {type} id del botón menú, si es NULL, no se recargará la info del cuerpo 
+ * @param {type} is_success false, si es un error, true si es correcto 
+ * @param {type} mensaje que se mostrará en el iv de mensajes 
+ * @returns 0 
+ */
 function recargar_opcion_menu_mostrar_mensaje(id, is_success, mensaje) {
     var class_tipo = (is_success) ? 'alert-success' : 'alert-danger';
-    $('#mensaje_error_inv_doc').html(mensaje);
+    $('#mensaje_error_index').html(mensaje);
     $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass(class_tipo);
     $('#div_error_index').show();
     $('#modal_censo').modal('toggle');
     setTimeout("$('#div_error_index').hide()", 6000);
-    if (id.length === 0) {
+    if (id !== null) {
         cargar_datos_menu_perfil(id);
     }
     recargar_fecha_ultima_actualizacion();

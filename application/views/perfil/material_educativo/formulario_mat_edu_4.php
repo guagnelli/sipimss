@@ -1,5 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+if (isset($datos)) {
+    extract($datos, EXTR_OVERWRITE); //EXTR_IF_EXISTS; EXTR_PREFIX_ALL; EXTR_OVERWRITE; EXTR_PREFIX_INVALID
+}
 ?>
 
 <div class='row'>
@@ -39,7 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             echo $this->form_complete->create_element(array('id' => 'numero_horas', 'type' => 'dropdown',
                 'options' => $numero_horas,
                 'first' => array('' => $string_values['drop_numero_horas']),
-                'value' => (isset($nom_tipo_material)) ? $nom_tipo_material : '',
+                'value' => (isset($opt_tipo_material)) ? $opt_tipo_material : '',
                 'attributes' => array('class' => 'form-control',
                     'placeholder' => $string_values['text_numero_horas'],
                     'data-toggle' => 'tooltip', 'data-placement' => 'top',
@@ -50,4 +53,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <?php echo form_error_format('numero_horas'); ?>
     </div>
 </div>
-<input type="hidden" name="tipo_material_regreso" value="<?php echo (isset($id_tipo_material)) ? $id_tipo_material : '0'; ?>">
+<input type="hidden" name="tipo_material_regreso" value="0">
