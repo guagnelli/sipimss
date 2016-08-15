@@ -8,14 +8,14 @@ $(document).ready(function () {
             data: form_data,
             method: 'POST',
             beforeSend: function (xhr) {
-                $('#get_data_ajax_actividad').html(create_loader());
+                $('#seccion_actividad_docente').html(create_loader());
             }
         })
                 .done(function (response) {
                     $("#seccion_info_general").html(response);
                 })
                 .fail(function (jqXHR, response) {
-                    $('#get_data_ajax_actividad').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                    $('#seccion_actividad_docente').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
                 })
                 .always(function () {
                     remove_loader();
