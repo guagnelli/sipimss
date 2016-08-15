@@ -135,6 +135,13 @@ $config['tipo_comision'] = array(
     'COORDINADOR_CURSO' => array('id'=>6)
 );
 
+$config['tipo_curso'] = array(
+    'FORMACION_INICIAL' => array('id'=>1),
+    'FORMACION_CONTINUA' => array('id'=>2),
+    'EDUCACION_CONTINUA' => array('id'=>3),
+    'CURSO_INTERACTIVO' => array('id'=>4)
+);
+
 $config['parametros_bitacora'] = array(
         'USUARIO_CVE' => 'NULL', 
         'BIT_OPERACION' => 'NULL',
@@ -205,6 +212,10 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'cmotivo_becado' => array('id' => 'MOTIVO_BECADO_CVE', 'nombre' => 'MOT_BEC_NOMBRE', 'where' => null),
     'cbeca_interrumpida' => array('id' => 'BECA_INTERRIMPIDA_CVE', 'nombre' => 'MSG_BEC_INTE', 'where' => null),
     'cclase_beca' => array('id' => 'CLA_BECA_CVE', 'nombre' => 'CLA_BEC_NOMBRE', 'where' => null),
+    'csubtipo_formacion_profesional' => array('id'=>'SUB_FOR_PRO_CVE', 'nombre'=>'SUB_FOR_PRO_NOMBRE', 'where'=>null),
+    'ctipo_formacion_salud' => array('id'=>'TIP_FORM_SALUD_CVE', 'nombre'=>'TIP_FORM_SALUD_NOMBRE', 'where'=>null),
+    'csubtipo_formacion_salud' => array('id'=>'CSUBTIP_FORM_SALUD_CVE', 'nombre'=>'SUBTIP_NOMBRE', 'where'=>null),
+
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 

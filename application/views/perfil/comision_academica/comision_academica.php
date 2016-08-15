@@ -21,7 +21,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 									</a>
 								</h4>
 							</div>
-							<div id="collapseOne_<?php echo $key_tc; ?>" class="panel-collapse collapse <?php echo ($inc>0) ? '' : 'in'; ?>" role="tabpanel" aria-labelledby="head_<?php echo $key_tc; ?>">
+							<div id="collapseOne_<?php echo $key_tc; ?>" class="panel-collapse collapse <?php /*echo ($inc>0) ? '' :*/ 'in'; ?>" role="tabpanel" aria-labelledby="head_<?php echo $key_tc; ?>">
 								<div class="panel-body">
 									<div class="row">
 									    <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
@@ -52,7 +52,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 														foreach ($columns[$key_tc] as $key_dato => $dato) {
 															echo '<td>'.$comision_academica[$key_dato].'</td>';
 														}
-														echo '<td><button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+														echo '<td><button type="button" class="btn btn-link btn-sm btn_editar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
 							                                       $string_values['editar'].
 							                                    '</button>
 							                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.

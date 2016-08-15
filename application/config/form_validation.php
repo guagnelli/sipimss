@@ -634,6 +634,62 @@ $config = array(
             'rules' => 'required'
         )
     ),
+    'form_comision_academica_comite_educacion' => array(
+        array(
+            'field' => 'dt_anio',
+            'label' => 'Año en que se emite la carta',
+            'rules' => 'trim|required|exact_length[4]|integer'
+        ),
+        array(
+            'field' => 'tipo_curso',
+            'label' => 'Tipo de curso',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        )
+    ),
+    'form_comision_academica_sinodal_examen' => array(
+        array(
+            'field' => 'dt_anio',
+            'label' => 'Año en que fue dirigida',
+            'rules' => 'trim|required|exact_length[4]|integer'
+        ),
+        array(
+            'field' => 'nivel_academico',
+            'label' => 'Nivel académico',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        )
+    ),
+    'form_comision_academica_coordinador_tutores' => array(
+        array(
+            'field' => 'dt_anio',
+            'label' => 'Año en que fue dirigida',
+            'rules' => 'trim|required|exact_length[4]|integer'
+        ),
+        array(
+            'field' => 'tipo_curso',
+            'label' => 'Tipo de curso',
+            'rules' => 'trim|required'
+        ),        
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'duracion',
+            'label' => 'Duración',
+            'rules' => 'required'
+        )
+    ),
       'form_beca' => array(
         'fecha_inicio' => array(
             'field' => 'fecha_inicio',

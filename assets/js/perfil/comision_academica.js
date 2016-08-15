@@ -4,11 +4,11 @@ $(function () {
             data_ajax(site_url+'/perfil/comision_academica_formulario/'+$(this).attr('data-com')+'/'+$(this).attr('data-value'), null, '#modal_content');
         });
     }
-    /*if($('.btn_editar_dt').length){
-        $('.btn_editar_dt').on('click', function() {
-            data_ajax(site_url+'/perfil/direccion_tesis_formulario/'+$(this).attr('data-value'), null, '#modal_content');
+    if($('.btn_editar_ca').length){
+        $('.btn_editar_ca').on('click', function() {
+            data_ajax(site_url+'/perfil/comision_academica_formulario/'+$(this).attr('data-com')+'/'+$(this).attr('data-value'), null, '#modal_content');
         });
-    }*/
+    }
     if($('.btn_eliminar_dt').length){
         $('.btn_eliminar_dt').on('click', function() {
             var data_value = $(this).attr('data-value');
@@ -44,3 +44,14 @@ $(function () {
         });
     }
 });
+function mostrar_horas_fechas(horas) {
+    if (horas == 'none') {
+        $('#div_horas_dedicadas').hide('slow');
+        $('#fecha_inicio').show('slow');
+        $('#fecha_fin').show('slow');
+    } else {
+        $('#div_horas_dedicadas').show('slow');
+        $('#fecha_inicio').hide('slow');
+        $('#fecha_fin').hide('slow');
+    }
+}

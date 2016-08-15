@@ -358,7 +358,21 @@ $lang['interface'] = array(
         't_h_fch_inicio' => 'Fecha inicio',
         't_h_fch_fin' => 'Fecha fin',
         't_h_tipo_curso' => 'Tipo',
+        't_h_curso' => 'Curso',
         'btn_add_new_comision_academica' => 'Agregar nueva comisión',
+        'radio_duracion_horas' => 'Hora(s)',
+        'radio_duracion_fecha' => 'Fecha(s)',
+        'lbl_duracion_fecha_inicio' => 'Fecha de inicio',
+        'lbl_duracion_fecha_final' => 'Fecha de termino',
+        'lbl_duracion' => 'Duración',
+    ),
+    'formacion_salud' => array(
+        'lbl_formacion_salud_opc' => 'Formación inicial',
+        'lbl_formacion_continua_salud_opc' => 'Formación continua',
+    ),
+    'formacion_docente' => array(
+        'lbl_formacion_docente_opc' => 'Formación inicial',
+        'lbl_formacion_educacion_distacion_opc' => 'Formación continua'
     ),
     'error' => array(
         'crear_carpeta' => 'No es posible crear la carpeta, verifique permisos de escritura con administrador.',

@@ -7,7 +7,11 @@ $(function() {
 	if($('#btn_guardar_direccion_tesis').length){
         $('#btn_guardar_direccion_tesis').on('click', function() {
         	if($('#idc').length){ //Validar carga de archivo
-            	data_ajax(site_url+'/perfil/direccion_tesis_formulario/<?php echo $identificador; ?>', '#formularioDireccionTesis', '#modal_content');
+        		if($("#userfile").val()==""){ //Validar carga de archivo
+            		data_ajax(site_url+'/perfil/direccion_tesis_formulario/<?php echo $identificador; ?>', '#formularioDireccionTesis', '#modal_content');
+            	} else {
+            	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
+                }
             } else {
             	$('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
             }

@@ -133,13 +133,13 @@ class Administracion extends CI_Controller {
                             $resultado['idb'] = $data['idc'];
                             $resultado['id'] = $data['identificador'];
                             $resultado_almacenado = $this->admin->update_comprobante($id, $archivo);
-                            unlink($config['upload_path'].$data_comprobante['COM_NOMBRE']); //Eliminar archivo anterior
+                            unlink($this->format_path($config['path_simple']).$data_comprobante['COM_NOMBRE']); //Eliminar archivo anterior
                         }
                         if($resultado_almacenado['result']==TRUE){
                             $resultado['result'] = TRUE; //Notificar el almacenado exitoso
                             $resultado['msg'] = $this->string_values['general']['carga_correcta'];
                         } else {
-                            unlink($config['upload_path'].$nombre_archivo); //En caso de error eliminar archivo cargado
+                            unlink($this->format_path($config['path_simple']).$nombre_archivo); //En caso de error eliminar archivo cargado
                         }
                     }
                 } else {
@@ -160,7 +160,7 @@ class Administracion extends CI_Controller {
         $borrados = $no_borrados = array();
         foreach ($data_comprobante as $key_dc => $dc) {
             if(file_exists($ruta.$dc['COM_NOMBRE'])) {
-                if(unlink($ruta.$dc['COM_NOMBRE'])) {
+                if(unlink($this->format_path($ruta).$dc['COM_NOMBRE'])) {
                     $borrados[] = $dc['COMPROBANTE_CVE'];
                 } else {
                     $no_borrados[] = $dc['COMPROBANTE_CVE'];
@@ -174,6 +174,15 @@ class Administracion extends CI_Controller {
         $resultado['no_borrados'] = $no_borrados;
 
         echo json_encode($resultado);
+    }
+
+    private function format_path($path){
+        if (realpath($path) !== FALSE)
+        {
+            $path = str_replace('\\', '/', realpath($path));
+        }
+        $path = preg_replace('/(.+?)\/*$/', '\\1/',  $path);
+        return $path;
     }
 
     /**
@@ -204,6 +213,7 @@ class Administracion extends CI_Controller {
         $nombre_archivo = (isset($data['nombre']) && !empty($data['nombre'])) ? $data['nombre'] : $this->session->userdata('matricula').'_'.time();
 
         $config['carpeta']              = $carpeta;
+        $config['path_simple']          = $ruta;
         $config['upload_path']          = $ruta_archivos;
         $config['allowed_types']        = $configuracion_carga['allowed_types'];
         $config['max_size']             = $configuracion_carga['max_size']; // Definir tamaño máximo de archivo

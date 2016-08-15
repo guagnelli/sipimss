@@ -94,7 +94,7 @@ function cargar_datos_menu_perfil(id) {
 }
 
 function recargar_fecha_ultima_actualizacion() {
-    var a = hrutes['ajax_investigacion'];
+    var a = hrutes['seccion_investigacion'];
     var cad_split = a.split(":");
     $.ajax({
         url: site_url + '/' + cad_split[0] + '/get_fecha_ultima_actualizacion',

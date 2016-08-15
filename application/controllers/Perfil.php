@@ -220,7 +220,7 @@ class Perfil extends MY_Controller {
 
             $data['comisiones'] = array();
             foreach ($data['catalogos']['ctipo_comision'] as $ctc => $tc) {
-                $data['comisiones'][$ctc] = $this->ca->get_comision_academica(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'TIP_COMISION_CVE'=>$ctc)));
+                $data['comisiones'][$ctc] = $this->ca->get_comision_academica(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'TIP_COMISION_CVE'=>$ctc), 'order'=>'EC_ANIO desc'));
             }
             //pr($data);
             echo $this->load->view('perfil/comision_academica/comision_academica.php', $data, true); //Valores que muestrán la lista
@@ -242,25 +242,43 @@ class Perfil extends MY_Controller {
 
             $config = $this->comision_academica_configuracion($tc_id);
             $data['catalogos'] = $config['catalogos'];
+            $data['mostrar_hora_fecha_duracion'] = 0;
 
             if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
                 $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                
+                $data['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_formulario, 'duracion'); //Muestrá validaciones de hora y fecha de inicio y termino según la opción de duración
+                //pr($datos_formulario);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item($config['validacion']); //Obtener validaciones de archivo general
                 $this->form_validation->set_rules($validations); //Añadir validaciones
-
+                if(isset($datos_formulario['duracion']) && $datos_formulario['duracion']=="fecha_dedicadas"){ //Agregar validaciones
+                    $datos_formulario['hora_dedicadas'] = null ;
+                    $this->form_validation->set_rules('fecha_inicio_pick', 'Fecha inicio', 'trim|required|validate_date_dd_mm_yyyy');
+                    $this->form_validation->set_rules('fecha_fin_pick', 'Fecha fin', 'trim|required|validate_date_dd_mm_yyyy');
+                } else {
+                    if(isset($datos_formulario['duracion'])){
+                        $datos_formulario['fecha_inicio_pick'] = null ;
+                        $datos_formulario['fecha_fin_pick'] = null ;
+                        $this->form_validation->set_rules('hora_dedicadas', 'Duración', 'trim|required|integer');
+                    }
+                }
+                if(isset($datos_formulario['tipo_curso']) && 
+                    ($tc_id == $this->config->item('tipo_comision')['COORDINADOR_TUTORES']['id'] || $tc_id == $this->config->item('tipo_comision')['COORDINADOR_CURSO']['id']) &&
+                    ($datos_formulario['tipo_curso']==$this->config->item('tipo_curso')['FORMACION_INICIAL']['id'] || $datos_formulario['tipo_curso']==$this->config->item('tipo_curso')['EDUCACION_CONTINUA']['id'])){ //Agregar validaciones
+                    $this->form_validation->set_rules('curso', 'Curso', 'trim|required|integer');
+                }
+                //pr($datos_formulario);
+                //pr($validations);
                 if($this->form_validation->run() == TRUE ){ //Validar datos
                     $datos_formulario['tipo_comision'] = $tc_id;
                     $datos_formulario['empleado'] = $this->session->userdata('idempleado');
-
-
                     $data_com = $this->emp_comision_fac($datos_formulario); //Generar objeto para almacenar
+                    //pr($data_com);  exit();
                     if(empty($data['identificador'])){ //Insertar
-                        $resultado_almacenado = $this->dt->insert_comision($data_com);
+                        $resultado_almacenado = $this->ca->insert_comision($data_com);
                         $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
                     } else { //Actualización
-                        $resultado_almacenado = $this->dt->update_comision($dt_id, $data_com);
+                        $resultado_almacenado = $this->ca->update_comision($ca_id, $data_com);
                     }
                     //////Inicio actualizar comprobante
                     $this->load->model('Administracion_model','admin');
@@ -269,19 +287,39 @@ class Perfil extends MY_Controller {
                     }
                     //////Fin actualizar comprobante
                     $data['msg'] = imprimir_resultado($resultado_almacenado); ///Muestra mensaje
+                } else {
+                    validation_errors();
                 }
             }
             if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
-                $data['dir_tes'] = $this->ca->get_comision_academica(array('conditions'=>array('EMP_COMISION_CVE'=>$dt_id)))[0]; //Obtener datos
+                $data['dir_tes'] = $this->ca->get_comision_academica(array('conditions'=>array('EMP_COMISION_CVE'=>$ca_id)))[0]; //Obtener datos
             } else {
                 $data['dir_tes'] = (array)$this->emp_comision_fac(array('tipo_comision'=>$tc_id)); //Generar objeto para ser enviado al formulario
             }
+            //pr($data);
             $data['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data, TRUE);
             $data['titulo_modal'] = $data['string_values']['title'];
             
             $data['cuerpo_modal'] = $this->load->view($config['plantilla'], $data, TRUE);
 
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    public function curso($tipo_curso, $CURSO_CVE=null){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $this->load->model('Comision_academica_model', 'ca');
+            $this->lang->load('interface');
+            $data['string_values'] = array_merge($this->lang->line('interface')['comision_academica'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
+            $data['dir_tes']['CURSO_CVE'] = $CURSO_CVE;
+
+            $entidades_ = array(enum_ecg::ccurso);
+            $condiciones_ = array(enum_ecg::ccurso => array('TIP_CURSO_CVE' => $tipo_curso));
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
+
+            echo $this->load->view('perfil/comision_academica/comision_academica_curso', $data, TRUE);
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
@@ -306,8 +344,10 @@ class Perfil extends MY_Controller {
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
                 break;
             case $this->config->item('tipo_comision')['COORDINADOR_CURSO']['id']:
-                $config['plantilla'] = 'perfil/comision_academica/comision_academica_cooordinador_curso_formulario';
-                $config['validacion'] = 'form_comision_academica_coordinador_curso';
+                //$config['plantilla'] = 'perfil/comision_academica/comision_academica_coordinador_curso_formulario';
+                //$config['validacion'] = 'form_comision_academica_coordinador_curso';
+                $config['plantilla'] = 'perfil/comision_academica/comision_academica_coordinador_tutores_formulario';
+                $config['validacion'] = 'form_comision_academica_coordinador_tutores';
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
                 break;
         }
@@ -327,7 +367,7 @@ class Perfil extends MY_Controller {
             
             //if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
                 $this->load->model('Direccion_tesis_model', 'dt');
-                $data['lista_direccion'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'TIP_COMISION_CVE'=>$this->config->item('tipo_comision')['DIRECCION_TESIS']['id'])));
+                $data['lista_direccion'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'TIP_COMISION_CVE'=>$this->config->item('tipo_comision')['DIRECCION_TESIS']['id']), 'order'=>'EC_ANIO desc'));
                 //pr($data);
                 echo $this->load->view('perfil/direccionTesis', $data, true); //Valores que muestrán la lista
             //}
@@ -440,6 +480,38 @@ class Perfil extends MY_Controller {
         }
         return $resultado;
     }
+
+    /////////////////////////Inicio formación //////////////////////////
+    public function seccion_formacion() {
+        if ($this->input->is_ajax_request()) {
+            $this->load->model('Formacion_model', 'fm');
+            $data = array();
+
+            $this->lang->load('interface');
+            $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['formacion_docente'], $this->lang->line('interface')['general']);
+
+            //$condiciones_ = array(enum_ecg::ctipo_comision => array('TIP_COMISION_CVE !=' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id'], 'IS_COMISION_ACADEMICA' => 1));
+            //$entidades_ = array(enum_ecg::ctipo_formacion_salud, enum_ecg::csubtipo_formacion_salud);
+            //$data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+            /*$data['columns'] = array($this->config->item('tipo_comision')['COMITE_EDUCACION']['id']=>array('EC_ANIO'=>$data['string_values']['t_h_anio'], 'TIP_CUR_NOMBRE'=>$data['string_values']['t_h_tipo']),
+                    $this->config->item('tipo_comision')['SINODAL_EXAMEN']['id']=>array('EC_ANIO'=>$data['string_values']['t_h_anio_'], 'NIV_ACA_NOMBRE'=>$data['string_values']['t_h_nivel_academico']),
+                    $this->config->item('tipo_comision')['COORDINADOR_TUTORES']['id']=>array('EC_ANIO'=>$data['string_values']['t_h_anio_'], 'TIP_CUR_NOMBRE'=>$data['string_values']['t_h_tipo'], 'EC_FCH_INICIO'=>$data['string_values']['t_h_fch_inicio'], 'EC_FCH_FIN'=>$data['string_values']['t_h_fch_fin'], 'EC_DURACION'=>$data['string_values']['t_h_duracion']),
+                    $this->config->item('tipo_comision')['COORDINADOR_CURSO']['id']=>array('EC_ANIO'=>$data['string_values']['t_h_anio_'], 'TIP_CUR_NOMBRE'=>$data['string_values']['t_h_tipo'], 'EC_FCH_INICIO'=>$data['string_values']['t_h_fch_inicio'], 'EC_FCH_FIN'=>$data['string_values']['t_h_fch_fin'], 'EC_DURACION'=>$data['string_values']['t_h_duracion']));
+            
+            $data['comisiones'] = array();
+            foreach ($data['catalogos']['ctipo_comision'] as $ctc => $tc) {
+                $data['comisiones'][$ctc] = $this->ca->get_comision_academica(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'TIP_COMISION_CVE'=>$ctc), 'order'=>'EC_ANIO desc'));
+            }*/
+            //pr($data);
+            $data['formacion_salud'] = $this->fm->get_formacion_salud(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado')), 'order'=>'EFPCS_ANIO desc'));
+            pr($data);
+            echo $this->load->view('perfil/formacion/formacion.php', $data, true); //Valores que muestrán la lista
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    /////////////////////////Fin formación //////////////////////////
     
     /////////////////////////Fin dirección de tesis //////////////////////////
 
@@ -1384,23 +1456,26 @@ class Perfil extends MY_Controller {
         $com->TIP_COMISION_CVE = (isset($comision['tipo_comision']) && !empty($comision['tipo_comision'])) ? $comision['tipo_comision'] : NULL;
         $com->COMPROBANTE_CVE = (isset($comision['idc']) && !empty($comision['idc'])) ? $this->seguridad->decrypt_base64($comision['idc']) : NULL;
         $com->EC_ANIO = (isset($comision['dt_anio']) && !empty($comision['dt_anio'])) ? $comision['dt_anio'] : NULL;
-        $com->EC_FCH_INICIO = (isset($comision['fecha_inicio']) && !empty($comision['fecha_inicio'])) ? $comision['fecha_inicio'] : NULL;
-        $com->EC_FCH_FIN = (isset($comision['fecha_fin']) && !empty($comision['fecha_fin'])) ? $comision['fecha_fin'] : NULL;
-        $com->EC_DURACION = (isset($comision['duracion']) && !empty($comision['duracion'])) ? $comision['duracion'] : NULL;
+        $com->EC_FCH_INICIO = (isset($comision['fecha_inicio_pick']) && !empty($comision['fecha_inicio_pick'])) ? date("Y-m-d", strtotime($comision['fecha_inicio_pick'])) : NULL;
+        $com->EC_FCH_FIN = (isset($comision['fecha_fin_pick']) && !empty($comision['fecha_fin_pick'])) ? date("Y-m-d", strtotime($comision['fecha_fin_pick'])) : NULL;
+        $com->EC_DURACION = (isset($comision['hora_dedicadas']) && !empty($comision['hora_dedicadas'])) ? $comision['hora_dedicadas'] : NULL;
         $com->TIP_CURSO_CVE = (isset($comision['tipo_curso']) && !empty($comision['tipo_curso'])) ? $comision['tipo_curso'] : NULL;
+        $com->CURSO_CVE = (isset($comision['curso']) && !empty($comision['curso'])) ? $comision['curso'] : NULL;
         
         return $com;
     }
 
     private function coordinador_curso_vo($comision){
+        $com = new Coordinador_curso_dao;
         $com->EMPLEADO_CVE = (isset($comision['empleado']) && !empty($comision['empleado'])) ? $comision['empleado'] : NULL;
         $com->TIP_COMISION_CVE = (isset($comision['tipo_comision']) && !empty($comision['tipo_comision'])) ? $comision['tipo_comision'] : NULL;
         $com->COMPROBANTE_CVE = (isset($comision['idc']) && !empty($comision['idc'])) ? $this->seguridad->decrypt_base64($comision['idc']) : NULL;
         $com->EC_ANIO = (isset($comision['dt_anio']) && !empty($comision['dt_anio'])) ? $comision['dt_anio'] : NULL;
-        $com->EC_FCH_INICIO = (isset($comision['fecha_inicio']) && !empty($comision['fecha_inicio'])) ? $comision['fecha_inicio'] : NULL;
-        $com->EC_FCH_FIN = (isset($comision['fecha_fin']) && !empty($comision['fecha_fin'])) ? $comision['fecha_fin'] : NULL;
-        $com->EC_DURACION = (isset($comision['duracion']) && !empty($comision['duracion'])) ? $comision['duracion'] : NULL;
+        $com->EC_FCH_INICIO = (isset($comision['fecha_inicio_pick']) && !empty($comision['fecha_inicio_pick'])) ? date("Y-m-d", strtotime($comision['fecha_inicio_pick'])) : NULL;
+        $com->EC_FCH_FIN = (isset($comision['fecha_fin_pick']) && !empty($comision['fecha_fin_pick'])) ? date("Y-m-d", strtotime($comision['fecha_fin_pick'])) : NULL;
+        $com->EC_DURACION = (isset($comision['hora_dedicadas']) && !empty($comision['hora_dedicadas'])) ? $comision['hora_dedicadas'] : NULL;
         $com->TIP_CURSO_CVE = (isset($comision['tipo_curso']) && !empty($comision['tipo_curso'])) ? $comision['tipo_curso'] : NULL;
+        $com->CURSO_CVE = (isset($comision['curso']) && !empty($comision['curso'])) ? $comision['curso'] : NULL;
         
         return $com;
     }
@@ -2621,6 +2696,7 @@ class Coordinador_tutores_dao extends Emp_comision_dao{
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
+    public $CURSO_CVE;
 }
 
 class Coordinador_curso_dao extends Emp_comision_dao{
@@ -2629,6 +2705,7 @@ class Coordinador_curso_dao extends Emp_comision_dao{
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
+    public $CURSO_CVE;
 }
 
 

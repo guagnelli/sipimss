@@ -7,7 +7,11 @@ $(function() {
 	if($('#btn_guardar_comision_academica').length){
         $('#btn_guardar_comision_academica').on('click', function() {
         	if($('#idc').length){ //Validar carga de archivo
-            	data_ajax(site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>', '#formulario_comision_academica', '#modal_content');
+        		if($("#userfile").val()==""){ //Validar carga de archivo
+            		data_ajax(site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>', '#formulario_comision_academica', '#modal_content');
+            	} else {
+            	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
+                }
             } else {
             	$('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
             }
