@@ -368,22 +368,22 @@ $config = array(
         'fecha_inicio_pick' => array(
             'field' => 'fecha_inicio_pick',
             'label' => 'fecha de inicio',
-            'rules' => 'trim|required|validate_date_dd_mm_yyyy' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'fecha_fin_pick' => array(
             'field' => 'fecha_fin_pick',
             'label' => 'fecha de fin',
-            'rules' => 'trim|required|validate_date_dd_mm_yyyy' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'periodo_fecha_inicio_pick' => array(
             'field' => 'periodo_fecha_inicio_pick',
             'label' => 'fecha de inicio',
-            'rules' => 'trim|required|validate_date_dd_mm_yyyy' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'periodo_fecha_fin_pick' => array(
             'field' => 'periodo_fecha_fin_pick',
             'label' => 'fecha de fin',
-            'rules' => 'trim|required|validate_date_dd_mm_yyyy' //
+            'rules' => 'trim|required|validate_date' //
         ),
         'hora_dedicadas' => array(
             'field' => 'hora_dedicadas',

@@ -9,7 +9,7 @@
                 up: "fa fa-arrow-up",
                 down: "fa fa-arrow-down"
             },
-            format:'DD-MM-YYYY', 
+            format:'YYYY-MM-DD', 
             locale: 'es',
             useCurrent: false
         });
@@ -20,7 +20,7 @@
                 up: "fa fa-arrow-up",
                 down: "fa fa-arrow-down"
             },
-            format:'DD-MM-YYYY', 
+            format:'YYYY-MM-DD', 
             locale: 'es',
             useCurrent: false
         });
@@ -381,7 +381,7 @@
                                     <!--<li class="list-group-item">-->
                                         <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
                                         <!--<input type="file" name="userfile" id="userfile" accept="application/pdf">-->
-                                        <input type="file" id="userfile" name="userfile" class ="userfile" accept="application/pdf">
+                                        <input type="file" id="userfile" name="userfile" class ="file" accept="application/pdf">
                                         
                                         <label for='lbl_comprobante' class="control-label">
                                             <?php echo $string_values['lbl_comprobante']; ?>

@@ -10,7 +10,7 @@
                 up: "fa fa-arrow-up",
                 down: "fa fa-arrow-down"
             },
-            format:'DD-MM-YYYY', 
+            format:'YYYY-MM-DD', 
             locale: 'es',
             useCurrent: false
         });
@@ -21,7 +21,7 @@
                 up: "fa fa-arrow-up",
                 down: "fa fa-arrow-down"
             },
-            format:'DD-MM-YYYY', 
+            format:'YYYY-MM-DD', 
             locale: 'es',
             useCurrent: false
         });

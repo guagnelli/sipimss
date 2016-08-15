@@ -303,6 +303,9 @@ ALTER TABLE `emp_for_personal_continua_salud` CHANGE `EFPCS_FCH_FIN` `EFPCS_FCH_
 ALTER TABLE `emp_for_personal_continua_salud` DROP `EFPCS_ANIO`, DROP `EFPCS_DURACION`;
 /* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+/* ********************modificaci 15/08/2016   ****************************************/
+
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 /* *
 ALTER TABLE `emp_esp_medica` CHANGE COLUMN `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;  /* cambia nombre a columna 

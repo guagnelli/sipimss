@@ -331,6 +331,11 @@ $config['comprobante'] = array(
     'ctipo_comprobante' => array('select' => 'TIPO_COMPROBANTE_CVE', 'insert' => 'TIPO_COMPROBANTE_CVE'), //comprobante
     'text_comprobante' => array('select' => 'COM_NOMBRE', 'insert' => 'COM_NOMBRE'), //comprobante
 );
+$config['comprobante_dos'] = array(
+//    'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'), //comprobante
+    'ctipo_comprobante' => array('select' => 'TIPO_COMPROBANTE_CVE', 'insert' => 'TIPO_COMPROBANTE_CVE'), //comprobante
+    'text_comprobante' => array('select' => 'COM_NOMBRE', 'insert' => 'COM_NOMBRE'), //comprobante
+);
 
 $config['emp_act_inv_edu'] = array(
     'nombre_investigacion' => array('select' => 'EIAE_NOMBRE_INV', 'insert' => 'EIAE_NOMBRE_INV'), 

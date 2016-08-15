@@ -13,20 +13,6 @@ $colapso_div_ejercicio_profesional = 'collapse in';
 <!-- Inicio informacion personal -->
 
 <div class="list-group">
-
-    <div class="list-group-item" style='display:none'>
-        <div class='row' >
-            <div class="row" id='div_error'>
-                <div class="col-md-10 col-sm-10 col-xs-10">
-                    <div id='mensaje_error_div' class='alert'>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <span id='mensaje_error'></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="list-group-item">
         <div class='row'>
             <div class="col-xs-12 col-md-12 col-lg-12 text-left">
