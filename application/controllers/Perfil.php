@@ -1130,11 +1130,9 @@ class Perfil extends MY_Controller {
                     }
                     
                     $id_investigacion = intval($this->seguridad->decrypt_base64($datos_post['cve_inv']));
-//                    pr($array_actualizacion_inv_doc);
                     //Actualiza datos de investigación
                     $result_actualizacion_investigacion_docente = $this->idm->update_investigacion_docente($id_investigacion, $array_actualizacion_inv_doc);
                     if (!empty($result_actualizacion_investigacion_docente)) {
-                    pr($result_actualizacion_investigacion_docente);
                         $array_datos_entidad['emp_act_inv_edu'] = $result_actualizacion_investigacion_docente; //Pertenece a bitacora
                         $array_operacion_id_entidades['emp_act_inv_edu'] = array('update' => $result_actualizacion_investigacion_docente['EAID_CVE']); //Pertenece a bitacora 
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
