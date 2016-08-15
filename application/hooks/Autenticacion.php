@@ -51,7 +51,7 @@ class Iniciar_sesion {
 //                pr($valor_array);
                 if (empty($valor_array)) {//Si el array es vacio, manda a pagina no encontrada
 //                    pr($rol_seleccionado);
-                    redirect('pagina_no_encontrada');
+                    redirect('rol/');
                     exit();
                 }
             }

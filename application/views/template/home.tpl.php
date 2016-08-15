@@ -56,7 +56,7 @@
 					<header role="banner">
 						<div id="cd-logo"><a href="#0"><?php echo img("imss.png"); ?></a></div>
 						<div id="cd-logo"><a href="#0"><?php echo img("ces.png"); ?></a></div>
-						<div id="cd-logo"><a href="#0"><?php echo img("arrobas.png"); ?></a></div>
+						<!--div id="cd-logo"><a href="#0"><?php echo img("Logo_Die_White.png"); ?></a></div-->
 					</header>
 
 					<!--navbar principal-->
@@ -71,32 +71,6 @@
 						}
 
 						echo $this->load->view("template/navbar.tpl.php",$menu,true);
-
-						// pr($this->session->userdata());
-						/*
-						if($this->session->has_userdata("usuario_logeado")){
-
-						?>
-
-						<h3><span class="label label-default"> <span class="glyphicon glyphicon-user"></span>
-						<?php
-								//printf("Bienvenido: %s %s %s",
-							echo $this->session->userdata("nombre");
-								//,$this->session->userdata("apaterno"),$this->session->userdata("amaterno"));
-
-						?>
-						</span>
-						</h3>
-
-						<?php
-
-
-						}else{
-
-							echo "<br>";
-
-						}
-						*/
 						?>
 
 						<!-- /.navegación -->
