@@ -54,7 +54,7 @@ class Actividad_docente_model extends CI_Model {
         //Actualiza
         $error = $this->db->where("EMPLEADO_CVE", $datos_actividad_docente['EMPLEADO_CVE']);
         $this->db->update('actividad_docente_gral', $datos_actividad_docente);
-        pr($this->db->last_query());
+//        pr($this->db->last_query());
         $result['return'] = 1;
         $result['actualizados'] = $datos_actividad_docente;
         return $result;
