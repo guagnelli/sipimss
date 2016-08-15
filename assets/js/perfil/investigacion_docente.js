@@ -347,10 +347,11 @@ function funcion_actualizar_investigacion(element) {
                         var json = $.parseJSON(response);
                         recargar_opcion_menu_mostrar_mensaje('seccion_investigacion', json.satisfactorio, json.error);
                     } catch (e) {
-                        $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                        $('#cuerpo_modal').html(response);
                     }
                 })
                 .fail(function (jqXHR, response) {
+                    $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
                 })
                 .always(function () {
                     remove_loader();
