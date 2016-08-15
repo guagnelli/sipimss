@@ -42,8 +42,11 @@ class Curp {
     }
     
     public function getGenero(){
+        if(is_null($this->genero)){
+            return false;
+        }
         $genero = array("H"=>"Masculino","M"=>"Femenino");
-        return $genero[$this->genero];
+        return $genero[strtoupper($this->genero)];
     }
     
     public function getEdad(){
