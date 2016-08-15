@@ -154,7 +154,8 @@ $lang['interface'] = array(
     ),
     //Actividad del docente
     'actividad_docente' => array(
-     'placeholder_formato_fecha' => 'AAAA-MMDD',
+        'title_investigacion' => 'Investigación',
+        'placeholder_formato_fecha' => 'AAAA-MM-DD',
         'error_no_registro' => 'No existe un registro',
         'alert_no_existe_actividad_principal' => 'No existe una actividad principal',
         'lbl_pregunta_eliminar_actividad_docente' => 'Confirme que realmente desea eliminar la actividad [field]',
@@ -239,6 +240,7 @@ $lang['interface'] = array(
         'tab_titulo_eliminar' => 'Eliminar',
     ),
     'investigacion_docente' => array(
+        'lbl_ver_comprobante' => 'Ver comprobante',
         'Texto_de_ayuda_divulgacion' => 'Si selecciona comprobante o foro, deberá cargar un archivo en pdf. Para las demás opciónes debera llenar un formato que generará la ficha bibliografica',
         'texto_ayuda_comprobante' => 'Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en la investigación en formato pdf',
         'tab_titulo_nombre_trabajo_investigacion' => 'Nombre de la investigación',
@@ -273,10 +275,11 @@ $lang['interface'] = array(
         'txt_bb_libro' => 'Bibliografía del libro',
         'lbl_bb_revista' => 'Bibliografía',
         'txt_bb_revista' => 'Bibliografía de la revista',
-        'insert_investigacion_docente' => 'La información de investigación docente se agrego correctamente',
+        'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde',
+        'phl_registro_correcto' => 'El registro se agrego correctamente',
         'update_investigacion_docente' => 'La información de investigación docente se actualizo correctamente',
-        'error_investigacion_docente_insert' => 'No fue posible registrar la información de investigación docente',
-        'error_investigacion_docente_update' => 'No fue posible actualizar la información de investigación docente',
+
+
     ),
     'designar_validador' => array(
         'titulo_template' => 'Designación de validadores',
@@ -426,7 +429,7 @@ $lang['interface'] = array(
         'lbl_comision_fecha_fin' => 'Fecha de fin de la comisión',
         'lbl_tipo_comision' => 'Tipo de comisión',
         'lbl_ver_comprobante' => 'Ver comprobante',
-        'phl_registro_correcto' => 'El registro se efectuo correctamente',
+        'phl_registro_correcto' => 'El registro se agrego correctamente',
         'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde',
         'tab_titulo_editar' => 'Editar',
         'tab_titulo_eliminar' => 'Eliminar',

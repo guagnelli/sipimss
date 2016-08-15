@@ -11,26 +11,6 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 <div class="list-group">
 
     <div class="list-group-item">
-        <div class='row' >
-
-            <div class="row" style='display:hidden;' id='div_error_inv_doc'>
-                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                <div class="col-md-10 col-sm-10 col-xs-10">
-                    <?php /*  if($tipo_msg==='danger' || $tipo_msg==='warning'){
-                      $colapso_div_ejercicio_profesional = 'collapse in';
-                      }
-                      echo html_message($error, $tipo_msg); */ ?>
-                    <div id='mensaje_error_inv_doc_div' class='alert'>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <span id='mensaje_error_inv_doc'></span>
-                    </div>
-                </div>
-                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-            </div>
-
-        </div>
-    </div>
-    <div class="list-group-item">
 
         <div class="panel-body">
             <div>
@@ -40,11 +20,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
             </div>
 
             <div class="row">
-                <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-
-
-                </div>
-                <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
+                <div class="form-group col-xs-12 col-md-12 col-lg-12 text-right">
                     <button type="button" class="btn btn-success btn-lg" id="btn_agregar_investigacion_modal" data-toggle="modal" data-target="#modal_censo">
                         <?php echo $string_values['btn_add_new_investigacion']; ?>
                     </button>
@@ -72,14 +48,22 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 //                            pr($lista_investigaciones);
                             foreach ($lista_investigaciones as $key_ai => $val) {
                                 $key = $val['cve_investigacion'];
+                                $key = $this->seguridad->encrypt_base64($key);
                                 $c_bb = $val['cita_publicada'];
                                 if (is_null($c_bb)) {//Pone texto referente a que no existe una cita bibliografica
                                     $tiene_cita = $string_values['text_sin_cita'];
-                                    $comprobante = (is_null($val['comprobante_cve'])) ?  0 : $val['comprobante_cve'];
-                                    //Nota: agregar vinculo para mostrar el documento cargado
+                                    $idcomprobante = $val['comprobante_cve'];
+                                    if (!is_null($idcomprobante)) {
+                                        //Btn comprobante
+                                        $comprobante = $this->seguridad->encrypt_base64($idcomprobante); //Encripta
+                                        $tiene_cita_comprobante =  '<a href="'.site_url('administracion/ver_archivo/'.$comprobante).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>';
+                                    }else{
+                                        $comprobante = 0;
+                                        $tiene_cita_comprobante  = ''; 
+                                    }
                                 } else {//Crea boton vinculo para ver cita bibliografica
                                     $comprobante = 0;
-                                    $tiene_cita = '<button '
+                                    $tiene_cita_comprobante = '<button '
                                             . 'type="button" '
                                             . 'class="btn btn-link btn-sm" '
                                             . 'id="btn_ver_cita_bibliografica" '
@@ -93,7 +77,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                 echo "<td>" . $val['tpad_nombre'] . "</td>";
                                 echo "<td>" . $val['nombre_investigacion'] . "</td>";
                                 echo "<td>" . $val['folio_investigacion'] . "</td>";
-                                echo "<td>" . $tiene_cita . "</td>";
+                                echo "<td>" . $tiene_cita_comprobante . "</td>";
                                 echo "<td>"
                                 . '<button '
                                 . 'type="button" '
@@ -131,11 +115,6 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 
     </div>
 </div>
---------------
-<button type="button" class="btn btn-link btn-sm" id="btn_update_actividad_modal" data-idrow = "$$key_ai$$"  data-toggle="modal" data-target="#modal_censo"> 
-    Boton prueba 
-</button>
---------------
 <script type="text/template" id="template_row_nueva_investigacion">
     <tr id='id_row_"$$key_ai$$"' data-keyrow="$$key_ai$$">
         <td><p id="p_inv_nombre">"$$tpad_nombre$$"</p></td>

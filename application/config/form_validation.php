@@ -457,7 +457,7 @@ $config = array(
             'rules' => 'required'//
         ),
         
-        'ctipo_comprobante' => array(
+        /*'ctipo_comprobante' => array(
             'field' => 'ctipo_comprobante',
             'label' => 'tipo de comprobante',
             'rules' => 'required' //
@@ -466,7 +466,7 @@ $config = array(
             'field' => 'text_comprobante',
             'label' => 'Nombre de comprobante',
             'rules' => 'trim|required'                                                                                                                                                                                                                                                                      //
-        ),
+        ),*/
         'bibliografia_revista' => array(
             'field' => 'bibliografia_revista',
             'label' => 'bibliografia de la revista',

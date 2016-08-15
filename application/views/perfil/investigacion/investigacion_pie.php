@@ -8,14 +8,18 @@
         <!--</div>-->
     <?php if (isset($cve_inv)) {//Actualizar?> 
         <div class="col-xs-6 col-sm-6 col-md-6 text-left " >
-            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" data-invcve= "<?php echo $cve_inv; ?>"
-                    data-comprobantecve= "<?php echo $comprobantecve; ?>" data-idrow="<?php echo $idrow; ?>" onclick="funcion_actualizar_investigacion(this)" >
+            <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" 
+                    data-invcve= "<?php echo $cve_inv; ?>"
+                    data-comprobantecve= "<?php echo $comprobantecve; ?>" 
+                    onclick="funcion_actualizar_investigacion(this)" >
                 Actualizar 
             </button>
         </div>
     <?php } else { //Guardar ?> 
         <div class="col-xs-6 col-sm-6 col-md-6 text-left" >
-            <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-success" onclick="funcion_guardar_investigacion()" >
+            <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-success" 
+                    data-comprobantecve=""
+                    onclick="funcion_guardar_investigacion(this)" >
                 Guardar
             </button>
         </div>

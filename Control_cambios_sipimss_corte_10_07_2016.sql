@@ -288,6 +288,20 @@ FOREIGN KEY (`CURSO_CVE`) REFERENCES `ccurso`(`CURSO_CVE`) ON DELETE RESTRICT ON
 ALTER TABLE sipimss.ctipo_material MODIFY COLUMN TIP_MAT_OPCION varchar(30) NULL; /*Cambio en tamano de tipo de dato 20 to 50 6-16-2016  */
 /* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+/* ********************modificaci 14/08/2016   **************************************/
+ALTER TABLE sipimss.csubtipo_formacion_salud MODIFY COLUMN SUBTIP_NOMBRE varchar(100) NULL;  /*Cabio de longitud de 50 to 100*/
+
+ALTER TABLE `emp_for_personal_continua_salud` DROP FOREIGN KEY `emp_for_personal_continua_salud_ibfk_3`; 
+ALTER TABLE emp_for_personal_continua_salud DROP TIP_FORM_SALUD_CVE;
+
+ALTER TABLE `emp_for_personal_continua_salud` ADD `CSUBTIP_FORM_SALUD_CVE` INT(11) NOT NULL AFTER `FECHA_INSERSION`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF10EMP_FOR_PERSONAL_CONTINUA_SALUD ON emp_for_personal_continua_salud (CSUBTIP_FORM_SALUD_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `emp_for_personal_continua_salud` ADD CONSTRAINT `emp_for_personal_continua_salud_efcsfk_10`   /* Asigna llave foran*/
+FOREIGN KEY (`CSUBTIP_FORM_SALUD_CVE`) REFERENCES `csubtipo_formacion_salud`(`CSUBTIP_FORM_SALUD_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+/*Cambios efectuados por jesusu Días, ajuste de campos en entidad "emp_for_personal_continua_salud"*/
+ALTER TABLE `emp_for_personal_continua_salud` CHANGE `EFPCS_FCH_FIN` `EFPCS_FCH_FIN` DATE NULL DEFAULT NULL, CHANGE `EFPCS_FOR_INICIAL` `EFPCS_FOR_INICIAL` BOOLEAN NULL DEFAULT NULL;
+ALTER TABLE `emp_for_personal_continua_salud` DROP `EFPCS_ANIO`, DROP `EFPCS_DURACION`;
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 
 /* *

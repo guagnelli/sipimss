@@ -4,12 +4,9 @@ $(function () {
     $('#btn_agregar_investigacion_modal').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
-        var a = hrutes['ajax_investigacion'];
+        var a = hrutes['seccion_investigacion'];
         var cad_split = a.split(":");
-//        data_ajax(site_url + '/perfil    /get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
-        data_ajax(site_url + '/' + cad_split[0] + '/ajax_cargar_formulario_investigacion', null, '#modal_content');
-//        data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal', '#form_actividad_docente_general', '#modal_content');
-//        alert('continua.....');
+        data_ajax(site_url + '/' + cad_split[0] + '/cargar_formulario_investigacion', null, '#modal_content');
     });
 
     $('#btn_guardar_actividad').on('click', function () {//Llama agetget_"data_ajax_actividad" para guardar información
@@ -49,15 +46,14 @@ $(function () {
 });
 
 function funcion_eliminar_reg_investigacion(element) {
-    var a = hrutes['ajax_investigacion'];
+    var a = hrutes['seccion_investigacion'];
     var cad_split = a.split(":");
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
     var index_inv = button_obj.data('invcve');
     var comprobante_cve = button_obj.data('comprobantecve');
-
+    var idrow = button_obj.data('idrow');
     apprise('Confirme que realmente desea eliminar el registro de investigación', {verify: true}, function (btnClick) {
         if (btnClick) {
-            var button_obj = $(element);
             $.ajax({
                 url: site_url + '/' + cad_split[0] + '/get_data_ajax_eliminar_investigacion',
                 data: {
@@ -66,25 +62,22 @@ function funcion_eliminar_reg_investigacion(element) {
                 },
                 method: 'POST',
                 beforeSend: function (xhr) {
-
                 }
             })
                     .done(function (response) {
                         var response = $.parseJSON(response);
-                        $('#mensaje_error_inv_doc').html(response.error);
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').removeClass('alert-success');
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').addClass('alert-' + response.tipo_msg);
-                        $('#id_row_' + button_obj.data('keyrow')).remove();
-                        $('#div_error_inv_doc').show();
-                        setTimeout("$('#div_error_inv_doc').hide()", 5000);
+                        $('#mensaje_error_index').html(response.error);
+                        $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass('alert-' + response.tipo_msg);
+                        $('#id_row_' + idrow).remove();
+                        $('#div_error_index').show();
+                        setTimeout("$('#div_error_index').hide()", 5000);
                         recargar_fecha_ultima_actualizacion();
-
                     })
                     .fail(function (jqXHR, response) {
-                        $('#mensaje_error_inv_doc').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-success').addClass('alert-danger');
-                        $('#div_error_inv_doc').show();
-                        setTimeout("$('#div_error_inv_doc').hide()", 6000);
+                        $('#mensaje_error_index').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                        $('#mensaje_error_div_index').removeClass('alert-success').addClass('alert-danger');
+                        $('#div_error_index').show();
+                        setTimeout("$('#div_error_index').hide()", 6000);
                     })
                     .always(function () {
                         remove_loader();
@@ -96,75 +89,49 @@ function funcion_eliminar_reg_investigacion(element) {
 }
 
 
-function funcion_guardar_investigacion() {
+function funcion_guardar_investigacion(element) {
 //    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
-    var a = hrutes['ajax_investigacion'];
+    var a = hrutes['seccion_investigacion'];
     var cad_split = a.split(":");
-//    alert('si llgas');
-//    data_ajax(site_url + '/' + cad_split[0] + '/ajax_add_investigacion', '#form_investigacion_docente', '#modal_content');
-//    var formData = new FormData($('#form_investigacion_docente')[0]);
+    var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
+    var comprobantecve = obj.data('comprobantecve');
     var formData = new FormData($('#form_investigacion_docente')[0]);
-    $.ajax({
-        url: site_url + '/' + cad_split[0] + '/ajax_add_investigacion',
-//        data: $('#form_investigacion_docente').serialize(),
-        data: formData,
-        type: 'POST',
-        mimeType: "multipart/form-data", //Para subir archivos 
-        contentType: false,//Limpía el formulario
-        cache: false,
-        processData: false,
-//        fileElementId: 'userfile',
-//        dataType: 'JSON',
-                beforeSend: function (xhr) {
-                    $('#cuerpo_modal').html(create_loader());
-                }
-    })
-            .done(function (response) {
-                var is_html = response.indexOf('<div class=\"list-group\">');//si existe la cadena, entonces es un html
-//                alert(is_html + ' ' + response);
-//                    alert('html');
-                if (is_html > -1) {
-                    $('#cuerpo_modal').html(response);
-//                    $('#modal_censo').modal(toggle);
-                } else {
-                    if (response) {
-
-                        var response_json = $.parseJSON(response);//
-                        var investigacion_cve = response_json.result_datos[0].cve_investigacion;
-                        var nombre_investigacion = response_json.result_datos[0].nombre_investigacion;
-                        var nombre_tipo_actividad_docente = response_json.result_datos[0].tpad_nombre;
-                        var cita_publica = response_json.result_datos[0].cita_publicada;
-                        var comprobante_cve = response_json.result_datos[0].comprobante_cve;
-                        var folio = response_json.result_datos[0].folio_investigacion;
-                        var tiene_publicacion = response_json.result_datos[0].tiene_publicacion;
-                        var idrow = funcion_obtener_max_id_row_table_tabla_investigacion_docente() + 1;//Obtiene el maximo index de el row de la tabla de actividades
-
-                        var htmlRowTemplate = $('#template_row_nueva_investigacion').html();
-                        var htmlNewRow = htmlRowTemplate.replace(/\$\$key_ai\$\$/g, idrow)
-                                .replace(/\$\$tpad_nombre\$\$/g, nombre_tipo_actividad_docente)
-                                .replace(/\$\$nombre_investigacion\$\$/g, nombre_investigacion)
-                                .replace(/\$\$folio_investigacion\$\$/g, folio)
-                                .replace(/\$\$tiene_cita\$\$/g, tiene_publicacion)
-                                .replace(/\$\$key\$\$/g, investigacion_cve)
-                                .replace(/\$\$comprobante\$\$/g, comprobante_cve);
-                        $('#tabla_investigacion_docente').append($(htmlNewRow));
-                        $('#mensaje_error_inv_doc').html(response_json.error);
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').addClass('alert-success');
-                        $('#div_error_inv_doc').show();
-//                        $('#close_modal_censo').trigger('onclick');
-                        $('#modal_censo').modal('toggle');
-                        setTimeout("$('#div_error_inv_doc').hide()", 5000);
+    formData.append("comprobantecve", comprobantecve);
+    var cve_divulgacion = parseInt($("#cmedio_divulgacion").val());
+    var validacion_comprobante = (cve_divulgacion === 1 || cve_divulgacion === 2);//Valida que las opciones carguen un comprobante
+    var validacion_cargado_comprobante = (validacion_comprobante) ? $('#idc').length : true;
+    if (validacion_cargado_comprobante) { //Validar carga de archivo
+        $.ajax({
+            url: site_url + '/' + cad_split[0] + '/ajax_add_investigacion',
+            data: formData,
+            type: 'POST',
+            mimeType: "multipart/form-data", //Para subir archivos 
+            contentType: false, //Limpía el formulario
+            cache: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                $('#cuerpo_modal').html(create_loader());
+            }
+        })
+                .done(function (response) {
+                    try {
+                        var json = $.parseJSON(response);
+                        recargar_opcion_menu_mostrar_mensaje('seccion_investigacion', json.satisfactorio, json.error);
+                    } catch (e) {
+                        $('#cuerpo_modal').html(response);
                     }
-                }
-            })
-            .fail(function (jqXHR, response) {
-//                $('#div_error').show();
-//                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
-//                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
-            })
-            .always(function () {
-                remove_loader();
-            });
+                })
+                .fail(function (jqXHR, response) {
+//                recargar_opcion_menu_mostrar_mensaje('', false, 'Guardado satisfactorio');
+                    $('cuerpo_modal').html(response);
+                })
+                .always(function () {
+                    remove_loader();
+                });
+    } else {
+        $('#error_carga_archivo').html(html_message("Falta cargar archivos", 'danger'));
+    }
+
 }
 
 function funcion_obtener_max_id_row_table_tabla_investigacion_docente() {
@@ -186,21 +153,26 @@ function funcion_obtener_max_id_row_table_tabla_investigacion_docente() {
  * @param {type} elementos
  * @returns {undefined}
  */
-function funcion_mostrar_tipo_publicacion(elementos) {
-    $(document.getElementById('div_libro')).hide();
-    $(document.getElementById('div_revista')).hide();
-    $(document.getElementById('div_comprobante')).hide();
-    switch (elementos.value) {
-        case '3'://Caso revista
-            $(document.getElementById('div_revista')).show();
-            break;
-        case '4'://Caso libro 
-            $(document.getElementById('div_libro')).show();
-            break;
-        default ://Caso comprobante, foro
-            $(document.getElementById('div_comprobante')).show();
-
-    }
+function funcion_mostrar_tipo_publicacion() {
+    var a = hrutes['seccion_material_educativo'];
+    var cad_split = a.split(":");
+    var cve_divulgacion = $("#cmedio_divulgacion").val();
+    $.ajax({
+        url: site_url + '/' + cad_split[0] + '/cargar_opcion_divulgacion',
+        data: {cve_divulgacion: cve_divulgacion},
+        method: 'POST',
+        beforeSend: function (xhr) {
+            $('#div_mostrar_comprobante_libro_revista').html(create_loader());
+        }
+    })
+            .done(function (response) {
+                $('#div_mostrar_comprobante_libro_revista').html(response);
+            })
+            .fail(function (jqXHR, response) {
+            })
+            .always(function () {
+                remove_loader();
+            });
 }
 
 /**
@@ -314,17 +286,16 @@ function valores_label(id_div) {
 
 
 function funcion_editar_reg_investigacion(element) {
-    var a = hrutes['ajax_investigacion'];
+    var a = hrutes['seccion_investigacion'];
     var cad_split = a.split(":");
     var obj = $(element);
     var cve_inv = obj.data('invcve');
-    var idrow = obj.data('idrow');
     var comprobantecve = obj.data('comprobantecve');
 //    datos_form_serializados += '&cve_inv='+cve_inv+'&carga_datos=0'+'&idrow='+idrow+'&comprovantecve='+comprovantecve;
 
     $.ajax({
         url: site_url + '/' + cad_split[0] + '/ajax_carga_datos_investigacion',
-        data: {cve_inv: cve_inv, carga_datos: 1, idrow: idrow, comprobantecve: comprobantecve},
+        data: {cve_inv: cve_inv, comprobantecve: comprobantecve},
         method: 'POST',
         beforeSend: function (xhr) {
             $('#modal_content').html(create_loader());
@@ -337,9 +308,7 @@ function funcion_editar_reg_investigacion(element) {
                 $('#modal_content').html(response);
             })
             .fail(function (jqXHR, response) {
-//                $('#div_error').show();
-//                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
-//                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
+                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
             })
             .always(function () {
                 remove_loader();
@@ -347,7 +316,7 @@ function funcion_editar_reg_investigacion(element) {
 }
 
 function funcion_actualizar_investigacion(element) {
-    var a = hrutes['ajax_investigacion'];
+    var a = hrutes['seccion_investigacion'];
     var cad_split = a.split(":");
     var obj = $(element);
     var cve_inv = obj.data('invcve');
@@ -355,61 +324,41 @@ function funcion_actualizar_investigacion(element) {
     var comprobantecve = obj.data('comprobantecve');
     var formData = new FormData($('#form_investigacion_docente')[0]);
     formData.append("comprobantecve", comprobantecve);
-    formData.append("invcve", cve_inv);
+    formData.append("cve_inv", cve_inv);
 //    cve_inv : cve_inv, carga_datos : 0
 //    alert('sasasdasd asda,sdmlamk da sdkjaskdm ,aksmd lksa dmk F');
-    $.ajax({
-        url: site_url + '/' + cad_split[0] + '/ajax_update_investigacion',
-        data: formData,
-        type: 'POST',
-        mimeType: "multipart/form-data", //Para subir archivos 
-        contentType: false,//Limpía el formulario
-        cache: false,
-        processData: false,
+    var cve_divulgacion = parseInt($("#cmedio_divulgacion").val());
+    var validacion_comprobante = (cve_divulgacion === 1 || cve_divulgacion === 2);//Valida que las opciones carguen un comprobante
+    var validacion_cargado_comprobante = (validacion_comprobante) ? $('#idc').length : true;
+    if (validacion_cargado_comprobante) { //Validar carga de archivo
+        $.ajax({
+            url: site_url + '/' + cad_split[0] + '/ajax_update_investigacion',
+            data: formData,
+            type: 'POST',
+            contentType: false, //Limpía el formulario
+            processData: false,
 //  
-        beforeSend: function (xhr) {
-            $('#cuerpo_modal').html(create_loader());
-        }
-    })
-            .done(function (response) {
-                var is_html = response.indexOf('<div class=\"list-group\">');//si existe la cadena, entonces es un html
-//                alert(is_html + ' ' + response);
-                if (is_html > -1) {
-                    $('#cuerpo_modal').html(response);
-//                    $('#modal_censo').modal(toggle);
-                } else {
-                    if (response) {
-
-                        var response_json = $.parseJSON(response);//
-                        var idrow = response_json.idrow;//rom
-                        var investigacion_cve = response_json.result_datos[0].cve_investigacion;
-                        var nombre_investigacion = response_json.result_datos[0].nombre_investigacion;
-                        var nombre_tipo_actividad_docente = response_json.result_datos[0].tpad_nombre;
-                        var cita_publica = response_json.result_datos[0].cita_publicada;
-                        var comprobante_cve = response_json.result_datos[0].comprobante_cve;
-                        var folio = response_json.result_datos[0].folio_investigacion;
-                        var tiene_publicacion = response_json.result_datos[0].tiene_publicacion;
-
-                        $('#id_row_' + idrow).data();
-                        var htmlRowTemplate = $('#template_row_nueva_investigacion').html();
-
-                        $('#mensaje_error_inv_doc').html(response_json.error);
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').addClass('alert-success');
-                        $('#div_error_inv_doc').show();
-//                        $('#close_modal_censo').trigger('onclick');
-                        $('#modal_censo').modal('toggle');
-                        setTimeout("$('#div_error_inv_doc').hide()", 5000);
+            beforeSend: function (xhr) {
+                $('#cuerpo_modal').html(create_loader());
+            }
+        })
+                .done(function (response) {
+                    try {
+                        var json = $.parseJSON(response);
+                        recargar_opcion_menu_mostrar_mensaje('seccion_investigacion', json.satisfactorio, json.error);
+                    } catch (e) {
+                        $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
                     }
-                }
-            })
-            .fail(function (jqXHR, response) {
-//                $('#div_error').show();
-//                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
-//                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
-            })
-            .always(function () {
-                remove_loader();
-            });
+                })
+                .fail(function (jqXHR, response) {
+                })
+                .always(function () {
+                    remove_loader();
+                });
+    } else {
+        $('#error_carga_archivo').html(html_message("Falta cargar archivos", 'danger'));
+    }
+
 }
 
 //function funcion_cambio_texto(element) {

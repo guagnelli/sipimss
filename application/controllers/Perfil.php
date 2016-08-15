@@ -940,7 +940,7 @@ class Perfil extends MY_Controller {
     }
 
 //********************Investigación educativa ******************************************************************************/
-    public function ajax_investigacion() {
+     public function seccion_investigacion() {
         $data = array();
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['investigacion_docente'];
@@ -958,7 +958,7 @@ class Perfil extends MY_Controller {
         //Consulta datos de empleado en investigación
     }
 
-    public function ajax_cargar_formulario_investigacion() {
+    public function cargar_formulario_investigacion() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
@@ -968,6 +968,7 @@ class Perfil extends MY_Controller {
             $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
             $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
             $datos_pie = array();
+
             $data = array(
                 'titulo_modal' => 'Investigación',
                 'cuerpo_modal' => $this->load->view('perfil/investigacion/investigacion_formulario', $data_investigacion, TRUE),
@@ -978,8 +979,20 @@ class Perfil extends MY_Controller {
             redirect(site_url());
         }
     }
+    
+     public function cargar_opcion_divulgacion() {
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post()) {//Después de cargar el formulario
+                $datos_post = $this->input->post(null, true);
+                $vista = $this->divulgacion_cargar($datos_post['cve_divulgacion']);
+                echo $vista;
+            }
+        } else {
+            redirect(site_url());
+        }
+    }
 
-    public function ajax_add_investigacion() {
+     public function ajax_add_investigacion() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $tipo_msg = $this->config->item('alert_msg');
@@ -993,68 +1006,49 @@ class Perfil extends MY_Controller {
 
             if ($this->input->post()) {//Después de cargar el formulario
 //                pr($this->input->post());
-                $datos_registro = $this->input->post(null, true);
+                $datos_post = $this->input->post(null, true);
+//                pr($datos_post);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_investigacion_docente'); //Obtener validaciones de archivo
-                $validations = $this->analiza_validacion_investigacion_docente($validations, $datos_registro, $_FILES);
+                $validations = $this->analiza_validacion_investigacion_docente($validations, $datos_post, $_FILES);
                 $array_to_json = array(); //name_entidad => array(campos con valores)
                 $array_operacion_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
 //                pr($datos_registro);
-                $divulgacion = $datos_registro['cmedio_divulgacion']; //Para mostrar los divs de bibliografia o comprobante
+                $divulgacion = $datos_post['cmedio_divulgacion']; //Para mostrar los divs de bibliografia o comprobante
 //                pr($validations['emp_act_inv_edu_inser']);
+//                pr($validations['validacion']);
                 $this->form_validation->set_rules($validations['validacion']);
                 if ($this->form_validation->run()) { //Si pasa todas las validaciones, guardar
-                    $validations['emp_act_inv_edu_inser']['EMPLEADO_CVE'] = $result_id_empleado; //Asigna empleado
-                    if (isset($validations['comprobante'])) {//Si existe el comprobante
-                        $id_inv = $this->idm->get_ultimo_registro_investigacion($result_id_empleado); //Último registro para hacerlo parte del nombre del comprobante
-                        $id_inv = intval($id_inv) + 1;
-                        $name_comprobante = 'investigacion_' . $matricula_user . '_' . $datos_registro['ctipo_estudio'] . '_' . $id_inv . '_' . $datos_registro['ctipo_comprobante'] . '_' . rand(10, 2000); //Asigna_nombre del comprobante
-                        $validations['comprobante'][$this->config->item('comprobante')['text_comprobante']['insert']] = $name_comprobante;
-                        $index_comprobante = $this->cg->insert_comprobante($validations['comprobante']);
-                        if ($index_comprobante > 0) {//el comprobante se guardo correctamente
-                            $validations['comprobante']['COMPROBANTE_CVE'] = $index_comprobante; //Agrega identificador del registro de comprobante 
-                            $validations['emp_act_inv_edu_inser'][$this->config->item('emp_act_inv_edu')['comprobante']['insert']] = $index_comprobante; //Agrega index del comprobante a a la tabla de investigación
-                            $array_to_json['comprobante'] = $validations['comprobante']; //Pertenece a bitacora comprobante
-                            $array_operacion_entidades['comprobante'] = 'insert-' . $index_comprobante; //Pertenece a bitacora agrega index
-                            $this->guardar_archivo($name_comprobante); //Guarda el comprobante
-                        }
-                        $result_insert_investigacion = $this->idm->insert_investigacion_docente($validations['emp_act_inv_edu_inser']); //Inserta investigación 
-                    } else {
-                        $result_insert_investigacion = $this->idm->insert_investigacion_docente($validations['emp_act_inv_edu_inser']); //Inserta investigación 
+                    $array_insert_act_docente = $validations['emp_act_inv_edu_inser'];
+                    $array_insert_act_docente['EMPLEADO_CVE'] = $result_id_empleado; //Asigna empleado
+                    if (isset($datos_post['idc']) AND ! empty($datos_post['idc'])) {
+                        $array_insert_act_docente['COMPROBANTE_CVE'] = $this->seguridad->decrypt_base64($datos_post['idc']); //Asigna empleado
                     }
 
+                    $result_insert_investigacion = $this->idm->insert_investigacion_docente($array_insert_act_docente); //Inserta investigación 
                     if ($result_insert_investigacion > 0) {//se inserto correctamente, se debe registrar en bitacora
-                        $validations['emp_act_inv_edu_inser']['EAID_CVE'] = $result_insert_investigacion; //Agrega identificador del registro de investigación insertado 
-
-                        $array_to_json['emp_act_inv_edu'] = $validations['emp_act_inv_edu_inser']; //Pertenece a bitacora
-                        $array_operacion_entidades['emp_act_inv_edu'] = 'insert-' . $result_insert_investigacion; //Pertenece a bitacora
-
-                        $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
+                        $array_insert_act_docente['EAID_CVE'] = $result_insert_investigacion; //Agrega identificador del registro de investigación insertado 
+                        $array_datos_entidad['emp_act_inv_edu'] = $array_insert_act_docente; //Pertenece a bitacora
+                        $array_operacion_id_entidades['emp_act_inv_edu'] = array('insert' => $result_insert_investigacion); //Pertenece a bitacora 
+                        $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
+                        //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
-
-
-                        $rs = $this->idm->get_datos_investigacion_docente($result_insert_investigacion);
-                        if (!empty($rs[0]['cita_publicada'])) {
-                            $rs[0]['comprobante_cve'] = 0;
-                            $rs[0]['tiene_publicacion'] = $string_values['text_con_cita'];
-                        } else {
-                            $rs[0]['tiene_publicacion'] = $string_values['text_sin_cita'];
-                        }
-//                            pr($rs);
-                        $resultado['result_datos'] = $rs;
-                        $resultado['error'] = $string_values['insert_investigacion_docente']; //
-                        $resultado['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
-                    } else {//No se pudo registrar los datos de investigación
-                        $resultado['error'] = $string_values['error_investigacion_docente_insert']; //
-                        $resultado['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                        $res_j['error'] = $string_values['phl_registro_correcto']; //Mensaje de que no encontro empleado
+                        $res_j['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                        $res_j['satisfactorio'] = TRUE; //Tipo de mensaje de error
+                    } else {//Error al guardar, manda mensaje de error
+                        $res_j['error'] = $string_values['error_guardar']; //Mensaje de que no encontro empleado
+                        $res_j['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                        $res_j['satisfactorio'] = FALSE; //Tipo de mensaje de error
                     }
-                    echo json_encode($resultado);
+                    echo json_encode($res_j);
                     exit();
                 }//*************************Termina bloque de insertar nueva investigación
             }
 
-            $data_investigacion['divulgacion'] = $divulgacion; //Crea la variable 
+//          $data_investigacion['divulgacion'] = $divulgacion; //Crea la variable
+            $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($divulgacion, $datos_post);
             $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
             $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
             $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
@@ -1066,7 +1060,7 @@ class Perfil extends MY_Controller {
         }
     }
 
-    public function ajax_carga_datos_investigacion() {
+     public function ajax_carga_datos_investigacion() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
@@ -1075,15 +1069,23 @@ class Perfil extends MY_Controller {
             $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             $matricula_user = $this->session->userdata('matricula');
             $datos_pie = array();
-//            pr($this->input->post());
             if ($this->input->post()) {
-                $datos_registro = $this->input->post(null, true);
-                if (isset($datos_registro['cve_inv'])) {
-                    $datos_pie['cve_inv'] = $datos_registro['cve_inv'];
-                    $datos_pie['idrow'] = $datos_registro['idrow'];
-                    $datos_pie['comprobantecve'] = $datos_registro['comprobantecve'];
-                    $data_investigacion['select_inv'] = $this->idm->get_datos_investigacion_docente(intval($datos_registro['cve_inv'])); //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
-                    $divulgacion = $data_investigacion['select_inv'][0]['med_divulgacion_cve'];
+                $datos_post = $this->input->post(null, true);
+//                pr($datos_post);
+                if (isset($datos_post['cve_inv'])) {
+                    $datos_pie['cve_inv'] = $datos_post['cve_inv'];
+                    $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
+                    $id_inv = $this->seguridad->decrypt_base64($datos_post['cve_inv']);
+                    $data_investigacion_load = $this->idm->get_datos_investigacion_docente(intval($id_inv)); //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
+                    if (!empty($data_investigacion_load)) {//Si es diferente de vacio 
+                        $data_investigacion['select_inv'] = $data_investigacion_load;
+                        $divulgacion = $data_investigacion_load['med_divulgacion_cve']; //Carga el index de la opción divulgación
+                        if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
+                            $data_investigacion_load['idc'] = $datos_post['comprobantecve'];
+                        }
+                        //Selecciona divulgación
+                        $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($divulgacion, $data_investigacion_load, TRUE);
+                    }
                 }
             }
 
@@ -1091,7 +1093,6 @@ class Perfil extends MY_Controller {
             $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
             $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
             $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
-
             $data = array(
                 'titulo_modal' => 'Investigación',
                 'cuerpo_modal' => $this->load->view('perfil/investigacion/investigacion_formulario', $data_investigacion, TRUE),
@@ -1104,126 +1105,117 @@ class Perfil extends MY_Controller {
         }
     }
 
-    public function ajax_update_investigacion() {
+   public function ajax_update_investigacion() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $tipo_msg = $this->config->item('alert_msg');
             $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
             $data_investigacion['string_values'] = $string_values; //Crea la variable 
-            $divulgacion = '';
             $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
-            $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
-            $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
             if ($this->input->post()) {//Después de cargar el formulario
-                $datos_registro = $this->input->post(null, true);
+                $datos_post = $this->input->post(null, true);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $val = $this->config->item('form_investigacion_docente'); //Obtener validaciones de archivo
-                $validations = $this->analiza_validacion_investigacion_docente($val, $datos_registro, $_FILES);
-                $array_to_json = array(); //name_entidad => array(campos con valores)
-                $array_operacion_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
-//                pr($datos_registro);
-//                pr($validations);
+                $validations = $this->analiza_validacion_investigacion_docente($val, $datos_post, $_FILES, TRUE);
+//                pr($datos_post);
+//                pr($validations['validacion']);
                 //Parametros iniciales que deben persistir en el botón de actualización
-                $divulgacion = $datos_registro['cmedio_divulgacion']; //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
+                $divulgacion = $datos_post['cmedio_divulgacion']; //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
                 $this->form_validation->set_rules($validations['validacion']);
                 if ($this->form_validation->run()) {//Si pasa todas las validaciones, actualizar
-                    $id_comprobante = intval($datos_registro['comprobantecve']);
-                    if ($divulgacion < 3) {//Guardar o actualiza comprobante
-                        if ($id_comprobante > 0) {//UPDATE Existe comprobante actualiza
-                            $datos_comprobante_actual = $this->cg->get_comprobante($id_comprobante); //Seobtienen los datos del comprobante actual
-                            //Generamos el nombre del nuevo comprobante
-                            $id_inv = $this->idm->get_ultimo_registro_investigacion($result_id_empleado); //Último registro para hacerlo parte del nombre del comprobante
-                            $id_inv = intval($id_inv) + 1;
-                            $name_comprobante = 'investigacion_' . $matricula_user . '_' . $datos_registro['ctipo_estudio'] . '_' . $id_inv . '_' . $datos_registro['ctipo_comprobante'] . '_' . rand(10, 2000); //Asigna_nombre del comprobante
-                            $validations['comprobante'][$this->config->item('comprobante')['text_comprobante']['insert']] = $name_comprobante;
-
-                            $update_comprobante = $this->cg->update_comprobante($id_comprobante, $validations['comprobante']);
-                            if ($update_comprobante['result'] > 0) {//La actualización de la bitacora se efectuo correctamente
-                                //Registro bitacora
-                                $array_to_json['comprobante'] = $update_comprobante['entidad']; //Pertenece a bitacora comprobante
-                                $array_operacion_entidades['comprobante'] = 'update-' . intval($datos_registro['comprobantecve']); //Pertenece a bitacora agrega index
-                                //Se elimina el archivo relacionado al comprobante, y se carga el nuevo archivo, o solo se sobreescribe 
-                                $config_comprobante = $this->config->item('upload_config')['comprobantes']; //Carga configuración para subir archivo comprobante
-                                $path = $config_comprobante['upload_path']; //obtiene el path donde se guarda los comprobantes 
-                                eliminar_archivo($path, $datos_comprobante_actual[0]['COM_NOMBRE']);
-                                //Se guarda el nuevo comprobante
-                                $this->guardar_archivo($name_comprobante); //Guarda el comprobante
-                            }
-                        } else {//INSERT No existe comprobante, inserta
-                            //Generamos el nombre del nuevo comprobante
-                            $id_inv = $this->idm->get_ultimo_registro_investigacion($result_id_empleado); //Último registro para hacerlo parte del nombre del comprobante
-                            $id_inv = intval($id_inv) + 1;
-                            $name_comprobante = 'investigacion_' . $matricula_user . '_' . $datos_registro['ctipo_estudio'] . '_' . $id_inv . '_' . $datos_registro['ctipo_comprobante'] . '_' . rand(10, 2000); //Asigna_nombre del comprobante
-                            $validations['comprobante'][$this->config->item('comprobante')['text_comprobante']['insert']] = $name_comprobante;
-
-                            $index_comprobante = $this->cg->insert_comprobante($validations['comprobante']);
-                            if ($index_comprobante > 0) {//La insersion  de la bitacora se efectuo correctamente
-                                $validations['comprobante']['COMPROBANTE_CVE'] = $index_comprobante; //Agrega identificador del registro de comprobante 
-                                $array_to_json['comprobante'] = $validations['comprobante']; //Pertenece a bitacora comprobante
-                                $array_operacion_entidades['comprobante'] = 'insert-' . $index_comprobante; //Pertenece a bitacora agrega index
-                                $validations['emp_act_inv_edu_update'][$this->config->item('emp_act_inv_edu')['insert']] = $index_comprobante; //Asigna comprobante a la entidad para actualizar
-                                //Carga el archivo pdf comprobante al directorio de archivos
-                                $this->guardar_archivo($name_comprobante); //Guarda el comprobante
-                            }
-                        }
-                    } else {//Validación para eliminar comprobante
-                        if ($id_comprobante > 0) {//DELETE Existe comprobante lo elimina
-                            $datos_comprobante_actual = $this->cg->get_comprobante($id_comprobante); //Seobtienen los datos del comprobante actual
-                            $config_comprobante = $this->config->item('upload_config')['comprobantes']; //Carga configuración para subir archivo comprobante
-                            $path = $config_comprobante['upload_path']; //obtiene el path donde se guarda los comprobantes 
-                            eliminar_archivo($path, $datos_comprobante_actual[0]['COM_NOMBRE']); //Elimina archivo
-                        }
+                    $array_actualizacion_inv_doc = $validations['emp_act_inv_edu_update'];
+                    $cve_divulgacion = intval($array_actualizacion_inv_doc['MED_DIVULGACION_CVE']);
+                    if ($cve_divulgacion < 3) {//Asigna id del comprobante
+                        $array_actualizacion_inv_doc['COMPROBANTE_CVE'] = $id_comprobante = intval($this->seguridad->decrypt_base64($datos_post['idc']));
                     }
-//                            pr($validations['emp_act_inv_edu_update']);
-//                            pr($datos_registro['cve_inv']);
+                    
+                    $id_investigacion = intval($this->seguridad->decrypt_base64($datos_post['cve_inv']));
+//                    pr($array_actualizacion_inv_doc);
                     //Actualiza datos de investigación
-                    $result_actualizacion_investigacion_docente = $this->idm->update_investigacion_docente(intval($datos_registro['cve_inv']), $validations['emp_act_inv_edu_update']);
-                    if ($result_actualizacion_investigacion_docente['result'] > 0) {
-                        $array_to_json['emp_act_inv_edu'] = $result_actualizacion_investigacion_docente['entidad']; //Pertenece a bitacora comprobante
-                        $array_operacion_entidades['emp_act_inv_edu'] = 'update-' . intval($datos_registro['cve_inv']); //Pertenece a bitacora agrega index
-                        if (isset($borrar_comprobante)) {//Borrar comprobante, si existe la variable $borrar_comprobante 
-                            $delete_comprobante = $this->cg->delete_comprobante($borrar_comprobante); //Elimina comprobante
-                            if ($delete_comprobante['result'] > 0) {//Si se elimino correctamente, agrega a bitacora la acción
-                                $array_to_json['comprobante'] = $delete_comprobante['entidad']; //Pertenece a bitacora comprobante
-                                $array_operacion_entidades['comprobante'] = 'delete-' . $borrar_comprobante; //Pertenece a bitacora agrega index
-                                //Elimina archivo de del servidor ........
-                            }
-                        }
-                        //Registra bitacora
-                        $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
+                    $result_actualizacion_investigacion_docente = $this->idm->update_investigacion_docente($id_investigacion, $array_actualizacion_inv_doc);
+                    if (!empty($result_actualizacion_investigacion_docente)) {
+                    pr($result_actualizacion_investigacion_docente);
+                        $array_datos_entidad['emp_act_inv_edu'] = $result_actualizacion_investigacion_docente; //Pertenece a bitacora
+                        $array_operacion_id_entidades['emp_act_inv_edu'] = array('update' => $result_actualizacion_investigacion_docente['EAID_CVE']); //Pertenece a bitacora 
+                        $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
+                        //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
-
-                        $rs = $this->idm->get_datos_investigacion_docente(intval($datos_registro['cve_inv']));
-                        if (!empty($rs[0]['cita_publicada'])) {
-                            $rs[0]['comprobante_cve'] = 0;
-                            $rs[0]['tiene_publicacion'] = $string_values['text_con_cita'];
-                        } else {
-                            $rs[0]['tiene_publicacion'] = $string_values['text_sin_cita'];
-                        }
-//                                $resultado['result_datos'] = $result_actualizacion_investigacion_docente['entidad'];
-                        $resultado['result_datos'] = $rs;
-                        $resultado['idrow'] = $datos_registro['idrow'];
-                        $resultado['error'] = $string_values['update_investigacion_docente']; //
-                        $resultado['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
-                    } else {
-                        $resultado['error'] = $string_values['error_investigacion_docente_update']; //
-                        $resultado['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                        $res_j['error'] = $string_values['phl_registro_correcto']; //Mensaje de que no encontro empleado
+                        $res_j['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                        $res_j['satisfactorio'] = TRUE; //Tipo de mensaje de error
+                    } else {//Error al guardar, manda mensaje de error
+                        $res_j['error'] = $string_values['error_guardar']; //Mensaje de que no encontro empleado
+                        $res_j['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                        $res_j['satisfactorio'] = FALSE; //Tipo de mensaje de error
                     }
-                    echo json_encode($resultado);
+                    echo json_encode($res_j);
                     exit();
                 }
+
+                $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($divulgacion, $datos_post, TRUE);
+
+                $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
+                $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
+                $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
+
+                echo $this->load->view('perfil/investigacion/investigacion_formulario', $data_investigacion, TRUE); //Carga los div de modal
             }
-
-            $data_investigacion['divulgacion'] = $divulgacion; //Crea la variable 
-            $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
-            $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
-            $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
-
-            echo $this->load->view('perfil/investigacion/investigacion_formulario', $data_investigacion, TRUE); //Carga los div de modal
         }
     }
+    
+    private function divulgacion_cargar($divulgacion_cve, $array_comprobante = array(), $is_actualizacion = FALSE) {
+        if (!empty($divulgacion_cve)) {
+            $cve_divulgacion = intval($divulgacion_cve);
+            $this->lang->load('interface', 'spanish');
+//            pr($array_comprobante);
+            switch ($cve_divulgacion) {
+                case 3:
+                    $data['string_values'] = $this->lang->line('interface')['investigacion_docente'];
+                    if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante)) {
+                        $data['bibliografia_libro'] = $array_comprobante['cita_publicada'];
+                    }
+                    return $this->load->view('perfil/investigacion/bibliografia_libro', $data, TRUE);
+                    break;
+                case 4:
+                    $data['string_values'] = $this->lang->line('interface')['investigacion_docente'];
+                    if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante)) {
+                        $data['bibliografia_revista'] = $array_comprobante['cita_publicada'];
+                    }
+                    return $this->load->view('perfil/investigacion/bibliografia_revista', $data, TRUE);
+                    break;
+                default :
+                    //Todo lo de comprobante *******************************************
+                    $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
+                    $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+                    $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                    if ($is_actualizacion) {
+                        if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
+//                        $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
+                            $data_comprobante['idc'] = $array_comprobante['idc'];
+                            $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
+                                'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
+                                'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
+                        }
+                    } else {
 
+                        if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
+//                        $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
+                            $data_comprobante['idc'] = $array_comprobante['idc'];
+//                            pr($array_comprobante);
+                            $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
+                                'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
+                                'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
+                        }
+                    }
+                    //**** fi de comprobante *******************************************
+                    $data['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
+                    return $this->load->view('perfil/investigacion/comprobante_foro', $data, TRUE);
+            }
+            return '';
+        }
+    }
+    
     /**
      * author LEAS
      * @param type $array_validaciones
@@ -1235,73 +1227,29 @@ class Perfil extends MY_Controller {
      * y son de tipo textuales,
      * @return type
      */
-    private function analiza_validacion_investigacion_docente($array_validaciones, $array_elementos_post, $file) {
+     private function analiza_validacion_investigacion_docente($array_validaciones, $array_elementos_post, $file = null, $is_actualizacion = FALSE) {
 //        pr($array_validaciones);
 //        pr($array_elementos_post);
         $array_result = array();
         $emp_act_inv_edu = $this->config->item('emp_act_inv_edu'); //Campos de la tabla
-        $comprobante = $this->config->item('comprobante'); //Campos de la tabla
+//        pr($array_elementos_post);
+//        pr($$array_validaciones);
         foreach ($array_elementos_post as $key => $value) {
-//            pr('..... <<<<>>>>'.$key);
-            switch ($key) {
-                case 'invcve':
-                    break;
-                case 'carga_file':
-                    break;
-                case 'userfile':
-                    break;
-                case 'comprobantecve':
-                    break;
-                case 'idrow':
-                    break;
-                case 'cve_inv':
-                    break;
-                case 'carga_datos':
-                    break;
-                case 'bibliografia_revista':
-                    break;
-                case 'bibliografia_libro':
-                    break;
-                case 'ctipo_comprobante':
-                    break;
-                case 'text_comprobante':
-                    break;
-                case 'cmedio_divulgacion'://Sólo en divulgación existen algunas reglas de negoció en cuanto a publicación o comprobante
-                    $array_result['validacion'][] = $array_validaciones['cmedio_divulgacion'];
-                    $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu['cmedio_divulgacion']['insert']] = $array_elementos_post['cmedio_divulgacion'];
-                    $array_result['emp_act_inv_edu_update'][$emp_act_inv_edu['cmedio_divulgacion']['insert']] = $array_elementos_post['cmedio_divulgacion'];
-                    if (!empty($value)) {
-                        switch ($value) {
-                            case 3://Revista
-                                $array_result['validacion'][] = $array_validaciones['bibliografia_revista'];
-                                $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu['bibliografia_revista']['insert']] = $array_elementos_post['bibliografia_revista'];
-                                $array_result['emp_act_inv_edu_update'][$emp_act_inv_edu['comprobante']['insert']] = NULL;
-                                $array_result['emp_act_inv_edu_update'][$emp_act_inv_edu['bibliografia_libro']['insert']] = $array_elementos_post['bibliografia_revista'];
-                                break;
-                            case 4://Libro
-                                $array_result['validacion'][] = $array_validaciones['bibliografia_libro'];
-                                $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu['bibliografia_libro']['insert']] = $array_elementos_post['bibliografia_libro'];
-                                $array_result['emp_act_inv_edu_update'][$emp_act_inv_edu['bibliografia_libro']['insert']] = $array_elementos_post['bibliografia_libro'];
-                                $array_result['emp_act_inv_edu_update'][$emp_act_inv_edu['comprobante']['insert']] = NULL;
-                                break;
-                            default ://Comprobante
-                                $array_result['validacion'][] = $array_validaciones['ctipo_comprobante'];
-                                $array_result['validacion'][] = $array_validaciones['text_comprobante'];
-                                $array_result['comprobante'][$comprobante['ctipo_comprobante']['insert']] = $array_elementos_post['ctipo_comprobante'];
-                                $array_result['comprobante'][$comprobante['text_comprobante']['insert']] = $array_elementos_post['text_comprobante'];
-                                $array_result['emp_act_inv_edu_update'][$emp_act_inv_edu['bibliografia_revista']['insert']] = NULL;
-                                $file_cargado = ($_FILES) ? TRUE : FALSE;
-                                if (isset($file) AND intval($file['file']['error']) > 0) {//Si file o, hubo un error, error = 0 = no hubo error, mayor que ceroalgo paso
-                                    $array_result['validacion'][] = $array_validaciones['carga_file'];
-                                }
-                        }
-                    }
-                    break;
-                default :
-//                    pr($key);
-                    $array_result['validacion'][] = $array_validaciones[$key];
+            if (array_key_exists($key, $array_validaciones)) {
+                $array_result['validacion'][] = $array_validaciones[$key];
+                if (array_key_exists($key, $emp_act_inv_edu)) {
                     $array_result['emp_act_inv_edu_inser'][$emp_act_inv_edu[$key]['insert']] = $value;
                     $array_result['emp_act_inv_edu_update'][$emp_act_inv_edu[$key]['insert']] = $value;
+                }
+            }
+        }
+
+        if ($is_actualizacion) {//si es acyualización limpía los datos de la entidad que no se ocupen, como limpiar el comprobante o la cita bibliografica
+            foreach ($emp_act_inv_edu as $value) {
+                $key_prima = $value['insert'];
+                if (!isset($array_result['emp_act_inv_edu_update'][$key_prima])) {//Si no existe el elemento lo agraga null
+                    $array_result['emp_act_inv_edu_update'][$key_prima] = NULL;
+                }
             }
         }
 
@@ -1310,54 +1258,40 @@ class Perfil extends MY_Controller {
     }
 
     public function get_data_ajax_eliminar_investigacion() {
-        $datos_registro = $this->input->post(null, true);
-        $data = array();
-        $tipo_msg = $this->config->item('alert_msg');
-        $this->lang->load('interface', 'spanish');
-        $string_values = $this->lang->line('interface')['investigacion_docente'];
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post()) {//Indica que debe intentar eliminar el curso
+                $data = array();
+                $tipo_msg = $this->config->item('alert_msg');
+                $this->lang->load('interface', 'spanish');
+                $string_values = $this->lang->line('interface')['investigacion_docente'];
 
-        $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
-//        $data['borrado_correcto'] = 0;
-//        $data['error'] = $datos_registro;
-////        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class'];
-//        $data['tipo_msg'] = $tipo_msg['DANGER']['class'];
-//        echo json_encode($data);
-//        exit();
+                $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+                $datos_post = $this->input->post(null, true);
+//            pr($datos_post);
+                $comprobante_cve_post = $datos_post['comprobante_cve'];
+                $id_inv_docente = $this->seguridad->decrypt_base64($datos_post['index_inv']);
+                $resul_delete_inv = $this->idm->delete_investigacion_docente($id_inv_docente); //Verifica si existe el ususario ya contiene datos de actividad
+                if (!empty($resul_delete_inv)) {//Manda mensaje de que no se pudo borrar el registro
+                    $array_datos_entidad['emp_act_inv_edu'] = $resul_delete_inv;
+                    $array_operacion_id_entidades['emp_act_inv_edu'] = array('delete' => $id_inv_docente);
 
-        if ($this->input->post()) {//Indica que debe intentar eliminar el curso
-            $resul_delete_inv = $this->idm->delete_investigacion_docente($datos_registro['index_inv']); //Verifica si existe el ususario ya contiene datos de actividad
-            if ($resul_delete_inv['result'] === -1) {//Manda mensaje de que no se pudo borrar el registro
-                $data['error'] = $string_values['error_no_elimino_reg_invest']; //Mensaje de que no pudo borrar registro
-                $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
-                $this->output->set_status_header('400');
-            } else {
-                $array_to_json['emp_act_inv_edu'] = $resul_delete_inv['entidad'];
-                $array_operacion_entidades['emp_act_inv_edu'] = array('delete' => $resul_delete_inv['result']);
-                $reg_entidad_cve = 'emp_act_inv_edu-' + $resul_delete_inv['result'];
-                if (intval($datos_registro['comprobante_cve']) > 0) {
-                    $resul_delete_comprobante = $this->cg->delete_comprobante($datos_registro['comprobante_cve']); //Elimina comprobante, si existe
-                    if ($resul_delete_comprobante['result'] > 0) {//Elimino correctamente el comprobante
-                        $array_to_json['comprobante'] = $resul_delete_comprobante['entidad'];
-                        $array_operacion_entidades['comprobante'] = array('delete' => $resul_delete_comprobante['entidad']);
-                        $reg_entidad_cve += ',comprobante-' + $resul_delete_comprobante['result'];
-                        //eliminar archivo comprobante 
-//                      $nombre_comprobante = $resul_delete_comprobante['entidad']['COM_NOMBRE'];
-                        $config_comprobante = $this->config->item('upload_config')['comprobantes']; //Carga configuración para subir archivo comprobante
-                        $path = $config_comprobante['upload_path']; //obtiene el path donde se guarda los comprobantes 
-                        if (intval($resul_delete_comprobante['result']) > 0) {
-                            eliminar_archivo($path, $resul_delete_comprobante['entidad']['COM_NOMBRE']); //Elimina el archivo del directorio
-                        }
-                    }
+                    $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
+                    $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
+                    //Datos de bitacora el registro del usuario
+                    registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
+
+                    $data['error'] = $string_values['succesfull_eliminar']; //mensaje Guardado correcto
+                    $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                    $data['borrado_correcto'] = 1; //Tipo de mensaje de error
+                } else {
+                    $data['error'] = $string_values['error_no_elimino_reg_invest']; //Mensaje de que no pudo borrar registro
+                    $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                    $this->output->set_status_header('400');
                 }
-                $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
-                $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
-                registro_bitacora($result_id_user, null, $json_datos_entidad, $reg_entidad_cve, $json_registro_bitacora, null);
-
-                $data['error'] = $string_values['succesfull_eliminar']; //mensaje Guardado correcto
-                $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
-                $data['borrado_correcto'] = 1; //Tipo de mensaje de error
+                echo json_encode($data);
             }
-            echo json_encode($data);
+        } else {
+            redirect(site_url());
         }
     }
 
@@ -1644,9 +1578,6 @@ class Perfil extends MY_Controller {
                     $insert_emp_materia_educativo = $validations['insert_emp_mat_educativo'];
                     $guardado_correcto = FALSE;
                     $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
-
-
-
                     $id_desencript_comprobante = $this->seguridad->decrypt_base64($datos_post['idc']); //Desencripta la clave del comprobante 
                     $insert_emp_materia_educativo['COMPROBANTE_CVE'] = $id_desencript_comprobante; //Asocia cve del comprobante
                     if (intval($insert_emp_materia_educativo['TIP_MATERIAL_CVE']) === 0) {//Guarda primero el tipo de ctipo_material
