@@ -1,9 +1,9 @@
-$(function() {
+$(function () {
 
-    $('#btn_agregar_actividad_modal').on('click', function() {
+    $('#btn_agregar_actividad_modal').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
-        var a = hrutes['get_data_ajax_actividad'];
+        var a = hrutes['seccion_actividad_docente'];
         var cad_split = a.split(":");
 //        data_ajax(site_url + '/perfil    /get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
         data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/0   ', '#form_actividad_docente_general', '#modal_content');
@@ -11,30 +11,30 @@ $(function() {
 //        alert('continua.....');
     });
 
-    $('#btn_guardar_actividad').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información
+    $('#btn_guardar_actividad').on('click', function () {//Llama agetget_"data_ajax_actividad" para guardar información
 //        data_ajax(site_url + '/perfil/get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
-        apprise('Confirme que realmente desea actualizar los datos', {verify: true}, function(btnClick) {
+        apprise('Confirme que realmente desea actualizar los datos', {verify: true}, function (btnClick) {
             if (btnClick) {
                 $.ajax({
-                    url: site_url + '/perfil/get_data_ajax_actividad',
+                    url: site_url + '/perfil/seccion_actividad_docente',
                     data: $('#form_actividad_docente').serialize(),
                     method: 'POST',
-                    beforeSend: function(xhr) {
-                        $('#get_data_ajax_actividad').html(create_loader());
+                    beforeSend: function (xhr) {
+                        $('#seccion_actividad_docente').html(create_loader());
                     }
                 })
-                        .done(function(response) {
+                        .done(function (response) {
 //                            alert(response);
-                            $('#get_data_ajax_actividad').html(response);
+                            $('#seccion_actividad_docente').html(response);
                             $('#mensaje_error').html('Los datos se almacenaron correctamente');
                             $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
                             $('#div_error').show();
                             setTimeout("$('#div_error').hide()", 5000);//desaparece div
                         })
-                        .fail(function(jqXHR, response) {
-                            $('#get_data_ajax_actividad').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                        .fail(function (jqXHR, response) {
+                            $('#seccion_actividad_docente').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
                         })
-                        .always(function() {
+                        .always(function () {
                             remove_loader();
                         });
             } else {
@@ -77,16 +77,16 @@ $(function() {
 
 function funcion_eliminar_actividad_docente(element) {
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
-    var a = hrutes['get_data_ajax_actividad'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var index_tp_actividad = button_obj.data('cvead');
     var index_entidad = button_obj.data('tacve');
     var is_curso_principal = button_obj.data('cp');
-    if (is_curso_principal===1) {
+    if (is_curso_principal === 1) {
         apprise('Es un curso principal, no es posible eliminar');
     } else {
 
-        apprise('Confirme que realmente desea eliminar la actividad', {verify: true}, function(btnClick) {
+        apprise('Confirme que realmente desea eliminar la actividad', {verify: true}, function (btnClick) {
             if (btnClick) {
                 var button_obj = $(element);
                 $.ajax({
@@ -97,11 +97,11 @@ function funcion_eliminar_actividad_docente(element) {
                         is_curso_principal: is_curso_principal,
                     },
                     method: 'POST',
-                    beforeSend: function(xhr) {
+                    beforeSend: function (xhr) {
 
                     }
                 })
-                        .done(function(response) {
+                        .done(function (response) {
                             var response = $.parseJSON(response);
                             $('#mensaje_error').html(response.error);
                             $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
@@ -111,13 +111,13 @@ function funcion_eliminar_actividad_docente(element) {
                             recargar_fecha_ultima_actualizacion();//Recarga la fecha de la ultima actualización del modulo perfil
 
                         })
-                        .fail(function(jqXHR, response) {
+                        .fail(function (jqXHR, response) {
                             $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
                             $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
                             $('#div_error').show();
                             setTimeout("$('#div_error').hide()", 6000);
                         })
-                        .always(function() {
+                        .always(function () {
                             remove_loader();
                         });
             } else {
@@ -130,7 +130,7 @@ function funcion_eliminar_actividad_docente(element) {
 }
 function funcion_asignar_curso_principal(element) {
     var radio_curso_principal = $(element);
-    var a = hrutes['get_data_ajax_actividad'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var entidad_tp_a_cve = radio_curso_principal.data('entidadtpacve');
     var act_general_cve = radio_curso_principal.data('actividadgeneralcve');
@@ -150,11 +150,11 @@ function funcion_asignar_curso_principal(element) {
             actividad_docente_cve: act_docente_cve,
         },
         method: 'POST',
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
 //            $('#tabla_actividades_docente').html(create_loader());
         }
     })
-            .done(function(response) {
+            .done(function (response) {
                 var response = $.parseJSON(response);//
                 $('#mensaje_error_div').removeClass('alert-danger').removeClass('alert-success');
                 if (response.result === 1) {
@@ -175,7 +175,7 @@ function funcion_asignar_curso_principal(element) {
                 $('#div_error').show();
                 setTimeout("$('#div_error').hide()", 5000);
             })
-            .fail(function(jqXHR, response) {
+            .fail(function (jqXHR, response) {
                 $('#mensaje_error_div').removeClass('alert-danger').removeClass('alert-success');
                 $('#mensaje_error_div').addClass('alert-danger');
                 $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
@@ -185,7 +185,7 @@ function funcion_asignar_curso_principal(element) {
 //                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
 //                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
             })
-            .always(function() {
+            .always(function () {
                 remove_loader();
             });
 
@@ -268,19 +268,14 @@ function funcion_guargar(index) {
         url: site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0',
         data: $('#form_actividad_docente_especifico').serialize(),
         method: 'POST',
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             $('#info_actividad_docente').html(create_loader());
         }
     })
-            .done(function(response) {
-                var is_html = response.indexOf('<div class=\"list-group\">');//si existe la cadena, entonces es un html
-//                alert(is_html + ' ' + response);
-                if (is_html > -1) {
-                    $('#info_actividad_docente').html(response);
-//                    $('#modal_censo').modal(toggle);
-                } else {
-                    if (response) {
+            .done(function (response) {
 
+                try {
+                    if (response) {
                         var response_json = $.parseJSON(response);//
                         var titulo_tipo_actividad = response_json.insertar[0].nombre_tp_actividad;
                         var anio = response_json.insertar[0].anio;
@@ -310,19 +305,24 @@ function funcion_guargar(index) {
                                 .replace(/\$\$key\$\$/g, idrow)//identificador unitario de el row
                                 .replace(/\$\$actividadgeneralcve\$\$/g, cve_actividad_general);//identificador unitario de el row
                         $('#tabla_actividades').append($(htmlNewRow))
-                        $('#mensaje_error').html(response_json.error);
-                        $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
-                        $('#div_error').show();
-                        setTimeout("$('#div_error').hide()", 5000);
+//                        $('#mensaje_error').html(response_json.error);
+//                        $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
+//                        $('#div_error').show();
+//                        setTimeout("$('#div_error').hide()", 6000);
+////                        setTimeout("$('#div_error').hide()", 5000);
+                        recargar_opcion_menu_mostrar_mensaje('seccion_actividad_docente', true, response_json.error);
+                        
                     }
+                } catch (e) {
+                    $('#info_actividad_docente').html(response);
                 }
             })
-            .fail(function(jqXHR, response) {
+            .fail(function (jqXHR, response) {
 //                $('#div_error').show();
 //                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
 //                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
             })
-            .always(function() {
+            .always(function () {
                 remove_loader();
             });
 }
@@ -331,7 +331,7 @@ function funcion_editar(index, id_actividad) {
 }
 function myFunctionActividad() {
     var x = document.getElementById("ctipo_actividad_docente");
-    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + x.value + '/0/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
+    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + x.value + '/0/0', null, '#info_actividad_docente');
 }
 
 function mostrar_horas_fechas(horas) {
