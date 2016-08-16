@@ -212,3 +212,12 @@ img { max-width: 100%; }
 .img-captcha{
     text-align: center;
 }
+.rojo {
+    color: #a94442;
+}
+.panel-body table{
+    color: #000;
+} 
+.pinfo{
+    padding:20px;
+} 

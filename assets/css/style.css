@@ -7,7 +7,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 header[role=banner] {
   position: relative;
   height: 50px;
-  background: #343642;
+  /*background: #343642;*/
+  background: #d1d3d4;
 }
 header[role=banner] #cd-logo {
   float: left;
@@ -75,18 +76,31 @@ body a{
 div#wrapper {
     background-color: #fff;
 }
+
 /*-- header --*/
+.navbar {
+    position: relative;
+    min-height: 50px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 0px !important;
+}
+
 .navbar-default {
   background-color: #6a4d93;
-  border-color: #e7e7e7;
+  /*border-color: #e7e7e7;*/
+  border-color: #6a4d93;
 }
 
 .navbar-default .navbar-nav > li > a {
   color: #fff;
 }
-/*.navbar-default .navbar-nav > li > a:hover,
+
+
+.navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-  color: #372950;
+  color: #5cb85c;
+  /*color: #372950;*/
   background-color: transparent;
 }
 .navbar-default .navbar-nav > .active > a,
@@ -94,8 +108,8 @@ div#wrapper {
 .navbar-default .navbar-nav > .active > a:focus {
   color: #bb8cff;
   background-color: #e7e7e7;
-}*/
-/*
+}
+
 .navbar .navbar-nav li a {
   padding: 0 10px;
   line-height: 56px;
@@ -107,7 +121,7 @@ div#wrapper {
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
     color: #d8a21c;
     background-color: #e7e7e7;
-}*/
+}
 .navbar .navbar-nav li a i {
   border: 1px solid #fff;
   padding: 8px 0;
@@ -119,6 +133,11 @@ div#wrapper {
   color: #fff;
   height: 32px;
 }
+
+.navbar-brand{
+    font-size: 12px;
+}
+
 .navbar .navbar-nav li .dropdown-menu {
   margin-top: 3px;
   border: none;
@@ -168,9 +187,9 @@ div#wrapper {
   text-shadow: none;
 }
 
-/*.but_list, .tab-content{
+.but_list, .tab-content{
 	margin:1.5em 0 0 0;
-}*/
+}
 
 .navbar .navbar-nav li .dropdown-toggle.avatar img {
   height: 40px;
@@ -283,8 +302,14 @@ div#wrapper {
 nav.top1.navbar.navbar-default.navbar-static-top {
   background-color:rgb(6, 217, 149);
 }
+
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+
+
 h1 a.navbar-brand {
-	color: #fff !important;
+  color: #fff !important;
 	font-size: 30px;
 	font-weight: 500;
   padding: 20px 0px;
@@ -297,7 +322,8 @@ h1 a.navbar-brand {
 	
 }
 .navbar-default .navbar-brand:hover {
-    color: #fff;
+    /*color: #2F1E46;*/
+    color: #5cb85c;
     background-color: #6a4d93;
 }
 .navbar-right {
@@ -2918,11 +2944,16 @@ ul.dropdown-menu.dropdown-menu-right {
     font-size: 1.6em;
 }
 }
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:hover,
-.nav-pills > li.active > a:focus {
+.nav-pills > li.active > a{
     color:white;
     background-color:#6a4d93;
+}
+
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+    
+    color: #5cb85c;
+    background-color:#6a4d93 !important;
 }
 
 .nav-pills > li > a,

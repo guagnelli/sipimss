@@ -126,10 +126,10 @@ class Form_complete {
 					$clase = ' btn';
 				break;
 				case 'dropdown': case 'multiselect':
-					$clase = ' form-control input-sm';
+					$clase = 'input-sm';
 				break;
 				case 'password': case 'textarea': case 'text':
-					$clase = ' form-control';
+					$clase = '';
 				break;
 				case 'checkbox': case 'radio': case 'upload': case 'label': case 'span': case 'hidden':
 				break;

@@ -56,12 +56,9 @@
 					<header role="banner">
 						<div id="cd-logo"><a href="#0"><?php echo img("imss.png"); ?></a></div>
 						<div id="cd-logo"><a href="#0"><?php echo img("ces.png"); ?></a></div>
-						<!--div id="cd-logo"><a href="#0"><?php echo img("Logo_Die_White.png"); ?></a></div-->
+						<div id="cd-logo"><a href="#0"><?php echo img("die.png"); ?></a></div>
 					</header>
-
 					<!--navbar principal-->
-						<br>
-					<!--- -->
 					<?php
 
 						if(!is_null($menu)){
