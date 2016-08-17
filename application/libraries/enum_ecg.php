@@ -45,6 +45,7 @@ class Enum_ecg extends MyEnum3 {
             ctipo_formacion_profesional = 'ctipo_formacion_profesional',
             ctipo_participacion = 'ctipo_participacion',
             ctipo_material = 'ctipo_material',
+            csubtipo_formacion_profesional = 'csubtipo_formacion_profesional',
             cestado_civil = 'cestado_civil',
             cejercicio_predominante = 'cejercicio_predominante',
             cejercicio_profesional = 'cejercicio_profesional',
@@ -63,7 +64,9 @@ class Enum_ecg extends MyEnum3 {
 			ctipo_comision = 'ctipo_comision' ,
             cmotivo_becado = 'cmotivo_becado' ,
             cbeca_interrumpida = 'cbeca_interrumpida', 
-            cclase_beca = 'cclase_beca'
+            cclase_beca = 'cclase_beca',
+            csubtipo_formacion_salud = 'csubtipo_formacion_salud',
+            ctipo_formacion_salud = 'ctipo_formacion_salud'
     ;
     /*
       guardar actuación (evaluaciones)

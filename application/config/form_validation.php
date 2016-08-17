@@ -690,6 +690,33 @@ $config = array(
             'rules' => 'required'
         )
     ),
+    'form_formacion_salud' => array(
+        array(
+            'field' => 'es_inicial',
+            'label' => 'Tipo de formación',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'fch_inicio',
+            'label' => 'Fecha de inicio',
+            'rules' => 'required|max_length[7]'
+        ),
+        array(
+            'field' => 'fch_fin',
+            'label' => 'Fecha de termino',
+            'rules' => 'required|max_length[7]' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'tipo_formacion',
+            'label' => 'Formación profesional del profesor',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        )
+    ),
       'form_beca' => array(
         'fecha_inicio' => array(
             'field' => 'fecha_inicio',
