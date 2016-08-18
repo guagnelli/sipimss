@@ -34,6 +34,8 @@ $config['modulos_sesion_generales'] = array(
     'pruebas' => '*'
 );
 
+$config['institucion'] = array('avala'=>'A', 'imparte'=>'I');
+
 $config['categorias_designar_validador'] = array('36112580','35312180');
 
 /////Ruta de solicitudes

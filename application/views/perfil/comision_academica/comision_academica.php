@@ -40,8 +40,8 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 			                                        	<?php
 			                                        	foreach ($columns[$key_tc] as $title) {
 															echo '<th>'.$title.'</th>';
-														} ?>
-			                                            <th>Opciones</th>
+														}
+			                                            echo '<th>'.$string_values['t_h_opciones'].'</th>'; ?>
 			                                        </tr>
 			                                    </thead>
 			                                    <tbody>
