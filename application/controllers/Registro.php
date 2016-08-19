@@ -45,33 +45,35 @@ class Registro extends MY_Controller {
             $this->config->load('form_validation'); //Cargar archivo con validaciones
             $validations = $this->config->item('form_registro_docente'); //Obtener validaciones de archivo
             $this->form_validation->set_rules($validations);
-            if ($this->form_validation->run()) { //Se ejecuta la validación de datos
-                $datos_registro = $this->input->post(null, true); //cargamos el array post en una variable
-
-//                $datos_siap = $this->empleados_siap->buscar_usuario_siap(array("reg_delegacion" => $datos_registro['reg_delegacion'], "asp_matricula" => $datos_registro['reg_matricula']));
-//                        pr($datos_siap);
-//                        $res_cat = $this->mod_registro->get_categoria($datos_siap['emp_keypue']);
-//                        pr($res_cat);
-//                        
-                $verifica_existe_user_local = $this->mod_registro->get_existe_usuario(trim($datos_registro['reg_matricula'])); //Verifica que no exista el usuario localmente
-                if ($verifica_existe_user_local == 0) {//Si el usuario no exixte localmente, lo debe guardar 
-//                if ($verifica_existe_user_local < 1) {
-                    if ($datos_registro['reg_contrasenia'] === $datos_registro['reg_confirma_contrasenia']) {//Valida contraseña
-//                      $exists = $this->validarUsuarioCupo($datos_registro['reg_matricula'], $datos_registro['reg_sesion']); //Validar que el usuario no este registrado
+            //Se ejecuta la validación de datos
+            if ($this->form_validation->run()) { 
+                //cargamos el array post en una variable
+                $datos_registro = $this->input->post(null, true);                      
+                //Verifica que no exista el usuario localmente
+                $verifica_existe_user_local = $this->mod_registro->get_existe_usuario(
+                    trim($datos_registro['reg_matricula'])
+                ); 
+                //Si el usuario no exixte localmente, lo debe guardar
+                if ($verifica_existe_user_local == 0) {
+                    //Valida contraseña
+                    if ($datos_registro['reg_contrasenia'] === $datos_registro['reg_confirma_contrasenia']) {
                         // obtenemos los datos del sistema de personal (SIAP)
-                        $datos_siap = $this->empleados_siap->buscar_usuario_siap(array("reg_delegacion" => $datos_registro['reg_delegacion'], "asp_matricula" => $datos_registro['reg_matricula']));
-//                        pr($datos_siap);
-//                        $res_cat = $this->mod_registro->get_categoria($datos_siap['emp_keypue']);
-//                        pr($res_cat);
-//                        
-//                        exit();
-//                        pr($datos_siap);
-                        if (is_array($datos_siap) && !empty($datos_siap)) {//Si el usuario que que se quiere registrar no existe en el "SIAP" no se puede registrar
+                        $datos_siap = $this->empleados_siap->buscar_usuario_siap(
+                            array("reg_delegacion" => $datos_registro['reg_delegacion'], 
+                                  "asp_matricula" => $datos_registro['reg_matricula'])
+                        );
+                        //si siap esta Vacio
+                        if($datos_siap === FALSE){
+                            $datos_registro['error'] = str_replace(
+                                    '[field]', 
+                                    $datos_registro['reg_matricula'], 
+                                    $string_values['registro']['phl_la_matricula_no_existe']
+                                ); //Remplaza
+                            $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
+                        }elseif(is_array($datos_siap) && !empty($datos_siap)) {
+                            //Si el usuario que que se quiere registrar no existe en el "SIAP" no se puede registrar
                             //pr($datos_siap);
                             if ($datos_siap['status'] == 1) { //si el status del empleado esta activo (1)
-//                        $usuario = $this->usuarioFactory($datos_siap, $datos_registro);//Aún no se implementa 
-//                        $taller = $this->tallerFactory($datos_siap, $datos_registro);//Aún no se implementa
-//                                echo "<script>alert('cambié de red a externa'); </script>";
                                 $datos_usuario = array();
                                 $datos_usuario['USU_MATRICULA'] = $datos_registro['reg_matricula'];
                                 $datos_usuario['DELEGACION_CVE'] = $datos_registro['reg_delegacion'];
@@ -90,7 +92,6 @@ class Registro extends MY_Controller {
                                 $datos_usuario['CATEGORIA_CVE'] = $id_cat;
                                 $datos_usuario['ESTADO_USUARIO_CVE'] = 1;
                                 $datos_usuario['USU_FCH_REGISTRO'] = $datos_siap['fecha_ingreso'];
-//                                $datos_usuario['USU_FCH_NACIMIENTO'] = $datos_siap['nacimiento'];
                                 $result_id_user = $this->mod_registro->insert_registro_usuario($datos_usuario); //Retorna id usuario
                                 if ($result_id_user > -1) {//si el id del usuario es mayor que -1, entonces se inserto correctamente el registro
                                     $verifica_existe_empleado_local = $this->mod_registro->get_existe_empleado($datos_registro['reg_matricula']); //Verifica que no exista el empleado
@@ -175,15 +176,16 @@ class Registro extends MY_Controller {
                                         exit();
                                     }
                                 }
-                            } else {
+                            }//matricula inactiva
+                            /*else{
                                 $datos_registro['error'] = str_replace('[field]', $datos_registro['reg_matricula'], $string_values['registro']['phl_la_matricula_existe']); //Remplaza
                                 $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
-                            }
-                        } else {
+                            }*/
+                        } /*else {
                             //Mosttrar mensaje de que no existe el registro en "SIAP"
                             $datos_registro['error'] = str_replace('[field]', $datos_registro['reg_matricula'], $string_values['registro']['phl_la_matricula_existe']); //Remplaza
                             $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
-                        }
+                        }*/
                     } else {
                         //La contraseña no coinside, verificar  queda pendiente
 //                         form_error('reg_contrasenia','La contraseña no coinside');
@@ -193,7 +195,6 @@ class Registro extends MY_Controller {
                     }
                 } else {
                     //Manda advertencia, el usuario ya existe en el sistema
-//                    pr('El usuario ya se encuentra registrado');
                     $datos_registro['error'] = str_replace('[field]', $datos_registro['reg_matricula'], $string_values['registro']['phl_la_matricula_existe']); //Remplaza
                     $datos_registro['tipo_msg'] = $tipo_msg['DANGER']['class'];
                 }
@@ -205,6 +206,7 @@ class Registro extends MY_Controller {
         $datos_registro['delegaciones'] = dropdown_options($data['delegaciones'], 'DELEGACION_CVE', 'DEL_NOMBRE'); //Manipulamos la información a mostrar de delegación
         $datos_registro['string_values'] = $string_values;
 
+        //$this->load->view('registro/index', $datos_registro);
         $main_contet = $this->load->view('registro/registro', $datos_registro, true);
         $this->template->setMainContent($main_contet);
         $this->template->getTemplate();

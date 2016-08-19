@@ -55,8 +55,12 @@ class Perfil extends MY_Controller {
         $this->template->getTemplate();
     }
 
-    /**/
-
+    /**
+     * @Author: Mr. Guag
+     * @params: void
+     * @return: void 
+     * @description: This function shows & allows to the users/profesors manage their information
+     */
     public function seccion_info_general() {
         $data = array();
         $this->lang->load('interface', 'spanish');
@@ -76,12 +80,34 @@ class Perfil extends MY_Controller {
             }
             $id = $empData["EMPLEADO_CVE"];
             unset($empData["EMPLEADO_CVE"]);
+            
             //pr($empData);
             //echo $this->reg->update_registro_empleado($empData,$id);
             if ($this->reg->update_registro_empleado($empData, $id) == 1) {
-               // print("<h1>Cambio realizado correctamente</h1>");
+                $response['message']=$string_values['save_informacion_personal'];
+                $response['result'] = "true";
+            }else{
+                $response['message']=$string_values['error_informacion_personal'];
+                $response['result'] = false;
             }
+            $response["content"] = $this->_load_general_info_form(TRUE);
+            echo json_encode($response);
+            return 0;
         }
+        $this->_load_general_info_form();
+    }
+    
+     /**
+     * @Author: Mr. Guag
+     * @param void
+     * @return array 
+     * @description: This function create & return a form within the general information of the profesor
+     */
+    function _load_general_info_form($type = FALSE){
+        //$data = array();
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface')['perfil'];
+        $id_usuario = $this->session->userdata('identificador');
         //pr("Just showing a preview");
         $datosPerfil = $this->loadInfo($id_usuario);
 
@@ -93,11 +119,12 @@ class Perfil extends MY_Controller {
         $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
         $datosPerfil['formacionProfesionalOptions'] = array();
         $datosPerfil['tipoComprobanteOptions'] = array();
-
         $datosPerfil['antiguedad'] = explode('_', $datosPerfil['antiguedad']);
-
-        //pr($datosPerfil);
-        $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista  
+        if($type){
+            return $this->load->view('perfil/informacionGeneral', $datosPerfil, $type); 
+        }
+        
+        $this->load->view('perfil/informacionGeneral', $datosPerfil, $type); //Valores que muestrán la lista  
     }
 
     /**
@@ -268,15 +295,17 @@ class Perfil extends MY_Controller {
         $config['catalogos'] = carga_catalogos_generales($entidades_, null, null);
         return $config;
     }
-
     /////////////////////////Fin comisiones academicas
+    
     ////////////////////////Inicio Dirección de tesis ////////////////////////
     public function seccion_direccion_tesis() {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
+        
             $this->lang->load('interface');
             $data['string_values'] = array_merge($this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general']);
             //$result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             //$empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
+            
             //if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
             $this->load->model('Direccion_tesis_model', 'dt');
             $data['lista_direccion'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions' => array('EMPLEADO_CVE' => $this->session->userdata('idempleado'), 'TIP_COMISION_CVE' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']), 'order' => 'EC_ANIO desc'));
@@ -355,6 +384,7 @@ class Perfil extends MY_Controller {
             $datos['msg'] = null;
             $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la dirección de tesis
             $idempleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+            
             //$datos['string_values'] = $this->lang->line('interface')['general']; //Cargar textos utilizados en vista
 
             $resultado = $this->dt->delete_comision(array('conditions' => array('EMP_COMISION_CVE' => $dt_id))); //Eliminar datos
@@ -396,10 +426,11 @@ class Perfil extends MY_Controller {
     public function seccion_formacion() {
         if ($this->input->is_ajax_request()) {
             $this->load->model('Formacion_model', 'fm');
+            $this->load->helper('date');
             $data = array();
 
             $this->lang->load('interface');
-            $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['formacion_docente'], $this->lang->line('interface')['general']);
+            $data['string_values'] = array_merge($this->lang->line('interface')['perfil'], $this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['formacion_docente'], $this->lang->line('interface')['general']);
 
             //$condiciones_ = array(enum_ecg::ctipo_comision => array('TIP_COMISION_CVE !=' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id'], 'IS_COMISION_ACADEMICA' => 1));
             //$entidades_ = array(enum_ecg::ctipo_formacion_salud, enum_ecg::csubtipo_formacion_salud);
@@ -413,10 +444,119 @@ class Perfil extends MY_Controller {
               foreach ($data['catalogos']['ctipo_comision'] as $ctc => $tc) {
               $data['comisiones'][$ctc] = $this->ca->get_comision_academica(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'TIP_COMISION_CVE'=>$ctc), 'order'=>'EC_ANIO desc'));
               } */
+            $entidades_ = array(enum_ecg::ctipo_formacion_profesional, enum_ecg::csubtipo_formacion_profesional);
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+
+            $data['formacion_salud']['inicial'] = $this->fm->get_formacion_salud(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'EFPCS_FOR_INICIAL'=>1), 'order'=>'EFPCS_FCH_INICIO desc', 'fields'=>'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE'));
+            $data['formacion_salud']['continua'] = $this->fm->get_formacion_salud(array('conditions'=>array('EMPLEADO_CVE='.$this->session->userdata('idempleado'), 'EFPCS_FOR_INICIAL'=>2), 'order'=>'EFPCS_FCH_INICIO desc', 'fields'=>'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE'));
+
+            $formacion_docente = $this->fm->get_formacion_docente(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado')), 'order'=>'EFO_ANIO_CURSO'));
+            foreach ($formacion_docente as $key_fd => $fd) { ///Ordenar de acuerdo a tipo
+                $data['formacion_docente'][$fd['TIP_FOR_PROF_CVE']][] = $fd;
+            }
             //pr($data);
-            $data['formacion_salud'] = $this->fm->get_formacion_salud(array('conditions' => array('EMPLEADO_CVE' => $this->session->userdata('idempleado')), 'order' => 'EFPCS_ANIO desc'));
-            pr($data);
             echo $this->load->view('perfil/formacion/formacion.php', $data, true); //Valores que muestrán la lista
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+    
+    public function formacion_salud_formulario($identificador = null){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $this->load->model('Formacion_model', 'fm');
+            $this->lang->load('interface');
+            $data['identificador'] = $identificador;
+            $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
+            $data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
+            $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
+            $tmp = array();
+            $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_formacion_salud);
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+
+            if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
+                $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                $validations = $this->config->item('form_formacion_salud'); //Obtener validaciones de archivo general de validaciones
+                $this->form_validation->set_rules($validations); //Añadir validaciones
+                
+                $total_subtipo = $this->fm->get_subtipo_formacion_salud(array('conditions'=>array('ctipo_formacion_salud.TIP_FORM_SALUD_CVE'=>$datos_formulario['tipo_formacion']), 'fields'=>'count(*) AS total'))[0];
+                if($total_subtipo['total']>0){
+                    $this->form_validation->set_rules('subtipo', 'Subtipo de formación profesional', 'trim|required');
+                }
+                if($this->form_validation->run() == TRUE ){ //Validar datos
+                    $datos_formulario['empleado'] = $this->session->userdata('idempleado');
+                    $data_fs = $this->formacion_salud_vo($datos_formulario); //Generar objeto para almacenar
+                    if(empty($data['identificador'])){ //Insertar
+                        $resultado_almacenado = $this->fm->insert_formacion_salud($data_fs);
+                        $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
+                    } else { //Actualización
+                        $resultado_almacenado = $this->fm->update_formacion_salud($fs_id, $data_fs);
+                    }
+                    //////Inicio actualizar comprobante
+                    $this->load->model('Administracion_model','admin');
+                    if(!empty($datos_formulario['idc'])){
+                        $resultado_almacenado = $this->admin->update_comprobante($this->seguridad->decrypt_base64($data['idc']), array('TIPO_COMPROBANTE_CVE'=>$datos_formulario['tipo_comprobante']));
+                    }
+                    //////Fin actualizar comprobante
+                    $data['msg'] = imprimir_resultado($resultado_almacenado); ///Muestra mensaje
+                } else {
+                    $tmp = $datos_formulario;
+                }
+            }
+            if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
+                $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions'=>array('FPCS_CVE'=>$fs_id), 'fields'=>'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
+            } else {
+                $data['dir_tes'] = (array)$this->formacion_salud_vo($tmp); //Generar objeto para ser enviado al formulario
+            }
+            $data['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data, TRUE);
+            $data['titulo_modal'] = $data['string_values']['title'];
+            //pr($data);
+            $data['cuerpo_modal'] = $this->load->view('perfil/formacion/formacion_salud_formulario', $data, TRUE);
+
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+    
+    public function subtipo_formacion($identificador, $CSUBTIP_FORM_SALUD_CVE=null){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $this->load->model('Formacion_model', 'fm');
+            $this->lang->load('interface');
+            $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
+            $data['dir_tes']['CSUBTIP_FORM_SALUD_CVE'] = $CSUBTIP_FORM_SALUD_CVE;
+
+            $entidades_ = array(enum_ecg::csubtipo_formacion_salud);
+            $condiciones_ = array(enum_ecg::csubtipo_formacion_salud => array('TIP_FORM_SALUD_CVE' => $identificador));
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
+
+            echo $this->load->view('perfil/formacion/formacion_salud_tipo_formacion', $data, TRUE);
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    /**
+     * Función que permite eliminar la dirección de tesis
+     * @method: void eliminar_convocatoria()
+     * @param: $Identificador   string en base64    Identificador de la dirección de tesis codificado en base64
+     * @author: Jesús Z. Díaz P.
+     */
+    public function eliminar_formacion_salud($identificador){
+        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
+            $this->load->model('Formacion_model', 'fm');
+            $datos['identificador'] = $identificador; //Identificador de dirección de tesis
+            $datos['msg'] = null;
+            $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la dirección de tesis
+            $idempleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+            
+            $resultado = $this->fm->delete_formacion_salud(array('conditions'=>array('FPCS_CVE'=>$dt_id))); //Eliminar datos
+            //pr($resultado);
+            $this->eliminar_archivo(array('archivo'=>$resultado['data']['COM_NOMBRE'], 'matricula'=>$this->session->userdata('matricula')));
+            
+            echo json_encode($resultado); ///Muestra mensaje
+            exit();
+            //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
@@ -1390,7 +1530,19 @@ class Perfil extends MY_Controller {
 
         return $com;
     }
+    
+    private function formacion_salud_vo($formacion){
+        $for = new Formacion_salud_dao;
+        $for->EMPLEADO_CVE = (isset($formacion['empleado']) && !empty($formacion['empleado'])) ? $formacion['empleado'] : NULL;
+        $for->COMPROBANTE_CVE = (isset($formacion['idc']) && !empty($formacion['idc'])) ? $this->seguridad->decrypt_base64($formacion['idc']) : NULL;
+        $for->EFPCS_FCH_INICIO = (isset($formacion['fch_inicio']) && !empty($formacion['fch_inicio'])) ? date("Y-m-d", strtotime('1-'.$formacion['fch_inicio'])) : NULL;
+        $for->EFPCS_FCH_FIN = (isset($formacion['fch_fin']) && !empty($formacion['fch_fin'])) ? date("Y-m-d", strtotime('1-'.$formacion['fch_fin'])) : NULL;
+        $for->EFPCS_FOR_INICIAL = (isset($formacion['es_inicial']) && !empty($formacion['es_inicial'])) ? $formacion['es_inicial'] : NULL;
+        $for->TIP_FORM_SALUD_CVE = (isset($formacion['tipo_formacion']) && !empty($formacion['tipo_formacion'])) ? $formacion['tipo_formacion'] : NULL;
+        $for->CSUBTIP_FORM_SALUD_CVE = (isset($formacion['subtipo']) && !empty($formacion['subtipo'])) ? $formacion['subtipo'] : NULL;
 
+        return $for;
+    }
     ////////////////////////Fin Factory de tipos de comisión
 
     /*     * *********************************** Material educativo **************************** */
@@ -1953,6 +2105,7 @@ class Perfil extends MY_Controller {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
     }
+    
 
     /*     * *********************************** Becas_ **************************** */
 
@@ -2574,54 +2727,54 @@ class Perfil extends MY_Controller {
 }
 
 class Emp_comision_dao {
-
     //public $EMP_COMISION_CVE;
     public $EMPLEADO_CVE;
     public $TIP_COMISION_CVE;
     public $COMPROBANTE_CVE;
-
 }
 
 class Direccion_tesis_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $COM_AREA_CVE;
-    public $NIV_ACADEMICO_CVE;
-
+    public $NIV_ACADEMICO_CVE;                      
 }
 
 class Comite_educacion_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $TIP_CURSO_CVE;
-
 }
 
 class Sinodal_examen_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $NIV_ACADEMICO_CVE;
-
 }
 
 class Coordinador_tutores_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $EC_FCH_INICIO;
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
     public $CURSO_CVE;
-
 }
 
 class Coordinador_curso_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $EC_FCH_INICIO;
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
     public $CURSO_CVE;
-
 }
+
+class Formacion_salud_dao{
+    //public $FPCS_CVE;
+    public $EMPLEADO_CVE;
+    public $COMPROBANTE_CVE;
+    public $EFPCS_FCH_INICIO;
+    public $EFPCS_FCH_FIN;
+    public $EFPCS_FOR_INICIAL;
+    public $TIP_FORM_SALUD_CVE;
+    public $CSUBTIP_FORM_SALUD_CVE;
+}
+

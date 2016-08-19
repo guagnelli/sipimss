@@ -66,7 +66,7 @@
                             <div class="form-bottom form-username">
 			                    <?php   echo form_open('login/index', array('id'=>'login')); ?>
 			                    	<div class="form-group">
-                                        <label class="sr-only" for="form-username">Matricula</label>
+                                        <label class="sr-only" for="form-username">Matr&iacute;cula</label>
                                         <?php
                                         echo $this->form_complete->create_element(
                                             array('id'=>'matricula', 
@@ -126,7 +126,9 @@
                                                name="userCaptcha" 
                                                id="userCaptcha" 
                                                placeholder="Escribe el texto de la imágen" 
-                                               autocomplete="off" 
+                                               autocomplete="off"
+                                               data-toggle='tooltip'
+                                               data-placement='top'
                                                value="<?php if(!empty($userCaptcha))echo $userCaptcha; ?>" />
                                          <span class="text-danger"> 
                                              <?php echo form_error('userCaptcha','','');?>
@@ -144,6 +146,14 @@
                                 <script type="text/javascript">
                                     $( "#img-captcha" ).find( "img" ).addClass( "img-rounded");
                                 </script>
+                                <div class="form-group text-right">
+                                <?php 
+                                    echo anchor('registro', 
+                                                'Registrarse en el SIPIMSS>>',
+                                                array('title'=>'Registrarse en el SIPIMSS')
+                                    ); 
+                                ?>
+                                </div>
 		                    </div>
                         </div>
                     </div>

@@ -114,6 +114,9 @@ $lang['interface'] = array(
         'lbl_informacion_general_estatus_empleado' => 'Estatus del empleado',
         'lbl_informacion_general_clave_presupuestal' => 'Clave presupuestal',
         'lbl_informacion_general_curp' => 'CURP',
+        'save_informacion_personal' => 'La Información personal se ha actualizado correctamente',
+        'error_informacion_personal' => 'Ha ocurrido un error al intentar actualizar la información personal',
+        'update_informacion_imss' => 'La Información de nómina  se ha actualizado correctamente',
         'lbl_formacion_salud_formacion_profesional' => 'Tipo formación profesional',
         'lbl_formacion_salud_subtipo_formacion_profesional' => 'Subtipo formación profesional',
         'lbl_formacion_salud_comprobante' => 'Cedula profesional / Comprobante',
@@ -151,6 +154,7 @@ $lang['interface'] = array(
         'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
         'archivo_incorrecto' => 'Archivo incorrecto',
         'archivo_inexistente' => 'Archivo inexistente',
+        'opciones' => 'Opciones',
     ),
     //Actividad del docente
     'actividad_docente' => array(
@@ -362,6 +366,7 @@ $lang['interface'] = array(
         't_h_fch_fin' => 'Fecha fin',
         't_h_tipo_curso' => 'Tipo',
         't_h_curso' => 'Curso',
+        't_h_opciones' => 'Opciones',
         'btn_add_new_comision_academica' => 'Agregar nueva comisión',
         'radio_duracion_horas' => 'Hora(s)',
         'radio_duracion_fecha' => 'Fecha(s)',
@@ -372,8 +377,19 @@ $lang['interface'] = array(
     'formacion_salud' => array(
         'lbl_formacion_salud_opc' => 'Formación inicial',
         'lbl_formacion_continua_salud_opc' => 'Formación continua',
+        'lbl_fecha_inicio' => 'Fecha de inicio',
+        'lbl_fecha_final' => 'Fecha de termino',
+        'lbl_tipo_formacion' => 'Formación profesional del profesor',
+        'lbl_subtipo_formacion' => 'Subtipo de formación profesional',
+        'title' => 'Formación en salud',
+        'lbl_tipo_for' => 'El tipo de formación es',
+        'lbl_es_inicial' => 'Es inicial',
+        'lbl_es_continua' => 'Es continua',
+        'btn_add_new_formacion_salud' => 'Agregar formación del personal de salud'
     ),
     'formacion_docente' => array(
+        'title' => 'Formación docente',
+        'btn_add_new_formacion_docente' => 'Agregar formación docente',
         'lbl_formacion_docente_opc' => 'Formación inicial',
         'lbl_formacion_educacion_distacion_opc' => 'Formación continua'
     ),

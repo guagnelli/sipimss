@@ -76,10 +76,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => 'localhost',
+    'hostname' => '11.32.41.238',
+    /*'hostname' => 'localhost',*/
     'username' => 'sipimss',
     'password' => 'sipimss',
-    'database' => 'sipimss',
+    'database' => 'sipimss_20160815',
+    /*'database' => 'sipimss_18_08',*/
     
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
