@@ -7,7 +7,7 @@
 </label>
 <div class="input-group">
     <span class="input-group-addon">
-        <span class="glyphicon glyphicon-user"> </span>
+        <span class="glyphicon glyphicon-book"> </span>
     </span>
     <?php
     echo $this->form_complete->create_element(array('id' => 'ccurso', 'type' => 'dropdown',

@@ -14,7 +14,7 @@
     <div class="list-group">
             <?php if(isset($ctipo_actividad_docente)){ ?>
            <div class="list-group-item">
-                <?php echo form_open('perfil/get_data_ajax_actividad_cuerpo_modal', array('id'=>'form_actividad_docente_general')); ?>
+                <?php // echo form_open('', array('id'=>'form_actividad_docente_general')); ?>
                 <label for='lbl_tipo_actividad_docente_' class="control-label">
                      <?php echo $string_values['lbl_tipo_actividad_docente']; ?>
                 </label>
@@ -25,19 +25,22 @@
                     <?php 
                         echo $this->form_complete->create_element(array('id' => 'ctipo_actividad_docente', 'type' => 'dropdown', 
                             'options' => $ctipo_actividad_docente, 
-                            'first' => array('' => 'Selecciona tipo de actividad'), 
+                            'first' => (isset($nada))? $nada : array('' => 'Selecciona tipo de actividad'), 
                             'value' => '',
-                            'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                            'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                            'onchange' =>  "myFunctionActividad()"   
+                            'attributes' => array('class' => 'form-control', 
+                            'placeholder' => 'Categoría', 
+                            'data-toggle' => 'tooltip', 
+                            'data-placement' => 'top', 
+                            'onchange' =>  "function_carga_form_actividad_doc()"   
                             )
                        )); 
                     ?>
                </div>
                <?php   echo form_error_format('ctipo_actividad_docente'); ?>
            </div>
-            <?php echo form_close(); }?>
-                <?php echo form_open_multipart('', array('id'=>'form_actividad_docente_especifico')); ?>
+            <?php // echo form_close(); ?>
+            <?php  }?>
+                <?php echo form_open('', array('id'=>'form_actividad_docente_especifico')); ?>
             <div class="list-group-item" id="info_actividad_docente">
                <!--Carga la vista correspondiente al elemento tipo de actividad del docente-->
                <?php   if(isset($formulario)){ echo $formulario; } ?>

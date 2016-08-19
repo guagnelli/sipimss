@@ -6,19 +6,20 @@
             <button type="button" id="close_modal_censo" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
         <!--</div>-->
-        <?php if (isset($cve_act_doc)) {//Actualizar?> 
+        <?php if (isset($act_doc_cve)) {//Actualizar?> 
             <div class="col-xs-6 col-sm-6 col-md-6 text-left " >
                 <button id="btn_actualizar_investigacion_docente" type="button" class="btn btn-success" 
-                        data-invcve= "<?php echo $cve_act_doc; ?>"
+                        data-invcve= "<?php echo $act_doc_cve; ?>"
                         data-comprobantecve= "<?php echo $comprobantecve; ?>" 
-                        data-tpactividadcve="<?php echo (isset($cve_tipo_actividad)) ? $cve_tipo_actividad : ''; ?>"
+                        data-tpactividadcve="<?php echo (isset($tp_actividad_cve)) ? $tp_actividad_cve : ''; ?>"
                         onclick="funcion_actualizar_actividad_docente(this)" >
                     Actualizar 
                 </button>
             </div>
         <?php } else { //Guardar ?> 
             <div class="col-xs-6 col-sm-6 col-md-6 text-left" >
-                <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-success" 
+                <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-success"
+                        data-actgralcve="<?php echo (isset($act_gral_cve))?$act_gral_cve :''; ?> "
                         onclick="funcion_guardar(this)" >
                     Guardar
                 </button>

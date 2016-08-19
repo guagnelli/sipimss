@@ -31,6 +31,6 @@ listado de variables
       <?php if(isset($cuerpo_modal) && !empty($cuerpo_modal)) echo $cuerpo_modal;//se verifica que exista la variable $cuerpo_modal. despues se imprime ?>
     </div>
 </div>
-<div class="modal-footer">
+<div class="modal-footer" >
   <?php if(isset($pie_modal) && $pie_modal) echo $pie_modal;//se verifica que exista la variable $pie_modal. despues se imprime ?>
 </div>

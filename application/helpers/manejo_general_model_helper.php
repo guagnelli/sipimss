@@ -12,14 +12,17 @@ if (!function_exists('carga_catalogos_generales')) {
      * y un array como datos que contenga las condiciones involucradas, es decir, nombre del campo y valor
      * @param int $drop_option  //Por default regresa el dropdown_options en $drop_option=true; para que regrese 
      *                          todos los datos del catalogo, poner en "false" o cualquier otro valor
+     * @param  $array_tipo_where  //Por default se asigna "where", esto implica puros AND, 
+     * argumentos: "or_where", "" 
      * Importante registrar en catalogos_definidos
+     * 
      * @return  array con los catálogos  cargados
      */
-    function carga_catalogos_generales($array_entidades = array(), $data = array(), $array_where = null, $drop_option = true) {
-        if (isset($array_entidades) AND is_null($array_entidades)) {
+    function carga_catalogos_generales($array_entidades = array(), $data = array(), $array_where = null, $drop_option = true, $array_tipo_where = null,  $array_order_by = null, $order_by_direccion = 'asc') {
+        if (is_null($array_entidades)) {
             $array_entidades = array();
         }
-        if (isset($data) AND is_null($data)) {
+        if (is_null($data)) {
             $data = array();
         }
         $CI = & get_instance();
@@ -30,11 +33,13 @@ if (!function_exists('carga_catalogos_generales')) {
 
         foreach ($array_entidades as $entidad) {
             $where = (isset($array_where[$entidad])) ? $array_where[$entidad] : null; //Verifica que exista un where relacionado a la entidad
-            $tmp_result = $CI->cg->get_catalogo_general($entidad, $where); //Funcion general que consulta la base de datos
+            $order_by = (isset($array_order_by[$entidad])) ? $array_order_by[$entidad] : $catalogos_propertis[$entidad]['nombre'] . ' ' . $order_by_direccion; //Verifica que exista un order by relacionado a la entidad, si no existe lo ordena por nombre asendentemente
+            $type_group_ = (isset($array_tipo_where[$entidad])) ? $array_tipo_where[$entidad] : 'AND'; //Verifica que exista un order by relacionado a la entidad, si no existe lo ordena por nombre asendentemente
+            $tmp_result = $CI->cg->get_catalogo_general($entidad, $order_by, $where, $type_group_); //Funcion general que consulta la base de datos
             if ($drop_option) {
                 $data[$entidad] = dropdown_options($tmp_result, $catalogos_propertis[$entidad]['id'], $catalogos_propertis[$entidad]['nombre']); //genera el "dropdown_options" y lo guarda en el array que retornará la función·
             } else {
-                $data[$entidad] = $tmp_result;//Carga el resultado con todos los registros
+                $data[$entidad] = $tmp_result; //Carga el resultado con todos los registros
             }
         }
 

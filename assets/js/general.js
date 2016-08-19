@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip(); //Llamada a tooltip
 });
 
@@ -7,9 +7,9 @@ $(document).ready(function() {
  *	@return	string	Contenedor e imagen del cargador.
  */
 function create_loader(optionalPadding = '200px') {
-    optionalPadding = (typeof optionalPadding === 'undefined') ? '200px' : optionalPadding;
-    return '<div id="ajax_loader" align="center" style="padding-top:'+optionalPadding+'; padding-bottom:'+optionalPadding+';"><img src="' + img_url_loader + '" alt="Cargando..." title="Cargando..." /></div>';
-}
+optionalPadding = (typeof optionalPadding === 'undefined') ? '200px' : optionalPadding;
+        return '<div id="ajax_loader" align="center" style="padding-top:' + optionalPadding + '; padding-bottom:' + optionalPadding + ';"><img src="' + img_url_loader + '" alt="Cargando..." title="Cargando..." /></div>';
+        }
 
 /**
  *	Método que remueve el contenedor e imagen de cargando
@@ -27,9 +27,9 @@ function html_message(message, tipo) {
     return "<div class='alert alert-" + tipo + "' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" + message + "</div>";
 }
 
-function imprimir_resultado(resultado){
-	var tipo_mensaje = (resultado.result==true) ? 'success' : 'danger';
-    return "<div class='row'><div class='col-lg-12 alert alert-"+tipo_mensaje+"'>"+resultado.msg+"</div></div>";
+function imprimir_resultado(resultado) {
+    var tipo_mensaje = (resultado.result == true) ? 'success' : 'danger';
+    return "<div class='row'><div class='col-lg-12 alert alert-" + tipo_mensaje + "'>" + resultado.msg + "</div></div>";
 }
 
 
@@ -38,23 +38,119 @@ function data_ajax(path, form_recurso, elemento_resultado) {
         url: path,
         data: $(form_recurso).serialize(),
         method: 'POST',
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             $(elemento_resultado).html(create_loader());
 //			$(elemento_resultado).html();
         }
     })
-            .done(function(response) {
+            .done(function (response) {
                 $(elemento_resultado).html(response);
             })
-            .fail(function(jqXHR, textStatus) {
+            .fail(function (jqXHR, textStatus) {
                 $(elemento_resultado).html("Ocurrió un error durante el proceso, inténtelo más tarde.");
             })
-            .always(function() {
+            .always(function () {
                 remove_loader();
-    });
+            });
 
 }
 
+/**
+ * 
+ * @param {type} path 
+ * @param {type} form_recurso
+ * @param {type} elemento_resultado
+ * Param extra {type_ objet} elementos_post - Argumentos indefinidos, 
+ * Despúes del elemento resuiltado, se enviarán todos los elementos 
+ * por post que se requieran enviar ejem. {key : value, key_2 : value_2,...,key_n : value_n}
+ * @returns {JSON} Si el return del response del servidor es un, regresa JSON, si no, regresa vacio 
+ */
+function data_ajax_type_post(path, form_recurso, elemento_resultado) {
+    var json_return = '';
+    var formData = new FormData();
+    if (form_recurso !== null) {//Prepara los datos del formulario
+        var formData = new FormData($(form_recurso)[0]);
+    }
+    if (arguments.length === 4) {//Prepara los datos extra que se enviarán por post
+        var obj_data_extra = arguments[3]
+        for (var key_extras in arguments[3]) {
+            formData.append(key_extras, obj_data_extra[key_extras]);
+        }
+    }
+    $.ajax({
+        url: path,
+        data: formData,
+        type: 'POST',
+        contentType: false, //Limpía el formulario
+        processData: false,
+//        mimeType: "multipart/form-data",
+        beforeSend: function (xhr) {
+            $(elemento_resultado).html(create_loader());
+        }
+    })
+            .done(function (response) {
+                try {
+                    json_return = $.parseJSON(response);
+                } catch (e) {
+                    $(elemento_resultado).html(response);
+                }
+            })
+            .fail(function (jqXHR, textStatus) {
+                $(elemento_resultado).html("Ocurrió un error durante el proceso, inténtelo más tarde.");
+            })
+            .always(function () {
+                remove_loader();
+            });
+    return json_return;//Return de json, puede ser null
+
+}
+
+/**
+ * 
+ * @param {type} path
+ * @param {type} form_recurso - Formulario que se va a enviar
+ * @param {type} elemento_resultado Div o elemento donde se mostrará el resultado
+ * param {type objete} Despúes del elemento resuiltado, se enviarán todos los elementos 
+ * por post simple que se requieran enviar ejem. {key : value, key_2 : value_2,...,key_n : value_n}
+ * 
+ * @returns {JSON} Si el return del response del servidor es un, regresa JSON, si no, regresa vacio 
+ */
+function data_ajax_post(path, form_recurso, elemento_resultado) {
+//    var result = 0;
+    var formData = '';
+    if (form_recurso !== null) {//Prepara los datos del formulario
+        formData = $(form_recurso).serialize();
+    }
+    if (arguments.length === 4) {//Prepara los datos extra que se enviarán por post
+        var obj_data_extra = arguments[3];
+        for (var key_extras in arguments[3]) {
+            formData += '&' + key_extras + '=' + obj_data_extra[key_extras];
+        }
+    }
+
+    $.ajax({
+        url: path,
+        data: formData,
+        method: 'POST',
+        beforeSend: function (xhr) {
+            $(elemento_resultado).html(create_loader());
+        }
+    })
+            .done(function (response) {
+//                     result = 1;
+                try {
+                     var json = $.parseJSON(response);
+                } catch (e) {
+                    $(elemento_resultado).html(response);
+                }
+            })
+            .fail(function (jqXHR, textStatus) {
+                $(elemento_resultado).html("Ocurrió un error durante el proceso, inténtelo más tarde.");
+            })
+            .always(function () {
+                remove_loader();
+            });
+}
 
 /**
  *	Método que válida con javascript la extensión del archivo que se desea subir
@@ -114,12 +210,12 @@ function dropdown(id, tag, act) {
         data: {'campo': val},
         method: 'POST',
         dataType: 'JSON',
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             $(tag).html(create_loader());
         }
 
     })
-            .done(function(response) {
+            .done(function (response) {
                 // alert(response.resultado);
                 if (response.resultado == true) {
                     $(tag).html(response.data);
@@ -128,11 +224,11 @@ function dropdown(id, tag, act) {
                     $(tag).html(html_message(response.error, 'danger'));
                 }
             })
-            .fail(function(jqXHR, textStatus) {
+            .fail(function (jqXHR, textStatus) {
                 // alert(textStatus)
                 $(tag).html(html_message("Ocurri&oacute; un error durante el proceso, inténtelo m&aacute;s tarde.", 'danger'));//+textStatus
             })
-            .always(function() {
+            .always(function () {
                 remove_loader();
             });
 }
@@ -140,31 +236,31 @@ function dropdown(id, tag, act) {
 function modal_static(is_static_modal) {
     var modal = $(document).getElementById('modal_censo');
     if (is_static_modal) {
-        
+
     } else {
 
     }
 
 }
 
-function cargar_archivo(req, form){
+function cargar_archivo(req, form) {
     var archivo = $('#userfile').val();
     var carga = '#capa_carga_archivo';
     var error = "#error_carga_archivo";
     var tipo_comprobante = "";
     var ed = $('#extension').val();
     var extension_documentacion = ed.split(',');
-    if ( $("#tipo_comprobante").length ) {
+    if ($("#tipo_comprobante").length) {
         tipo_comprobante = $("#tipo_comprobante").val();
     }
-    if(archivo!=""){ //Validar que contenga archivo
-        if(validate_extension(archivo, extension_documentacion)){ //Validar la extensión, definida en archivo de configuración
-            if(tipo_comprobante!=""){
+    if (archivo != "") { //Validar que contenga archivo
+        if (validate_extension(archivo, extension_documentacion)) { //Validar la extensión, definida en archivo de configuración
+            if (tipo_comprobante != "") {
                 var formData = new FormData($(form)[0]);
                 formData.append('identificador', req);
                 formData.append('tipo_comprobante', tipo_comprobante);
                 $.ajax({
-                    url: site_url+'/administracion/cargar_archivo',
+                    url: site_url + '/administracion/cargar_archivo',
                     type: 'POST',
                     data: formData,
                     mimeType: "multipart/form-data",
@@ -172,39 +268,39 @@ function cargar_archivo(req, form){
                     cache: false,
                     processData: false,
                     dataType: 'JSON',
-                    beforeSend: function( xhr ) {
+                    beforeSend: function (xhr) {
                         $(carga).hide();
                         $(error).html(create_loader());
                     }
                 })
-                .done(function(response) {
-                    var tipo = "";
-                    $(carga).show();
-                    if(response.result==true){
-                        tipo = 'success';
-                        $('#capa_archivo_cargado').html("<a href='"+site_url+"/administracion/ver_archivo/"+response.idb+"' target='_blank'><span class='glyphicon glyphicon-search'></span>  Ver archivo</a><br><a href='"+site_url+"/administracion/descarga_archivo/"+response.idb+"' target='_blank'><span class='glyphicon glyphicon-download'></span>  Descargar archivo</a><input id='idc' name='idc' type='hidden' value='"+response.idb+"' >");
-                        $('#userfile').val("");
-                        $('#text_comprobante').val("");
-                        $("#btn_subir_archivo").attr('data-key', response.id);
-                    } else {
-                        tipo = 'danger';
-                    }
-                    $("#error_carga_archivo").html(html_message(response.msg, tipo));
-                })
-                .fail(function( jqXHR, textStatus ) {
-                    $(error).html(html_message("Ocurrió un error durante el proceso, inténtelo más tarde.", 'danger'));
-                })
-                .always(function() {
-                    remove_loader();
-                    $(carga).show();
-                    $('#evidencia_archivo').val('');
-                    $('[data-toggle="tooltip"]').tooltip();
-                });
+                        .done(function (response) {
+                            var tipo = "";
+                            $(carga).show();
+                            if (response.result == true) {
+                                tipo = 'success';
+                                $('#capa_archivo_cargado').html("<a href='" + site_url + "/administracion/ver_archivo/" + response.idb + "' target='_blank'><span class='glyphicon glyphicon-search'></span>  Ver archivo</a><br><a href='" + site_url + "/administracion/descarga_archivo/" + response.idb + "' target='_blank'><span class='glyphicon glyphicon-download'></span>  Descargar archivo</a><input id='idc' name='idc' type='hidden' value='" + response.idb + "' >");
+                                $('#userfile').val("");
+                                $('#text_comprobante').val("");
+                                $("#btn_subir_archivo").attr('data-key', response.id);
+                            } else {
+                                tipo = 'danger';
+                            }
+                            $("#error_carga_archivo").html(html_message(response.msg, tipo));
+                        })
+                        .fail(function (jqXHR, textStatus) {
+                            $(error).html(html_message("Ocurrió un error durante el proceso, inténtelo más tarde.", 'danger'));
+                        })
+                        .always(function () {
+                            remove_loader();
+                            $(carga).show();
+                            $('#evidencia_archivo').val('');
+                            $('[data-toggle="tooltip"]').tooltip();
+                        });
             } else {
                 $(error).html(html_message("Debe seleccionar el tipo de comprobante para poder cargar el archivo.", 'danger'));
             }
         } else {
-            $(error).html(html_message("El archivo seleccionado no esta permitido. Por favor elija un archivo con alguna de las siguientes extensiones: "+extension_documentacion, 'danger'));
+            $(error).html(html_message("El archivo seleccionado no esta permitido. Por favor elija un archivo con alguna de las siguientes extensiones: " + extension_documentacion, 'danger'));
         }
     } else {
         $(error).html(create_loader());
