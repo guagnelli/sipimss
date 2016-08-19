@@ -4,7 +4,7 @@
 <script type="text/javascript">
 //    $('.btn_subir_comprobante').click(function () {
     $('.btn_subir_comprobante').click(function () {
-        cargar_archivo($(this).attr('data-key'), "#form_investigacion_docente");
+        cargar_archivo($(this).attr('data-key'), "#form_actividad_docente_especifico");
     });
 </script>
 
