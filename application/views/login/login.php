@@ -149,8 +149,8 @@
                                 <div class="form-group text-right">
                                 <?php 
                                     echo anchor('registro', 
-                                                'Retrarse en el SIPIMSS>>',
-                                                array('title'=>'Retrarse en el SIPIMSS')
+                                                'Registrarse en el SIPIMSS>>',
+                                                array('title'=>'Registrarse en el SIPIMSS')
                                     ); 
                                 ?>
                                 </div>

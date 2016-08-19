@@ -34,7 +34,7 @@
                         'type'=>'text',
                         'value' => !empty($apellidoPaterno) ? $apellidoPaterno : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal nameFields',
+                            'class'=>'form-control form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_apellido_paterno'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -61,7 +61,7 @@
                         'type'=>'text',
                         'value' => !empty($apellidoMaterno) ? $apellidoMaterno : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal nameFields',
+                            'class'=>'form-control form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_apellido_materno'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -88,7 +88,7 @@
                         'type'=>'text',
                         'value' => !empty($nombre) ? $nombre : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal nameFields',
+                            'class'=>'form-control form-control-personal nameFields',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_nombre'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -120,7 +120,7 @@
                         'type'=>'text',
                         'value' => !empty($edad) ? $edad : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_edad'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -150,7 +150,7 @@
                         'type'=>'text',
                         'value' => !empty($genero) ? $genero : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_edad'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -184,7 +184,7 @@
                         'first' => array('' => $string_values['perfil']['plh_informacion_general_estado_civil'] ),
                         'value' => $estadoCivilSelected,
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -210,7 +210,7 @@
                         'type'=>'text',
                         'value' => !empty($correoElectronico) ? $correoElectronico : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_correo_electronico'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -242,7 +242,7 @@
                         'type'=>'text',
                         'value' => !empty($telParticular) ? $telParticular : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_telefono_particular'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -272,7 +272,7 @@
                         'type'=>'text',
                         'value' => !empty($telLaboral) ? $telLaboral : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_telefono_laboral'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -303,7 +303,7 @@
                         'type'=>'text',
                         'value' => !empty($empleosFueraImss) ? $empleosFueraImss : 0,
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'placeholder'=>$string_values['perfil']['plh_informacion_general_empleos_actuales'],
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
@@ -344,7 +344,7 @@
                         'type'=>'text',
                         'value' => !empty($matricula) ? $matricula : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -370,7 +370,7 @@
                         'type'=>'text',
                         'value' => !empty($delegacion) ? $delegacion : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -398,7 +398,7 @@
                         'type'=>'text',
                         'value' => !empty($nombreCategoria) ? $nombreCategoria : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -424,7 +424,7 @@
                         'type'=>'text',
                         'value' => !empty($claveCategoria) ? $claveCategoria : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -452,7 +452,7 @@
                         'type'=>'text',
                         'value' => !empty($nombreAreaAdscripcion) ? $nombreAreaAdscripcion : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -478,7 +478,7 @@
                         'type'=>'text',
                         'value' => !empty($nombreUnidadAdscripcion) ? $nombreUnidadAdscripcion : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -505,7 +505,7 @@
                         'type'=>'text',
                         'value' => !empty($claveAdscripcion) ? $claveAdscripcion : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -532,7 +532,7 @@
                                     'type'=>'text',
                                     'value' => !empty($antiguedad[0]) ? $antiguedad[0] : '',
                                     'attributes'=>array(
-                                        'class'=>'form-control-personal',
+                                        'class'=>'form-control form-control-personal',
                                         'autocomplete'=>'off',
                                         'data-toggle'=>'tooltip',
                                         'data-placement'=>'bottom',
@@ -555,7 +555,7 @@
                                     'type'=>'text',
                                     'value' => !empty($antiguedad[1]) ? $antiguedad[1] : '',
                                     'attributes'=>array(
-                                        'class'=>'form-control-personal',
+                                        'class'=>'form-control form-control-personal',
                                         'autocomplete'=>'off',
                                         'data-toggle'=>'tooltip',
                                         'data-placement'=>'bottom',
@@ -578,7 +578,7 @@
                                     'type'=>'text',
                                     'value' => !empty($antiguedad[2]) ? $antiguedad[2] : '',
                                     'attributes'=>array(
-                                        'class'=>'form-control-personal',
+                                        'class'=>'form-control form-control-personal',
                                         'autocomplete'=>'off',
                                         'data-toggle'=>'tooltip',
                                         'data-placement'=>'bottom',
@@ -609,7 +609,7 @@
                         'type'=>'text',
                         'value' => !empty($tipoContratacion) ? $tipoContratacion : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -634,7 +634,7 @@
                         'type'=>'text',
                         'value' => !empty($estatusEmpleado) ? $estatusEmpleado : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -661,7 +661,7 @@
                         'type'=>'text',
                         'value' => !empty($clavePresupuestal) ? $clavePresupuestal : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
@@ -687,7 +687,7 @@
                         'type'=>'text',
                         'value' => !empty($curp) ? $curp : '',
                         'attributes'=>array(
-                            'class'=>'form-control-personal',
+                            'class'=>'form-control form-control-personal',
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',

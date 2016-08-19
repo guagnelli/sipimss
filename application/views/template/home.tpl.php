@@ -23,7 +23,7 @@
 		<!-- Custom and plugin javascript -->
 		<?php echo css("custom.css"); ?>
 		<?php echo css("apprise.css"); ?>
-		<?php echo css("bonos.css"); ?>
+		<?php //echo css("bonos.css"); ?>
 		<?php // echo js("jquery.min.js"); ?>
 		<?php echo js("jquery-2.1.4.min.js"); ?>
 		<?php echo js("moment.js"); ?>

@@ -55,8 +55,12 @@ class Perfil extends MY_Controller {
         $this->template->getTemplate();
     }
 
-    /**/
-
+    /**
+     * @Author: Mr. Guag
+     * @params: void
+     * @return: void 
+     * @description: This function shows & allows to the users/profesors manage their information
+     */
     public function seccion_info_general() {
         $data = array();
         $this->lang->load('interface', 'spanish');
@@ -76,12 +80,34 @@ class Perfil extends MY_Controller {
             }
             $id = $empData["EMPLEADO_CVE"];
             unset($empData["EMPLEADO_CVE"]);
+            
             //pr($empData);
             //echo $this->reg->update_registro_empleado($empData,$id);
             if ($this->reg->update_registro_empleado($empData, $id) == 1) {
-               // print("<h1>Cambio realizado correctamente</h1>");
+                $response['message']=$string_values['save_informacion_personal'];
+                $response['result'] = "true";
+            }else{
+                $response['message']=$string_values['error_informacion_personal'];
+                $response['result'] = false;
             }
+            $response["content"] = $this->_load_general_info_form(TRUE);
+            echo json_encode($response);
+            return 0;
         }
+        $this->_load_general_info_form();
+    }
+    
+     /**
+     * @Author: Mr. Guag
+     * @param void
+     * @return array 
+     * @description: This function create & return a form within the general information of the profesor
+     */
+    function _load_general_info_form($type = FALSE){
+        //$data = array();
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface')['perfil'];
+        $id_usuario = $this->session->userdata('identificador');
         //pr("Just showing a preview");
         $datosPerfil = $this->loadInfo($id_usuario);
 
@@ -93,11 +119,12 @@ class Perfil extends MY_Controller {
         $datosPerfil['estadosCiviles'] = dropdown_options($this->modPerfil->getEstadoCivil(), 'CESTADO_CIVIL_CVE', 'EDO_CIV_NOMBRE');
         $datosPerfil['formacionProfesionalOptions'] = array();
         $datosPerfil['tipoComprobanteOptions'] = array();
-
         $datosPerfil['antiguedad'] = explode('_', $datosPerfil['antiguedad']);
-
-        //pr($datosPerfil);
-        $this->load->view('perfil/informacionGeneral', $datosPerfil, FALSE); //Valores que muestrán la lista  
+        if($type){
+            return $this->load->view('perfil/informacionGeneral', $datosPerfil, $type); 
+        }
+        
+        $this->load->view('perfil/informacionGeneral', $datosPerfil, $type); //Valores que muestrán la lista  
     }
 
     /**

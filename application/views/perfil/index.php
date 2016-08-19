@@ -62,7 +62,11 @@ $string_values = $this->lang->line('interface');
                 <!-- genera div por opción de menu -->
                 <div id = 'tabContent' class='tab-content col-md-9'>
                     <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                        <div class="col-lg-12 col-md-12 col-sm-12 text-left" id="msg_general" style='display:none'>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 text-right" >
                             <span id="fecha_ultima_actualizacion" class="text-right">
                                 <?php //echo (isset($fecha_ultima_actualizacion)) ? $fecha_ultima_actualizacion : ''; ?>
                             </span>

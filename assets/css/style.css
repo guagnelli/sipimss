@@ -81,7 +81,7 @@ div#wrapper {
 .navbar {
     position: relative;
     min-height: 50px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     border: 1px solid transparent;
     border-radius: 0px !important;
 }
@@ -1918,7 +1918,7 @@ td span.mar{
 	-ms-border-radius: 4px;
 }
 .inbox-mail{
-	padding: 1em 0;
+	padding: 0px;
 }
 .input-group{
 	padding-bottom: 1em;
@@ -2981,4 +2981,25 @@ ul.dropdown-menu.dropdown-menu-right {
     background: white;
     cursor: inherit;
     display: block;
+}
+
+.panel {
+    margin-bottom: 0px;
+    background-color: #fff;
+    border: 1px solid #fff;
+    border-radius: 0px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.copyright{
+	/*background: #343642 none repeat scroll 0 0;
+	color: #FFF;*/
+    background: #d1d3d4 none repeat scroll 0 0;
+	color: #343642;
+	padding: 20px;
+	text-align: center;
+}
+.nav-pills>li>a {
+    border-radius: 0px;
 }
