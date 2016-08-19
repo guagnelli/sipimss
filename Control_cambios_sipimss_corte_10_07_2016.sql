@@ -349,8 +349,24 @@ ALTER TABLE `emp_formacion_profesional` ADD CONSTRAINT `emp_formacion_profesiona
 FOREIGN KEY (`SUB_FOR_PRO_CVE`) REFERENCES `csubtipo_formacion_profesional`(`SUB_FOR_PRO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `emp_educacion_distancia` ADD `IS_CURSO_TUTURIZADO` BOOLEAN NOT NULL AFTER `FECHA_INSERSION`;
+
+ALTER TABLE `emp_actividad_docente` ADD `EMPLEADO_CVE` INT(11) NULL AFTER `FECHA_INSERSION`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF11EMP_ACTIVIDAD_DOCENTE ON emp_actividad_docente (EMPLEADO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `emp_actividad_docente` ADD CONSTRAINT `emp_actividad_docente_empfk_11`   /* Asigna llave foran*/
+FOREIGN KEY (`EMPLEADO_CVE`) REFERENCES `empleado`(`EMPLEADO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 /* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+/* ********************modificaci 18/08/2016   ****************************************/
+ALTER TABLE emp_formacion_profesional ADD EFP_NOMBRE_CURSO VARCHAR(125) NULL;emp_formacion_profesional_ibfk_9
+
+ALTER TABLE emp_formacion_profesional` DROP FOREIGN KEY `emp_formacion_profesional_ibfk_9`;
+ALTER TABLE emp_formacion_profesional DROP EFP_TIENE_FORMA_EDU;
+ALTER TABLE emp_formacion_profesional DROP TIP_ACT_DOC_CVE;
+
+ALTER TABLE recuperar_contrasenia MODIFY COLUMN REC_CON_FCH TIMESTAMP NULL;
+
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /* *
 ALTER TABLE `emp_esp_medica` CHANGE COLUMN `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;  /* cambia nombre a columna 
 ALTER TABLE `emp_esp_medica` CHANGE `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;
