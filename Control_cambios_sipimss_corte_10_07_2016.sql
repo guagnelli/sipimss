@@ -294,7 +294,7 @@ ALTER TABLE sipimss.csubtipo_formacion_salud MODIFY COLUMN SUBTIP_NOMBRE varchar
 ALTER TABLE `emp_for_personal_continua_salud` DROP FOREIGN KEY `emp_for_personal_continua_salud_ibfk_3`; 
 ALTER TABLE emp_for_personal_continua_salud DROP TIP_FORM_SALUD_CVE;
 
-ALTER TABLE `emp_for_personal_continua_salud` ADD `CSUBTIP_FORM_SALUD_CVE` INT(11) NOT NULL AFTER `FECHA_INSERSION`;  /*Campo agregado a la tabla "emp_comision"*/
+ALTER TABLE `emp_for_personal_continua_salud` ADD `CSUBTIP_FORM_SALUD_CVE` INT(11) NULL AFTER `FECHA_INSERSION`;  /*Campo agregado a la tabla "emp_comision"*/
 CREATE INDEX XIF10EMP_FOR_PERSONAL_CONTINUA_SALUD ON emp_for_personal_continua_salud (CSUBTIP_FORM_SALUD_CVE);  /* Se vuelve index el campo */
 ALTER TABLE `emp_for_personal_continua_salud` ADD CONSTRAINT `emp_for_personal_continua_salud_efcsfk_10`   /* Asigna llave foran*/
 FOREIGN KEY (`CSUBTIP_FORM_SALUD_CVE`) REFERENCES `csubtipo_formacion_salud`(`CSUBTIP_FORM_SALUD_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -304,9 +304,69 @@ ALTER TABLE `emp_for_personal_continua_salud` DROP `EFPCS_ANIO`, DROP `EFPCS_DUR
 /* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 /* ********************modificaci 15/08/2016   ****************************************/
+ALTER TABLE sipimss_20160815.emp_for_personal_continua_salud MODIFY COLUMN CSUBTIP_FORM_SALUD_CVE int(11) NULL;  /*Modifica para que se a null la llave*/
+
+ALTER TABLE `emp_for_personal_continua_salud` ADD `TIP_FORM_SALUD_CVE` INT(11) NULL AFTER `CSUBTIP_FORM_SALUD_CVE`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF11EMP_FOR_PERSONAL_CONTINUA_SALUD ON emp_for_personal_continua_salud (TIP_FORM_SALUD_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `emp_for_personal_continua_salud` ADD CONSTRAINT `emp_for_personal_continua_salud_efcsfk_11`   /* Asigna llave foran*/
+FOREIGN KEY (`TIP_FORM_SALUD_CVE`) REFERENCES `ctipo_formacion_salud`(`TIP_FORM_SALUD_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 /* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+/* ********************modificaci 16/08/2016   ****************************************/
+/*Agraga nueva entidad */
+CREATE TABLE `rform_prof_tematica` (
+  `RFORM_PROF_TEMATICA_CVE` int(11) NOT NULL AUTO_INCREMENT,
+  `TEMATICA_CVE` int(11) DEFAULT NULL,
+  `EMP_FORMACION_PROFESIONAL_CVE` int(10) DEFAULT NULL,
+  PRIMARY KEY (`RFORM_PROF_TEMATICA_CVE`),
+  UNIQUE KEY `XPKRFORM_PROF_TEMATICA_CVE` (`RFORM_PROF_TEMATICA_CVE`),
+  KEY `XIF14EMP_FORMACION_PROFESIONAL_CVE` (`EMP_FORMACION_PROFESIONAL_CVE`),
+  KEY `XIF10TEMATICA_CVE` (`TEMATICA_CVE`),
+  CONSTRAINT `emp_formacion_profesional_efpfrk` FOREIGN KEY (`EMP_FORMACION_PROFESIONAL_CVE`) REFERENCES `emp_formacion_profesional` (`EMP_FORMACION_PROFESIONAL_CVE`),
+  CONSTRAINT `ctematica_ctmrfk` FOREIGN KEY (`TEMATICA_CVE`) REFERENCES `ctematica` (`TEMATICA_CVE`),
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+/* Elimina relación entre "ctematica" y "emp_formacion_profesional"*/
+ALTER TABLE `emp_formacion_profesional` DROP FOREIGN KEY `emp_formacion_profesional_ibfk_1`;
+ALTER TABLE `emp_formacion_profesional` DROP TEMATICA_CVE;
+/* Agrega a la entidad "emplead" la relacion con "cejercicio_profesional;"*/
+ALTER TABLE `empleado` ADD `emp_eje_pro_cve` INT(11) NULL AFTER `delegacion_cve`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF12_EMPLEADO ON empleado (emp_eje_pro_cve);  /* Se vuelve index el campo */
+ALTER TABLE `empleado` ADD CONSTRAINT `cejercicio_profesional_cjpfk_12`   /* Asigna llave foran*/
+FOREIGN KEY (`emp_eje_pro_cve`) REFERENCES `cejercicio_profesional`(`eje_pro_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/* ********************modificaci 17/08/2016   ****************************************/
+ALTER TABLE `emp_educacion_distancia` DROP FOREIGN KEY `emp_educacion_distancia_ibfk_4`; /* Rompe la llave foranea*/
+ALTER TABLE emp_educacion_distancia MODIFY COLUMN CURSO_CVE varchar(50) NOT NULL;
+ALTER TABLE emp_educacion_distancia DROP CURSO_CVE;
+ALTER TABLE `emp_formacion_profesional` ADD `CLAVE_CURSO` varchar(50) NOT NULL AFTER `COMPROBANTE_CVE`
+
+ALTER TABLE `emp_formacion_profesional` ADD `SUB_FOR_PRO_CVE` INT(11) NULL AFTER `FECHA_INSERSION`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF11EMP_FORMACION_PROFESIONAL ON emp_formacion_profesional (SUB_FOR_PRO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `emp_formacion_profesional` ADD CONSTRAINT `emp_formacion_profesional_csfpfk_15`   /* Asigna llave foran*/
+FOREIGN KEY (`SUB_FOR_PRO_CVE`) REFERENCES `csubtipo_formacion_profesional`(`SUB_FOR_PRO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `emp_educacion_distancia` ADD `IS_CURSO_TUTURIZADO` BOOLEAN NOT NULL AFTER `FECHA_INSERSION`;
+
+ALTER TABLE `emp_actividad_docente` ADD `EMPLEADO_CVE` INT(11) NULL AFTER `FECHA_INSERSION`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF11EMP_ACTIVIDAD_DOCENTE ON emp_actividad_docente (EMPLEADO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `emp_actividad_docente` ADD CONSTRAINT `emp_actividad_docente_empfk_11`   /* Asigna llave foran*/
+FOREIGN KEY (`EMPLEADO_CVE`) REFERENCES `empleado`(`EMPLEADO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/* ********************modificaci 18/08/2016   ****************************************/
+ALTER TABLE emp_formacion_profesional ADD EFP_NOMBRE_CURSO VARCHAR(125) NULL;emp_formacion_profesional_ibfk_9
+
+ALTER TABLE emp_formacion_profesional` DROP FOREIGN KEY `emp_formacion_profesional_ibfk_9`;
+ALTER TABLE emp_formacion_profesional DROP EFP_TIENE_FORMA_EDU;
+ALTER TABLE emp_formacion_profesional DROP TIP_ACT_DOC_CVE;
+
+ALTER TABLE recuperar_contrasenia MODIFY COLUMN REC_CON_FCH TIMESTAMP NULL;
+
+/* finn de modificaciones ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /* *
 ALTER TABLE `emp_esp_medica` CHANGE COLUMN `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;  /* cambia nombre a columna 
 ALTER TABLE `emp_esp_medica` CHANGE `EMP_ESP_MEDICA_CVE` `EMP_ESP_MEDICA_CVE` INT(10) NULL;

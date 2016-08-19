@@ -1,14 +1,14 @@
 $(function () {
 
-    $('#btn_agregar_actividad_modal').on('click', function () {
+    $('#btn_agregar_actividad_modal_nueva').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
         var a = hrutes['seccion_actividad_docente'];
         var cad_split = a.split(":");
-//        data_ajax(site_url + '/perfil    /get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
-        data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/0   ', '#form_actividad_docente_general', '#modal_content');
-//        data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal', '#form_actividad_docente_general', '#modal_content');
-//        alert('continua.....');
+        var actgralcve = $('#btn_agregar_actividad_modal_nueva').data('actgralcve');
+        data_ajax_post(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/0', null, '#modal_content', {act_gral_cve: actgralcve});
+//        data_ajax(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/0', null, '#modal_content');
+        $(this).off();//Para el encadenamiento del post
     });
 
     $('#btn_guardar_actividad').on('click', function () {//Llama agetget_"data_ajax_actividad" para guardar información
@@ -40,40 +40,10 @@ $(function () {
             } else {
                 return false;
             }
+            $(this).off();//Para el encadenamiento del post
         });
     });
-
-//    $('#btn_guardar_actividad_especifica').on('click', function() {//Llama agetget_"data_ajax_actividad" para guardar información
-//        var x = document.getElementById("#btn_guardar_actividad_especifica");
-//        alert('aa' + x.value);
-//        //data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/1', '#form_actividad_docente_especifico', '#info_actividad_docente');
-//    });
 });
-
-//$('#fecha_inicio_pick').datetimepicker({
-//    icons: {
-//        time: "fa fa-clock-o",
-//        date: "fa fa-calendar",
-//        up: "fa fa-arrow-up",
-//        down: "fa fa-arrow-down"
-//    }
-//});
-//$('#fecha_fin_pick').datetimepicker({
-//    icons: {
-//        time: "fa fa-clock-o",
-//        date: "fa fa-calendar",
-//        up: "fa fa-arrow-up",
-//        down: "fa fa-arrow-down"
-//    }
-//});
-
-//document.getElementById("tipo_actividad_docente").onchange = function() {
-//    tipo_actividad_docente();
-//};
-
-//function tipo_actividad_docente() {
-//    var x = document.getElementById("tipo_actividad_docente");
-//}
 
 function funcion_eliminar_actividad_docente(element) {
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
@@ -103,13 +73,13 @@ function funcion_eliminar_actividad_docente(element) {
                 })
                         .done(function (response) {
                             var response = $.parseJSON(response);
-                            $('#mensaje_error').html(response.error);
-                            $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
-                            $('#id_row_' + button_obj.data('idrow')).remove();
-                            $('#div_error').show();
-                            setTimeout("$('#div_error').hide()", 5000);
-                            recargar_fecha_ultima_actualizacion();//Recarga la fecha de la ultima actualización del modulo perfil
+                            $('#mensaje_error_index').html(response.error);
+                            $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-warning').removeClass('alert-info').removeClass('alert-success').addClass('alert-success');
+                            $('#div_error_index').show();
 
+                            $('#id_row_' + button_obj.data('idrow')).remove();
+                            setTimeout("$('#div_error_index').hide()", 6000);
+                            recargar_fecha_ultima_actualizacion();//Recarga la fecha de la ultima actualización del modulo perfil
                         })
                         .fail(function (jqXHR, response) {
                             $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
@@ -128,6 +98,15 @@ function funcion_eliminar_actividad_docente(element) {
 
 
 }
+
+function cargar_curso(element) {
+    var a = hrutes['seccion_actividad_docente'];
+    var cad_split = a.split(":");
+    var ctipo_curso_cve = document.getElementById("ctipo_curso").value;
+
+    data_ajax_post(site_url + '/' + cad_split[0] + '/curso_actividad_docente', null, '#curso_div_gen', {ctipo_curso_cve: ctipo_curso_cve});
+}
+
 function funcion_asignar_curso_principal(element) {
     var radio_curso_principal = $(element);
     var a = hrutes['seccion_actividad_docente'];
@@ -262,76 +241,148 @@ function funcion_obtener_max_id_row_table_actividad() {
 //function funcion_guargar(index) {
 //    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
 //}
-function funcion_guargar(index) {
-//    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
-    $.ajax({
-        url: site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0',
-        data: $('#form_actividad_docente_especifico').serialize(),
-        method: 'POST',
-        beforeSend: function (xhr) {
-            $('#info_actividad_docente').html(create_loader());
-        }
-    })
-            .done(function (response) {
+function funcion_guardar(element) {
+    var a = hrutes['seccion_actividad_docente'];
+    var cad_split = a.split(":");
+    var act_doc_cve = 0;
+    var cve_tipo_actividad = document.getElementById("ctipo_actividad_docente").value;
+    var act_gral_cve = $(element).data("actgralcve");
+    var formData = $('#form_actividad_docente_especifico').serialize();
+    formData += '&act_doc_cve=' + act_doc_cve + '&cve_tipo_actividad=' + cve_tipo_actividad + '&act_gral_cve=' + act_gral_cve;//Agrega tipo de actividad
+    if ($('#idc').length) { //Validar carga de archivo
+        $.ajax({
+            url: site_url + '/' + cad_split[0] + '/get_add_actividad_docente',
+            data: formData,
+            method: 'POST',
+            beforeSend: function (xhr) {
+                $('#info_actividad_docente').html(create_loader());
+            }
+        })
+                .done(function (response) {
+                    try {
+                        if (response) {
+                            var response_json = $.parseJSON(response);//
+//                            var titulo_tipo_actividad = response_json.insertar[0].nombre_tp_actividad;
+//                            var anio = response_json.insertar[0].anio;
+//                            var duracion = response_json.insertar[0].duracion;
+//                            var fecha_inicio = response_json.insertar[0].fecha_inicio;
+//                            var fecha_fin = response_json.insertar[0].fecha_fin;
+//                            var tacve = response_json.insertar[0].ta_cve;
+//                            var cvead = response_json.insertar[0].cve_actividad_docente;
+//                            var cve_actividad_general = response_json.insertar[0].actividad_general_cve;
+//                            var cp = 0;
+//                            var idrow = funcion_obtener_max_id_row_table_actividad() + 1;//Obtiene el maximo index de el row de la tabla de actividades
+//                            ////////////
+//                            duracion = (duracion === null) ? '' : duracion;
+//                            fecha_inicio = (fecha_inicio === null) ? '' : fecha_inicio;
+//                            fecha_fin = (fecha_fin === null) ? '' : fecha_fin;
+//
+//                            var htmlRowTemplate = $('#template_row_nueva_act').html();
+//                            var htmlNewRow = htmlRowTemplate.replace(/\$\$titulo_tipo_actividad\$\$/g, titulo_tipo_actividad)
+//                                    .replace(/\$\$anio\$\$/g, anio)
+//                                    .replace(/\$\$duracion\$\$/g, duracion)
+//                                    .replace(/\$\$fecha_inicio\$\$/g, fecha_inicio)
+//                                    .replace(/\$\$fecha_fin\$\$/g, fecha_fin)
+//                                    .replace(/\$\$tacve\$\$/g, tacve)
+//                                    .replace(/\$\$cvead\$\$/g, cvead)
+//                                    .replace(/\$\$cp\$\$/g, cp)
+//                                    .replace(/\$\$idrow\$\$/g, idrow)
+//                                    .replace(/\$\$key\$\$/g, idrow)//identificador unitario de el row
+//                                    .replace(/\$\$actividadgeneralcve\$\$/g, cve_actividad_general);//identificador unitario de el row
+//                            $('#tabla_actividades').append($(htmlNewRow));
+                            recargar_opcion_menu_mostrar_mensaje('seccion_actividad_docente', true, response_json.error);
 
-                try {
-                    if (response) {
-                        var response_json = $.parseJSON(response);//
-                        var titulo_tipo_actividad = response_json.insertar[0].nombre_tp_actividad;
-                        var anio = response_json.insertar[0].anio;
-                        var duracion = response_json.insertar[0].duracion;
-                        var fecha_inicio = response_json.insertar[0].fecha_inicio;
-                        var fecha_fin = response_json.insertar[0].fecha_fin;
-                        var tacve = response_json.insertar[0].ta_cve;
-                        var cvead = response_json.insertar[0].cve_actividad_docente;
-                        var cve_actividad_general = response_json.insertar[0].actividad_general_cve;
-                        var cp = 0;
-                        var idrow = funcion_obtener_max_id_row_table_actividad() + 1;//Obtiene el maximo index de el row de la tabla de actividades
-                        ////////////
-                        duracion = (duracion === null) ? '' : duracion;
-                        fecha_inicio = (fecha_inicio === null) ? '' : fecha_inicio;
-                        fecha_fin = (fecha_fin === null) ? '' : fecha_fin;
-
-                        var htmlRowTemplate = $('#template_row_nueva_act').html();
-                        var htmlNewRow = htmlRowTemplate.replace(/\$\$titulo_tipo_actividad\$\$/g, titulo_tipo_actividad)
-                                .replace(/\$\$anio\$\$/g, anio)
-                                .replace(/\$\$duracion\$\$/g, duracion)
-                                .replace(/\$\$fecha_inicio\$\$/g, fecha_inicio)
-                                .replace(/\$\$fecha_fin\$\$/g, fecha_fin)
-                                .replace(/\$\$tacve\$\$/g, tacve)
-                                .replace(/\$\$cvead\$\$/g, cvead)
-                                .replace(/\$\$cp\$\$/g, cp)
-                                .replace(/\$\$idrow\$\$/g, idrow)
-                                .replace(/\$\$key\$\$/g, idrow)//identificador unitario de el row
-                                .replace(/\$\$actividadgeneralcve\$\$/g, cve_actividad_general);//identificador unitario de el row
-                        $('#tabla_actividades').append($(htmlNewRow))
-//                        $('#mensaje_error').html(response_json.error);
-//                        $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
-//                        $('#div_error').show();
-//                        setTimeout("$('#div_error').hide()", 6000);
-////                        setTimeout("$('#div_error').hide()", 5000);
-                        recargar_opcion_menu_mostrar_mensaje('seccion_actividad_docente', true, response_json.error);
-                        
+                        }
+                    } catch (e) {
+                        $('#info_actividad_docente').html(response);
                     }
-                } catch (e) {
-                    $('#info_actividad_docente').html(response);
-                }
-            })
-            .fail(function (jqXHR, response) {
-//                $('#div_error').show();
-//                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
-//                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
-            })
-            .always(function () {
-                remove_loader();
-            });
+                })
+                .fail(function (jqXHR, response) {
+                    $('#info_actividad_docente').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                })
+                .always(function () {
+                    remove_loader();
+                });
+    } else {
+        $('#error_carga_archivo').html(html_message("Falta cargar archivos", 'danger'));
+    }
 }
-function funcion_editar(index, id_actividad) {
-    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/' + id_actividad, '#form_actividad_docente_especifico', '#info_actividad_docente');
+
+/**
+ * 
+ * @param {type} element  (this)
+ * @returns {undefined} 
+ * Función del botón editar actividad docente. 
+ */
+function funcion_editar_reg_actividad(element) {
+    var a = hrutes['seccion_actividad_docente'];
+    var cad_split = a.split(":");
+    var obj = $(element);
+    var tp_actividad_cve = obj.data('tacve');
+    var act_doc_cve = obj.data('cvead');
+    data_ajax_post(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/1', null, '#modal_content', {act_doc_cve: act_doc_cve, tp_actividad_cve: tp_actividad_cve});
 }
-function myFunctionActividad() {
-    var x = document.getElementById("ctipo_actividad_docente");
-    data_ajax(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal/' + x.value + '/0/0', null, '#info_actividad_docente');
+/**
+ * 
+ * @param {type} element  (this)
+ * @returns {undefined} 
+ * Función del botón editar actividad docente. 
+ */
+function funcion_actualizar_actividad_docente(element) {
+    var a = hrutes['seccion_actividad_docente'];
+    var cad_split = a.split(":");
+    var obj = $(element);
+    var tp_actividad_cve = obj.data('tpactividadcve');
+    var act_doc_cve = obj.data('invcve');
+    var comprobantecve = obj.data('comprobantecve');
+    var formData = $('#form_actividad_docente_especifico').serialize();
+    formData += '&act_doc_cve=' + act_doc_cve + '&cve_tipo_actividad=' + tp_actividad_cve + '&comprobantecve=' + comprobantecve;//Agrega tipo de actividad
+    if ($('#idc').length) {
+        $.ajax({
+            url: site_url + '/' + cad_split[0] + '/get_add_actividad_docente',
+            data: formData,
+            method: 'POST',
+            beforeSend: function (xhr) {
+                $('#info_actividad_docente').html(create_loader());
+            }
+        })
+                .done(function (response) {
+                    try {
+                        var json = $.parseJSON(response);
+                        recargar_opcion_menu_mostrar_mensaje('seccion_actividad_docente', json.satisfactorio, json.error);
+                    } catch (e) {
+                        $('#info_actividad_docente').html(response);
+                    }
+                })
+                .fail(function (jqXHR, response) {
+//                recargar_opcion_menu_mostrar_mensaje('', false, 'Guardado satisfactorio');
+                    $('info_actividad_docente').html(response);
+                })
+                .always(function () {
+                    remove_loader();
+                });
+    } else {
+        $('#error_carga_archivo').html(html_message("Falta cargar archivos", 'danger'));
+    }
+}
+
+/**
+ * Carga formulario vista de formulario, según la opción del combo seleccionada
+ * @returns {undefined}
+ */
+function function_carga_form_actividad_doc() {
+    var tp_actividad_cve = document.getElementById("ctipo_actividad_docente").value;
+    if (parseInt(tp_actividad_cve) < 1) {
+        $('#id_pie_modal_actividad_docente').hide();
+    } else {
+        $('#id_pie_modal_actividad_docente').show();
+    }
+    var data_post = {tp_actividad_cve: tp_actividad_cve}//Datos a enviar 
+    data_ajax_post(site_url + '/perfil/get_vista_form_act_docente', null, '#info_actividad_docente', data_post);
+
+//    $('#info_actividad_docente').html(response.error);
+//    $('#info_actividad_docente').removeClass('alert-danger').removeClass('alert-warning')
+//            .removeClass('alert-info').removeClass('alert-success').addClass(response.tipo_msg);
 }
 
 function mostrar_horas_fechas(horas) {
@@ -346,6 +397,12 @@ function mostrar_horas_fechas(horas) {
     }
 }
 
+function funcion_guargar(element) {
+    var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
+    var tp_actividad_cve = obj.data('tpactividadcve');
+    var data_post = {tp_actividad_cve: tp_actividad_cve}
+    data_ajax_post(site_url + '/perfil/get_data_ajax_actividad_cuerpo_modal', '#form_actividad_docente_especifico', '#info_actividad_docente', data_post);
+}
 
 
 

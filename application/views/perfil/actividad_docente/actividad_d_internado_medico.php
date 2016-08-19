@@ -24,20 +24,15 @@
             locale: 'es',
             useCurrent: false
         });
+        $("#datetimepicker_anio").datetimepicker({
+            format: "YYYY", // Notice the Extra space at the beginning
+            viewMode: "years"
+        });
     });
     </script>
     <div class="list-group">
         <div class="list-group-item">
                 <div class="panel-body">
-                            <?php if(isset($error)){ ?>
-                            <div class="row">
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                                <div class="col-md-10 col-sm-10 col-xs-10">
-                                           <?php echo html_message($error, $tipo_msg); ?>
-                                </div>
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                            </div>
-                            <?php } ?>
                             <div class='row'>
                                 <div class="col-md-6">
                                      <label for='lbl_rol_desempenia' class="control-label">
@@ -52,9 +47,9 @@
                                             echo $this->form_complete->create_element(array('id' => 'crol_desempenia', 'type' => 'dropdown', 
                                                 'options' => $crol_desempenia, 
                                                 'first' => array('' => $string_values['drop_rol_desempenia']), 
-                                                'value' => '',
+                                                'value' => (isset($crol_desempenia_cve))? $crol_desempenia_cve : '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'placeholder' => '', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_rol_desempenia'] ))); 
                                         ?>
                                    </div>
@@ -73,9 +68,9 @@
                                             echo $this->form_complete->create_element(array('id' => 'cinstitucion_avala', 'type' => 'dropdown', 
                                                 'options' => $cinstitucion_avala, 
                                                 'first' => array('' => $string_values['drop_institucion_edu_avala']), 
-                                                'value' => '',
+                                                'value' => (isset($cinstitucion_avala_cve))? $cinstitucion_avala_cve : '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => 'Institución avala', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'placeholder' => $string_values['lbl_institucion_edu_avala'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_institucion_edu_avala'] ))); 
                                         ?>
                                    </div>
@@ -95,13 +90,11 @@
                                                 <?php
                                                 echo $this->form_complete->create_element(
                                                 array('id'=>'pago_extra', 'type'=>'radio',
-                                                        'value' => 'Si',
+                                                        'value' => '1',
                                                         'attributes'=>array(
+                                                        'checked'=>(isset($pago_extra) AND $pago_extra === '1')? "checked" : "",
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
-//                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );
@@ -114,13 +107,11 @@
                                                 <?php
                                                 echo $this->form_complete->create_element(
                                                 array('id'=>'pago_extra', 'type'=>'radio',
-                                                        'value' => 'No',
+                                                        'value' => '0',
                                                         'attributes'=>array(
+                                                        'checked'=>(isset($pago_extra) AND $pago_extra === '0')? "checked" : "",
                                                         'class'=>'radio-inline m-r-sm',
                                                         'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-//                                                        'checked'=>"checked",
-//                                                        'onchange' =>"mostrar_horas_fechas('block')"    
                                                         )
                                                     )
                                                 );
@@ -144,9 +135,10 @@
                                             echo $this->form_complete->create_element(array('id' => 'cmodulo', 'type' => 'dropdown', 
                                                 'options' => $cmodulo,
                                                 'first' => array('' => $string_values['drop_modulo']), 
-                                                'value' => '',
+                                                'value' => (isset($cmodulo_cve))? $cmodulo_cve : '',
                                                 'attributes' => array('name' => 'modulo_name', 'class' => 'form-control', 
-                                                'placeholder' => 'Módulo', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'placeholder' => $string_values['lbl_modulo'], 
+                                                'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_modulo'] ))); 
                                         ?>
                                    </div>
@@ -161,15 +153,15 @@
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <span class="fa fa-dot-circle-o"> </span>
+                                            <span class="glyphicon glyphicon-user"> </span>
                                         </span>
                                         <?php 
                                             echo $this->form_complete->create_element(array('id' => 'cmodalidad', 'type' => 'dropdown', 
                                                 'options' => $cmodalidad, 
                                                 'first' => array('' => $string_values['drop_modalidad']), 
-                                                'value' => '',
+                                                'value' => (isset($cmodalidad_cve))? $cmodalidad_cve : '',
                                                 'attributes' => array('name' => 'modalidad_name', 'class' => 'form-control', 
-                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'placeholder' => $string_values['lbl_modalidad'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_modalidad'] ))); 
                                         ?>
                                    </div>
@@ -180,19 +172,18 @@
                                             <b class="rojo">*</b>
                                             <?php echo $string_values['lbl_anio_que_impartio_curso']; ?>
                                         </label>
-                                        <div class="input-group">
+                                        <div class="input-group date datepicker" id="datetimepicker_anio">
                                         <span class="input-group-addon">
-                                            <!--<span class="glyphicon glyphicon-calendar"> </span>-->
-                                            <span class="fa fa-calendar"> </span>
+                                            <span class="glyphicon glyphicon-calendar"> </span>
                                         </span>
                                         <?php
                                             echo $this->form_complete->create_element(
-                                            array('id'=>'actividad_anios_dedicados_docencia','type'=>'number',
-                                                    'value' => '',
+                                            array('id'=>'actividad_anios_dedicados_docencia','type'=>'text',
+                                                    'value' => (isset($actividad_anios_dedicados_docencia))?$actividad_anios_dedicados_docencia:'',
                                                     'attributes'=>array(
                                                     'class'=>'form-control',
                                                     'placeholder'=>$string_values['lbl_anio_que_impartio_curso'],
-                                                    'min'=> '1900',
+                                                    'min'=> '1950',
                                                     'max'=> '2050',
                                                     'data-toggle'=>'tooltip',
                                                     'data-placement'=>'bottom',
@@ -221,7 +212,7 @@
                                             <?php
                                             echo $this->form_complete->create_element(
                                             array('id'=>'periodo_fecha_inicio_pick','type'=>'text',
-                                                    'value' => '',
+                                                    'value' => (isset($periodo_fecha_inicio_pick))? $periodo_fecha_inicio_pick : '',
                                                     'attributes'=>array(
                                                     'class'=>'form-control',
                                                     'placeholder'=>$string_values['lbl_duracion_fecha_inicio'],
@@ -246,7 +237,7 @@
                                             <?php
                                             echo $this->form_complete->create_element(
                                             array('id'=>'periodo_fecha_fin_pick','type'=>'text',
-                                                    'value' => '',
+                                                    'value' => (isset($periodo_fecha_fin_pick))? $periodo_fecha_fin_pick : '',
                                                     'attributes'=>array(
                                                     'class'=>'form-control',
                                                     'placeholder'=>$string_values['lbl_duracion_fecha_final'],
@@ -266,62 +257,11 @@
                             
                             </div>
                         <br>
-                            <div class="row">
-                                <div class="col-md-6">
-                                        <label for='radio_duracion_fecha' class="control-label">
-                                            <?php echo $string_values['lbl_tipo_comprobante']; ?>
-                                        </label>
-                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'ctipo_comprobante', 
-                                                'type' => 'dropdown', 
-                                                'options' => $ctipo_comprobante, 
-                                                'first' => array('' => $string_values['drop_tipo_comprobante']), 
-                                                'value' => '',
-                                                'class'=>'form-control',
-                                                'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
-                                                'placeholder' => $string_values['title_tipo_comprobante'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['title_tipo_comprobante'] ))); 
-                                        ?>
-                                        <?php echo form_error_format('ctipo_comprobante'); ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <!--<li class="list-group-item">-->
-                                        <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
-                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">
-                                        <label for='radio_duracion_fecha' class="control-label">
-                                            <?php echo $string_values['lbl_comprobante']; ?>
-                                        </label>
-                                        <div class="input-group">                                           
-                                             <?php
-                                                echo $this->form_complete->create_element(
-                                                array('id'=>'text_comprobante','type'=>'text',
-                                                        'value' => '',
-                                                        'attributes'=>array(
-                                                        'class'=>'form-control',
-                                                        'placeholder'=>$string_values['title_cargar_comprobante'],
-                                                        'min'=> '0',
-                                                        'max'=> '100',
-                                                        'data-toggle'=>'tooltip',
-                                                        'data-placement'=>'bottom',
-                                                        'title'=>$string_values['title_cargar_comprobante'],
-                                                        'readonly'=>'readonly',
-                                                        )
-                                                    )
-                                                );
-                                             ?>
-                                           
-                                          <div class="input-group-btn">
-                                            <button type="button" aria-expanded="false" class="btn btn-default browse">
-                                                <span aria-hidden="true" class="glyphicon glyphicon-file"> </span>
-                                            </button>
-                                            <a role="button" tabindex="0" data-container="body" data-trigger="focus" data-toggle="popover" data-placement="top" data-title="Comprobante" data-content="Aquí usted puede seleccionar el tipo de comprobante que se le otorgo en el curso y posteriormente subirlo al sistema para su verificación" class="btn btn-default" data-original-title="" title="">
-                                                <span aria-hidden="true" class="glyphicon glyphicon-question-sign"> </span>
-                                            </a>
-                                          </div>
-                                        </div><span id="help-tipo-comprobante" class="help-block">Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en el curso</span>
-                                        <?php echo form_error_format('text_comprobante'); ?>
-                                </div>
-                            </div>
+                            <?php 
+                                if(isset($formulario_carga_comprobante)){
+                                    echo $formulario_carga_comprobante;
+                                }
+                            ?>
                             
                     </div>
                 </div>

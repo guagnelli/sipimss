@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
 //    pr($tipo_msg);
 $colapso_div_ejercicio_profesional = 'collapse in';
 //        $colapso_div_ejercicio_profesional = 'collapse';
@@ -101,7 +100,9 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                     </div>
                             <?php if (isset($datos_tabla_actividades_docente)) { ?>
                         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-                            <button type="button" class="btn btn-success btn-lg" id="btn_agregar_actividad_modal" data-toggle="modal" data-target="#modal_censo">
+                            <button type="button" class="btn btn-success btn-lg" id="btn_agregar_actividad_modal_nueva" 
+                                    data-actgralcve =" <?php echo $actividad_general_cve;?>"
+                                    data-toggle="modal" data-target="#modal_censo">
                             <?php echo $string_values['btn_add_new_actividad']; ?>
                             </button>
                         </div>
@@ -121,6 +122,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                         <th><?php echo $string_values['tab_titulo_pro_salud_duracion'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_fecha_inicio'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_fecha_fin'] ?></th>
+                                        <th><?php echo $string_values['tab_titulo_comprobante'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_editar'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_eliminar'] ?></th>
                                         <!--<th>Opciones</th>-->
@@ -145,6 +147,16 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                             $reg_principal = '';
                                             $cp = '0';
                                         }
+                                        $idcomprobante = $value['comprobante'];
+                                        if (!is_null($idcomprobante)) {//Valida existencia del comprobante
+                                            //Botón comprobante
+                                            $idcomprobante = $this->seguridad->encrypt_base64($idcomprobante); //Encripta
+                                            $btn_comprobante = '<a href="' . site_url('administracion/ver_archivo/' . $idcomprobante) . '" target="_blank">' . $string_values['lbl_ver_comprobante'] . '</a>';
+                                        } else {
+                                            $comprobante = 0;
+                                            $btn_comprobante = '';
+                                        }
+                                        
                                         echo "<tr class='" . $reg_principal . "' id='id_row_" . $key . "' data-cp='" . $cp . "' data-keyrow=" . $key . " >";
                                         echo "<td >" . $this->form_complete->create_element(
                                                 array('id' => 'radio_curso_principal', 'type' => 'radio',
@@ -167,12 +179,20 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                         echo "<td >" . $value['duracion'] . "</td>";
                                         echo "<td >" . $value['fecha_inicio'] . "</td>";
                                         echo "<td >" . $value['fecha_fin'] . "</td>";
+                                         echo "<td>" . $btn_comprobante . "</td>";
                                         echo '<td>'
-                                        . '<button type="button" '
+                                        . '<button '
+                                        . 'type="button" '
                                         . 'class="btn btn-link btn-sm" '
-                                        . 'id="btn_editar_actividad_modal" '
-                                        . $string_values['tab_titulo_editar']
-                                        . '</button>'
+                                        . 'data-idrow ="' . $key . '"'
+                                        . 'data-becacve ="' . $value['cve_actividad_docente'] . '"'
+                                        . 'data-comprobantecve ="' . $idcomprobante . '"'
+                                        . 'data-tacve ="' . $value['ta_cve'] . '"'
+                                        . 'data-cvead ="' . $value['cve_actividad_docente'] . '"'
+                                        . 'data-toggle="modal"'
+                                        . 'data-target="#modal_censo"'
+                                        . 'onclick="funcion_editar_reg_actividad(this)" >' .
+                                        $string_values['tab_titulo_editar']
                                         . '</td>';
                                         echo '<td>'
                                         . '<button '

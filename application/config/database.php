@@ -76,12 +76,27 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn' => '',
+    
+//    'hostname' => '11.32.41.238',
+//    'username' => 'sipimss',
+//    'password' => 'sipimss',
+//    'database' => 'sipimss',
+
+//    'hostname' => 'vps-1214838-x.dattaweb.com',
+//    'username' => 'censo_user',
+//    'password' => 'el#:(vlaluna',
+//    'database' => 'censo_v678',
+    
+//    'hostname' => 'localhost',
+//    'username' => 'root',
+//    'password' => 'mysql',
+//    'database' => 'sipimss',
+    
     'hostname' => '11.32.41.238',
-    /*'hostname' => 'localhost',*/
     'username' => 'sipimss',
     'password' => 'sipimss',
     'database' => 'sipimss_20160815',
-    /*'database' => 'sipimss_18_08',*/
+    
     
     'dbdriver' => 'mysqli',
     'dbprefix' => '',

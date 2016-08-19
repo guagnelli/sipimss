@@ -360,6 +360,11 @@ $config = array(
             'label' => 'folio',
             'rules' => 'trim|required|max_length[35]' //alfanumerico y guión
         ),
+        'is_curso_tutorizado' => array(
+            'field' => 'is_curso_tutorizado',
+            'label' => 'tipo curso',
+            'rules' => 'required' //boolean
+        ),
         'actividad_anios_dedicados_docencia' => array(
             'field' => 'actividad_anios_dedicados_docencia',
             'label' => 'de años',

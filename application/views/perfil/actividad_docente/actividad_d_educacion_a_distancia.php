@@ -24,20 +24,15 @@
             locale: 'es',
             useCurrent: false
         });
+        $("#datetimepicker_anio").datetimepicker({
+            format: "YYYY", // Notice the Extra space at the beginning
+            viewMode: "years"
+        });
     });
     </script>
     <div class="list-group">
         <div class="list-group-item">
                 <div class="panel-body">
-                            <?php if(isset($error)){ ?>
-                            <div class="row">
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                                <div class="col-md-10 col-sm-10 col-xs-10">
-                                           <?php echo html_message($error, $tipo_msg); ?>
-                                </div>
-                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                            </div>
-                            <?php } ?>
                             <div class='row'>
                                 <!--<div class="form-group col-xs-10 col-md-10 col-md-offset-1 col-md-offset-1">-->
                                  <div class="col-md-6">
@@ -64,7 +59,7 @@
                                    <?php   echo form_error_format('nombre_curso'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                     <label for='lbl_tipo_curso' class="control-label">
+                                    <label for='lbl_tipo_curso' class="control-label">
                                          <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_tipo_curso']; ?>
                                     </label>
@@ -76,9 +71,10 @@
                                             echo $this->form_complete->create_element(array('id' => 'ctipo_curso', 'type' => 'dropdown', 
                                                 'options' => $ctipo_curso, 
                                                 'first' => array('' => $string_values['drop_tipo_curso']), 
-                                                'value' => '',
+                                                'value' => isset($ctipo_curso_cve)? $ctipo_curso_cve: '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'placeholder' => '', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+//                                                'onchange' =>  "cargar_curso()",   
                                                 'title' => $string_values['lbl_tipo_curso'] ))); 
                                         ?>
                                    </div>
@@ -87,32 +83,29 @@
                             </div>
                             <div class='row'>
                                 <div class="col-md-6">
-                                        <label for='lbl_anio_que_impartio_curso' class="control-label">
-                                            <b class="rojo">*</b>
-                                            <?php echo $string_values['lbl_anio_que_impartio_curso']; ?>
-                                        </label>
-                                        <div class="input-group">
+                                    <label for='lbl_tutorizado_no_tuto' class="control-label">
+                                         <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_tutorizado_no_tuto']; ?>
+                                    </label>
+                                    <div class="input-group">
                                         <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"> </span>
+                                            <span class="glyphicon glyphicon-user"> </span>
                                         </span>
-                                        <?php
-                                            echo $this->form_complete->create_element(
-                                            array('id'=>'actividad_anios_dedicados_docencia','type'=>'number',
-                                                    'value' => '',
-                                                    'attributes'=>array(
-                                                    'class'=>'form-control',
-                                                    'placeholder'=>$string_values['lbl_anio_que_impartio_curso'],
-                                                    'min'=> '1900',
-                                                    'max'=> '2050',
-                                                    'data-toggle'=>'tooltip',
-                                                    'data-placement'=>'bottom',
-                                                    'title'=>$string_values['lbl_anio_que_impartio_curso'],
-                                                    )
-                                                )
-                                            );
+                                        <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'is_curso_tutorizado', 'type' => 'dropdown', 
+                                                'options' => array(0 => $string_values['option_no_tutorizado'],1 => $string_values['option_tutorizado']), 
+                                                'first' => array('' => $string_values['drop_tipo_curso_tutorizado']), 
+                                                'value' => isset($is_curso_tutorizado)? $is_curso_tutorizado: '',
+                                                'attributes' => array('name' => 'categoria', 
+                                                'class' => 'form-control', 
+                                                'data-placement' => 'top', 
+                                                'placeholder' => '', 'data-toggle' => 'tooltip', 
+                                                'data-placement' => 'top', 
+//                                                'onchange' =>  "cargar_curso()",   
+                                                'title' => $string_values['lbl_tutorizado_no_tuto'] ))); 
                                         ?>
-                                        </div>
-                                        <?php echo form_error_format('actividad_anios_dedicados_docencia'); ?>
+                                   </div>
+                                   <?php   echo form_error_format('is_curso_tutorizado'); ?>
                                 </div>
                                 <div class="col-md-6">
                                     <label for='lbl_folio' class="control-label">
@@ -152,13 +145,41 @@
                                             echo $this->form_complete->create_element(array('id' => 'crol_desempenia', 'type' => 'dropdown', 
                                                 'options' => $crol_desempenia, 
                                                 'first' => array('' => $string_values['drop_rol_desempenia']), 
-                                                'value' => '',
+                                                'value' => (isset($crol_desempenia_cve))? $crol_desempenia_cve : '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'placeholder' => '', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'title' => $string_values['lbl_rol_desempenia'] ))); 
                                         ?>
                                    </div>
                                    <?php   echo form_error_format('crol_desempenia'); ?>
+                                </div>
+                                <div class="col-md-6">
+                                        <label for='lbl_anio_que_impartio_curso' class="control-label">
+                                            <b class="rojo">*</b>
+                                            <?php echo $string_values['lbl_anio_que_impartio_curso']; ?>
+                                        </label>
+                                        <div class="input-group date datepicker" id="datetimepicker_anio">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"> </span>
+                                        </span>
+                                        <?php
+                                            echo $this->form_complete->create_element(
+                                            array('id'=>'actividad_anios_dedicados_docencia','type'=>'text',
+                                                    'value' => (isset($actividad_anios_dedicados_docencia))?$actividad_anios_dedicados_docencia:'',
+                                                    'attributes'=>array(
+                                                    'class'=>'form-control',
+                                                    'placeholder'=>$string_values['lbl_anio_que_impartio_curso'],
+                                                    'min'=> '1950',
+                                                    'max'=> '2050',
+                                                    'data-toggle'=>'tooltip',
+                                                    'data-placement'=>'bottom',
+                                                    'title'=>$string_values['lbl_anio_que_impartio_curso'],
+                                                    )
+                                                )
+                                            );
+                                        ?>
+                                        </div>
+                                        <?php echo form_error_format('actividad_anios_dedicados_docencia'); ?>
                                 </div>
                             </div>
                         <br>
@@ -178,8 +199,7 @@
                                                 'attributes'=>array(
                                                 'class'=>'radio-inline m-r-sm',
                                                 'title'=> $string_values['radio_duracion_horas'],
-    //                                                    'disabled'=> '',
-    //                                                        'checked'=>"checked",
+                                                'checked'=>(isset($duracion) AND $duracion === "hora_dedicadas")?"checked":"",
                                                 'onchange' =>"mostrar_horas_fechas('block')"    
                                                 )
                                             )
@@ -197,7 +217,7 @@
                                                'attributes'=>array(
                                                'class'=>'radio-inline m-r-sm',
                                                'title'=> $string_values['radio_duracion_fecha'],
-    //                                                    'disabled'=> '',
+                                               'checked'=>(isset($duracion) AND $duracion === "fecha_dedicadas")?"checked":"",
                                                'onchange' =>"mostrar_horas_fechas('none')"    
                                                )
                                            )
@@ -224,7 +244,7 @@
                                         <?php
                                             echo $this->form_complete->create_element(
                                             array('id'=>'hora_dedicadas','type'=>'number',
-                                                    'value' => '',
+                                                    'value' => (isset($hora_dedicadas))?$hora_dedicadas:'',
                                                     'attributes'=>array(
                                                     'class'=>'form-control',
                                                     'placeholder'=>$string_values['radio_duracion_horas'],
@@ -233,7 +253,6 @@
                                                     'data-toggle'=>'tooltip',
                                                     'data-placement'=>'bottom',
                                                     'title'=>$string_values['radio_duracion_horas'],
-//                                                    'style'=>"display: none"
                                                     )
                                                 )
                                             );
@@ -251,7 +270,7 @@
                                             <?php
                                             echo $this->form_complete->create_element(
                                             array('id'=>'fecha_inicio_pick','type'=>'text',
-                                                    'value' => '',
+                                                    'value' => (isset($fecha_inicio_pick))? $fecha_inicio_pick : '',
                                                     'attributes'=>array(
                                                     'class'=>'form-control',
                                                     'placeholder'=>$string_values['lbl_duracion_fecha_inicio'],
@@ -279,7 +298,7 @@
                                             <?php
                                             echo $this->form_complete->create_element(
                                             array('id'=>'fecha_fin_pick','type'=>'text',
-                                                    'value' => '',
+                                                    'value' => (isset($fecha_fin_pick))? $fecha_fin_pick : '',
                                                     'attributes'=>array(
                                                     'class'=>'form-control',
                                                     'placeholder'=>$string_values['lbl_duracion_fecha_final'],
@@ -299,63 +318,11 @@
                                 </div>
                             </div>
                         <br>
-                            <div class="row">
-                                <div class="col-md-6">
-                                        <label for='lbl_tipo_comprobante' class="control-label">
-                                            <?php echo $string_values['lbl_tipo_comprobante']; ?>
-                                        </label>
-                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'ctipo_comprobante', 
-                                                'type' => 'dropdown', 
-                                                'options' => $ctipo_comprobante, 
-                                                'first' => array('' => $string_values['drop_tipo_comprobante']), 
-                                                'value' => '',
-                                                'class'=>'form-control',
-                                                'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
-                                                'placeholder' => $string_values['title_tipo_comprobante'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['title_tipo_comprobante'] ))); 
-                                        ?>
-                                        <?php echo form_error_format('ctipo_comprobante'); ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <!--<li class="list-group-item">-->
-                                        <!--<input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">Maneja la carga del archivo-->
-                                        <input id="archivo-comprobante" type="file" name="file" class="file" accept="application/pdf">
-                                        <label for='radio_duracion_fecha' class="control-label">
-                                            <?php echo $string_values['lbl_comprobante']; ?>
-                                        </label>
-                                        <div class="input-group">                                           
-                                             <?php
-                                                echo $this->form_complete->create_element(
-                                                array('id'=>'text_comprobante','type'=>'text',
-                                                        'value' => '',
-                                                        'attributes'=>array(
-                                                        'class'=>'form-control',
-                                                        'placeholder'=>$string_values['title_cargar_comprobante'],
-                                                        'min'=> '0',
-                                                        'max'=> '100',
-                                                        'data-toggle'=>'tooltip',
-                                                        'data-placement'=>'bottom',
-                                                        'title'=>$string_values['title_cargar_comprobante'],
-                                                        'readonly'=>'readonly',
-                                                        )
-                                                    )
-                                                );
-                                             ?>
-                                           
-                                          <div class="input-group-btn">
-                                            <button type="button" aria-expanded="false" class="btn btn-default browse">
-                                                <span aria-hidden="true" class="glyphicon glyphicon-file"> </span>
-                                            </button>
-                                            <a role="button" tabindex="0" data-container="body" data-trigger="focus" data-toggle="popover" data-placement="top" data-title="Comprobante" data-content="Aquí usted puede seleccionar el tipo de comprobante que se le otorgo en el curso y posteriormente subirlo al sistema para su verificación" class="btn btn-default" data-original-title="" title="">
-                                                <span aria-hidden="true" class="glyphicon glyphicon-question-sign"> </span>
-                                            </a>
-                                          </div>
-                                        </div><span id="help-tipo-comprobante" class="help-block">Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en el curso</span>
-                                        <?php echo form_error_format('text_comprobante'); ?>
-                                </div>
-                            </div>
-                            
+                            <?php 
+                                if(isset($formulario_carga_comprobante)){
+                                    echo $formulario_carga_comprobante;
+                                }
+                            ?>
                     </div>
                 </div>
                 <?php if(isset($pie_pag)){ echo $pie_pag; }?>
