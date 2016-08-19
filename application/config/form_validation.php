@@ -799,6 +799,49 @@ $config = array(
             'rules' => 'trim|required|max_length[100]|alpha_numeric_spaces' 
         ),
     ),
+    'informacion_general'=>array(
+        'emp_ape_paterno_equerido'=>array(
+            'field'=>'emp_ape_paterno',        
+            'label'=>'apellido paterno',        
+            'rules'=>'required|alpha_numeric_spaces|max_length[30]'        
+        ),
+        'emp_ape_materno'=>array(
+            'field'=>'emp_ape_materno',        
+            'label'=>'apellido materno',        
+            'rules'=>'alpha_numeric_spaces|max_length[30]'        
+        ),
+        'emp_nombre'=>array(
+            'field'=>'emp_nombre',        
+            'label'=>'nombre',        
+            'rules'=>'required|alpha_numeric_spaces|max_length[30]'      
+        ),
+        'CESTADO_CIVIL_CVE'=>array(
+            'field'=>'CESTADO_CIVIL_CVE',        
+            'label'=>'estado civil',        
+            'rules'=>'required|numeric'        
+        ),
+        'EMP_EMAIL'=>array(
+            'field'=>'EMP_EMAIL',        
+            'label'=>'correo electrónico',        
+            'rules'=>'trim|required|valid_email'        
+        ),
+        'EMP_TEL_PARTICULAR'=>array(
+            'field'=>'EMP_TEL_PARTICULAR',        
+            'label'=>'teléfono particular',        
+            'rules'=>'required|alpha_numeric_spaces'        
+        ),
+        'EMP_TEL_LABORAL'=>array(
+            'field'=>'EMP_TEL_LABORAL',        
+            'label'=>'teléfono laboral',        
+            'rules'=>'required|alpha_numeric_spaces'        
+        ),
+        'EMP_NUM_FUE_IMSS'=>array(
+            'field'=>'EMP_NUM_FUE_IMSS',        
+            'label'=>'trabajos fuera del IMSS',        
+            'rules'=>'numeric|greater_than[0]'        
+        ),
+        
+    ),
 
     /*matricula
     delegacion

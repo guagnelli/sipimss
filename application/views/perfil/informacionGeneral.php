@@ -40,7 +40,7 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_paterno'],
-                            'maxlength'=>15,                              
+                            'maxlength'=>30,                              
                             )
                         )
                     );
@@ -50,10 +50,12 @@
         </div>
         <div class="form-group col-xs-4 col-md-4">
             <label for='perfil_apellido_materno' class="control-label">
-                <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_apellido_materno']; ?>
             </label>
             <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-pencil"> </span>
+                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
@@ -67,7 +69,7 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_materno'],
-                            'maxlength'=>15,
+                            'maxlength'=>30,
                             )
                         )
                     );
@@ -81,6 +83,9 @@
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre']; ?>
             </label>
             <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-pencil"> </span>
+                </span>
             <?php
             echo $this->form_complete->create_element(
                     array(
@@ -94,7 +99,7 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_nombre'],
-                            'maxlength'=>15,
+                            'maxlength'=>30,
                             )
                         )
                     );
@@ -106,7 +111,6 @@
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_edad' class="control-label">
-                <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_edad']; ?>
             </label>
             <div class="input-group">
@@ -125,7 +129,6 @@
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'maxlength'=>30,
                             'readonly' => 'readonly'
                             )
                         )
@@ -136,7 +139,6 @@
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_genero' class="control-label">
-                <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_genero']; ?>
             </label>
             <div class="input-group">

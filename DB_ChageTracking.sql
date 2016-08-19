@@ -262,3 +262,42 @@ ADD COLUMN IS_LOADED NUMERIC(1) DEFAULT 0 COMMENT 'EL REGISTRO SE CARGÓ POR SIS
 
 ALTER TABLE EMP_EDUCACION_DISTANCIA
 ADD COLUMN IS_LOADED NUMERIC(1) DEFAULT 0 COMMENT 'EL REGISTRO SE CARGÓ POR SISTEMA O POR USUARIO 0->NO, 1->SI';
+
+--------------19/08/2016--------------
+ALTER TABLE conv_periodo_horas
+DROP FOREIGN key `conv_periodo_horas_ibfk_4`;
+
+ALTER TABLE evaluacion_curso_for_profesonal
+DROP FOREIGN key `evaluacion_curso_for_profesonal_ibfk_2`;
+
+ALTER TABLE hist_efp_validacion_curso
+DROP FOREIGN KEY hist_efp_validacion_curso_ibfk_1;
+
+ALTER TABLE sipimss_20160815.rform_prof_tematica
+DROP FOREIGN KEY emp_formacion_profesional_efpfrk; 
+
+
+ALTER TABLE sipimss_20160815.emp_formacion_profesional 
+MODIFY COLUMN EMP_FORMACION_PROFESIONAL_CVE int NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE conv_periodo_horas ADD
+CONSTRAINT `conv_periodo_horas_ibfk_4` 
+FOREIGN KEY (`EMP_FORMACION_PROFESIONAL_CVE`) 
+REFERENCES `emp_formacion_profesional` (`EMP_FORMACION_PROFESIONAL_CVE`);
+
+ALTER TABLE evaluacion_curso_for_profesonal ADD
+CONSTRAINT `evaluacion_curso_for_profesonal_ibfk_2` 
+FOREIGN KEY (`EMP_FORMACION_PROFESIONAaL_CVE`) 
+REFERENCES `emp_formacion_profesional` (`EMP_FORMACION_PROFESIONAL_CVE`);
+
+ALTER TABLE hist_efp_validacion_curso ADD
+  CONSTRAINT `hist_efp_validacion_curso_ibfk_1` 
+  FOREIGN KEY (`EMP_FORMACION_PROFESIONAL_CVE`) 
+  REFERENCES `emp_formacion_profesional` (`EMP_FORMACION_PROFESIONAL_CVE`);
+  
+ALTER TABLE sipimss_20160815.rform_prof_tematica ADD
+CONSTRAINT `emp_formacion_profesional_efpfrk` 
+FOREIGN KEY (`EMP_FORMACION_PROFESIONAL_CVE`) 
+REFERENCES `emp_formacion_profesional` (`EMP_FORMACION_PROFESIONAL_CVE`);
+
+

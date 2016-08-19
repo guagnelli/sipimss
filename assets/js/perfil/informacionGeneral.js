@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#seccion_info_general").on('click', function () {
+    $("#btn_informacion_general_personal").on('click', function () {
         //alert($("#form_informacion_general").attr("action"));
         var action = $("#form_informacion_general").attr("action");
         var form_data = $("#form_informacion_general").serialize();
@@ -13,18 +13,22 @@ $(document).ready(function () {
         })
                 .done(function (response) {
                     //alert(response)
-                    var resp = $.parseJSON(response);
-                    $('#msg_general').show();        
-                    $('#msg_general').text(resp.message);
-                    //alert($('#msg_general').attr("class"));
-                    if(resp.result==true){
-                         $('#msg_general').addClass('alert-success');
-                    }else{
-                        $('#msg_general').addClass('alert-danger');
+                    try{
+                        var resp = $.parseJSON(response);
+                        $('#msg_general').show();        
+                        $('#msg_general').text(resp.message);
+                        //alert($('#msg_general').attr("class"));
+                        if(resp.result==true){
+                             $('#msg_general').addClass('alert-success');
+                        }else{
+                            $('#msg_general').addClass('alert-danger');
+                        }
+                        setTimeout("$('#msg_general').hide()", 5000);
+                        recargar_fecha_ultima_actualizacion();//Recarga la fecha de la ultima actualización del modulo perfil
+                        $("#seccion_info_general").html(resp.content);
+                    }catch(e){
+                        $("#seccion_info_general").html(response);
                     }
-                    setTimeout("$('#msg_general').hide()", 5000);
-                    recargar_fecha_ultima_actualizacion();//Recarga la fecha de la ultima actualización del modulo perfil
-                    $("#seccion_info_general").html(resp.content);
                     
                 })
                 .fail(function (jqXHR, response) {

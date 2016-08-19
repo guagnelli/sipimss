@@ -31,7 +31,6 @@ class Perfil extends MY_Controller {
 
     /**
      * 
-     * @author Ricardo Sanchez S
      */
     public function index() {
         //echo "SOY UN INDEX....";
@@ -69,30 +68,35 @@ class Perfil extends MY_Controller {
 
         /* Esto es de información general */
         if ($this->input->post()) {
-            //pr("Validating-data, Saving-data");
-            //pr($this->input->post());
-            $this->load->model("Registro_model", "reg");
-            $empData = $this->input->post();
-            foreach ($empData as $key => $field) {
-                if (empty($field)) {
-                    unset($empData[$key]);
+            $this->config->load('form_validation'); //Cargar archivo con validaciones
+            $validations = $this->config->item('informacion_general'); //Obtener validaciones de archivo general
+            $this->form_validation->set_rules($validations); //Añadir validaciones
+           if($this->form_validation->run()){
+                //pr("Validating-data, Saving-data");
+                //pr($this->input->post());
+                $this->load->model("Registro_model", "reg");
+                $empData = $this->input->post();
+                foreach ($empData as $key => $field) {
+                    if (empty($field)) {
+                        unset($empData[$key]);
+                    }
                 }
+                $id = $empData["EMPLEADO_CVE"];
+                unset($empData["EMPLEADO_CVE"]);
+
+                //pr($empData);
+                //echo $this->reg->update_registro_empleado($empData,$id);
+                if ($this->reg->update_registro_empleado($empData, $id) == 1) {
+                    $response['message']=$string_values['save_informacion_personal'];
+                    $response['result'] = "true";
+                }else{
+                    $response['message']=$string_values['error_informacion_personal'];
+                    $response['result'] = false;
+                }
+                $response["content"] = $this->_load_general_info_form(TRUE);
+                echo json_encode($response);
+                return 0;
             }
-            $id = $empData["EMPLEADO_CVE"];
-            unset($empData["EMPLEADO_CVE"]);
-            
-            //pr($empData);
-            //echo $this->reg->update_registro_empleado($empData,$id);
-            if ($this->reg->update_registro_empleado($empData, $id) == 1) {
-                $response['message']=$string_values['save_informacion_personal'];
-                $response['result'] = "true";
-            }else{
-                $response['message']=$string_values['error_informacion_personal'];
-                $response['result'] = false;
-            }
-            $response["content"] = $this->_load_general_info_form(TRUE);
-            echo json_encode($response);
-            return 0;
         }
         $this->_load_general_info_form();
     }
