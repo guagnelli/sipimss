@@ -97,24 +97,6 @@ class Perfil extends MY_Controller {
                 echo json_encode($response);
                 return 0;
             }
-<<<<<<< HEAD
-=======
-            $id = $empData["EMPLEADO_CVE"];
-            unset($empData["EMPLEADO_CVE"]);
-
-            //pr($empData);
-            //echo $this->reg->update_registro_empleado($empData,$id);
-            if ($this->reg->update_registro_empleado($empData, $id) == 1) {
-                $response['message'] = $string_values['save_informacion_personal'];
-                $response['result'] = "true";
-            } else {
-                $response['message'] = $string_values['error_informacion_personal'];
-                $response['result'] = false;
-            }
-            $response["content"] = $this->_load_general_info_form(TRUE);
-            echo json_encode($response);
-            return 0;
->>>>>>> 9b21cd42ae3aa5d75537fa9270b44788475d21ab
         }
         $this->_load_general_info_form();
     }

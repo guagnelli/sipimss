@@ -808,17 +808,17 @@ $config = array(
         'emp_ape_paterno_equerido'=>array(
             'field'=>'emp_ape_paterno',        
             'label'=>'apellido paterno',        
-            'rules'=>'required|alpha_numeric_spaces|max_length[30]'        
+            'rules'=>'required|alpha_numeric_accent_space|max_length[30]'        
         ),
         'emp_ape_materno'=>array(
             'field'=>'emp_ape_materno',        
             'label'=>'apellido materno',        
-            'rules'=>'alpha_numeric_spaces|max_length[30]'        
+            'rules'=>'alpha_numeric_accent_space|max_length[30]'        
         ),
         'emp_nombre'=>array(
             'field'=>'emp_nombre',        
             'label'=>'nombre',        
-            'rules'=>'required|alpha_numeric_spaces|max_length[30]'      
+            'rules'=>'required|alpha_numeric_accent_space|max_length[30]'      
         ),
         'CESTADO_CIVIL_CVE'=>array(
             'field'=>'CESTADO_CIVIL_CVE',        
