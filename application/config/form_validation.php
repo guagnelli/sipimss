@@ -722,6 +722,55 @@ $config = array(
             'rules' => 'required'
         )
     ),
+    'form_ejercicio_profesional' => array(
+        array(
+            'field' => 'ejercicio_profesional',
+            'label' => 'Ejercicio profesional docente',
+            'rules' => 'required|integer'
+        ),
+    ),
+    'form_formacion_docente' => array(
+        array(
+            'field' => 'duracion',
+            'label' => 'Duración',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'modalidad',
+            'label' => 'Modalidad',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'institucion',
+            'label' => 'Institución que imparte',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'tipo_curso',
+            'label' => 'Tipo de curso',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'tipo_formacion',
+            'label' => 'Tipo de formación',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'fd_anio',
+            'label' => 'Año',
+            'rules' => 'trim|required|exact_length[4]|integer'
+        ),
+        array(
+            'field' => 'tematica[]',
+            'label' => 'Temática',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        )
+    ),
       'form_beca' => array(
         'fecha_inicio' => array(
             'field' => 'fecha_inicio',

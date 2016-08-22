@@ -66,7 +66,8 @@ class Enum_ecg extends MyEnum3 {
             cbeca_interrumpida = 'cbeca_interrumpida', 
             cclase_beca = 'cclase_beca',
             csubtipo_formacion_salud = 'csubtipo_formacion_salud',
-            ctipo_formacion_salud = 'ctipo_formacion_salud'
+            ctipo_formacion_salud = 'ctipo_formacion_salud',
+            ctematica = 'ctematica'
     ;
     /*
       guardar actuación (evaluaciones)

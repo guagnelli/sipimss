@@ -112,8 +112,6 @@ $config['estados_bono'] = array(
         'tareas' => array(8, 9), 'no_acceso_tipo_usuarios' => array(), 'validacion_estado_anterior' => array()),
 );
 
-
-
 $config['usuarios_bono'] = array(
     'COORDINADOR' => array('id' => 1, 'permisos' => array(6, 1, 2, 3, 11, 12, 10, 13)),
     'VALIDADOR' => array('id' => 2, 'permisos' => array(6, 8, 9, 13)),
@@ -217,7 +215,7 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'csubtipo_formacion_profesional' => array('id'=>'SUB_FOR_PRO_CVE', 'nombre'=>'SUB_FOR_PRO_NOMBRE', 'where'=>null),
     'ctipo_formacion_salud' => array('id'=>'TIP_FORM_SALUD_CVE', 'nombre'=>'TIP_FORM_SALUD_NOMBRE', 'where'=>null),
     'csubtipo_formacion_salud' => array('id'=>'CSUBTIP_FORM_SALUD_CVE', 'nombre'=>'SUBTIP_NOMBRE', 'where'=>null),
-
+    'ctematica' => array('id'=>'TEMATICA_CVE', 'nombre'=>'TEM_NOMBRE', 'where'=>null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 
@@ -400,6 +398,68 @@ $config['opciones_tipo_material'] = array(
     1=>array('opt_tipo_material'=>'cantidad_hojas'),
     3=>array('nom_tipo_material'=>'nombre_unidad', 'opt_tipo_material'=>'numero_horas'),
     4=>array('nom_tipo_material'=>'nombre_objeto_aprendizaje', 'opt_tipo_material'=>'numero_horas'),
+);
+
+$config['ccatalogo_modulo'] = array(
+    'GENERAL'=>array('id'=>1),
+    'FOR_SAL'=>array('id'=>2),
+    'FOR_CON_SAL'=>array('id'=>3),
+    'EJE_PRO'=>array('id'=>4),
+    'DES_INV'=>array('id'=>5),
+    'FOR_DOC'=>array('id'=>6),
+    'FOR_EDU_DIS'=>array('id'=>7),
+    'FOR_DES_CON'=>array('id'=>8),
+    'FOR_DIS_INS'=>array('id'=>9),
+    'FOR_INV_EDU'=>array('id'=>10),
+    'OTROS'=>array('id'=>11),
+    'BEC_Y_COM'=>array('id'=>12),
+    'ACT_DOC'=>array('id'=>13),
+    'CIC_CLI'=>array('id'=>14),
+    'INT_MED'=>array('id'=>15),
+    'SER_SOC'=>array('id'=>16),
+    'LICENCIATURA'=>array('id'=>17),
+    'ESP_MED'=>array('id'=>18),
+    'MAESTRIA'=>array('id'=>19),
+    'DOCTORADO'=>array('id'=>20),
+    'TECNICO'=>array('id'=>21),
+    'POSTECNICO'=>array('id'=>22),
+    'EDU_CON'=>array('id'=>23),
+    'DIR_SAL'=>array('id'=>24),
+    'EDU_FOR_PRO'=>array('id'=>25),
+    'FOR_PRO_INV'=>array('id'=>26),
+    'EDU_DIS'=>array('id'=>27),
+    'ACT_INV_EDU'=>array('id'=>28),
+    'COM_EDU'=>array('id'=>29),
+    'SIN_EXA'=>array('id'=>30),
+    'COO_TUT_EDU_DIS'=>array('id'=>31),
+    'COO_CUR_EDU_DIS'=>array('id'=>32),
+    'DIR_TES'=>array('id'=>33),
+    'ELA_MAT_EDU'=>array('id'=>34)
+);
+
+$config['formacion_tipo_subtipo'] = array(
+    'INICIAL' => array('id' => 1),
+    'CONTINUA' => array('id' => 2, 
+        'subtipo'=>array('EDU_DIS'=>array('id'=>1),
+            'DES_CON'=>array('id'=>2),
+            'DIS_INS'=>array('id'=>3),
+            'INV_EDU'=>array('id'=>4))),
+    'OTRO' => array('id' => 3),
+);
+
+$config['formacion_tipo_subtipo__ccatalogo_modulo'] = array(
+    $config['formacion_tipo_subtipo']['INICIAL']['id']=>array(0=>$config['ccatalogo_modulo']['FOR_DOC']['id']),
+    $config['formacion_tipo_subtipo']['CONTINUA']['id']=>array(
+        $config['formacion_tipo_subtipo']['CONTINUA']['subtipo']['EDU_DIS']['id']=>$config['ccatalogo_modulo']['FOR_EDU_DIS']['id'],
+        $config['formacion_tipo_subtipo']['CONTINUA']['subtipo']['DES_CON']['id']=>$config['ccatalogo_modulo']['FOR_DES_CON']['id'],
+        $config['formacion_tipo_subtipo']['CONTINUA']['subtipo']['DIS_INS']['id']=>$config['ccatalogo_modulo']['FOR_DIS_INS']['id'],
+        $config['formacion_tipo_subtipo']['CONTINUA']['subtipo']['INV_EDU']['id']=>$config['ccatalogo_modulo']['FOR_INV_EDU']['id']
+    ),
+    $config['formacion_tipo_subtipo']['OTRO']['id']=>array(0=>$config['ccatalogo_modulo']['OTROS']['id']),
+);
+
+$config['ccurso'] = array(
+    'OTRO' => array('id'=>57)
 );
 
 //    EAD_DURACION
