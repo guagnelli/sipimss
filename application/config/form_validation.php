@@ -896,6 +896,62 @@ $config = array(
         ),
         
     ),
+    'form_begin_password_reset'=>array(
+        'correo_electronico' => array(
+            'field' => 'correo_electronico',
+            'label' => 'Correo electrónico',
+            'rules' => 'trim|required|valida_correo_electronico' 
+        ),
+        'matricula' => array(
+            'field' => 'matricula',
+            'label' => 'Matrícula',
+            'rules' => 'trim|required|max_length[12]|alpha_dash' 
+        ),
+        'userCaptcha' => array(
+            'field' => 'userCaptcha',
+            'label' => 'Código de seguridad',
+            'rules' => 'required|check_captcha' 
+        ), 
+    ),
+    'form_middle_password_reset'=>array(
+        'codigo_recuperacion' => array(
+            'field' => 'codigo_recuperacion',
+            'label' => 'Código de recuperación',
+            'rules' => 'trim|required|alpha_numeric|max_length[6]' 
+        ),
+        'matricula' => array(
+            'field' => 'matricula',
+            'label' => 'Matrícula',
+            'rules' => 'trim|required|max_length[12]|alpha_dash' 
+        ),
+        'userCaptcha' => array(
+            'field' => 'userCaptcha',
+            'label' => 'Código de seguridad',
+            'rules' => 'required|check_captcha' 
+        ), 
+    ),
+    'form_endup_password_reset'=>array(
+        'matricula' => array(
+            'field' => 'matricula',
+            'label' => 'Matrícula',
+            'rules' => 'trim|required|max_length[12]|alpha_dash' 
+        ),
+        'nueva_contrasenia' => array(
+            'field' => 'nueva_contrasenia',
+            'label' => 'Nueva contraseña',
+            'rules' => 'trim|required|valid_pass' 
+        ),
+        'confirma_nueva_contrasenia' => array(
+            'field' => 'confirma_nueva_contrasenia',
+            'label' => 'Confirma nueva contraseña',
+            'rules' => 'trim|matches[nueva_contrasenia]' 
+        ),
+        'userCaptcha' => array(
+            'field' => 'userCaptcha',
+            'label' => 'Código de seguridad',
+            'rules' => 'required|check_captcha' 
+        ), 
+    ),
 
     /*matricula
     delegacion

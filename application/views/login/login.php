@@ -147,7 +147,17 @@
                                     $( "#img-captcha" ).find( "img" ).addClass( "img-rounded");
                                 </script>
                                 <div class="form-group text-right">
+
                                 <?php 
+                                    echo anchor('account/begin_password_reset', 
+                                                '¿Olvidaste tu contraseña?',
+                                                array('class'=>'pull-left',
+                                                    'data-toggle'=>'tooltip',
+                                                    'data-placement'=>'bottom',
+                                                    'title'=>'Recuperar contraseña'
+                                                )
+                                    ); 
+                                    
                                     echo anchor('registro', 
                                                 'Registrarse en el SIPIMSS>>',
                                                 array('title'=>'Registrarse en el SIPIMSS')

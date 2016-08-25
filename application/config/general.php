@@ -23,6 +23,7 @@ $config['extension_comprobante'] = array('pdf');
 $config['modulos_no_sesion'] = array(
     'login' => array('index', 'cerrar_session', 'cerrar_session_ajax'),
     'registro' => array('*'),
+    'account' => array('*'),
     'pagina_no_encontrada' => array('index'),
     'recuperar_contrasenia' => '*',
     'captcha' => '*'
