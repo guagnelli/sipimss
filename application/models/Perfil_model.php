@@ -54,7 +54,7 @@ class Perfil_model extends CI_Model {
             'EMP_APE_PATERNO as apellidoPaterno',
             'EMP_APE_MATERNO as apellidoMaterno',
             'EMP_CURP as curp',
-            'EMP_EDAD as edad',
+            //'EMP_EDAD as edad',
             'EMP_ANTIGUEDAD as antiguedad',
             'emp_fch_nac as fecha_nacimiento',
             'EMP_GENERO as generoSelected',
