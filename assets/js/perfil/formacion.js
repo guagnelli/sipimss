@@ -27,9 +27,14 @@ $(function () {
 
         });
     }
-    if($('.btn_agregar_formacion_docente_modal').length){
+	if($('.btn_agregar_formacion_docente_modal').length){
         $('.btn_agregar_formacion_docente_modal').on('click', function() {
             data_ajax(site_url+'/perfil/formacion_docente_formulario/', null, '#modal_content');
+        });
+    }
+    if($('.btn_agregar_formacion_salud_modal').length){
+        $('.btn_agregar_formacion_salud_modal').on('click', function() {
+            data_ajax(site_url+'/perfil/formacion_salud_formulario/', null, '#modal_content');
         });
     }
     if($('.btn_editar_fi').length){

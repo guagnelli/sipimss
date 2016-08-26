@@ -76,45 +76,45 @@ class Registro extends MY_Controller {
                             if ($datos_siap['status'] == 1) { //si el status del empleado esta activo (1)
                                 $datos_usuario = array();
                                 $datos_usuario['USU_MATRICULA'] = $datos_registro['reg_matricula'];
-                                $datos_usuario['DELEGACION_CVE'] = $datos_registro['reg_delegacion'];
+                                // $datos_usuario['DELEGACION_CVE'] = $datos_registro['reg_delegacion'];
                                 $datos_usuario['USU_CORREO'] = $datos_registro['reg_correo'];
                                 $datos_usuario['USU_CONTRASENIA'] = contrasenia_formato($datos_registro['reg_matricula'], $datos_registro['reg_confirma_contrasenia']); //
                                 $datos_usuario['USU_NOMBRE'] = $datos_siap['nombre'];
                                 $datos_usuario['USU_PATERNO'] = $datos_siap['paterno'];
                                 $datos_usuario['USU_MATERNO'] = $datos_siap['materno'];
-                                $datos_usuario['USU_GENERO'] = $datos_siap['sexo'];
-                                $datos_usuario['USU_CURP'] = $datos_siap['curp'];
-                                $datos_usuario['USU_ANTIGUEDAD'] = $datos_siap['antiguedad'];
-                                $datos_usuario['EDO_LABORAL_CVE'] = $datos_siap['status'];
-                                $datos_usuario['ADSCRIPCION_CVE'] = $datos_siap['adscripcion'];
+                                // $datos_usuario['USU_GENERO'] = $datos_siap['sexo'];
+                                // $datos_usuario['USU_CURP'] = $datos_siap['curp'];
+                                // $datos_usuario['USU_ANTIGUEDAD'] = $datos_siap['antiguedad'];
+                                // $datos_usuario['EDO_LABORAL_CVE'] = $datos_siap['status'];
+                                // $datos_usuario['ADSCRIPCION_CVE'] = $datos_siap['adscripcion'];
                                 $res_cat = $this->mod_registro->get_categoria($datos_siap['emp_keypue']);
                                 $id_cat = (empty($res_cat)) ? 0 : $res_cat[0]['id_cat'];
-                                $datos_usuario['CATEGORIA_CVE'] = $id_cat;
-                                $datos_usuario['ESTADO_USUARIO_CVE'] = 1;
-                                $datos_usuario['USU_FCH_REGISTRO'] = $datos_siap['fecha_ingreso'];
+                                // $datos_usuario['CATEGORIA_CVE'] = $id_cat;
+                                // $datos_usuario['ESTADO_USUARIO_CVE'] = 1;
+                                // $datos_usuario['USU_FCH_REGISTRO'] = $datos_siap['fecha_ingreso'];
                                 $result_id_user = $this->mod_registro->insert_registro_usuario($datos_usuario); //Retorna id usuario
                                 if ($result_id_user > -1) {//si el id del usuario es mayor que -1, entonces se inserto correctamente el registro
                                     $verifica_existe_empleado_local = $this->mod_registro->get_existe_empleado($datos_registro['reg_matricula']); //Verifica que no exista el empleado
                                     if ($verifica_existe_empleado_local === -1) {//Si no existe el empleado registrado, lo registra
                                         //Guardar también empleado    
                                         $datos_empleados = array();
-                                        $datos_empleados['EMP_NOMBRE'] = $datos_usuario['USU_NOMBRE'];
-                                        $datos_empleados['EDO_LABORAL_CVE'] = $datos_usuario['EDO_LABORAL_CVE'];
-                                        $datos_empleados['EMP_APE_PATERNO'] = $datos_usuario['USU_PATERNO'];
-                                        $datos_empleados['EMP_ANTIGUEDAD'] = $datos_usuario['USU_ANTIGUEDAD'];
-                                        $datos_empleados['EMP_APE_MATERNO'] = $datos_usuario['USU_MATERNO'];
-                                        $datos_empleados['EMP_MATRICULA'] = $datos_usuario['USU_MATRICULA'];
-                                        $datos_empleados['EMP_CURP'] = $datos_usuario['USU_CURP'];
+                                        $datos_empleados['EMP_NOMBRE'] =  $datos_siap['nombre'];
+                                        $datos_empleados['EDO_LABORAL_CVE'] = $datos_siap['status'];
+                                        $datos_empleados['EMP_APE_PATERNO'] = $datos_siap['paterno'];
+                                        $datos_empleados['EMP_APE_MATERNO'] = $datos_siap['materno'];
+                                        $datos_empleados['EMP_ANTIGUEDAD'] = $datos_siap['antiguedad'];
+                                        $datos_empleados['EMP_MATRICULA'] = $datos_registro['reg_matricula'];
+                                        $datos_empleados['EMP_CURP'] = $datos_siap['curp'];
                                         $datos_empleados['DELEGACION_CVE'] = $datos_siap['delegacion'];
-                                        $datos_empleados['CATEGORIA_CVE'] = $datos_usuario['CATEGORIA_CVE'];
+                                        $datos_empleados['CATEGORIA_CVE'] = $id_cat;
                                         $datos_empleados['USUARIO_CVE'] = $result_id_user;
-                                        $datos_empleados['ADSCRIPCION_CVE'] = $datos_usuario['ADSCRIPCION_CVE'];
-                                        $datos_empleados['EMP_GENERO'] = $datos_usuario['USU_GENERO'];
-                                        $datos_empleados['EMP_EMAIL'] = $datos_usuario['USU_CORREO'];
+                                        $datos_empleados['ADSCRIPCION_CVE'] = $datos_siap['adscripcion'];
+                                        // $datos_empleados['EMP_GENERO'] = $datos_usuario['USU_GENERO'];
+                                        $datos_empleados['EMP_EMAIL'] = $datos_registro['reg_correo'];
                                         $result_id_emp = $this->mod_registro->insert_registro_empleado($datos_empleados); //Retorna id usuario
                                     } else {//Si existe el empleado, le asigna el id del usuario
                                         $datos_empleados['USUARIO_CVE'] = $result_id_user;
-                                        $where = $datos_usuario['USU_MATRICULA'];
+                                        $where =$datos_registro['reg_matricula'];
                                         $result_id_emp = $this->mod_registro->update_registro_empleado($datos_empleados, $where); //Retorna id usuario
                                         $datos_empleados['EMP_MATRICULA'] = $where;
                                     }

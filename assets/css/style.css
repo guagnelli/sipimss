@@ -3003,3 +3003,26 @@ ul.dropdown-menu.dropdown-menu-right {
 .nav-pills>li>a {
     border-radius: 0px;
 }
+/*Revisar con Leylani
+.datepicker {
+background-color: #333333 !important;
+color: #000 ;
+}
+.datepicker {
+  background-color: #ffffff;
+  border-color: #999;
+  color: #333 !important;
+}
+
+.datepicker .button {
+  cursor: pointer;
+  padding: 0 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+	color: red !important
+}
+.datepicker .button:hover {
+  background-color: #808080;
+  color: #333 !important;
+}*/

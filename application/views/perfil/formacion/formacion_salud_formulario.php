@@ -59,7 +59,7 @@
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
-		            <div class="input-group date datepicker" id="datetimepicker1">
+		            <div class="input-group date" id="datetimepicker1">
 		                <?php
 		                echo $this->form_complete->create_element(
 		                	array('id'=>'fch_inicio','type'=>'text',
@@ -90,7 +90,7 @@
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
-		            <div class="input-group date datepicker" id="datetimepicker2">
+		            <div class="input-group date" id="datetimepicker2">
 		                <?php
 		                echo $this->form_complete->create_element(
 		                	array('id'=>'fch_fin','type'=>'text',
