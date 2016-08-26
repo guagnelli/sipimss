@@ -1,11 +1,11 @@
 <div id="capa_html">
-	<?php echo form_open_multipart('', array('id'=>'formulario_formacion_salud')); ?>
+	<?php //echo form_open_multipart('', array('id'=>'formulario_formacion_salud')); ?>
 	<div id="capa_formacion_salud" style="padding:20px;">
-		<?php if(isset($msg) && !is_null($msg)){ echo $msg; } //Imprimir mensaje ?>
+		<?php //if(isset($msg) && !is_null($msg)){ echo $msg; } //Imprimir mensaje ?>
 		<div class="row">
 		    <div class='col-sm-12 col-md-4 col-lg-4 text-right'>
 		        <label class="control-label">
-		            * <?php echo $string_values['lbl_tipo_for']; ?>:
+		            <?php echo $string_values['lbl_tipo_for']; ?>:
 		        </label>
 		    </div>
 		    <div class="col-md-4 col-lg-4 text-center">
@@ -49,17 +49,17 @@
 		</div><br>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'></div>
-		    <div class='col-sm-12 col-md-12 col-lg-8'><?php echo form_error_format('es_inicial'); ?></div>
+		    <div class='col-sm-12 col-md-12 col-lg-8'><?php //echo form_error_format('es_inicial'); ?></div>
 		</div>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
-		            * <?php echo $string_values['lbl_fecha_inicio']; ?>:
+		            <?php echo $string_values['lbl_fecha_inicio']; ?>:
 		        </label>
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
-		            <div class="input-group date" id="datetimepicker1">
+		            <div class="input-group date datepicker" id="datetimepicker1">
 		                <?php
 		                echo $this->form_complete->create_element(
 		                	array('id'=>'fch_inicio','type'=>'text',
@@ -79,18 +79,18 @@
 		                </span>
 		            </div>
 		        </div>
-		        <?php echo form_error_format('fch_inicio'); ?>
+		        <?php //echo form_error_format('fch_inicio'); ?>
 		    </div>
 		</div>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
-		            * <?php echo $string_values['lbl_fecha_final']; ?>:
+		            <?php echo $string_values['lbl_fecha_final']; ?>:
 		        </label>
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
-		            <div class="input-group date" id="datetimepicker2">
+		            <div class="input-group date datepicker" id="datetimepicker2">
 		                <?php
 		                echo $this->form_complete->create_element(
 		                	array('id'=>'fch_fin','type'=>'text',
@@ -110,14 +110,14 @@
 		                </span>
 		            </div>
 		        </div>
-		        <?php echo form_error_format('fch_fin'); ?>
+		        <?php //echo form_error_format('fch_fin'); ?>
 		    </div>
 		</div>
 
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
-		            * <?php echo $string_values['lbl_tipo_formacion']; ?>:
+		            <?php echo $string_values['lbl_tipo_formacion']; ?>:
 		        </label>
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
@@ -128,14 +128,15 @@
 		                ?>
 		            </div>
 		        </div>
-		        <?php echo form_error_format('tipo_formacion'); ?>
+		        <?php //echo form_error_format('tipo_formacion'); ?>
 		    </div>
 		</div>
 		<div id="capa_subtipo" class="row"></div>
-        <?php echo form_error_format('subtipo'); ?>
+        <?php //echo form_error_format('subtipo'); ?>
 		<?php echo $formulario_carga_archivo; ?>
+		<?php echo $formulario_validacion; ?>
 	</div>
-	<div class="list-group-item text-center center">
+	<!-- <div class="list-group-item text-center center">
 	    <div class="row">
 	        <div class="col-xs-6 col-sm-6 col-md-6 text-right" >
 	            <button id="btn_guardar_formacion_salud" type="button" class="btn btn-success" data-value="<?php echo $identificador; ?>">
@@ -146,12 +147,12 @@
 	            <button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal"><?php echo $string_values['cerrar']; ?></button>
 	        </div>
 	    </div>
-	</div>
-	<?php echo form_close(); ?>
+	</div> -->
+	<?php //echo form_close(); ?>
 </div>
 <script type="text/javascript">
 $(function() {
-	$("#datetimepicker1").datetimepicker( {
+	/*$("#datetimepicker1").datetimepicker( {
 	    format: "MM-YYYY", // Notice the Extra space at the beginning
 	    viewMode: "years",
 	    locale: 'es',
@@ -169,33 +170,7 @@ $(function() {
         $('#btn_guardar_formacion_salud').on('click', function() {
         	if($('#idc').length){ //Validar carga de archivo
         		if($("#userfile").val()==""){ //Validar carga de archivo
-            		//data_ajax(site_url+'/perfil/formacion_salud_formulario/<?php echo $identificador; ?>', '#formulario_formacion_salud', '#modal_content');
-                $.ajax({
-		                url: site_url+'/perfil/formacion_salud_formulario/<?php echo $identificador; ?>',
-		                method: 'POST',
-		                dataType: "json",
-		                beforeSend: function(xhr) {
-		                    $('#cuerpo_modal').html(create_loader());
-		                }
-		            })
-		            .done(function(response) {
-		            	if(response.result==true){
-			                try {
-			                    recargar_opcion_menu_mostrar_mensaje('seccion_formacion', response.result, response.msg);
-			                } catch (e) {
-			                    $('#cuerpo_modal').html(response);
-			                }
-			            } else {
-			            	$('#cuerpo_modal').html(response);
-			            }
-		            })
-		            .fail(function(jqXHR, response) {
-		                $('cuerpo_modal').html(imprimir_resultado(response));
-		            })
-		            .always(function() {
-		                remove_loader();
-		                recargar_fecha_ultima_actualizacion();
-		            });
+            		data_ajax(site_url+'/perfil/formacion_salud_formulario/<?php echo $identificador; ?>', '#formulario_formacion_salud', '#modal_content');
             	} else {
             	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
                 }
@@ -206,26 +181,26 @@ $(function() {
     }
     $('.btn_subir_comprobante').click(function() {
         cargar_archivo($(this).attr('data-key'), "#formulario_formacion_salud");
-    });
+    });*/
     $('#modal_censo').on('hide.bs.modal', function (e) {
 		cargar_datos_menu_perfil('seccion_formacion');
 		recargar_fecha_ultima_actualizacion();
-		var btn_gdt = $("#btn_guardar_formacion_salud").attr('data-value');
+		/*var btn_gdt = $("#btn_guardar_formacion_salud").attr('data-value');
 		if($('#idc').length && btn_gdt == ""){ ///Eliminar archivo que no hayan sido asociados
 			data_ajax(site_url+'/administracion/eliminar_archivos', null, null);
-		}
+		}*/
 		$(this).off(e);
 	});
-	if($('#tipo_formacion').length){
+	/*if($('#tipo_formacion').length){
         $( "#tipo_formacion" ).change(function() {
             if($(this).val()!=""){
                 data_ajax(site_url+'/perfil/subtipo_formacion/'+$(this).val(), null, '#capa_subtipo');
             }
-        });
+        });*/
         <?php
         if(isset($dir_tes['TIP_FORM_SALUD_CVE']) && !empty($dir_tes['TIP_FORM_SALUD_CVE'])){ ?>
             data_ajax(site_url+"/perfil/subtipo_formacion/"+$('#tipo_formacion').val()+"/<?php echo ((isset($dir_tes['CSUBTIP_FORM_SALUD_CVE']) && !empty($dir_tes['CSUBTIP_FORM_SALUD_CVE'])) ? $dir_tes['CSUBTIP_FORM_SALUD_CVE'] : '')?>", null, '#capa_subtipo');
         <?php } ?>
-    }
+    //}
 });
 </script>

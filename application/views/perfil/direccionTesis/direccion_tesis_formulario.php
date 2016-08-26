@@ -5,16 +5,41 @@ $(function() {
 	    viewMode: "years"
 	});
 	if($('#btn_guardar_direccion_tesis').length){
-        $('#btn_guardar_direccion_tesis').on('click', function() {
+        $('#btn_guardar_direccion_tesis').on('click', function (e) {
         	if($('#idc').length){ //Validar carga de archivo
         		if($("#userfile").val()==""){ //Validar carga de archivo
-            		data_ajax(site_url+'/perfil/direccion_tesis_formulario/<?php echo $identificador; ?>', '#formularioDireccionTesis', '#modal_content');
+            		//data_ajax(site_url+'/perfil/direccion_tesis_formulario/<?php echo $identificador; ?>', '#formularioDireccionTesis', '#modal_content');
+            		$.ajax({
+                        url: site_url+'/perfil/direccion_tesis_formulario/<?php echo $identificador; ?>',
+                        method: 'POST',
+                        //dataType: "json",
+                        data: $('#formularioDireccionTesis').serialize(),
+                        beforeSend: function(xhr) {
+                            $('#cuerpo_modal').html(create_loader());
+                        }
+                    })
+                    .done(function(response) {
+                        try{
+                        	var json = $.parseJSON(response);
+	                        recargar_opcion_menu_mostrar_mensaje('seccion_direccion_tesis', json.result, json.msg);
+	                    } catch (e) {
+	                        $('#cuerpo_modal').html(response);
+	                    }
+                    })
+                    .fail(function(jqXHR, response) {
+                    	$('cuerpo_modal').html(imprimir_resultado(response));
+                    })
+                    .always(function() {
+                        remove_loader();
+                        recargar_fecha_ultima_actualizacion();
+                    });
             	} else {
             	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
                 }
             } else {
             	$('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
             }
+            //$(this).off(e);
         });
     }
     $('.btn_subir_comprobante').click(function() {
@@ -35,6 +60,7 @@ $(function() {
 	<?php echo form_open_multipart('', array('id'=>'formularioDireccionTesis')); ?>
 	<div id="capa_direccion_tesis" style="padding:20px;">
 		<?php if(isset($msg) && !is_null($msg)){ echo $msg; } //Imprimir mensaje ?>
+		<div id="mensaje"></div>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
@@ -56,7 +82,6 @@ $(function() {
 		                        )
 		                    )
 		                );
-		                //$js_fch_fin_reg = (isset($dato_convocatoria[0]['dt_anio']) && !empty($dato_convocatoria[0]['FCH_FIN_REG_DOCENTE'])) ? "defaultDate:moment('".$dato_convocatoria[0]['FCH_FIN_REG_DOCENTE']."')" : '';
 		                ?>
 		                <span class="input-group-addon">
 		                    <span class="fa fa-calendar"></span>

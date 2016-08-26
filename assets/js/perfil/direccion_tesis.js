@@ -13,7 +13,7 @@ $(function () {
         /*$('.btn_eliminar_dt').on('click', function() {
             data_ajax(site_url+'/perfil/eliminar_direccion_tesis/'+$(this).attr('data-value'), null, '#modal_content');
         });*/
-        $('.btn_eliminar_dt').on('click', function() {
+        $('.btn_eliminar_dt').on('click', function(e) {
             var data_value = $(this).attr('data-value');
             apprise(confirmar_eliminacion, {verify: true}, function(btnClick) {
                 if (btnClick) {
@@ -32,6 +32,12 @@ $(function () {
                                 $('#tr_'+data_value).remove(); //Eliminar fila
                             });
                         }
+                        /*try {
+                            //var json = $.parseJSON(response);
+                            recargar_opcion_menu_mostrar_mensaje('seccion_direccion_tesis', response.result, response.msg);
+                        } catch (e) {
+                            $('#mensaje').html(response);
+                        }*/
                     })
                     .fail(function(jqXHR, response) {
                         $('#mensaje').html(imprimir_resultado(response));
@@ -44,6 +50,13 @@ $(function () {
                     return false;
                 }
             });
+            //$(this).off(e);
+        });
+    }
+    ///////////Validación
+    if($('.btn_validar_dt').length){
+        $('.btn_validar_dt').on('click', function() {
+            data_ajax(site_url+'/perfil/direccion_tesis_detalle/'+$(this).attr('data-value'), null, '#modal_content');
         });
     }
 });

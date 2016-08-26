@@ -364,6 +364,14 @@ $lang['interface'] = array(
         'li_emp_nombre' => 'Nombre del empleado',
         'li_categoria' => 'Categoría',
         'lbl_validar_empleado' => 'Ver validación docente',
+        'li_clave_adscripcion' => 'Clave de adscripción',
+        'li_unidad' => 'Unidad',
+        'lbl_comentario' => 'Comentarios',
+        't_h_fecha' => 'Fecha',
+        't_h_rol' => 'Rol',
+        'falta_estado_validacion' => 'Debe seleccionar el estado de la validación. Elijalo por favor.',
+        'error_datos_enviados' => 'No han sido enviados datos, por favor intentelo nuevamente.',
+        'lbl_historico_validaciones' => 'Histórico de validaciones'
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',
@@ -442,6 +450,7 @@ $lang['interface'] = array(
         'actualizacion' => 'Se ha actualizado correctamente la información.',
         'eliminacion' => 'Se ha eliminado correctamente.',
         'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
+        'error_validaciones_asociadas' => 'No es posible eliminar el registro debido a que tiene validaciones asociadas.'
     ),
 	'becas_comisiones' => array(
         'placeholder_formato_fecha' => 'AAAA-MMDD',

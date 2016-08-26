@@ -68,7 +68,8 @@ class Enum_ecg extends MyEnum3 {
             csubtipo_formacion_salud = 'csubtipo_formacion_salud',
             ctipo_formacion_salud = 'ctipo_formacion_salud',
             ctematica = 'ctematica',
-            cvalidacion_estado = 'cvalidacion_estado'
+            cvalidacion_estado = 'cvalidacion_estado',
+            cvalidacion_curso_estado = 'cvalidacion_curso_estado'
     ;
     /*
       guardar actuación (evaluaciones)

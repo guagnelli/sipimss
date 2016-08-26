@@ -29,7 +29,8 @@ function html_message(message, tipo) {
 
 function imprimir_resultado(resultado) {
     var tipo_mensaje = (resultado.result == true) ? 'success' : 'danger';
-    return "<div class='row'><div class='col-lg-12 alert alert-" + tipo_mensaje + "'>" + resultado.msg + "</div></div>";
+    setTimeout("$('#div_mensaje').hide()", 6000);
+    return "<div id='div_mensaje' class='row'><div class='col-lg-12 alert alert-" + tipo_mensaje + "'>" + resultado.msg + "</div></div>";
 }
 
 

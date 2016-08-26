@@ -218,6 +218,7 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'csubtipo_formacion_salud' => array('id'=>'CSUBTIP_FORM_SALUD_CVE', 'nombre'=>'SUBTIP_NOMBRE', 'where'=>null),
     'ctematica' => array('id'=>'TEMATICA_CVE', 'nombre'=>'TEM_NOMBRE', 'where'=>null),
      'cvalidacion_estado' => array('id' => 'VAL_ESTADO_CVE', 'nombre' => 'VAL_EST_NOMBRE' , 'where' => null),
+     'cvalidacion_curso_estado' => array('id'=>'VAL_CUR_EST_CVE', 'nombre'=>'VAl_CUR_EST_NOMBRE', 'where'=>null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 
@@ -463,6 +464,33 @@ $config['formacion_tipo_subtipo__ccatalogo_modulo'] = array(
 $config['ccurso'] = array(
     'OTRO' => array('id'=>57)
 );
+
+$config['ACCION_GENERAL'] = array(
+    'VALIDAR' => array('id'=>'validar', 'valor'=>'validar')
+);
+
+////////////////////////////////////////Inicio parámetros de validación
+$config['cvalidacion_curso_estado'] = array(
+    'VALIDO' => array('id' => 1),
+    'NO_VALIDO' => array('id' => 2),
+    'CORRECCION' => array('id' => 3)
+);
+
+$config['TABLAS'] = array(
+    'COMISION_ACADEMICA' => array('tabla_censo'=>'emp_comision', 'tabla_validacion'=>'hist_comision_validacion_curso', 'campo'=>'EMP_COMISION_CVE'),
+    'FORMACION_SALUD' => array('tabla_censo'=>'emp_for_personal_continua_salud', 'tabla_validacion'=>'hist_fpcs_validacion_curso', 'campo'=>'FPCS_CVE'),
+    'INVESTIGACION_SALUD' => array('tabla_censo'=>'emp_desa_inv_salud', 'tabla_validacion'=>'hist_edis_validacion_curso', 'campo'=>'EDIS_CVE'),
+    'INVESTIGACION_EDUCATIVA' => array('tabla_censo'=>'emp_act_inv_edu', 'tabla_validacion'=>'hist_eaid_validacion_curso', 'campo'=>'EAID_CVE'),
+    'BECA' => array('tabla_censo'=>'emp_beca', 'tabla_validacion'=>'hist_beca_validacion_curso', 'campo'=>'EMP_BECA_CVE'),
+    'ACTIVIDAD_DOCENTE' => array('tabla_censo'=>'emp_actividad_docente', 'tabla_validacion'=>'hist_efpd_validacion_curso', 'campo'=>'EMP_ACT_DOCENTE_CVE'),
+    'FORMACION_PROFESIONAL' => array('tabla_censo'=>'emp_formacion_profesional', 'tabla_validacion'=>'hist_efp_validacion_curso', 'campo'=>'EMP_FORMACION_PROFESIONAL_CVE'),
+    'EDUCACION_DISTANCIA' => array('tabla_censo'=>'emp_educacion_distancia', 'tabla_validacion'=>'hist_edd_validacion_curso', 'campo'=>'EMP_EDU_DISTANCIA_CVE'),
+    'ESPECIALIDAD_MEDICA' => array('tabla_censo'=>'emp_esp_medica', 'tabla_validacion'=>'hist_eem_validacion_curso', 'campo'=>'EMP_ESP_MEDICA_CVE'),
+    'MATERIAL_EDUCATIVO' => array('tabla_censo'=>'emp_materia_educativo', 'tabla_validacion'=>'hist_me_validacion_curso', 'campo'=>'MATERIA_EDUCATIVO_CVE'),
+);
+
+
+////////////////////////////////////////Fin parámetros de validación
 
 //    EAD_DURACION
 //    EAD_FCH_INICIO

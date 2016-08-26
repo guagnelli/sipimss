@@ -103,6 +103,9 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                        $string_values['editar'].
                                                                     '</button>
+                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                       $string_values['validar'].
+                                                                    '</button>
                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
                                                                            $string_values['eliminar'].
                                                                         '</button>

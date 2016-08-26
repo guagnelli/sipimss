@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(function() {
-	$("#datetimepicker1").datetimepicker( {
+	/*$("#datetimepicker1").datetimepicker( {
 	    format: "YYYY", // Notice the Extra space at the beginning
 	    viewMode: "years"
 	});
@@ -8,31 +8,7 @@ $(function() {
         $('#btn_guardar_comision_academica').on('click', function() {
         	if($('#idc').length){ //Validar carga de archivo
         		if($("#userfile").val()==""){ //Validar carga de archivo
-            		//data_ajax(site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>', '#formulario_comision_academica', '#modal_content');
-            		$.ajax({
-                        url: site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>',
-                        method: 'POST',
-                        //dataType: "json",
-                        data: $('#formulario_comision_academica').serialize(),
-                        beforeSend: function(xhr) {
-                            $('#cuerpo_modal').html(create_loader());
-                        }
-                    })
-                    .done(function(response) {
-                        try{
-                        	var json = $.parseJSON(response);
-	                        recargar_opcion_menu_mostrar_mensaje('seccion_comision_academica', json.result, json.msg);
-	                    } catch (e) {
-	                        $('#cuerpo_modal').html(response);
-	                    }
-                    })
-                    .fail(function(jqXHR, response) {
-                    	$('cuerpo_modal').html(imprimir_resultado(response));
-                    })
-                    .always(function() {
-                        remove_loader();
-                        recargar_fecha_ultima_actualizacion();
-                    });
+            		data_ajax(site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>', '#formulario_comision_academica', '#modal_content');
             	} else {
             	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
                 }
@@ -43,33 +19,34 @@ $(function() {
     }
     $('.btn_subir_comprobante').click(function() {
         cargar_archivo($(this).attr('data-key'), "#formulario_comision_academica");
-    });
+    });*/
     $('#modal_censo').on('hide.bs.modal', function (e) {
 		cargar_datos_menu_perfil('seccion_comision_academica');
 		recargar_fecha_ultima_actualizacion();
-		var btn_gdt = $("#btn_guardar_comision_academica").attr('data-value');
+		/*var btn_gdt = $("#btn_guardar_comision_academica").attr('data-value');
 		if($('#idc').length && btn_gdt == ""){ ///Eliminar archivo que no hayan sido asociados
 			data_ajax(site_url+'/administracion/eliminar_archivos', null, null);
-		}
+		}*/
 		$(this).off(e);
 	});
 });
 </script>
 <div id="capa_html">
-	<?php echo form_open_multipart('', array('id'=>'formulario_comision_academica')); ?>
+	<?php //echo form_open_multipart('', array('id'=>'formulario_comision_academica')); ?>
 	<div id="capa_direccion_tesis" style="padding:20px;">
 		<?php if(isset($msg) && !is_null($msg)){ echo $msg; } //Imprimir mensaje ?>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
-		            * <?php echo $string_values['t_h_anio']; ?>:
+		            <?php echo $string_values['t_h_anio']; ?>:
 		        </label>
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
-		            <div class="input-group date datepicker" id="datetimepicker1">
+		            <div class="input-group date datepicker">
+		            	<label class="registro"><?php echo $dir_tes['EC_ANIO']; ?></label>
 		                <?php
-		                echo $this->form_complete->create_element(
+		                /*echo $this->form_complete->create_element(
 		                	array('id'=>'dt_anio','type'=>'text',
 		                		'value' => $dir_tes['EC_ANIO'],
 		                        'attributes'=>array(
@@ -79,38 +56,40 @@ $(function() {
 			                        'title'=>$string_values['t_h_anio']
 		                        )
 		                    )
-		                );
+		                );*/
 		                //$js_fch_fin_reg = (isset($dato_convocatoria[0]['dt_anio']) && !empty($dato_convocatoria[0]['FCH_FIN_REG_DOCENTE'])) ? "defaultDate:moment('".$dato_convocatoria[0]['FCH_FIN_REG_DOCENTE']."')" : '';
 		                ?>
-		                <span class="input-group-addon">
+		                <!-- <span class="input-group-addon">
 		                    <span class="fa fa-calendar"></span>
-		                </span>
+		                </span> -->
 		            </div>
 		        </div>
-		        <?php echo form_error_format('dt_anio'); ?>
+		        <?php //echo form_error_format('dt_anio'); ?>
 		    </div>
 		</div>
 
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
-		            * <?php echo $string_values['t_h_tipo_curso']; ?>:
+		            <?php echo $string_values['t_h_nivel_academico']; ?>:
 		        </label>
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
 		            <div class="input-group">
+		            	<label class="registro"><?php echo $dir_tes['NIV_ACA_NOMBRE']; ?></label>
 		                <?php
-		                echo $this->form_complete->create_element(array('id'=>'tipo_curso', 'type'=>'dropdown', 'value'=>$dir_tes['TIP_CURSO_CVE'], 'options'=>$catalogos['ctipo_curso'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['t_h_tipo_curso'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['t_h_tipo_curso'])));
+		                //echo $this->form_complete->create_element(array('id'=>'nivel_academico', 'type'=>'dropdown', 'value'=>$dir_tes['NIV_ACADEMICO_CVE'], 'options'=>$catalogos['cnivel_academico'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['t_h_nivel_academico'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['t_h_nivel_academico'])));
 		                ?>		                
 		            </div>
 		        </div>
-		        <?php echo form_error_format('tipo_curso'); ?>
+		        <?php //echo form_error_format('nivel_academico'); ?>
 		    </div>
 		</div>
 		<?php echo $formulario_carga_archivo; ?>
+		<?php echo $formulario_validacion; ?>
 	</div>
-	<div class="list-group-item text-center center">
+	<!-- <div class="list-group-item text-center center">
 	    <div class="row">
 	        <div class="col-xs-6 col-sm-6 col-md-6 text-right" >
 	            <button id="btn_guardar_comision_academica" type="button" class="btn btn-success" data-value="<?php echo $identificador; ?>">
@@ -121,6 +100,6 @@ $(function() {
 	            <button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal"><?php echo $string_values['cerrar']; ?></button>
 	        </div>
 	    </div>
-	</div>
-	<?php echo form_close(); ?>
+	</div> -->
+	<?php //echo form_close(); ?>
 </div>

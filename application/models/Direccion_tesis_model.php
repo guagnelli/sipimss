@@ -32,6 +32,7 @@ class Direccion_tesis_model extends CI_Model {
         $this->db->join('cnivel_academico', 'cnivel_academico.niv_academico_cve=emp_comision.niv_academico_cve', 'left');
         $this->db->join('comision_area', 'comision_area.com_area_cve=emp_comision.com_area_cve', 'left');
         $this->db->join('comprobante', 'comprobante.comprobante_cve=emp_comision.comprobante_cve', 'left');
+        $this->db->join('ctipo_comprobante', 'comprobante.TIPO_COMPROBANTE_CVE=ctipo_comprobante.TIPO_COMPROBANTE_CVE', 'left');
         $this->db->join('ctipo_curso', 'ctipo_curso.TIP_CURSO_CVE=emp_comision.TIP_CURSO_CVE', 'left');
 
         $query = $this->db->get('emp_comision'); //Obtener conjunto de registros
@@ -98,26 +99,34 @@ class Direccion_tesis_model extends CI_Model {
         }
         $this->db->stop_cache();
 
-        $this->db->join('comprobante', 'emp_comision.COMPROBANTE_CVE=comprobante.COMPROBANTE_CVE', 'left');
-        $subSql = $this->db->get('emp_comision', true); //Obtener ID de comprobante para eliminar
-        $comp = $subSql->result_array();
+        $bandera_validar = $this->db->get('hist_comision_validacion_curso', true); //Se verifica que no tenga validaciones asociadas, de lo contrario no se borra
+        $bv = $bandera_validar->result_array();
+        if(empty($bv)){
+            $this->db->join('comprobante', 'emp_comision.COMPROBANTE_CVE=comprobante.COMPROBANTE_CVE', 'left');
+            $subSql = $this->db->get('emp_comision', true); //Obtener ID de comprobante para eliminar
+            $comp = $subSql->result_array();
 
-        $this->db->delete('emp_comision'); //Eliminamos registro de comisión
-        
-        $this->db->flush_cache(); //Eliminar datos de cache
-        
-        $this->db->where('COMPROBANTE_CVE', $comp[0]['COMPROBANTE_CVE']);
-        $this->db->delete('comprobante'); //Eliminamos comprobante
+            $this->db->delete('emp_comision'); //Eliminamos registro de comisión
+            
+            $this->db->flush_cache(); //Eliminar datos de cache
+            
+            $this->db->where('COMPROBANTE_CVE', $comp[0]['COMPROBANTE_CVE']);
+            $this->db->delete('comprobante'); //Eliminamos comprobante
 
-        if ($this->db->trans_status() === FALSE){
+            if ($this->db->trans_status() === FALSE){
+                $this->db->trans_rollback();
+                $resultado['result'] = FALSE;
+                $resultado['msg'] = $this->string_values['error'];
+            } else {
+                $this->db->trans_commit();
+                $resultado['result'] = TRUE;
+                $resultado['msg'] = $this->string_values['eliminacion'];
+                $resultado['data'] = $comp[0];
+            }
+        } else {
             $this->db->trans_rollback();
             $resultado['result'] = FALSE;
-            $resultado['msg'] = $this->string_values['error'];
-        } else {
-            $this->db->trans_commit();
-            $resultado['result'] = TRUE;
-            $resultado['msg'] = $this->string_values['eliminacion'];
-            $resultado['data'] = $comp[0];
+            $resultado['msg'] = $this->string_values['error_validaciones_asociadas'];
         }
         
         return $resultado;
