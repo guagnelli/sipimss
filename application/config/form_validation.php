@@ -40,7 +40,7 @@ $config = array(
         array(
             'field' => 'passwd',
             'label' => 'Contraseña',
-            'rules' => 'required' //|callback_valid_pass
+            'rules' => 'required|max_length[30]|min_length[8]' //|callback_valid_pass
         ),
         /* array(
           'field'=>'curp',
@@ -939,12 +939,12 @@ $config = array(
         'nueva_contrasenia' => array(
             'field' => 'nueva_contrasenia',
             'label' => 'Nueva contraseña',
-            'rules' => 'trim|required|valid_pass' 
+            'rules' => 'required|callback_valid_pass|max_length[30]|min_length[8]' 
         ),
         'confirma_nueva_contrasenia' => array(
             'field' => 'confirma_nueva_contrasenia',
             'label' => 'Confirma nueva contraseña',
-            'rules' => 'trim|matches[nueva_contrasenia]' 
+            'rules' => 'required|matches[nueva_contrasenia]' 
         ),
         'userCaptcha' => array(
             'field' => 'userCaptcha',

@@ -74,10 +74,18 @@ class MY_Form_validation extends CI_Form_validation {
         $exp = '/^[*\/_+-,]*$/u';
         return (!preg_match($exp, $str)) ? FALSE : TRUE;
     }
+
+    /*
+    * validación contraseña
+    */
+    public function valid_pass_user($str) {
+        $exp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/";
+        return (!preg_match($exp, $str)) ? FALSE : TRUE;
+    }
     /*
       falta validacion pa ra % $ # & !
     */
-
+    // /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/
     public function validate_url($url) {
         $url = trim($url);
         $url = stripslashes($url);

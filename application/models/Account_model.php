@@ -79,9 +79,12 @@ class Account_model extends CI_Model {
         $query = $this->db->get('usuario');
         $cantidad = $query->num_rows();
 
+        //pr($this->db->last_query());
+
         if ($cantidad > 0) {
             $result['result'] = 1;
             $result['data'] =  $query->result_array()[0];
+
             return $result;
         } else {
             return $result;

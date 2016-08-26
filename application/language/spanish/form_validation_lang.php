@@ -75,7 +75,8 @@ $lang['form_validation_alpha_numeric_accent_space_dot']                 = 'El ca
 $lang['form_validation_validate_url'] 					= 'El campo {field} debe contener una URL válida.';
 $lang['form_validation_validate_date']					= 'El campo {field} debe contener una fecha válida; con el formato yyyy/mm/dd';
 $lang['form_validation_validate_date_dd_mm_yyyy']		= 'El campo {field} debe contener una fecha válida; con el formato dd-mm-yyyy';
-
+//valid_pass_user
+$lang['form_validation_valid_pass_user']						= 'El campo {field} debe tener una longitud mínima de 8 caracteres. Debe contener al menos una letra mayúscula, una minúscula, 1 dígito y 1 caracter especial.';
 $lang['form_validation_alpha_accent_space_dot_quot']                   = 'El campo {field} solo puede contener caracteres alfabéticos, acentos, puntos y espacios.';
 $lang['form_validation_alpha_numeric_accent_slash']                    = 'El campo {field} solo puede contener caracteres alfanuméricos, acentos y diagonal.';
 $lang['form_validation_alpha_numeric_accent_space_dot_parent']         = 'El campo {field} solo puede contener caracteres alfanuméricos, acentos, espacios, comas, puntos, espacios, paréntesis y diagonal.';

@@ -114,15 +114,11 @@
 </div>
 
 <script type="text/javascript">
-// inicia codigo javascript necesario para un captcha
-/*$( document ).ready(function() { //alert("nn")
-data_ajax(site_url+"/account/endup_password_reset", "#endup_password_reset", "#middle_password_reset"); // cargamos por primera vez el captcha
-}); // termina codigo javascript necesario para un captcha
-*/
+
 function enviaCodigoRecContrasenia() {
     data_ajax(site_url+"/account/ajax_middle_pass", "#middle_pass_reset", "#middle_password_reset"); // cargamos por primera vez el captcha
 }
 function guardaNuevaContrasenia() {
-    data_ajax(site_url+"/account/endup_password_reset", "#endup_password_reset", "#middle_password_reset"); // cargamos por primera vez el captcha
+    data_ajax(site_url+"/account/endup_password_reset/<?php echo $token_activate_middle; ?>", "#endup_password_reset", "#middle_password_reset"); // cargamos por primera vez el captcha
 }
 </script>

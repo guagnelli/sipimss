@@ -99,8 +99,10 @@ class Account extends MY_Controller {
             $main_contet = '';
             $string_values = $this->lang->line('interface')['password_reset'];
             $data_reset_password['string_values'] = $string_values;
-            $activate_token = $this->modAccount->get_exist_token($token_activate_middle);
             $data_reset_password['token_activate_middle'] = $token_activate_middle;
+
+            $activate_token = $this->modAccount->get_exist_token($data_reset_password['token_activate_middle']);
+
             if ($activate_token['result'] == 1) {
                 
                 $data_change_pass = $activate_token['data'];
@@ -122,15 +124,16 @@ class Account extends MY_Controller {
 
                     }else{
                         $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
-                        $main_contet = $this->load->view('login/reset_password/reset_password_errors', $data_reset_password, true);
+                        $main_contet = $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
                     }
                     
                 }
                 
                 
             }else{
+                //pr($activate_token);
                 $data_reset_password['error_token_url'] = $string_values['msg_error_no_token_exists'];
-                $main_contet = $this->load->view('login/reset_password/reset_password_errors', $data_reset_password, true);
+                $main_contet = $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
             }
 
             $this->template->setMainContent($main_contet);
@@ -190,7 +193,7 @@ class Account extends MY_Controller {
 
                             }else{
                                 $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
-                                echo $this->load->view('login/reset_password/reset_password_errors', $data_reset_password, true);
+                                echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
                             }                         
                             
 
@@ -234,7 +237,7 @@ class Account extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             
             if (!is_null($this->input->post())) { //Validar que la información se haya enviado por método POST para almacenado
-                //pr($this->input->post());
+                //pr($token_activate_middle);
                 $string_values = $this->lang->line('interface')['password_reset'];
                 $data_reset_password['string_values'] = $string_values;                
                 $data_reset_password['token_activate_middle'] = $token_activate_middle;
@@ -253,7 +256,7 @@ class Account extends MY_Controller {
                     
                     if ($data_usu['result']==1) {   // ci¿onfirmamos si existe información de la matrpicula
 
-                        $activate_token = $this->modAccount->get_exist_token($token_activate_middle); // consultamos el token de la url                        
+                        $activate_token = $this->modAccount->get_exist_token($data_reset_password['token_activate_middle']); // consultamos el token de la url                        
 
                         if ($activate_token['result'] == 1) { // si si existe informacion del token
                             
@@ -271,34 +274,39 @@ class Account extends MY_Controller {
                                             'USUARIO_CVE'=>$data_usu['data']['USUARIO_CVE'],
                                             'USU_MATRICULA'=>$data_usu['data']['USU_MATRICULA'],
                                             'REC_CON_CVE'=>$update_code_reset['data']['REC_CON_CVE'],
-                                            'USU_CONTRASENIA'=>$this->seguridad->encrypt_sha512($data_form_middle['nueva_contrasenia'])
+                                            'USU_CONTRASENIA'=>contrasenia_formato($data_form_middle['matricula'],$data_form_middle['nueva_contrasenia'])
                                         );
                                     $password_reseted_commit = $this->modAccount->reset_password_commit($params_reseted);
 
                                     // falta validar (no permitir registrar nueva solicitud de recuperacion de contraseña si una esta activa)
                                     // falta hacer esta vista
-                                    echo $this->load->view('template/email/mail_success_change_pass', $data_reset_password, true);
+                                    $data_reset_password['endup_success'] = $string_values['msg_endup_success'].$string_values['btn_endup_success'];
+                                    echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+
+                                    echo $this->load->view('template/email/enviar_correo_rec_contrasenia_exitoso', $data_reset_password, true);
 
                                 }else{
                                     $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
-                                    echo $this->load->view('login/reset_password/reset_password_errors', $data_reset_password, true);
+                                    echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
                                 }
 
                             }else{
                                 // la matricula que intentanta recuperar la contraseña no coincide con el token generado
-                            }                         
+                            }
 
                         }else{
+                            //pr($token_activate_middle);
+                            //pr($data_reset_password);
                             // el codigo introducido no coincide con la matricula introducida
-                            $data_reset_password['error_model'] = $string_values['msg_error_no_mat_on_cod_rec'];
+                            $data_reset_password['error_model'] = $string_values['msg_error_no_mat_on_token'];
                             echo $this->load->view('login/reset_password/form_endup_password_reset', $data_reset_password, true);
                         
                         }
                     }else{
                         // la matrícula introducida no existe
                         $data_reset_password['error_model'] = $string_values['msg_error_no_mat_exists'];
-                        echo $this->load->view('login/reset_password/form_endup_password_reset', $data_reset_password, true); 
-                    }            
+                        echo $this->load->view('login/reset_password/form_endup_password_reset', $data_reset_password, true);
+                    }
 
                 }else{
                     echo $this->load->view('login/reset_password/form_endup_password_reset', $data_reset_password, true);
@@ -329,7 +337,7 @@ class Account extends MY_Controller {
     {
         $result = array('active' => 0);
 
-        $endup_date_time_change = strtotime("+1 day", strtotime($date_time_code_generate_active));
+        $endup_date_time_change = strtotime("+1440 minutes", strtotime($date_time_code_generate_active));
         $today_date_time = date("Y-m-d H:i:s");
 
         if (strtotime($today_date_time) < $endup_date_time_change) {

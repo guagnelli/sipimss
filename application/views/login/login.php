@@ -64,6 +64,12 @@
                         		</div>
                             </div>
                             <div class="form-bottom form-username">
+                              <?php
+                                  if (isset($error) && !empty($error)) {                        
+                                      echo html_message($error);
+                                      //echo html_message($error, $tipo_msg);
+                                  }
+                              ?>
 			                    <?php   echo form_open('login/index', array('id'=>'login')); ?>
 			                    	<div class="form-group">
                                         <label class="sr-only" for="form-username">Matr&iacute;cula</label>
