@@ -550,6 +550,7 @@ $lang['interface'] = array(
         'msg_error_no_token_exists'=> 'Error, URL no válida',
         'msg_success_ultimate_step'=>'El código de recuperación de contraseña ha sido verificado correctamente',
         'msg_endup_success'=>'La recuperación de contraseña ha sido exitosa, puede dar clic en el siguiente botón para iniciar sesión: <br>',
+        'msg_error_end_time_change_pass'=>'El código de recuperación que intenta usar ya ha sido registrado',
         'link_inicio_sesion'=>'da clic en esta liga para ir al inicio de sesión',
         'btn_endup_success'=>'<a href="'.site_url('login').'" class="btn btn-info">Iniciar sesión</a>',
     ),

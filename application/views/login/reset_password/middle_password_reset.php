@@ -95,6 +95,11 @@
                             data-placement='top'
                             value="<?php if(!empty($userCaptcha))echo $userCaptcha; ?>" 
                             />
+                        <input 
+                            type="hidden"
+                            id="t_a_m"
+                            value="<?php echo $token_activate_middle; ?>" 
+                            />
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                         <?php   echo form_error_format('userCaptcha'); ?>
@@ -116,7 +121,7 @@
 <script type="text/javascript">
 
 function enviaCodigoRecContrasenia() {
-    data_ajax(site_url+"/account/ajax_middle_pass", "#middle_pass_reset", "#middle_password_reset"); // cargamos por primera vez el captcha
+    data_ajax(site_url+"/account/ajax_middle_pass/<?php echo $token_activate_middle; ?>", "#middle_pass_reset", "#middle_password_reset"); // cargamos por primera vez el captcha
 }
 function guardaNuevaContrasenia() {
     data_ajax(site_url+"/account/endup_password_reset/<?php echo $token_activate_middle; ?>", "#endup_password_reset", "#middle_password_reset"); // cargamos por primera vez el captcha

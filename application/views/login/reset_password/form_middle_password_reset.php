@@ -1,5 +1,5 @@
 
-<?php   echo form_open('account/middle_password_reset/'.$token_activate_middle.'/', array('id'=>'middle_password_reset')); 
+<?php   echo form_open('account/middle_password_reset/'.$token_activate_middle.'/', array('id'=>'middle_pass_reset')); 
     
     $is_error_mail = $is_error_mat = FALSE; // TRUE
     $has_error_mat = $has_error_mail = ""; //"has-error"
@@ -98,6 +98,7 @@
                             data-placement='top'
                             value="<?php if(!empty($userCaptcha))echo $userCaptcha; ?>" 
                             />
+                        
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                         <?php   echo form_error_format('userCaptcha'); ?>

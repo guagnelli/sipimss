@@ -116,14 +116,19 @@ class Account extends MY_Controller {
                 if($find_row_change_pass['result'] == 1){
 
                     $data_code_generated = $find_row_change_pass['data'];
+                    if ($data_code_generated['REC_CON_FCH'] != 1) {
                     
-                    $is_on_time = $this->compareDateCodeGenerated($data_code_generated['REC_CON_FCH']);
+                        $is_on_time = $this->compareDateCodeGenerated($data_code_generated['REC_CON_FCH']);
 
-                    if ($is_on_time['active'] == 1) {
-                        $main_contet = $this->load->view('login/reset_password/middle_password_reset', $data_reset_password, true);                    
+                        if ($is_on_time['active'] == 1) {
+                            $main_contet = $this->load->view('login/reset_password/middle_password_reset', $data_reset_password, true);                    
 
+                        }else{
+                            $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
+                            $main_contet = $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+                        }
                     }else{
-                        $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
+                        $data_reset_password['error_code_end_time'] = $string_values['msg_error_code_rec_used'];
                         $main_contet = $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
                     }
                     
@@ -185,16 +190,25 @@ class Account extends MY_Controller {
                         if ($update_code_reset['result'] == 1) {
                             $data_open_form_pass = $update_code_reset['data'];
 
-                            $is_on_time = $this->compareDateCodeGenerated($data_open_form_pass['REC_CON_FCH']);
+                            if ($data_open_form_pass['REC_CON_ESTADO'] != 1) {
+                                
+                                $is_on_time = $this->compareDateCodeGenerated($data_open_form_pass['REC_CON_FCH']);
 
-                            if ($is_on_time['active'] == 1) {
-                                $data_reset_password['step_success'] = $string_values['msg_success_ultimate_step'];
-                                echo $this->load->view('login/reset_password/form_endup_password_reset', $data_reset_password, true);
+                                if ($is_on_time['active'] == 1) {
+                                    $data_reset_password['step_success'] = $string_values['msg_success_ultimate_step'];
+                                    echo $this->load->view('login/reset_password/form_endup_password_reset', $data_reset_password, true);
+
+                                }else{
+                                    $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
+                                    echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+                                }
+
 
                             }else{
-                                $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
-                                echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
-                            }                         
+                                $data_reset_password['error_code_end_time'] = $string_values['msg_error_code_rec_used'];
+                                $main_contet = $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+                            }
+
                             
 
                         }else{
@@ -267,27 +281,38 @@ class Account extends MY_Controller {
                                 );
 
                                 $update_code_reset = $this->modAccount->get_exist_code_password_reset($params_cod_rec);
-                                $is_on_time = $this->compareDateCodeGenerated($update_code_reset['data']['REC_CON_FCH']);
 
-                                if ($is_on_time['active'] == 1) {
-                                    $params_reseted = array(
-                                            'USUARIO_CVE'=>$data_usu['data']['USUARIO_CVE'],
-                                            'USU_MATRICULA'=>$data_usu['data']['USU_MATRICULA'],
-                                            'REC_CON_CVE'=>$update_code_reset['data']['REC_CON_CVE'],
-                                            'USU_CONTRASENIA'=>contrasenia_formato($data_form_middle['matricula'],$data_form_middle['nueva_contrasenia'])
-                                        );
-                                    $password_reseted_commit = $this->modAccount->reset_password_commit($params_reseted);
+                                if ($update_code_reset['REC_CON_ESTADO'] != 1) {
 
-                                    // falta validar (no permitir registrar nueva solicitud de recuperacion de contraseña si una esta activa)
-                                    // falta hacer esta vista
-                                    $data_reset_password['endup_success'] = $string_values['msg_endup_success'].$string_values['btn_endup_success'];
-                                    echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+                                    $is_on_time = $this->compareDateCodeGenerated($update_code_reset['data']['REC_CON_FCH']);
 
-                                    echo $this->load->view('template/email/enviar_correo_rec_contrasenia_exitoso', $data_reset_password, true);
+                                    if ($is_on_time['active'] == 1) {
+                                        $params_reseted = array(
+                                                'USUARIO_CVE'=>$data_usu['data']['USUARIO_CVE'],
+                                                'USU_MATRICULA'=>$data_usu['data']['USU_MATRICULA'],
+                                                'REC_CON_CVE'=>$update_code_reset['data']['REC_CON_CVE'],
+                                                'USU_CONTRASENIA'=>contrasenia_formato($data_form_middle['matricula'],$data_form_middle['nueva_contrasenia'])
+                                            );
 
+                                        pr($params_reseted);
+
+                                        $password_reseted_commit = $this->modAccount->reset_password_commit($params_reseted);
+
+                                        // falta validar (no permitir registrar nueva solicitud de recuperacion de contraseña si una esta activa)
+                                        // falta hacer esta vista
+                                        $data_reset_password['endup_success'] = $string_values['msg_endup_success'].$string_values['btn_endup_success'];
+                                        echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+
+                                        echo $this->load->view('template/email/enviar_correo_rec_contrasenia_exitoso', $data_reset_password, true);
+
+                                    }else{
+                                        $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
+                                        echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+                                    }
+                                    
                                 }else{
-                                    $data_reset_password['error_code_end_time'] = $string_values['msg_error_end_time_change_pass'];
-                                    echo $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
+                                    $data_reset_password['error_code_end_time'] = $string_values['msg_error_code_rec_used'];
+                                    $main_contet = $this->load->view('login/reset_password/reset_password_msg', $data_reset_password, true);
                                 }
 
                             }else{

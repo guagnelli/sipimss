@@ -141,6 +141,7 @@ class Account_model extends CI_Model {
 
         $this->db->select($data_select);
         $this->db->where($params);
+        //$this->db->where('REC_CON_ESTADO = 0');
         //$this->db->where('REC_CON_CODIGO', $code_password_reset);
         //$this->db->where('USU_MATRICULA', $matricula);
         $query = $this->db->get('recuperar_contrasenia');
@@ -165,11 +166,12 @@ class Account_model extends CI_Model {
      */
     public function update_pass_recover($rec_con_cve = null, $data_rec_update = array())
     {
-        if (is_null($rec_con_cve) AND is_null($data_rec_update)) {
+        if (is_null($rec_con_cve) && empty($data_rec_update)) {
             return 0;
         }
         $this->db->where('REC_CON_CVE', $rec_con_cve);
         if($this->db->update('recuperar_contrasenia', $data_rec_update)){
+            //pr($this->db->last_query());
             return 1;
 
         }
@@ -185,11 +187,12 @@ class Account_model extends CI_Model {
      * @return int 
      */
     public function update_password_user($data_pass_save = array(), $matricula = null) {
-        if (is_null($matricula) AND is_null($data_pass_save)) {
+        if (is_null($matricula) && empty($data_pass_save)) {
             return 0;
         }
         $this->db->where('USU_MATRICULA', $matricula);
         if($this->db->update('usuario', $data_pass_save)){
+            //pr($this->db->last_query());
             return 1;
 
         }
@@ -219,8 +222,10 @@ class Account_model extends CI_Model {
                 'USU_CONTRASENIA'=>$params['USU_CONTRASENIA']
             );
 
-        $this->update_password_user($params_pass_upd, $params['USU_CONTRASENIA']);
-        $this->update_pass_recover($params['USU_CONTRASENIA'], $params_rec_pass);
+        $pass['_cod'] = $this->update_password_user($params_pass_upd, $params['USU_MATRICULA']);
+        $pass['_rec'] = $this->update_pass_recover($params['REC_CON_CVE'], $params_rec_pass);
+
+        //pr($pass);
 
 
         $this->db->trans_complete();
