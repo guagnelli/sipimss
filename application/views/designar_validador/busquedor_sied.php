@@ -33,6 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             'placeholder' => $string_values['txt_buscar_matricula'],
                             'data-toggle' => 'tooltip',
                             'data-placement' => 'bottom',
+                            'class' => 'form-control',
                             'onkeypress' => 'return runScriptBuscador_sied(event);',
                             'title' => $string_values['txt_buscar_matricula'],
                         //                                        'readonly'=>'readonly',

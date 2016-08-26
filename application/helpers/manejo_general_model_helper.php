@@ -33,7 +33,9 @@ if (!function_exists('carga_catalogos_generales')) {
 
         foreach ($array_entidades as $entidad) {
             $where = (isset($array_where[$entidad])) ? $array_where[$entidad] : null; //Verifica que exista un where relacionado a la entidad
-            $order_by = (isset($array_order_by[$entidad])) ? $array_order_by[$entidad] : $catalogos_propertis[$entidad]['nombre'] . ' ' . $order_by_direccion; //Verifica que exista un order by relacionado a la entidad, si no existe lo ordena por nombre asendentemente
+            $order_by = (!is_null($array_order_by[$entidad])) ? $array_order_by[$entidad] . ' ' . $order_by_direccion 
+                    : $catalogos_propertis[$entidad]['nombre'] . ' ' . $order_by_direccion; //Verifica que exista un order by relacionado a la entidad, si no existe lo ordena por nombre asendentemente
+            
             $type_group_ = (isset($array_tipo_where[$entidad])) ? $array_tipo_where[$entidad] : 'AND'; //Verifica que exista un order by relacionado a la entidad, si no existe lo ordena por nombre asendentemente
             $tmp_result = $CI->cg->get_catalogo_general($entidad, $order_by, $where, $type_group_); //Funcion general que consulta la base de datos
             if ($drop_option) {

@@ -591,7 +591,8 @@ if (!function_exists('get_busca_hijos')) {
 
         foreach ($array_busqueda as $keys => $valores) {
             $cad1 = strtolower($controlador);
-            $cad2 = strtolower($valores['nombre_padre']);
+//            $cad2 = strtolower($valores['nombre_padre']);
+            $cad2 = strtolower($valores['ruta_padre']);
             if (!empty($valores['padre']) AND ( $cad1 === $cad2)) {
                 $array_result[$keys] = $valores;
             }

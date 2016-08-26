@@ -18,47 +18,28 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 
 <!-- Inicio informacion personal -->
 
-<?php echo form_open('', array('id' => 'form_busqueda_unidades')); ?>
+<?php echo form_open('', array('id' => 'form_busqueda_docentes_validar')); ?>
 <div class="list-group">
-
-    <div class="list-group-item">
-        <div class='row text-right'>
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <font size=1><?php echo $fecha_ultima_actualizacion; ?></font>
-            </div>
-        </div>
-        <div class='row' >
-            <div class="row" id='div_error_inv_doc'>
-                <div class="col-md-10 col-sm-10 col-xs-10" style="display:hidden">
-                    <div id='mensaje_error_inv_doc_div' class='alert'>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="false">&times;</span>
-                        </button>
-                        <span id='mensaje_error_inv_doc'></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+  
     <div class="list-group-item">
         
-        <div class="panel-body">
+        <div class="panel-body tab-content">
+        <div id="select_buscador_validar" class="tab-pane fade active in">
             <div>
                 <br>
                 <h4><?php echo $string_values['titulo_template']; ?> </h4>
                 <br>
             </div>
-
+            
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <div class="panel-body input-group ">
                         <span class="input-group-addon"><?php echo $string_values['lbl_estado_validacion']; ?></span>
                      <?php 
-                        echo $this->form_complete->create_element(array('id' => 'estado_cve', 
+                        echo $this->form_complete->create_element(array('id' => 'cvalidacion_estado', 
                             'type' => 'dropdown', 
-                            'options' => $cestado_validacion, 
+                            'options' => $cvalidacion_estado, 
                             'first' => array('' => $string_values['drop_estado_validacion']), 
                             'value' => '',
                             'class'=>'form-control',
@@ -83,8 +64,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                               <ul id="ul_menu_buscar_por" data-seleccionado='unidad' class="dropdown-menu borderlist">
                                   <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('matricula')"><?php echo $string_values['li_matricula'];?></li>
                                   <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('nombre')"><?php echo $string_values['li_emp_nombre'];?></li>
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('claveadscripcion')"><?php echo $string_values['li_clave_adscripcion'];?></li>
-                                  <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('unidad')"><?php echo $string_values['li_unidad'];?></li>
+                                  <li class="lip" onclick="funcion_menu_tipo_busqueda_validar_censo('clavecategoria')"><?php echo $string_values['li_categoria'];?></li>
                               </ul>
 
                             </div>
@@ -97,14 +77,19 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                     'placeholder'=>$string_values['txt_buscar_docentes'],
                                     'data-toggle'=>'tooltip',
                                     'data-placement'=>'bottom',
-                                    'onkeypress'=>'return runScript(event);',
+                                    'class'=>'form-control',
+                                    'onkeypress'=>'return runScript_busqueda_val(event);',
                                     'title'=>$string_values['txt_buscar_docentes'],
                                     )
                                 )
                             );
                          ?>
                         <div class="input-group-btn" >
-                            <button type="button" id="btn_buscar_b" aria-expanded="false" class="btn btn-default browse" title="<?php echo$string_values['txt_buscar_docentes'];?>" data-toggle="tooltip" onclick="funcion_buscar_elementos()" ><span aria-hidden="true" class="glyphicon glyphicon-search"></span>
+                            <button type="button" id="btn_buscar_docentes_validacion" aria-expanded="false" 
+                                    class="btn btn-default browse" 
+                                    title="<?php echo$string_values['txt_buscar_docentes'];?>" 
+                                    data-toggle="tooltip" onclick="funcion_buscar_docentes_validar()" >
+                                <span aria-hidden="true" class="glyphicon glyphicon-search"></span>
                             </button>
                         </div>
                     </div>
@@ -131,13 +116,17 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                         </div>
                     </div>
             </div>
+            <?php echo form_close(); ?>
             <div class="row" >
-                <div id="div_result_unidades_medicas" class="row" style="padding:0 20px;">
+                <div id="div_result_docentes_validacion" class="row" style="padding:0 20px;">
 
                 </div>
             </div>
         </div>
-        <?php echo form_close(); ?>
+        <div id="select_perfil_validar" class="tab-pane fade">
+
+        </div>
+    </div>    
 
     </div>
 </div>

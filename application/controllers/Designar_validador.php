@@ -21,6 +21,7 @@ class Designar_validador extends MY_Controller {
         $this->load->library('Ventana_modal');
         $this->load->config('general');
         $this->load->library('form_validation');
+        $this->load->library('seguridad');
 //        $this->load->library('Ventana_modal');
     }
 
@@ -59,17 +60,20 @@ class Designar_validador extends MY_Controller {
             if (!is_null($this->input->post())) {
                 $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
 //            $data_selecciona_validador['status'] = '0';
-
-                pr($datos_post);
-
-
-                $param['departamento_cve'] = '09NC012520'; //
+//                pr($datos_post);
+                $param['departamento_cve'] = $datos_post['departamento_desc']; //
 //            $param['departamento_cve'] = $datos_post['departamento_desc'];
                 $param['delegacion_cve'] = $datos_post['delegacion_cve'];
                 $param['categorias'] = $this->config->item('categorias_designar_validador'); //Categorias permitidas para validador
-                $res_busqueda = $this->dvm->get_buscar_candidatos_validador_por_unidad_delegacion_categoria($param);
+                $res_busqueda = $this->dvm->get_buscar_candidatos_validador_por_unidad_delegacion_categoria_($param);
+                $res_items = $res_busqueda;
+                foreach ($res_busqueda as $key => $value) {//Quita a los candidatos que ya sean validadores
+                    if (!empty($value['estado_validador']) AND intval($value['estado_validador']) === 1) {
+                        unset($res_items[$key]);
+                    }
+                }
 //            array_unshift($res_busqueda, array('nom_empleado' => 'Otro candidato', 'empleado_cve' => 0  ));//Agrega al principio del array otro empleado para, se pueda buscar en el sied
-                $lista_candidaros = dropdown_options($res_busqueda, 'empleado_cve', 'nom_empleado');
+                $lista_candidaros = dropdown_options($res_items, 'empleado_cve', 'nom_empleado');
 //            $result_candidatos = 
                 $data_selecciona_validador['string_values'] = $string_values;
                 $data_selecciona_validador['lista_candidaros'] = $lista_candidaros;
@@ -144,6 +148,7 @@ class Designar_validador extends MY_Controller {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['designar_validador'];
                 $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
+//                pr($datos_post);
                 $this->load->library('empleados_siap');
                 //Datos que vienen desde raíz.......................................
                 $data_selecciona_validador['string_values'] = $string_values;
@@ -153,30 +158,36 @@ class Designar_validador extends MY_Controller {
                 $data_selecciona_validador['reg_idrow'] = $datos_post['idrow'];
 
                 $datos_sipimss = $this->dvm->get_buscar_empleado_delegacion($datos_post['buscar_unidad_medica'], $datos_post['delegacion_busqueda_validador']);
+//                pr($datos_sipimss);
                 if (!empty($datos_sipimss)) {
-                    pr($datos_sipimss);
                     if (intval($datos_sipimss[0]['status']) === 1) {
-                        $data_selecciona_validador['base_reg_encontrado'] = 'sipimss';
-                        $data_selecciona_validador['empleado_cve'] = $datos_sipimss[0]['empleado_cve'];
-                        $data_selecciona_validador['matricula'] = $datos_sipimss[0]['matricula'];
-                        $data_selecciona_validador['nombre'] = $datos_sipimss[0]['nombre'];
-                        $data_selecciona_validador['materno'] = $datos_sipimss[0]['materno'];
-                        $data_selecciona_validador['paterno'] = $datos_sipimss[0]['paterno'];
-                        $data_selecciona_validador['delegacion'] = $datos_sipimss[0]['delegacion_cve'];
-                        $data_selecciona_validador['adscripcion'] = $datos_sipimss[0]['adscripcion_cve'];
-                        $data_selecciona_validador['descripcion'] = $datos_sipimss[0]['nom_dependencia_adscripcion'];
-                        $data_selecciona_validador['pue_despue'] = $datos_sipimss[0]['nom_categoria'];
-                        $data_selecciona_validador['emp_keypue'] = $datos_sipimss[0]['desc_categoria_cve'];
-                        $data_selecciona_validador['categoria_id_sipimss'] = $datos_sipimss[0]['categoria_id'];
-                        $data_selecciona_validador['status'] = $datos_sipimss[0]['status'];
-                        echo $this->load->view('designar_validador/seleccionar_validador', $data_selecciona_validador, true);
+                        if (empty($datos_sipimss[0]['estado_validador']) || intval($datos_sipimss[0]['estado_validador']) === 0) {
+                            $data_selecciona_validador['base_reg_encontrado'] = 'sipimss';
+                            $data_selecciona_validador['empleado_cve'] = $datos_sipimss[0]['empleado_cve'];
+                            $data_selecciona_validador['matricula'] = $datos_sipimss[0]['matricula'];
+                            $data_selecciona_validador['nombre'] = $datos_sipimss[0]['nombre'];
+                            $data_selecciona_validador['materno'] = $datos_sipimss[0]['materno'];
+                            $data_selecciona_validador['paterno'] = $datos_sipimss[0]['paterno'];
+                            $data_selecciona_validador['delegacion'] = $datos_sipimss[0]['nom_delegacion'];
+                            $data_selecciona_validador['delegacion_id'] = $datos_sipimss[0]['delegacion_cve'];
+                            $data_selecciona_validador['adscripcion'] = $datos_sipimss[0]['adscripcion_cve'];
+                            $data_selecciona_validador['descripcion'] = $datos_sipimss[0]['nom_dependencia_adscripcion'];
+                            $data_selecciona_validador['pue_despue'] = $datos_sipimss[0]['nom_categoria'];
+                            $data_selecciona_validador['emp_keypue'] = $datos_sipimss[0]['desc_categoria_cve'];
+                            $data_selecciona_validador['categoria_id_sipimss'] = $datos_sipimss[0]['categoria_id'];
+                            $data_selecciona_validador['status'] = $datos_sipimss[0]['status'];
+                            echo $this->load->view('designar_validador/seleccionar_validador', $data_selecciona_validador, true);
+                        } else {
+                            $data_selecciona_validador['mensaje'] = $string_values['lbl_validador_asignado'];
+                            echo $this->load->view('designar_validador/mensajes', $data_selecciona_validador, true);
+                        }
                     } else {
                         $data_selecciona_validador['mensaje'] = $string_values['lbl_status_empleado_cero'];
                         echo $this->load->view('designar_validador/mensajes', $data_selecciona_validador, true);
                     }
                 } else {
                     $datos_siap = $this->empleados_siap->buscar_usuario_siap(array("reg_delegacion" => $datos_post['delegacion_busqueda_validador'], "asp_matricula" => $datos_post['buscar_unidad_medica']));
-                    pr($datos_siap);
+//                    pr($datos_siap);
                     if (isset($datos_siap) AND is_array($datos_siap)) {//Si existe y es un array 
                         if (intval($datos_siap['status']) === 1) {
                             $data_selecciona_validador['base_reg_encontrado'] = 'sied';
@@ -185,6 +196,7 @@ class Designar_validador extends MY_Controller {
                             $data_selecciona_validador['materno'] = $datos_siap['materno'];
                             $data_selecciona_validador['paterno'] = $datos_siap['paterno'];
                             $data_selecciona_validador['delegacion'] = $datos_siap['delegacion'];
+                            $data_selecciona_validador['delegacion_id'] = $datos_siap['delegacion'];
                             $data_selecciona_validador['adscripcion'] = $datos_siap['adscripcion'];
                             $data_selecciona_validador['descripcion'] = $datos_siap['descripcion']; //Adscripción cve
                             $data_selecciona_validador['pue_despue'] = $datos_siap['pue_despue']; //categoría descripción
@@ -222,11 +234,13 @@ class Designar_validador extends MY_Controller {
             $string_values = $this->lang->line('interface')['designar_validador'];
             if (!is_null($this->input->post())) {
                 $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
-                pr($datos_post);
+//                pr($datos_post);
 //            $data_selecciona_validador['status'] = '0';
+                $id_validacion = '';
+                $categoria_name = '';
                 if (isset($datos_post['bus_base_reg_encontrado'])) {//Si existe esté parametro, entonces se intenta guardar el registro
-                    $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
-                    $array_validador = array('EMPLEADO_CVE' => $datos_post['bus_empleado_cve'], 'DEPARTAMENTO_CVE' => $datos_post['bus_clave_adscripcion'], 'DELEGACION_CVE' => $datos_post['bus_delegacion_id_'], 'ROL_CVE' => enum_rols::Validador_N1);
+                    $id_usuario = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+                    $array_validador = array('EMPLEADO_CVE' => $datos_post['bus_empleado_cve'], 'DEPARTAMENTO_CVE' => $datos_post['bus_clave_adscripcion'], 'DELEGACION_CVE' => $datos_post['bus_delegacion_id_'], 'ROL_CVE' => enum_rols::Validador_N1, 'VAL_ESTADO' => 1);
                     $array_operacion_id_entidades = array(); //json array de registros por entidad
                     $array_datos_entidad = array(); //json array de operaciones por entidad
                     $almacenamiento_correcto = FALSE;
@@ -237,45 +251,123 @@ class Designar_validador extends MY_Controller {
                             $almacenamiento_correcto = FALSE;
                             break;
                         case 'sipimss'://Si es de sipimss, ya existe en la base, sólo hay que seleccionar el id del empleado
-                            $result_inser_validador = $this->dvm->insert_designar_validador($array_validador);
-                            if ($result_id_user > 0) {
-                                $result_id_emp = $datos_post['bus_empleado_cve'];
-                                $array_validador['VALIDADOR_CVE'] = $result_inser_validador;
-                                $array_operacion_id_entidades['validador'] = array('insert' => $result_inser_validador, 'VALIDADOR_CVE' => $result_inser_validador);
-                                $array_datos_entidad['validador'] = $array_validador;
-                                $almacenamiento_correcto = TRUE;
+                            $info_validador = $datos_post['id_validaor'];
+                            $this->load->model('Usuario_model', 'usum');
+                            if (!empty($info_validador) AND $info_validador !== '0') {
+                                $info_validador = $this->seguridad->decrypt_base64($info_validador);
+                                $result = $this->dvm->get_validador_n1(null, $info_validador);
+                                $usuario_validador = $this->usum->get_usuario_validador(null, $info_validador); //Obtiene datos de validador y si existe el usuario relacionado con el empleado 
+                            } else {
+                                $usuario_validador = $this->usum->get_usuario_validador($datos_post['bus_empleado_cve']); //Obtiene datos de validador y si existe el usuario relacionado con el empleado 
+                                $result = array();
                             }
+                            if (empty($result)) {//Si es vacio el array, entonces, se agrega el validador
+//                                pr($usuario_validador);
+//                                exit();
+                                $result_inser_validador = $this->dvm->insert_designar_validador_rol_use($array_validador, $usuario_validador);
+                                if (!empty($result_inser_validador)) {
+                                    $id_validacion = $result_inser_validador['validador'];
+                                    $result_id_emp = $datos_post['bus_empleado_cve'];
+                                    $array_validador['VALIDADOR_CVE'] = $result_inser_validador['validador'];
+                                    $array_datos_entidad['validador'] = $array_validador;
+                                    $array_operacion_id_entidades['validador'] = array('insert' => $result_inser_validador['validador'], 'VALIDADOR_CVE' => $result_inser_validador['validador']);
+                                    if (isset($result_inser_validador['usuario'])) {//Si existe la llave usuario, entonces, si se inserto el nuevo rol relacionado con usuario 
+                                        $array_datos_entidad['usuario_rol'] = array('USUARIO_CVE' => $result_inser_validador['usuario'], 'ROL_CVE' => $result_inser_validador['rol']);
+                                        $array_operacion_id_entidades['usuario_rol'] = array('insert' => $result_inser_validador['usuario'] . ' ' . $result_inser_validador['rol'], 'USUARIO_CVE' => $result_inser_validador['usuario'], 'ROL_CVE' => $result_inser_validador['rol']);
+                                    }
+                                    $almacenamiento_correcto = TRUE;
+                                }
+                            } else if (intval($result['VAL_ESTADO']) === 0) {//Si no es vacio, hace una actualización  
+                                $id_validacion = $result['VALIDADOR_CVE'];
+                                $this->load->model('Usuario_model', 'usum');
+                                $usuario_validador = $this->usum->get_usuario_validador($datos_post['bus_empleado_cve']); //Obtiene datos de validador y si existe el usuario relacionado con el empleado 
+                                $result_actualizacion = $this->dvm->update_designar_validador($id_validacion, $array_validador, $usuario_validador);
+                                if (!empty($result_actualizacion)) {
+                                    if (isset($result_actualizacion['usuario_rol'])) {//Si se guardo o inserto un registro de usuario rol
+                                        $array_operacion_id_entidades['usuario_rol'] = array('update' => $result_actualizacion['usuario_rol']['USUARIO_CVE'], 'USUARIO_CVE' => $result_actualizacion['usuario_rol']['USUARIO_CVE'], 'ROL_CVE' => $result_actualizacion['usuario_rol']['ROL_CVE']);
+                                        $array_datos_entidad['usuario_rol'] = $result_actualizacion['usuario_rol'];
+                                    }
+                                    $array_operacion_id_entidades['validador'] = array('update' => $result_actualizacion['validador']['VALIDADOR_CVE'], 'VALIDADOR_CVE' => $result_actualizacion['validador']['VALIDADOR_CVE']);
+                                    $array_datos_entidad['validador'] = $result_actualizacion['validador'];
+                                    $almacenamiento_correcto = TRUE;
+                                }
+                            }
+                            $categoria_name = $datos_post['bus_nombre_categoria'];
                             break;
                         case 'sied'://si es de sied, entonces, se debe de guardar el empleado, ya que no existe en la base de datos local 
                             $this->load->model('Registro_model', 'mod_registro');
                             $datos_empleados = array();
                             $datos_empleados['EMP_NOMBRE'] = $datos_post['bus_nombre'];
-                            $datos_empleados['EDO_LABORAL_CVE'] = $datos_post['bus_status'];
                             $datos_empleados['EMP_APE_PATERNO'] = $datos_post['bus_paterno'];
-                            $datos_empleados['EMP_ANTIGUEDAD'] = $datos_post['bus_antiguedad'];
                             $datos_empleados['EMP_APE_MATERNO'] = $datos_post['bus_materno'];
+                            $datos_empleados['EDO_LABORAL_CVE'] = $datos_post['bus_status'];
+                            $datos_empleados['EMP_ANTIGUEDAD'] = $datos_post['bus_antiguedad'];
                             $datos_empleados['EMP_MATRICULA'] = $datos_post['bus_matricula'];
                             $datos_empleados['EMP_CURP'] = $datos_post['bus_curp'];
                             $datos_empleados['DELEGACION_CVE'] = $datos_post['bus_delegacion_id_'];
-                            $res_cat = $this->mod_registro->get_categoria($datos_post['bus_clave_categoria']);
-                            $datos_empleados['CATEGORIA_CVE'] = $res_cat;
                             $datos_empleados['ADSCRIPCION_CVE'] = $datos_post['bus_clave_adscripcion'];
                             $datos_empleados['EMP_GENERO'] = $datos_post['bus_sexo'];
+                            $res_cat = $this->mod_registro->get_categoria($datos_post['bus_clave_categoria']);
+                            if (!empty($res_cat)) {//Sie es diferente de vacio, agrega la categoria y el nombre de la misma
+//                                $res_cat = $res_cat[0];
+                                $datos_empleados['CATEGORIA_CVE'] = $res_cat[0]['id_cat'];
+                                $categoria_name = $res_cat[0]['nom_categoria'];
+                            }
                             $result_id_emp = $this->mod_registro->insert_registro_empleado($datos_empleados); //Retorna id usuario
                             if ($result_id_emp > 0) {//se guardo el empleado correctamente 
+                                //Actualizacion de los datos de empleado********
+                                $this->load->model('Usuario_model', 'usum');
+                                $this->usum->updateEmpleado($result_id_emp);
+                                //**********************************************
+
                                 $datos_empleados['EMPLEADO_CVE'] = $result_id_emp; //asigna id del empleado nuevo insertado
                                 //Asigna arrays para guardar a bitacora 
                                 $array_operacion_id_entidades['empleado'] = array('insert' => $result_id_emp, 'EMPLEADO_CVE' => $result_id_emp);
                                 $array_datos_entidad ['empleado'] = $datos_empleados;
                                 //Prepara para insertar datos del validador
-                                $array_validador['EMPLEADO_CVE'] = $result_id_emp;
-                                $result_inser_validador = $this->dvm->insert_designar_validador($array_validador);
-                                if ($result_inser_validador > 0) {
-                                    $array_validador['VALIDADOR_CVE'] = $result_inser_validador;
-                                    $array_operacion_id_entidades['validador'] = array('insert' => $result_inser_validador, 'VALIDADOR_CVE' => $result_inser_validador);
-                                    $array_datos_entidad['validador'] = $array_validador;
-                                    $almacenamiento_correcto = TRUE;
+                                $info_validador = $datos_post['id_validaor'];
+                                $this->load->model('Usuario_model', 'usum');
+                                if (!empty($info_validador) AND $info_validador !== '0') {
+                                    $info_validador = $this->seguridad->decrypt_base64($info_validador);
+                                    $result = $this->dvm->get_validador_n1(null, $info_validador);
+                                    $usuario_validador = $this->usum->get_usuario_validador(null, $info_validador); //Obtiene datos de validador y si existe el usuario relacionado con el empleado 
+                                } else {
+                                    $result_inser_validador = $this->dvm->insert_designar_validador_rol_use($array_validador, $usuario_validador);
+                                    $result = array();
                                 }
+
+                                $array_validador['EMPLEADO_CVE'] = $result_id_emp; //Asigna al array el id del empledo agregado 
+                                if (empty($result)) {//Si es vacio el array, entonces, se agrega el validador
+                                    $usuario_validador = $this->usum->get_usuario_validador($result_id_emp); //Obtiene datos de validador y si existe el usuario relacionado con el empleado 
+//                                    pr($result_inser_validador);
+                                    if (!empty($result_inser_validador)) {
+                                        $id_validacion = $result_inser_validador['validador'];
+                                        $result_id_emp = $datos_post['bus_empleado_cve'];
+                                        $array_validador['VALIDADOR_CVE'] = $result_inser_validador['validador'];
+                                        $array_datos_entidad['validador'] = $array_validador;
+                                        $array_operacion_id_entidades['validador'] = array('insert' => $result_inser_validador['validador'], 'VALIDADOR_CVE' => $result_inser_validador['validador']);
+                                        if (isset($result_inser_validador['usuario'])) {//Si existe la llave usuario, entonces, si se inserto el nuevo rol relacionado con usuario 
+                                            $array_datos_entidad['usuario_rol'] = array('USUARIO_CVE' => $result_inser_validador['usuario'], 'ROL_CVE' => $result_inser_validador['rol']);
+                                            $array_operacion_id_entidades['usuario_rol'] = array('insert' => $result_inser_validador['usuario'] . ' ' . $result_inser_validador['rol'], 'USUARIO_CVE' => $result_inser_validador['usuario'], 'ROL_CVE' => $result_inser_validador['rol']);
+                                        }
+                                        $almacenamiento_correcto = TRUE;
+                                    }
+                                } else if (intval($result['VAL_ESTADO']) === 0) {//Si no es vacio, hace una actualización  
+                                    $id_validacion = $result['VALIDADOR_CVE'];
+                                    $this->load->model('Usuario_model', 'usum');
+                                    $usuario_validador = $this->usum->get_usuario_validador($datos_post['bus_empleado_cve']); //Obtiene datos de validador y si existe el usuario relacionado con el empleado 
+                                    $result_actualizacion = $this->dvm->update_designar_validador($id_validacion, $array_validador, $usuario_validador);
+                                    if (!empty($result_actualizacion)) {
+                                        if (isset($result_actualizacion['usuario_rol'])) {//Si se guardo o inserto un registro de usuario rol
+                                            $array_operacion_id_entidades['usuario_rol'] = array('update' => $result_actualizacion['usuario_rol']['USUARIO_CVE'], 'USUARIO_CVE' => $result_actualizacion['usuario_rol']['USUARIO_CVE'], 'ROL_CVE' => $result_actualizacion['usuario_rol']['ROL_CVE']);
+                                            $array_datos_entidad['usuario_rol'] = $result_actualizacion['usuario_rol'];
+                                        }
+                                        $array_operacion_id_entidades['validador'] = array('update' => $result_actualizacion['validador']['VALIDADOR_CVE'], 'VALIDADOR_CVE' => $result_actualizacion['validador']['VALIDADOR_CVE']);
+                                        $array_datos_entidad['validador'] = $result_actualizacion['validador'];
+                                        $almacenamiento_correcto = TRUE;
+                                    }
+                                }
+                                $categoria_name = $datos_post['bus_nombre_categoria'];
                             }
                             break;
                     }
@@ -287,20 +379,19 @@ class Designar_validador extends MY_Controller {
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
                         $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
                         //Datos de bitacora el registro del usuario
-                        registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
-
+                        registro_bitacora($id_usuario, null, $json_datos_entidad, null, $json_registro_bitacora, null);
+                        $id_validacion = (!empty($id_validacion)) ? $this->seguridad->encrypt_base64($id_validacion) : $id_validacion;
                         $name = $datos_post['bus_nombre'] . ' ' . $datos_post['bus_paterno'] . ' ' . $datos_post['bus_materno'];
-                        $rs = array('id_validador' => $result_inser_validador, 'delegacion_cve' => $datos_post['bus_delegacion_id_'],
+                        $rs = array('id_validador' => $id_validacion,
                             'matricula' => $datos_post['bus_matricula'],
-                            'nombre' => $name, 'categoria_cve' => $datos_post['bus_clave_categoria'],
-                            'categoria_nombre' => $datos_post['bus_nombre_categoria'], 'adscripcion_clave' => $datos_post['bus_clave_adscripcion'],
-                            'adscripcion_nombre' => $datos_post['bus_nombre_adscripcion'],
-                            'idrow' => $datos_post['idrow']
+                            'nombre' => $name,
+                            'categoria_nombre' => $categoria_name,
                         );
                         $tipo_msg = $this->config->item('alert_msg');
                         $resultado['result_datos'] = $rs;
                         $resultado['error'] = $string_values['insert_validador_asignacion']; //
                         $resultado['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                        echo json_encode($resultado);
                     } else {
                         $data_selecciona_validador['mensaje'] = $string_values['lbl_fallo_designar_validador'];
                         echo $this->load->view('designar_validador/mensajes', $data_selecciona_validador, true);
@@ -323,25 +414,38 @@ class Designar_validador extends MY_Controller {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
             if (!is_null($this->input->post())) {
                 $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
-                $id_validador = intval($datos_post['id_validador']);
-                if ($id_validador > 0) {
-                    $array_operacion_entidades = array(); //json array de registros por entidad
-                    $array_to_json = array(); //json array de operaciones por entidad
-                    $result_delete_desig_val = $this->dvm->delete_vinculo_validador($id_validador);
+                $id_validador = $this->seguridad->decrypt_base64($datos_post['id_validador']);
+                if ($id_validador > 0) {//Contiene un id el validador
                     $this->lang->load('interface', 'spanish');
-                    $string_values = $this->lang->line('interface')['actividad_docente'];
+                    $string_values = $this->lang->line('interface')['designar_validador'];
+                    $array_operacion_id_entidades = array(); //json array de registros por entidad
+                    $array_datos_entidad = array(); //json array de operaciones por entidad
                     $tipo_msg = $this->config->item('alert_msg');
-                    if ($result_delete['result'] > 0) {//Elimino correctamente el registro de validor asignado
-                        $array_to_json['validador'] = $result_delete_desig_val['entidad'];
-                        $array_operacion_entidades['validador'] = array('delete' => $result_delete_desig_val['result']);
+                    $this->load->model('Usuario_model', 'usum');
+                    $usuario_validador = $this->usum->get_usuario_validador(null, $id_validador); //Obtiene datos de validador
+                    $result_delete_desig_val = $this->dvm->delete_vinculo_validador_n1($usuario_validador);
+                    if (!empty($result_delete_desig_val)) {//Se elimino el vinculo entré validador y rol usuario 
                         $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
-                        $json_datos_entidad = json_encode($array_operacion_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_to_json); //Codifica a json la actualización o insersión a las entidades involucradas
+                        if (isset($result_delete_desig_val['usuario_rol'])) {
+                            $array_datos_entidad['usuario_rol'] = $result_delete_desig_val['usuario_rol'];
+                            $array_operacion_id_entidades['usuario_rol'] = array('delete' => $result_delete_desig_val['usuario_rol']['USUARIO_CVE'] . ',' . $result_delete_desig_val['usuario_rol']['ROL_CVE']);
+                        }
+                        $array_datos_entidad['validador'] = $result_delete_desig_val['validador'];
+                        $array_operacion_id_entidades['validador'] = array('update' => $result_delete_desig_val['validador']['VALIDADOR_CVE']);
+
+                        $json_datos_entidad = json_encode($array_datos_entidad); //Codifica a json datos de entidad
+                        $json_registro_bitacora = json_encode($array_operacion_id_entidades); //Codifica a json la actualización o insersión a las entidades involucradas
+                        //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
+                        $resultado['success'] = 1;
+                        $resultado['error'] = $string_values['delete_validador_asignacion_succes']; //
+                        $resultado['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
                     } else {
-                        $data['error'] = $this->lang->line('interface')['general']['msg_no_existe_empleado']; //Mensaje de que no encontro empleado
-                        $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                        $resultado['success'] = 0;
+                        $resultado['error'] = $string_values['delete_validador_asignacion_fallo']; //
+                        $resultado['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                     }
+                    echo json_encode($resultado);
                 }
             }
         } else {
@@ -356,7 +460,7 @@ class Designar_validador extends MY_Controller {
             $data_selecciona_validador['mostrar_buscador'] = "display: none";
             if (!is_null($this->input->post())) {
                 $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
-                pr($datos_post);
+//                pr($datos_post);
                 if (intval($datos_post['candidato_a_validador']) === 0) {
                     $data_selecciona_validador['mostrar_buscador'] = "display: block";
                 } else {
@@ -381,7 +485,8 @@ class Designar_validador extends MY_Controller {
                 $string_values = $this->lang->line('interface')['designar_validador'];
                 $filtros = $this->input->post(null, true); //Obtenemos el post o los valores 
                 $filtros['current_row'] = (isset($current_row) && !empty($current_row)) ? $current_row : 0;
-                $filtros['delegacion_cve'] =  $this->session->userdata('delegacion_cve');//Carga la delegacion del usuario
+                $id_delegacion = (strlen($this->session->userdata('delegacion_cve')) > 1) ? $this->session->userdata('delegacion_cve') : '0' . $this->session->userdata('delegacion_cve');
+                $filtros['delegacion_cve'] = $id_delegacion; //Carga la delegación del usuario
 //            $filtros['per_page'] = 10;
 //            pr($filtros);
                 $resutlado = $this->dvm->get_buscar_unidades($filtros);

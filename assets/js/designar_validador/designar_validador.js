@@ -172,24 +172,107 @@ function funcion_buscar_validador(element) {
             });
 }
 
+function funcion_designar_validador(element) {
+    var obj = $(element);
+    var id_validador = obj.data('idvalidador');
+    var delegacion_cve = obj.data('delcve');
+    var departamento_desc = obj.data('depcve');
+    var idrow = parseInt(obj.data('idrow'));
+
+    var confirmacion = apprise('Confirme que realmente quitar la designación de validador a la unidad', {verify: true}, function (btnClick) {
+        if (btnClick) {
+            $.ajax({
+                url: site_url + '/designar_validador/get_data_eliminar_vinculo_validador',
+                data: {
+                    id_validador: id_validador
+                },
+                method: 'POST',
+                beforeSend: function (xhr) {
+
+                }
+            })
+                    .done(function (response) {
+                        try {
+                            var response_json = $.parseJSON(response);//
+                            var success = response_json.success;
+                            if (parseInt(success) === 1) {//Se elimino correctamente el vinculo unidad validador
+                                var row = document.getElementById("id_row_"+idrow);
+//                                var row = document.getElementById("tabla_designar_validador").rows[idrow + 1];
+                                $('#check_designado_' + idrow).remove();//Remover checkbox para asignar validador
+                                var boton = add_boton_link(idrow, id_validador, departamento_desc, delegacion_cve);//Genera checkbox
+                                row.cells[6].appendChild(boton);//Agrega el botón a la celda seleccionada
+                                row.cells[3].innerHTML = '';//Limpia el texto de la celda matricula
+                                row.cells[4].innerHTML = '';//Limpia el texto de la celda nombre
+                                row.cells[5].innerHTML = '';//Limpia el texto de la celda categoría
+                            } else {
+                                document.getElementById("check_designado_" + idrow).checked = true;//"Cheked" del checkbox, ya que cancelo
+                            }
+                            $('#mensaje_error_index').html(response_json.error);
+                            $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass('alert-' + response_json.tipo_msg);
+                            $('#div_error_index').show();
+                            setTimeout("$('#div_error_index').hide()", 6000);
+                        } catch (e) {
+
+                        }
+
+                    })
+                    .fail(function (jqXHR, response) {
+                        document.getElementById("check_designado_" + idrow).checked = true;//"Cheked" del checkbox, ya que cancelo
+                        $('#mensaje_error_index').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                        $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass('alert-danger');
+                        $('#div_error_index').show();
+                        setTimeout("$('#div_error_index').hide()", 10000);
+
+                    })
+                    .always(function () {
+                        remove_loader();
+                    });
+        } else {
+            document.getElementById("check_designado_" + idrow).checked = true;//"Cheked" del checkbox, ya que cancelo
+            return false;
+        }
+    });
+}
+
+function add_boton_link(id_row, id_validador, depcve, delcve) {
+    var btn = document.createElement("button");
+    btn.id = "btn_seleccionar_validador_" + id_row;
+    btn.type = "button";
+//    btn.class = "btn btn-link btn-sm";
+    btn.textContent = "Seleccionar validador";
+    //Agrega los atrubutos
+    btn.setAttribute('class', 'btn btn-link btn-sm');
+    btn.setAttribute('data-delcve', delcve);
+    btn.setAttribute('data-idrow', id_row);
+    btn.setAttribute('data-idvalidador', id_validador);
+    btn.setAttribute('data-depcve', depcve);
+    btn.setAttribute('data-tipoevento', 'cargarseleccion');
+    btn.setAttribute('data-toggle', 'modal');
+    btn.setAttribute('data-target', '#modal_censo');
+    btn.setAttribute('onchange', 'funcion_carga_elemento(this)');
+//    checkbox.addEventListener('onchange', funcion_designar_validador(this), true);
+//    var data_ = document.createElement("input");
+    return btn;
+//  
+}
 
 function funcion_seleccionar_validador(element) {
     var obj = $(element);
-    var id_validaor = obj.data('idvalidador');
+    var id_validador = obj.data('idvalidador');
     var tipo_evento = obj.data('tipoevento');
     var delegacion_cve = obj.data('delcve');
     var departamento_desc = obj.data('depcve');
-    var idrow = obj.data('idrow');
+    var idrow = parseInt(obj.data('idrow'));
 //    var candidato_a_validador = document.getElementById('#candidato_a_validador').val;
     var e = document.getElementById("candidato_a_validador");
     var candidato_a_validador = e.options[e.selectedIndex].value;
 
     var datos_form_serializados = $('#form_seleccionar_validador').serialize();
-    datos_form_serializados += '&idrow=' + idrow + '&candidato_a_validador=' + candidato_a_validador + '&tipo_evento=' + tipo_evento + '&id_validaor=' + id_validaor + '&delegacion_cve=' + delegacion_cve + '&departamento_desc=' + departamento_desc;
+    datos_form_serializados += '&idrow=' + idrow + '&candidato_a_validador=' + candidato_a_validador + '&tipo_evento=' + tipo_evento + '&id_validaor=' + id_validador + '&delegacion_cve=' + delegacion_cve + '&departamento_desc=' + departamento_desc;
 
-    document.getElementById("div_resultados_validadores").innerHTML = "";
-    document.getElementById("div_buscador_sied").innerHTML = "";
-    if (candidato_a_validador > 0) {
+    document.getElementById("div_resultados_validadores").innerHTML = "";//Limpia del div resultado de validadores
+    document.getElementById("div_buscador_sied").innerHTML = ""; //Limpia resultado busqueda de sied
+    if (candidato_a_validador > 0) {//
         div_resultado = 'div_resultados_validadores';
     }
 
@@ -203,93 +286,76 @@ function funcion_seleccionar_validador(element) {
         }
     })
             .done(function (response) {
-                var is_html = response.indexOf('<label for=\"lbl_no_existe_usuario\"');//si existe la cadena, entonces es un html
-//                alert(is_html + ' ' + response);
-                if (is_html > -1) {
+                try {
+                    var response_json = $.parseJSON(response);//
+                    var validador_cve = response_json.result_datos.id_validador;
+                    var matricula = response_json.result_datos.matricula;
+                    var nombre = response_json.result_datos.nombre;
+                    var categoria_nombre = response_json.result_datos.categoria_nombre;
+//                    var id_reg = idrow + 1;
+//                    alert(id_reg);
+//                    var row = document.getElementById("tabla_designar_validador").rows[id_reg];
+                    var row = document.getElementById("id_row_" + idrow);
+                    $('#btn_seleccionar_validador_' + idrow).remove();//Remover boton para asignar validador
+                    var checkbox = add_check_box(idrow, validador_cve, departamento_desc, delegacion_cve);//Genera checkbox
+                    row.cells[1].appendChild(checkbox);//Agrega el check box a la celda seleccionada
+                    row.cells[3].innerHTML = matricula;//Agrega el check box a la celda seleccionada
+                    row.cells[4].innerHTML = nombre;//Agrega el check box a la celda seleccionada
+                    row.cells[5].innerHTML = categoria_nombre;//Agrega el check box a la celda seleccionada
+                    $('#mensaje_error_index').html(response_json.error);
+                    $('#mensaje_error_div_index').removeClass('alert-danger').addClass('alert-success');
+                    $('#div_error_index').show();
+                    $('#modal_censo').modal('toggle');
+                    setTimeout("$('#div_error_index').hide()", 5000);
+                } catch (e) {
                     $('#div_resultados_validadores').html(response);
-                } else {
-                    if (response) {
-
-                        var response_json = $.parseJSON(response);//
-                        var validador_cve = response_json.result_datos[0].id_validador;
-                        var delegacion_cve = response_json.result_datos[0].delegacion_cve;
-                        var matricula = response_json.result_datos[0].matricula;
-                        var nombre = response_json.result_datos[0].nombre;
-                        var categoria_cve = response_json.result_datos[0].categoria_cve;
-                        var categoria_nombre = response_json.result_datos[0].categoria_nombre;
-                        var adscripcion_clave = response_json.result_datos[0].adscripcion_clave;
-                        var adscripcion_nombre = response_json.result_datos[0].adscripcion_nombre;
-                        var idrow = response_json.result_datos[0].idrow;//Obtiene index de el row de la tabla de actividades
-
-                        var htmlRowTemplate = $('#template_row_nueva_investigacion').html();
-                        var htmlNewRow = htmlRowTemplate.replace(/\$\$key_ai\$\$/g, idrow)
-                                .replace(/\$\$tpad_nombre\$\$/g, nombre_tipo_actividad_docente)
-                                .replace(/\$\$nombre_investigacion\$\$/g, nombre_investigacion)
-                                .replace(/\$\$folio_investigacion\$\$/g, folio)
-                                .replace(/\$\$tiene_cita\$\$/g, tiene_publicacion)
-                                .replace(/\$\$key\$\$/g, investigacion_cve)
-                                .replace(/\$\$comprobante\$\$/g, comprobante_cve);
-                        $('#tabla_investigacion_docente').append($(htmlNewRow));
-                        $('#mensaje_error_inv_doc').html(response_json.error);
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').addClass('alert-success');
-                        $('#div_error_inv_doc').show();
-//                        $('#close_modal_censo').trigger('onclick');
-                        $('#modal_censo').modal('toggle');
-                        setTimeout("$('#div_error_inv_doc').hide()", 5000);
-                    }
                 }
             })
             .fail(function (jqXHR, response) {
 //                $('#div_error').show();
-//                $('#mensaje_error').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                $('#div_resultados_validadores').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
 //                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
             })
             .always(function () {
                 remove_loader();
             });
 }
-function funcion_designar_validador(element) {
-    var a = hrutes['ajax_investigacion'];
-    var cad_split = a.split(":");
-    var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
-    var id_validador = button_obj.data('invcve');
-    var comprobante_cve = button_obj.data('comprobantecve');
+function add_check_box(id_row, id_validador, depcve, delcve) {
+    var checkbox = document.createElement("input");
+    checkbox.id = "check_designado_" + id_row;
+    checkbox.type = "checkbox";
+    checkbox.class = "text-center";
+    checkbox.checked = "checked";
+    //Agrega los atrubutos del checkbox
+    checkbox.setAttribute('data-idvalidador', id_validador)
+    checkbox.setAttribute('data-idrow', id_row)
+    checkbox.setAttribute('data-delcve', delcve)
+    checkbox.setAttribute('data-depcve', depcve)
+    checkbox.setAttribute('onchange', 'funcion_designar_validador(this)')
+//    checkbox.addEventListener('onchange', funcion_designar_validador(this), true);//dispara el evento
+//    var data_ = document.createElement("input");
+    return checkbox;
+//  
+}
 
-    apprise('Confirme que realmente quitar la designación de validador a la unidad', {verify: true}, function (btnClick) {
-        if (btnClick) {
-            var button_obj = $(element);
-            $.ajax({
-                url: site_url + '/' + cad_split[0] + '/get_data_ajax_eliminar_investigacion',
-                data: {
-                    id_validador: id_validador,
-                    comprobante_cve: comprobante_cve,
-                },
-                method: 'POST',
-                beforeSend: function (xhr) {
-
+function  add_html_cell(name_tabla, id_row, id_cell, textoHtml) {
+    var table = document.getElementById(name_tabla);
+    var row;
+    var col;
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        //iterate through rows
+        if (id_row === i) {
+            //rows would be accessed using the "row" variable assigned in the for loop
+            for (var j = 0, col; col = row.cells[j]; j++) {
+                //iterate through columns
+                //columns would be accessed using the "col" variable assigned in the for loop
+                if (j === id_cell) {
+                    col.innerHTML(textoHtml);
+                    break;
                 }
-            })
-                    .done(function (response) {
-                        var response = $.parseJSON(response);
-                        $('#mensaje_error_inv_doc').html(response.error);
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').removeClass('alert-success');
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-danger').addClass('alert-' + response.tipo_msg);
-                        $('#id_row_' + button_obj.data('idrow')).remove();
-                        $('#div_error_inv_doc').show();
-                        setTimeout("$('#div_error_inv_doc').hide()", 5000);
-
-                    })
-                    .fail(function (jqXHR, response) {
-                        $('#mensaje_error_inv_doc').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
-                        $('#mensaje_error_inv_doc_div').removeClass('alert-success').addClass('alert-danger');
-                        $('#div_error_inv_doc').show();
-                        setTimeout("$('#div_error_inv_doc').hide()", 6000);
-                    })
-                    .always(function () {
-                        remove_loader();
-                    });
-        } else {
-            return false;
+            }
+            break;
         }
-    });
+    }
+
 }

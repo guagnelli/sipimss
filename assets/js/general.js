@@ -33,6 +33,7 @@ function imprimir_resultado(resultado) {
 }
 
 
+
 function data_ajax(path, form_recurso, elemento_resultado) {
     $.ajax({
         url: path,

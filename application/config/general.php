@@ -217,6 +217,7 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'ctipo_formacion_salud' => array('id'=>'TIP_FORM_SALUD_CVE', 'nombre'=>'TIP_FORM_SALUD_NOMBRE', 'where'=>null),
     'csubtipo_formacion_salud' => array('id'=>'CSUBTIP_FORM_SALUD_CVE', 'nombre'=>'SUBTIP_NOMBRE', 'where'=>null),
     'ctematica' => array('id'=>'TEMATICA_CVE', 'nombre'=>'TEM_NOMBRE', 'where'=>null),
+     'cvalidacion_estado' => array('id' => 'VAL_ESTADO_CVE', 'nombre' => 'VAL_EST_NOMBRE' , 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 

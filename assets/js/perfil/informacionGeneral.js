@@ -51,7 +51,7 @@ $(function () {
 
     $("ul.nav-pills > li > a").on("shown.bs.tab", function (e) {
 //      alert(window.location.href);
-        var scrollposition = $(document).scrollTop();
+//        var scrollposition = $(document).scrollTop();
         var id = jQuery(e.target).attr("href").substr(1);//Obtiene el texto del href
         window.location.hash = id;
         if ((id.indexOf('ajax') > -1 || id.indexOf('seccion') > -1) && array_menu_perfil.indexOf(id) < 0) {

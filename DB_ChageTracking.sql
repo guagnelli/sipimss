@@ -300,4 +300,105 @@ CONSTRAINT `emp_formacion_profesional_efpfrk`
 FOREIGN KEY (`EMP_FORMACION_PROFESIONAL_CVE`) 
 REFERENCES `emp_formacion_profesional` (`EMP_FORMACION_PROFESIONAL_CVE`);
 
+/* Elimina relación entre "ctematica" y "emp_formacion_profesional"*/
+ALTER TABLE `emp_formacion_profesional` DROP FOREIGN KEY `emp_formacion_profesional_ibfk_1`;
+ALTER TABLE `emp_formacion_profesional` DROP TEMATICA_CVE;
+/* Agrega a la entidad "emplead" la relacion con "cejercicio_profesional;"*/
+ALTER TABLE `empleado` ADD `emp_eje_pro_cve` INT(11) NULL AFTER `delegacion_cve`;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF12_EMPLEADO ON empleado (emp_eje_pro_cve);  /* Se vuelve index el campo */
+ALTER TABLE `empleado` ADD CONSTRAINT `cejercicio_profesional_cjpfk_12`   /* Asigna llave foran*/
+FOREIGN KEY (`emp_eje_pro_cve`) REFERENCES `cejercicio_profesional`(`eje_pro_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+--------------23/08/2016----LEAS----------
+CREATE TABLE `validacion_gral` (
+  `VALIDACION_GRAL_CVE` int(11) NULL AUTO_INCREMENT,
+  `VAL_CONV_CVE` int(11) DEFAULT NULL,
+  `EMPLEADO_CVE` int(10) DEFAULT NULL,
+  PRIMARY KEY (`VALIDACION_GRAL_CVE`),
+  UNIQUE KEY `XPKRVALIDACION_GRAL_CVE` (`VALIDACION_GRAL_CVE`),
+  KEY `XIF011VAL_CONV_CVE` (`VAL_CONV_CVE`),
+  KEY `XIF012EMPLEADO_CVE` (`EMPLEADO_CVE`),
+  CONSTRAINT `validacion_convocatoria_rvgrfk` FOREIGN KEY (`VAL_CONV_CVE`) REFERENCES `validacion_convocatoria` (`VAL_CON_CVE`),
+  CONSTRAINT `empleado_rvgrfk` FOREIGN KEY (`EMPLEADO_CVE`) REFERENCES `empleado` (`EMPLEADO_CVE`),
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+/*Elimina la relacion "validacion_convocatoria" con "hist_validacion" */
+ALTER TABLE hist_validacion DROP FOREIGN KEY hist_validacion_ibfk_1;
+ALTER TABLE hist_validacion DROP VAL_CON_CVE;
+
+/*Elimina la relacion "empleado" con "hist_validacion" */
+ALTER TABLE hist_validacion DROP FOREIGN KEY hist_validacion_ibfk_4;
+ALTER TABLE hist_validacion DROP EMPLEADO_CVE;
+
+ALTER TABLE `hist_validacion` ADD `VALIDACION_GRAL_CVE` INT(11) NOT NULL AFTER `EMPLEADO_CVE`;  /*Campo agregado a la tabla "hist_validacion"*/
+CREATE INDEX XIF012_HIST_VALIDACION ON hist_validacion (VALIDACION_GRAL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `hist_validacion` ADD CONSTRAINT `validacion_gral_rhvfk_012`   /* Asigna llave foranea*/
+FOREIGN KEY (`VALIDACION_GRAL_CVE`) REFERENCES `validacion_gral`(`VALIDACION_GRAL_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+/*Campos agregaos a las entidades "hist" de validación*/
+ALTER TABLE `hist_beca_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_comision_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_eaid_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_ecc_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_edd_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_edis_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_eem_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_efp_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_efpd_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_fpcs_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `hist_me_validacion_curso` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+
+ALTER TABLE `hist_beca_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_comision_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_eaid_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_ecc_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_edd_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_edis_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_eem_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_efp_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_efpd_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_fpcs_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+ALTER TABLE `hist_me_validacion_curso` DROP `IS_VALIDO_PROFESIONALIZACION` ;
+
+ALTER TABLE `emp_beca` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_comision` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_act_inv_edu` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_ciclos_clinicos` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_educacion_distancia` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_desa_inv_salud` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_esp_medica` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_formacion_profesional` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_actividad_docente` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_for_personal_continua_salud` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+ALTER TABLE `emp_materia_educativo` ADD `IS_VALIDO_PROFESIONALIZACION` boolean NOT NULL default 0;
+
+ALTER TABLE `hist_validacion` ADD `IS_ACTUAL` boolean NOT NULL default 1;
+ALTER TABLE `cdepartamento` ADD `IS_UNIDAD_VALIDACION` boolean NOT NULL default 0;
+
+
+
+
+
+/*TIPO DE UNIDAD DE VALIDACION (No llevada a cabo)ºº¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡ **/
+CREATE TABLE `ctipo_unidad_validacion` (
+  `TIPO_UNIDAD_VALIDACION_CVE` int(11) NULL AUTO_INCREMENT,
+  `TP_UNIDAD_NOMBRE` VARCHAR(30) DEFAULT NULL,
+  PRIMARY KEY (`TIPO_UNIDAD_VALIDACION_CVE`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+/*----------------2016/08/25------------------------*/
+ALTER TABLE hist_beca_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_comision_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_eaid_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_ecc_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_edd_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_edis_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_eem_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_efp_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_fpcs_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_me_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+
+
+
+
 

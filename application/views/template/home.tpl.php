@@ -19,6 +19,7 @@
 		<?php echo css("style.css"); ?>
 		<?php echo css("font-awesome.css"); ?>
 		<?php echo css("bootstrap-datetimepicker.css"); ?>
+		
 
 		<!-- Custom and plugin javascript -->
 		<?php echo css("custom.css"); ?>
@@ -52,7 +53,7 @@
 		<div id="wrapper">
 			<div class="gray-bg dashbard-1"> <!-- id="page-wrapper" -->
 				<div class="content-main">
-					<div class="container">
+                                    <div class="container">
 					<header role="banner">
 						<div id="cd-logo"><a href="#0"><?php echo img("imss.png"); ?></a></div>
 						<div id="cd-logo"><a href="#0"><?php echo img("ces.png"); ?></a></div>
@@ -94,55 +95,52 @@
 						<!--//banner-->
 						<!--grid-->
 
-						<div class="inbox-mail">
-							<?php if($this->session->flashdata('success')){?>
+                                <div class="inbox-mail">
+                                    <?php if($this->session->flashdata('success')){?>
+                                    <div class="row">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-8">
+                                            <div class="row">
+                                                <div class="alert alert-success">
+                                                        <?php echo $this->session->flashdata('success'); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-							<div class="row">
-								<div class="col-sm-2"></div>
-								<div class="col-sm-8">
-									<div class="row">
-										<div class="alert alert-success">
-											<?php echo $this->session->flashdata('success'); ?>
-								</div>
-							</div>
-						</div>
+                                    <?php }elseif($this->session->flashdata('error')){ ?>
 
-							<?php 		}elseif($this->session->flashdata('error')){ 		?>
+                                    <div class="row">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-8">
+                                            <div class="row">
+                                                <div class="alert alert-danger">
+                                                        <?php echo $this->session->flashdata('error'); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php }elseif($this->session->flashdata('warning')){?>
 
-					<div class="row">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-8">
-							<div class="row">
-								<div class="alert alert-danger">
-									<?php echo $this->session->flashdata('error'); ?>
-								</div>
-							</div>
-						</div>
-					</div>
-					<?php 		}elseif($this->session->flashdata('warning')){ 		?>
+                                    <div class="row">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-8">
+                                            <div class="row">
+                                                <div class="alert alert-error">
+                                                        <?php echo $this->session->flashdata('warning'); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-					<div class="row">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-8">
-							<div class="row">
-								<div class="alert alert-error">
-									<?php echo $this->session->flashdata('warning'); ?>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<?php 		}
-
-					if( ! is_null($main_content) ){
-
-						echo $main_content;
-
-					} 		?>
-
-					</div>
-				</div>
-				</div>
+                                    <div id="main_content_tpl">
+                                    <?php }
+                                    if(!is_null($main_content) ){
+                                            echo $main_content;
+                                    }?>
+                                    </div>
+                                </div>
+                            </div>
 			</div>
 
 			</div>

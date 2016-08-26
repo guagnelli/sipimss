@@ -30,9 +30,9 @@ class Catalogos_generales extends CI_Model {
                             $this->db->where_not_in($key, $value);
                             break;
                         default :
-                            foreach ($value as $key => $value_prima) {
+//                            foreach ($value as $key => $value_prima) {
                                 $this->db->where($value);
-                            }
+//                            }
                     }
                 } else {
                     $this->db->where($key, $value);

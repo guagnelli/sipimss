@@ -22,22 +22,13 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 <div class="list-group">
 
     <div class="list-group-item">
-        <div class='row' >
-            <div class="row" style='display:hidden;' id='div_error_inv_doc'>
-                <div class="col-md-1 col-sm-1 col-xs-1"></div>
-                <div class="col-md-10 col-sm-10 col-xs-10">
-                    <?php /*  if($tipo_msg==='danger' || $tipo_msg==='warning'){
-                      $colapso_div_ejercicio_profesional = 'collapse in';
-                      }
-                      echo html_message($error, $tipo_msg); */ ?>
-                    <div id='mensaje_error_inv_doc_div' class='alert'>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <span id='mensaje_error_inv_doc'></span>
-                    </div>
+        <div class="row" >
+            <div class="col-md-12 col-sm-12 col-xs-12 " id='div_error_index' style='display:none'>
+                <div id='mensaje_error_div_index' class='alert'>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span id='mensaje_error_index'></span>
                 </div>
-                <div class="col-md-1 col-sm-1 col-xs-1"></div>
             </div>
-
         </div>
     </div>
     <div class="list-group-item">
@@ -49,28 +40,28 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                 <br>
             </div>
 
-            <div class="row">
+<!--            <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <div class="panel-body input-group ">
-                        <span class="input-group-addon"><?php echo $string_values['lbl_delegacion']; ?></span>
+                        <span class="input-group-addon"><?php // echo $string_values['lbl_delegacion']; ?></span>
                      <?php 
-                        echo $this->form_complete->create_element(array('id' => 'delegacion_cve', 
-                            'type' => 'dropdown', 
-                            'options' => $cdelegacion, 
-                            'first' => array('' => $string_values['drop_delegacion']), 
-                            'value' => '',
-                            'class'=>'form-control',
-                            'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
-                            'placeholder' => $string_values['lbl_delegacion'], 
-                            'data-toggle' => 'tooltip', 
-                            'data-placement' => 'top', 
-                            'title' => $string_values['lbl_delegacion'] ))); 
+//                        echo $this->form_complete->create_element(array('id' => 'delegacion_cve', 
+//                            'type' => 'dropdown', 
+//                            'options' => $cdelegacion, 
+//                            'first' => array('' => $string_values['drop_delegacion']), 
+//                            'value' => '',
+//                            'class'=>'form-control',
+//                            'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
+//                            'placeholder' => $string_values['lbl_delegacion'], 
+//                            'data-toggle' => 'tooltip', 
+//                            'data-placement' => 'top', 
+//                            'title' => $string_values['lbl_delegacion'] ))); 
                     ?>
                     </div>
                 </div>
                 <div class="col-md-3"></div>
-            </div>
+            </div>-->
             <br>
             <div class="row">
                 <div class="col-md-3"></div>
@@ -96,7 +87,8 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                     'placeholder'=>$string_values['txt_buscar_unidad'],
                                     'data-toggle'=>'tooltip',
                                     'data-placement'=>'bottom',
-                                    'onkeypress'=>'return runScript(event);',
+                                    'class' => 'form-control',
+                                    'onkeypress'=>'return runScript(event);',//control key del enter para buscar
                                     'title'=>$string_values['txt_buscar_unidad'],
 //                                        'readonly'=>'readonly',
                                     )

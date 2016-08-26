@@ -11,43 +11,51 @@ class Validacion_docente_model extends CI_Model {
     }
 
     public function get_buscar_docentes_validar($params) {
-        $arra_buscar_por = array('unidad' => 'dp.nom_dependencia',
-            'matricula' => 'e.EMP_MATRICULA',
-            'claveadscripcion' => 'dp.departamento_cve',
-            'nombre' => array('e.EMP_NOMBRE', 'e.EMP_APE_PATERNO', 'e.EMP_APE_MATERNO')
+        $arra_buscar_por = array(
+            'matricula' => 'em.EMP_MATRICULA',
+            'clavecategoria' => 'em.CATEGORIA_CVE',
+            'nombre' => array('em.EMP_NOMBRE', 'em.EMP_APE_PATERNO', 'em.EMP_APE_MATERNO')
         );
-        $busqueda_text = $arra_buscar_por[$params['menu_busqueda']];
-
-        $select = array('dp.cve_delegacion "delegacion_cve"', 'dp.nom_delegacion "nom_delegacion"',
-            'dp.nom_dependencia "nom_departamento"', 'dp.departamento_cve "departamento_cve"',
-            'v.VALIDADOR_CVE "validador_cve"', 'v.ROL_CVE "rol_cve"', 'cr.ROL_NOMBRE "nom_rol"',
-            'v.EMPLEADO_CVE "empleado_cve"',
-            'CONCAT(e.EMP_NOMBRE, e.EMP_APE_PATERNO', 'e.EMP_APE_MATERNO) "nom_empleado"',
-            'e.EMP_MATRICULA "matricula_empleado"', 'e.CATEGORIA_CVE "categoria_id"',
-            'cat.des_clave "categoria_cve"', 'cat.nom_categoria "nom_categoria"');
+        $busqueda_text = $arra_buscar_por[$params['menu_busqueda']];//busqueda en texto por
+        $adscripcion = $params['DEPARTAMENTO_CVE'];
+        $delegacion = (strlen($params['DELEGACION_CVE']) > 1) ? $params['DELEGACION_CVE'] : '0' . $params['DELEGACION_CVE'];
+        $convocatoria = $params['VAL_CON_CVE'];
+        $select = array('em.EMPLEADO_CVE "empleado_cve"', 'em.EMP_MATRICULA "matricula"',
+            'concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO) as "nom_docente"',
+            'hv.VAL_ESTADO_CVE "estado_validacion"', 'cve.VAL_EST_NOMBRE "nombre_estado_validacion"', 
+            'hv.VAL_COMENTARIO "comentario_estado"', 'hv.VAL_FCH "fecha_estado_validacion"',
+            'hv.VALIDADOR_CVE  "validador_cve"', 'em.ADSCRIPCION_CVE "emp_adscripcion_cve"',
+            'em.DELEGACION_CVE "emp_delegacion_cve"', 'em.CATEGORIA_CVE "emp_categoria"',
+            'hv.VALIDACION_CVE "hist_validacion_cve"', 'vg.VALIDACION_GRAL_CVE "validaor_grl_cve"',
+            'em.USUARIO_CVE "usuario_cve"'
+            );
 
         $this->db->start_cache();
 //        $this->db->from('cdepartamento as dp');
-        $this->db->join('validador v', 'v.DEPARTAMENTO_CVE = dp.departamento_cve', 'left');
-        $this->db->join('empleado e', 'e.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
-        $this->db->join('crol cr', 'cr.ROL_CVE = v.ROL_CVE', 'left');
-        $this->db->join('ccategoria cat', 'cat.id_cat = e.CATEGORIA_CVE', 'left');
-
-        if (!empty($params['delegacion_cve'])) {
-            $this->db->where('dp.cve_delegacion', $params['delegacion_cve']);
+        $this->db->join('empleado em', 'em.EMPLEADO_CVE = vg.EMPLEADO_CVE');
+        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
+        $this->db->join('cvalidacion_estado cve', 'cve.VAL_ESTADO_CVE = hv.VAL_ESTADO_CVE');
+        //where que son obligatorios
+        $this->db->where('em.EDO_LABORAL_CVE', 1);
+        $this->db->where('hv.IS_ACTUAL', 1);
+        $this->db->where('em.ADSCRIPCION_CVE', $adscripcion);
+        $this->db->where('em.DELEGACION_CVE', $delegacion);
+        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
+        if (!empty($params['cvalidacion_estado'])) {//where estado de la validación, no es obligatorio
+            $this->db->where('hv.VAL_ESTADO_CVE', $params['cvalidacion_estado']);
         }
 
-        if (is_array($busqueda_text)) {
+        if (is_array($busqueda_text)) {//si es un array lo recorre, ejemplo es la concatenación de nombre, ap y am
             foreach ($busqueda_text as $value) {
-                $this->db->or_like($value, $params['buscar_unidad_medica']);
+                $this->db->or_like($value, $params['buscador_docente']);
             }
-        } else {
-            $this->db->like($busqueda_text, $params['buscar_unidad_medica']);
+        } else {//pone un like para buscar por matricula, o categoria
+            $this->db->like($busqueda_text, $params['buscador_docente']);
         }
         $this->db->stop_cache();
 
         //Cuenta la cantidad de registros
-        $num_rows = $this->db->query($this->db->select('count(*) as total')->get_compiled_select('cdepartamento as dp'))->result();
+        $num_rows = $this->db->query($this->db->select('count(*) as total')->get_compiled_select('validacion_gral as vg'))->result();
         $this->db->reset_query(); //Reset de query 
         $this->db->select($select); //Crea query de consulta
         if (isset($params['per_page']) && isset($params['current_row'])) { //Establecer límite definido para paginación 
@@ -60,12 +68,12 @@ class Validacion_docente_model extends CI_Model {
             $orden = $params['order'];
 //            pr($orden);
             if ($orden === 'fullname') {
-                $orden = 'e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO';
+                $orden = 'em.EMP_NOMBRE, em.EMP_APE_PATERNO, em.EMP_APE_MATERNO';
             }
             $this->db->order_by($orden, $order_type);
         }
 
-        $ejecuta = $this->db->get('cdepartamento as dp'); //Prepara la consulta ( aún no la ejecuta)
+        $ejecuta = $this->db->get('validacion_gral as vg'); //Prepara la consulta ( aún no la ejecuta)
         $query = $ejecuta->result_array();
 //        pr($this->db->last_query());
 //        $query->free_result();

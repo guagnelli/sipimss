@@ -142,6 +142,7 @@ $lang['interface'] = array(
         'guardar' => 'Guardar',
         'editar' => 'Editar',
         'eliminar' => 'Eliminar',
+         'validar' => 'Validar',
         'subir_archivo' => 'Subir archivo',
         'lbl_tipo_comprobante' => 'Tipo de comprobante',
         'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
@@ -155,6 +156,7 @@ $lang['interface'] = array(
         'archivo_incorrecto' => 'Archivo incorrecto',
         'archivo_inexistente' => 'Archivo inexistente',
         'opciones' => 'Opciones',
+        'error_sql' => 'Ocurrio un error durante el guardado, intentelo más tarde.'
     ),
     //Actividad del docente
     'actividad_docente' => array(
@@ -294,6 +296,7 @@ $lang['interface'] = array(
 
     ),
     'designar_validador' => array(
+        'placeholder_formato_fecha' => 'AAAA-MMDD',
         'titulo_template' => 'Designación de validadores',
         'resp_sin_resultados' => '<div class="jumbotron"><h1>No se encontraron resultados</h1></div>',
         'tab_titulo_unidades' => 'unidades',
@@ -328,6 +331,7 @@ $lang['interface'] = array(
         'drop_selecciona_validador_nulo' => 'Debe seleccionar una opción para asignar validador',
         'opt_otro_validador' => 'Otro validador',
         'lbl_delegacion' => 'Delegación',
+        'lbl_validador_asignado' => 'El validador ya fue asignado en otra unidad',
         'lbl_no_existe_usuario' => 'El empleado no existe',
         'lbl_status_empleado_cero' => 'El empleado se encuentrá dado de baja del sistema por el momento ',
         'lbl_no_se_encontro_empleado_sied' => 'No se encontraron datos asociados a la matrícula o la delegación.<br>Por favor verifique que la información que ingreso es correcta o que la red se encuentá habilitata.',
@@ -339,21 +343,27 @@ $lang['interface'] = array(
         'li_matricula' => 'Matrícula',
         'li_emp_nombre' => 'Nombre de empleado',
         'insert_validador_asignacion' => 'La asignación de validador se realizo correctamente',
+        'delete_validador_asignacion_succes' => 'La eliminación de validador de unidad se efectuó  correctamente',
+        'delete_validador_asignacion_fallo' => 'No se pudo realizar la operación de eliminar validador de unidad',
     ),
     'validador_censo' => array(
         'titulo_template' => 'Validación de censo de profesores',
         'titulo_tab_matricula' => 'Matrícula',
-        'titulo_tab_nombre' => 'Nombre',
+        'resp_sin_resultados' => '<div class="jumbotron"><h1>No se encontraron resultados</h1></div>',
+        'titulo_tab_nombre' => 'Nombre(s)',
         'titulo_tab_estado_validacion' => 'Estado de la validación',
         'titulo_tab_fecha_ultimo_estado' => 'Fecha de último estado',
+        'titulo_tab_ver_ultimo_comentario' => 'Ver comentario',
+        'titulo_tab_validar_cursos' => 'Validar cursos',
+        'titulo_tab_categoria' => 'Categoría',
         'titulo_tab_validar' => 'Fecha de último estado',
         'lbl_estado_validacion' => 'Estado de validación',
         'drop_estado_validacion' => 'Filtro por estado de validación',
         'txt_buscar_docentes' => 'Buscar docente',
         'li_matricula' => 'Matrícula',
-        'li_emp_nombre' => 'Nombre de empleado',
-        'li_clave_adscripcion' => 'Clave de adscripción',
-        'li_unidad' => 'Unidad',
+        'li_emp_nombre' => 'Nombre del empleado',
+        'li_categoria' => 'Categoría',
+        'lbl_validar_empleado' => 'Ver validación docente',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',
