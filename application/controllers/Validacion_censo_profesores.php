@@ -66,7 +66,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['validador_censo'];
                 $filtros = $this->input->post(null, true); //Obtenemos el post o los valores 
-                $datos_validador = $this->session->userdata('datos_val_n1');
+                $datos_validador = $this->session->userdata('datos_validador');
                 $filtros += $datos_validador;
 //                pr($filtros);
                 $filtros['current_row'] = (isset($current_row) && !empty($current_row)) ? $current_row : 0;
@@ -74,7 +74,7 @@ class Validacion_censo_profesores extends MY_Controller {
 //            $filtros['per_page'] = 10;
 //            pr($filtros);
                 $resutlado = $this->vdm->get_buscar_docentes_validar($filtros);
-                pr($resutlado['result']);
+//                pr($resutlado['result']);
                 $data['string_values'] = $string_values;
                 $data['lista_docentes_validar'] = $resutlado['result'];
                 $data['total'] = $resutlado['total'];
