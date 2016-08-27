@@ -418,7 +418,7 @@ $lang['interface'] = array(
         'lbl_es_inicial' => 'Es inicial',
         'lbl_es_continua' => 'Es continua',
         'btn_add_new_formacion_salud' => 'Agregar formación del personal de salud',
-        'btn_guardar' => 'Guardar'
+        'btn_guardar' => 'Guardar',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
     ),
@@ -447,7 +447,7 @@ $lang['interface'] = array(
         'alert_tematica_duplicado' => 'La temática ya ha sido agregada, seleccione otra.',
         'confirmar_tematica_eliminacion' => 'Confirme la eliminación del registro.',
         'otro_curso' => 'Nombre del otro curso',
-        'lbl_ejercicio_profesional' =>'Ejercicio profesional docente'
+        'lbl_ejercicio_profesional' =>'Ejercicio profesional docente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
     ),
