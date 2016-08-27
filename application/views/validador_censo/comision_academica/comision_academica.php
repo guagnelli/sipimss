@@ -53,10 +53,10 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 															echo '<td>'.$comision_academica[$key_dato].'</td>';
 														}
 														echo '<td><button type="button" class="btn btn-link btn-sm btn_editar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
-							                                       $string_values['editar'].
+							                                       $string_values['tab_titulo_g_ver'].
 							                                    '</button>
 							                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
-							                                           $string_values['eliminar'].
+							                                           $string_values['tab_titulo_g_validar'].
 							                                        '</button>
 							                                </td>
 														</tr>';

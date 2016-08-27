@@ -100,12 +100,14 @@ class Investigacion_docente_model extends CI_Model {
         if (is_null($datos_investigacion_docente)) {
             return -1;
         }
+            $this->db->trans_begin();
         $this->db->insert('emp_act_inv_edu', $datos_investigacion_docente); //Almacena usuario
         $obtiene_id_usuario = $this->db->insert_id();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return -1;
         } else {
+            $this->db->trans_commit();
             return $obtiene_id_usuario;
         }
     }

@@ -13,23 +13,23 @@ $(document).ready(function () {
         })
                 .done(function (response) {
                     //alert(response)
-                    try{
+                    try {
                         var resp = $.parseJSON(response);
-                        $('#msg_general').show();        
+                        $('#msg_general').show();
                         $('#msg_general').text(resp.message);
                         //alert($('#msg_general').attr("class"));
-                        if(resp.result==true){
-                             $('#msg_general').addClass('alert-success');
-                        }else{
+                        if (resp.result == true) {
+                            $('#msg_general').addClass('alert-success');
+                        } else {
                             $('#msg_general').addClass('alert-danger');
                         }
                         setTimeout("$('#msg_general').hide()", 5000);
                         recargar_fecha_ultima_actualizacion();//Recarga la fecha de la ultima actualización del modulo perfil
                         $("#seccion_info_general").html(resp.content);
-                    }catch(e){
+                    } catch (e) {
                         $("#seccion_info_general").html(response);
                     }
-                    
+
                 })
                 .fail(function (jqXHR, response) {
                     $('#msg_general').removeClass('alert-success').addClass('alert-danger');
@@ -54,7 +54,7 @@ $(function () {
 //        var scrollposition = $(document).scrollTop();
         var id = jQuery(e.target).attr("href").substr(1);//Obtiene el texto del href
         window.location.hash = id;
-        if ((id.indexOf('ajax') > -1 || id.indexOf('seccion') > -1) && array_menu_perfil_validar.indexOf(id) < 0) {
+        if (id.indexOf('seccion') > -1 && array_menu_perfil_validar.indexOf(id) < 0) {
             //alert();
             array_menu_perfil_validar.push(id);
             //Separar en 4, 0controlador; 1nombre del método ajax; 2nombre del formulario; 3nombre del div
@@ -104,15 +104,27 @@ function recargar_opcion_menu_mostrar_mensaje(id, is_success, mensaje) {
  * @returns {undefined}
  */
 function cargar_datos_menu_perfil(id) {
-    var cad = hrutes_val[id];
-    var cad_split = cad.split(":");
-//    alert('si me llamo' + cad_split[0] + '/' + cad_split[1] + cad_split[2] + cad_split[3]);
-//            data_ajax(site_url + '/validacion_censo_profesores/get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
-    data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
+//    alert(id);
+    try {
+        var cadena = hrutes[id];
+        var cad_split = cadena.split(":");
+        data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
+    } catch (e) {
+        var URLactual = window.location;
+        URLactual = String(URLactual);
+        var pag = URLactual.split("#");
+        if (pag.length === 2) {
+            var menu = pag[1];
+            data_ajax(site_url + '/validacion_censo_profesores/' + menu, '', '#' + menu);
+//            array_menu_perfil_validar();
+        }
+
+    }
 }
 
 function recargar_fecha_ultima_actualizacion() {
-    var a = hrutes_val['seccion_info_general'];
+
+    var a = hrutes['seccion_info_general'];
     var cad_split = a.split(":");
     $.ajax({
         url: site_url + '/' + cad_split[0] + '/get_fecha_ultima_actualizacion',

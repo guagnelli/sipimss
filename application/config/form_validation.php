@@ -433,7 +433,7 @@ $config = array(
     'form_investigacion_docente' => array(
         'ctipo_actividad_docente' => array(
             'field' => 'ctipo_actividad_docente',
-            'label' => 'fecha fin de registro docente',
+            'label' => 'tipo de actividad en investigación',
             'rules' => 'required'//
         ),
         'nombre_investigacion' => array(

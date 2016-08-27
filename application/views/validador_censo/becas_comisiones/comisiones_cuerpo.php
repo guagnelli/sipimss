@@ -21,8 +21,8 @@
                             <th><?php echo $string_values['title_tab_comision_fecha_inicio']; ?></th>
                             <th><?php echo $string_values['title_tab_comision_fecha_termino']; ?></th>
                             <th><?php echo $string_values['title_tab_comision_comprobante']; ?></th>
-                            <th><?php echo $string_values['title_tab_comision_editar']; ?></th>
-                            <th><?php echo $string_values['title_tab_comision_eliminar']; ?></th>
+                            <th><?php echo $string_values['tab_titulo_g_ver']; ?></th>
+                            <th><?php echo $string_values['tab_titulo_g_validar']; ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +57,7 @@
                             . 'data-toggle="modal"'
                             . 'data-target="#modal_censo"'
                             . 'onclick="funcion_editar_reg_comision(this)" >' 
-                            . $string_values['tab_titulo_editar']
+                            . $string_values['tab_titulo_g_ver']
                             . '</button>'
                             . "</td>";
                             echo "<td>"//Botón eliminar
@@ -69,7 +69,7 @@
                             . 'data-comisioncve ="' . $key . '"'
                             . 'data-comprobantecve ="' . $idcomprobante . '"'
                             . 'onclick="funcion_eliminar_reg_comision(this)" >' .
-                            $string_values['tab_titulo_eliminar']
+                            $string_values['tab_titulo_g_validar']
                             . '</button>'
                             . "</td>";
                             echo "</tr>";

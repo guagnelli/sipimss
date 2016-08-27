@@ -123,8 +123,8 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                         <th><?php echo $string_values['tab_titulo_pro_salud_fecha_inicio'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_fecha_fin'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_comprobante'] ?></th>
-                                        <th><?php echo $string_values['tab_titulo_editar'] ?></th>
-                                        <th><?php echo $string_values['tab_titulo_eliminar'] ?></th>
+                                        <th><?php echo $string_values['tab_titulo_g_ver'] ?></th>
+                                        <th><?php echo $string_values['tab_titulo_g_validar'] ?></th>
                                         <!--<th>Opciones</th>-->
                                     </tr>
                                 </thead>
@@ -192,7 +192,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                         . 'data-toggle="modal"'
                                         . 'data-target="#modal_censo"'
                                         . 'onclick="funcion_editar_reg_actividad(this)" >' .
-                                        $string_values['tab_titulo_editar']
+                                        $string_values['tab_titulo_g_ver']
                                         . '</td>';
                                         echo '<td>'
                                         . '<button '
@@ -204,7 +204,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                         . 'data-cvead ="' . $value['cve_actividad_docente'] . '"'
                                         . 'data-cp ="' . $is_cur_principal . '"'
                                         . 'onclick="funcion_eliminar_actividad_docente(this)" >' .
-                                        $string_values['tab_titulo_eliminar']
+                                        $string_values['tab_titulo_g_validar']
                                         . '</button>'
                                         . '</td>';
                                         echo "</tr>";

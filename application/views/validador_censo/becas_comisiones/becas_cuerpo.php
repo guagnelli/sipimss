@@ -24,8 +24,8 @@
                             <th><?php echo $string_values['title_tab_becas_motivo_beca']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_beca_interrumpida']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_comprobante']; ?></th>
-                            <th><?php echo $string_values['title_tab_becas_editar']; ?></th>
-                            <th><?php echo $string_values['title_tab_becas_eliminar']; ?></th>
+                            <th><?php echo $string_values['tab_titulo_g_ver']; ?></th>
+                            <th><?php echo $string_values['tab_titulo_g_validar']; ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,7 +60,7 @@
                             . 'data-toggle="modal"'
                             . 'data-target="#modal_censo"'
                             . 'onclick="funcion_editar_reg_beca(this)" >' .
-                            $string_values['tab_titulo_editar']
+                            $string_values['tab_titulo_g_ver']
                             . '</button>'
                             . "</td>";
                             echo "<td>"//Botón eliminar
@@ -72,7 +72,7 @@
                             . 'data-becacve ="' . $key . '"'
                             . 'data-comprobantecve ="' . $idcomprobante . '"'
                             . 'onclick="funcion_eliminar_reg_beca(this)" >' .
-                            $string_values['tab_titulo_eliminar']
+                            $string_values['tab_titulo_g_validar']
                             . '</button>'
                             . "</td>";
                             echo "</tr>";

@@ -352,7 +352,7 @@ $config['emp_act_inv_edu'] = array(
     'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'), 
     'bibliografia_revista' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'), 
     'bibliografia_libro' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'),
-    
+    'ctipo_actividad_docente' => array('select' => 'TIP_ACT_DOC_CVE', 'insert' => 'TIP_ACT_DOC_CVE'),    
 );
 
 $config['emp_beca'] = array(

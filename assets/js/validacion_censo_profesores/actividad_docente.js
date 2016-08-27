@@ -3,7 +3,7 @@ $(function () {
     $('#btn_agregar_actividad_modal_nueva').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
-        var a = hrutes_val['seccion_actividad_docente'];
+        var a = hrutes['seccion_actividad_docente'];
         var cad_split = a.split(":");
         var actgralcve = $('#btn_agregar_actividad_modal_nueva').data('actgralcve');
         data_ajax_post(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/0', null, '#modal_content', {act_gral_cve: actgralcve});
@@ -47,7 +47,7 @@ $(function () {
 
 function funcion_eliminar_actividad_docente(element) {
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
-    var a = hrutes_val['seccion_actividad_docente'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var index_tp_actividad = button_obj.data('cvead');
     var index_entidad = button_obj.data('tacve');
@@ -100,7 +100,7 @@ function funcion_eliminar_actividad_docente(element) {
 }
 
 function cargar_curso(element) {
-    var a = hrutes_val['seccion_actividad_docente'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var ctipo_curso_cve = document.getElementById("ctipo_curso").value;
 
@@ -109,7 +109,7 @@ function cargar_curso(element) {
 
 function funcion_asignar_curso_principal(element) {
     var radio_curso_principal = $(element);
-    var a = hrutes_val['seccion_actividad_docente'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var entidad_tp_a_cve = radio_curso_principal.data('entidadtpacve');
     var act_general_cve = radio_curso_principal.data('actividadgeneralcve');
@@ -242,7 +242,7 @@ function funcion_obtener_max_id_row_table_actividad() {
 //    data_ajax(site_url + '/validacion_censo_profesores/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
 //}
 function funcion_guardar(element) {
-    var a = hrutes_val['seccion_actividad_docente'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var act_doc_cve = 0;
     var cve_tipo_actividad = document.getElementById("ctipo_actividad_docente").value;
@@ -315,7 +315,7 @@ function funcion_guardar(element) {
  * Función del botón editar actividad docente. 
  */
 function funcion_editar_reg_actividad(element) {
-    var a = hrutes_val['seccion_actividad_docente'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var obj = $(element);
     var tp_actividad_cve = obj.data('tacve');
@@ -329,7 +329,7 @@ function funcion_editar_reg_actividad(element) {
  * Función del botón editar actividad docente. 
  */
 function funcion_actualizar_actividad_docente(element) {
-    var a = hrutes_val['seccion_actividad_docente'];
+    var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var obj = $(element);
     var tp_actividad_cve = obj.data('tpactividadcve');

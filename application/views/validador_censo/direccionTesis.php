@@ -1,7 +1,7 @@
 <script type="text/javascript">
 var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion']; ?>";
 </script>
-<?php echo js('perfil/direccion_tesis.js'); ?>
+<?php echo js('validacion_censo_profesores/direccion_tesis.js'); ?>
 <div class="list-group">
     <div id = 'tab_content_actividad_docente' class='tab-content col-md-12'>
         <div id = 'actividad_docente_tab' class='tab-pane fade in active'>
@@ -42,10 +42,10 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 													<td>'.$direccion['NIV_ACA_NOMBRE'].'</td>
 													<td>'.$direccion['COM_ARE_NOMBRE'].'</td>
 													<td><button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-					                                       $string_values['editar'].
+					                                       $string_values['tab_titulo_g_ver'].
 					                                    '</button>
 					                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
-					                                           $string_values['eliminar'].
+					                                           $string_values['tab_titulo_g_validar'].
 					                                        '</button>
 					                                </td>
 												</tr>';
