@@ -15,7 +15,7 @@ $(function() {
                         //dataType: "json",
                         data: $('#formularioDireccionTesis').serialize(),
                         beforeSend: function(xhr) {
-                            $('#cuerpo_modal').html(create_loader());
+                            $('#modal_content').html(create_loader());
                         }
                     })
                     .done(function(response) {
@@ -23,11 +23,11 @@ $(function() {
                         	var json = $.parseJSON(response);
 	                        recargar_opcion_menu_mostrar_mensaje('seccion_direccion_tesis', json.result, json.msg);
 	                    } catch (e) {
-	                        $('#cuerpo_modal').html(response);
+	                        $('#modal_content').html(response);
 	                    }
                     })
                     .fail(function(jqXHR, response) {
-                    	$('cuerpo_modal').html(imprimir_resultado(response));
+                    	$('modal_content').html(imprimir_resultado(response));
                     })
                     .always(function() {
                         remove_loader();

@@ -66,6 +66,8 @@ $config['cestado_usuario'] = array('ACTIVO'=>array('id'=>1), 'INACTIVO'=>array('
 $config['USU_GENERO'] = array('M'=>'Masculino', 'F'=>'Femenino', 'H'=>'Masculino');
 
 $config['categoria_participante'] = array('36112580', '35312180');
+
+$config['EFPCS_FOR_INICIAL'] = array('INICIAL'=>array('id'=>1, 'datos'=>array(2, 4)), 'CONTINUA'=>array('id'=>2) );
 //, 'attributes' => array('class' => 'btn btn-info btn-sm espacio'
 $config['listado_tareas'] = array(
     1 => array('id' => 'btn_solicitud_tarjeton', 'value' => 'Solicitar tarjetón', 'type' => 'button', 'attributes' => array('class' => 'btn btn-sm btn-success btn-block espacio')),

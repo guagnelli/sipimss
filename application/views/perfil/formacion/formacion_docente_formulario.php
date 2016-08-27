@@ -21,6 +21,13 @@
         </div>
         
         <div id="capa_subtipo" class="row"></div>
+        <div class="row">
+            <div class='col-sm-12 col-md-12 col-lg-4 text-right'></div>
+            <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
+                <?php echo form_error_format('subtipo'); ?>
+                <?php echo form_error_format('tipo_curso'); ?>
+            </div>
+        </div>
         
         <!-- <div id="capa_tipo_curso" class="row"></div> -->
 
@@ -74,7 +81,7 @@
                         ?>                      
                     </div>
                 </div>
-                <?php echo form_error_format('tematica'); ?>
+                <?php echo form_error_format('tematica[]'); ?>
             </div>
             <div class='col-sm-12 col-md-12 col-lg-2 text-right'>
                 <div class="form-group">
@@ -321,7 +328,31 @@ $(function() {
         $('#btn_guardar_formacion_docente').on('click', function() {
         	if($('#idc').length){ //Validar carga de archivo
         		if($("#userfile").val()==""){ //Validar carga de archivo
-            		data_ajax(site_url+'/perfil/formacion_docente_formulario/<?php echo $identificador; ?>', '#formulario_formacion_docente', '#modal_content');
+            		//data_ajax(site_url+'/perfil/formacion_docente_formulario/<?php echo $identificador; ?>', '#formulario_formacion_docente', '#modal_content');
+                $.ajax({
+                        url: site_url+'/perfil/formacion_docente_formulario/<?php echo $identificador; ?>',
+                        method: 'POST',
+                        //dataType: "json",
+                        data: $('#formulario_formacion_docente').serialize(),
+                        beforeSend: function(xhr) {
+                            $('#modal_content').html(create_loader());
+                        }
+                    })
+                    .done(function(response) {
+                        try {
+                            var json = $.parseJSON(response);
+                            recargar_opcion_menu_mostrar_mensaje('seccion_formacion', json.result, json.msg);
+                        } catch (e) {
+                            $('#modal_content').html(response);
+                        }
+                    })
+                    .fail(function(jqXHR, response) {
+                        $('modal_content').html(imprimir_resultado(response));
+                    })
+                    .always(function() {
+                        remove_loader();
+                        recargar_fecha_ultima_actualizacion();
+                    });
             	} else {
             	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
                 }
@@ -340,6 +371,10 @@ $(function() {
 		if($('#idc').length && btn_gdt == ""){ ///Eliminar archivo que no hayan sido asociados
 			data_ajax(site_url+'/administracion/eliminar_archivos', null, null);
 		}
+    setTimeout(function(){
+            $('#tabList a:last').tab('show');
+        }, 1000);
+        
 		$(this).off(e);
 	});
 	if($('#tipo_formacion').length){

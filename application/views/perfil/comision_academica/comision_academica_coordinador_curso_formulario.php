@@ -7,7 +7,35 @@ $(function() {
 	if($('#btn_guardar_comision_academica').length){
         $('#btn_guardar_comision_academica').on('click', function() {
         	if($('#idc').length){ //Validar carga de archivo
-            	data_ajax(site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>', '#formulario_comision_academica', '#modal_content');
+        		if($("#userfile").val()==""){ //Validar carga de archivo
+	            	//data_ajax(site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>', '#formulario_comision_academica', '#modal_content');
+	            	$.ajax({
+                        url: site_url+'/perfil/comision_academica_formulario/<?php echo $tipo_comision; ?>/<?php echo $identificador; ?>',
+                        method: 'POST',
+                        //dataType: "json",
+                        data: $('#formulario_comision_academica').serialize(),
+                        beforeSend: function(xhr) {
+                            $('#modal_content').html(create_loader());
+                        }
+                    })
+                    .done(function(response) {
+                        try{
+                        	var json = $.parseJSON(response);
+	                        recargar_opcion_menu_mostrar_mensaje('seccion_comision_academica', json.result, json.msg);
+	                    } catch (e) {
+	                        $('#modal_content').html(response);
+	                    }
+                    })
+                    .fail(function(jqXHR, response) {
+                    	$('modal_content').html(imprimir_resultado(response));
+                    })
+                    .always(function() {
+                        remove_loader();
+                        recargar_fecha_ultima_actualizacion();
+                    });
+                } else {
+            	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
+                }
             } else {
             	$('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
             }
