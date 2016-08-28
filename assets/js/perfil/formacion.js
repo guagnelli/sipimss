@@ -122,6 +122,11 @@ $(function () {
             data_ajax(site_url+'/perfil/formacion_salud_detalle/'+$(this).attr('data-value'), null, '#modal_content');
         });
     }
+    if($('.btn_validar_fd').length){
+        $('.btn_validar_fd').on('click', function() {
+            data_ajax(site_url+'/perfil/formacion_docente_detalle/'+$(this).attr('data-value'), null, '#modal_content');
+        });
+    }
 });
 
 function mostrar_horas_fechas(horas) {

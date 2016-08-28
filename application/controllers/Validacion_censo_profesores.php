@@ -3221,7 +3221,102 @@ class Validacion_censo_profesores extends MY_Controller {
             }
         }
     }
+    
+    /**
+     * Método que almacena la validación del censo, registro por registro(curso, beca, comisión, etc.)
+     * @autor       : Jesús Z. Díaz P.
+     * @modified    :
+     * @access      : public
+     */
+    public function validar_registro($identificador_registro=null, $identificador_validacion=null){
+        if ($this->input->is_ajax_request()) { //Sólo se accede al método a través de una petición ajax
+            if($this->input->post()){ //Validar si se recibió información
+                $this->lang->load('interface');
+                $string_values = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general']);
+                $resultado = array('result'=>false, 'msg'=>'', 'id'=>'');
+                $tipo = $this->input->get('tipo'); //Tipo de tabla a utilizar
 
+                if(!is_null($identificador_registro) && !is_null($tipo)){
+                    $data['identificador_registro'] = $identificador_registro;
+                    $data['identificador_validacion'] = $identificador_validacion;
+                    $registro_id = $this->seguridad->decrypt_base64($identificador_registro); //Identificador del registro
+                    $validacion_id = (!is_null($identificador_validacion)) ? $this->seguridad->decrypt_base64($identificador_validacion) : $identificador_validacion; //Identificador del registro
+                    //pr($_SESSION);
+                    if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido información por método post
+                        $validacion_cve = $this->session->userdata('validacion_cve'); ///Obtener de sesión el identificador de la validación que se esta editando
+                        //$validacion_gral_cve = $this->session->userdata('validacion_gral_cve'); ///Obtener de sesión el identificador de la validación que se esta editando
+                        $data['formulario'] = $this->input->post(null, true); //Se limpian y obtienen datos
+
+                        $this->config->load('form_validation'); //Cargar archivo con validaciones
+                        $validations = $this->config->item('form_validacion_registro'); //Obtener validaciones de archivo general
+                        $this->form_validation->set_rules($validations); //Añadir validaciones
+                        $cvalidacion_curso_estado = $this->config->item('cvalidacion_curso_estado');
+
+                        //////Agregar validación de comentario, si el estado elegido es no valido o en corrección
+                        if(in_array($data['formulario']['estado_validacion'], array($cvalidacion_curso_estado['NO_VALIDO']['id'], $cvalidacion_curso_estado['CORRECCION']['id']))){
+                            $this->form_validation->set_rules('comentario', 'Comentario', 'required');
+                        }
+
+                        if($this->form_validation->run() == TRUE) { //Validar datos
+                            $tipo_id = $this->seguridad->decrypt_base64($tipo); //Identificador del tipo
+                            $tipo_validacion = $this->config->item('TABLAS')[$tipo_id]; ///Obtener tabla y campo donde se almacenará
+                            $validacion_registro = $this->validacion_registro_vo(array_merge($data['formulario'], array('validacion_cve' => $validacion_cve, 'registro' => $registro_id, 'tipo_validacion' => $tipo_validacion))); //'validacion_gral_cve' => $validacion_gral_cve
+                            
+                            //$this->vdm->get_validacion_registro(array('table'=>$tipo_validacion['tabla_validacion'], 'conditions'=>''));
+                            if(is_null($identificador_validacion)){
+                                $resultado_almacenado = $this->vdm->insert_validacion_registro($tipo_validacion['tabla_validacion'], $validacion_registro);
+                                $resultado['id'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']);
+                            } else {
+                                $resultado_almacenado = $this->vdm->update_validacion_registro(array('HIST_VAL_CURSO_CVE' => $validacion_id), $tipo_validacion['tabla_validacion'], $validacion_registro);
+                            }
+
+                            if($resultado_almacenado['result']==true){
+                                $resultado['result'] = true;
+                                $resultado['msg'] = $string_values['datos_almacenados_correctamente'];
+                            } else {
+                                $resultado['msg'] = $resultado_almacenado['msg'];
+                            }
+                            //pr($validacion_registro);
+                            //pr($resultado_almacenado);
+                        } else {
+                            $resultado['msg'] = validation_errors();
+                        }
+                    } else {
+                        $resultado['msg'] = $string_values['error_datos_enviados'];
+                    }
+                } else {
+                    $resultado['msg'] = $string_values['error_datos_enviados'];
+                }
+                //echo imprimir_resultado($resultado); ///Muestra mensaje
+                //pr($_POST); //pr($_SESSION);
+                //pr($data);
+                echo json_encode($resultado);
+            }
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    ////////////////////////Inicio Factory de validación
+    private function validacion_registro_vo($validacion){
+        $val = new Validacion_registro_dao;
+        $val->VALIDACION_CVE = (isset($validacion['validacion_cve']) && !empty($validacion['validacion_cve'])) ? $validacion['validacion_cve'] : NULL;
+        $val->VAL_CUR_EST_CVE = (isset($validacion['estado_validacion']) && !empty($validacion['estado_validacion'])) ? $validacion['estado_validacion'] : NULL;
+        $val->VAL_CUR_COMENTARIO = (isset($validacion['comentario']) && !empty($validacion['comentario'])) ? $validacion['comentario'] : NULL;
+        //$val->VAL_CUR_FCH = (isset($validacion['fecha']) && !empty($validacion['fecha'])) ? $validacion['fecha'] : NULL;
+        $val->{$validacion['tipo_validacion']['campo']} = $validacion['registro'];
+
+        return $val;
+    }
+}
+
+class Validacion_registro_dao {
+    //public $HIST_VAL_CURSO_CVE;
+    public $VALIDACION_CVE;
+    public $VAL_CUR_EST_CVE;
+    public $VAL_CUR_COMENTARIO;
+    //public $VAL_CUR_FCH;
+    //public $EMP_COMISION_CVE;
 }
 
 class Emp_comision_dao {

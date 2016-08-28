@@ -256,10 +256,10 @@ class Validacion_docente_model extends CI_Model {
             $this->db->order_by($params['order']);
         }
         $this->db->join('cvalidacion_curso_estado', "{$params['table']}.VAL_CUR_EST_CVE=cvalidacion_curso_estado.VAL_CUR_EST_CVE", 'left');
-        $this->db->join('hist_validacion', "hist_comision_validacion_curso.VALIDACION_CVE=hist_validacion.VALIDACION_CVE", 'left');
+        $this->db->join('hist_validacion', "{$params['table']}.VALIDACION_CVE=hist_validacion.VALIDACION_CVE", 'left');
         $this->db->join('validador', "hist_validacion.VALIDADOR_CVE=validador.VALIDADOR_CVE", 'left');
         $this->db->join('crol', "validador.ROL_CVE=crol.ROL_CVE", 'left');
-
+        //pr($params);
         $query = $this->db->get($params['table']); //Obtener conjunto de registros
         //pr($this->db->last_query());
         $resultado=$query->result_array();
