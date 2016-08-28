@@ -92,11 +92,21 @@ $db['default'] = array(
 //    'password' => 'mysql',
 //    'database' => 'sipimss',
     
-    'hostname' => 'localhost',
+//    'hostname' => '11.32.41.238',
+//    'username' => 'sipimss',
+//    'password' => 'sipimss',
+//    'database' => 'sipimss_20160815',
+
+//    'hostname' => '11.32.41.30',
+//    'username' => 'sipimss',
+//    'password' => 'sipimss',
+//    'database' => 'sipimss_20160823',
+  
+    'hostname' => '192.168.0.9',
     'username' => 'sipimss',
     'password' => 'sipimss',
     'database' => 'sipimss',
-    
+  
     
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
