@@ -87,15 +87,15 @@ $db['default'] = array(
 //    'password' => 'el#:(vlaluna',
 //    'database' => 'censo_v678',
     
-//    'hostname' => 'localhost',
-//    'username' => 'root',
-//    'password' => 'mysql',
-//    'database' => 'sipimss',
-    
     'hostname' => 'localhost',
-    'username' => 'sipimss',
-    'password' => 'sipimss',
-    'database' => 'sipimss',
+    'username' => 'root',
+    'password' => 'mysql',
+    'database' => 'sipimss_27082016',
+    
+//    'hostname' => 'localhost',
+//    'username' => 'sipimss',
+//    'password' => 'sipimss',
+//    'database' => 'sipimss',
     
     
     'dbdriver' => 'mysqli',

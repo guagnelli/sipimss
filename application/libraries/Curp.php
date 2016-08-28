@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Clase para identificar información del empleado con base en la CURP
  * @version 	: 1.0.0
- * @author      : Guagnelli Mike
+ * @author      : Mr. Guag
  **/
 class Curp {
    

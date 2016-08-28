@@ -30,6 +30,11 @@ $config = array(
             'label' => 'C&oacute;digo de seguridad',
             'rules' => 'required|check_captcha'
         ),
+        array(
+            'field' => 'reg_confirma_contrasenia',
+            'label' => 'Confirmación contraseña',
+            'rules' => 'required|matches[reg_contrasenia]'
+        )
     ),
     'inicio_sesion' => array(
         array(

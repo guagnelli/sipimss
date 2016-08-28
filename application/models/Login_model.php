@@ -152,7 +152,7 @@ class Login_model extends CI_Model {
         if (is_null($matricula) && is_null($password)) {
             return null;
         }
-        $select = array('count(*) "cantidad_reg"', 'us.USUARIO_CVE "user_cve"',
+        $select = array('us.USUARIO_CVE "user_cve"',
             'us.USU_MATRICULA "usr_matricula"', 'us.USU_NOMBRE "usr_nombre"',
             'us.USU_PATERNO "usr_paterno"', 'us.USU_MATERNO "usr_materno"',
             'us.USU_CONTRASENIA "usr_passwd"', 'emp.CATEGORIA_CVE "usr_categoria"',
@@ -168,6 +168,7 @@ class Login_model extends CI_Model {
         $this->db->limit(1);
         $query = $this->db->get('usuario as us');
         $result = $query->row();
+        $result->cantidad_reg = count($result);
         if (!isset($result)) {
             $result = null;
         } else if (empty($result)) {

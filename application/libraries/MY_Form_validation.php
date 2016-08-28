@@ -148,5 +148,14 @@ class MY_Form_validation extends CI_Form_validation {
         $exp = '/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(\.[a-z]{2,4})$/';
         return (!preg_match($exp, $str)) ? FALSE : TRUE;
     }
+    
+    public function matches($str, $field){
+        if ( ! isset($_POST[$field]))
+        {
+            return FALSE;
+        }   
+        $field = $_POST[$field];    
+        return ($str !== $field) ? FALSE : TRUE;
+    }
 
 }
