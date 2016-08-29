@@ -452,45 +452,9 @@ class Perfil extends MY_Controller {
             $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
             //$data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
             $data['string_values'] = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
-            /*$tmp = array();
-            $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_formacion_salud);
-            $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
             
-            if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido información por método post
-                $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                $this->config->load('form_validation'); //Cargar archivo con validaciones
-                $validations = $this->config->item('form_formacion_salud'); //Obtener validaciones de archivo general de validaciones
-                $this->form_validation->set_rules($validations); //Añadir validaciones
-
-                $total_subtipo = $this->fm->get_subtipo_formacion_salud(array('conditions' => array('ctipo_formacion_salud.TIP_FORM_SALUD_CVE' => $datos_formulario['tipo_formacion']), 'fields' => 'count(*) AS total'))[0];
-                if ($total_subtipo['total'] > 0) {
-                    $this->form_validation->set_rules('subtipo', 'Subtipo de formación profesional', 'trim|required');
-                }
-                if ($this->form_validation->run() == TRUE) { //Validar datos
-                    $datos_formulario['empleado'] = $this->session->userdata('idempleado');
-                    $data_fs = $this->formacion_salud_vo($datos_formulario); //Generar objeto para almacenar
-                    if (empty($data['identificador'])) { //Insertar
-                        $resultado_almacenado = $this->fm->insert_formacion_salud($data_fs);
-                        $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
-                    } else { //Actualización
-                        $resultado_almacenado = $this->fm->update_formacion_salud($fs_id, $data_fs);
-                    }
-                    //////Inicio actualizar comprobante
-                    $this->load->model('Administracion_model', 'admin');
-                    if (!empty($datos_formulario['idc'])) {
-                        $resultado_almacenado = $this->admin->update_comprobante($this->seguridad->decrypt_base64($data['idc']), array('TIPO_COMPROBANTE_CVE' => $datos_formulario['tipo_comprobante']));
-                    }
-                    //////Fin actualizar comprobante
-                    $data['msg'] = imprimir_resultado($resultado_almacenado); ///Muestra mensaje
-                } else {
-                    $tmp = $datos_formulario;
-                }
-            }*/
-            //if (!is_null($identificador)) { ///En caso de que se haya elegido alguna convocatoria                
-                $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions' => array('FPCS_CVE' => $fs_id), 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
-            /*} else {
-                $data['dir_tes'] = (array) $this->formacion_salud_vo($tmp); //Generar objeto para ser enviado al formulario
-            }*/
+            $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions' => array('FPCS_CVE' => $fs_id), 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
+            
             $accion_general = $this->config->item('ACCION_GENERAL');
             if($this->session->userdata($accion_general['VALIDAR']['id']) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
                 $data = $this->validar_registro(array_merge($data, array('tipo_id'=>'FORMACION_SALUD', 'seccion_actualizar'=>'seccion_formacion', 'identificador_registro'=>$fs_id)));
@@ -527,72 +491,9 @@ class Perfil extends MY_Controller {
             
             $data['mostrar_hora_fecha_duracion'] = 0;
 
-            /*if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
-                $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                $data['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_formulario, 'duracion'); //Muestrá validaciones de hora y fecha de inicio y termino según la opción de duración
-                $this->config->load('form_validation'); //Cargar archivo con validaciones
-                $validations = $this->config->item('form_formacion_docente'); //Obtener validaciones de archivo general de validaciones
-                $this->form_validation->set_rules($validations); //Añadir validaciones
-                //pr($datos_formulario);
-                $total_subtipo = $this->fm->get_subtipo_formacion_docente(array('conditions'=>array('ctipo_formacion_profesional.TIP_FOR_PROF_CVE'=>$datos_formulario['tipo_formacion']), 'fields'=>'count(*) AS total'))[0];
-                if($total_subtipo['total']>0){
-                    $this->form_validation->set_rules('subtipo', 'Subtipo de formación profesional', 'trim|required');
-                }
-                if (isset($datos_formulario['duracion']) && $datos_formulario['duracion'] == "fecha_dedicadas") { //Agregar validaciones
-                    $datos_formulario['hora_dedicadas'] = null;
-                    $this->form_validation->set_rules('fecha_inicio_pick', 'Fecha inicio', 'trim|required|validate_date_dd_mm_yyyy');
-                    $this->form_validation->set_rules('fecha_fin_pick', 'Fecha fin', 'trim|required|validate_date_dd_mm_yyyy');
-                } else {
-                    if (isset($datos_formulario['duracion'])) {
-                        $datos_formulario['fecha_inicio_pick'] = null;
-                        $datos_formulario['fecha_fin_pick'] = null;
-                        $this->form_validation->set_rules('hora_dedicadas', 'Duración', 'trim|required|integer');
-                    }
-                }
-                if (isset($datos_formulario['tipo_curso']) && ($datos_formulario['tipo_curso'] == $this->config->item('ccurso')['OTRO']['id'])) { //Agregar validaciones
-                    $this->form_validation->set_rules('nombre_curso', 'Nombre del otro curso', 'trim|required');
-                }
-                if($this->form_validation->run() == TRUE ){ //Validar datos
-                    $datos_formulario['empleado'] = $this->session->userdata('idempleado');
-                    $data_fs = $this->formacion_docente_vo($datos_formulario); //Generar objeto para almacenar
-                    $data_tfd = $this->formacion_docente_tematica_vo($datos_formulario['tematica'], $fs_id); //Generar objeto para almacenar
-                    //pr($data_fs);
-                    if(empty($data['identificador'])){ //Insertar
-                        $resultado_almacenado = $this->fm->insert_formacion_docente($data_fs, $data_tfd);
-                        $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
-                        $fs_id = $resultado_almacenado['data']['identificador'];
-                    } else { //Actualización
-                        $resultado_almacenado = $this->fm->update_formacion_docente($fs_id, $data_fs, $data_tfd);
-                    }
-                    //pr($resultado_almacenado);
-                    //////Inicio actualizar comprobante
-                    $this->load->model('Administracion_model','admin');
-                    if(!empty($datos_formulario['idc'])){
-                        $resultado_almacenado_archivo = $this->admin->update_comprobante($this->seguridad->decrypt_base64($data['idc']), array('TIPO_COMPROBANTE_CVE'=>$datos_formulario['tipo_comprobante']));
-                    }
-                    //////Fin actualizar comprobante
-                    $data['msg'] = imprimir_resultado($resultado_almacenado); ///Muestra mensaje
-                    
-                    echo json_encode($resultado_almacenado);
-                    exit();
-                } else {
-                    $tmp = $datos_formulario; ///Necesario
-                    if(isset($datos_formulario['tematica']) && !empty($datos_formulario['tematica'])) {
-                        $tmp_tematica = implode(',', $datos_formulario['tematica']);
-                    }
-                    //pr(validation_errors());
-                    //$data['dir_tes'] = (array)$this->formacion_docente_vo($tmp);
-                    //pr($data['dir_tes']);
-                }
-            }*/
-            //if((!is_null($identificador) && empty($tmp)) || (!empty($resultado_almacenado) && $resultado_almacenado['result']==1)){ ///En caso de que se haya elegido alguna convocatoria
-                $data['dir_tes'] = $this->fm->get_formacion_docente(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'EMP_FORMACION_PROFESIONAL_CVE'=>$fs_id), 'order'=>'EFO_ANIO_CURSO', 'fields'=>'emp_formacion_profesional.*, cinstitucion_avala.IA_NOMBRE, ctipo_formacion_profesional.TIP_FOR_PRO_NOMBRE, csubtipo_formacion_profesional.SUB_FOR_PRO_NOMBRE, cmodalidad.MOD_NOMBRE, comprobante.TIPO_COMPROBANTE_CVE'))[0]; //ccurso.CUR_NOMBRE, ctipo_curso.TIP_CUR_NOMBRE,
-                $data['dir_tes']['tematica'] = $this->fm->get_formacion_docente_tematica(array('conditions'=>array('EMP_FORMACION_PROFESIONAL_CVE'=>$fs_id), 'order'=>'TEM_NOMBRE'));
-            /*} else {
-                $data['dir_tes'] = (array)$this->formacion_docente_vo($tmp); //Generar objeto para ser enviado al formulario
-                $data['dir_tes']['tematica'] = $this->fm->get_tematica(array('conditions'=>"TEMATICA_CVE IN (".$tmp_tematica.")", 'order'=>'TEM_NOMBRE'));
-            }*/
-
+            $data['dir_tes'] = $this->fm->get_formacion_docente(array('conditions'=>array('EMPLEADO_CVE'=>$this->session->userdata('idempleado'), 'EMP_FORMACION_PROFESIONAL_CVE'=>$fs_id), 'order'=>'EFO_ANIO_CURSO', 'fields'=>'emp_formacion_profesional.*, cinstitucion_avala.IA_NOMBRE, ctipo_formacion_profesional.TIP_FOR_PRO_NOMBRE, csubtipo_formacion_profesional.SUB_FOR_PRO_NOMBRE, cmodalidad.MOD_NOMBRE, comprobante.TIPO_COMPROBANTE_CVE, ccurso.CUR_NOMBRE'))[0]; //ctipo_curso.TIP_CUR_NOMBRE,
+            $data['dir_tes']['tematica'] = $this->fm->get_formacion_docente_tematica(array('conditions'=>array('EMP_FORMACION_PROFESIONAL_CVE'=>$fs_id), 'order'=>'TEM_NOMBRE'));
+            
             $accion_general = $this->config->item('ACCION_GENERAL');
             if($this->session->userdata($accion_general['VALIDAR']['id']) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
                 $data = $this->validar_registro(array_merge($data, array('tipo_id'=>'FORMACION_PROFESIONAL', 'seccion_actualizar'=>'seccion_formacion', 'identificador_registro'=>$fs_id)));

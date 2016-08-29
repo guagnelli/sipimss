@@ -224,7 +224,9 @@
 $(function() {
     $("#datetimepicker1").datetimepicker( {
         format: "YYYY", // Notice the Extra space at the beginning
-        viewMode: "years"
+        viewMode: "years",
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
     });
     $('#datetimepickerfi').datetimepicker({
         icons: {
@@ -236,6 +238,8 @@ $(function() {
         format:'DD-MM-YYYY', 
         locale: 'es',
         useCurrent: false,
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
         <?php echo $js_fch_ini; ?>
     });
     $('#datetimepickerff').datetimepicker({
@@ -248,7 +252,15 @@ $(function() {
         format:'DD-MM-YYYY', 
         locale: 'es',
         useCurrent: false,
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
         <?php echo $js_fch_fin; ?>
+    });
+    $("#datetimepickerfi").on("dp.change", function (e) {
+        $('#datetimepickerff').data("DateTimePicker").minDate(e.date);
+    });
+    $("#datetimepickerff").on("dp.change", function (e) {
+        $('#datetimepickerfi').data("DateTimePicker").maxDate(e.date);
     });
     if($('#btn_guardar_comision_academica').length){
         $('#btn_guardar_comision_academica').on('click', function() {

@@ -3026,3 +3026,14 @@ color: #000 ;
   background-color: #808080;
   color: #333 !important;
 }*/
+
+/*************** Calendario ******************/
+.datepicker td span{
+  font-size: 0.8em;
+  color: #333;
+  font-family: "Montserrat-Regular";
+}
+
+.datepicker td.active{
+  color: #FFF;
+}

@@ -21,7 +21,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 									</a>
 								</h4>
 							</div>
-							<div id="collapseOne_<?php echo $key_tc; ?>" class="panel-collapse collapse <?php /*echo ($inc>0) ? '' :*/ 'in'; ?>" role="tabpanel" aria-labelledby="head_<?php echo $key_tc; ?>">
+							<div id="collapseOne_<?php echo $key_tc; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="head_<?php echo $key_tc; ?>">
 								<div class="panel-body">
 									<div class="row">
 									    <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
@@ -41,23 +41,25 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 			                                        	foreach ($columns[$key_tc] as $title) {
 															echo '<th>'.$title.'</th>';
 														}
-			                                            echo '<th>'.$string_values['t_h_opciones'].'</th>'; ?>
+			                                            echo '<th>'.$string_values['t_h_comprobante'].'</th><th>'.$string_values['t_h_opciones'].'</th>'; ?>
 			                                        </tr>
 			                                    </thead>
 			                                    <tbody>
 			                                        <?php //Generará la tabla que muestrá las actividades del docente
 		                                    		foreach ($comisiones[$key_tc] as $key_ca => $comision_academica) {
 		                                    			$id = $this->seguridad->encrypt_base64($comision_academica['EMP_COMISION_CVE']);
+		                                    			$btn_comprobante = (!is_null($comision_academica['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($comision_academica['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
 														echo '<tr id="tr_'.$id.'">';
 														foreach ($columns[$key_tc] as $key_dato => $dato) {
 															echo '<td>'.$comision_academica[$key_dato].'</td>';
 														}
-														echo '<td><button type="button" class="btn btn-link btn-sm btn_editar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
+														echo '<td>'.$btn_comprobante.'</td>
+															<td><button type="button" class="btn btn-link btn-sm btn_editar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
 							                                       $string_values['editar'].
 							                                    '</button>
-							                                    <button type="button" class="btn btn-link btn-sm btn_validar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
+							                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
 							                                       $string_values['validar'].
-							                                    '</button>
+							                                    '</button> -->
 							                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
 							                                           $string_values['eliminar'].
 							                                        '</button>

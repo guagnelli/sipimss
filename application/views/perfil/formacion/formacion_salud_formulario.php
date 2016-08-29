@@ -159,6 +159,8 @@ $(function() {
 	    viewMode: "years",
 	    locale: 'es',
         useCurrent: false,
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
 	    <?php echo $js_fch_ini; ?>
 	});
 	$("#datetimepicker2").datetimepicker( {
@@ -166,8 +168,16 @@ $(function() {
 	    viewMode: "years",
 	    locale: 'es',
         useCurrent: false,
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
 	    <?php echo $js_fch_fin; ?>
 	});
+	$("#datetimepicker1").on("dp.change", function (e) {
+        $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+    });
+    $("#datetimepicker2").on("dp.change", function (e) {
+        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+    });
 	if($('#btn_guardar_formacion_salud').length){
         $('#btn_guardar_formacion_salud').on('click', function(e) {
         	if($('#idc').length){ //Validar carga de archivo
