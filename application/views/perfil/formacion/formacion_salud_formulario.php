@@ -2,16 +2,16 @@
 	<?php echo form_open_multipart('', array('id'=>'formulario_formacion_salud')); ?>
 	<div id="capa_formacion_salud" style="padding:20px;">
 		<?php if(isset($msg) && !is_null($msg)){ echo $msg; } //Imprimir mensaje ?>
-		<div class="row">
+		<!-- <div class="row">
 		    <div class='col-sm-12 col-md-4 col-lg-4 text-right'>
 		        <label class="control-label">
-		            * <?php echo $string_values['lbl_tipo_for']; ?>:
+		            * <?php //echo $string_values['lbl_tipo_for']; ?>:
 		        </label>
 		    </div>
 		    <div class="col-md-4 col-lg-4 text-center">
                 <label>
                     <?php
-                    $checkedI = $checkedC = array();
+                    /*$checkedI = $checkedC = array();
                     if(isset($dir_tes['EFPCS_FOR_INICIAL']) && $dir_tes['EFPCS_FOR_INICIAL']==1){
                         $checkedI = array('checked'=>'checked');
                     } elseif(isset($dir_tes['EFPCS_FOR_INICIAL']) && $dir_tes['EFPCS_FOR_INICIAL']==2) {
@@ -26,14 +26,14 @@
                             ), $checkedI)
                         )
                     );
-                    echo $string_values['lbl_es_inicial'];
+                    echo $string_values['lbl_es_inicial'];*/
                     ?>
                 </label>
             </div>
             <div class="col-md-4 col-lg-4 text-left">
                 <label>
                     <?php
-                   	echo $this->form_complete->create_element(
+                   	/*echo $this->form_complete->create_element(
                    		array('id'=>'es_inicial', 'type'=>'radio',
                            'value' => '2',
                            'attributes'=>array_merge(array(
@@ -42,15 +42,37 @@
 	                           ), $checkedC)
                        	)
                    	);
-                   	echo $string_values['lbl_es_continua'];
+                   	echo $string_values['lbl_es_continua'];*/
                    ?>
                 </label>
             </div>
 		</div><br>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'></div>
-		    <div class='col-sm-12 col-md-12 col-lg-8'><?php echo form_error_format('es_inicial'); ?></div>
+		    <div class='col-sm-12 col-md-12 col-lg-8'><?php //echo form_error_format('es_inicial'); ?></div>
+		</div> -->
+    <?php
+		echo $this->form_complete->create_element(array('id'=>'es_inicial', 'value'=>$dir_tes['EFPCS_FOR_INICIAL'], 'type'=>'hidden'));
+		?>
+		<div class="row">
+		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
+		        <label class="control-label">
+		            * <?php echo $string_values['lbl_tipo_formacion']; ?>:
+		        </label>
+		    </div>
+		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
+		        <div class="form-group">
+		            <div class="input-group">
+		                <?php
+		                echo $this->form_complete->create_element(array('id'=>'tipo_formacion', 'type'=>'dropdown', 'value'=>$dir_tes['TIP_FORM_SALUD_CVE'], 'options'=>$catalogos['ctipo_formacion_salud'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['lbl_tipo_formacion'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_tipo_formacion'])));
+		                ?>
+		            </div>
+		        </div>
+		        <?php echo form_error_format('tipo_formacion'); ?>
+		    </div>
 		</div>
+		<div id="capa_subtipo" class="row"></div>
+        <?php echo form_error_format('subtipo'); ?>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
@@ -114,25 +136,6 @@
 		    </div>
 		</div>
 
-		<div class="row">
-		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
-		        <label class="control-label">
-		            * <?php echo $string_values['lbl_tipo_formacion']; ?>:
-		        </label>
-		    </div>
-		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
-		        <div class="form-group">
-		            <div class="input-group">
-		                <?php
-		                echo $this->form_complete->create_element(array('id'=>'tipo_formacion', 'type'=>'dropdown', 'value'=>$dir_tes['TIP_FORM_SALUD_CVE'], 'options'=>$catalogos['ctipo_formacion_salud'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['lbl_tipo_formacion'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_tipo_formacion'])));
-		                ?>
-		            </div>
-		        </div>
-		        <?php echo form_error_format('tipo_formacion'); ?>
-		    </div>
-		</div>
-		<div id="capa_subtipo" class="row"></div>
-        <?php echo form_error_format('subtipo'); ?>
 		<?php echo $formulario_carga_archivo; ?>
 	</div>
 	<div class="list-group-item text-center center">
@@ -166,31 +169,29 @@ $(function() {
 	    <?php echo $js_fch_fin; ?>
 	});
 	if($('#btn_guardar_formacion_salud').length){
-        $('#btn_guardar_formacion_salud').on('click', function() {
+        $('#btn_guardar_formacion_salud').on('click', function(e) {
         	if($('#idc').length){ //Validar carga de archivo
         		if($("#userfile").val()==""){ //Validar carga de archivo
             		//data_ajax(site_url+'/perfil/formacion_salud_formulario/<?php echo $identificador; ?>', '#formulario_formacion_salud', '#modal_content');
                 $.ajax({
 		                url: site_url+'/perfil/formacion_salud_formulario/<?php echo $identificador; ?>',
 		                method: 'POST',
-		                dataType: "json",
+		                //dataType: "json",
+		                data: $('#formulario_formacion_salud').serialize(),
 		                beforeSend: function(xhr) {
-		                    $('#cuerpo_modal').html(create_loader());
+		                    $('#modal_content').html(create_loader());
 		                }
 		            })
 		            .done(function(response) {
-		            	if(response.result==true){
-			                try {
-			                    recargar_opcion_menu_mostrar_mensaje('seccion_formacion', response.result, response.msg);
-			                } catch (e) {
-			                    $('#cuerpo_modal').html(response);
-			                }
-			            } else {
-			            	$('#cuerpo_modal').html(response);
-			            }
+		                try {
+		                	var json = $.parseJSON(response);
+		                    recargar_opcion_menu_mostrar_mensaje('seccion_formacion', json.result, json.msg);
+		                } catch (e) {
+		                    $('#modal_content').html(response);
+		                }
 		            })
 		            .fail(function(jqXHR, response) {
-		                $('cuerpo_modal').html(imprimir_resultado(response));
+		                $('modal_content').html(imprimir_resultado(response));
 		            })
 		            .always(function() {
 		                remove_loader();
@@ -207,6 +208,7 @@ $(function() {
     $('.btn_subir_comprobante').click(function() {
         cargar_archivo($(this).attr('data-key'), "#formulario_formacion_salud");
     });
+    
     $('#modal_censo').on('hide.bs.modal', function (e) {
 		cargar_datos_menu_perfil('seccion_formacion');
 		recargar_fecha_ultima_actualizacion();

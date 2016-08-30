@@ -64,6 +64,7 @@ $userfile = ((!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_s
             	}
             	?>
             </div>
+            <?php if(!isset($no_mostrar_comprobante)){//No muestra el comprobante si esté existe ?>
             <div class="col-lg-4 col-md-12">
             	<?php echo $this->form_complete->create_element(array(
                             'id'=>'btn_subir_archivo',
@@ -74,7 +75,7 @@ $userfile = ((!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_s
                                 'data-key'=> $userfile
                             ))); ?>
             </div>
-            <?php echo form_error_format('text_comprobante'); ?>
+            <?php echo form_error_format('text_comprobante'); }?>
     </div>
     <div id="error_carga_archivo"></div>
 </div>

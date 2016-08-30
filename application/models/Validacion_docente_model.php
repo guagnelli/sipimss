@@ -8,6 +8,7 @@ class Validacion_docente_model extends CI_Model {
         // Call the CI_Model constructor
         parent::__construct();
         $this->load->database();
+        $this->string_values = $this->lang->line('interface')['model']; //Cargar textos utilizados en vista
     }
 
     public function get_buscar_docentes_validar($params) {
@@ -236,6 +237,80 @@ class Validacion_docente_model extends CI_Model {
             $return_info = $this->regresa_datos($result, $data_siap['reg_delegacion']);
         }
         return $return_info;
+    }
+    
+    public function get_validacion_registro($params=null){
+        $resultado = array();
+
+        if(array_key_exists('fields', $params)){
+            if(is_array($params['fields'])){
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        if(array_key_exists('order', $params)){
+            $this->db->order_by($params['order']);
+        }
+        $this->db->join('cvalidacion_curso_estado', "{$params['table']}.VAL_CUR_EST_CVE=cvalidacion_curso_estado.VAL_CUR_EST_CVE", 'left');
+        $this->db->join('hist_validacion', "{$params['table']}.VALIDACION_CVE=hist_validacion.VALIDACION_CVE", 'left');
+        $this->db->join('validador', "hist_validacion.VALIDADOR_CVE=validador.VALIDADOR_CVE", 'left');
+        $this->db->join('crol', "validador.ROL_CVE=crol.ROL_CVE", 'left');
+        //pr($params);
+        $query = $this->db->get($params['table']); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado=$query->result_array();
+
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
+
+    public function insert_validacion_registro($tabla, $datos){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        $this->db->insert($tabla, $datos); //Inserción de registro
+        
+        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $data_id;
+            $resultado['msg'] = $this->string_values['insercion'];
+            $resultado['result'] = TRUE;
+        }
+        //pr($this->db->last_query());
+        return $resultado;
+    }
+
+    public function update_validacion_registro($identificador, $tabla, $datos){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        
+        $this->db->trans_begin(); //Definir inicio de transacción
+        $this->db->where($identificador);
+        $this->db->update($tabla, $datos); //Inserción de registro
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $identificador;
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
+        //pr($this->db->last_query());
+        return $resultado;
     }
 
 }

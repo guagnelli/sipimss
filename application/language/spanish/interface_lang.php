@@ -252,6 +252,8 @@ $lang['interface'] = array(
         'tab_titulo_editar' => 'Editar',
         'tab_titulo_eliminar' => 'Eliminar',
         'msj_selecciona_actividad_docente' => 'Debe seleccionar una actividad docente',
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'investigacion_docente' => array(
         'lbl_ver_comprobante' => 'Ver comprobante',
@@ -292,8 +294,8 @@ $lang['interface'] = array(
         'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde',
         'phl_registro_correcto' => 'El registro se agrego correctamente',
         'update_investigacion_docente' => 'La información de investigación docente se actualizo correctamente',
-
-
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'designar_validador' => array(
         'placeholder_formato_fecha' => 'AAAA-MMDD',
@@ -379,6 +381,8 @@ $lang['interface'] = array(
         't_h_nivel_academico' => 'Nivel académico',
         't_h_area' => 'Área',
         'btn_add_new_direccion' => 'Agregar nueva dirección de tesis',
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'comision_academica' => array(
         'title' => 'Comisión académica',
@@ -397,8 +401,10 @@ $lang['interface'] = array(
         'radio_duracion_horas' => 'Hora(s)',
         'radio_duracion_fecha' => 'Fecha(s)',
         'lbl_duracion_fecha_inicio' => 'Fecha de inicio',
-        'lbl_duracion_fecha_final' => 'Fecha de termino',
+        'lbl_duracion_fecha_final' => 'Fecha de termino',          
         'lbl_duracion' => 'Duración',
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'formacion_salud' => array(
         'lbl_formacion_salud_opc' => 'Formación inicial',
@@ -412,7 +418,9 @@ $lang['interface'] = array(
         'lbl_es_inicial' => 'Es inicial',
         'lbl_es_continua' => 'Es continua',
         'btn_add_new_formacion_salud' => 'Agregar formación del personal de salud',
-        'btn_guardar' => 'Guardar'
+        'btn_guardar' => 'Guardar',
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'formacion_docente' => array(
         'title' => 'Formación docente',
@@ -439,7 +447,9 @@ $lang['interface'] = array(
         'alert_tematica_duplicado' => 'La temática ya ha sido agregada, seleccione otra.',
         'confirmar_tematica_eliminacion' => 'Confirme la eliminación del registro.',
         'otro_curso' => 'Nombre del otro curso',
-        'lbl_ejercicio_profesional' =>'Ejercicio profesional docente'
+        'lbl_ejercicio_profesional' =>'Ejercicio profesional docente',
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'error' => array(
         'crear_carpeta' => 'No es posible crear la carpeta, verifique permisos de escritura con administrador.',
@@ -501,6 +511,8 @@ $lang['interface'] = array(
         'error_eliminar' => 'No se pudo eliminar el archivo. <br>Por favor intente más tarde',
         'succesfull_eliminar' => 'El registro se elimino correctamente',
         'succesfull_actualizar' => 'Los datos se actualizarón correctamente',
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'material_educativo' => array(
         'placeholder_formato_fecha' => 'AAAA-MMDD',
@@ -543,6 +555,8 @@ $lang['interface'] = array(
         'error_eliminar' => 'No se pudo eliminar el archivo. <br>Por favor intente más tarde',
         'succesfull_eliminar' => 'El registro se elimino correctamente',
         'succesfull_actualizar' => 'Los datos de material educativo se actualizarón correctamente',
+        'tab_titulo_g_ver' => 'Ver',
+        'tab_titulo_g_validar' => 'Validar',
     ),
     'password_reset'=>array(
         'title_begin_password_reset' => 'Recuperar tu contraseña en SIPIMSS',

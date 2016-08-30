@@ -9,7 +9,7 @@ $string_values = $this->lang->line('interface');
 
 <script>
     var array_menu_perfil_validar = new Array(15);
-    var hrutes_val = new Object();//Objeto que almacena las rutas del controlador 
+    var hrutes = new Object();//Objeto que almacena las rutas del controlador 
     $('.botonF1').hover(function () {
         $('.btn').addClass('animacionVer');
     })
@@ -133,7 +133,6 @@ $string_values = $this->lang->line('interface');
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

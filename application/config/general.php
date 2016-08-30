@@ -66,6 +66,8 @@ $config['cestado_usuario'] = array('ACTIVO'=>array('id'=>1), 'INACTIVO'=>array('
 $config['USU_GENERO'] = array('M'=>'Masculino', 'F'=>'Femenino', 'H'=>'Masculino');
 
 $config['categoria_participante'] = array('36112580', '35312180');
+
+$config['EFPCS_FOR_INICIAL'] = array('INICIAL'=>array('id'=>1, 'datos'=>array(2, 4)), 'CONTINUA'=>array('id'=>2) );
 //, 'attributes' => array('class' => 'btn btn-info btn-sm espacio'
 $config['listado_tareas'] = array(
     1 => array('id' => 'btn_solicitud_tarjeton', 'value' => 'Solicitar tarjetón', 'type' => 'button', 'attributes' => array('class' => 'btn btn-sm btn-success btn-block espacio')),
@@ -352,7 +354,7 @@ $config['emp_act_inv_edu'] = array(
     'comprobante' => array('select' => 'COMPROBANTE_CVE', 'insert' => 'COMPROBANTE_CVE'), 
     'bibliografia_revista' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'), 
     'bibliografia_libro' => array('select' => 'EAIE_PUB_CITA', 'insert' => 'EAIE_PUB_CITA'),
-    
+    'ctipo_actividad_docente' => array('select' => 'TIP_ACT_DOC_CVE', 'insert' => 'TIP_ACT_DOC_CVE'),    
 );
 
 $config['emp_beca'] = array(

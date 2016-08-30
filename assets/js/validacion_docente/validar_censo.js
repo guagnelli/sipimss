@@ -78,8 +78,8 @@ function funcion_ver_validacion_empleado(element) {
     data_ajax_post(site_url + '/validacion_censo_profesores/seccion_index', null, '#select_perfil_validar', obj_post);
 }
 function funcion_cerrar_validacion_empleado(element) {
-    alert('jsahjhdadas');
+//    alert('jsahjhdadas');
     $('#select_perfil_validar').empty();
-    
+    data_ajax_post(site_url + '/validacion_censo_profesores/seccion_delete_datos_validado', null, null);
 }
     

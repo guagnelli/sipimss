@@ -96,7 +96,7 @@ $db['default'] = array(
 //    'username' => 'sipimss',
 //    'password' => 'sipimss',
 //    'database' => 'sipimss',
-    
+
     
     'dbdriver' => 'mysqli',
     'dbprefix' => '',

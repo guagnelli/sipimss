@@ -3,8 +3,7 @@
 var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion']; ?>";
 </script>
 <?php echo js('perfil/formacion.js'); ?>
-
-    <ul class="nav nav-tabs">
+    <ul id="tabList" class="nav nav-tabs">
         <li class="active">
             <a data-toggle="tab" href="#formacionPersonalSalud">
                 <strong>
@@ -53,27 +52,27 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                     <?php echo form_close();
                     $vista_formacion_salud = (empty($ejercicio_profesional['emp_eje_pro_cve'])) ? 'display:none;' : 'display:block;'; ?>
                     
-                    <div id="div_datos_salud" style="<?php echo $vista_formacion_salud; ?>">
-                        <div class="row">
-                            <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
-                                <div>
-                                    <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_formacion_salud_modal" data-toggle="modal" data-target="#modal_censo" data-value="">
-                                        <?php echo $string_values['btn_add_new_formacion_salud']; ?>
-                                    </button>
-                                </div>
-                            </div>
-                        </div><br>                    
+                    <div id="div_datos_salud" style="<?php echo $vista_formacion_salud; ?>">                    
                         <div class="panel-group" id="accordionSalud" role="tablist" aria-multiselectable="true">
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="headingOneSalud">
                                     <h4 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseOneSalud" aria-expanded="true" aria-controls="collapseOneSalud">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>" aria-expanded="true" aria-controls="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>">
                                             <?php echo $string_values['lbl_formacion_salud_opc']; //Formación docente ?>
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseOneSalud" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOneSalud">
-                                    <div class="panel-body">                                    
+                                <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOneSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>">
+                                    <div class="panel-body">
+                                    <div class="row">
+                                        <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
+                                                <div>
+                                                    <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_formacion_salud_modal" data-toggle="modal" data-target="#modal_censo" data-value="1">
+                                                        <?php echo $string_values['btn_add_new_formacion_salud']; ?>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div><br>                                    
                                         <div id="list_formacion_salud_inicial">                                        
                                             <table class='table table-striped'>
                                                 <thead>
@@ -122,13 +121,22 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="headingTwoSalud">
                                     <h4 class="panel-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseTwoSalud" aria-expanded="false" aria-controls="collapseTwoSalud">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>" aria-expanded="false" aria-controls="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>">
                                             <?php echo $string_values['lbl_formacion_continua_salud_opc']; ?>
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseTwoSalud" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwoSalud">
-                                    <div class="panel-body">                                    
+                                <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwoSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
+                                                <div>
+                                                    <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_formacion_salud_modal" data-toggle="modal" data-target="#modal_censo" data-value="2">
+                                                        <?php echo $string_values['btn_add_new_formacion_salud']; ?>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div><br>                                    
                                         <div id="list_formacion_salud_continua">
                                             <table class='table table-striped'>
                                                 <thead>
@@ -157,6 +165,9 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                        $string_values['editar'].
+                                                                    '</button>
+                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                       $string_values['validar'].
                                                                     '</button>
                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
                                                                            $string_values['eliminar'].
@@ -247,6 +258,9 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                                                        $string_values['editar'].
                                                                                                     '</button>
+                                                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                                                       $string_values['validar'].
+                                                                                                    '</button>
                                                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.
                                                                                                            $string_values['eliminar'].
                                                                                                         '</button>
@@ -297,6 +311,9 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                                        $string_values['editar'].
                                                                                     '</button>
+                                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                                           $string_values['validar'].
+                                                                                        '</button>
                                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.
                                                                                            $string_values['eliminar'].
                                                                                         '</button>

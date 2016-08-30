@@ -37,8 +37,8 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                 <th><?php echo $string_values['tab_titulo_nombre_trabajo_investigacion'] ?></th>
                                 <th><?php echo $string_values['tab_titulo_folio'] ?></th>
                                 <th><?php echo $string_values['tab_titulo_cita_bibliografica'] ?></th>
-                                <th><?php echo $string_values['tab_titulo_editar'] ?></th>
-                                <th><?php echo $string_values['tab_titulo_eliminar'] ?></th>
+                                <th><?php echo $string_values['tab_titulo_g_ver'] ?></th>
+                                <th><?php echo $string_values['tab_titulo_g_validar'] ?></th>
                                 <!--<th>Opciones</th>-->
                             </tr>
                         </thead>
@@ -78,7 +78,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                 echo "<td>" . $val['nombre_investigacion'] . "</td>";
                                 echo "<td>" . $val['folio_investigacion'] . "</td>";
                                 echo "<td>" . $tiene_cita_comprobante . "</td>";
-                                echo "<td>"
+                                 echo "<td>"
                                 . '<button '
                                 . 'type="button" '
                                 . 'class="btn btn-link btn-sm" '
@@ -89,7 +89,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                 . 'data-toggle="modal"'
                                 . 'data-target="#modal_censo"'
                                 . 'onclick="funcion_editar_reg_investigacion(this)" >' .
-                                $string_values['tab_titulo_editar']
+                                $string_values['tab_titulo_g_ver']
                                 . '</button>'
                                 . "</td>";
                                 echo "<td>"//Botón eliminar
@@ -101,10 +101,10 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                 . 'data-invcve ="' . $key . '"'
                                 . 'data-comprobantecve ="' . $comprobante . '"'
                                 . 'onclick="funcion_eliminar_reg_investigacion(this)" >' .
-                                $string_values['tab_titulo_eliminar']
+                                $string_values['tab_titulo_g_validar']
                                 . '</button>'
                                 . "</td>";
-                                echo "</tr>";
+                                echo "</tr>";;
                             }
                             ?>
                         </tbody>

@@ -438,7 +438,7 @@ $config = array(
     'form_investigacion_docente' => array(
         'ctipo_actividad_docente' => array(
             'field' => 'ctipo_actividad_docente',
-            'label' => 'fecha fin de registro docente',
+            'label' => 'tipo de actividad en investigación',
             'rules' => 'required'//
         ),
         'nombre_investigacion' => array(
@@ -701,11 +701,11 @@ $config = array(
         )
     ),
     'form_formacion_salud' => array(
-        array(
+        /*array(
             'field' => 'es_inicial',
             'label' => 'Tipo de formación',
             'rules' => 'required'
-        ),
+        ),*/
         array(
             'field' => 'fch_inicio',
             'label' => 'Fecha de inicio',
@@ -773,6 +773,13 @@ $config = array(
         array(
             'field' => 'tipo_comprobante',
             'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        )
+    ),
+    'form_validacion_registro' => array(
+        array(
+            'field' => 'estado_validacion',
+            'label' => 'Estado de la validación',
             'rules' => 'required'
         )
     ),

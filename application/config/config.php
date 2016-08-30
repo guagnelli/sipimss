@@ -25,9 +25,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 //$config['base_url'] = 'http://11.32.41.242/~solucionesweb/rist/';
 //$config['base_url'] = 'http://11.32.41.238:9000/2016/ristfeb16/';
+<<<<<<< HEAD
 //$config['base_url'] = 'http://localhost/sipimss_censo/';
 //MATAR----->$config['base_url'] = 'http://11.32.41.86/sipimss_censo/';
 $config['base_url'] = 'http://localhost:8080/sipimss/sipimss/';
+=======
+$config['base_url'] = 'http://localhost/sipimss_censo/';
+//$config['base_url'] = 'http://localhost:8080/sipimss/sipimss/';
+>>>>>>> 7c7d8c54be060aef44566994bdbbf5b67ebeb290
 
 /*
 |--------------------------------------------------------------------------

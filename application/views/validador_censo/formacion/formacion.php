@@ -101,10 +101,10 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-                                                                       $string_values['editar'].
+                                                                       $string_values['tab_titulo_g_ver'].
                                                                     '</button>
                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
-                                                                           $string_values['eliminar'].
+                                                                           $string_values['tab_titulo_g_validar'].
                                                                         '</button>
                                                                 </td>
                                                             </tr>';
@@ -153,10 +153,10 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-                                                                       $string_values['editar'].
+                                                                       $string_values['tab_titulo_g_ver'].
                                                                     '</button>
                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
-                                                                           $string_values['eliminar'].
+                                                                           $string_values['tab_titulo_g_validar'].
                                                                         '</button>
                                                                 </td>
                                                             </tr>';

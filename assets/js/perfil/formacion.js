@@ -29,7 +29,7 @@ $(function () {
     }
     if($('.btn_agregar_formacion_salud_modal').length){
         $('.btn_agregar_formacion_salud_modal').on('click', function() {
-            data_ajax(site_url+'/perfil/formacion_salud_formulario/', null, '#modal_content');
+            data_ajax(site_url+'/perfil/formacion_salud_formulario/?es_inicial='+$(this).attr('data-value'), null, '#modal_content');
         });
     }
 	  if($('.btn_agregar_formacion_docente_modal').length){
@@ -43,7 +43,7 @@ $(function () {
         });
     }
     if($('.btn_eliminar_fi').length){
-        $('.btn_eliminar_fi').on('click', function() {
+        $('.btn_eliminar_fi').on('click', function(e) {
             var data_value = $(this).attr('data-value');
             apprise(confirmar_eliminacion, {verify: true}, function(btnClick) {
                 if (btnClick) {
@@ -74,6 +74,7 @@ $(function () {
                     return false;
                 }
             });
+            //$(this).off(e);
         });
     }
     if($('.btn_editar_fd').length){
@@ -119,6 +120,11 @@ $(function () {
     if($('.btn_validar_fs').length){
         $('.btn_validar_fs').on('click', function() {
             data_ajax(site_url+'/perfil/formacion_salud_detalle/'+$(this).attr('data-value'), null, '#modal_content');
+        });
+    }
+    if($('.btn_validar_fd').length){
+        $('.btn_validar_fd').on('click', function() {
+            data_ajax(site_url+'/perfil/formacion_docente_detalle/'+$(this).attr('data-value'), null, '#modal_content');
         });
     }
 });

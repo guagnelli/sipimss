@@ -80,7 +80,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                             . 'data-toggle="modal"'
                             . 'data-target="#modal_censo"'
                             . 'onclick="funcion_editar_material_educativo(this)" >' .
-                            $string_values['tab_titulo_editar']
+                            $string_values['tab_titulo_g_ver']
                             . '</button>'
                             . "</td>";
                             echo "<td>"//Botón eliminar
@@ -93,7 +93,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                             . 'data-tpmateducve ="' . $key_tp_mat_edu . '"'
                             . 'data-comprobantecve ="' . $idcomprobante . '"'
                             . 'onclick="funcion_eliminar_reg_material_educativo(this)" >' .
-                            $string_values['tab_titulo_eliminar']
+                            $string_values['tab_titulo_g_validar']
                             . '</button>'
                             . "</td>";
                             echo "</tr>";

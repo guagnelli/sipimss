@@ -1,8 +1,9 @@
 <div id="capa_html">
-	<?php //echo form_open_multipart('', array('id'=>'formulario_formacion_salud')); ?>
+	<?php
+	//echo form_open_multipart('', array('id'=>'formulario_formacion_salud')); ?>
 	<div id="capa_formacion_salud" style="padding:20px;">
 		<?php //if(isset($msg) && !is_null($msg)){ echo $msg; } //Imprimir mensaje ?>
-		<div class="row">
+		<!-- <div class="row">
 		    <div class='col-sm-12 col-md-4 col-lg-4 text-right'>
 		        <label class="control-label">
 		            <?php echo $string_values['lbl_tipo_for']; ?>:
@@ -11,7 +12,7 @@
 		    <div class="col-md-4 col-lg-4 text-center">
                 <label>
                     <?php
-                    $checkedI = $checkedC = array();
+                    /*$checkedI = $checkedC = array();
                     if(isset($dir_tes['EFPCS_FOR_INICIAL']) && $dir_tes['EFPCS_FOR_INICIAL']==1){
                         $checkedI = array('checked'=>'checked');
                     } elseif(isset($dir_tes['EFPCS_FOR_INICIAL']) && $dir_tes['EFPCS_FOR_INICIAL']==2) {
@@ -26,14 +27,14 @@
                             ), $checkedI)
                         )
                     );
-                    echo $string_values['lbl_es_inicial'];
+                    echo $string_values['lbl_es_inicial'];*/
                     ?>
                 </label>
             </div>
             <div class="col-md-4 col-lg-4 text-left">
                 <label>
                     <?php
-                   	echo $this->form_complete->create_element(
+                   	/*echo $this->form_complete->create_element(
                    		array('id'=>'es_inicial', 'type'=>'radio',
                            'value' => '2',
                            'attributes'=>array_merge(array(
@@ -42,7 +43,7 @@
 	                           ), $checkedC)
                        	)
                    	);
-                   	echo $string_values['lbl_es_continua'];
+                   	echo $string_values['lbl_es_continua'];*/
                    ?>
                 </label>
             </div>
@@ -50,7 +51,7 @@
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'></div>
 		    <div class='col-sm-12 col-md-12 col-lg-8'><?php //echo form_error_format('es_inicial'); ?></div>
-		</div>
+		</div> -->
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">
@@ -59,9 +60,10 @@
 		    </div>
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
-		            <div class="input-group date datepicker" id="datetimepicker1">
+		            <div class="input-group date datepicker">
+		            	<label class="registro"><?php echo nice_date($dir_tes['EFPCS_FCH_INICIO'], 'd-m-Y'); ?></label>
 		                <?php
-		                echo $this->form_complete->create_element(
+		                /*echo $this->form_complete->create_element(
 		                	array('id'=>'fch_inicio','type'=>'text',
 		                		//'value' => $dir_tes['EFPCS_FCH_INICIO'],
 		                        'attributes'=>array(
@@ -72,14 +74,13 @@
 		                        )
 		                    )
 		                );
-		                $js_fch_ini = (isset($dir_tes['EFPCS_FCH_INICIO']) && !empty($dir_tes['EFPCS_FCH_INICIO'])) ? "defaultDate:moment('".$dir_tes['EFPCS_FCH_INICIO']."')" : '';
+		                $js_fch_ini = (isset($dir_tes['EFPCS_FCH_INICIO']) && !empty($dir_tes['EFPCS_FCH_INICIO'])) ? "defaultDate:moment('".$dir_tes['EFPCS_FCH_INICIO']."')" : '';*/
 		                ?>
-		                <span class="input-group-addon">
+		                <!-- <span class="input-group-addon">
 		                    <span class="fa fa-calendar"></span>
-		                </span>
+		                </span> -->
 		            </div>
 		        </div>
-		        <?php //echo form_error_format('fch_inicio'); ?>
 		    </div>
 		</div>
 		<div class="row">
@@ -91,8 +92,9 @@
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
 		            <div class="input-group date datepicker" id="datetimepicker2">
+		            	<label class="registro"><?php echo nice_date($dir_tes['EFPCS_FCH_FIN'], 'd-m-Y'); ?></label>
 		                <?php
-		                echo $this->form_complete->create_element(
+		                /*echo $this->form_complete->create_element(
 		                	array('id'=>'fch_fin','type'=>'text',
 		                		//'value' => $dir_tes['EFPCS_FCH_FIN'],
 		                        'attributes'=>array(
@@ -103,14 +105,13 @@
 		                        )
 		                    )
 		                );
-		                $js_fch_fin = (isset($dir_tes['EFPCS_FCH_FIN']) && !empty($dir_tes['EFPCS_FCH_FIN'])) ? "defaultDate:moment('".$dir_tes['EFPCS_FCH_FIN']."')" : '';
+		                $js_fch_fin = (isset($dir_tes['EFPCS_FCH_FIN']) && !empty($dir_tes['EFPCS_FCH_FIN'])) ? "defaultDate:moment('".$dir_tes['EFPCS_FCH_FIN']."')" : '';*/
 		                ?>
-		                <span class="input-group-addon">
+		                <!-- <span class="input-group-addon">
 		                    <span class="fa fa-calendar"></span>
-		                </span>
+		                </span> -->
 		            </div>
 		        </div>
-		        <?php //echo form_error_format('fch_fin'); ?>
 		    </div>
 		</div>
 
@@ -123,16 +124,33 @@
 		    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		        <div class="form-group">
 		            <div class="input-group">
+		            	<label class="registro"><?php echo $dir_tes['TIP_FORM_SALUD_NOMBRE']; ?></label>		            	
 		                <?php
-		                echo $this->form_complete->create_element(array('id'=>'tipo_formacion', 'type'=>'dropdown', 'value'=>$dir_tes['TIP_FORM_SALUD_CVE'], 'options'=>$catalogos['ctipo_formacion_salud'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['lbl_tipo_formacion'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_tipo_formacion'])));
+		                //echo $this->form_complete->create_element(array('id'=>'tipo_formacion', 'type'=>'dropdown', 'value'=>$dir_tes['TIP_FORM_SALUD_CVE'], 'options'=>$catalogos['ctipo_formacion_salud'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['lbl_tipo_formacion'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_tipo_formacion'])));
 		                ?>
 		            </div>
 		        </div>
 		        <?php //echo form_error_format('tipo_formacion'); ?>
 		    </div>
 		</div>
-		<div id="capa_subtipo" class="row"></div>
-        <?php //echo form_error_format('subtipo'); ?>
+		<?php
+		if(isset($dir_tes['SUBTIP_NOMBRE']) && !empty($dir_tes['SUBTIP_NOMBRE'])) {
+			?>
+			<div class='col-sm-12 col-md-12 col-lg-4 text-right'>
+			    <label class="control-label">
+			        <?php echo $string_values['lbl_subtipo_formacion']; ?>:
+			    </label>
+			</div>
+			<div class='col-sm-12 col-md-12 col-lg-8 text-left'>
+				<div class="form-group">
+				    <div class="input-group">
+				    	<label class="registro"><?php echo $dir_tes['SUBTIP_NOMBRE']; ?></label>
+				    </div>
+				</div>
+			</div>
+			<?php
+		}
+		?>
 		<?php echo $formulario_carga_archivo; ?>
 		<?php echo $formulario_validacion; ?>
 	</div>
@@ -198,9 +216,9 @@ $(function() {
             }
         });*/
         <?php
-        if(isset($dir_tes['TIP_FORM_SALUD_CVE']) && !empty($dir_tes['TIP_FORM_SALUD_CVE'])){ ?>
+        /*if(isset($dir_tes['TIP_FORM_SALUD_CVE']) && !empty($dir_tes['TIP_FORM_SALUD_CVE'])){ ?>
             data_ajax(site_url+"/perfil/subtipo_formacion/"+$('#tipo_formacion').val()+"/<?php echo ((isset($dir_tes['CSUBTIP_FORM_SALUD_CVE']) && !empty($dir_tes['CSUBTIP_FORM_SALUD_CVE'])) ? $dir_tes['CSUBTIP_FORM_SALUD_CVE'] : '')?>", null, '#capa_subtipo');
-        <?php } ?>
+        <?php }*/ ?>
     //}
 });
 </script>
