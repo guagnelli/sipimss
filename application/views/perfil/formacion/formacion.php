@@ -77,34 +77,29 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                             <table class='table table-striped'>
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_inicio']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_final']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_tipo_formacion']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['opciones']; ?>
-                                                        </th>
+                                                        <th><?php echo $string_values['lbl_fecha_inicio']; ?></th>
+                                                        <th><?php echo $string_values['lbl_fecha_final']; ?></th>
+                                                        <th><?php echo $string_values['lbl_tipo_formacion']; ?></th>
+                                                        <th><?php echo $string_values['t_h_comprobante']; ?></th>
+                                                        <th><?php echo $string_values['opciones']; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     foreach ($formacion_salud['inicial'] as $key_ini => $fsi) {
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
+                                                        $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
                                                         echo '<tr id="tr_'.$id.'">
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
+                                                                <td>'.$btn_comprobante.'</td>
                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                        $string_values['editar'].
                                                                     '</button>
-                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                        $string_values['validar'].
-                                                                    '</button>
+                                                                    '</button> -->
                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
                                                                            $string_values['eliminar'].
                                                                         '</button>
@@ -126,7 +121,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwoSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>">
+                                <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwoSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>">
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
@@ -141,34 +136,29 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                             <table class='table table-striped'>
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_inicio']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_final']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_tipo_formacion']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['opciones']; ?>
-                                                        </th>
+                                                        <th><?php echo $string_values['lbl_fecha_inicio']; ?></th>
+                                                        <th><?php echo $string_values['lbl_fecha_final']; ?></th>
+                                                        <th><?php echo $string_values['lbl_tipo_formacion']; ?></th>
+                                                        <th><?php echo $string_values['t_h_comprobante']; ?></th>
+                                                        <th><?php echo $string_values['opciones']; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     foreach ($formacion_salud['continua'] as $key_ini => $fsi) {
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
+                                                        $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
                                                         echo '<tr id="tr_'.$id.'">
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
+                                                                <td>'.$btn_comprobante.'</td>
                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                        $string_values['editar'].
                                                                     '</button>
-                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                        $string_values['validar'].
-                                                                    '</button>
+                                                                    '</button> -->
                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
                                                                            $string_values['eliminar'].
                                                                         '</button>
@@ -238,6 +228,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                                     <th><?php echo $string_values['t_h_curso']; ?></th>
                                                                                     <th><?php echo $string_values['t_h_institucion']; ?></th>
                                                                                     <th><?php echo $string_values['t_h_modalidad']; ?></th>
+                                                                                    <th><?php echo $string_values['t_h_comprobante']; ?></th>
                                                                                     <th><?php echo $string_values['opciones']; ?></th>
                                                                                 </tr>
                                                                             </thead>
@@ -249,18 +240,20 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                                     if(count($formacion_docente[$key_tfp][$key_sfp])>0) {
                                                                                         foreach ($formacion_docente[$key_tfp][$key_sfp] as $key_fd => $for_doc) {
                                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
+                                                                                            $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
                                                                                             echo '<tr id="tr_'.$id.'">
                                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
                                                                                                 <td>'.$for_doc['IA_NOMBRE'].'</td>
                                                                                                 <td>'.$for_doc['MOD_NOMBRE'].'</td>
+                                                                                                <td>'.$btn_comprobante.'</td>
                                                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                                                        $string_values['editar'].
                                                                                                     '</button>
-                                                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                                                        $string_values['validar'].
-                                                                                                    '</button>
+                                                                                                    '</button> -->
                                                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.
                                                                                                            $string_values['eliminar'].
                                                                                                         '</button>
@@ -293,6 +286,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                     <th><?php echo $string_values['t_h_curso']; ?></th>
                                                                     <th><?php echo $string_values['t_h_institucion']; ?></th>
                                                                     <th><?php echo $string_values['t_h_modalidad']; ?></th>
+                                                                    <th><?php echo $string_values['t_h_comprobante']; ?></th>
                                                                     <th><?php echo $string_values['opciones']; ?></th>
                                                                 </tr>
                                                             </thead>
@@ -302,18 +296,20 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                     if(count($formacion_docente[$key_tfp][0])>0) {
                                                                         foreach ($formacion_docente[$key_tfp][0] as $key_fd => $for_doc) {
                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
+                                                                            $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
                                                                             echo '<tr id="tr_'.$id.'">
                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
                                                                                 <td>'.$for_doc['IA_NOMBRE'].'</td>
                                                                                 <td>'.$for_doc['MOD_NOMBRE'].'</td>
+                                                                                <td>'.$btn_comprobante.'</td>
                                                                                 <td><button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                                        $string_values['editar'].
                                                                                     '</button>
-                                                                                    <button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+                                                                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
                                                                                            $string_values['validar'].
-                                                                                        '</button>
+                                                                                        '</button> -->
                                                                                     <button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.
                                                                                            $string_values['eliminar'].
                                                                                         '</button>

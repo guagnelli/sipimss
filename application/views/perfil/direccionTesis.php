@@ -30,23 +30,26 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                             <th><?php echo $string_values['t_h_anio']; ?></th>
                                             <th><?php echo $string_values['t_h_nivel_academico']; ?></th>
                                             <th><?php echo $string_values['t_h_area']; ?></th>
-                                            <th>Opciones</th>
+                                            <th><?php echo $string_values['t_h_comprobante']; ?></th>
+                                            <th><?php echo $string_values['opciones']; ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php //Generará la tabla que muestrá las actividades del docente
                                     		foreach ($lista_direccion as $key_ld => $direccion) {
                                     			$id = $this->seguridad->encrypt_base64($direccion['EMP_COMISION_CVE']);
+                                    			$btn_comprobante = (!is_null($direccion['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($direccion['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
 												echo '<tr id="tr_'.$id.'">
 													<td>'.$direccion['EC_ANIO'].'</td>
 													<td>'.$direccion['NIV_ACA_NOMBRE'].'</td>
 													<td>'.$direccion['COM_ARE_NOMBRE'].'</td>
+													<td>'.$btn_comprobante.'</td>
 													<td><button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
 					                                       $string_values['editar'].
 					                                    '</button>
-					                                    <button type="button" class="btn btn-link btn-sm btn_validar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
+					                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
 					                                       $string_values['validar'].
-					                                    '</button>
+					                                    '</button> -->
 					                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
 					                                           $string_values['eliminar'].
 					                                        '</button>

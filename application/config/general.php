@@ -5,6 +5,8 @@ if (!defined('BASEPATH'))
 
 $config['salt'] = "B0no5"; ///SALT
 
+$config['minDate'] = '01/01/1980';
+
 $config['superadmin'] = 5;
 
 $config['upload_config'] = array(

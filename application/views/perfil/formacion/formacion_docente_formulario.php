@@ -298,7 +298,9 @@
 $(function() {
 	$("#datetimepicker1").datetimepicker( {
         format: "YYYY", // Notice the Extra space at the beginning
-        viewMode: "years"
+        viewMode: "years",
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now'
     });
     $('#datetimepickerfi').datetimepicker({
         icons: {
@@ -310,6 +312,8 @@ $(function() {
         format:'DD-MM-YYYY', 
         locale: 'es',
         useCurrent: false,
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
         <?php echo $js_fch_ini; ?>
     });
     $('#datetimepickerff').datetimepicker({
@@ -322,7 +326,19 @@ $(function() {
         format:'DD-MM-YYYY', 
         locale: 'es',
         useCurrent: false,
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
         <?php echo $js_fch_fin; ?>
+    });
+    /*$("#datetimepicker1").on("dp.change", function (e) {
+        $('#datetimepickerff').data("DateTimePicker").maxDate(e.date);
+    });*/
+    $("#datetimepickerfi").on("dp.change", function (e) {
+        $('#datetimepickerff').data("DateTimePicker").minDate(e.date);
+    });
+    $("#datetimepickerff").on("dp.change", function (e) {
+        $('#datetimepickerfi').data("DateTimePicker").maxDate(e.date);
+        //$('#datetimepicker1').data("DateTimePicker").maxDate(e.date);        
     });
 	if($('#btn_guardar_formacion_docente').length){
         $('#btn_guardar_formacion_docente').on('click', function() {

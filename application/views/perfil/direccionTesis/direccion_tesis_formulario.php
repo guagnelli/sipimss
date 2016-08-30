@@ -2,7 +2,9 @@
 $(function() {
 	$("#datetimepicker1").datetimepicker( {
 	    format: "YYYY", // Notice the Extra space at the beginning
-	    viewMode: "years"
+	    viewMode: "years",
+	    minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now',
 	});
 	if($('#btn_guardar_direccion_tesis').length){
         $('#btn_guardar_direccion_tesis').on('click', function (e) {

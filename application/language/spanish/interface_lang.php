@@ -156,7 +156,9 @@ $lang['interface'] = array(
         'archivo_incorrecto' => 'Archivo incorrecto',
         'archivo_inexistente' => 'Archivo inexistente',
         'opciones' => 'Opciones',
-        'error_sql' => 'Ocurrio un error durante el guardado, intentelo más tarde.'
+        'error_sql' => 'Ocurrio un error durante el guardado, intentelo más tarde.',
+        't_h_comprobante' => 'Comprobante',
+        'lbl_ver_comprobante' => 'Ver comprobante'
     ),
     //Actividad del docente
     'actividad_docente' => array(
