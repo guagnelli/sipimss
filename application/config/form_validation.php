@@ -40,7 +40,7 @@ $config = array(
         array(
             'field' => 'passwd',
             'label' => 'Contraseña',
-            'rules' => 'required|max_length[30]|min_length[8]' //|callback_valid_pass
+            'rules' => 'required|max_length[30]' //|callback_valid_pass
         ),
         /* array(
           'field'=>'curp',
@@ -959,6 +959,14 @@ $config = array(
             'rules' => 'required|check_captcha' 
         ), 
     ),
+    'validacion_docente'=>array(
+        'comentario_justificacion' => array(
+            'field' => 'comentario_justificacion',
+            'label' => 'justificación',
+            'rules' => 'trim|required|max_length[4000]' 
+        ),
+    ),
+   
 
     /*matricula
     delegacion

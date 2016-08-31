@@ -41,9 +41,9 @@ class Rol extends MY_Controller {
             $this->lang->load('interface', 'spanish');
             $mensajes = $this->lang->line('interface');
             $tipo_msg = $this->config->item('alert_msg');
-            $value = $this->input->post('seleciion_role', TRUE);
+            $value_rol_cve = $this->input->post('seleciion_role', TRUE);
 //            pr($value);
-            if (empty($value)) {
+            if (empty($value_rol_cve)) {
                 //Mostrar mensaje de advertencia para seleccionar un rol
                 $this->session->set_userdata('rol_seleccionado', array());
                 $data['error'] = $mensajes['rol']['lbl_selecciona_rol'];
@@ -51,10 +51,12 @@ class Rol extends MY_Controller {
             } else {
                 //Cargar controlador
                 $lista_roles_modulos = $this->session->userdata('lista_roles_modulos'); //Módulos de acceso del usuario
-                $rol_seleccionado = get_array_valor($lista_roles_modulos, $value);
+                $rol_seleccionado = get_array_valor($lista_roles_modulos, $value_rol_cve);
                 $this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
+                $this->session->set_userdata('rol_seleccionado_cve', intval($value_rol_cve));
 //                pr($rol_seleccionado);
-                switch ($value) {
+//                exit();
+                switch ($value_rol_cve) {
                     case 1:
                         redirect('perfil');
                     case 2:
@@ -70,6 +72,7 @@ class Rol extends MY_Controller {
             }
         }
 //        pr($this->session->userdata('rol_seleccionado'));
+
         $lista_roles = $this->session->userdata('lista_roles');
         $data['lista_roles'] = $lista_roles;
         $main_contet = $this->load->view('login/Selection_role_tpl', $data, true);
@@ -77,5 +80,11 @@ class Rol extends MY_Controller {
         $this->template->getTemplate();
     }
     
+    private function limpiar_datos_temp_variable_sesion(){
+        /* Limpiar información de validación censo
+         * Limpiar rol_seleccionado
+         * Limpiar rol_seleccionado_cve
+         */
+    }
 
 }

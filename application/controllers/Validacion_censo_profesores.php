@@ -53,8 +53,18 @@ class Validacion_censo_profesores extends MY_Controller {
         //Manda el identificador de la delegación del usuario
         $this->load->model('Designar_validador_model', 'dvm');
         $empleado_cve = $this->session->userdata('idempleado');
-        $datos_validador = $this->dvm->get_validador_n1($empleado_cve);
-        $datos_validador['VAL_CON_CVE'] = 1; //*Implementar bien la consulta que obtiene la convocatoría***
+        $rol_usuario = $this->session->userdata('rol_seleccionado_cve');
+        $datos_validador = $this->vdm->get_validador_empleado_rol($empleado_cve, $rol_usuario);//Busca datos del validador actual
+//        pr($datos_validador);
+        if ($rol_usuario === Enum_rols::Validador_N1 || $rol_usuario === Enum_rols::Validador_N2) {//Se obtiene la convocatoria relacionada a la delegación, unicamente para los validadores N1 y N2, ya que solo pueden validar a los de su delegación, en el caso del N2, para N1 sólo puede validar a los de su unidad
+            $delegacion_cve = (isset($datos_validador['DELEGACION_CVE'])) ? $datos_validador['DELEGACION_CVE'] : ''; //Verifica si existe el rol, de lo contrario pone default cero
+            $datos_validador['VAL_CON_CVE'] = $this->cg->get_convocatoria_delegacion($delegacion_cve)->convocatoria_cve;
+        } else {
+//          Enum_rols::Profesionalizacion -> para la busqueda del rol profesionalización, no es necesario filtrar por convocatoría;
+            $datos_validador['VAL_CON_CVE'] = 0; //*No es necesario filtrar por convocatoria para el tipo de usuario profesionalización***
+            $datos_validador['DELEGACION_CVE'] = '';
+        }
+        
         $this->session->set_userdata('datos_validador', $datos_validador);
 //        pr($datos_validador);
         $data = carga_catalogos_generales(array(enum_ecg::cvalidacion_estado), $data, NULL, TRUE, NULL, array(enum_ecg::cvalidacion_estado => 'VAL_ESTADO_CVE')); //Carga el catálogo de ejercicio predominante
@@ -220,7 +230,59 @@ class Validacion_censo_profesores extends MY_Controller {
 
     public function seccion_validar() {
         if ($this->input->is_ajax_request()) {
-            $this->load->view('validador_censo/valida_docente/valida_docente_tpl', NULL, FALSE);
+            $data = array();
+            $tipo_msg = $this->config->item('alert_msg');
+            $this->lang->load('interface', 'spanish');
+            $string_values = $this->lang->line('interface')['validador_censo'];
+            $data['string_values'] = $string_values;
+            $data_pie['string_values'] = $string_values;
+
+            $pie_pag = $this->load->view('validador_censo/valida_docente/direccion_tesis_pie', $data_pie, TRUE);
+            $data['pie_pag'] = $pie_pag;
+            $this->load->view('validador_censo/valida_docente/valida_docente_tpl', $data, FALSE);
+        } else {
+            redirect(site_url());
+        }
+    }
+    
+    public function validar_estado_docente() {
+        if ($this->input->is_ajax_request()) {
+            if (!is_null($this->input->post())) {
+                $this->lang->load('interface', 'spanish');
+                $string_values = $this->lang->line('interface')['validador_censo'];
+                $filtros = $this->input->post(null, true); //Obtenemos el post o los valores
+            }
+        } else {
+            redirect(site_url());
+        }
+    }
+    
+     public function enviar_correccion_validacion() {
+        if ($this->input->is_ajax_request()) {
+            if (!is_null($this->input->post())) {
+                $this->lang->load('interface', 'spanish');
+                $string_values = $this->lang->line('interface')['validador_censo'];
+                $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
+                $this->config->load('form_validation'); //Cargar archivo con validaciones
+                $validations_array = $this->config->item('validacion_docente'); //Obtener validaciones de archivo general
+                $validation = array();
+                //Busca validaciones para el envío a corrección
+                foreach ($datos_post as $key => $value) {
+                    if (key_exists($key, $validations_array)) {
+                        $validation[] = $validations_array[$key];
+                    }
+                }
+                $this->form_validation->set_rules($validation); //Añadir validaciones
+                if ($this->form_validation->run()) {
+//                    pr('entro aquí');
+                }
+                $data['string_values'] = $string_values;
+                $data_pie['string_values'] = $string_values;
+
+                $pie_pag = $this->load->view('validador_censo/valida_docente/direccion_tesis_pie', $data_pie, TRUE);
+                $data['pie_pag'] = $pie_pag;
+                $this->load->view('validador_censo/valida_docente/valida_docente_tpl', $data, FALSE);
+            }
         } else {
             redirect(site_url());
         }

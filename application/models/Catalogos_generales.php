@@ -31,7 +31,7 @@ class Catalogos_generales extends CI_Model {
                             break;
                         default :
 //                            foreach ($value as $key => $value_prima) {
-                                $this->db->where($value);
+                            $this->db->where($value);
 //                            }
                     }
                 } else {
@@ -488,6 +488,36 @@ class Catalogos_generales extends CI_Model {
             }
         }
         return $result_comprobante;
+    }
+
+    /**
+     * @param autor LEAS
+     * @fecha 29/08/2016
+     * @param type $delegacion_cve
+     * @return type Objet con la convocatoria asociada a la delegación
+     * La consulta obtiene la convocatoria relacionada con la delegación, demás, 
+     * si existe más de una convocatoria asociada a la delegación, entonces,
+     * obtiene el maximo id de la convocatoría
+     * 
+     */
+    public function get_convocatoria_delegacion($delegacion_cve = null) {
+        $select = 'select vc.VAL_CON_CVE "convocatoria_cve",
+        vc.VAL_CON_FCH_INICIO_ACTUALIZACION "inicio_actualizacion_datos_docente",
+        vc.VAL_CON_FCH_FIN_ACTUALIZACION "fin_actualizacion_datos_docente", 
+        vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_I "inicio_validacion_face1", 
+        vc.VAL_CON_FCH_FIN_VALIDACION_FASE_I "fin_validacion_face1",
+        vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_II "inicio_validacion_face2", 
+        vc.VAL_CON_FCH_FIN_VALIDACION_FASE_II "fin_validacion_face2" 
+        from validacion_convocatoria vc
+        where vc.VAL_CON_CVE in 
+        (select max(vcp.VAL_CON_CVE) from validacion_convocatoria_delegacion vcd 
+        join validacion_convocatoria vcp on vcp.VAL_CON_CVE = vcd.VAL_CON_CVE
+        where vcd.VAL_CON_DEL_CVE = ' . $delegacion_cve . ')';
+        $num_rows = $this->db->query($select)->result();
+        if (!empty($num_rows)) {
+            $num_rows = $num_rows[0];
+        }
+        return $num_rows;
     }
 
 }

@@ -109,7 +109,7 @@ function cargar_datos_menu_perfil(id) {
         var cadena = hrutes[id];
         var cad_split = cadena.split(":");
         data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
-    } catch (e) {
+    } catch (e) {//Carga los datos de la recarga de la páginas
         var URLactual = window.location;
         URLactual = String(URLactual);
         var pag = URLactual.split("#");

@@ -377,7 +377,11 @@ $lang['interface'] = array(
         't_h_rol' => 'Rol',
         'falta_estado_validacion' => 'Debe seleccionar el estado de la validación. Elijalo por favor.',
         'error_datos_enviados' => 'No han sido enviados datos, por favor intentelo nuevamente.',
-        'lbl_historico_validaciones' => 'Histórico de validaciones'
+        'lbl_historico_validaciones' => 'Histórico de validaciones',
+        'lbl_comentario' => 'Comentarío:',
+        'lbl_jus_validacion' => 'Justificación de la validación',
+        'lbl_validar_docente_n1' => 'Validar',
+        'lbl_no_validar_n1' => 'Enviar a corrección',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',
