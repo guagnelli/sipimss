@@ -475,9 +475,9 @@ $config['ACCION_GENERAL'] = array(
 
 ////////////////////////////////////////Inicio parámetros de validación
 $config['cvalidacion_curso_estado'] = array(
-    'VALIDO' => array('id' => 1),
-    'NO_VALIDO' => array('id' => 2),
-    'CORRECCION' => array('id' => 3)
+    'VALIDO' => array('id' => 1, 'color' => 'success'),
+    'NO_VALIDO' => array('id' => 2, 'color' => 'danger'),
+    'CORRECCION' => array('id' => 3, 'color' => 'warning')
 );
 
 $config['TABLAS'] = array(

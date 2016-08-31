@@ -60,8 +60,8 @@ $(function() {
         $('#btn_guardar_validacion').on('click', function() {
     		if($("#estado_validacion").val()!=""){ //Validar selección de estado
                 $.ajax({
-                    //url: site_url+'/validacion_censo_profesores/validar_registro/<?php echo $identificador.'/+$(this).attr("data-value")+?tipo='.$tipo; ?>',
-                    url: site_url+'/validacion_censo_profesores/validar_registro/<?php echo $identificador."/'+$(this).attr('data-value')+'?tipo=".$tipo; ?>',
+                    //url: site_url+'/validacion_censo_profesores/validar_censo_registro/<?php echo $identificador.'/+$(this).attr("data-value")+?tipo='.$tipo; ?>',
+                    url: site_url+'/validacion_censo_profesores/validar_censo_registro/<?php echo $identificador."/'+$(this).attr('data-value')+'?tipo=".$tipo; ?>',
                     method: 'POST',
                     dataType: "json",
                     data: $('#formulario_validacion').serialize(),
@@ -74,7 +74,7 @@ $(function() {
                     if(response.id!=""){
                         $("#btn_guardar_validacion").attr('data-value', response.id);
                     }
-                    data_ajax(site_url+'/perfil/listado_estado_registro/<?php echo $identificador.'/'.$tipo; ?>', null, '#capa_historico_registro');
+                    data_ajax(site_url+'/validacion_censo_profesores/listado_estado_registro/<?php echo $identificador.'/'.$tipo; ?>', null, '#capa_historico_registro');
                 })
                 .fail(function(jqXHR, response) {
                     $('#error').html(imprimir_resultado(response));
@@ -89,7 +89,7 @@ $(function() {
         });
     }
     
-    data_ajax(site_url+'/perfil/listado_estado_registro/<?php echo $identificador.'/'.$tipo; ?>', null, '#capa_historico_registro');
+    data_ajax(site_url+'/validacion_censo_profesores/listado_estado_registro/<?php echo $identificador.'/'.$tipo; ?>', null, '#capa_historico_registro');
 
     $('#modal_censo').on('hide.bs.modal', function (e) {
 		cargar_datos_menu_perfil('<?php echo $seccion_actualizar; ?>');

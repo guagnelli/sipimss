@@ -3037,3 +3037,13 @@ color: #000 ;
 .datepicker td.active{
   color: #FFF;
 }
+
+td span.class_validacion_registro{
+  font-size: 24px;
+  color: gray;
+}
+
+td span.text-black {
+  font-size: 24px;
+  color: black;
+}

@@ -1,5 +1,15 @@
+<script type="text/javascript">
+$(function() {
+    $('#modal_censo').on('hide.bs.modal', function (e) {
+		cargar_datos_menu_perfil('seccion_direccion_tesis');
+		recargar_fecha_ultima_actualizacion();
+		$(this).off(e);
+	});
+});
+</script>
 <div id="capa_html">
 	<div id="capa_direccion_tesis" style="padding:20px;">
+		<?php //if(isset($msg) && !is_null($msg)){ echo $msg; } //Imprimir mensaje ?>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">

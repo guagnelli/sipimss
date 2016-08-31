@@ -21,17 +21,8 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 									</a>
 								</h4>
 							</div>
-							<div id="collapseOne_<?php echo $key_tc; ?>" class="panel-collapse collapse <?php /*echo ($inc>0) ? '' :*/ 'in'; ?>" role="tabpanel" aria-labelledby="head_<?php echo $key_tc; ?>">
+							<div id="collapseOne_<?php echo $key_tc; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="head_<?php echo $key_tc; ?>">
 								<div class="panel-body">
-									<div class="row">
-									    <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
-									    	<div>
-								                <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_comision_academica_modal" data-toggle="modal" data-target="#modal_censo" data-value="" data-com="<?php echo $this->seguridad->encrypt_base64($key_tc); ?>">
-								                    <?php echo $string_values['btn_add_new_comision_academica']; ?>
-								                </button>
-								            </div>
-									    </div>
-									</div><br>
 									<div class="row" >
 			                            <div id="div_comision_academica" class="table-responsive">
 			                                <table class="table table-striped table-hover table-bordered" id="tabla_comision_academica">
@@ -41,23 +32,25 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 			                                        	foreach ($columns[$key_tc] as $title) {
 															echo '<th>'.$title.'</th>';
 														}
-			                                            echo '<th>'.$string_values['t_h_opciones'].'</th>'; ?>
+			                                            echo '<th>'.$string_values['t_h_comprobante'].'</th><th>'.$string_values['t_h_opciones'].'</th>'; ?>
 			                                        </tr>
 			                                    </thead>
 			                                    <tbody>
 			                                        <?php //Generará la tabla que muestrá las actividades del docente
 		                                    		foreach ($comisiones[$key_tc] as $key_ca => $comision_academica) {
 		                                    			$id = $this->seguridad->encrypt_base64($comision_academica['EMP_COMISION_CVE']);
-														echo '<tr id="tr_'.$id.'">';
+		                                    			$btn_comprobante = (!is_null($comision_academica['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($comision_academica['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
+		                                    			$btn_validar = (isset($comision_academica['IS_VALIDO_PROFESIONALIZACION']) && $comision_academica['IS_VALIDO_PROFESIONALIZACION']==0) ? '<button type="button" class="btn btn-link btn-sm btn_validar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'" onclick="validar_ca(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+														echo '<tr id="tr_'.$id.'">
+															<td class="text-center">'.html_verificar_validacion_registro($comision_academica['validation'], $comision_academica['IS_VALIDO_PROFESIONALIZACION']).'</td>';
 														foreach ($columns[$key_tc] as $key_dato => $dato) {
 															echo '<td>'.$comision_academica[$key_dato].'</td>';
 														}
-														echo '<td><button type="button" class="btn btn-link btn-sm btn_editar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
-							                                       $string_values['tab_titulo_g_ver'].
+														echo '<td>'.$btn_comprobante.'</td>
+															<td><button type="button" class="btn btn-link btn-sm btn_ver_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'" onclick="ver_ca(this);">'.
+							                                       $string_values['ver'].
 							                                    '</button>
-							                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
-							                                           $string_values['tab_titulo_g_validar'].
-							                                        '</button>
+							                                    '.$btn_validar.'
 							                                </td>
 														</tr>';
 													}
