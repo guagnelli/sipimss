@@ -312,5 +312,81 @@ class Validacion_docente_model extends CI_Model {
         //pr($this->db->last_query());
         return $resultado;
     }
+    
+    /**
+     * @author LEAS 
+     * @fecha 29/08/2016
+     * @param $empleado_cve empleado del validador
+     * @param $rol_cve rol que del usuario que inicio sesion
+     * @return datos del validador
+     */
+    function get_validador_empleado_rol($empleado_cve = null, $rol_cve = null) {
+
+        $this->db->where('EMPLEADO_CVE=', intval($empleado_cve));
+        $this->db->where('ROL_CVE=', intval($rol_cve));
+
+        $query = $this->db->get('validador'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado = $query->result_array();
+        if (!empty($resultado)) {
+            $resultado = $resultado[0];
+        }
+
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
+
+    /**
+     * @author LEAS 
+     * @fecha 30/08/2016
+     * @param $empleado_cve 
+     * @param $convocatoria 
+     * @return datos del validador
+     */
+    function get_hist_estado_validacion_docente_actual($empleado_cve = null, $convocatoria = null) {
+        $select  = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"', 
+                         'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"', 
+                         'hv.VAL_COMENTARIO "comentario_estado"');
+        $this->db->where('hv.IS_ACTUAL', 1);//Para obtener el último registro de la actualización
+        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
+        $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
+        $this->db->select($select);
+        
+        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
+
+        $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $row_query = $query->row();
+        if (!empty($row_query)) {
+            $row_query = $row_query[0];
+        }
+        return $row_query;
+    }
+    
+    /**
+     * @author LEAS 
+     * @fecha 30/08/2016
+     * @param $empleado_cve 
+     * @param $convocatoria 
+     * @return Historias de los estados de validación del docente, incluye todos 
+     * los mensajes y comentarios de los validadores en el proceso de validación
+     */
+    function get_hist_estados_validacion_docente($empleado_cve = null, $convocatoria = null) {
+        $select  = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"', 
+                'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"', 
+                'cev.EST_VALIDA_DESC "nom_estado_validacion"',
+                'hv.VAL_COMENTARIO "comentario_estado"');
+        
+        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
+        $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
+        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
+        $this->db->join('cestado_validacion cev', 'cev.EST_VALIDACION_CVE = hv.VAL_ESTADO_CVE');
+
+        $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $result = $query->$query->result_array();
+        return $result;
+    }
 
 }

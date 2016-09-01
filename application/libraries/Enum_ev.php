@@ -1,6 +1,6 @@
 <?php
 
-abstract class MyEnumRols {
+abstract class MyEnum_ev {
 
     final public function __construct($value = null) {
         $c = new ReflectionClass($this);
@@ -25,24 +25,23 @@ abstract class MyEnumRols {
 
 }
 
-class Enum_rols extends MyEnumRols {
+class Enum_ev extends MyEnum_ev {
 
     const
             __default = 0,
-            Docente = 1,
-            Validador_N1 = 2,
-            Validador_N2 = 3,
-            Administrador = 4,
-            Super_Administrador = 5,
-            Presidente = 6,
-            Secretario = 7,
-            Vocal = 8,
-            Coordinador = 9,
-            Jefe_de_area_bono = 10,
-            Titular = 11,
-            Mesa_de_ayuda = 12,
-            Jefe_de_rea_eva = 13,
-            Profesionalizacion = 14
+            Inicio = 1,
+            Incompleta = 2,
+            Completa = 3,
+            Por_validar_n1 = 4,
+            En_revision_n1 = 5,
+            Correccion_docente = 6,
+            Val_n1_por_validar_n2 = 7,
+            En_revision_n2 = 8,
+            Correccion_n1 = 9,
+            Val_n2_por_validar_profesionalizacion = 10,
+            En_revision_profesionalizacion = 11,
+            Correccion_n2 = 12,
+            Validado = 13
 
     ;
     /*

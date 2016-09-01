@@ -140,9 +140,10 @@ $lang['interface'] = array(
         'error_guardar' => 'Los datos no se almacenaron. Por favor intentemo más tarde',
         'cerrar' => 'Cerrar',
         'guardar' => 'Guardar',
+        'ver' => 'Ver',
         'editar' => 'Editar',
         'eliminar' => 'Eliminar',
-         'validar' => 'Validar',
+        'validar' => 'Validar',
         'subir_archivo' => 'Subir archivo',
         'lbl_tipo_comprobante' => 'Tipo de comprobante',
         'drop_tipo_comprobante' => 'Seleccione el tipo de comprobante',
@@ -158,7 +159,8 @@ $lang['interface'] = array(
         'opciones' => 'Opciones',
         'error_sql' => 'Ocurrio un error durante el guardado, intentelo más tarde.',
         't_h_comprobante' => 'Comprobante',
-        'lbl_ver_comprobante' => 'Ver comprobante'
+        'lbl_ver_comprobante' => 'Ver comprobante',
+        'validado' => 'Validado'
     ),
     //Actividad del docente
     'actividad_docente' => array(
@@ -375,7 +377,11 @@ $lang['interface'] = array(
         't_h_rol' => 'Rol',
         'falta_estado_validacion' => 'Debe seleccionar el estado de la validación. Elijalo por favor.',
         'error_datos_enviados' => 'No han sido enviados datos, por favor intentelo nuevamente.',
-        'lbl_historico_validaciones' => 'Histórico de validaciones'
+        'lbl_historico_validaciones' => 'Histórico de validaciones',
+        'lbl_comentario' => 'Comentarío:',
+        'lbl_jus_validacion' => 'Justificación de la validación',
+        'lbl_validar_docente_n1' => 'Validar',
+        'lbl_no_validar_n1' => 'Enviar a corrección',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',

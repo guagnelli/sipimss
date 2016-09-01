@@ -26,7 +26,7 @@ class Designar_validador_model extends CI_Model {
             'e.EMP_MATRICULA "matricula_empleado"', 'e.CATEGORIA_CVE "categoria_id"',
             'cat.des_clave "categoria_cve"', 'cat.nom_categoria "nom_categoria"',
             'dp.IS_UNIDAD_VALIDACION "is_unidad_validacion"'
-            );
+        );
 
         $this->db->start_cache();
 //        $this->db->from('cdepartamento as dp');
@@ -34,8 +34,8 @@ class Designar_validador_model extends CI_Model {
         $this->db->join('empleado e', 'e.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
         $this->db->join('crol cr', 'cr.ROL_CVE = v.ROL_CVE', 'left');
         $this->db->join('ccategoria cat', 'cat.id_cat = e.CATEGORIA_CVE', 'left');
-        
-        $this->db->where('dp.IS_UNIDAD_VALIDACION', 1);//es una unidad de validación
+
+        $this->db->where('dp.IS_UNIDAD_VALIDACION', 1); //es una unidad de validación
 
         if (!empty($params['delegacion_cve'])) {
             $this->db->where('dp.cve_delegacion', $params['delegacion_cve']);
@@ -305,7 +305,7 @@ class Designar_validador_model extends CI_Model {
         }
         return $return_info;
     }
-    
+
 //    public function get_validador($validador = null) {
 //        if (!is_null($validador)) {
 //            $this->db->where('VALIDADOR_CVE', $validador);

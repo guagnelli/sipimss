@@ -3,8 +3,7 @@
 var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion']; ?>";
 </script>
 <?php echo js('validacion_censo_profesores/formacion.js'); ?>
-
-    <ul class="nav nav-tabs">
+    <ul id="tabList" class="nav nav-tabs">
         <li class="active">
             <a data-toggle="tab" href="#formacionPersonalSalud">
                 <strong>
@@ -25,87 +24,64 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
             <div class="panel">
                 <div class="panel-body">
                     <div id="mensaje1"></div>
-                    <?php echo form_open('perfil#seccion_formacion', array('id'=>'formulario_ejercicio_profesional')); ?>
                     <div class="row">
                         <div class='col-sm-12 col-md-12 col-lg-3 text-right'>
                             <label class="control-label">
-                                * <?php echo $string_values['lbl_ejercicio_profesional']; ?>:
+                                <?php echo $string_values['lbl_ejercicio_profesional']; ?>:
                             </label>
                         </div>
                         <div class='col-sm-12 col-md-12 col-lg-7 text-left'>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <?php
-                                    echo $this->form_complete->create_element(array('id'=>'ejercicio_profesional', 'type'=>'dropdown', 'value'=>$ejercicio_profesional['emp_eje_pro_cve'], 'options'=>$catalogos['cejercicio_profesional'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['lbl_ejercicio_profesional'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_ejercicio_profesional'])));
-                                    ?>                      
+                                    <label class="registro"><?php echo $ejercicio_profesional['EJE_PRO_NOMBRE']; ?></label>
                                 </div>
                             </div>
                             <div id="error_ejercicio_profesional"></div>
                         </div>
-                        <div class='col-sm-12 col-md-12 col-lg-2 text-right'>
-                            <div>
-                                <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_ejercicio">
-                                    <?php echo $string_values['btn_guardar']; ?>
-                                </button>
-                            </div>
-                        </div>
                     </div>
-                    <?php echo form_close();
+                    <?php
                     $vista_formacion_salud = (empty($ejercicio_profesional['emp_eje_pro_cve'])) ? 'display:none;' : 'display:block;'; ?>
                     
-                    <div id="div_datos_salud" style="<?php echo $vista_formacion_salud; ?>">
-                        <div class="row">
-                            <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
-                                <div>
-                                    <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_formacion_salud_modal" data-toggle="modal" data-target="#modal_censo" data-value="">
-                                        <?php echo $string_values['btn_add_new_formacion_salud']; ?>
-                                    </button>
-                                </div>
-                            </div>
-                        </div><br>                    
+                    <div id="div_datos_salud" style="<?php echo $vista_formacion_salud; ?>">                    
                         <div class="panel-group" id="accordionSalud" role="tablist" aria-multiselectable="true">
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="headingOneSalud">
                                     <h4 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseOneSalud" aria-expanded="true" aria-controls="collapseOneSalud">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>" aria-expanded="true" aria-controls="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>">
                                             <?php echo $string_values['lbl_formacion_salud_opc']; //Formación docente ?>
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseOneSalud" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOneSalud">
-                                    <div class="panel-body">                                    
+                                <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOneSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>">
+                                    <div class="panel-body">
                                         <div id="list_formacion_salud_inicial">                                        
                                             <table class='table table-striped'>
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_inicio']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_final']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_tipo_formacion']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['opciones']; ?>
-                                                        </th>
+                                                        <th>¿<?php echo $string_values['validado']; ?>?</th>
+                                                        <th><?php echo $string_values['lbl_fecha_inicio']; ?></th>
+                                                        <th><?php echo $string_values['lbl_fecha_final']; ?></th>
+                                                        <th><?php echo $string_values['lbl_tipo_formacion']; ?></th>
+                                                        <th><?php echo $string_values['t_h_comprobante']; ?></th>
+                                                        <th><?php echo $string_values['opciones']; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     foreach ($formacion_salud['inicial'] as $key_ini => $fsi) {
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
+                                                        $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
+                                                        $btn_validar = (isset($fsi['IS_VALIDO_PROFESIONALIZACION']) && $fsi['IS_VALIDO_PROFESIONALIZACION']==0) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                                                         echo '<tr id="tr_'.$id.'">
+                                                                <td class="text-center">'.html_verificar_validacion_registro($fsi['validation'], $fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
-                                                                <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-                                                                       $string_values['tab_titulo_g_ver'].
+                                                                <td>'.$btn_comprobante.'</td>
+                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fs(this);">'.
+                                                                       $string_values['ver'].
                                                                     '</button>
-                                                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
-                                                                           $string_values['tab_titulo_g_validar'].
-                                                                        '</button>
+                                                                    '.$btn_validar.'
                                                                 </td>
                                                             </tr>';
                                                     }
@@ -119,45 +95,41 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="headingTwoSalud">
                                     <h4 class="panel-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseTwoSalud" aria-expanded="false" aria-controls="collapseTwoSalud">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionSalud" href="#collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>" aria-expanded="false" aria-controls="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>">
                                             <?php echo $string_values['lbl_formacion_continua_salud_opc']; ?>
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseTwoSalud" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwoSalud">
-                                    <div class="panel-body">                                    
+                                <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwoSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>">
+                                    <div class="panel-body">
                                         <div id="list_formacion_salud_continua">
                                             <table class='table table-striped'>
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_inicio']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_fecha_final']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['lbl_tipo_formacion']; ?>
-                                                        </th>
-                                                        <th>
-                                                            <?php echo $string_values['opciones']; ?>
-                                                        </th>
+                                                        <th>¿<?php echo $string_values['validado']; ?>?</th>
+                                                        <th><?php echo $string_values['lbl_fecha_inicio']; ?></th>
+                                                        <th><?php echo $string_values['lbl_fecha_final']; ?></th>
+                                                        <th><?php echo $string_values['lbl_tipo_formacion']; ?></th>
+                                                        <th><?php echo $string_values['t_h_comprobante']; ?></th>
+                                                        <th><?php echo $string_values['opciones']; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     foreach ($formacion_salud['continua'] as $key_ini => $fsi) {
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
+                                                        $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
+                                                        $btn_validar = (isset($fsi['IS_VALIDO_PROFESIONALIZACION']) && $fsi['IS_VALIDO_PROFESIONALIZACION']==0) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                                                         echo '<tr id="tr_'.$id.'">
+                                                                <td class="text-center">'.html_verificar_validacion_registro($fsi['validation'], $fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
-                                                                <td><button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-                                                                       $string_values['tab_titulo_g_ver'].
+                                                                <td>'.$btn_comprobante.'</td>
+                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fs(this);">'.
+                                                                       $string_values['ver'].
                                                                     '</button>
-                                                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.
-                                                                           $string_values['tab_titulo_g_validar'].
-                                                                        '</button>
+                                                                    '.$btn_validar.'
                                                                 </td>
                                                             </tr>';
                                                     }
@@ -178,15 +150,6 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
             <div class="panel">
                 <div class="panel-body">
                     <div id="mensaje"></div>
-                    <div class="row">
-                        <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
-                            <div>
-                                <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_formacion_docente_modal" data-toggle="modal" data-target="#modal_censo" data-value="">
-                                    <?php echo $string_values['btn_add_new_formacion_docente']; ?>
-                                </button>
-                            </div>
-                        </div>
-                    </div><br>
                     <?php
                     foreach ($catalogos['ctipo_formacion_profesional'] as $key_tfp => $formacion) { ?>
                         <div class="panel-group" id="accordion<?php echo $key_tfp; ?>" role="tablist" aria-multiselectable="true">
@@ -219,11 +182,13 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                         <table class="table table-striped table-hover table-bordered" id="tabla_formacion_docente_<?php echo $key_tfp.'_'.$key_sfp; ?>">
                                                                             <thead>
                                                                                 <tr class='btn-default'>
+                                                                                    <th>¿<?php echo $string_values['validado']; ?>?</th>
                                                                                     <th><?php echo $string_values['t_h_anio']; ?></th>
                                                                                     <th><?php echo $string_values['lbl_tipo_formacion_docente']; ?></th>
                                                                                     <th><?php echo $string_values['t_h_curso']; ?></th>
                                                                                     <th><?php echo $string_values['t_h_institucion']; ?></th>
                                                                                     <th><?php echo $string_values['t_h_modalidad']; ?></th>
+                                                                                    <th><?php echo $string_values['t_h_comprobante']; ?></th>
                                                                                     <th><?php echo $string_values['opciones']; ?></th>
                                                                                 </tr>
                                                                             </thead>
@@ -235,18 +200,20 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                                     if(count($formacion_docente[$key_tfp][$key_sfp])>0) {
                                                                                         foreach ($formacion_docente[$key_tfp][$key_sfp] as $key_fd => $for_doc) {
                                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
+                                                                                            $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
+                                                                                            $btn_validar = (isset($for_doc['IS_VALIDO_PROFESIONALIZACION']) && $for_doc['IS_VALIDO_PROFESIONALIZACION']==0) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                                                                                             echo '<tr id="tr_'.$id.'">
+                                                                                                <td class="text-center">'.html_verificar_validacion_registro($for_doc['validation'], $for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
                                                                                                 <td>'.$for_doc['IA_NOMBRE'].'</td>
                                                                                                 <td>'.$for_doc['MOD_NOMBRE'].'</td>
-                                                                                                <td><button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-                                                                                                       $string_values['editar'].
+                                                                                                <td>'.$btn_comprobante.'</td>
+                                                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fd(this);">'.
+                                                                                                       $string_values['ver'].
                                                                                                     '</button>
-                                                                                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.
-                                                                                                           $string_values['eliminar'].
-                                                                                                        '</button>
+                                                                                                    '.$btn_validar.'
                                                                                                 </td>
                                                                                             </tr>';
                                                                                         }
@@ -271,11 +238,13 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                         <table class="table table-striped table-hover table-bordered" id="tabla_formacion_docente_<?php echo $key_tfp; ?>">
                                                             <thead>
                                                                 <tr class='btn-default'>
+                                                                    <th>¿<?php echo $string_values['validado']; ?>?</th>
                                                                     <th><?php echo $string_values['t_h_anio']; ?></th>
                                                                     <th><?php echo $string_values['lbl_tipo_formacion_docente']; ?></th>
                                                                     <th><?php echo $string_values['t_h_curso']; ?></th>
                                                                     <th><?php echo $string_values['t_h_institucion']; ?></th>
                                                                     <th><?php echo $string_values['t_h_modalidad']; ?></th>
+                                                                    <th><?php echo $string_values['t_h_comprobante']; ?></th>
                                                                     <th><?php echo $string_values['opciones']; ?></th>
                                                                 </tr>
                                                             </thead>
@@ -285,18 +254,20 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                     if(count($formacion_docente[$key_tfp][0])>0) {
                                                                         foreach ($formacion_docente[$key_tfp][0] as $key_fd => $for_doc) {
                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
+                                                                            $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
+                                                                            $btn_validar = (isset($for_doc['IS_VALIDO_PROFESIONALIZACION']) && $for_doc['IS_VALIDO_PROFESIONALIZACION']==0) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                                                                             echo '<tr id="tr_'.$id.'">
+                                                                                <td class="text-center">'.html_verificar_validacion_registro($for_doc['validation'], $for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
                                                                                 <td>'.$for_doc['IA_NOMBRE'].'</td>
                                                                                 <td>'.$for_doc['MOD_NOMBRE'].'</td>
-                                                                                <td><button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-                                                                                       $string_values['editar'].
+                                                                                <td>'.$btn_comprobante.'</td>
+                                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fd(this);">'.
+                                                                                       $string_values['ver'].
                                                                                     '</button>
-                                                                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.
-                                                                                           $string_values['eliminar'].
-                                                                                        '</button>
+                                                                                    '.$btn_validar.'
                                                                                 </td>
                                                                             </tr>';
                                                                         }

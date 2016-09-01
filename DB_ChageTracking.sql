@@ -399,6 +399,7 @@ ALTER TABLE hist_fpcs_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAU
 ALTER TABLE hist_me_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
 
 
-
+/*----------------2016/08/29------------------------*/
+ALTER TABLE sipimss_pdos.modulo MODIFY COLUMN IS_CONTROLADOR int(1) DEFAULT 0 NOT NULL; /*Cambia tipo de dato a int de "1" para distinguir entre un controlador = 1, un controlador de tareas = 2, un hijo de controlador  = 0*/
 
 

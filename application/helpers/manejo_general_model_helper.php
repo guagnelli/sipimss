@@ -209,7 +209,8 @@ if (!function_exists('iniciar_sesion')) {
             if ($login_user->usr_passwd == $password_encrypt) {
                 $roles = $CI->lm->get_usuario_rol_modulo_sesion($login_user->user_cve); //Módulos por rol 
                 $modulos_extra = $CI->lm->get_usuario_modulo_extra_sesion($login_user->user_cve); //Módulos extra por usuario 
-//                            pr($roles);
+                $CI->load->model('Catalogos_generales', 'cg');
+                //                            pr($roles);
                 $datos_session = array(
                     'usuario_logeado' => TRUE,
                     'identificador' => $login_user->user_cve,

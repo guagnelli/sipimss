@@ -21,8 +21,24 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
                         <span class="icon-bar"></span> 
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo site_url()?>">
-                        <span class="glyphicon glyphicon-user"></span><?php echo $this->session->userdata("nombre") . " " . $this->session->userdata("apaterno") . " " . $this->session->userdata("amaterno")?></a>
+                    <?php if($this->uri->segment(1)!=='rol' AND !is_null($this->session->userdata("rol_seleccionado"))){
+                        $rol_opciones = $this->session->userdata("rol_seleccionado");
+//                        pr($rol_opciones);
+                        foreach($rol_opciones as $key => $value){
+                            if(empty(!$value['is_controlador'])AND intval($value['is_controlador']) ===1){
+//                            pr($value['ruta']);
+                    ?>
+                             <a class="navbar-brand" href="<?php echo site_url($value['ruta']); ?>">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                    <?php  echo $value['nombre_modulo'];?>
+                            </a>
+                    <?php
+                            }
+                        }
+                    }//fin if 
+                    ?>
+                   
+                    
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <div class="navbar-form navbar-left" role="search">
@@ -31,13 +47,8 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
                     </div> 
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="<?php echo site_url('/'); ?>"  >
+                            <a href="<?php echo site_url('/'); ?>">
                                 <span class="glyphicon glyphicon-home"></span>Inicio
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<?php echo site_url('rol'); ?>" >
-                                <span class="glyphicon glyphicon-list"></span> Ver listado de roles
                             </a>
                         </li>
                         <li>
@@ -49,6 +60,16 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
                 </div>  
             </div>
         </nav>
+        <div class="text-right">
+            <?php echo "Bienvenido: ";?>  
+            <a  href="<?php echo site_url()?>">
+                <span class="glyphicon glyphicon-user"></span>
+                <?php echo $this->session->userdata("nombre") . " "  
+                        . $this->session->userdata("apaterno") . " "
+                        . $this->session->userdata("amaterno") ?>
+            </a> 
+            <br>
+        </div>  
 <?php
 } else { ///Usuario sin sesión
 ?>  <nav class="navbar navbar-default">   
@@ -86,59 +107,5 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
 <?php
 }
 
-/*******
-    }elseif($tipo_admin == $tipo_admin_config['VALIDADOR']['id']) { ///Administrador
-    ?>
-        <nav class="navbar navbar-default">   
-            <div class="container-fluid">   
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span> 
-                        <span class="icon-bar"></span> 
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="' . site_url() . '">
-                        <span class="glyphicon glyphicon-user"></span><?php echo $this->session->userdata("nombre") . " " . $this->session->userdata("apaterno") . " " . $this->session->userdata("amaterno") ?>
-                    </a>
-                </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <div class="navbar-form navbar-left" role="search"><div class="form-group">
 
-
-                ';
-        ?>
-
-
-        <?php echo '</div></div> <ul class="nav navbar-nav navbar-right">  '; ?>
-        <li><a href="<?php echo site_url('dashboard'); ?>"  ><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-        <li><a href="<?php echo site_url('rol'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de Roles</a></li>
-        <li><a href="<?php echo site_url('login/cerrar_session'); ?>"  ><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a></li>
-
-        <?php
-        echo '   </ul>     </div>  </div>  </nav>';
-    } else { //Docente
-        echo '<nav class="navbar navbar-default">   <div class="container-fluid">   <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="' . site_url() . '"><span class="glyphicon glyphicon-user"></span> ' . $this->session->userdata("nombre") . " " . $this->session->userdata("apaterno") . " " . $this->session->userdata("amaterno") . '</a>
-                </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <div class="navbar-form navbar-left" role="search"><div class="form-group">
-
-
-                ';
-        ?>
-
-        <?php echo '</div></div> <ul class="nav navbar-nav navbar-right">  '; ?>
-        <li><a href="<?php echo site_url('dashboard'); ?>"  ><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-        <li><a href="<?php echo site_url('rol'); ?>" ><span class="glyphicon glyphicon-list"></span> Ver listado de roles</a></li>
-        <li><a href="<?php echo site_url('login/cerrar_session'); ?>"  ><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a></li>
-
-        <?php
-        echo '   </ul>     </div>  </div>  </nav>';
-    }
-    */
 

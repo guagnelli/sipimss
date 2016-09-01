@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Perfil_model extends CI_Model {
-    
+
     var $genero = array('F' => 'Femenino', 'M' => 'Masculino');
 
     public function __construct() {
@@ -86,4 +86,34 @@ class Perfil_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    /**
+     * @author LEAS
+     * @param type $id_empleado
+     * @return type Cantidad de registros que existen en "formación profesional docente y actividad docente"
+     * Para que se cumpla la regla de cambiar de estado "completa" el docente debe cumplir ciertos requisitos, 
+     * 1.- Ya haber registrado almenos información en profesionalización en salud
+     * 2.- Ya haber registrado almenos una actividad docente, y la actividad principal 
+     */
+    public function get_estado_valida_completa($id_empleado) {
+        $select_ = 'select SUM(count_salud) as "total_prof_salud", SUM(count_act_doc) as "total_act_docente" 
+                    from
+                    (select count(efpcs.EMPLEADO_CVE) "count_salud", 0 "count_act_doc"
+                    from empleado as em
+                    join emp_for_personal_continua_salud efpcs on efpcs.EMPLEADO_CVE = em.EMPLEADO_CVE
+                    where em.EMPLEADO_CVE = ' . $id_empleado . '
+                    union
+                    select 0 "count_salud", count(ead.COMPROBANTE_CVE) "count_act_doc"
+                    from empleado as em
+                    join emp_actividad_docente ead on ead.EMPLEADO_CVE = em.EMPLEADO_CVE
+                    join actividad_docente_gral ag on ag.EMPLEADO_CVE = em.EMPLEADO_CVE
+                    where em.EMPLEADO_CVE = ' . $id_empleado . ' and ag.TIP_ACT_DOC_PRINCIPAL_CVE is not null) as res';
+        $query = $this->db->query($select_)->row();
+        return $query;
+    }
+    
+    public function get_verifica_registro_($id_empleado) {
+        
+    }
+
 }

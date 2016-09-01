@@ -51,7 +51,12 @@ class Perfil extends MY_Controller {
         $upDate = $this->modPerfil->get_fecha_ultima_actualizacion($id_usuario)->fecha_bitacora;
         $datosPerfil['fecha_ultima_actualizacion'] = $string_values['span_fecha_last_update'] . strftime("%d de %B de %G a las %H:%M:%S", strtotime($upDate));
         //pr($datosPerfil);
-
+        //Carga el identificador de la convocatoria
+        $convocatoria = $this->cg->get_convocatoria_delegacion($this->session->userdata('delegacion_cve')); //Obtiene la convocatoría a la que pertenece el usuario
+        $this->session->set_userdata('convocatoria_delegacion', $convocatoria);
+        //Verificar que el boton de enviar a validacion deba aparecer
+        $this->validar_cursos_status_completa_docente(null);
+//        $mostrar_boton_validador = $this->
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
@@ -3269,6 +3274,22 @@ class Perfil extends MY_Controller {
                     $array_result[] = $array_validados[$keyp];
             }
         }
+    }
+    
+     private function validar_cursos_status_completa_docente($empleado_id = null, $delegacion_cve = '09') {
+
+//        $delegacion = $this->session->userdata('delegacion_cve');
+//        $convocatoria = $this->session->userdata('convocatoria_delegacion');
+//
+//        pr($convocatoria);
+//        $ultim_convocatoria = $this->cg->get_estado_valida_completa($delegacion_cve); //Checa si existe almenos un registro en formación en salud y actividad docente, y que además marco acctividad principal
+//        $datos_validacion = $this->modPerfil->get_estado_valida_completa($empleado_id); //Checa si existe almenos un registro en formación en salud y actividad docente, y que además marco acctividad principal
+//        $delegacion = '14';
+//        $res_conv = $this->cg->get_convocatoria_delegacion($delegacion_cve); //Obtiene la convocatoría a la que pertenece el usuario
+    }
+
+    private function hist_validacion_docente($empleado_cve, $convocatoria_cve) {
+        $estado_docente = $this->vdm->get_hist_estado_validacion_docente_actual($empleado_cve, $convocatoria_cve); //Checa si existe almenos un registro en formación en salud y actividad docente, y que además marco acctividad principal
     }
 
 }

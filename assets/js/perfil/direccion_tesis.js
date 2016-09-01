@@ -54,9 +54,9 @@ $(function () {
         });
     }
     ///////////Validación
-    if($('.btn_validar_dt').length){
+    /*if($('.btn_validar_dt').length){
         $('.btn_validar_dt').on('click', function() {
             data_ajax(site_url+'/perfil/direccion_tesis_detalle/'+$(this).attr('data-value'), null, '#modal_content');
         });
-    }
+    }*/
 });

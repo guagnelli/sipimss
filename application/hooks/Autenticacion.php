@@ -15,13 +15,8 @@ class Iniciar_sesion {
         $CI->load->library('session');
 
         $logeado = $CI->session->userdata('usuario_logeado'); ///Obtener datos de sesión
-//        $matricula = $CI->session->userdata('matricula');
-//        $tipo_admin = $CI->session->userdata('lista_roles'); //tipo de usuario que inicio sesión
-        $privilegios = $CI->session->userdata('lista_roles_modulos'); //tipo de usuario que inicio sesión
-//        $rol_seleccionado = $CI->session->userdata('rol_seleccionado'); //tipo de usuario que inicio sesión
-//        pr($modulos_permitidos);
-//        pr($privilegios);
-//        pr($tipo_admin);
+//        $privilegios = $CI->session->userdata('lista_roles_modulos'); //Toma los privilegios de todos los roles, no importa cual selecciono
+        $privilegios[] = $CI->session->userdata('rol_seleccionado'); //tipo de usuario que inicio sesión, sólo si tiene acceso el rol seleccionado
 
         $controlador = $CI->uri->segment(1);  //Controlador actual o dirección actual
         $funcion_controlador = $CI->uri->segment(2);  //Función que se llama en el controlador

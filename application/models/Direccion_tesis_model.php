@@ -15,6 +15,24 @@ class Direccion_tesis_model extends CI_Model {
     public function get_lista_datos_direccion_tesis($params=null){
         $resultado = array();
 
+        /////////////////////////////////Inicio verificación existencia de validación actual
+        if(array_key_exists('validation', $params)){
+            if(array_key_exists('fields', $params['validation'])){
+                if(is_array($params['validation']['fields'])){
+                    $this->db->select($params['validation']['fields'][0], $params['validation']['fields'][1]);
+                } else {
+                    $this->db->select($params['validation']['fields']);
+                }
+            }
+            if(array_key_exists('conditions', $params['validation'])){
+                $this->db->where($params['validation']['conditions']);
+            }
+            $subquery = $this->db->get_compiled_select($params['validation']['table']); //Obtener conjunto de registros
+
+            $this->db->select('('.$subquery.') AS validation');
+        } 
+        ////////////////////////////////Fin verificación existencia de validación actual
+
         if(array_key_exists('fields', $params)){
             if(is_array($params['fields'])){
                 $this->db->select($params['fields'][0], $params['fields'][1]);

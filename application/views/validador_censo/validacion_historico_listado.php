@@ -1,7 +1,22 @@
 <?php
 $html = '';
 foreach ($registro_validado as $key_rv => $historico) {
-    $html .= '<tr>
+    $cvalidacion_curso_estado = $this->config->item('cvalidacion_curso_estado');
+    switch ($historico['VAL_CUR_EST_CVE']) {
+        case $cvalidacion_curso_estado['VALIDO']['id']:
+            $class = $cvalidacion_curso_estado['VALIDO']['color'];
+            break;
+        case $cvalidacion_curso_estado['NO_VALIDO']['id']:
+            $class = $cvalidacion_curso_estado['NO_VALIDO']['color'];
+            break;
+        case $cvalidacion_curso_estado['CORRECCION']['id']:
+            $class = $cvalidacion_curso_estado['CORRECCION']['color'];
+            break;
+        default:
+            $class = 'info';
+            break;
+    }
+    $html .= '<tr class="'.$class.'">
         <td>'.nice_date($historico['VAL_CUR_FCH'], 'd-m-Y').'</td>
         <td>'.$historico['ROL_NOMBRE'].'</td>
         <td>'.$historico['VAl_CUR_EST_NOMBRE'].'</td>

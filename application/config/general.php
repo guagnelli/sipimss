@@ -475,9 +475,9 @@ $config['ACCION_GENERAL'] = array(
 
 ////////////////////////////////////////Inicio parámetros de validación
 $config['cvalidacion_curso_estado'] = array(
-    'VALIDO' => array('id' => 1),
-    'NO_VALIDO' => array('id' => 2),
-    'CORRECCION' => array('id' => 3)
+    'VALIDO' => array('id' => 1, 'color' => 'success'),
+    'NO_VALIDO' => array('id' => 2, 'color' => 'danger'),
+    'CORRECCION' => array('id' => 3, 'color' => 'warning')
 );
 
 $config['TABLAS'] = array(
@@ -493,7 +493,46 @@ $config['TABLAS'] = array(
     'MATERIAL_EDUCATIVO' => array('tabla_censo'=>'emp_materia_educativo', 'tabla_validacion'=>'hist_me_validacion_curso', 'campo'=>'MATERIA_EDUCATIVO_CVE'),
 );
 
+/**
+ *  Array de los estados que conforman la validación del censo 12
+ * 
+ *  
+ */
+$config['estados_val_censo'] = array(
+    Enum_ev::Inicio => array('value' => 'Inicio', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => ''),
+    Enum_ev::Incompleta => array('value' => 'Incompleta', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => ''), 
+    Enum_ev::Completa => array('value' => 'Completa', 'rol_permite' => array(Enum_rols::Docente), 'estados_transicion' => array(Enum_ev::Por_validar_n1), 'value_boton' => ''), 
+    Enum_ev::Por_validar_n1 => array('value' => 'Por validar N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::En_revision_n1), 'value_boton' => 'Validar N1'),
+    Enum_ev::En_revision_n1 => array('value' => 'En revisión N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::Correccion_docente, Enum_ev::Val_n1_por_validar_n2), 'value_boton' => 'Enviar a revisión nivel 1'),
+    Enum_ev::Correccion_docente => array('value' => 'Corrección docente', 'rol_permite' =>  array(Enum_rols::Docente),'estados_transicion' => array(Enum_ev::Por_validar_n1), 'value_boton' => 'Enviar corrección por docente'),
+    Enum_ev::Val_n1_por_validar_n2 => array('value' => 'Validado Nivel 1-Por validar Nivel 2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::En_revision_n2), 'value_boton' => 'Validar N2'),
+    Enum_ev::En_revision_n2 => array('value' => 'En revisión N2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::Correccion_n1, Enum_ev::Val_n2_por_validar_profesionalizacion), 'value_boton' => 'Enviar a revisión nivel 2'),
+    Enum_ev::Correccion_n1 => array('value' => 'Corrección N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::Correccion_docente, Enum_ev::Val_n1_por_validar_n2), 'value_boton' => 'Enviar a corrección por nivel 1'),
+    Enum_ev::Val_n2_por_validar_profesionalizacion => array('value' => 'Validado Nivel 2-Por validar profesionalización', 'rol_permite' =>array(Enum_rols::Profesionalizacion),'estados_transicion' => array(Enum_ev::En_revision_profesionalizacion), 'value_boton' => 'Validar profesionalización'),
+    Enum_ev::En_revision_profesionalizacion => array('value' => 'En revisión profesionalización', 'rol_permite' =>array(Enum_rols::Profesionalizacion),'estados_transicion' => array(Enum_ev::Correccion_n2, Enum_ev::Validado), 'value_boton' => 'Enviar a revisión profesionalización'),
+    Enum_ev::Correccion_n2 => array('value' => 'Corrección N2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::Correccion_n1, Enum_ev::Val_n2_por_validar_profesionalizacion), 'value_boton' => 'Enviar a corrección por nivel 2'),
+    Enum_ev::Validado => array('value' => 'Validado profesionalización', 'rol_permite' =>array(),'estados_transicion' => array(), 'value_boton' => ''),
+);
 
+$config['listado_tareas'] = array(
+    1 => array('id' => 'btn_solicitud_tarjeton', 'value' => 'Solicitar tarjetón', 'type' => 'button', 'attributes' => array('class' => 'btn btn-sm btn-success btn-block espacio')),
+    2 => array('id' => 'btn_registro_tarjeton', 'value' => 'Capturar tarjetón', 'type' => 'button', 'attributes' => array('class' => 'btn btn-sm btn-info  btn-block  espacio')),
+    3 => array('id' => 'btn_modificar_tarjeton', 'value' => 'Corregir tarjetón', 'type' => 'button', 'attributes' => array('class' => 'btn btn-sm btn-info  btn-block espacio')),
+    4 => array('id' => 'btn_env_seleccion', 'value' => 'Validar candidato seleccionados', 'type' => 'button', 'attributes' => array('class' => 'btn btn-default btn-sm espacio pull-right')), /*   actualmente esta opcion no esta en el alcance las validaciones se tendran que hacer individuales   */
+    5 => array('id' => 'btn_term_seleccion', 'value' => 'Terminar seleccion de candidatos', 'type' => 'button', 'attributes' => array('class' => 'btn btn-success btn-sm espacio pull-right', 'data-toggle' => "modal", 'data-target' => "#reporteBeneficiadosBono")),
+    6 => array('id' => 'btn_export_exel', 'value' => 'Exportar a excel', 'type' => 'submit', 'attributes' => array('class' => 'btn btn-info btn-sm espacio pull-right')),
+    7 => array('id' => 'btn_val_titular', 'type' => 'button', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'value' => '<i class=/"fa fa-check/"></i>', 'title' => 'Validar candidato por titular', 'class' => 'btn btn-success btn-sm pull-right'),
+    8 => array('id' => 'btn_val_ja', 'value' => 'Validar candidato por jefe area', 'type' => 'button', 'attributes' => array('class' => 'btn btn-info btn-sm espacio', 'data-toggle' => 'tooltip', 'title' => 'Validar candidato por jefe area')),
+    9 => array('id' => 'btn_env_correccion', 'value' => 'Enviar a corrección', 'type' => 'button', 'title' => 'Enviar a corrección', 'attributes' => array('class' => 'btn btn-info btn-sm espacio', 'data-toggle' => 'tooltip', 'onclick' => "data_ajax(site_url+\'/bonos_titular/get_data_ajax_correccion\', \'null\', \'#modal_content\')")),
+    //    8 => array('id' => 'btn_val_ja', 'value' => 'Validar candidato por jefe area', 'type' => 'button', 'attributes' => array('class' => 'btn btn-info btn-sm espacio', 'data-toggle' => 'tooltip', 'title' => 'Validar candidato por jefe area')),
+    //    9 => array('id' => 'btn_env_correccion', 'value' => 'Enviar a corrección', 'type' => 'button', 'title' => 'Enviar a corrección', 'attributes' => array('class' => 'btn btn-info btn-sm espacio', 'data-toggle' => 'tooltip',  'onclick' => "data_ajax(site_url+\'/bonos_titular/get_data_ajax_correccion\', \'null\', \'#modal_content\')")),
+    10 => array('type' => 'button', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Enviar a revisión del validador', 'class' => 'btn btn-success btn-sm pull-right'),
+    11 => array('title' => 'Agregar evaluación', 'value' => 'Agregar evaluación'),
+    12 => array('title' => 'Coorregir evaluación'),
+    13 => array('type' => 'label', 'value' => 'Cumplio con todos los filtros de validación', 'class' => 'btn btn-success btn-sm pull-right'),
+    14 => array('value' => ' Existe(n) [field] empleado(s) validados por el jefe de área', 'cantidad' => 0),
+    15 => array('value' => ' Existe(n) [field] empleado(s) validados por el titular, Puede terminar el proceso de selección de candidatos', 'cantidad' => 0)
+);
 ////////////////////////////////////////Fin parámetros de validación
 
 //    EAD_DURACION
