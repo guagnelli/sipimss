@@ -1,31 +1,21 @@
-<div class="list-group">
-
-    <div class="list-group-item">      
         <div>
             <br>
             <?php echo $string_values['title_becas']; ?>
             <br>
-        </div>
-        <div class='row'>
-            <div class="form-group col-xs-4 col-md-4 col-md-offset-8">
-                <button type="button" class="btn btn-success btn-lg" id="btn_gregar_beca_modal" data-toggle="modal" data-target="#modal_censo">
-                    <?php echo $string_values['btn_agregar_beca']; ?>
-                </button>
-            </div>
         </div>
         <div class='row'> 
             <div class="form-group col-xs-12 col-md-12">
                 <table class="table table-striped table-hover table-bordered" id="tabla_becas">
                     <thead>
                         <tr class="btn-default">
+                            <th><?php echo $string_values['validado']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_clase_beca']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_fecha_inicio']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_fecha_termino']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_motivo_beca']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_beca_interrumpida']; ?></th>
                             <th><?php echo $string_values['title_tab_becas_comprobante']; ?></th>
-                            <th><?php echo $string_values['tab_titulo_g_ver']; ?></th>
-                            <th><?php echo $string_values['tab_titulo_g_validar']; ?></th>
+                            <th><?php echo $string_values['opciones']; ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,39 +32,20 @@
                                 $comprobante = 0;
                                 $btn_comprobante = '';
                             }
+                            $btn_validar = ($this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_be" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_be(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
+                            echo '<td class="text-center">'.html_verificar_validacion_registro($val['validation'], $val['IS_VALIDO_PROFESIONALIZACION']).'</td>';
                             echo "<td>" . $val['nom_beca'] . "</td>";
                             echo "<td>" . $val['fecha_inicio'] . "</td>";
                             echo "<td>" . $val['fecha_fin'] . "</td>";
                             echo "<td>" . $val['nom_motivo_beca'] . "</td>";
                             echo "<td>" . $val['msj_beca_interrumpida'] . "</td>";
                             echo "<td>" . $btn_comprobante . "</td>";
-                            echo "<td>"
-                            . '<button '
-                            . 'type="button" '
-                            . 'class="btn btn-link btn-sm" '
-                            . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-becacve ="' . $key . '"'
-                            . 'data-comprobantecve ="' . $idcomprobante . '"'
-                            . 'data-toggle="modal"'
-                            . 'data-target="#modal_censo"'
-                            . 'onclick="funcion_editar_reg_beca(this)" >' .
-                            $string_values['tab_titulo_g_ver']
-                            . '</button>'
-                            . "</td>";
-                            echo "<td>"//Botón eliminar
-                            . '<button '
-                            . 'type="button" '
-                            . 'class="btn btn-link btn-sm" '
-                            . 'id="btn_editar_mat_educativo" '
-                            . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-becacve ="' . $key . '"'
-                            . 'data-comprobantecve ="' . $idcomprobante . '"'
-                            . 'onclick="funcion_eliminar_reg_beca(this)" >' .
-                            $string_values['tab_titulo_g_validar']
-                            . '</button>'
-                            . "</td>";
+                            echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_be" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="ver_be(this);">'.
+                                   $string_values['ver'].
+                                '</button>';
+                            echo ''.$btn_validar.'</td>'; ///Botón validar
                             echo "</tr>";
                         }
                         ?>
@@ -82,5 +53,3 @@
                 </table>
             </div>
         </div>
-    </div>
-</div>

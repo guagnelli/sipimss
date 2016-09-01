@@ -1,6 +1,6 @@
 $(function () {
-
-    $('#btn_gregar_comision_modal').on('click', function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    /*$('#btn_gregar_comision_modal').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
         var a = hrutes['seccion_becas_comisiones'];
@@ -13,10 +13,22 @@ $(function () {
         var a = hrutes['seccion_becas_comisiones'];
         var cad_split = a.split(":");
         data_ajax(site_url + '/' + cad_split[0] + '/get_form_becas', null, '#modal_content');
-    });
+    });*/
 });
+function ver_be(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_editar_beca/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
+function validar_be(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_editar_beca/'+$(elemento).attr('data-value')+'/'+$(elemento).attr('data-valid'), null, '#modal_content');
+}
+function ver_co(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_editar_comision/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
+function validar_co(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_editar_comision/'+$(elemento).attr('data-value')+'/'+$(elemento).attr('data-valid'), null, '#modal_content');
+}
 
-function funcion_eliminar_reg_beca(element) {
+/*function funcion_eliminar_reg_beca(element) {
     var a = hrutes['seccion_becas_comisiones'];
     var cad_split = a.split(":");
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
@@ -317,3 +329,4 @@ function funcion_actualizar_comision(element) {//actualizar_datos_editar_comisio
             });
    
 }
+*/

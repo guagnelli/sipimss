@@ -9,14 +9,33 @@ class Investigacion_docente_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_lista_datos_investigacion_docente($empleado_cve = null) {
+    public function get_lista_datos_investigacion_docente($empleado_cve = null, $params=null) {
         if (isset($empleado_cve) AND is_null($empleado_cve)) {
             return -1;
         }
+        /////////////////////////////////Inicio verificación existencia de validación actual
+        if(isset($params['validation']) && !is_null($params['validation'])){
+            if(array_key_exists('validation', $params)){
+                if(array_key_exists('fields', $params['validation'])){
+                    if(is_array($params['validation']['fields'])){
+                        $this->db->select($params['validation']['fields'][0], $params['validation']['fields'][1]);
+                    } else {
+                        $this->db->select($params['validation']['fields']);
+                    }
+                }
+                if(array_key_exists('conditions', $params['validation'])){
+                    $this->db->where($params['validation']['conditions']);
+                }
+                $subquery = $this->db->get_compiled_select($params['validation']['table']); //Obtener conjunto de registros
+
+                $this->db->select('('.$subquery.') AS validation');
+            }
+        }
+        ////////////////////////////////Fin verificación existencia de validación actual
         $select = array('eaid.EAID_CVE "cve_investigacion"', 'eaid.EIAE_NOMBRE_INV "nombre_investigacion"'
             , 'eaid.EAIE_FOLIO_ACEPTACION "folio_investigacion"', 'eaid.EMPLEADO_CVE', 'eaid.EAIE_PUB_CITA "cita_publicada"'
             , 'eaid.COMPROBANTE_CVE "comprobante_cve"'
-            , 'eaid.TIP_ACT_DOC_CVE "tpad_cve"', 'ctad.TIP_ACT_DOC_NOMBRE "tpad_nombre"');
+            , 'eaid.TIP_ACT_DOC_CVE "tpad_cve"', 'ctad.TIP_ACT_DOC_NOMBRE "tpad_nombre"', 'eaid.IS_VALIDO_PROFESIONALIZACION');
 
         $this->db->select($select);
         $this->db->from('emp_act_inv_edu as eaid');
@@ -41,13 +60,19 @@ class Investigacion_docente_model extends CI_Model {
             , 'eaid.TIP_ESTUDIO_CVE "tip_estudio_cve"'
             , 'eaid.TIP_ACT_DOC_CVE "tpad_cve"', 'ctad.TIP_ACT_DOC_NOMBRE "tpad_nombre"',
 //            , 'c.COM_NOMBRE "text_comprobante"', 
-            'c.TIPO_COMPROBANTE_CVE "tipo_comprobante"'
+            'c.TIPO_COMPROBANTE_CVE "tipo_comprobante"',
+            'ctipo_estudio.TIP_EST_NOMBRE',
+            'ctipo_participacion.TIP_PAR_NOMBRE',
+            'cmedio_divulgacion.MED_DIV_NOMBRE'
         );
 
         $this->db->select($select);
         $this->db->from('emp_act_inv_edu as eaid');
         $this->db->join('ctipo_actividad_docente as ctad', 'ctad.TIP_ACT_DOC_CVE = eaid.TIP_ACT_DOC_CVE');
         $this->db->join('comprobante as c', 'c.COMPROBANTE_CVE = eaid.COMPROBANTE_CVE', 'left');
+        $this->db->join('ctipo_estudio', 'ctipo_estudio.TIP_ESTUDIO_CVE = eaid.TIP_ESTUDIO_CVE', 'left');
+        $this->db->join('ctipo_participacion', 'ctipo_participacion.TIP_PARTICIPACION_CVE = eaid.TIP_PARTICIPACION_CVE', 'left');
+        $this->db->join('cmedio_divulgacion', 'cmedio_divulgacion.MED_DIVULGACION_CVE = eaid.MED_DIVULGACION_CVE', 'left');
         $this->db->where('eaid.EAID_CVE', $EAID_cve);
         $query = $this->db->get();
         $result = array();

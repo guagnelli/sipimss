@@ -15,17 +15,36 @@ class Material_educativo_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_lista_material_educativo($empleado_cve) {
+    public function get_lista_material_educativo($empleado_cve, $params=null) {
         if ($empleado_cve < 1) {
             return -1;
         }
+        /////////////////////////////////Inicio verificación existencia de validación actual
+        if(isset($params['validation']) && !is_null($params['validation'])){
+            if(array_key_exists('validation', $params)){
+                if(array_key_exists('fields', $params['validation'])){
+                    if(is_array($params['validation']['fields'])){
+                        $this->db->select($params['validation']['fields'][0], $params['validation']['fields'][1]);
+                    } else {
+                        $this->db->select($params['validation']['fields']);
+                    }
+                }
+                if(array_key_exists('conditions', $params['validation'])){
+                    $this->db->where($params['validation']['conditions']);
+                }
+                $subquery = $this->db->get_compiled_select($params['validation']['table']); //Obtener conjunto de registros
+
+                $this->db->select('('.$subquery.') AS validation');
+            }
+        }
+        ////////////////////////////////Fin verificación existencia de validación actual
         $select = array('eme.MATERIA_EDUCATIVO_CVE "emp_material_educativo_cve"',
             'eme.NOMBRE_MATERIAL_EDUCATIVO "nombre_material"',
             'eme.MAT_EDU_ANIO "material_educativo_anio"', 'eme.COMPROBANTE_CVE "comprobante"',
             'c.COM_NOMBRE "nom_comprobante"', 'c.TIPO_COMPROBANTE_CVE "ctc_comprobante_cve"',
             'ctc.TIP_COM_NOMBRE "nom_ctp_comprobante"', 'ctm.TIP_MATERIAL_CVE "tipo_material_cve"',
             'ctm.TIP_MAT_TIPO "padre_tp_material"', 'ctm.TIP_MAT_NOMBRE "nom_tipo_material"',
-            'ctm.TIP_MAT_OPCION "opt_tipo_material"');
+            'ctm.TIP_MAT_OPCION "opt_tipo_material"', 'eme.IS_VALIDO_PROFESIONALIZACION');
 
         $this->db->select($select);
         $this->db->from('emp_materia_educativo eme');

@@ -1,6 +1,5 @@
-
 $(function () {
-
+/*
     $('#btn_agregar_investigacion_modal').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
@@ -41,10 +40,17 @@ $(function () {
                 return false;
             }
         });
-    });
+    });*/
 
 });
+function ver_in(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_investigacion/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
 
+function validar_in(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_investigacion/'+$(elemento).attr('data-value')+'/'+$(elemento).attr('data-valid'), null, '#modal_content');
+}
+/*
 function funcion_eliminar_reg_investigacion(element) {
     var a = hrutes['seccion_investigacion'];
     var cad_split = a.split(":");
@@ -145,7 +151,7 @@ function funcion_obtener_max_id_row_table_tabla_investigacion_docente() {
         }
     }
     return index_macx;
-}
+}*/
 
 /**
  * @author LEAS
@@ -153,7 +159,7 @@ function funcion_obtener_max_id_row_table_tabla_investigacion_docente() {
  * @param {type} elementos
  * @returns {undefined}
  */
-function funcion_mostrar_tipo_publicacion() {
+/*function funcion_mostrar_tipo_publicacion() {
     var a = hrutes['seccion_material_educativo'];
     var cad_split = a.split(":");
     var cve_divulgacion = $("#cmedio_divulgacion").val();
@@ -173,7 +179,7 @@ function funcion_mostrar_tipo_publicacion() {
             .always(function () {
                 remove_loader();
             });
-}
+}*/
 
 /**
  * @author LEAS
@@ -181,7 +187,7 @@ function funcion_mostrar_tipo_publicacion() {
  * @param {type} elementos
  * @returns {undefined}
  */
-function funcion_agregar_elemento(element) {
+/*function funcion_agregar_elemento(element) {
     nextinput++;
     var obj = $(element);
 //    alert(obj.data('keyname'));
@@ -260,14 +266,14 @@ function funcion_eliminar_li(element) {
         $("#" + id_div).append(add_autor);
     }
 
-}
+}*/
 
 /**
  * 
  * @returns {}Obtiene el row de a la tabla de actividad docente que contiene 
  * el curso principal 
  */
-function valores_label(id_div) {
+/*function valores_label(id_div) {
     var inc = 1;
     $("#" + id_div + " p").each(function (i)
     {
@@ -360,7 +366,7 @@ function funcion_actualizar_investigacion(element) {
         $('#error_carga_archivo').html(html_message("Falta cargar archivos", 'danger'));
     }
 
-}
+}*/
 
 //function funcion_cambio_texto(element) {
 //    $('#id_row_' + 14). $("#" + id_div + " p").each(function (i)

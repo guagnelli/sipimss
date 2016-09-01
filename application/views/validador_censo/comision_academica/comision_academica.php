@@ -28,6 +28,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 			                                <table class="table table-striped table-hover table-bordered" id="tabla_comision_academica">
 			                                    <thead>
 			                                        <tr class='btn-default'>
+			                                        	<th><?php echo $string_values['validado']; ?></th>
 			                                        	<?php
 			                                        	foreach ($columns[$key_tc] as $title) {
 															echo '<th>'.$title.'</th>';
@@ -40,7 +41,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 		                                    		foreach ($comisiones[$key_tc] as $key_ca => $comision_academica) {
 		                                    			$id = $this->seguridad->encrypt_base64($comision_academica['EMP_COMISION_CVE']);
 		                                    			$btn_comprobante = (!is_null($comision_academica['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($comision_academica['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-		                                    			$btn_validar = (isset($comision_academica['IS_VALIDO_PROFESIONALIZACION']) && $comision_academica['IS_VALIDO_PROFESIONALIZACION']==0) ? '<button type="button" class="btn btn-link btn-sm btn_validar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'" onclick="validar_ca(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+		                                    			$btn_validar = ($this->seguridad->verificar_liga_validar($comision_academica['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'" onclick="validar_ca(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
 														echo '<tr id="tr_'.$id.'">
 															<td class="text-center">'.html_verificar_validacion_registro($comision_academica['validation'], $comision_academica['IS_VALIDO_PROFESIONALIZACION']).'</td>';
 														foreach ($columns[$key_tc] as $key_dato => $dato) {

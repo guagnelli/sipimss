@@ -105,4 +105,19 @@
 
         return $password;
     }
+
+    public function verificar_liga_validar($IS_VALIDO_PROFESIONALIZACION=null){
+        //$this->CI->load->config('general');
+        $flag_validar = false;
+        $estados_val_censo = $this->CI->config->item('estados_val_censo'); ///Obtener listado de estados de la validación, definidos en archivo de configuración
+        $rol_validador_actual = $this->CI->session->userdata('datos_validador')['ROL_CVE']; //Obtener de sesión el rol del usuario que validará
+        $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Obtener de sesión el estado actual de la validación
+        //pr($this->CI->session->userdata());
+        //pr($estados_val_censo[$estado_validacion_actual]['rol_permite']);
+        //echo $IS_VALIDO_PROFESIONALIZACION."|".$rol_validador_actual."|".$estado_validacion_actual;
+        if($IS_VALIDO_PROFESIONALIZACION==0 && in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite'])){
+            $flag_validar = true;
+        }
+    return $flag_validar;
+}
 }

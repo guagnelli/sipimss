@@ -18,7 +18,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                 <table class="table table-striped table-hover table-bordered" id="tabla_direccion_tesis">
                                     <thead>
                                         <tr class='btn-default'>
-                                        	<th>¿<?php echo $string_values['validado']; ?>?</th>
+                                        	<th><?php echo $string_values['validado']; ?></th>
                                             <th><?php echo $string_values['t_h_anio']; ?></th>
                                             <th><?php echo $string_values['t_h_nivel_academico']; ?></th>
                                             <th><?php echo $string_values['t_h_area']; ?></th>
@@ -31,7 +31,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                     		foreach ($lista_direccion as $key_ld => $direccion) {
                                     			$id = $this->seguridad->encrypt_base64($direccion['EMP_COMISION_CVE']);
                                     			$btn_comprobante = (!is_null($direccion['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($direccion['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                    			$btn_validar = (isset($direccion['IS_VALIDO_PROFESIONALIZACION']) && $direccion['IS_VALIDO_PROFESIONALIZACION']==0) ? '<button type="button" class="btn btn-link btn-sm btn_validar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_dt(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                    			$btn_validar = ($this->seguridad->verificar_liga_validar($direccion['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_dt(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
 												echo '<tr id="tr_'.$id.'">
 													<td class="text-center">'.html_verificar_validacion_registro($direccion['validation'], $direccion['IS_VALIDO_PROFESIONALIZACION']).'</td>
 													<td>'.$direccion['EC_ANIO'].'</td>
