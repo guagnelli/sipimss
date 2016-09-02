@@ -9,17 +9,37 @@ class Becas_comisiones_laborales_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_lista_becas($empleado_cve) {
+    public function get_lista_becas($empleado_cve, $params=null) {
         if ($empleado_cve < 1) {
             return -1;
         }
+        /////////////////////////////////Inicio verificación existencia de validación actual
+        if(isset($params) && !is_null($params)){
+            if(array_key_exists('validation', $params)){
+                if(array_key_exists('fields', $params['validation'])){
+                    if(is_array($params['validation']['fields'])){
+                        $this->db->select($params['validation']['fields'][0], $params['validation']['fields'][1]);
+                    } else {
+                        $this->db->select($params['validation']['fields']);
+                    }
+                }
+                if(array_key_exists('conditions', $params['validation'])){
+                    $this->db->where($params['validation']['conditions']);
+                }
+                $subquery = $this->db->get_compiled_select($params['validation']['table']); //Obtener conjunto de registros
+
+                $this->db->select('('.$subquery.') AS validation');
+            }
+        }
+        ////////////////////////////////Fin verificación existencia de validación actual
+
         $select = array('eb.EMP_BECA_CVE "emp_beca_cve"', 'eb.EMPLEADO_CVE "empleado_cve"',
             'eb.EB_FCH_INICIO "fecha_inicio"', 'eb.EB_FCH_FIN "fecha_fin"',
             'eb.CLA_BECA_CVE "clase_beca_cve"', 'cb.CLA_BEC_NOMBRE "nom_beca"',
             'eb.COMPROBANTE_CVE "comprobante"', 'c.COM_NOMBRE "nom_comprobante"',
             'c.TIPO_COMPROBANTE_CVE "tip_comprobante_cve"', 'tc.TIP_COM_NOMBRE "nom_comprobante"',
             'eb.BECA_INTERRIMPIDA_CVE "beca_interrumpida_cve"', 'bi.MSG_BEC_INTE "msj_beca_interrumpida"',
-            'eb.MOTIVO_BECADO_CVE "motivo_beca_cve"', 'mb.MOT_BEC_NOMBRE "nom_motivo_beca"');
+            'eb.MOTIVO_BECADO_CVE "motivo_beca_cve"', 'mb.MOT_BEC_NOMBRE "nom_motivo_beca"', 'eb.IS_VALIDO_PROFESIONALIZACION');
 
         $this->db->select($select);
         $this->db->from('emp_beca as eb');
@@ -34,14 +54,33 @@ class Becas_comisiones_laborales_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_lista_comisiones($empleado_cve) {
+    public function get_lista_comisiones($empleado_cve, $params=null) {
         if ($empleado_cve < 1) {
             return -1;
         }
+        /////////////////////////////////Inicio verificación existencia de validación actual
+        if(isset($params) && !is_null($params)){
+            if(array_key_exists('validation', $params)){
+                if(array_key_exists('fields', $params['validation'])){
+                    if(is_array($params['validation']['fields'])){
+                        $this->db->select($params['validation']['fields'][0], $params['validation']['fields'][1]);
+                    } else {
+                        $this->db->select($params['validation']['fields']);
+                    }
+                }
+                if(array_key_exists('conditions', $params['validation'])){
+                    $this->db->where($params['validation']['conditions']);
+                }
+                $subquery = $this->db->get_compiled_select($params['validation']['table']); //Obtener conjunto de registros
+
+                $this->db->select('('.$subquery.') AS validation');
+            }
+        }
+        ////////////////////////////////Fin verificación existencia de validación actual
         $select = array('ecm.EMP_COMISION_CVE "emp_comision_cve"', 'ecm.EMPLEADO_CVE "empleado_cve"',
             'ecm.EC_FCH_INICIO "fecha_inicio"', 'ecm.EC_FCH_FIN "fecha_fin"',
             'ecm.COMPROBANTE_CVE "comprobante"', 'c.COM_NOMBRE "nom_comprobante"',
-            'ecm.TIP_COMISION_CVE "tipo_comision_cve"', 'tcm.TIP_COM_NOMBRE "nom_tipo_comision"');
+            'ecm.TIP_COMISION_CVE "tipo_comision_cve"', 'tcm.TIP_COM_NOMBRE "nom_tipo_comision"', 'ecm.IS_VALIDO_PROFESIONALIZACION');
 
         $this->db->select($select);
         $this->db->from('emp_comision ecm');
@@ -92,7 +131,7 @@ class Becas_comisiones_laborales_model extends CI_Model {
             'ecm.EC_FCH_INICIO "fecha_inicio"', 'ecm.EC_FCH_FIN "fecha_fin"',
             'ecm.COMPROBANTE_CVE "comprobante_cve"', 'c.COM_NOMBRE "text_comprobante"',
             'c.TIPO_COMPROBANTE_CVE "ctipo_comprobante"',
-            'ecm.TIP_COMISION_CVE "tipo_comision_cve"', 'tcm.TIP_COM_NOMBRE "nom_tipo_comision"');
+            'ecm.TIP_COMISION_CVE "tipo_comision_cve"', 'tcm.TIP_COM_NOMBRE "nom_tipo_comision"', 'ecm.IS_VALIDO_PROFESIONALIZACION');
 
         $this->db->select($select);
         $this->db->from('emp_comision ecm');

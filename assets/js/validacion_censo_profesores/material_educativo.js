@@ -1,6 +1,5 @@
 $(function () {
-
-    $('#btn_gregar_material_educativo').on('click', function () {
+/*    $('#btn_gregar_material_educativo').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
         var a = hrutes['seccion_material_educativo'];
@@ -14,12 +13,18 @@ $(function () {
         } else {
             $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
         }
-    });
+    });*/
 
 });
+function ver_me(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_editar_material_educativo/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
 
+function validar_me(elemento){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_editar_material_educativo/'+$(elemento).attr('data-value')+'/'+$(elemento).attr('data-valid'), null, '#modal_content');
+}
 
-function funcion_cargar_campos_tipo_material_educativo() {
+/*function funcion_cargar_campos_tipo_material_educativo() {
     var a = hrutes['seccion_material_educativo'];
     var cad_split = a.split(":");
     data_ajax(site_url + '/' + cad_split[0] + '/get_cargar_tipo_material', '#form_material_educativo', '#cuerpo_modal');
@@ -182,4 +187,4 @@ function funcion_actualizar_material_educativo(element) {
             .always(function () {
                 remove_loader();
             });
-}
+}*/

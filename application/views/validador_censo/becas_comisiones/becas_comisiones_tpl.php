@@ -29,7 +29,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
     </div>
 
     <div class="list-group-item">
-        <ul class="nav nav-tabs">
+        <ul id="tabList" class="nav nav-tabs">
             <li class="active">
                 <a data-toggle="tab" href="#becas_tab">
                     <strong>

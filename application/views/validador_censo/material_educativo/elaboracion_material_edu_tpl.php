@@ -1,17 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
+//$fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
 //    pr($tipo_msg);
-$colapso_div_ejercicio_profesional = 'collapse in';
+//$colapso_div_ejercicio_profesional = 'collapse in';
 //        $colapso_div_ejercicio_profesional = 'collapse';
 //        pr($datos_tabla_actividades_docente);
 //        pr($actividades_docente_objet);
+echo js('validacion_censo_profesores/material_educativo.js');
 ?>
-
-<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_censo_profesores/material_educativo.js"></script>
-
+<!-- <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_censo_profesores/material_educativo.js"></script> -->
 <!-- Inicio informacion personal -->
-
 <div class="list-group">
     <div class="list-group-item">
         <div class='row'>
@@ -21,27 +19,18 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                 <br>
             </div>
         </div>
-
-        <div class='row'>
-            <div class="col-xs-12 col-md-12 col-lg-12 text-right">
-                <button type="button" class="btn btn-success btn-lg" id="btn_gregar_material_educativo" data-toggle="modal" data-target="#modal_censo">
-                    <?php echo $string_values['btn_agregar_material_eduactivo']; ?>
-                </button>
-            </div>
-        </div>
-        <br>
         <div class='row'> 
             <div class="form-group col-xs-12 col-md-12">
                 <?php // pr($lista_material_educativo); ?>
                 <table class="table table-striped table-hover table-bordered" id="tabla_becas">
                     <thead>
                         <tr class="btn-default">
+                            <th><?php echo $string_values['validado']; ?></th>
                             <th><?php echo $string_values['title_tab_mat_edu_nombre_mat']; ?></th>
                             <th><?php echo $string_values['title_tab_mat_edu_tipo_mat']; ?></th>
                             <th><?php echo $string_values['title_tab_mat_edu_anio']; ?></th>
                             <th><?php echo $string_values['title_tab_mat_edu_comprobante']; ?></th>
-                            <th><?php echo $string_values['title_tab_mat_edu_tipo_eliminar']; ?></th>
-                            <th><?php echo $string_values['title_tab_mat_edu_tipo_editar']; ?></th>
+                            <th><?php echo $string_values['opciones']; ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,40 +51,20 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                 $comprobante = 0;
                                 $btn_comprobante  = '';
                             }
+                            $btn_validar = ($this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_me(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
+                            echo '<td class="text-center">'.html_verificar_validacion_registro($val['validation'], $val['IS_VALIDO_PROFESIONALIZACION']).'</td>';
                             echo "<td>" . $val['nombre_material'] . "</td>";
                             echo "<td>" . $desc_tipo_material . "</td>";
                             echo "<td>" . $val['material_educativo_anio'] . "</td>";
                             echo "<td>" . $btn_comprobante . "</td>";
                             echo "<td>" 
-                            . '<button '
-                            . 'type="button" '
-                            . 'class="btn btn-link btn-sm" '
-                            . 'id="btn_editar_mat_educativo" '
-                            . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-mateducve ="' . $key . '"'
-                            . 'data-tpmateducve ="' . $key_tp_mat_edu . '"'
-                            . 'data-comprobantecve ="' . $idcomprobante . '"'
-                            . 'data-toggle="modal"'
-                            . 'data-target="#modal_censo"'
-                            . 'onclick="funcion_editar_material_educativo(this)" >' .
-                            $string_values['tab_titulo_g_ver']
-                            . '</button>'
-                            . "</td>";
-                            echo "<td>"//Botón eliminar
-                            . '<button '
-                            . 'type="button" '
-                            . 'class="btn btn-link btn-sm" '
-                            . 'id="btn_editar_mat_educativo" '
-                            . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-mateducve ="' . $key . '"'
-                            . 'data-tpmateducve ="' . $key_tp_mat_edu . '"'
-                            . 'data-comprobantecve ="' . $idcomprobante . '"'
-                            . 'onclick="funcion_eliminar_reg_material_educativo(this)" >' .
-                            $string_values['tab_titulo_g_validar']
-                            . '</button>'
-                            . "</td>";
+                                . '<button type="button" class="btn btn-link btn-sm btn_ver_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="ver_me(this);">'.
+                                       $string_values['ver'].
+                                    '</button>'
+                                . "";
+                            echo ''.$btn_validar.'</td>'; ///Botón validar
                             echo "</tr>";
                         }
                         ?>

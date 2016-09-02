@@ -15,16 +15,8 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
         <div class="panel-body">
             <div>
                 <br>
-                <h4>Investigación </h4>
+                <h4><?php echo $string_values['title_investigacion'] ?></h4>
                 <br>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-xs-12 col-md-12 col-lg-12 text-right">
-                    <button type="button" class="btn btn-success btn-lg" id="btn_agregar_investigacion_modal" data-toggle="modal" data-target="#modal_censo">
-                        <?php echo $string_values['btn_add_new_investigacion']; ?>
-                    </button>
-                </div>
             </div>
 
             <div class="row" >
@@ -33,12 +25,12 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                     <table class="table table-striped table-hover table-bordered" id="tabla_investigacion_docente">
                         <thead>
                             <tr class='btn-default'>
+                                <th><?php echo $string_values['validado']; ?></th>
                                 <th><?php echo $string_values['tab_titulo_tipo_investigacion'] ?></th>
                                 <th><?php echo $string_values['tab_titulo_nombre_trabajo_investigacion'] ?></th>
                                 <th><?php echo $string_values['tab_titulo_folio'] ?></th>
-                                <th><?php echo $string_values['tab_titulo_cita_bibliografica'] ?></th>
-                                <th><?php echo $string_values['tab_titulo_g_ver'] ?></th>
-                                <th><?php echo $string_values['tab_titulo_g_validar'] ?></th>
+                                <th><?php echo $string_values['lbl_comprobante'] ?></th>
+                                <th><?php echo $string_values['opciones'] ?></th>
                                 <!--<th>Opciones</th>-->
                             </tr>
                         </thead>
@@ -72,38 +64,19 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                             $string_values['text_con_cita']
                                             . '</button>';
                                 }
+                                //pr($val);
+                                $btn_validar = ($this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_in" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_in(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                                 //Crea los row de la tabla
                                 echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
+                                echo '<td class="text-center">'.html_verificar_validacion_registro($val['validation'], $val['IS_VALIDO_PROFESIONALIZACION']).'</td>';
                                 echo "<td>" . $val['tpad_nombre'] . "</td>";
                                 echo "<td>" . $val['nombre_investigacion'] . "</td>";
                                 echo "<td>" . $val['folio_investigacion'] . "</td>";
                                 echo "<td>" . $tiene_cita_comprobante . "</td>";
-                                 echo "<td>"
-                                . '<button '
-                                . 'type="button" '
-                                . 'class="btn btn-link btn-sm" '
-                                . 'id="btn_eliminar_actividad_modal" '
-                                . 'data-idrow ="' . $key_ai . '"'
-                                . 'data-invcve ="' . $key . '"'
-                                . 'data-comprobantecve ="' . $comprobante . '"'
-                                . 'data-toggle="modal"'
-                                . 'data-target="#modal_censo"'
-                                . 'onclick="funcion_editar_reg_investigacion(this)" >' .
-                                $string_values['tab_titulo_g_ver']
-                                . '</button>'
-                                . "</td>";
-                                echo "<td>"//Botón eliminar
-                                . '<button '
-                                . 'type="button" '
-                                . 'class="btn btn-link btn-sm"'
-                                . 'id="btn_eliminar_actividad_modal" '
-                                . 'data-idrow ="' . $key_ai . '"'
-                                . 'data-invcve ="' . $key . '"'
-                                . 'data-comprobantecve ="' . $comprobante . '"'
-                                . 'onclick="funcion_eliminar_reg_investigacion(this)" >' .
-                                $string_values['tab_titulo_g_validar']
-                                . '</button>'
-                                . "</td>";
+                                echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_in" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="ver_in(this);">'.
+                                           $string_values['ver'].
+                                        '</button>
+                                        '.$btn_validar.'</td>';
                                 echo "</tr>";;
                             }
                             ?>

@@ -8,6 +8,7 @@
         <div class="form-group">
             <div class="input-group date datepicker">
                 <label class="registro"><?php
+                $dir_tes['COMPROBANTE_CVE'] = (isset($dir_tes['comprobante_cve']) && !empty($dir_tes['comprobante_cve'])) ? $dir_tes['comprobante_cve'] : $dir_tes['COMPROBANTE_CVE'];
                 if(!empty($dir_tes['COMPROBANTE_CVE']) || !empty($idc)){ //En caso de tener asociado archivo, se muestra link
                     $idcomprobante = (!empty($dir_tes['COMPROBANTE_CVE'])) ? $this->seguridad->encrypt_base64($dir_tes['COMPROBANTE_CVE']) : ((!empty($idc)) ? $idc : '');
                     echo '<a href="'.site_url('administracion/ver_archivo/'.$idcomprobante).'" target="_blank"><span class="glyphicon glyphicon-search"></span> '.$string_values['ver_archivo'].'</a><br>';

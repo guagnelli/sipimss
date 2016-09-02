@@ -178,7 +178,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 if (!empty($filtros['matricula'])) {
                     $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($filtros['matricula']); //Identificador de la comisión
                 }
-                if (empty($filtros['estval'])) {
+                if (!empty($filtros['estval'])) {
                     $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($filtros['estval']); //Identificador de la comisión
                 }
                 if (!empty($filtros['validadorcve'])) {
@@ -706,6 +706,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 $data['formacion_salud']['continua'] = array();
             }
             //pr($data);
+            //$formacion_docente = $this->fm->get_formacion_docente(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()), 'order' => 'EFO_ANIO_CURSO', 'fields' => 'emp_formacion_profesional.*, cinstitucion_avala.IA_NOMBRE, ctipo_formacion_profesional.TIP_FOR_PRO_NOMBRE, csubtipo_formacion_profesional.SUB_FOR_PRO_NOMBRE, cmodalidad.MOD_NOMBRE, ccurso.CUR_NOMBRE', 'validation'=>array(array('table'=>'hist_efp_validacion_curso', 'fields'=>'COUNT(*) AS validation', 'conditions'=>'hist_efp_validacion_curso.EMP_FORMACION_PROFESIONAL_CVE=emp_formacion_profesional.EMP_FORMACION_PROFESIONAL_CVE AND VALIDACION_CVE='.$validacion_cve_session), array('table'=>'hist_efp_validacion_curso', 'fields'=>'VAL_CUR_EST_CVE', 'conditions'=>'hist_efp_validacion_curso.EMP_FORMACION_PROFESIONAL_CVE=emp_formacion_profesional.EMP_FORMACION_PROFESIONAL_CVE AND VALIDACION_CVE='.$validacion_cve_session)))); // ctipo_curso.TIP_CUR_NOMBRE, 
             $formacion_docente = $this->fm->get_formacion_docente(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()), 'order' => 'EFO_ANIO_CURSO', 'fields' => 'emp_formacion_profesional.*, cinstitucion_avala.IA_NOMBRE, ctipo_formacion_profesional.TIP_FOR_PRO_NOMBRE, csubtipo_formacion_profesional.SUB_FOR_PRO_NOMBRE, cmodalidad.MOD_NOMBRE, ccurso.CUR_NOMBRE', 'validation'=>array('table'=>'hist_efp_validacion_curso', 'fields'=>'COUNT(*) AS validation', 'conditions'=>'hist_efp_validacion_curso.EMP_FORMACION_PROFESIONAL_CVE=emp_formacion_profesional.EMP_FORMACION_PROFESIONAL_CVE AND VALIDACION_CVE='.$validacion_cve_session))); // ctipo_curso.TIP_CUR_NOMBRE, 
             foreach ($formacion_docente as $key_fd => $fd) { ///Ordenar de acuerdo a tipo
                 $fd['SUB_FOR_PRO_CVE'] = (!isset($fd['SUB_FOR_PRO_CVE']) || is_null($fd['SUB_FOR_PRO_CVE'])) ? 0 : $fd['SUB_FOR_PRO_CVE'];
@@ -1594,21 +1595,24 @@ class Validacion_censo_profesores extends MY_Controller {
 
 //********************Investigación educativa ******************************************************************************/
     public function seccion_investigacion() {
-        $data = array();
-        $this->lang->load('interface', 'spanish');
-        $string_values = $this->lang->line('interface')['investigacion_docente'];
-        $data['string_values'] = $string_values;
-        $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
-        $empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
-        if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
-            $this->load->model('Investigacion_docente_model', 'id');
-            $lista_investigacion = $this->id->get_lista_datos_investigacion_docente($empleado[0]['EMPLEADO_CVE']);
-            $data['lista_investigaciones'] = $lista_investigacion;
-            $this->load->view('validador_censo/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrán la lista
+        if ($this->input->is_ajax_request()) {
+            $data = array();
+            $this->lang->load('interface', 'spanish');
+            $data['string_values'] = array_merge($this->lang->line('interface')['investigacion_docente'], $this->lang->line('interface')['general']);
+            $validacion_cve_session = $this->obtener_id_validacion();            
+            //$result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
+
+            //$empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
+            //if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
+                $this->load->model('Investigacion_docente_model', 'id');
+                $data['lista_investigaciones'] = $this->id->get_lista_datos_investigacion_docente($this->obtener_id_empleado(), array('validation'=>array('table'=>'hist_eaid_validacion_curso', 'fields'=>'COUNT(*) AS validation', 'conditions'=>'hist_eaid_validacion_curso.EAID_CVE=eaid.EAID_CVE AND VALIDACION_CVE='.$validacion_cve_session)));
+                $this->load->view('validador_censo/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrán la lista
+            /*} else {
+                //Error, No existe el empleado
+            }*/
         } else {
-            //Error, No existe el empleado
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-        //Consulta datos de empleado en investigación
     }
 
     public function cargar_formulario_investigacion() {
@@ -1645,7 +1649,7 @@ class Validacion_censo_profesores extends MY_Controller {
         }
     }
 
-    public function ajax_add_investigacion() {
+    /*public function ajax_add_investigacion() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $tipo_msg = $this->config->item('alert_msg');
@@ -1711,45 +1715,53 @@ class Validacion_censo_profesores extends MY_Controller {
         } else {
             redirect(site_url());
         }
-    }
+    }*/
 
-    public function ajax_carga_datos_investigacion() {
+    public function carga_datos_investigacion($identificador = null, $validar = null) {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
-            $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
-            $data_investigacion['string_values'] = $string_values; //Crea la variable 
-            $divulgacion = '';
+            $data_investigacion['string_values'] = array_merge($this->lang->line('interface')['investigacion_docente'], $this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
+            //$divulgacion = '';
+            $data_investigacion['identificador'] = $identificador;
             $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
             $matricula_user = $this->session->userdata('matricula');
-            $datos_pie = array();
-            if ($this->input->post()) {
-                $datos_post = $this->input->post(null, true);
+            //$datos_pie = array();
+            //if ($this->input->post()) {
+                //$datos_post = $this->input->post(null, true);
 //                pr($datos_post);
-                if (isset($datos_post['cve_inv'])) {
-                    $datos_pie['cve_inv'] = $datos_post['cve_inv'];
-                    $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
-                    $id_inv = $this->seguridad->decrypt_base64($datos_post['cve_inv']);
-                    $data_investigacion_load = $this->idm->get_datos_investigacion_docente(intval($id_inv)); //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
-                    if (!empty($data_investigacion_load)) {//Si es diferente de vacio 
+                //if (isset($datos_post['cve_inv'])) {
+                    //$datos_pie['cve_inv'] = $datos_post['cve_inv'];
+                    //$datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
+                    $id_inv = $this->seguridad->decrypt_base64($identificador);
+                    $data_investigacion['dir_tes'] = $this->idm->get_datos_investigacion_docente($id_inv); //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
+
+                    /*if (!empty($data_investigacion_load)) {//Si es diferente de vacio 
                         $data_investigacion['select_inv'] = $data_investigacion_load;
                         $divulgacion = $data_investigacion_load['med_divulgacion_cve']; //Carga el index de la opción divulgación
                         if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
                             $data_investigacion_load['idc'] = $datos_post['comprobantecve'];
-                        }
+                        }*/
                         //Selecciona divulgación
-                        $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($divulgacion, $data_investigacion_load, TRUE);
-                    }
-                }
+                        $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($data_investigacion['dir_tes']['med_divulgacion_cve'], $data_investigacion, TRUE);
+                    //}
+                //}
+            //}
+            $accion_general = $this->config->item('ACCION_GENERAL');
+            if($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
+                $data_investigacion = $this->validar_registro(array_merge($data_investigacion, array('tipo_id'=>'INVESTIGACION_EDUCATIVA', 'seccion_actualizar'=>'seccion_investigacion', 'identificador_registro'=>$id_inv)));
+            } else {
+                $data_investigacion['formulario_validacion'] = $this->historico_registro(array_merge($data_investigacion, array('tipo_id'=>'INVESTIGACION_EDUCATIVA', 'seccion_actualizar'=>'seccion_investigacion', 'identificador_registro'=>$id_inv)));
+                $data_investigacion['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">'.$data_investigacion['string_values']['cerrar'].'</button></div>';
             }
-
-            $data_investigacion['divulgacion'] = $divulgacion; //Crea la variable 
-            $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
-            $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
-            $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
+            //$data_investigacion['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', $data_investigacion, TRUE);
+            //$data_investigacion['divulgacion'] = $divulgacion; //Crea la variable 
+            //$condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 14));
+            //$entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
+            //$data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
             $data = array(
-                'titulo_modal' => 'Investigación',
+                'titulo_modal' => $data_investigacion['string_values']['title_investigacion'],
                 'cuerpo_modal' => $this->load->view('validador_censo/investigacion/investigacion_formulario', $data_investigacion, TRUE),
-                'pie_modal' => $this->load->view('validador_censo/investigacion/investigacion_pie', $datos_pie, true)
+                'pie_modal' => null //$this->load->view('validador_censo/investigacion/investigacion_pie', $datos_pie, true)
             );
 
             echo $this->ventana_modal->carga_modal($data);
@@ -1758,7 +1770,7 @@ class Validacion_censo_profesores extends MY_Controller {
         }
     }
 
-    public function ajax_update_investigacion() {
+    /*public function ajax_update_investigacion() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $tipo_msg = $this->config->item('alert_msg');
@@ -1813,32 +1825,31 @@ class Validacion_censo_profesores extends MY_Controller {
                 echo $this->load->view('validador_censo/investigacion/investigacion_formulario', $data_investigacion, TRUE); //Carga los div de modal
             }
         }
-    }
+    }*/
 
     private function divulgacion_cargar($divulgacion_cve, $array_comprobante = array(), $is_actualizacion = FALSE) {
         if (!empty($divulgacion_cve)) {
             $cve_divulgacion = intval($divulgacion_cve);
             $this->lang->load('interface', 'spanish');
-//            pr($array_comprobante);
             switch ($cve_divulgacion) {
                 case 3:
-                    $data['string_values'] = $this->lang->line('interface')['investigacion_docente'];
-                    if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante)) {
-                        $data['bibliografia_libro'] = $array_comprobante['cita_publicada'];
+                    $array_comprobante['string_values'] = $this->lang->line('interface')['investigacion_docente'];
+                    if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante['dir_tes'])) {
+                        $array_comprobante['bibliografia_libro'] = $array_comprobante['dir_tes']['cita_publicada'];
                     }
-                    return $this->load->view('validador_censo/investigacion/bibliografia_libro', $data, TRUE);
+                    return $this->load->view('validador_censo/investigacion/bibliografia_libro', $array_comprobante, TRUE);
                     break;
                 case 4:
-                    $data['string_values'] = $this->lang->line('interface')['investigacion_docente'];
-                    if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante)) {
-                        $data['bibliografia_revista'] = $array_comprobante['cita_publicada'];
+                    $array_comprobante['string_values'] = $this->lang->line('interface')['investigacion_docente'];
+                    if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante['dir_tes'])) {
+                        $array_comprobante['bibliografia_revista'] = $array_comprobante['dir_tes']['cita_publicada'];
                     }
-                    return $this->load->view('validador_censo/investigacion/bibliografia_revista', $data, TRUE);
+                    return $this->load->view('validador_censo/investigacion/bibliografia_revista', $array_comprobante, TRUE);
                     break;
                 default :
                     //Todo lo de comprobante *******************************************
-                    $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-                    $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+                    //$data_comprobante['string_values'] = $this->lang->line('interface')['general'];
+                    /*$entidades_comprobante = array(enum_ecg::ctipo_comprobante);
                     $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
                     if ($is_actualizacion) {
                         if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
@@ -1858,9 +1869,10 @@ class Validacion_censo_profesores extends MY_Controller {
                                 'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
                                 'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
                         }
-                    }
+                    }*/
                     //**** fi de comprobante *******************************************
-                    $data['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
+                    //$data['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
+                    $data['vista_comprobante'] = $this->load->view('template/formulario_visualizar_archivo', $array_comprobante, TRUE);
                     return $this->load->view('validador_censo/investigacion/comprobante_foro', $data, TRUE);
             }
             return '';
@@ -1908,7 +1920,7 @@ class Validacion_censo_profesores extends MY_Controller {
         return $array_result;
     }
 
-    public function get_data_ajax_eliminar_investigacion() {
+    /*public function get_data_ajax_eliminar_investigacion() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post()) {//Indica que debe intentar eliminar el curso
                 $data = array();
@@ -1944,7 +1956,7 @@ class Validacion_censo_profesores extends MY_Controller {
         } else {
             redirect(site_url());
         }
-    }
+    }*/
 
     public function get_fecha_ultima_actualizacion() {
         $this->lang->load('interface', 'spanish');
@@ -2123,13 +2135,11 @@ class Validacion_censo_profesores extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             $data = array();
             $this->lang->load('interface', 'spanish');
-            $string_values = $this->lang->line('interface')['material_educativo'];
-            $data['string_values'] = $string_values;
+            $data['string_values'] = array_merge($this->lang->line('interface')['material_educativo'], $this->lang->line('interface')['general']);
             $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
             $empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
             if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
-                $lista_material_educativo = $this->mem->get_lista_material_educativo($empleado);
-                $data['lista_material_educativo'] = $lista_material_educativo;
+                $data['lista_material_educativo'] = $this->mem->get_lista_material_educativo($empleado, array('validation'=>array('table'=>'hist_me_validacion_curso', 'fields'=>'COUNT(*) AS validation', 'conditions'=>'hist_me_validacion_curso.MATERIA_EDUCATIVO_CVE=eme.MATERIA_EDUCATIVO_CVE AND VALIDACION_CVE='.$this->obtener_id_validacion())));
                 $this->load->view('validador_censo/material_educativo/elaboracion_material_edu_tpl', $data, FALSE); //Valores que muestrán la lista
             }
         } else {
@@ -2478,57 +2488,65 @@ class Validacion_censo_profesores extends MY_Controller {
         return $array_datos_res;
     }
 
-    public function carga_datos_editar_material_educativo() {
+    public function carga_datos_editar_material_educativo($identificador = null, $validar = null) {
         if ($this->input->is_ajax_request()) {
-            if ($this->input->post()) {//Indica que debe intentar eliminar el curso
-                $datos_post = $this->input->post(null, true);
-//                pr($datos_post);
+            //if ($this->input->post()) {//Indica que debe intentar eliminar el curso
+                //$datos_post = $this->input->post(null, true);
+                //pr($datos_post);
                 $this->lang->load('interface', 'spanish');
-                $string_values = $this->lang->line('interface')['material_educativo']; //Carga textos a utilizar 
-                $datos_mat_edu['string_values'] = $string_values; //Crea la variable
-                $condiciones_ = array(enum_ecg::ctipo_material => array('TIP_MAT_TIPO =' => NULL));
-                $entidades_ = array(enum_ecg::ctipo_material);
-                $datos_mat_edu = carga_catalogos_generales($entidades_, $datos_mat_edu, $condiciones_);
-                $material_edu_cve = intval($this->seguridad->decrypt_base64($datos_post['material_edu_cve'])); //Identificador de materia_educativo
-                $datos_reg_mat_edu = $this->mem->get_datos_material_educativo($material_edu_cve);
-
-                $datos_reg_mat_edu_validados = $this->filtrar_datos_material_educatiovo($datos_reg_mat_edu); //Modifica los nombres e las llaves para ajustar a los formilarios secundarios
-//                pr($datos_reg_mat_edu_validados);
-
-                $datos_mat_edu['info_material_educativo'] = $datos_reg_mat_edu_validados;
-
-//                pr($datos_mat_edu['info_material_educativo']);
+                $datos_mat_edu['string_values'] = array_merge($this->lang->line('interface')['material_educativo'], $this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
+                //$condiciones_ = array(enum_ecg::ctipo_material => array('TIP_MAT_TIPO =' => NULL));
+                //$entidades_ = array(enum_ecg::ctipo_material);
+                //$datos_mat_edu = carga_catalogos_generales($entidades_, $datos_mat_edu, $condiciones_);
+                $material_edu_cve = $this->seguridad->decrypt_base64($identificador); //Identificador de materia_educativo
+                $datos_mat_edu['identificador'] = $identificador;
+                $datos_mat_edu['info_material_educativo'] = $this->mem->get_datos_material_educativo($material_edu_cve);
+                //pr($datos_mat_edu['info_material_educativo']);
+                //$datos_reg_mat_edu_validados = $this->filtrar_datos_material_educatiovo($datos_reg_mat_edu); //Modifica los nombres e las llaves para ajustar a los formilarios secundarios
+                //pr($datos_reg_mat_edu_validados);
+                //$datos_mat_edu['info_material_educativo'] = $datos_reg_mat_edu_validados;
+                //pr($datos_mat_edu['info_material_educativo']);
                 //Todo lo de comprobante *******************************************
-                $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
+                /*$data_comprobante['string_values'] = $this->lang->line('interface')['general'];
                 $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $datos_reg_mat_edu_validados['ctipo_comprobante'], 'COM_NOMBRE' => $datos_reg_mat_edu_validados['text_comprobante'], 'COMPROBANTE_CVE' => $datos_reg_mat_edu_validados['comprobante_cve']);
                 if (!empty($datos_reg_mat_edu_validados['comprobante'])) {//Si existe comprobante, manda el identificador
                     $data_comprobante['idc'] = $this->seguridad->encrypt_base64($datos_reg_mat_edu_validados['comprobante_cve']);
                 }
                 $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
                 $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                $datos_mat_edu['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
+                $datos_mat_edu['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);*/
                 //**** fi de comprobante *******************************************
                 //Carga el formulario secundario segun la opcion de tipo de material educativo
-                $datos_form_secundario['datos'] = $datos_reg_mat_edu_validados;
-                $datos_form_secundario['string_values'] = $string_values;
-                $datos_form_secundario ['cantidad_hojas'] = $this->config->item('opciones_tipo_material')['cantidad_hojas'];
-                $datos_form_secundario ['numero_horas'] = $this->config->item('opciones_tipo_material')['numero_horas'];
-                $datos_mat_edu['formulario_complemento'] = $this->load->view('validador_censo/material_educativo/formulario_mat_edu_' . $datos_reg_mat_edu_validados['material_educativo_cve'], $datos_form_secundario, TRUE);
+                $datos_mat_edu['info_material_educativo']['material_educativo_cve'] = (!empty($datos_mat_edu['info_material_educativo']['padre_tp_material'])) ? $datos_mat_edu['info_material_educativo']['padre_tp_material'] : $datos_mat_edu['info_material_educativo']['tipo_material_cve'];
+                $datos_form_secundario['datos'] = $datos_mat_edu['info_material_educativo'];
+                $datos_form_secundario['string_values'] = $datos_mat_edu['string_values'];
+                $datos_form_secundario['cantidad_hojas'] = $this->config->item('opciones_tipo_material')['cantidad_hojas'];
+                $datos_form_secundario['numero_horas'] = $this->config->item('opciones_tipo_material')['numero_horas'];
+                $datos_mat_edu['formulario_complemento'] = $this->load->view('validador_censo/material_educativo/formulario_mat_edu_' . $datos_mat_edu['info_material_educativo']['material_educativo_cve'], $datos_form_secundario, TRUE);
+
+                $accion_general = $this->config->item('ACCION_GENERAL');
+                if($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
+                    $datos_mat_edu = $this->validar_registro(array_merge($datos_mat_edu, array('tipo_id'=>'MATERIAL_EDUCATIVO', 'seccion_actualizar'=>'seccion_material_educativo', 'identificador_registro'=>$material_edu_cve)));
+                } else {
+                    $datos_mat_edu['formulario_validacion'] = $this->historico_registro(array_merge($datos_mat_edu, array('tipo_id'=>'MATERIAL_EDUCATIVO', 'seccion_actualizar'=>'seccion_material_educativo', 'identificador_registro'=>$material_edu_cve)));
+                    $datos_mat_edu['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">'.$datos_mat_edu['string_values']['cerrar'].'</button></div>';
+                }
+                $datos_mat_edu['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', array('dir_tes'=>$datos_mat_edu['info_material_educativo']), TRUE);
                 //Carga datos de pie de página
-                $datos_pie = array();
+                /*$datos_pie = array();
                 $datos_pie['cve_mat_edu'] = $datos_post['material_edu_cve']; //Cve del material encriptado base64
                 $datos_pie['cve_tp_mat_edu'] = $datos_post['ti_material_cve']; //Cve del material encriptado base64
-                $datos_pie['comprobantecve'] = $datos_post['comprobantecve']; //Cve del material encriptado base64
+                $datos_pie['comprobantecve'] = $datos_post['comprobantecve']; //Cve del material encriptado base64 */
 
                 $data = array(
-                    'titulo_modal' => $string_values['title_material_eduacativo'],
+                    'titulo_modal' => $datos_mat_edu['string_values']['title_material_eduacativo'],
                     'cuerpo_modal' => $this->load->view('validador_censo/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE),
-                    'pie_modal' => $this->load->view('validador_censo/material_educativo/material_edu_pie', $datos_pie, true)
+                    'pie_modal' => null //$this->load->view('validador_censo/material_educativo/material_edu_pie', $datos_pie, true)
                 );
                 echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
-            } else {
+            /*} else {
                 
-            }
+            }*/
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
@@ -2684,13 +2702,13 @@ class Validacion_censo_profesores extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             $data = array();
             $this->lang->load('interface', 'spanish');
-            $string_values = $this->lang->line('interface')['becas_comisiones'];
+            $string_values = array_merge($this->lang->line('interface')['becas_comisiones'], $this->lang->line('interface')['general']);
             $data['string_values'] = $string_values;
             $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
             $empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
             if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
-                $lista_becas = $this->bcl->get_lista_becas($empleado);
-                $lista_comisiones = $this->bcl->get_lista_comisiones($empleado);
+                $lista_becas = $this->bcl->get_lista_becas($empleado, array('validation'=>array('table'=>'hist_beca_validacion_curso', 'fields'=>'COUNT(*) AS validation', 'conditions'=>'hist_beca_validacion_curso.EMP_BECA_CVE=eb.EMP_BECA_CVE AND VALIDACION_CVE='.$this->obtener_id_validacion())));
+                $lista_comisiones = $this->bcl->get_lista_comisiones($empleado, array('validation'=>array('table'=>'hist_comision_validacion_curso', 'fields'=>'COUNT(*) AS validation', 'conditions'=>'hist_comision_validacion_curso.EMP_COMISION_CVE=ecm.EMP_COMISION_CVE AND VALIDACION_CVE='.$this->obtener_id_validacion())));
                 $data_becas['lista_becas'] = $lista_becas;
                 $data_comision['lista_comisiones'] = $lista_comisiones;
                 $data_becas['string_values'] = $string_values;
@@ -2705,31 +2723,40 @@ class Validacion_censo_profesores extends MY_Controller {
         }
     }
 
-    public function get_form_becas() {
+    /*public function get_form_becas($validar = null) {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
-            $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
+            $string_values = array_merge($this->lang->line('interface')['becas_comisiones'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
             $data_becas['string_values'] = $string_values; //Crea la variable
-            $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cclase_beca, enum_ecg::cbeca_interrumpida, enum_ecg::cmotivo_becado);
-            $data_becas = carga_catalogos_generales($entidades_, $data_becas);
-            $datos_pie = array();
+            //$entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cclase_beca, enum_ecg::cbeca_interrumpida, enum_ecg::cmotivo_becado);
+            //$data_becas = carga_catalogos_generales($entidades_, $data_becas);
+
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_becas['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
             //**** fi de comprobante *******************************************
+            $accion_general = $this->config->item('ACCION_GENERAL');
+            if($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
+                $data_becas = $this->validar_registro(array_merge($data, array('tipo_id'=>'COMISION_ACADEMICA', 'seccion_actualizar'=>'seccion_direccion_tesis', 'identificador_registro'=>$dt_id)));
+            } else {
+                $data_becas['formulario_validacion'] = $this->historico_registro(array_merge($data, array('tipo_id'=>'COMISION_ACADEMICA', 'seccion_actualizar'=>'seccion_direccion_tesis', 'identificador_registro'=>$dt_id)));
+                $data_becas['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">'.$data['string_values']['cerrar'].'</button></div>';
+            }
+            //pr($data['formulario_validacion']);
+            $data_becas['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', $data, TRUE);
 
             $data = array(
                 'titulo_modal' => $string_values['title_becas'],
                 'cuerpo_modal' => $this->load->view('validador_censo/becas_comisiones/formulario_becas', $data_becas, TRUE),
-                'pie_modal' => $this->load->view('validador_censo/becas_comisiones/becas_pie', $datos_pie, true)
+                'pie_modal' => $this->load->view('validador_censo/becas_comisiones/becas_pie', array(), true)
             );
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }
+    }*/
 
     public function get_form_comisiones() {
         if ($this->input->is_ajax_request()) {
@@ -2778,7 +2805,7 @@ class Validacion_censo_profesores extends MY_Controller {
         return $array_result;
     }
 
-    public function get_add_beca() {
+    /*public function get_add_beca() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $tipo_msg = $this->config->item('alert_msg');
@@ -3046,7 +3073,7 @@ class Validacion_censo_profesores extends MY_Controller {
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }
+    }*/
 
     private function filtrar_datos_becas_comisiones($array_datos, $name_entidad) {
         //emp_beca o emp_comision
@@ -3067,93 +3094,89 @@ class Validacion_censo_profesores extends MY_Controller {
         return $array_datos_res;
     }
 
-    public function carga_datos_editar_beca() {
+    public function carga_datos_editar_beca($identificador = null, $validar = null) {
         if ($this->input->is_ajax_request()) {
-            if ($this->input->post()) {//Indica que debe intentar eliminar el curso
-                $datos_post = $this->input->post(null, true);
-                $this->lang->load('interface', 'spanish');
-                $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
-                $data_becas['string_values'] = $string_values; //Crea la variable
-                //Carga cátalogos de becas
-                $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cclase_beca, enum_ecg::cbeca_interrumpida, enum_ecg::cmotivo_becado);
-                $data_becas = carga_catalogos_generales($entidades_, $data_becas);
-                //Des encrypta id de la beca para hacer la consulta de las becas
-                $cve_beca = intval($this->seguridad->decrypt_base64($datos_post['cve_beca'])); //Identificador de materia_educativo
-                $datos_reg_mat_edu = $this->bcl->get_datos_becas($cve_beca); //Datos de becas
-                $informacion_becas = $this->filtrar_datos_becas_comisiones($datos_reg_mat_edu, 'emp_beca');
-                $data_becas['informacion_becas'] = $informacion_becas;
-//                pr($informacion_becas);
-                //Carga datos de píe de página ************************************
-                $datos_pie = array();
-                $datos_pie['cve_beca'] = $datos_post['cve_beca'];
-                $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
-                //Todo lo de comprobante *******************************************
-                $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-                $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $informacion_becas['ctipo_comprobante'], 'COM_NOMBRE' => $informacion_becas['text_comprobante'], 'COMPROBANTE_CVE' => $informacion_becas['comprobante_cve']);
-                if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
-                    $data_comprobante['idc'] = $datos_post['comprobantecve']; //Carga id del comprobante
-                }
-                $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                $data_becas['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
-                //**** fi de comprobante *******************************************
-
-                $data = array(
-                    'titulo_modal' => $string_values['title_becas'],
-                    'cuerpo_modal' => $this->load->view('validador_censo/becas_comisiones/formulario_becas', $data_becas, TRUE),
-                    'pie_modal' => $this->load->view('validador_censo/becas_comisiones/becas_pie', $datos_pie, true)
-                );
-                echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+            $this->lang->load('interface', 'spanish');
+            $data_becas['string_values'] = array_merge($this->lang->line('interface')['becas_comisiones'], $this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
+            $data_becas['identificador'] = $identificador;
+            $cve_beca = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
+            $data_becas['dir_tes'] = $this->bcl->get_datos_becas($cve_beca); //Datos de becas
+            
+            $accion_general = $this->config->item('ACCION_GENERAL');
+            if($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
+                $data_becas = $this->validar_registro(array_merge($data_becas, array('tipo_id'=>'BECA', 'seccion_actualizar'=>'seccion_becas_comisiones', 'identificador_registro'=>$cve_beca)));
+            } else {
+                $data_becas['formulario_validacion'] = $this->historico_registro(array_merge($data_becas, array('tipo_id'=>'BECA', 'seccion_actualizar'=>'seccion_becas_comisiones', 'identificador_registro'=>$cve_beca)));
+                $data_becas['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">'.$data_becas['string_values']['cerrar'].'</button></div>';
             }
+            $data_becas['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', $data_becas, TRUE);
+            //**** fi de comprobante *******************************************
+
+            $data = array(
+                'titulo_modal' => $data_becas['string_values']['title_becas'],
+                'cuerpo_modal' => $this->load->view('validador_censo/becas_comisiones/formulario_becas', $data_becas, TRUE),
+                'pie_modal' => null //$this->load->view('validador_censo/becas_comisiones/becas_pie', $datos_pie, true)
+            );
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
     }
 
-    public function carga_datos_editar_comision() {
+    public function carga_datos_editar_comision($identificador = null, $validar = null) {
         if ($this->input->is_ajax_request()) {
-            if ($this->input->post()) {//Indica que debe intentar eliminar el curso
-                $datos_post = $this->input->post(null, true);
-                $this->lang->load('interface', 'spanish');
-                $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
-                $data_comisiones['string_values'] = $string_values; //Crea la variable
-                //Carga cátalogos de becas
-                $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //Sólo comisiones que no son academicas, es decir, puras comisiones laborales
-                $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
-                $data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
-                //Des encrypta id de la beca para hacer la consulta de las becas
-                $cve_comision = intval($this->seguridad->decrypt_base64($datos_post['cve_comision'])); //Identificador de materia_educativo
-                $datos_reg_comision = $this->bcl->get_datos_comisiones($cve_comision); //Datos de becas
-                $informacion_comisiones = $this->filtrar_datos_becas_comisiones($datos_reg_comision, 'emp_comision');
-                $data_comisiones['informacion_comisiones'] = $informacion_comisiones;
-                //Carga datos de píe de página ************************************
-                $datos_pie = array();
-                $datos_pie['cve_comision'] = $datos_post['cve_comision'];
-                $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
-                //Todo lo de comprobante *******************************************
-                $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-                $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $informacion_comisiones['ctipo_comprobante'], 'COM_NOMBRE' => $informacion_comisiones['text_comprobante'], 'COMPROBANTE_CVE' => $informacion_comisiones['comprobante_cve']);
-                if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
-                    $data_comprobante['idc'] = $datos_post['comprobantecve']; //Carga id del comprobante
-                }
-                $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                $data_comisiones['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
-                //**** fi de comprobante *******************************************
-
-                $data = array(
-                    'titulo_modal' => $string_values['tabs_comisiones'],
-                    'cuerpo_modal' => $this->load->view('validador_censo/becas_comisiones/formulario_comisiones', $data_comisiones, TRUE),
-                    'pie_modal' => $this->load->view('validador_censo/becas_comisiones/comisiones_pie', $datos_pie, true)
-                );
-                echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+            //$datos_post = $this->input->post(null, true);
+            $this->lang->load('interface', 'spanish');
+            $data_comisiones['string_values'] = array_merge($this->lang->line('interface')['becas_comisiones'], $this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
+            $data_comisiones['identificador'] = $identificador;
+            $cve_comision = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
+            $data_comisiones['dir_tes'] = $this->bcl->get_datos_comisiones($cve_comision); //Datos de becas
+            //pr($data_comisiones['dir_tes']);
+            //Carga cátalogos de becas
+            //$condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //Sólo comisiones que no son academicas, es decir, puras comisiones laborales
+            //$entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
+            //$data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
+            //Des encrypta id de la beca para hacer la consulta de las becas
+            //$cve_comision = intval($this->seguridad->decrypt_base64($datos_post['cve_comision'])); //Identificador de materia_educativo
+            //$datos_reg_comision = $this->bcl->get_datos_comisiones($cve_comision); //Datos de becas
+            //$informacion_comisiones = $this->filtrar_datos_becas_comisiones($datos_reg_comision, 'emp_comision');
+            //$data_comisiones['informacion_comisiones'] = $informacion_comisiones;
+            //Carga datos de píe de página ************************************
+            //$datos_pie = array();
+            //$datos_pie['cve_comision'] = $datos_post['cve_comision'];
+            //$datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
+            //Todo lo de comprobante *******************************************
+            /*$data_comprobante['string_values'] = $this->lang->line('interface')['general'];
+            $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $informacion_comisiones['ctipo_comprobante'], 'COM_NOMBRE' => $informacion_comisiones['text_comprobante'], 'COMPROBANTE_CVE' => $informacion_comisiones['comprobante_cve']);
+            if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
+                $data_comprobante['idc'] = $datos_post['comprobantecve']; //Carga id del comprobante
             }
+            $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+            $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+            $data_comisiones['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);*/
+            //**** fi de comprobante *******************************************
+
+            $accion_general = $this->config->item('ACCION_GENERAL');
+            if($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
+                $data_comisiones = $this->validar_registro(array_merge($data_comisiones, array('tipo_id'=>'COMISION_ACADEMICA', 'seccion_actualizar'=>'seccion_becas_comisiones', 'identificador_registro'=>$cve_comision)));
+            } else {
+                $data_comisiones['formulario_validacion'] = $this->historico_registro(array_merge($data_comisiones, array('tipo_id'=>'COMISION_ACADEMICA', 'seccion_actualizar'=>'seccion_becas_comisiones', 'identificador_registro'=>$cve_comision)));
+                $data_comisiones['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">'.$data_comisiones['string_values']['cerrar'].'</button></div>';
+            }
+            $data_comisiones['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', $data_comisiones, TRUE);
+
+            $data = array(
+                'titulo_modal' => $data_comisiones['string_values']['tabs_comisiones'],
+                'cuerpo_modal' => $this->load->view('validador_censo/becas_comisiones/formulario_comisiones', $data_comisiones, TRUE),
+                'pie_modal' => null //$this->load->view('validador_censo/becas_comisiones/comisiones_pie', $datos_pie, true)
+            );
+            echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
     }
 
-    public function actualizar_datos_editar_becas() {
+    /*public function actualizar_datos_editar_becas() {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $tipo_msg = $this->config->item('alert_msg');
@@ -3281,7 +3304,7 @@ class Validacion_censo_profesores extends MY_Controller {
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }
+    }*/
 
     public function genera_array($array_validados, $datos_post, $array_campos) {
         $array_result = array();

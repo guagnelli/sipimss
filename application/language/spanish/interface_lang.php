@@ -260,6 +260,7 @@ $lang['interface'] = array(
         'tab_titulo_g_validar' => 'Validar',
     ),
     'investigacion_docente' => array(
+        'title_investigacion' => 'Investigación',
         'lbl_ver_comprobante' => 'Ver comprobante',
         'Texto_de_ayuda_divulgacion' => 'Si selecciona comprobante o foro, deberá cargar un archivo en pdf. Para las demás opciónes debera llenar un formato que generará la ficha bibliografica',
         'texto_ayuda_comprobante' => 'Seleccionar y subir al sistema el tipo de comprobante que se le otorgo en la investigación en formato pdf',

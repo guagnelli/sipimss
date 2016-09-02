@@ -2,15 +2,15 @@
 ?>
 <div class="col-md-12">
     <label for='lbl_bb_libro' class="control-label">
-        <b class="rojo">*</b>
         <?php echo $string_values['lbl_bb_libro']; ?>
     </label>
     <div class="input-group">
-        <span class="input-group-addon">
+        <label class="registro"><?php echo $bibliografia_libro; ?></label>
+        <!-- <span class="input-group-addon">
             <span class="glyphicon glyphicon-education"> </span>
-        </span>
+        </span> -->
         <?php
-        echo $this->form_complete->create_element(array('id' => 'bibliografia_libro',
+        /*echo $this->form_complete->create_element(array('id' => 'bibliografia_libro',
             'type' => 'textarea',
             'value' => (isset($bibliografia_libro)) ? $bibliografia_libro : '',
             'attributes' => array(
@@ -18,8 +18,8 @@
                 'placeholder' => $string_values['txt_bb_libro'],
                 'data-toggle' => 'tooltip',
                 'data-placement' => 'top',
-                'title' => $string_values['txt_bb_libro'])));
+                'title' => $string_values['txt_bb_libro'])));*/
         ?>
     </div>
-    <?php echo form_error_format('bibliografia_libro'); ?>
+    <?php //echo form_error_format('bibliografia_libro'); ?>
 </div>
