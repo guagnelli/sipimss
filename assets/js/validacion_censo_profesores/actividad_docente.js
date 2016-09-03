@@ -1,5 +1,5 @@
 $(function () {
-
+/*
     $('#btn_agregar_actividad_modal_nueva').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
@@ -42,10 +42,17 @@ $(function () {
             }
             $(this).off();//Para el encadenamiento del post
         });
-    });
+    });*/
 });
 
-function funcion_eliminar_actividad_docente(element) {
+function ver_ad(elemento, tipo){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_actividad/'+$(elemento).attr('data-value')+'?t='+tipo, null, '#modal_content');
+}
+function validar_ad(elemento, tipo){
+    data_ajax(site_url+'/validacion_censo_profesores/carga_datos_actividad/'+$(elemento).attr('data-value')+'/'+$(elemento).attr('data-valid')+'?t='+tipo, null, '#modal_content');
+}
+
+/*function funcion_eliminar_actividad_docente(element) {
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
     var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
@@ -97,7 +104,7 @@ function funcion_eliminar_actividad_docente(element) {
     }
 
 
-}
+}*/
 
 function cargar_curso(element) {
     var a = hrutes['seccion_actividad_docente'];
@@ -106,7 +113,7 @@ function cargar_curso(element) {
 
     data_ajax_post(site_url + '/' + cad_split[0] + '/curso_actividad_docente', null, '#curso_div_gen', {ctipo_curso_cve: ctipo_curso_cve});
 }
-
+/*
 function funcion_asignar_curso_principal(element) {
     var radio_curso_principal = $(element);
     var a = hrutes['seccion_actividad_docente'];
@@ -168,7 +175,7 @@ function funcion_asignar_curso_principal(element) {
                 remove_loader();
             });
 
-}
+}*/
 
 
 
@@ -190,7 +197,7 @@ function curso_principal_actividad_docente() {
     return row_cur_prin_actual;
 }
 
-function funcion_agregar_nueva_actividad() {
+/*function funcion_agregar_nueva_actividad() {
     //////////////
     var valor_radio_curso = '123';
     var titulo_tipo_actividad = 'titulo prueba';
@@ -217,7 +224,7 @@ function funcion_agregar_nueva_actividad() {
             .replace(/\$\$idrow\$\$/g, idrow)
             .replace(/\$\$key\$\$/g, idrow);//identificador unitario de el row
     $('#tabla_actividades').append($(htmlNewRow));
-}
+}*/
 
 /**
  * 
@@ -241,7 +248,7 @@ function funcion_obtener_max_id_row_table_actividad() {
 //function funcion_guargar(index) {
 //    data_ajax(site_url + '/validacion_censo_profesores/get_data_ajax_actividad_cuerpo_modal/' + index + '/1/0', '#form_actividad_docente_especifico', '#info_actividad_docente');
 //}
-function funcion_guardar(element) {
+/*function funcion_guardar(element) {
     var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var act_doc_cve = 0;
@@ -306,7 +313,7 @@ function funcion_guardar(element) {
     } else {
         $('#error_carga_archivo').html(html_message("Falta cargar archivos", 'danger'));
     }
-}
+}*/
 
 /**
  * 
@@ -314,21 +321,21 @@ function funcion_guardar(element) {
  * @returns {undefined} 
  * Función del botón editar actividad docente. 
  */
-function funcion_editar_reg_actividad(element) {
+/*function funcion_editar_reg_actividad(element) {
     var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var obj = $(element);
     var tp_actividad_cve = obj.data('tacve');
     var act_doc_cve = obj.data('cvead');
     data_ajax_post(site_url + '/' + cad_split[0] + '/get_data_ajax_actividad_modal/1', null, '#modal_content', {act_doc_cve: act_doc_cve, tp_actividad_cve: tp_actividad_cve});
-}
+}*/
 /**
  * 
  * @param {type} element  (this)
  * @returns {undefined} 
  * Función del botón editar actividad docente. 
  */
-function funcion_actualizar_actividad_docente(element) {
+/*function funcion_actualizar_actividad_docente(element) {
     var a = hrutes['seccion_actividad_docente'];
     var cad_split = a.split(":");
     var obj = $(element);
@@ -364,7 +371,7 @@ function funcion_actualizar_actividad_docente(element) {
     } else {
         $('#error_carga_archivo').html(html_message("Falta cargar archivos", 'danger'));
     }
-}
+}*/
 
 /**
  * Carga formulario vista de formulario, según la opción del combo seleccionada
@@ -397,12 +404,12 @@ function mostrar_horas_fechas(horas) {
     }
 }
 
-function funcion_guargar(element) {
+/*function funcion_guargar(element) {
     var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
     var tp_actividad_cve = obj.data('tpactividadcve');
     var data_post = {tp_actividad_cve: tp_actividad_cve}
     data_ajax_post(site_url + '/validacion_censo_profesores/get_data_ajax_actividad_cuerpo_modal', '#form_actividad_docente_especifico', '#info_actividad_docente', data_post);
-}
+}*/
 
 
 

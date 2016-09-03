@@ -998,84 +998,18 @@ class Validacion_censo_profesores extends MY_Controller {
      * Guarda actividad docente general
      */
     public function seccion_actividad_docente() {
-//        pr($_SERVER);
         $data = array();
         $tipo_msg = $this->config->item('alert_msg');
         $this->lang->load('interface', 'spanish');
-        $string_values = $this->lang->line('interface')['actividad_docente'];
-        $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
-        $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
-//        pr($actividad_docente);
-        if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
-            $this->config->load('form_validation'); //Cargar archivo con validaciones
-            $validations = $this->config->item('form_actividad_docente_general'); //Obtener validaciones de archivo
-//            pr($validations);
-            $this->form_validation->set_rules($validations);
-//            pr($this->input->post(null, true));
-            if ($this->form_validation->run()) { //Se ejecuta la validación de datos
-                $datos_registro = $this->input->post(null, true);
-                if (empty($actividad_docente)) {//insertar nueva actividad
-                    $empleado = $this->cg->getDatos_empleado($result_id_user);
-                    //Obtener identificador de empleado
-                    if (!empty($empleado)) {
-                        $actividad_docente_up['ANIOS_DEDICADOS'] = $datos_registro['actividad_anios_dedicados_docencia'];
-                        $actividad_docente_up['EJER_PREDOMI_CVE'] = $datos_registro['ejercicio_predominante'];
-//                        $actividad_docente_up['CURSO_PRINC_IMPARTE'] = $datos_registro['curso_principal_imapare'];
-                        $actividad_docente_up['EMPLEADO_CVE'] = $empleado[0]['EMPLEADO_CVE']; //Asigna cve del empleado
-                        $resultado = $this->adm->insert_actividad_docente_general($actividad_docente_up); //Inserta datos del docente
-                        if ($resultado['return'] === -1) {//hubo un error a la hora de insertar un registro
-                            $data['error'] = $string_values['error_insertar']; //Mensaje de que no encontro empleado
-                            $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
-                        } else {//Los datos se insertaron correctamente
-                            $data['error'] = $string_values['succesfull_insertar']; //Mensaje de que los datos se insertaron correctamente
-                            $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de éxito
-                            //Datos de bitacora el actividad general del docente del usuario
-                            $json = json_encode($resultado['parametros']);
-                            $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'ACT_DOC_GRAL_CVE-' . $resultado['ACT_DOC_GRAL_CVE'], $json, 'insert');
-                        }
-                    } else {//No existe el empleado, manda un mensaje
-                        $data['error'] = $this->lang->line('interface')['general']['msg_no_existe_empleado']; //Mensaje de que no encontro empleado
-                        $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
-                    }
-                } else {//Actualizar
-                    //Preguntar si, existira mas de una actividad general por ususario, y si no, como se distingue 
-                    $actividad_docente_up['ANIOS_DEDICADOS'] = $datos_registro['actividad_anios_dedicados_docencia'];
-                    $actividad_docente_up['EJER_PREDOMI_CVE'] = $datos_registro['ejercicio_predominante'];
-//                    $actividad_docente_up['CURSO_PRINC_IMPARTE'] = $datos_registro['curso_principal_imapare'];
-                    $actividad_docente_up['EMPLEADO_CVE'] = $actividad_docente[0]['EMPLEADO_CVE']; //Asigna cve del empleado
-                    $resultado = $this->adm->update_actividad_docente_general($actividad_docente_up); //Verifica si existe el ususario ya contiene datos de actividad
-                    if ($resultado['return'] == -1) {//hubo un error a la hora de insertar un registro
-                        $data['error'] = $string_values['error_actualizar']; //Mensaje de existio un error al actualizar los datos de actividad docente
-                        $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
-                    } else {//Los datos se insertaron correctamente
-                        $data['error'] = $string_values['succesfull_actualizar']; //Mensaje de que los datos se actualizarón correctamente
-                        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de éxito
-//                        //Datos de bitacora el actividad general del docente del usuario
-                        $json = json_encode($resultado['actualizados']);
-                        $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'EMPLEADO_CVE', $json, 'update');
-                    }
-                }
-//                $parse = json_encode($data);
-//                echo $parse;
-//                exit();
-            }
-        }
+        $data['string_values'] = array_merge($this->lang->line('interface')['actividad_docente'], $this->lang->line('interface')['general']);
+        $data['actividad_docente'] = $this->adm->get_actividad_docente_general($this->obtener_id_usuario())[0]; //Verifica si existe el ususario ya contiene datos de actividad
 
-        $data['string_values'] = $string_values; //Array de textos que muestra el formulario para actividad
-//        $condiciones = array(enum_ecg::cejercicio_predominante=>array('EJER_PREDOMI_CVE '=>'3'));//A manera de ejemplo
-        //Carga catálogos según array, visto en config->general->catalogos_indexados 
-        $data = carga_catalogos_generales(array(enum_ecg::cejercicio_predominante), $data); //Carga el catálogo de ejercicio predominante
-
-        $data['actividad_docente'] = $actividad_docente; //
-
-        if (!empty($actividad_docente)) {
-//            pr($actividad_docente);
-            $data['curso_principal'] = $actividad_docente[0]['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
-            $data['actividad_general_cve'] = $actividad_docente[0]['ACT_DOC_GRAL_CVE']; //Identificador del curso principal 
-            $data['curso_principal_entidad_contiene'] = $actividad_docente[0]['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
-            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE']); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
-//            pr($data['datos_tabla_actividades_docente']);
-        }
+        //if (!empty($data['actividad_docente'])) {
+            $data['curso_principal'] = $data['actividad_docente']['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
+            $data['actividad_general_cve'] = $data['actividad_docente']['ACT_DOC_GRAL_CVE']; //Identificador del curso principal 
+            $data['curso_principal_entidad_contiene'] = $data['actividad_docente']['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
+            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($data['actividad_docente']['ACT_DOC_GRAL_CVE'], $this->obtener_id_validacion()); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
+        //}
 
         $this->load->view('validador_censo/actividad_docente/actividad_tpl', $data, FALSE);
     }
@@ -1086,29 +1020,30 @@ class Validacion_censo_profesores extends MY_Controller {
      * @param type $insertar si "insertar" es igual con "0" muestra el combo que 
      * carga los tipos de actividad docente. Si "insertar" es mayor que "0"
      */
-    public function get_data_ajax_actividad_modal($insertar = '0') {
+    public function carga_datos_actividad($identificador = null, $validar = null) {
         if ($this->input->is_ajax_request()) {
-            if ($this->input->post()) {
-                $data_post = $this->input->post(null, true);
+            //if ($this->input->post()) {
+                //$data_post = $this->input->post(null, true);
 //                pr($data_post);
                 $this->lang->load('interface', 'spanish');
-                $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar 
-                $data_actividad['string_values'] = $string_values; //Crea la variable 
+                $data_actividad['string_values'] = array_merge($this->lang->line('interface')['actividad_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
+                $data_actividad['identificador'] = $identificador;
 
-                $act_gral_cve = $this->input->post('act_gral_cve');
+                $cve_actividad = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
+                $tipo_actividad_docente = $this->input->get('t', true);
+                /*$act_gral_cve = $this->input->post('act_gral_cve');
                 $data_actividad['act_gral_cve'] = $act_gral_cve;
                 $datos_pie = array();
-                $datos_pie['act_gral_cve'] = $act_gral_cve;
-
-
-                if ($insertar === '0') {//Muestra el combo para seleccionar tipo de actividad docente 
+                $datos_pie['act_gral_cve'] = $act_gral_cve;*/
+                
+                /*if ($insertar === '0') {//Muestra el combo para seleccionar tipo de actividad docente 
                     $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE < ' => 15));
                     $data_actividad = carga_catalogos_generales(array(enum_ecg::ctipo_actividad_docente), $data_actividad, $condiciones_);
-                } else {
-                    $id_tp_act_doc = intval($data_post['tp_actividad_cve']);
-                    if ($id_tp_act_doc > 0) {
-                        $propiedades = $this->config->item('actividad_docente_componentes')[$id_tp_act_doc]; //Carga el nombre de la vista del diccionario 
-                        $data_formulario = $this->cargar_datos_actividad($id_tp_act_doc, $data_post['act_doc_cve'], $propiedades); //No mover posición puede romperse
+                } else {*/
+                    //$id_tp_act_doc = intval($data_post['tp_actividad_cve']);
+                    if ($tipo_actividad_docente > 0) {
+                        $propiedades = $this->config->item('actividad_docente_componentes')[$tipo_actividad_docente]; //Carga el nombre de la vista del diccionario 
+                        $data_formulario = $this->cargar_datos_actividad($tipo_actividad_docente, $cve_actividad, $propiedades); //No mover posición puede romperse
 //                        pr($data_formulario);
                         $carga_extra = $propiedades['validaciones_extra'];
                         $data_formulario = $this->cargar_extra($data_formulario, $carga_extra); //No mover posición puede romperse
@@ -1136,10 +1071,10 @@ class Validacion_censo_profesores extends MY_Controller {
                         }
                         //********************************************************************************
                         //Carga dsatos de píe 
-                        $datos_pie['tp_actividad_cve'] = $id_tp_act_doc;
-                        $datos_pie['act_doc_cve'] = $this->input->post('act_doc_cve');
+                        //$datos_pie['tp_actividad_cve'] = $tipo_actividad_docente;
+                        //$datos_pie['act_doc_cve'] = $this->input->post('act_doc_cve');
                         //Todo lo de comprobante *********************************************************
-                        $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
+                        /*$data_comprobante['string_values'] = $this->lang->line('interface')['general'];
                         $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
                         $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
                         if (isset($data_formulario['comprobante']) AND ! empty($data_formulario['comprobante'])) {
@@ -1150,22 +1085,22 @@ class Validacion_censo_profesores extends MY_Controller {
                                 'COM_NOMBRE' => isset($data_formulario['text_comprobante']) ? $data_formulario['text_comprobante'] : '');
                         }
                         $vista_comprobante['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
-                        $data_formulario['formulario_carga_comprobante'] = $this->load->view('validador_censo/actividad_docente/comprobante_actividad_docente', $vista_comprobante, TRUE);
+                        $data_formulario['formulario_carga_comprobante'] = $this->load->view('validador_censo/actividad_docente/comprobante_actividad_docente', $vista_comprobante, TRUE);*/
                         //*********************************************fin carga comprobante**************
                         //Carga la vista del formulario
-                        $data_formulario['string_values'] = $string_values;
+                        $data_formulario['string_values'] = $data_actividad['string_values'];
                         $data_actividad['formulario'] = $this->load->view($propiedades['vista'], $data_formulario, TRUE);
                         $data_actividad['nada'] = '';
                     }
-                }
+                //}
 
                 $data = array(
                     'titulo_modal' => 'Actividad docente',
                     'cuerpo_modal' => $this->load->view('validador_censo/actividad_docente/actividad_modal_tpl', $data_actividad, TRUE),
-                    'pie_modal' => $this->load->view('validador_censo/actividad_docente/actividad_docente_pie', $datos_pie, true)
+                    'pie_modal' => null //$this->load->view('validador_censo/actividad_docente/actividad_docente_pie', $datos_pie, true)
                 );
                 echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
-            }
+            //}
         } else {
             redirect(site_url());
         }
@@ -3131,30 +3066,6 @@ class Validacion_censo_profesores extends MY_Controller {
             $data_comisiones['identificador'] = $identificador;
             $cve_comision = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
             $data_comisiones['dir_tes'] = $this->bcl->get_datos_comisiones($cve_comision); //Datos de becas
-            //pr($data_comisiones['dir_tes']);
-            //Carga cátalogos de becas
-            //$condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //Sólo comisiones que no son academicas, es decir, puras comisiones laborales
-            //$entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
-            //$data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
-            //Des encrypta id de la beca para hacer la consulta de las becas
-            //$cve_comision = intval($this->seguridad->decrypt_base64($datos_post['cve_comision'])); //Identificador de materia_educativo
-            //$datos_reg_comision = $this->bcl->get_datos_comisiones($cve_comision); //Datos de becas
-            //$informacion_comisiones = $this->filtrar_datos_becas_comisiones($datos_reg_comision, 'emp_comision');
-            //$data_comisiones['informacion_comisiones'] = $informacion_comisiones;
-            //Carga datos de píe de página ************************************
-            //$datos_pie = array();
-            //$datos_pie['cve_comision'] = $datos_post['cve_comision'];
-            //$datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
-            //Todo lo de comprobante *******************************************
-            /*$data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-            $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $informacion_comisiones['ctipo_comprobante'], 'COM_NOMBRE' => $informacion_comisiones['text_comprobante'], 'COMPROBANTE_CVE' => $informacion_comisiones['comprobante_cve']);
-            if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
-                $data_comprobante['idc'] = $datos_post['comprobantecve']; //Carga id del comprobante
-            }
-            $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-            $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            $data_comisiones['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);*/
-            //**** fi de comprobante *******************************************
 
             $accion_general = $this->config->item('ACCION_GENERAL');
             if($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada

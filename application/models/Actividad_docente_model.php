@@ -21,9 +21,10 @@ class Actividad_docente_model extends CI_Model {
      */
     public function get_actividad_docente_general($usuario_id) {
         $this->db->select(array('adg.ACT_DOC_GRAL_CVE', 'adg.ANIOS_DEDICADOS', 'adg.EJER_PREDOMI_CVE',
-            'adg.EMPLEADO_CVE "EMPLEADO_CVE"', 'adg.CURSO_MAS_DEDICADO', 'adg.CURSO_PRINC_IMPARTE', 'adg.TIP_ACT_DOC_PRINCIPAL_CVE'));
+            'adg.EMPLEADO_CVE "EMPLEADO_CVE"', 'adg.CURSO_MAS_DEDICADO', 'adg.CURSO_PRINC_IMPARTE', 'adg.TIP_ACT_DOC_PRINCIPAL_CVE', 'ejpre.EJE_PRE_NOMBRE'));
         $this->db->from('actividad_docente_gral as adg');
         $this->db->join('empleado as em', 'em.EMPLEADO_CVE = adg.EMPLEADO_CVE');
+        $this->db->join('cejercicio_predominante as ejpre', 'ejpre.EJER_PREDOMI_CVE=adg.EJER_PREDOMI_CVE', 'left');
         $this->db->where('em.USUARIO_CVE', $usuario_id);
         $query = $this->db->get();
         return $query->result_array();
@@ -130,28 +131,35 @@ class Actividad_docente_model extends CI_Model {
      * @param int $actividad_docente_general_cve Lista de actividades del docente
      * 
      */
-    public function get_actividades_docente($actividad_docente_general_cve = null) {
+    public function get_actividades_docente($actividad_docente_general_cve = null, $validacion_cve_session=null) {
         if (isset($actividad_docente_general_cve) AND is_nan($actividad_docente_general_cve)) {
             return -1;
         }
+        
         //Entidad de emp_actividad_docente 
-        $select_emp_actividad_docente = 'select ead.EMP_ACT_DOCENTE_CVE "cve_actividad_docente", ead.EAD_ANIO_CURSO "anio", ead.EAD_DURACION "duracion"
+        $select_emp_actividad_docente = 'select (SELECT COUNT(*) AS validation FROM hist_efpd_validacion_curso WHERE
+                hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,
+            ead.EMP_ACT_DOCENTE_CVE "cve_actividad_docente", ead.EAD_ANIO_CURSO "anio", ead.EAD_DURACION "duracion"
             ,ead.EAD_FCH_INICIO "fecha_inicio", ead.EAD_FCH_FIN "fecha_fin", ead.COMPROBANTE_CVE "comprobante"
-            ,ead.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", ead.ACT_DOC_GRAL_CVE "actividad_general_cve"  
+            ,ead.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", ead.ACT_DOC_GRAL_CVE "actividad_general_cve", ead.IS_VALIDO_PROFESIONALIZACION  
             from emp_actividad_docente as ead
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = ead.TIP_ACT_DOC_CVE
             where ead.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
         //Entidad de emp_educacion_distancia 
-        $select_emp_educacion_distancia = 'select eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente", eed.EDD_CUR_ANIO "anio", eed.EED_DURACION "duracion"
+        $select_emp_educacion_distancia = 'select (SELECT COUNT(*) AS validation FROM hist_edd_validacion_curso WHERE
+                hist_edd_validacion_curso.EMP_EDU_DISTANCIA_CVE=eed.EMP_EDU_DISTANCIA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,
+            eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente", eed.EDD_CUR_ANIO "anio", eed.EED_DURACION "duracion"
             ,eed.EDD_FCH_INICIO "fecha_inicio", eed.EED_FCH_FIN "fecha_fin", eed.COMPROBANTE_CVE "comprobante"
-            ,eed.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", eed.ACT_DOC_GRAL_CVE "actividad_general_cve" 
+            ,eed.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", eed.ACT_DOC_GRAL_CVE "actividad_general_cve", eed.IS_VALIDO_PROFESIONALIZACION
             from emp_educacion_distancia as eed
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = eed.TIP_ACT_DOC_CVE
             where eed.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
         //Entidad de emp_esp_medica
-        $select_emp_esp_medica = 'select esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente", esm.EEM_ANIO_FUNGIO "anio", esm.EEM_DURACION "duracion"
+        $select_emp_esp_medica = 'select (SELECT COUNT(*) AS validation FROM hist_eem_validacion_curso WHERE
+                hist_eem_validacion_curso.EMP_ESP_MEDICA_CVE=esm.EMP_ESP_MEDICA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,
+            esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente", esm.EEM_ANIO_FUNGIO "anio", esm.EEM_DURACION "duracion"
             ,esm.EEM_FCH_INICIO "fecha_inicio", esm.EEM_FCH_FIN "fecha_fin", esm.COMPROBANTE_CVE "comprobante"
-            ,esm.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", esm.ACT_DOC_GRAL_CVE "actividad_general_cve"  
+            ,esm.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", esm.ACT_DOC_GRAL_CVE "actividad_general_cve", esm.IS_VALIDO_PROFESIONALIZACION 
             from emp_esp_medica as esm
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = esm.TIP_ACT_DOC_CVE
             where esm.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
