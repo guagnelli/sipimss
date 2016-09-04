@@ -1026,7 +1026,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 //$data_post = $this->input->post(null, true);
 //                pr($data_post);
                 $this->lang->load('interface', 'spanish');
-                $data_actividad['string_values'] = array_merge($this->lang->line('interface')['actividad_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
+                $data_actividad['string_values'] = array_merge($this->lang->line('interface')['actividad_docente'],  $this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
                 $data_actividad['identificador'] = $identificador;
 
                 $cve_actividad = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
@@ -1047,7 +1047,7 @@ class Validacion_censo_profesores extends MY_Controller {
 //                        pr($data_formulario);
                         $carga_extra = $propiedades['validaciones_extra'];
                         $data_formulario = $this->cargar_extra($data_formulario, $carga_extra); //No mover posición puede romperse
-//                        pr($data_formulario);
+                        //pr($data_formulario);
                         $condiciones_ = array(); //Carga, únicamente el tipo de actividad docente
                         if (isset($propiedades['where'])) {
                             $condiciones_ = $propiedades['where']; //Carga, únicamente el tipo de actividad docente
@@ -1060,8 +1060,8 @@ class Validacion_censo_profesores extends MY_Controller {
                         $catalogos_ = $propiedades['catalogos_indexados']; //Carga, únicamente el tipo de actividad docente
                         $data_formulario = carga_catalogos_generales($catalogos_, $data_formulario, $condiciones_, true, $tipo_were);
                         //Condiciones extra "pago_extra" y "duracion"
-                        $this->lang->load('interface', 'spanish');
-                        $string_values = $this->lang->line('interface')['actividad_docente'];
+                        //$this->lang->load('interface', 'spanish');
+                        //$string_values = $this->lang->line('interface')['actividad_docente'];
                         //************fin de la carga de catálogos ***************************************
                         //*****************Carga ccurso según tipo de curso**************************
                         $valua_entidad = $propiedades['tabla_guardado'] === 'emp_actividad_docente';
@@ -1087,9 +1087,21 @@ class Validacion_censo_profesores extends MY_Controller {
                         $vista_comprobante['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
                         $data_formulario['formulario_carga_comprobante'] = $this->load->view('validador_censo/actividad_docente/comprobante_actividad_docente', $vista_comprobante, TRUE);*/
                         //*********************************************fin carga comprobante**************
-                        //Carga la vista del formulario
                         $data_formulario['string_values'] = $data_actividad['string_values'];
-                        $data_actividad['formulario'] = $this->load->view($propiedades['vista'], $data_formulario, TRUE);
+                        $data_formulario['identificador'] = $identificador;
+                        $accion_general = $this->config->item('ACCION_GENERAL');
+                        //pr($this->config->item('actividad_docente_componentes')[$tipo_actividad_docente]['tabla_validacion']);
+                        if($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']){ //En caso de que la acción almacenada
+                            //pr($data_formulario);
+                            $data_formulario = $this->validar_registro(array_merge($data_formulario, array('tipo_id'=>$this->config->item('actividad_docente_componentes')[$tipo_actividad_docente]['tabla_validacion'], 'seccion_actualizar'=>'seccion_actividad_docente', 'identificador_registro'=>$cve_actividad)));
+                        } else {
+                            $data_formulario['formulario_validacion'] = $this->historico_registro(array_merge($data_formulario, array('tipo_id'=>$this->config->item('actividad_docente_componentes')[$tipo_actividad_docente]['tabla_validacion'], 'seccion_actualizar'=>'seccion_actividad_docente', 'identificador_registro'=>$cve_actividad)));
+                            $data_formulario['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">'.$data_actividad['string_values']['cerrar'].'</button></div>';
+                        }
+                        $data_formulario['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', array('dir_tes'=>$data_formulario), TRUE);
+                        //pr($data_formulario);
+                        //Carga la vista del formulario                        
+                        $data_actividad['formulario'] = $this->load->view($propiedades['vista_validacion'], $data_formulario, TRUE);
                         $data_actividad['nada'] = '';
                     }
                 //}

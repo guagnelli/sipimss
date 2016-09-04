@@ -135,31 +135,41 @@ class Actividad_docente_model extends CI_Model {
         if (isset($actividad_docente_general_cve) AND is_nan($actividad_docente_general_cve)) {
             return -1;
         }
+        if(!is_null($validacion_cve_session)){
+            $sead = '(SELECT COUNT(*) AS validation FROM hist_efpd_validacion_curso WHERE
+                hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,';
+            $seed = '(SELECT COUNT(*) AS validation FROM hist_edd_validacion_curso WHERE
+                hist_edd_validacion_curso.EMP_EDU_DISTANCIA_CVE=eed.EMP_EDU_DISTANCIA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,';
+            $seem = '(SELECT COUNT(*) AS validation FROM hist_eem_validacion_curso WHERE
+                hist_eem_validacion_curso.EMP_ESP_MEDICA_CVE=esm.EMP_ESP_MEDICA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,';
+        } else {
+            $sead = $seed = $seem = '';
+        }
         
         //Entidad de emp_actividad_docente 
-        $select_emp_actividad_docente = 'select (SELECT COUNT(*) AS validation FROM hist_efpd_validacion_curso WHERE
-                hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,
+        $select_emp_actividad_docente = 'select '.$sead.'
             ead.EMP_ACT_DOCENTE_CVE "cve_actividad_docente", ead.EAD_ANIO_CURSO "anio", ead.EAD_DURACION "duracion"
             ,ead.EAD_FCH_INICIO "fecha_inicio", ead.EAD_FCH_FIN "fecha_fin", ead.COMPROBANTE_CVE "comprobante"
-            ,ead.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", ead.ACT_DOC_GRAL_CVE "actividad_general_cve", ead.IS_VALIDO_PROFESIONALIZACION  
+            ,ead.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", ead.ACT_DOC_GRAL_CVE "actividad_general_cve"
+            , ead.IS_VALIDO_PROFESIONALIZACION
             from emp_actividad_docente as ead
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = ead.TIP_ACT_DOC_CVE
             where ead.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
         //Entidad de emp_educacion_distancia 
-        $select_emp_educacion_distancia = 'select (SELECT COUNT(*) AS validation FROM hist_edd_validacion_curso WHERE
-                hist_edd_validacion_curso.EMP_EDU_DISTANCIA_CVE=eed.EMP_EDU_DISTANCIA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,
+        $select_emp_educacion_distancia = 'select '.$seed.'
             eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente", eed.EDD_CUR_ANIO "anio", eed.EED_DURACION "duracion"
             ,eed.EDD_FCH_INICIO "fecha_inicio", eed.EED_FCH_FIN "fecha_fin", eed.COMPROBANTE_CVE "comprobante"
-            ,eed.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", eed.ACT_DOC_GRAL_CVE "actividad_general_cve", eed.IS_VALIDO_PROFESIONALIZACION
+            ,eed.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", eed.ACT_DOC_GRAL_CVE "actividad_general_cve"
+            , eed.IS_VALIDO_PROFESIONALIZACION
             from emp_educacion_distancia as eed
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = eed.TIP_ACT_DOC_CVE
             where eed.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
         //Entidad de emp_esp_medica
-        $select_emp_esp_medica = 'select (SELECT COUNT(*) AS validation FROM hist_eem_validacion_curso WHERE
-                hist_eem_validacion_curso.EMP_ESP_MEDICA_CVE=esm.EMP_ESP_MEDICA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,
+        $select_emp_esp_medica = 'select '.$seem.'
             esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente", esm.EEM_ANIO_FUNGIO "anio", esm.EEM_DURACION "duracion"
             ,esm.EEM_FCH_INICIO "fecha_inicio", esm.EEM_FCH_FIN "fecha_fin", esm.COMPROBANTE_CVE "comprobante"
-            ,esm.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", esm.ACT_DOC_GRAL_CVE "actividad_general_cve", esm.IS_VALIDO_PROFESIONALIZACION 
+            ,esm.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", esm.ACT_DOC_GRAL_CVE "actividad_general_cve"
+            , esm.IS_VALIDO_PROFESIONALIZACION
             from emp_esp_medica as esm
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = esm.TIP_ACT_DOC_CVE
             where esm.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
@@ -198,13 +208,19 @@ class Actividad_docente_model extends CI_Model {
                         'cc.TIP_CURSO_CVE "ctipo_curso_cve"', 'ead.INS_AVALA_CVE "cinstitucion_avala_cve"', 
                         'ead.ROL_DESEMPENIA_CVE "crol_desempenia_cve"', 'ead.LICENCIATURA_CVE "licenciatura_cve"', 
                         'ead.MODALIDAD_CVE "cmodalidad_cve"', 'ead.TIP_FOR_PROF_CVE "ctipo_formacion_profesional_cve"',
-                        'com.TIPO_COMPROBANTE_CVE "ctipo_comprobante_cve"');
+                        'com.TIPO_COMPROBANTE_CVE "ctipo_comprobante_cve"', 'ROL_DESEMPENIA', 'IA_NOMBRE', 'LIC_NOMBRE',
+                        'MOD_NOMBRE', 'COM_NOMBRE', 'com.COMPROBANTE_CVE', 'AREA_NOMBRE');
                 $from = 'emp_actividad_docente as ead';
                 $where = 'ead.EMP_ACT_DOCENTE_CVE';
                 $on = 'ctad.TIP_ACT_DOC_CVE = ead.TIP_ACT_DOC_CVE';
                 $this->db->join('ccurso as cc', 'cc.CURSO_CVE = ead.CURSO_CVE', 'left');
                 $this->db->join('ctipo_curso as ctc', 'ctc.TIP_CURSO_CVE = cc.TIP_CURSO_CVE ', 'left');
                 $this->db->join('comprobante as com', 'com.COMPROBANTE_CVE = ead.COMPROBANTE_CVE ', 'left');
+                $this->db->join('crol_desempenia as rd', 'rd.ROL_DESEMPENIA_CVE = ead.ROL_DESEMPENIA_CVE', 'left');
+                $this->db->join('cinstitucion_avala as ia', 'ia.INS_AVALA_CVE = ead.INS_AVALA_CVE', 'left');
+                $this->db->join('licenciatura as lic', 'lic.LICENCIATURA_CVE = ead.LICENCIATURA_CVE', 'left');
+                $this->db->join('cmodalidad as mod', 'mod.MODALIDAD_CVE = ead.MODALIDAD_CVE', 'left');
+                $this->db->join('carea', 'carea.AREA_CVE = ead.AREA_CVE', 'left');
                 break;
             case 'emp_educacion_distancia':
                 $select = array('eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente"', 
@@ -216,11 +232,12 @@ class Actividad_docente_model extends CI_Model {
                     'eed.COMPROBANTE_CVE "comprobante"', 'eed.IS_CURSO_TUTURIZADO "is_curso_tutorizado"', 
                     'eed.TIPO_CURSO_CVE "ctipo_curso_cve"', 'eed.EED_NOMBRE_CURSO "nombre_curso"',
                     'eed.FOLIO_CONSTANCIA "folio_constancia"', 'eed.ROL_DESEMPENIA_CVE "crol_desempenia_cve"',
-                    'com.TIPO_COMPROBANTE_CVE "ctipo_comprobante_cve"');
+                    'com.TIPO_COMPROBANTE_CVE "ctipo_comprobante_cve"', 'ROL_DESEMPENIA', 'COM_NOMBRE', 'com.COMPROBANTE_CVE');
                 $from = 'emp_educacion_distancia as eed';
                 $where = 'eed.EMP_EDU_DISTANCIA_CVE';
                 $on = 'ctad.TIP_ACT_DOC_CVE = eed.TIP_ACT_DOC_CVE';
                 $this->db->join('comprobante as com', 'com.COMPROBANTE_CVE = eed.COMPROBANTE_CVE ', 'left');
+                $this->db->join('crol_desempenia as rd', 'rd.ROL_DESEMPENIA_CVE = eed.ROL_DESEMPENIA_CVE', 'left');
                 break;
             case 'emp_esp_medica':
                 $select = array('esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente"',
@@ -231,8 +248,12 @@ class Actividad_docente_model extends CI_Model {
                     'esm.EEM_PAGO_EXTRA "pago_extra"', 'esm.INS_AVALA_CVE "cinstitucion_avala_cve"',
                     'esm.MODALIDAD_CVE "cmodalidad_cve"', 'esm.ROL_DESEMPENIA_CVE "crol_desempenia_cve"', 
                     'esm.TIP_ESP_MEDICA_CVE "ctipo_especialidad_cve"',
-                    'com.TIPO_COMPROBANTE_CVE "ctipo_comprobante_cve"');
+                    'com.TIPO_COMPROBANTE_CVE "ctipo_comprobante_cve"', 'ROL_DESEMPENIA', 'IA_NOMBRE',
+                    'MOD_NOMBRE', 'COM_NOMBRE', 'com.COMPROBANTE_CVE');
                 $this->db->join('comprobante as com', 'com.COMPROBANTE_CVE = esm.COMPROBANTE_CVE ', 'left');
+                $this->db->join('crol_desempenia as rd', 'rd.ROL_DESEMPENIA_CVE = esm.ROL_DESEMPENIA_CVE', 'left');
+                $this->db->join('cinstitucion_avala as ia', 'ia.INS_AVALA_CVE = esm.INS_AVALA_CVE', 'left');
+                $this->db->join('cmodalidad as mod', 'mod.MODALIDAD_CVE = ead.MODALIDAD_CVE', 'left');
                 $from = 'emp_esp_medica as esm';
                 $where = 'esm.EMP_ESP_MEDICA_CVE';
                 $on = 'ctad.TIP_ACT_DOC_CVE = esm.TIP_ACT_DOC_CVE';

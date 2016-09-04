@@ -1,38 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-    <script type='text/javascript'>
-        $(function() {
-            $('#datetimepicker1').datetimepicker({
-            icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down"
-            },
-            format:'YYYY-MM-DD', 
-            locale: 'es',
-            useCurrent: false
-        });
-        $('#datetimepicker2').datetimepicker({
-            icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down"
-            },
-           format:'YYYY-MM-DD', 
-            locale: 'es',
-            useCurrent: false
-        });
-        $("#datetimepicker_anio").datetimepicker({
-            format: "YYYY", // Notice the Extra space at the beginning
-            viewMode: "years"
-        });
-    });
-    </script>
-    
-    <div class="list-group">
-        <div class="list-group-item">
+    <div class="">
+        <div class="">
                 <div class="panel-body">
                             <div class='row'>
                                 <div class="col-md-6">
@@ -41,32 +10,26 @@
                                          <?php echo $string_values['lbl_area']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-plus"> </span>
-                                        </span>
+                                        <label class="registro"><?php echo (isset($AREA_NOMBRE))? $AREA_NOMBRE : ''; ?></label>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'carea', 'type' => 'dropdown', 
+                                            /*echo $this->form_complete->create_element(array('id' => 'carea', 'type' => 'dropdown', 
                                                 'options' => $carea, 
                                                 'first' => array('' => $string_values['drop_area']), 
                                                 'value' => (isset($carea_cve))? $carea_cve : '',
                                                 'attributes' => array('name' => 'carea_name', 'class' => 'form-control', 
                                                 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_area'] ))); 
+                                                'title' => $string_values['lbl_area'] ))); */
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('carea'); ?>
                                 </div>
                                 <div class="col-md-6">
                                     <label for='lbl_nombre_materia' class="control-label">
-                                        <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_nombre_materia']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-education"> </span>
-                                        </span>
+                                        <label class="registro"><?php echo isset($nombre_materia_impartio) ? $nombre_materia_impartio : ''; ?></label>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'nombre_materia_impartio', 
+                                            /*echo $this->form_complete->create_element(array('id' => 'nombre_materia_impartio', 
                                                 'type' => 'text', 
                                                 'value' => isset($nombre_materia_impartio) ? $nombre_materia_impartio : '',
                                                 'attributes' => array( 
@@ -74,122 +37,56 @@
                                                 'placeholder' => $string_values['text_nombre_materia'], 
                                                 'data-toggle' => 'tooltip', 
                                                 'data-placement' => 'top', 
-                                                'title' => $string_values['text_nombre_materia'] ))); 
+                                                'title' => $string_values['text_nombre_materia'] ))); */
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('nombre_materia_impartio'); ?>
                                 </div>
                             </div>
                             <div class='row'>
                                 <div class="col-md-6">
                                     <label for='lbl_institucion_edu_avala' class="control-label">
-                                        <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_institucion_edu_avala']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-oil"> </span>
-                                        </span>
-                                        <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cinstitucion_avala', 'type' => 'dropdown', 
-                                                'options' => $cinstitucion_avala, 
-                                                'first' => array('' => $string_values['drop_institucion_edu_avala']), 
-                                                'value' => (isset($cinstitucion_avala_cve))? $cinstitucion_avala_cve : '',
-                                                'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => $string_values['lbl_institucion_edu_avala'], 
-                                                'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_institucion_edu_avala'] ))); 
-                                        ?>
+                                        <label class="registro"><?php echo isset($IA_NOMBRE) ? $IA_NOMBRE : ''; ?></label>
                                     </div>
-                                   <?php   echo form_error_format('cinstitucion_avala'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for='lbl_institucion_edu_avala' class="control-label">
-                                        <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_institucion_edu_avala']; ?>
+                                    <label for='lbl_rol_desempenia' class="control-label">
+                                         <?php echo $string_values['lbl_rol_desempenia']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-oil"> </span>
-                                        </span>
+                                        <label class="registro"><?php echo isset($ROL_DESEMPENIA) ? $ROL_DESEMPENIA : ''; ?></label>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cinstitucion_avala', 'type' => 'dropdown', 
-                                                'options' => $cinstitucion_avala, 
-                                                'first' => array('' => $string_values['drop_institucion_edu_avala']), 
-                                                'value' => (isset($cinstitucion_avala_cve))? $cinstitucion_avala_cve : '',
+                                            /*echo $this->form_complete->create_element(array('id' => 'crol_desempenia', 'type' => 'dropdown', 
+                                                'options' => $crol_desempenia, 
+                                                'first' => array('' => $string_values['drop_rol_desempenia']), 
+                                                'value' => (isset($crol_desempenia_cve))? $crol_desempenia_cve : '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => $string_values['lbl_institucion_edu_avala'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_institucion_edu_avala'] ))); 
+                                                'placeholder' => '', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_rol_desempenia'] ))); */
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('cinstitucion_avala'); ?>
                                 </div>
                             </div>
                             <div class='row'>
                                 <div class="col-md-6">
                                     <label for='lbl_recibe_pago_extra' class="control-label">
-                                        <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_recibe_pago_extra']; ?>
                                     </label>
                                     <div class='row'>
-                                        <div class="col-md-6 text-right">
-                                            <label>
-                                                <?php
-                                                echo $this->form_complete->create_element(
-                                                array('id'=>'pago_extra', 'type'=>'radio',
-                                                        'value' => '1',
-                                                        'attributes'=>array(
-                                                        'checked'=>(isset($pago_extra) AND $pago_extra === '1')? "checked" : "",
-                                                        'class'=>'radio-inline m-r-sm',
-                                                        'title'=> $string_values['radio_duracion_horas'],
-                                                        )
-                                                    )
-                                                );
-                                                ?>
-                                                Si
-                                            </label>
-                                        </div>
-                                        <div class="col-md-6 text-left">
-                                            <label>
-                                                <?php
-                                                echo $this->form_complete->create_element(
-                                                array('id'=>'pago_extra', 'type'=>'radio',
-                                                        'value' => '0',
-                                                        'attributes'=>array(
-                                                        'checked'=>(isset($pago_extra) AND $pago_extra === '0')? "checked" : "",
-                                                        'class'=>'radio-inline m-r-sm',
-                                                        'title'=> $string_values['radio_duracion_horas'],
-                                                        )
-                                                    )
-                                                );
-                                                ?>
-                                                No
-                                            </label>
+                                        <div class="col-md-12 text-left">
+                                            <label class="registro"><?php echo (isset($pago_extra) AND $pago_extra === '1') ? 'Si' : 'No' ; ?></label>
                                         </div>
                                     </div>
-                                   <?php   echo form_error_format('pago_extra'); ?>
                                 </div>
                                 <div class="col-md-6">
                                     <label for='lbl_modalidad' class="control-label">
-                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_modalidad']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-user"> </span>
-                                        </span>
-                                        <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cmodalidad', 'type' => 'dropdown', 
-                                                'options' => $cmodalidad, 
-                                                'first' => array('' => $string_values['drop_modalidad']), 
-                                                'value' => (isset($cmodalidad_cve))? $cmodalidad_cve : '',
-                                                'attributes' => array('name' => 'modalidad_name', 'class' => 'form-control', 
-                                                'placeholder' => $string_values['lbl_modalidad'], 'data-toggle' => 'tooltip', 
-                                                'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_modalidad'] ))); 
-                                        ?>
+                                        <label class="registro"><?php echo isset($MOD_NOMBRE) ? $MOD_NOMBRE : ''; ?></label>
                                    </div>
-                                   <?php   echo form_error_format('cmodalidad'); ?>
                                 </div>
                             </div>
                             <div class='row'>
