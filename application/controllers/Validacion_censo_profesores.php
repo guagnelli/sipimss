@@ -526,7 +526,7 @@ class Validacion_censo_profesores extends MY_Controller {
         $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
         $data['string_values'] = $this->lang->line('interface')['actividad_docente'];
         if (!empty($ccurso_cve)) {
-            $data['ccurso_cve'] = intval($ccurso_cve);
+            $data['CUR_NOMBRE'] = $ccurso_cve;
         }
         return $this->load->view('validador_censo/actividad_docente/vista_curso', $data, TRUE);
     }
@@ -1064,10 +1064,11 @@ class Validacion_censo_profesores extends MY_Controller {
                         //$string_values = $this->lang->line('interface')['actividad_docente'];
                         //************fin de la carga de catálogos ***************************************
                         //*****************Carga ccurso según tipo de curso**************************
+                        //pr($data_formulario);
                         $valua_entidad = $propiedades['tabla_guardado'] === 'emp_actividad_docente';
                         if ($valua_entidad AND isset($data_formulario['ctipo_curso_cve']) AND ! empty($data_formulario['ctipo_curso_cve']) AND isset($data_formulario['ccurso_cve']) AND ! empty($data_formulario['ccurso_cve'])) {//si existe el "ccurso" y "ctipo_curso", hay que pintarlo
                             $tipo_curso_cve = intval($data_formulario['ctipo_curso_cve']);
-                            $data_formulario['ccurso_pinta'] = $this->vista_ccurso($tipo_curso_cve, $data_formulario['ccurso_cve']); //Punta el curso
+                            $data_formulario['ccurso_pinta'] = $this->vista_ccurso($tipo_curso_cve, $data_formulario['CUR_NOMBRE']); //Punta el curso
                         }
                         //********************************************************************************
                         //Carga dsatos de píe 
@@ -1370,7 +1371,7 @@ class Validacion_censo_profesores extends MY_Controller {
      * @param type $actividad_docente_general
      * @return type
      */
-    private function guardar_actividad($array_campos_valores, $tipo_act_doc_cve, $actividad_docente_cve, $act_gral_cve, $empleado_cve, $user_cve, $string_values) {
+    /*private function guardar_actividad($array_campos_valores, $tipo_act_doc_cve, $actividad_docente_cve, $act_gral_cve, $empleado_cve, $user_cve, $string_values) {
         if (is_null($array_campos_valores)) {//si es null returna -1 que indica que no se guardo 
             return array();
         }
@@ -1505,7 +1506,7 @@ class Validacion_censo_profesores extends MY_Controller {
 
             exit();
         }
-    }
+    }*/
 
     private function verifica_curso_principal_actividad_docente($index_tp_actividad = '0', $index_entidad = '0', $id_user = '0') {
         if ($index_entidad === '0' || $index_tp_actividad = '0' || $id_user = '0') {
@@ -2211,7 +2212,7 @@ class Validacion_censo_profesores extends MY_Controller {
         return $array_result;
     }
 
-    public function add_tipo_material_educativo() {
+    /*public function add_tipo_material_educativo() {
         if ($this->input->is_ajax_request()) {
 //            pr($this->input->post(null, true));
             $this->lang->load('interface', 'spanish');
@@ -2303,7 +2304,7 @@ class Validacion_censo_profesores extends MY_Controller {
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }
+    }*/
 
     /**
      * Función que permite eliminar la dirección de tesis
@@ -2311,7 +2312,7 @@ class Validacion_censo_profesores extends MY_Controller {
      * @param: $Identificador   string en base64    Identificador de la dirección de tesis codificado en base64
      * @author: Jesús Z. Díaz P.
      */
-    public function eliminar_material_educativo() {
+    /*public function eliminar_material_educativo() {
         if ($this->input->is_ajax_request()) {
 //        [comprobante] => MjE4
 //        [tipo_material_cve] => 23
@@ -2386,7 +2387,7 @@ class Validacion_censo_profesores extends MY_Controller {
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }
+    }*/
 
     private function filtrar_datos_material_educatiovo($array_datos) {
 //        $insert_emp_materia_educativo = $this->config->item('emp_materia_educativo');
@@ -2499,7 +2500,7 @@ class Validacion_censo_profesores extends MY_Controller {
         }
     }
 
-    public function actualizar_datos_editar_material_educativo() {
+    /*public function actualizar_datos_editar_material_educativo() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post()) {//Indica que debe intentar eliminar el curso
                 $datos_post = $this->input->post(null, true);
@@ -2641,7 +2642,7 @@ class Validacion_censo_profesores extends MY_Controller {
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
-    }
+    }*/
 
     /*     * *********************************** Becas_ **************************** */
 
@@ -3377,6 +3378,76 @@ class Validacion_censo_profesores extends MY_Controller {
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+
+    /**
+     * @author LEAS
+     * Función que cambia de estado n1 a en revisión, según el validador que se encuentrá haciendo la revisión
+     * @return type 1 = cambio a revisión satisfactoriamente; 0= fallo en la transición  
+     */
+    private function cambiar_estado_revision_validador() {
+        $datos_validador = $this->session->userdata('datos_validador');
+        $datos_empleado_validar = $this->session->userdata('datosvalidadoactual');
+        $array_estados = $this->config->item('estados_val_censo');
+        $conf_estado_actual_empleado = $array_estados[$datos_empleado_validar['est_val']];
+        if (intval($conf_estado_actual_empleado['rol_permite'][0]) === intval($datos_validador['ROL_CVE'])) {//Verifica que el rol actual pueda modificar el estado del docente 
+            $estado_transicion = $conf_estado_actual_empleado['estados_transicion'];
+            foreach ($estado_transicion as $val_est_trans) {
+                if ($val_est_trans === Enum_ev::En_revision_n1 || $val_est_trans === Enum_ev::En_revision_n2 || $val_est_trans === Enum_ev::En_revision_profesionalizacion) {
+                    $string_values = $this->lang->line('interface')['validador_censo'];
+                    $comentario = $string_values['text_estado_revision'];
+                    $result = $this->cambio_estado_validacion_censo($val_est_trans, $comentario, $datos_validador['VALIDADOR_CVE'], $datos_empleado_validar);
+                    return $result;
+                }
+            }
+            return 0;
+        }
+        return 0;
+    }
+
+    /**
+     * @author  LEAS
+     * @fecha 03/09/2016
+     * @param type $estado_cambio_cve
+     * @param type $comentario_justificacion
+     * @param type $validador_cve
+     * @param type $datos_empleado_validar
+     * @return int
+     */
+    private function cambio_estado_validacion_censo($estado_cambio_cve, $comentario_justificacion = '', $validador_cve, $datos_empleado_validar) {
+        $parametros_insert_hist_val = array();
+        $parametros_insert_hist_val['VAL_ESTADO_CVE'] = $estado_cambio_cve;
+        $parametros_insert_hist_val['VALIDADOR_CVE'] = $validador_cve;
+        $parametros_insert_hist_val['VAL_COMENTARIO'] = $comentario_justificacion;
+        $parametros_insert_hist_val['VALIDACION_GRAL_CVE'] = $datos_empleado_validar['val_grl_cve'];
+        $parametros_insert_hist_val['IS_ACTUAL'] = 1;
+        $cve_hist_actual['VALIDACION_CVE'] = $datos_empleado_validar['validacion_cve'];
+        $parametro_hist_actual_mod['IS_ACTUAL'] = 0;
+
+        //Efectúa la actualización del nuevo estado
+        $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual);
+        if (!empty($result_cam_estado)) {
+            $parametro_hist_actual_mod['VALIDACION_CVE'] = $cve_hist_actual['VALIDACION_CVE'];
+            //Cambio datos variable sesión "datosvalidadoactual" por los nuevos valores
+            $datos_empleado_validar['validador_cve'] = $result_cam_estado['VALIDADOR_CVE']; //Asigna el id del validador actual
+            $datos_empleado_validar['validacion_cve'] = $result_cam_estado['VALIDACION_CVE']; //Asigna nuevo id de la validacion historia
+            $datos_empleado_validar['est_val'] = $result_cam_estado['VAL_ESTADO_CVE']; //Asigna nuevo estado
+            $this->session->set_userdata('datosvalidadoactual', $datos_empleado_validar); //Asigna datos nuevos datos del validado a la variable de sesión 
+            //Registra la bitacora
+            //Actualización 
+            $array_datos_entidad['hist_validacion'] = $parametro_hist_actual_mod; //Pertenece a bitacora
+            $array_operacion_id_entidades['hist_validacion'] = array('update' => $parametro_hist_actual_mod['VALIDACION_CVE']); //Pertenece a bitacora 
+            //Insersion nueva
+            $array_datos_entidad['hist_validacion'] = $result_cam_estado; //Pertenece a bitacora
+            $array_operacion_id_entidades['hist_validacion'] = array('insert' => $result_cam_estado['VALIDACION_CVE']); //Pertenece a bitacora 
+            $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
+            $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
+            //Datos de bitacora el registro del usuario
+            registro_bitacora($this->session->userdata('identificador'), null, $json_datos_entidad, null, $json_registro_bitacora, null);
+            return 1;
+        } else {
+            return 0;
         }
     }
 

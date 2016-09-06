@@ -9,7 +9,7 @@
                                          <?php echo $string_values['lbl_area']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <label class="registro"><?php echo $AREA_NOMBRE; ?></label>
+                                        <label class="registro"><?php echo isset($AREA_NOMBRE) ? $AREA_NOMBRE : ''; ?></label>
                                         <?php 
                                             /*echo $this->form_complete->create_element(array('id' => 'carea', 'type' => 'dropdown', 
                                                 'options' => $carea, 
@@ -93,7 +93,7 @@
                                          <?php echo $string_values['lbl_modalidad']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <label class="registro"><?php echo $MOD_NOMBRE; ?></label>
+                                        <label class="registro"><?php echo isset($MOD_NOMBRE) ? $MOD_NOMBRE : ''; ?></label>
                                    </div>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
                             </div>
                         <br>
                             <div class='row'>
-                                <div class="col-md-4 text-right">
+                                <div class="col-md-12 text-center">
                                     <label for='lbl_duracion' class="control-label">
                                          <?php echo $string_values['lbl_duracion']; ?>
                                     </label>
@@ -188,7 +188,7 @@
                                     </label>
                                     <div class="form-group">
                                         <div class='input-group date' id='datetimepicker2'>
-                                            <label class="registro"><?php echo $fecha_fin_pick; ?></label>
+                                            <label class="registro"><?php echo (isset($fecha_fin_pick)) ? $fecha_fin_pick : ''; ?></label>
                                             <?php
                                             /*echo $this->form_complete->create_element(
                                             array('id'=>'fecha_fin_pick','type'=>'text',

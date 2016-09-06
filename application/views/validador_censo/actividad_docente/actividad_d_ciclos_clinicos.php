@@ -10,7 +10,7 @@
                                         <?php echo $string_values['lbl_curso']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <label class="registro"><?php echo $nombre_curso; ?></label>
+                                        <label class="registro"><?php echo isset($nombre_curso) ? $nombre_curso : ''; ?></label>
                                         <!-- <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-education"> </span>
                                         </span> -->
@@ -51,7 +51,7 @@
                                          <?php echo $string_values['lbl_institucion_edu_avala']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <label class="registro"><?php echo $IA_NOMBRE; ?></label>
+                                        <label class="registro"><?php echo isset($IA_NOMBRE) ? $IA_NOMBRE : ''; ?></label>
                                         <?php 
                                             /*echo $this->form_complete->create_element(array('id' => 'cinstitucion_avala', 'type' => 'dropdown', 
                                                 'options' => $cinstitucion_avala, 
@@ -92,7 +92,7 @@
                                          <?php echo $string_values['lbl_licenciatura']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <label class="registro"><?php echo $LIC_NOMBRE; ?></label>
+                                        <label class="registro"><?php echo isset($LIC_NOMBRE) ? $LIC_NOMBRE : ''; ?></label>
                                         <?php 
                                             /*echo $this->form_complete->create_element(array('id' => 'licenciatura', 'type' => 'dropdown', 
                                                 'options' => $licenciatura, 
@@ -110,7 +110,7 @@
                                          <?php echo $string_values['lbl_modalidad']; ?>
                                     </label>
                                     <div class="input-group">
-                                        <label class="registro"><?php echo $MOD_NOMBRE; ?></label>
+                                        <label class="registro"><?php echo isset($MOD_NOMBRE) ? $MOD_NOMBRE : ''; ?></label>
                                         <?php 
                                             /*echo $this->form_complete->create_element(array('id' => 'cmodalidad', 'type' => 'dropdown', 
                                                 'options' => $cmodalidad, 
@@ -129,7 +129,7 @@
                                             <?php echo $string_values['lbl_anio_que_impartio_curso']; ?>
                                         </label>
                                         <div class="input-group date datepicker" id="datetimepicker_anio">
-                                            <label class="registro"><?php echo $actividad_anios_dedicados_docencia; ?></label>
+                                            <label class="registro"><?php echo isset($actividad_anios_dedicados_docencia) ? $actividad_anios_dedicados_docencia : ''; ?></label>
                                         <?php
                                             /*echo $this->form_complete->create_element(
                                             array('id'=>'actividad_anios_dedicados_docencia','type'=>'text',
@@ -151,16 +151,9 @@
                             </div>
                         <br>
                             <div class='row'>
-                                <div class="col-md-4 text-left">
+                                <div class="col-md-12 text-center">
                                     <label for='lbl_duracion' class="control-label">
                                          <?php echo $string_values['lbl_duracion']; ?>
-                                    </label>
-                                </div>
-                                <div class="col-md-8 text-center">
-                                    <label>
-                                        <?php
-                                        //echo (isset($duracion) AND $duracion === "hora_dedicadas") ? $string_values['radio_duracion_horas'] : $string_values['radio_duracion_fecha'];
-                                        ?>
                                     </label>
                                 </div>
                             </div>
@@ -195,7 +188,7 @@
                                     </label>
                                     <div class="form-group">
                                         <div class="input-group date" id="datetimepicker1" >
-                                            <label class="registro"><?php echo $fecha_inicio_pick; ?></label>
+                                            <label class="registro"><?php echo (isset($fecha_inicio_pick))? $fecha_inicio_pick : ''; ?></label>
                                             <?php
                                             /*echo $this->form_complete->create_element(
                                             array('id'=>'fecha_inicio_pick','type'=>'text',
@@ -219,7 +212,7 @@
                                     </label>
                                     <div class="form-group">
                                         <div class='input-group date' id='datetimepicker2'>
-                                            <label class="registro"><?php echo $fecha_fin_pick; ?></label>
+                                            <label class="registro"><?php echo (isset($fecha_fin_pick))? $fecha_fin_pick : ''; ?></label>
                                             <?php
                                             /*echo $this->form_complete->create_element(
                                             array('id'=>'fecha_fin_pick','type'=>'text',

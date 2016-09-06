@@ -133,6 +133,16 @@
 	        useCurrent: false,
 	        <?php echo $js_fch_fin_val2; ?>
 	    });
+	    $("#datetimepicker1").on("dp.change", function (e) {
+            $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker2").on("dp.change", function (e) {
+            $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+            $('#datetimepicker3').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker3").on("dp.change", function (e) {
+            $('#datetimepicker2').data("DateTimePicker").maxDate(e.date);
+        });
 	    if($('#btn_convocatoria_enviar').length){
 	        $('#btn_convocatoria_enviar').on('click', function() {
 	            data_ajax(site_url+'/convocatoria_evaluacion/gestionar_convocatoria/'+$(this).attr('data-value'), '#formularioConvocatoria', '#capa_html');
