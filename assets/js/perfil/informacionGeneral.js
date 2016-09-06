@@ -135,3 +135,56 @@ function recargar_fecha_ultima_actualizacion() {
             });
 
 }
+
+function envio_cambio_estado_validacion(element) {
+    var a = hrutes['seccion_enviar_validacion'];
+//    alert(a);
+    var cad_split = a.split(":");
+    var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
+    var estado_cambio_cve = obj.data('estadocambiocve');
+//    var tipo_transicion =obj.data('tipotransicion');
+    var formData = $('#form_validar_docente').serialize();
+    formData += '&estado_cambio_cve=' + estado_cambio_cve;
+    $.ajax({
+        url: site_url + '/' + cad_split[0] + '/enviar_cambio_estado_validacion',
+        data: formData,
+        method: 'POST',
+        beforeSend: function (xhr) {
+            $('#seccion_enviar_validacion').html(create_loader());
+        }
+    })
+            .done(function (response) {
+                try {
+                    var response = $.parseJSON(response);
+                    if (response.result === 1) {
+                        $('#mensaje_error_index').html(response.error);
+                        $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass('alert-' + response.tipo_msg);
+                        $('#div_error_index').show();
+                        setTimeout("$('#div_error_index').hide()", 5000);
+                        try {
+                            cargar_datos_menu_perfil('seccion_enviar_validacion');
+                        } catch (e) {
+                            $('#seccion_enviar_validacion').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                        }
+                    } else {
+                        $('#mensaje_error_index').html(response.error);
+                        $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass('alert-' + response.tipo_msg);
+                        $('#div_error_index').show();
+                        setTimeout("$('#div_error_index').hide()", 5000);
+
+                    }
+                } catch (e) {
+//                $('#seccion_validar').html(response);
+                    $('#seccion_validar').html(response);
+
+                }
+            })
+            .fail(function (jqXHR, response) {
+//                $('#div_error').show();
+                $('#seccion_validar').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+//                $('#mensaje_error_div').removeClass('alert-success').addClass('alert-danger');
+            })
+            .always(function () {
+                remove_loader();
+            });
+}

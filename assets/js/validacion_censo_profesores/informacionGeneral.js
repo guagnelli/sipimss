@@ -1,3 +1,4 @@
+var seccion_seleccionada;
 $(document).ready(function () {
     $("#btn_informacion_general_personal").on('click', function () {
         //alert($("#form_informacion_general").attr("action"));
@@ -54,16 +55,23 @@ $(function () {
 //        var scrollposition = $(document).scrollTop();
         var id = jQuery(e.target).attr("href").substr(1);//Obtiene el texto del href
         window.location.hash = id;
-        if (id.indexOf('seccion') > -1 && array_menu_perfil_validar.indexOf(id) < 0) {
-            //alert();
-            array_menu_perfil_validar.push(id);
-            //Separar en 4, 0controlador; 1nombre del método ajax; 2nombre del formulario; 3nombre del div
+        if (id === 'seccion_validar') {
+            if(seccion_seleccionada !== id){//Si es diferente, recarga la sección validar
+                cargar_datos_menu_perfil(id);
+            }
+        } else {
+            if (id.indexOf('seccion') > -1 && array_menu_perfil_validar.indexOf(id) < 0) {
+                //alert();
+                array_menu_perfil_validar.push(id);
+                //Separar en 4, 0controlador; 1nombre del método ajax; 2nombre del formulario; 3nombre del div
 //            var cad = hrutes[id];
 //            var cad_split = cad.split(":");
 ////            data_ajax(site_url + '/validacion_censo_profesores/get_data_ajax_actividad/', '#form_actividad_docente', '#get_data_ajax_actividad');
 //            data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
-            cargar_datos_menu_perfil(id);
+                cargar_datos_menu_perfil(id);
+            }
         }
+        seccion_seleccionada = id;
 //        $(document).scrollTop(scrollposition);
     });
 

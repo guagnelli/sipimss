@@ -33,7 +33,7 @@ if (!function_exists('carga_catalogos_generales')) {
 
         foreach ($array_entidades as $entidad) {
             $where = (isset($array_where[$entidad])) ? $array_where[$entidad] : null; //Verifica que exista un where relacionado a la entidad
-            $order_by = (!is_null($array_order_by[$entidad])) ? $array_order_by[$entidad] . ' ' . $order_by_direccion 
+            $order_by = (isset($array_order_by[$entidad]) AND !is_null($array_order_by[$entidad])) ? $array_order_by[$entidad] . ' ' . $order_by_direccion 
                     : $catalogos_propertis[$entidad]['nombre'] . ' ' . $order_by_direccion; //Verifica que exista un order by relacionado a la entidad, si no existe lo ordena por nombre asendentemente
             
             $type_group_ = (isset($array_tipo_where[$entidad])) ? $array_tipo_where[$entidad] : 'AND'; //Verifica que exista un order by relacionado a la entidad, si no existe lo ordena por nombre asendentemente

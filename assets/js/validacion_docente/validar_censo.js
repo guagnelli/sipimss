@@ -71,15 +71,24 @@ function funcion_ver_validacion_empleado(element) {
     var histvalcve = button_obj.data('histvalcve');
     var valgrlcve = button_obj.data('valgrlcve');
     var usuariocve = button_obj.data('usuariocve');
+    var convocatoria_cve = button_obj.data('convocatoriacve');
+    var idrow = button_obj.data('usuariocve');
     //Remover contenido de un div 
     $('#select_perfil_validar').empty();
     var obj_post = {empcve: empcve, matricula: matricula, estval: estval, validadorcve: validadorcve,
-        histvalcve: histvalcve, valgrlcve: valgrlcve, usuariocve: usuariocve};
+        histvalcve: histvalcve, valgrlcve: valgrlcve, usuariocve: usuariocve, convocatoria_cve: convocatoria_cve};
     data_ajax_post(site_url + '/validacion_censo_profesores/seccion_index', null, '#select_perfil_validar', obj_post);
 }
 function funcion_cerrar_validacion_empleado(element) {
 //    alert('jsahjhdadas');
     $('#select_perfil_validar').empty();
     data_ajax_post(site_url + '/validacion_censo_profesores/seccion_delete_datos_validado', null, null);
+}
+
+function ver_comentario_estado_doc(element) {
+    var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
+    var hist_val_cve = obj.data('histvalcve');
+    var formData = {hist_val_cve: hist_val_cve};
+    data_ajax_post(site_url + '/validacion_censo_profesores/ver_comentario_estado', null, '#modal_content', formData);
 }
     

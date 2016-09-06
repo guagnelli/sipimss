@@ -692,8 +692,126 @@ if (!function_exists('antiguedad_format')) {
 /* End of file general_helper.php */
 
 if (!function_exists('html_verificar_validacion_registro')) {
-    function html_verificar_validacion_registro($valor=0, $color=0) {
-        return ($valor>0 || $color==1) ? '<span class="class_validacion_registro '.(($color==1) ? 'text-black' : '').' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="'.(($color==1) ? 'Validación confirmada por profesionalización' : 'Validación realizada').'"></span>' : '-';
+
+    function html_verificar_validacion_registro($valor = 0, $color = 0) {
+        return ($valor > 0 || $color == 1) ? '<span class="class_validacion_registro ' . (($color == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($color == 1) ? 'Validación confirmada por profesionalización' : 'Validación realizada') . '"></span>' : '-';
+    }
+
+}
+
+if (!function_exists('genera_botones_estado_validacion')) {
+
+    function genera_botones_estado_validacion($paramentros) {
+        $mensaje = "No se encontrarón opciones";
+        if (isset($paramentros['msj_vacio'])) {
+            $mensaje = $paramentros['msj_vacio']; //Validador N1, Validador N2, Profesionalización o docente-->
+        }
+
+        $estado_actual = $paramentros['estado_actual'];
+        $tipo_validador_rol = $paramentros['tipo_validador_rol']; //Validador N1, Validador N2, Profesionalización o docente-->
+        $delegacion_validador = $paramentros['delegacion_cve']; //Validador N1, Validador N2, Profesionalización o docente-->
+//        pr($estado_actual);
+//        pr($tipo_validador_rol);
+        $CI = & get_instance();
+        $propiedades_gen_estado = $CI->config->item('estados_val_censo'); //Carga las propiedades de los estados de la validación del censo de docentes
+        $valida_acceso_rol = valida_acceso_rol_validador($tipo_validador_rol, $estado_actual); //Valida el acceso al rol seleccionado
+//        pr($valida_acceso_rol);
+        $respuesta_html_botones = array();
+        if ($valida_acceso_rol) {//**Tiene acceso el validar el estado actual la validación del docente 
+            $pro_estado_actual = $propiedades_gen_estado[$estado_actual]; //Carga el estado actual del docente 
+//            $estado_transicion = $pro_estado_actual['estados_transicion'];
+            $CI->load->library('seguridad');
+            $pasa_convocatoria_val = get_convocatoria_delegacion_val_censo($delegacion_validador, $tipo_validador_rol);
+            foreach ($pro_estado_actual['estados_transicion'] as $value_est_trans) {
+                $estados_trans = $propiedades_gen_estado[$value_est_trans];
+                if ($estados_trans['is_boton']) {//Verifica si es un botón o el cambio va implicito por el sistema, como es el caso del cambio de estado a "En revision por .."
+                    pr($value_est_trans);
+                    $value_est_trans = $CI->seguridad->encrypt_base64($value_est_trans);
+//                    $tipo_transicion = $CI->seguridad->encrypt_base64($estados_trans['color_status']);
+                    $respuesta_html_botones[] = '<button '
+                            . 'type="button" '
+                            . 'class="btn btn-success" '
+                            . 'data-estadocambiocve ="' . $value_est_trans . '"'
+//                            . 'data-tipotransicion ="' . $tipo_transicion . '"'
+                            . 'onclick=' . $estados_trans['funcion_demandada'] . '>' .
+                            $estados_trans['value_boton']
+                            . '</button>';
+                }
+            }
+        }
+
+        return $respuesta_html_botones;
+    }
+
+}
+if (!function_exists('valida_acceso_rol_validador')) {
+
+    /**
+     * @author LEAS
+     * @fecha 31/08/2016
+     * @param type $rol_validador Rol que intenta validar el estado actual del docente
+     * @param type $estado_validacion  Estado actual que se pretende validar por dicho rol
+     * @return int 0=No tiene acceso el rol a la validación 1=Tiene acceso el rol a la validación
+     */
+    function valida_acceso_rol_validador($rol_validador, $estado_validacion) {
+//        pr($rol_validador);
+//        pr($estado_validacion);
+        if (!is_null($estado_validacion) AND ! is_null($rol_validador) AND ! empty($estado_validacion) AND ! empty($rol_validador)) {
+            $CI = & get_instance();
+            $propiedades_gen_estado = $CI->config->item('estados_val_censo')[$estado_validacion];
+            //Valida el acceso al rol seleccionado
+            $valida_acceso_rol = 0;
+            foreach ($propiedades_gen_estado['rol_permite'] as $value_rol) {
+                if ($value_rol === $rol_validador) {//Si algún rol coinside, acepta el acceso al rol y termina el recorrido del foreach()
+                    $valida_acceso_rol = 1;
+                    break;
+                }
+            }
+            return $valida_acceso_rol;
+        } else {
+            return 0;
+        }
+    }
+
+}
+
+if (!function_exists('get_convocatoria_delegacion')) {
+
+    /**
+     * @author LEAS
+     * @fecha 05/09/2016 
+     * @param type $delegacion_cve
+     * @return int 0 No existe la convocatoria
+     */
+    function get_convocatoria_delegacion_val_censo($delegacion_cve, $rol = Enum_rols::Profesionalizacion) {
+        $CI = & get_instance();
+        $CI->load->model('Catalogos_generales', 'cg');
+        $convocatoria = $CI->cg->get_convocatoria_delegacion($delegacion_cve);
+        if (!empty($convocatoria)) {
+//            pr($convocatoria->aplica_convocatoria);
+//            pr($rol);
+            switch ($convocatoria->aplica_convocatoria) {
+                case 'sin'://Ya se registro la convocatoria, pero aún no inicía
+                    $valida_paso_convocatoria = 0;
+                    break;
+                case 'act'://Inicia la carga de datos por el docente
+                    $valida_paso_convocatoria = ($rol === Enum_rols::Docente) ? 1 : 0;
+                    break;
+                case 'vf1'://Periodo de validacion por el nivel 1
+                    $valida_paso_convocatoria = ($rol === Enum_rols::Validador_N1) ? 1 : 0;
+                    break;
+                case 'vf2'://Periodo de validación por nivel 2
+                    $valida_paso_convocatoria = ($rol === Enum_rols::Validador_N2) ? 1 : 0;
+                    break;
+                case 'nap'://Convocatoria liberada
+                    $valida_paso_convocatoria = 1;
+                    break;
+            }
+            //Existe la convocatoría
+            return array('idconv' => $convocatoria->convocatoria_cve, 'aplica_conv_rol' => $valida_paso_convocatoria);
+        } else {
+            return array();//NO existe una convocatoría
+        }
     }
 
 }

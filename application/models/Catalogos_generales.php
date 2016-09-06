@@ -498,22 +498,23 @@ class Catalogos_generales extends CI_Model {
      * La consulta obtiene la convocatoria relacionada con la delegación, demás, 
      * si existe más de una convocatoria asociada a la delegación, entonces,
      * obtiene el maximo id de la convocatoría
+     * Por etro lado regresa el estado de las fechas
      * 
      */
     public function get_convocatoria_delegacion($delegacion_cve = null) {
         $select = 'select vc.VAL_CON_CVE "convocatoria_cve",
-        vc.VAL_CON_FCH_INICIO_ACTUALIZACION "inicio_actualizacion_datos_docente",
-        vc.VAL_CON_FCH_FIN_ACTUALIZACION "fin_actualizacion_datos_docente", 
-        vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_I "inicio_validacion_face1", 
-        vc.VAL_CON_FCH_FIN_VALIDACION_FASE_I "fin_validacion_face1",
-        vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_II "inicio_validacion_face2", 
-        vc.VAL_CON_FCH_FIN_VALIDACION_FASE_II "fin_validacion_face2" 
+        if(now() < vc.VAL_CON_FCH_INICIO_ACTUALIZACION, "sin", 
+       	(if(now() between vc.VAL_CON_FCH_INICIO_ACTUALIZACION and vc.VAL_CON_FCH_FIN_ACTUALIZACION, "act", 
+       (if(now() between vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_I and vc.VAL_CON_FCH_FIN_VALIDACION_FASE_I,"vf1",
+        (if(now() between vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_II and vc.VAL_CON_FCH_FIN_VALIDACION_FASE_II, "vf2", "nap")))))))
+        "aplica_convocatoria"
         from validacion_convocatoria vc
         where vc.VAL_CON_CVE in 
         (select max(vcp.VAL_CON_CVE) from validacion_convocatoria_delegacion vcd 
         join validacion_convocatoria vcp on vcp.VAL_CON_CVE = vcd.VAL_CON_CVE
         where vcd.VAL_CON_DEL_CVE = ' . $delegacion_cve . ')';
         $num_rows = $this->db->query($select)->result();
+//        pr($this->db->last_query());
         if (!empty($num_rows)) {
             $num_rows = $num_rows[0];
         }

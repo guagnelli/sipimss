@@ -39,29 +39,6 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                 <h4><?php echo $string_values['titulo_template']; ?> </h4>
                 <br>
             </div>
-
-<!--            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <div class="panel-body input-group ">
-                        <span class="input-group-addon"><?php // echo $string_values['lbl_delegacion']; ?></span>
-                     <?php 
-//                        echo $this->form_complete->create_element(array('id' => 'delegacion_cve', 
-//                            'type' => 'dropdown', 
-//                            'options' => $cdelegacion, 
-//                            'first' => array('' => $string_values['drop_delegacion']), 
-//                            'value' => '',
-//                            'class'=>'form-control',
-//                            'attributes' => array('class' => 'form-control', 'aria-describedby'=>"help-tipo-comprobante",
-//                            'placeholder' => $string_values['lbl_delegacion'], 
-//                            'data-toggle' => 'tooltip', 
-//                            'data-placement' => 'top', 
-//                            'title' => $string_values['lbl_delegacion'] ))); 
-                    ?>
-                    </div>
-                </div>
-                <div class="col-md-3"></div>
-            </div>-->
             <br>
             <div class="row">
                 <div class="col-md-3"></div>

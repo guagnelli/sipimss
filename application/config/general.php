@@ -223,6 +223,7 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'ctematica' => array('id'=>'TEMATICA_CVE', 'nombre'=>'TEM_NOMBRE', 'where'=>null),
      'cvalidacion_estado' => array('id' => 'VAL_ESTADO_CVE', 'nombre' => 'VAL_EST_NOMBRE' , 'where' => null),
      'cvalidacion_curso_estado' => array('id'=>'VAL_CUR_EST_CVE', 'nombre'=>'VAl_CUR_EST_NOMBRE', 'where'=>null),
+     Enum_ecg::cestado_evaluacion => array('id' => 'EST_EVALUACION_CVE', 'nombre' => 'EST_EVA_NOMBRE' , 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
 
@@ -495,7 +496,8 @@ $config['ACCION_GENERAL'] = array(
 $config['cvalidacion_curso_estado'] = array(
     'VALIDO' => array('id' => 1, 'color' => 'success'),
     'NO_VALIDO' => array('id' => 2, 'color' => 'danger'),
-    'CORRECCION' => array('id' => 3, 'color' => 'warning')
+    'CORRECCION' => array('id' => 3, 'color' => 'warning'),
+    'REVISION' => array('id' => 4, 'color' => 'info')
 );
 
 $config['TABLAS'] = array(
@@ -520,7 +522,7 @@ $config['estados_val_censo'] = array(
     Enum_ev::Inicio => array('value' => 'Inicio', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => '', 'funcion_demandada' => '', 'value_boton' => '', 'tipo_transaccion'=>'', 'color_status' => ''),
     Enum_ev::Incompleta => array('value' => 'Incompleta', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => '', 'tipo_transaccion'=>'', 'color_status' => ''), 
     Enum_ev::Completa => array('value' => 'Completa', 'rol_permite' => array(Enum_rols::Docente), 'estados_transicion' => array(Enum_ev::Por_validar_n1), 'value_boton' => 'Enviar a validación', 'funcion_demandada' => '', 'tipo_transaccion'=>'', 'color_status' => 'NO_VALIDO'), 
-    Enum_ev::Por_validar_n1 => array('value' => 'Por validar N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::En_revision_n1), 'value_boton' => '', 'funcion_demandada' => '', 'is_boton' => TRUE, 'tipo_transaccion'=>'', 'color_status' => 'REVISION'),
+    Enum_ev::Por_validar_n1 => array('value' => 'Por validar N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::En_revision_n1), 'value_boton' => 'Enviar a revisión nivel 1', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'', 'color_status' => 'REVISION'),
     Enum_ev::En_revision_n1 => array('value' => 'En revisión N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::Correccion_docente, Enum_ev::Val_n1_por_validar_n2), 'value_boton' => 'Enviar a revisión nivel 1', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)' ,'is_boton' => FALSE, 'tipo_transaccion'=>'revisión', 'color_status' => 'REVISION'),
     Enum_ev::Correccion_docente => array('value' => 'Corrección docente', 'rol_permite' =>  array(Enum_rols::Docente),'estados_transicion' => array(Enum_ev::Por_validar_n1), 'value_boton' => 'Enviar a corrección por docente', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'corrección', 'color_status' => 'CORRECCION'),
     Enum_ev::Val_n1_por_validar_n2 => array('value' => 'Validado Nivel 1-Por validar Nivel 2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::En_revision_n2), 'value_boton' => 'Enviar a validar por nivel 2', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)','is_boton' => TRUE, 'tipo_transaccion'=>'validación', 'color_status' => 'VALIDO'),
