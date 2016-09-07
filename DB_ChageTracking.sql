@@ -395,12 +395,18 @@ ALTER TABLE hist_edd_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAUL
 ALTER TABLE hist_edis_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
 ALTER TABLE hist_eem_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
 ALTER TABLE hist_efp_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
+ALTER TABLE hist_efpd_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE hist_fpcs_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
 ALTER TABLE hist_me_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ;
 
 
 /*----------------2016/08/29------------------------*/
 ALTER TABLE sipimss_pdos.modulo MODIFY COLUMN IS_CONTROLADOR int(1) DEFAULT 0 NOT NULL; /*Cambia tipo de dato a int de "1" para distinguir entre un controlador = 1, un controlador de tareas = 2, un hijo de controlador  = 0*/
+
+/*----------------2016/09/05------------------------*/
+ALTER TABLE cestado_evaluacion MODIFY COLUMN EST_EVA_NOMBRE varchar(50) NOT NULL;
+ALTER TABLE sipimss_20160829.cestado_validacion MODIFY COLUMN EST_VALIDA_DESC varchar(50) NULL;
+ALTER TABLE sipimss_20160905.cestado_validacion MODIFY COLUMN EST_VALIDA_DESC varchar(50) NULL;
 
 
 /*****************2016/09/02*************************/

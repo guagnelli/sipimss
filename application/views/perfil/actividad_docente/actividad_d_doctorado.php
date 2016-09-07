@@ -104,25 +104,25 @@
                                    <?php   echo form_error_format('cinstitucion_avala'); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for='lbl_institucion_edu_avala' class="control-label">
-                                        <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_institucion_edu_avala']; ?>
+                                     <label for='lbl_rol_desempenia' class="control-label">
+                                         <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_rol_desempenia']; ?>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-oil"> </span>
+                                            <span class="glyphicon glyphicon-user"> </span>
                                         </span>
                                         <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cinstitucion_avala', 'type' => 'dropdown', 
-                                                'options' => $cinstitucion_avala, 
-                                                'first' => array('' => $string_values['drop_institucion_edu_avala']), 
-                                                'value' => (isset($cinstitucion_avala_cve))? $cinstitucion_avala_cve : '',
+                                            echo $this->form_complete->create_element(array('id' => 'crol_desempenia', 'type' => 'dropdown', 
+                                                'options' => $crol_desempenia, 
+                                                'first' => array('' => $string_values['drop_rol_desempenia']), 
+                                                'value' => (isset($crol_desempenia_cve))? $crol_desempenia_cve : '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
-                                                'placeholder' => $string_values['lbl_institucion_edu_avala'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_institucion_edu_avala'] ))); 
+                                                'placeholder' => '', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_rol_desempenia'] ))); 
                                         ?>
                                    </div>
-                                   <?php   echo form_error_format('cinstitucion_avala'); ?>
+                                   <?php   echo form_error_format('crol_desempenia'); ?>
                                 </div>
                             </div>
                             <div class='row'>

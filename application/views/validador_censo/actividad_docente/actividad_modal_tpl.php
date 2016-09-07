@@ -40,12 +40,12 @@
            </div>
             <?php // echo form_close(); ?>
             <?php  }?>
-                <?php echo form_open('', array('id'=>'form_actividad_docente_especifico')); ?>
+                <?php //echo form_open('', array('id'=>'form_actividad_docente_especifico')); ?>
             <div class="list-group-item" id="info_actividad_docente">
                <!--Carga la vista correspondiente al elemento tipo de actividad del docente-->
                <?php   if(isset($formulario)){ echo $formulario; } ?>
            </div>
-               <?php echo form_close(); ?>
+               <?php //echo form_close(); ?>
         </div>
     
     

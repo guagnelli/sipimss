@@ -66,8 +66,7 @@ echo js('validacion_censo_profesores/actividad_docente.js');
                                         $is_cur_principal_igual = ($curso_principal === $value['cve_actividad_docente']) ? 1 : 0;
                                         $is_tp_actividad_igual = ($curso_principal_entidad_contiene === $value['ta_cve']) ? 1 : 0;
                                         $is_cur_principal = ($is_cur_principal_igual === 1 AND $is_tp_actividad_igual === 1) ? 1 : 0;                                        
-                                        $checked = ($is_cur_principal === 1) ? '<span class="glyphicon glyphicon-ok"></span>' : '';
-
+                                        $checked = ($is_cur_principal === 1) ? '<span class="glyphicon glyphicon-ok class_validacion_registro"></span>' : '';
                                         $idcomprobante = $value['comprobante'];
                                         if (!is_null($idcomprobante)) {//Valida existencia del comprobante
                                             $idcomprobante = $this->seguridad->encrypt_base64($idcomprobante); //Encripta
@@ -77,7 +76,7 @@ echo js('validacion_censo_profesores/actividad_docente.js');
                                             $btn_comprobante = '';
                                         }
                                         $id = $this->seguridad->encrypt_base64($value['cve_actividad_docente']);
-                                        $btn_validar = ($this->seguridad->verificar_liga_validar($value['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_ad" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_ad(this, '.$value['ta_cve'].');" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';                                        
+                                        $btn_validar = ($this->seguridad->verificar_liga_validar($value['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_ad" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_ad(this, '.$value['ta_cve'].');" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                                         echo "<tr data-keyrow=".$key.">";
                                         echo '<td class="text-center">'.html_verificar_validacion_registro($value['validation'], $value['IS_VALIDO_PROFESIONALIZACION']).'</td>';
                                         echo "<td >".$checked."</td>";

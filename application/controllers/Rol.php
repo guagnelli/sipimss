@@ -42,6 +42,7 @@ class Rol extends MY_Controller {
             $mensajes = $this->lang->line('interface');
             $tipo_msg = $this->config->item('alert_msg');
             $value_rol_cve = $this->input->post('seleciion_role', TRUE);
+            $this->limpiar_datos_temp_variable_sesion();
 //            pr($value);
             if (empty($value_rol_cve)) {
                 //Mostrar mensaje de advertencia para seleccionar un rol
@@ -64,7 +65,7 @@ class Rol extends MY_Controller {
                     case 3:
                         redirect('validacion_censo_profesores');
                     case 14:
-                        redirect('designar_validador');
+                        redirect('evaluacion_curricular_validar');
                     case 5:
                         redirect('designar_validador');
                 }
@@ -79,12 +80,21 @@ class Rol extends MY_Controller {
         $this->template->setMainContent($main_contet);
         $this->template->getTemplate();
     }
-    
-    private function limpiar_datos_temp_variable_sesion(){
+
+    private function limpiar_datos_temp_variable_sesion() {
         /* Limpiar información de validación censo
          * Limpiar rol_seleccionado
          * Limpiar rol_seleccionado_cve
+         * Limpiar convocatoria_delegacion
+         * Limpiar datos_validador
+         * Limpiar datosvalidadoactual
+         * 
          */
+        $variables = array('rol_seleccionado', 'rol_seleccionado_cve', 'convocatoria_delegacion',
+            'datos_validador', 'datosvalidadoactual');
+        foreach ($variables as $value) {
+            $this->session->unset_userdata($value);
+        }
     }
 
 }

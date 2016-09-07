@@ -123,6 +123,19 @@
 	        useCurrent: false,
 	        <?php echo $js_fch_fin_val2; ?>
 	    });
+	    /*$( "#datetimepicker4" ).load(function(e) {
+            $('#datetimepicker3').data("DateTimePicker").minDate(e.date);
+        });*/
+	    $("#datetimepicker4").on("dp.change", function (e) {
+            $('#datetimepicker5').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker5").on("dp.change", function (e) {
+            $('#datetimepicker4').data("DateTimePicker").maxDate(e.date);
+            $('#datetimepicker6').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker5').data("DateTimePicker").maxDate(e.date);
+        });
 	    if($('#btn_dictamen_enviar').length){
 	        $('#btn_dictamen_enviar').on('click', function() {
 	            data_ajax(site_url+'/convocatoria_evaluacion/gestionar_dictamen/'+$("#btn_convocatoria_enviar").attr('data-value')+'/'+$(this).attr('data-value'), '#formularioDictamen', '#capa_dictamen_formulario');
