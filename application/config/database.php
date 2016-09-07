@@ -90,7 +90,7 @@ $db['default'] = array(
     'hostname' => 'localhost',
     'username' => 'root',
     'password' => 'mysql',
-    'database' => 'sipimss_27082016',
+    'database' => 'sipimss_20160903',
     
 //    'hostname' => 'localhost',
 //    'username' => 'sipimss',

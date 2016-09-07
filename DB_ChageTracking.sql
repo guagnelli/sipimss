@@ -403,3 +403,126 @@ ALTER TABLE hist_me_validacion_curso MODIFY COLUMN VAL_CUR_FCH TIMESTAMP DEFAULT
 ALTER TABLE sipimss_pdos.modulo MODIFY COLUMN IS_CONTROLADOR int(1) DEFAULT 0 NOT NULL; /*Cambia tipo de dato a int de "1" para distinguir entre un controlador = 1, un controlador de tareas = 2, un hijo de controlador  = 0*/
 
 
+/*****************2016/09/02*************************/
+--Creación de tablas
+DROP TABLE IF EXISTS `bono_emp_can_bono`;
+DROP table if exists bono_cestado_bono;
+DROP table if exists bono_can_bono_reg;
+DROP table if exists bono_convocatoria_bono;
+DROP table if exists bono_ctipo_evaluacion;
+DROP table if exists bono_cadmin_bonos;
+DROP table if exists ini_ses_int;
+DROP table if exists bono_act_edu_dist;
+
+CREATE TABLE `bono_cestado_bono` (
+  `est_bono_cve` int(11) NOT NULL AUTO_INCREMENT,
+  `est_nombre` varchar(50) NOT NULL,
+  `est_estado_nombre` varchar(30) NOT NULL,
+  `est_orden` int(2) NOT NULL,
+  constraint pk_cestado_bono
+  PRIMARY KEY (`est_bono_cve`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `bono_emp_can_bono` (
+  `emp_can_cve` int(11) NOT NULL AUTO_INCREMENT,
+  `empleado_cve` int(11) NOT NULL,
+  `can_periodo_bono` int(4) NOT NULL,
+  `can_sum_act` smallint(3) NOT NULL,
+  `can_estado` smallint(1) NOT NULL DEFAULT '0',
+  `can_tot_pro_eva` decimal(3,1) NOT NULL DEFAULT '0.0',
+  `can_correo` varchar(100) NOT NULL,
+  `conv_bono_cve` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`emp_can_cve`),
+  CONSTRAINT `FK_EMPCANBONO` 
+  FOREIGN KEY (`empleado_cve`) 
+  REFERENCES `empleado` (`empleado_cve`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `bono_can_bono_reg` (
+  `reg_bono_cve` int(11) NOT NULL AUTO_INCREMENT,
+  `emp_can_cve` int(11) NOT NULL,
+  `est_bono_cve` int(11) NOT NULL,
+  `reg_fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  `reg_promedio` decimal(5,2) DEFAULT NULL,
+  `reg_msg` varchar(150) DEFAULT NULL,
+  `tar_cve` int(11) DEFAULT NULL,
+  `accion_tarjeton` tinyint(1) NOT NULL DEFAULT '0',
+  `act_cve` int(11) DEFAULT NULL,
+  `accion_actuacion` tinyint(1) NOT NULL DEFAULT '0',
+  constraint pk_reg_bono_cve
+  PRIMARY KEY (`reg_bono_cve`),
+  CONSTRAINT `cbr_eb_fk` 
+  FOREIGN KEY (`est_bono_cve`) 
+  REFERENCES `bono_cestado_bono` (`est_bono_cve`),
+  CONSTRAINT `cbr_ecb_fk` 
+  FOREIGN KEY (`emp_can_cve`) 
+  REFERENCES `bono_emp_can_bono` (`emp_can_cve`),
+  CONSTRAINT `cbr_tar_fk` 
+  FOREIGN KEY (`tar_cve`) 
+  REFERENCES `tarjeton` (`tarjeton_cve`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `bono_convocatoria_bono` (
+  `conv_bono_cve` int(11) NOT NULL AUTO_INCREMENT,
+  `nom_bono` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `f_ini_carga_datos` datetime NOT NULL,
+  `f_fin_carga_datos` datetime NOT NULL,
+  `max_beneficiados` int(4) NOT NULL,
+  `anio_bono` year(4) NOT NULL,
+  `status_bono` smallint(1) NOT NULL,
+  PRIMARY KEY (`conv_bono_cve`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `bono_ctipo_evaluacion` (
+  `tipo_eva_cve` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo_eva_nombre` varchar(100) NOT NULL,
+  `id_regla_evaluacion` int(11) NOT NULL COMMENT 'PK logica viene de tabla reglas evaluacion',
+  PRIMARY KEY (`tipo_eva_cve`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `bono_cadmin_bonos` (
+  `id_admin` int(11) NOT NULL AUTO_INCREMENT,
+  `usr_matricula` varchar(20) NOT NULL,
+  `usr_nombre` varchar(60) NOT NULL,
+  `usr_paterno` varchar(60) NOT NULL,
+  `usr_materno` varchar(60) DEFAULT NULL,
+  `usr_correo` varchar(80) NOT NULL,
+  `usr_activo` decimal(1,0) NOT NULL DEFAULT '1',
+  `usr_passwd` char(128) NOT NULL,
+  `usr_rol_admin` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id_admin`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ini_ses_int` (
+  `usr_matricula` int(11) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `bono_act_edu_dist` (
+  `act_cve` int(11) NOT NULL AUTO_INCREMENT,
+  `cur_edu_dist_cve` int(11) NOT NULL,
+  `tipo_eva_cve` int(11) NOT NULL,
+  `act_promedio` decimal(5,2) DEFAULT NULL,
+  PRIMARY KEY (`act_cve`),
+  CONSTRAINT `act_edu_dist_ctipo_evaluacion_fk` 
+  FOREIGN KEY (`tipo_eva_cve`) 
+  REFERENCES `bono_ctipo_evaluacion` (`tipo_eva_cve`),
+  CONSTRAINT `act_edu_dist_emp_educacion_distancia_fk` 
+  FOREIGN KEY (`cur_edu_dist_cve`) 
+  REFERENCES `emp_educacion_distancia` (`EMP_EDU_DISTANCIA_CVE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*******************2016/09/03************************/
+alter table emp_formacion_profesional add
+column efp_aplica_ecd numeric(1) default 0;
+
+INSERT INTO `sipimss_20160903`.`modulo`
+(`MOD_NOMBRE`,
+`MOD_RUTA`,
+`MOD_EST_CVE`,
+`IS_CONTROLADOR`)
+VALUES
+('Evaluación de carrera docente','solicitar_evaluacion',1,1);
+
+-------------------2016/09/07------------------------------
+ALTER TABLE `crol_desempenia` ADD `ROL_MDL_CVE` bigint NOT NULL ;
+ALTER TABLE `ccurso` ADD column `CVE_CURSO_FUENTE` bigint NOT NULL ;

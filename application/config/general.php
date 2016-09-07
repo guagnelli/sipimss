@@ -558,3 +558,8 @@ $config['listado_tareas'] = array(
 //COMPROBANTE_CVE * 
 //COM_NOMBRE *
 //TIPO_COMPROBANTE_CVE *
+
+//////////////solicitud de evaluacion curricular
+$config['solicitar_evaluacion'] = (object)array("tabla"=>"emp_formacion_profesional",
+                                                "campo"=>"efp_aplica_ecd",
+                                                "validacion"=>array());

@@ -2,16 +2,18 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
-*@author: LI. Miguel Guagnelli
+*@author: Mr. Guag
 *@version: 1.0
 *@desc: Clase padre de los controladores del sistema
 **/
 
 class MY_Controller extends CI_Controller {
 	
-	function __construct()
-    {
+	function __construct(){
         parent::__construct();
+        //definir un estandar para los archivos de lenguaje
+        $this->lang->load('interface', 'spanish');
+        //$string_values = $this->lang->line('interface');
     }
 	
 	public function check_captcha_form($str){

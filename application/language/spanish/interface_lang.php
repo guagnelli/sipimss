@@ -597,6 +597,12 @@ $lang['interface'] = array(
         'btn_endup_success'=>'<a href="'.site_url('login').'" class="btn btn-info">Iniciar sesión</a>',
     ),
 );
+$lang['interface_secd'] = array(
+    'lbl_titulo'=> "Solicitud de evaluaci&oacute;n curricular docente",
+    'lbl_titulo_convocatoria'=> "Requisitos m&iacute;nimos para la evaluaci&oacute;n",
+    'lbl_titulo_solicitudes'=> "Listado de solicitudes",
+    'lbl_convocatoria'=> "esta es una convocatoria",
+);
 
 
 

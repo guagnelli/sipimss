@@ -165,7 +165,7 @@
 	            <div class="row">
 	                <div class="col-md-12">
 	                  <div class="copyright">
-	                    <p>Copyright © IMSS 2016. Este sitio se visualiza mejor a partir de resoluciones 1024 px con Explorer 11 / Firefox 33.0 / Chrome 38.0</p>
+	                    <p>Copyright © IMSS 2016. Este sitio se visualiza mejor a partir de resoluciones 1024 px con Microsof edge 25.10 / Firefox 33.0 / Chrome 38.0</p>
 	                  </div>
 	                </div>
 	            </div>
