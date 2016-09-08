@@ -722,10 +722,11 @@ if (!function_exists('genera_botones_estado_validacion')) {
 //            $estado_transicion = $pro_estado_actual['estados_transicion'];
             $CI->load->library('seguridad');
             $pasa_convocatoria_val = get_convocatoria_delegacion_val_censo($delegacion_validador, $tipo_validador_rol);
+//            pr($pro_estado_actual['estados_transicion']);
             foreach ($pro_estado_actual['estados_transicion'] as $value_est_trans) {
                 $estados_trans = $propiedades_gen_estado[$value_est_trans];
                 if ($estados_trans['is_boton']) {//Verifica si es un botón o el cambio va implicito por el sistema, como es el caso del cambio de estado a "En revision por .."
-                    pr($value_est_trans);
+//                    pr($value_est_trans);
                     $value_est_trans = $CI->seguridad->encrypt_base64($value_est_trans);
 //                    $tipo_transicion = $CI->seguridad->encrypt_base64($estados_trans['color_status']);
                     $respuesta_html_botones[] = '<button '

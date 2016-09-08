@@ -60,7 +60,7 @@ class Catalogos_generales extends CI_Model {
      * en el caso de que el usuario sea nullo o algo ocurrio en la base de datos, devuelve 0
      */
     public function set_bitacora_gral($parametros = null) {
-        if (!isset($parametros)) {
+       if (!isset($parametros)) {
             return false;
         }
 
@@ -509,6 +509,7 @@ class Catalogos_generales extends CI_Model {
         (if(now() between vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_II and vc.VAL_CON_FCH_FIN_VALIDACION_FASE_II, "vf2", "nap")))))))
         "aplica_convocatoria"
         from validacion_convocatoria vc
+        
         where vc.VAL_CON_CVE in 
         (select max(vcp.VAL_CON_CVE) from validacion_convocatoria_delegacion vcd 
         join validacion_convocatoria vcp on vcp.VAL_CON_CVE = vcd.VAL_CON_CVE

@@ -29,9 +29,9 @@ class Perfil_model extends CI_Model {
      * @return máximo_valor,  fecha_bitacora
      */
     public function get_fecha_ultima_actualizacion($id_usuario) {
-        $select_ = 'select BIT_FCH_CAMBIO "fecha_bitacora" from sipimss.bitacora b 
+        $select_ = 'select BIT_FCH_CAMBIO "fecha_bitacora" from bitacora b 
                         where BITACORA_CVE in (select max(BITACORA_CVE) 
-                        from sipimss.bitacora b where usuario_cve = 1 and BIT_RUTA like "%/perfil/%")';
+                        from bitacora b where usuario_cve = 1 and BIT_RUTA like "%/perfil/%")';
         $query = $this->db->query($select_)->result();
 //        $estadoCivil = $query->result_array();
 //        $result = $query->row();
@@ -109,6 +109,7 @@ class Perfil_model extends CI_Model {
                     join actividad_docente_gral ag on ag.EMPLEADO_CVE = em.EMPLEADO_CVE
                     where em.EMPLEADO_CVE = ' . $id_empleado . ' and ag.TIP_ACT_DOC_PRINCIPAL_CVE is not null) as res';
         $query = $this->db->query($select_)->row();
+//        pr($this->db->last_query());
         return $query;
     }
     

@@ -68,7 +68,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_contet);
         $this->template->getTemplate();
+        /*carga buscador*/
+        
+//        get_is_valida_validacion_censo(12, 3, 8);
+        
     }
+    
 
     public function data_buscar_docentes_validar($current_row = null) {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
@@ -122,6 +127,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     event.preventDefault();
                 });
                 </script>';
+    }
+    
+    public function cargar_bloques_información_docente(){
+        
+        
     }
 
     /*     * **********Fin de buscador de docentes ************************** */
