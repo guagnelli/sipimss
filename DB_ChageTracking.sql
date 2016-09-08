@@ -532,3 +532,54 @@ VALUES
 -------------------2016/09/07------------------------------
 ALTER TABLE `crol_desempenia` ADD `ROL_MDL_CVE` bigint NOT NULL ;
 ALTER TABLE `ccurso` ADD column `CVE_CURSO_FUENTE` bigint NOT NULL ;
+
+-------------------2016/09/08------------------------------
+alter table admin_validador rename evaluacion_convocatoria;
+alter table validador rename evaluacion_validador;
+alter table evaluacion_validador add column fch_insert datetime default current_timestamp;
+
+
+alter table validacion_validador drop foreign key validacion_validador_ibfk_1;
+alter table validacion_validador drop foreign key validacion_validador_ibfk_2;
+alter table validacion_validador drop foreign key validacion_validador_ibfk_3;
+alter table validacion_validador drop foreign key validacion_validador_ibfk_4;
+alter table validacion_validador drop foreign key validacion_validador_ibfk_5;
+alter table validacion_validador drop column msg_correcciones;
+alter table validacion_validador drop column unidad_cve;
+alter table validacion_validador drop column est_validacion_cve; 
+alter table validacion_validador drop column rol_validador_cve;
+alter table validacion_validador drop column seleccion_dictamen;
+alter table validacion_validador rename evaluacion_solicitud;
+alter table evaluacion_solicitud add 
+constraint fk_es_conv
+foreign key(admin_validador_cve)
+references evaluacion_convocatoria(admin_validador_cve);
+
+drop table cunidad;
+drop table crol_validador;
+create table evaluacion_hist_validacion(
+    hist_validacion_cve INTEGER not null auto_increment,
+    msg_correcciones text,
+    est_validacion_cve integer not null,
+    solicitud_cve int not null,
+    validador_cve int null,
+    fch_registro_historia datetime not null default current_timestamp,
+    is_actual numeric(1) not null default 0,
+    seleccion_dictamen varchar(18),
+    
+    constraint pk_hist_validacion
+    primary key(hist_validacion_cve),
+    
+    constraint fk_ehv_cev
+    foreign key(est_validacion_cve)
+    references cestado_validacion(est_validacion_cve),
+    
+    constraint fk_ehv_ev
+    foreign key(validador_cve)
+    references evaluacion_validador(validador_cve),
+    
+    constraint fk_ehv_es
+    foreign key(solicitud_cve)
+    references evaluacion_solicitud(validacion_cve)
+    
+);
