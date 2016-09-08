@@ -535,8 +535,18 @@ ALTER TABLE `ccurso` ADD column `CVE_CURSO_FUENTE` bigint NOT NULL ;
 
 -------------------2016/09/08------------------------------
 alter table admin_validador rename evaluacion_convocatoria;
+alter table evaluacion_convocatoria add column is_actual numeric(1) default 1;
+
 alter table validador rename evaluacion_validador;
-alter table evaluacion_validador add column fch_insert datetime default current_timestamp;
+alter table evaluacion_validador add 
+column fch_insert datetime default current_timestamp;
+
+CREATE TABLE cestado_solicitud_evauacion(
+    CESE_CVE INTEGER NOT NULL AUTO_INCREMENT,
+    CESE_NOMBRE VARCHAR(30) NOT NULL,
+    CONSTRAINT PK_CESE
+    PRIMARY KEY(CESE_CVE)
+);
 
 
 alter table validacion_validador drop foreign key validacion_validador_ibfk_1;
@@ -549,11 +559,16 @@ alter table validacion_validador drop column unidad_cve;
 alter table validacion_validador drop column est_validacion_cve; 
 alter table validacion_validador drop column rol_validador_cve;
 alter table validacion_validador drop column seleccion_dictamen;
+alter table validacion_validador drop column admin_validador_cve;
 alter table validacion_validador rename evaluacion_solicitud;
-alter table evaluacion_solicitud add 
-constraint fk_es_conv
-foreign key(admin_validador_cve)
-references evaluacion_convocatoria(admin_validador_cve);
+alter table evaluacion_solicitud add column fch_evaluacion_update timestamp not null;
+alter table evaluacion_solicitud drop column FCH_REGISTRO_VALIDADOR;
+alter table evaluacion_solicitud add column FCH_REGISTRO_VALIDADOR datetime not null default current_timestamp;
+alter table evaluacion_solicitud add column CESE_CVE INTEGER NOT NULL;
+ALTER TAble evaluacion_solicitud add
+constraint fk_es_cese
+foreign key(CESE_CVE)
+references cestado_solicitud_evauacion(CESE_CVE);
 
 drop table cunidad;
 drop table crol_validador;
@@ -566,6 +581,7 @@ create table evaluacion_hist_validacion(
     fch_registro_historia datetime not null default current_timestamp,
     is_actual numeric(1) not null default 0,
     seleccion_dictamen varchar(18),
+    convocatoria_cve integer not null,
     
     constraint pk_hist_validacion
     primary key(hist_validacion_cve),
@@ -580,6 +596,56 @@ create table evaluacion_hist_validacion(
     
     constraint fk_ehv_es
     foreign key(solicitud_cve)
-    references evaluacion_solicitud(validacion_cve)
+    references evaluacion_solicitud(validacion_cve),
     
+    constraint fk_ehv_conv
+    foreign key(convocatoria_cve)
+    references evaluacion_convocatoria(admin_validador_cve)
+);
+
+create table cseccion_informacion(
+    sec_info_cve int auto_increment,
+    csi_nombre varchar(20) not null,
+    csi_entidad varchar(100) not null,
+    constraint pk_cseccion_informacion
+    primary key(sec_info_cve)
+);
+
+create table evaluacion_bloques_val(
+    ebv_cve integer not null auto_increment,
+    sec_info_cve int not null,
+    fch_insert datetime not null default current_timestamp,
+    ehv_cve integer not null,
+    estado_validacion_cve integer not null,
+    txt_descripcion text,
+    
+    constraint pk_evaluacion_bloques_val
+    primary key(ebv_cve),
+    
+    constraint fk_ebv_ehv
+    foreign key(ehv_cve)
+    references evaluacion_hist_validacion(hist_validacion_cve),
+    
+    constraint fk_ebv_cvce
+    foreign key(estado_validacion_cve)
+    references cvalidacion_curso_estado(VAL_CUR_EST_CVE)
+    
+);
+
+create table evaluacion_curso_validacion(
+    ecv_cve integer not null auto_increment,
+    es_cve integer not null comment 'clave de la solicitud',
+    csi_cve integer not null comment 'nombre de la sección a la que pertenece',
+    seccion_cve integer not null comment 'clave del curso/registro por validar',
+    is_valido numeric(1) not null default 0,
+    constraint pk_ecv
+    primary key(ecv_cve),
+    
+    constraint fk_ecv_es
+    foreign key(es_cve)
+    references evaluacion_solicitud(VALIDACION_CVE),
+    
+    constraint fk_ecv_csi
+    foreign key(csi_cve)
+    references cseccion_informacion(sec_info_cve)
 );
