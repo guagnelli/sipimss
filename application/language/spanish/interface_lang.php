@@ -610,16 +610,17 @@ $lang['interface'] = array(
         'link_inicio_sesion'=>'da clic en esta liga para ir al inicio de sesión',
         'btn_endup_success'=>'<a href="'.site_url('login').'" class="btn btn-info">Iniciar sesión</a>',
     ),
-        'evaluacion_curricular_validar' => array(
+    'evaluacion_curricular_validar' => array(
+        'resp_sin_resultados' => '<div class="jumbotron"><h1>No se encontraron resultados</h1></div>',
         'titulo_template' => 'Validación de evaluación curricular docente',
         'titulo_tab_matricula' => 'Matrícula',
-        'resp_sin_resultados' => '<div class="jumbotron"><h1>No se encontraron resultados</h1></div>',
         'titulo_tab_nombre' => 'Nombre(s)',
+        'titulo_tab_categoria' => 'Categoría',
+        'titulo_tab_delegacion' => 'Delegación',
+        'titulo_tab_unidad' => 'Unidad',
         'titulo_tab_estado_validacion' => 'Estado de la validación',
         'titulo_tab_fecha_ultimo_estado' => 'Fecha de último estado',
-        'titulo_tab_ver_ultimo_comentario' => 'Ver comentario',
-        'titulo_tab_validar_cursos' => 'Validar cursos',
-        'titulo_tab_categoria' => 'Categoría',
+        'titulo_tab_acciones' => 'Acciones',
         'titulo_tab_validar' => 'Fecha de último estado',
         'lbl_estado_validacion' => 'Estado de validación',
         'drop_estado_validacion' => 'Filtro por estado de validación',
@@ -633,7 +634,13 @@ $lang['interface'] = array(
         'titulo_estado_validacion' => 'Estado de la validación: ',
         'drop_delegacion' => 'Seleccione delegación',
         'lbl_delegacion' => 'Delegación',
-        'text_estado_revision' => 'En revisión'
+        'drop_departamento' => 'Seleccione departamento',
+        'lbl_departamento' => 'Unidad',
+        'text_estado_revision' => 'En revisión',
+        'link_ver_comentario' => 'Ver comentario',
+        'lbl_jus_comentario' => 'Justificación de la ',
+        'msj_sin_comntarios_estado' => 'No existen mensajes de estado',
+        'titulo_modal_comentario' => 'Validador: ',
     ),
 );
 $lang['interface_secd'] = array(

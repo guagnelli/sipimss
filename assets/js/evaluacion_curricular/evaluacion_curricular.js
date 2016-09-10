@@ -19,9 +19,9 @@ $(function () {
 
 
 function funcion_buscar_docentes_validar() {
-    var path = site_url + '/validacion_censo_profesores/data_buscar_docentes_validar/0';
+    var path = site_url + '/evaluacion_curricular_validar/data_buscar_docentes_validar_evaluacion_curr/0';
 //    var val_post = $('#form_busqueda_docentes_validar').serialize();
-    data_ajax(path, '#form_busqueda_docentes_validar', '#div_result_docentes_validacion');
+    data_ajax(path, '#form_busqueda_evaluacion_curricular_validar', '#div_result_docentes_validacion_evaluacion');
 }
 
 /**
@@ -79,6 +79,6 @@ function ver_comentario_estado_doc(element) {
     var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
     var hist_val_cve = obj.data('histvalcve');
     var formData = {hist_val_cve: hist_val_cve};
-    data_ajax_post(site_url + '/validacion_censo_profesores/ver_comentario_estado', null, '#modal_content', formData);
+    data_ajax_post(site_url + '/evaluacion_curricular_validar/ver_comentario_estado', null, '#modal_content', formData);
 }
     

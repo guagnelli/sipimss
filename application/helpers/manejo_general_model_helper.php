@@ -322,30 +322,29 @@ if (!function_exists('crear_formato_array')) {
         return $array_modulo;
     }
 
-    if (!function_exists('get_is_valida_validacion_censo')) {
+}
+if (!function_exists('get_is_valida_validacion_censo')) {
 
-        function get_is_valida_validacion_censo($empleado, $rol, $estado_actual) {
-            //Valida que el rol actual pueda enviar a validación
-            $is_rol_valido = valida_acceso_rol_validador($rol, $estado_actual);
-            if ($is_rol_valido === 1) {//Valida acceso del rol
-                $prop_estado = $CI->config->item('estados_val_censo')[$estado_actual];
-                //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
-                if (isset($prop_estado['est_apr_para_validacion'])) {
-                    $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
-                    $CI = & get_instance();
-                    $CI->load->model('Validacion_docente_model', 'vdm');
-                    $result = $CI->vdm->get_is_envio_validacion($empleado, $estados_considerados_validacion);
-                    pr($result);
-                } else {//Si el estado no tiene permitido enviar a corrección, retorna 0
-                    return 0;
-                }
-            } else {//El rol seleccionado no puede enviar a validacion 
+    function get_is_valida_validacion_censo($empleado = null, $rol = null, $estado_actual = null) {
+        //Valida que el rol actual pueda enviar a validación
+        $is_rol_valido = valida_acceso_rol_validador($rol, $estado_actual);
+        if ($is_rol_valido === 1) {//Valida acceso del rol
+            $CI = & get_instance();
+            $prop_estado = $CI->config->item('estados_val_censo')[$estado_actual];
+            //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
+            if (isset($prop_estado['est_apr_para_validacion'])) {
+                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
+                $CI->load->model('Validacion_docente_model', 'vdm');
+                $result = $CI->vdm->get_is_envio_validacion($empleado, $estados_considerados_validacion);
+//                pr($result);
+            } else {//Si el estado no tiene permitido enviar a corrección, retorna 0
                 return 0;
             }
-//            $CI->db->reset_query();
         }
-
+        //El rol seleccionado no puede enviar a validacion 
+        return 0;
     }
+
 }
 
     

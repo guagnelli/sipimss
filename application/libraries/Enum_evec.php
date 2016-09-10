@@ -3,9 +3,9 @@ class Enum_evec {
 
     const
             __default = 0,
-            Inicio = 1,
-            Incompleta = 2,
-            Completa = 3,
+            Inicio =1,
+            No_validado_censo = 2,
+            Envio_solicitud_evaluacion = 3,
             Por_validar_n1 = 4,
             En_revision_n1 = 5,
             Correccion_docente = 6,

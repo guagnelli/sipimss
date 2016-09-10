@@ -3283,6 +3283,7 @@ class Perfil extends MY_Controller {
             $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
             $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
             $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion'); //Asignamos id usuario a variable
+//            pr($convocatoria_delegacion);
 //            exit();
             $data = array();
 //            pr($this->session->userdata());
@@ -3294,6 +3295,7 @@ class Perfil extends MY_Controller {
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
                 $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
+                pr($historia_docente);
                 if (!empty($historia_docente)) {//Tiene historial en validación
                     $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
                     $tmp_validado['estado_actual'] = $historia_docente->estado_validacion;

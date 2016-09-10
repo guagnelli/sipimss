@@ -583,10 +583,12 @@ class Validacion_docente_model extends CI_Model {
             where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             ) as res';
 
-        $result = $this->db->query($select)->result();
+        $query = $this->db->query($select)->result();
         $this->db->reset_query();
-
-        return $result;
+        if(!empty($query)){
+            $query = $query[0];
+        }
+        return $query;
     }
 
 }

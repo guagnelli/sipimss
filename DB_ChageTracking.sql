@@ -657,3 +657,9 @@ create table evaluacion_curso_validacion(
     foreign key(csi_cve)
     references cseccion_informacion(sec_info_cve)
 );
+
+-------------------2016/09/09 Responsable Jesus, ejecucion LEAS-----------------------------
+ALTER TABLE dictamen ADD VALIDACION_CVE INT(11) NOT NULL;  /*Campo agregado a la tabla "dictamen"*/
+CREATE INDEX XIF11_DICTAMEN ON dictamen (VALIDACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE dictamen ADD CONSTRAINT `dictamen_vcvefk_11`   /* Asigna llave forania*/
+FOREIGN KEY (`VALIDACION_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
