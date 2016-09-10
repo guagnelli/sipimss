@@ -153,7 +153,6 @@ class Login_model extends CI_Model {
             return null;
         }
         $result = new stdClass();
-        $result->cantidad_reg = 0;
         $select = array('us.USUARIO_CVE "user_cve"',
             'us.USU_MATRICULA "usr_matricula"', 'us.USU_NOMBRE "usr_nombre"',
             'us.USU_PATERNO "usr_paterno"', 'us.USU_MATERNO "usr_materno"',
@@ -169,13 +168,11 @@ class Login_model extends CI_Model {
 //        $this->db->where('us.USU_CONTRASENIA', $password_encrypt); //Aplica condición password
         $this->db->limit(1);
         $query = $this->db->get('usuario as us');
-        $result->cantidad_reg = $query->num_rows();
-        //count($result);
-        if (!isset($result)) {
-            $result = null;
-        } else if (empty($result)) {
-            $result = null;
-        } else if ($result->cantidad_reg == 1) {
+        
+        $result->cantidad_reg = 0;
+        if ($query->num_rows() == 1) {
+            $result = $query->row();
+            $result->cantidad_reg = $query->num_rows();
 //            $password_encrypt = hash('sha512', $password.$matricula); //aplica algoritmo de seguridad
             $password_encrypt = contrasenia_formato($matricula, $password); //aplica algoritmo de seguridad
             //

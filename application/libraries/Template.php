@@ -42,11 +42,11 @@ class Template {
      * @return: mixed[] Data arreglo de datos de plantilla con la siguisnte estructura array("title"=>null,"nav"=>null,"main_title"=>null,"main_content"=>null);
      */
 
-    function getTemplate($tipo = FALSE) {
+    function getTemplate($tipo = FALSE,$tpl = 'template/home.tpl.php') {
         if ($tipo) {
-            $this->CI->load->view('template/home.tpl.php', $this->elements, TRUE);
+            $this->CI->load->view($tpl, $this->elements, TRUE);
         }
-        $this->CI->load->view('template/home.tpl.php', $this->elements);
+        $this->CI->load->view($tpl, $this->elements);
     }
 
     /**
