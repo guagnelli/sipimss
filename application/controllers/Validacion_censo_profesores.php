@@ -188,6 +188,9 @@ class Validacion_censo_profesores extends MY_Controller {
                 $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
                 $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generé el menú y cargue los datos de perfil
                 $datosPerfil['array_menu'] = $array_menu;
+                
+//                $datosPerfil['nombre_validado'] = ;
+                
                 $datos_validacion = array();
                 if (!empty($filtros['empcve'])) {
                     $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($filtros['empcve']); //Identificador de la comisión

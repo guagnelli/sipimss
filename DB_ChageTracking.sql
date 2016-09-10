@@ -408,6 +408,14 @@ ALTER TABLE cestado_evaluacion MODIFY COLUMN EST_EVA_NOMBRE varchar(50) NOT NULL
 ALTER TABLE sipimss_20160829.cestado_validacion MODIFY COLUMN EST_VALIDA_DESC varchar(50) NULL;
 ALTER TABLE sipimss_20160905.cestado_validacion MODIFY COLUMN EST_VALIDA_DESC varchar(50) NULL;
 
+/*----------------2016/09/06------------------------*/
+/*Agrega curso a empleado eucación a distancia */
+ALTER TABLE emp_educacion_distancia ADD CURSO_CVE INT(11) NULL AFTER IS_VALIDO_PROFESIONALIZACION;  /*Campo agregado a la tabla "emp_comision"*/
+CREATE INDEX XIF11EMP_EDUCACION_DISTANCIA ON emp_educacion_distancia (CURSO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE emp_educacion_distancia ADD CONSTRAINT `emp_educacion_distancia_rccfk_11`   /* Asigna llave foran*/
+FOREIGN KEY (`CURSO_CVE`) REFERENCES `ccurso`(`CURSO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
 
 /*****************2016/09/02*************************/
 --Creación de tablas
@@ -654,5 +662,13 @@ create table evaluacion_curso_validacion(
     references cseccion_informacion(sec_info_cve)
 );
 
+
 alter table evaluacion_validador rename validador;
 alter table cseccion_informacion add column nom_camp_pk varchar(20) not null;
+
+-------------------2016/09/09 Responsable Jesus, ejecucion LEAS-----------------------------
+ALTER TABLE dictamen ADD VALIDACION_CVE INT(11) NOT NULL;  /*Campo agregado a la tabla "dictamen"*/
+CREATE INDEX XIF11_DICTAMEN ON dictamen (VALIDACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE dictamen ADD CONSTRAINT `dictamen_vcvefk_11`   /* Asigna llave forania*/
+FOREIGN KEY (`VALIDACION_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+

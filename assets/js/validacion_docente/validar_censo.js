@@ -92,3 +92,5 @@ function ver_comentario_estado_doc(element) {
     data_ajax_post(site_url + '/validacion_censo_profesores/ver_comentario_estado', null, '#modal_content', formData);
 }
     
+    
+    

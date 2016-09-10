@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!--Mostrará la tabla de actividad docente --> 
     <table class="table table-striped table-hover table-bordered " id="tabla_designar_validador">
         <thead>
-            <tr class="bg-primary">
+            <tr class="bg-info">
                 <th><?php echo $string_values['tab_titulo_unidades'] ?></th>
                 <th><?php echo $string_values['tab_titulo_designado'] ?></th>
                 <th><?php echo $string_values['tab_delegacion_validador'] ?></th>

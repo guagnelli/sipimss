@@ -365,6 +365,8 @@ class Validacion_docente_model extends CI_Model {
 //            pr('ashdlasldakl  es vacia');
             return array();
         }
+//        pr($convocatoria);
+//        pr($empleado_cve);
         $select = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
             'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"',
             'hv.VAL_COMENTARIO "comentario_estado"');
@@ -377,7 +379,10 @@ class Validacion_docente_model extends CI_Model {
 
         $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
 //        pr($this->db->last_query());
+//        pr($query);
+//        if (!is_null($query->row()) AND is_object($query->row())) {
         $row_query = $query->row();
+//        }
 //        pr($row_query);
 //        if (!empty($row_query)) {
 //            $row_query = $row_query[0];
@@ -454,6 +459,136 @@ class Validacion_docente_model extends CI_Model {
             return $parametros_insert_nuevo_hist;
         }
         //pr($this->db->last_query());
+    }
+
+    public function insert_inicio_estado_correccion($parametros_hist, $parametros_val_gen) {
+
+        $this->db->trans_begin(); //Definir inicio de transacción
+
+        $this->db->insert('validacion_gral', $parametros_val_gen); //Inserción de registro
+        $data_gen_id = $this->db->insert_id(); //Obtener identificador insertado
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return array();
+        } else {
+            $parametros_hist['VALIDACION_GRAL_CVE'] = $data_gen_id;
+            $this->db->insert('hist_validacion', $parametros_hist); //Inserción de registro
+            $data_hist_id = $this->db->insert_id(); //Obtener identificador insertado
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                return array();
+            } else {
+                $this->db->trans_commit();
+                $parametros_val_gen['VALIDACION_GRAL_CVE'] = $data_gen_id;
+                $parametros_hist['VALIDACION_CVE'] = $data_hist_id;
+                $result['validacion_gral'] = $parametros_val_gen;
+                $result['hist_validacion'] = $parametros_hist;
+                return $result;
+            }
+        }
+        //pr($this->db->last_query());
+    }
+
+    public function get_is_envio_validacion($empleado, $hist_estados_evaluar) {
+        $result_estados = '';
+        $or = '';
+        foreach ($hist_estados_evaluar as $value) {
+            $result_estados .= $or . ' hv.VAL_ESTADO_CVE = ' . $value;
+            $or = ' or ';
+        }
+
+        $select = 'select sum(A1) "num_registros_cargados", sum(B1) "num_registros_est_valido"  
+            from (
+            /*Comisiones academicas*/
+            select count(*) "A1", 0 "B1"  from emp_comision where EMPLEADO_CVE = ' . $empleado . '
+            union/*Formacion en salud*/
+            select count(*) "A1", 0 "B1" from emp_for_personal_continua_salud where EMPLEADO_CVE = ' . $empleado . '
+            union /*Investigacion en salud*/
+            select count(*) "A1", 0 "B1" from emp_desa_inv_salud where EMPLEADO_CVE = ' . $empleado . '
+            union /*Investigación educativa*/
+            select count(*) "A1", 0 "B1" from emp_act_inv_edu where EMPLEADO_CVE = ' . $empleado . '
+            union /*Beca*/
+            select count(*) "A1", 0 "B1" from emp_beca where EMPLEADO_CVE = ' . $empleado . '
+            union /*formación profesional*/
+            select count(*) "A1", 0 "B1" from emp_formacion_profesional where EMPLEADO_CVE = ' . $empleado . '
+            union /*Material educativo*/
+            select count(*) "A1", 0 "B1" from emp_materia_educativo where EMPLEADO_CVE = ' . $empleado . '
+            union /*Educación a distancia*/
+            select count(*) "A1", 0 "B1" from emp_educacion_distancia where EMPLEADO_CVE = ' . $empleado . '
+            union /*Especialidad medica*/
+            select count(*) "A1", 0 "B1" from emp_esp_medica where EMPLEADO_CVE = ' . $empleado . '
+            union /*Actividad docente*/
+            select count(*) "A1", 0 "B1" from emp_actividad_docente where EMPLEADO_CVE = ' . $empleado . '
+            union 
+            /*Comisiones academicas*/
+            select 0 "A1", count(*) "B1"
+            from hist_comision_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Formacion en salud*/
+            select 0 "A1", count(*) "B1"
+            from hist_fpcs_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Investigacion en salud*/
+            select 0 "A1", count(*) "B1"
+            from hist_edis_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Investigación educativa*/
+            select 0 "A1", count(*) "B1"
+            from hist_eaid_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Beca*/
+            select 0 "A1", count(*) "B1"
+            from hist_beca_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*formación profesional*/
+            select 0 "A1", count(*) "B1"
+            from hist_efp_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Material educativo*/
+            select 0 "A1", count(*) "B1"
+            from hist_me_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Educación a distancia*/
+            select 0 "A1", count(*) "B1"
+            from hist_edd_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and ( ' . $result_estados . ' ) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Especialidad medica*/
+            select 0 "A1", count(*) "B1"
+            from hist_eem_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Actividad docente*/
+            select 0 "A1", count(*) "B1"
+            from hist_efpd_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            ) as res';
+
+        $query = $this->db->query($select)->result();
+        $this->db->reset_query();
+        if(!empty($query)){
+            $query = $query[0];
+        }
+        return $query;
     }
 
 }

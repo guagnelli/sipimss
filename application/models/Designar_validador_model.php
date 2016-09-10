@@ -224,7 +224,7 @@ class Designar_validador_model extends CI_Model {
         }
     }
 
-    public function get_buscar_empleado_delegacion($id_empleado = null, $id_delegacion = null) {
+    public function get_buscar_empleado_delegacion($id_empleado = null, $id_delegacion = null, $rol_designar = Enum_rols::Validador_N1) {
         if (is_null($id_empleado)) {
             return array();
         }
@@ -243,6 +243,7 @@ class Designar_validador_model extends CI_Model {
 
         $this->db->where('e.EMP_MATRICULA', $id_empleado);
         $this->db->where('e.DELEGACION_CVE', $id_delegacion);
+        $this->db->where('v.ROL_CVE', $rol_designar);
         $this->db->select($select);
         $ejecuta = $this->db->get('ccategoria as c'); //
         $query = $ejecuta->result_array();

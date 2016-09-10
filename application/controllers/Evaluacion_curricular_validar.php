@@ -23,7 +23,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $this->load->library('seguridad');
 //        $this->load->library('Ventana_modal');
 
-        $this->load->model('Validacion_docente_model', 'vdm');
+        $this->load->model('Evaluacion_curricular_validar_model', 'ecvm');
         //*****Datos perfil 
         $this->load->model('Catalogos_generales', 'cg');
         $this->load->model('Actividad_docente_model', 'adm');
@@ -49,32 +49,53 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $data = array();
         $this->delete_datos_validado(); //Elimina los datos de empleado validado, si se encuentran los datos almacenados en la variable de sesión
         $data['string_values'] = $string_values;
-        $data['order_columns'] = array('em.EMP_MATRICULA' => 'Matrícula', 'em.EMP_NOMBRE' => 'Nombre', 'em.CATEGORIA_CVE' => 'Categoría');
+        $data['order_columns'] = array('ems.EMP_MATRICULA' => 'Matrícula', 'ems.EMP_NOMBRE' => 'Nombre', 'ems.CATEGORIA_CVE' => 'Categoría');
 //        $empleado_cve = $this->session->userdata('idempleado');
         $rol_usuario = $this->session->userdata('rol_seleccionado_cve');
-        if ($rol_usuario === Enum_rols::Validador_N1 || $rol_usuario === Enum_rols::Validador_N2) {//Se obtiene la convocatoria relacionada a la delegación, unicamente para los validadores N1 y N2, ya que solo pueden validar a los de su delegación, en el caso del N2, para N1 sólo puede validar a los de su unidad
-            $datos_validador['DELEGACION_CVE'] = '09'; //Verifica si existe el rol, de lo contrario pone default cero
-        } else {//profesionalización        
-            $datos_validador['DELEGACION_CVE'] = 0;
-            $array_catalogos[] = enum_ecg::cdelegacion; //Para cargar busqueda por delegación en el caso de profesionalización
+
+        $this->load->model('Validacion_docente_model', 'vdm');
+        $empleado_cve = $this->session->userdata('idempleado');
+        $rol_usuario = $this->session->userdata('rol_seleccionado_cve');
+        $datos_validador = $this->vdm->get_validador_empleado_rol($empleado_cve, $rol_usuario); //Busca datos del validador actual
+        $delegacion_cve = (isset($datos_validador['DELEGACION_CVE'])) ? $datos_validador['DELEGACION_CVE'] : ''; //Verifica si existe el rol, de lo contrario pone default cero
+        if (!empty($datos_validador)) {//Existe el validador 
+            switch ($rol_usuario) {
+                case Enum_rols::Validador_N1:
+                    $condiciones = array();
+                    break;
+                case Enum_rols::Validador_N2:
+                    $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
+                    $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1);
+                    break;
+                case Enum_rols::Profesionalizacion:
+                    $datos_validador['DELEGACION_CVE'] = 0;
+                    $array_catalogos[] = enum_ecg::cdelegacion;
+                    $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
+                    $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1);
+                    break;
+            }
+        
+            $datos_validador['ROL_CVE'] = $rol_usuario; 
+
+            $this->session->set_userdata('datos_validador', $datos_validador);
+
+            $array_catalogos[] = enum_ecg::cestado_validacion;
+            $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cestado_validacion => 'EST_VALIDACION_CVE')); //Carga el catálogo de ejercicio predominante
+            $main_contet = $this->load->view('evaluacion_currucular_doc/evaluacion_curricular_validar_tpl', $data, true);
+            $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
+            $this->template->setMainContent($main_contet);
+            $this->template->getTemplate();
+            /* carga buscador */
+//            $result = get_is_valida_validacion_censo(12, 3, 8);
+        } else {//No existe el validador. Mostrar leyenda de que no es un valiador
         }
-        $datos_validador['ROL_CVE'] = $rol_usuario; //Verifica si existe el rol, de lo contrario pone default cero
-
-        $this->session->set_userdata('datos_validador', $datos_validador);
-
-        $array_catalogos[] = enum_ecg::cestado_validacion;
-        $data = carga_catalogos_generales($array_catalogos, $data, NULL, TRUE, NULL, array(enum_ecg::cestado_validacion => 'EST_VALIDACION_CVE')); //Carga el catálogo de ejercicio predominante
-        $main_contet = $this->load->view('evaluacion_currucular_doc/evaluacion_curricular_validar_tpl', $data, true);
-        $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
-        $this->template->setMainContent($main_contet);
-        $this->template->getTemplate();
     }
 
-    public function data_buscar_docentes_validar($current_row = null) {
+    public function data_buscar_docentes_validar_evaluacion_curr($current_row = null) {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
             if (!is_null($this->input->post())) {
                 $this->lang->load('interface', 'spanish');
-                $string_values = $this->lang->line('interface')['validador_censo'];
+                $string_values = $this->lang->line('interface')['evaluacion_curricular_validar'];
                 $filtros = $this->input->post(null, true); //Obtenemos el post o los valores 
                 $datos_validador = $this->session->userdata('datos_validador');
                 $filtros += $datos_validador;
@@ -85,7 +106,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 if ($rol_seleccionado !== Enum_rols::Profesionalizacion) {
                     $filtros['delegacion_cve'] = $this->session->userdata('delegacion_cve');
                 }
-                $resutlado = $this->vdm->get_buscar_docentes_validar($filtros);
+                $resutlado = $this->ecvm->get_buscar_docentes_validar_evaluacion_c($filtros);
 //                pr($resutlado['result']);
                 $data['string_values'] = $string_values;
                 $data['lista_docentes_validar'] = $resutlado['result'];
@@ -107,21 +128,25 @@ class Evaluacion_curricular_validar extends MY_Controller {
     }
 
     private function listado_resultado_unidades($data, $form) {
-        $data['controller'] = 'validacion_docente_model';
-        $data['action'] = 'data_buscar_docentes_validar';
+        $data['controller'] = 'evaluacion_curricular_validar';
+        $data['action'] = 'data_buscar_docentes_validar_evaluacion_curr';
         $pagination = $this->template->pagination_data($data); //Crear mensaje y links de paginación
         //$pagination = $this->template->pagination_data_buscador_asignar_validador($data); //Crear mensaje y links de paginación
         $links = "<div class='col-sm-5 dataTables_info' style='line-height: 50px;'>" . $pagination['total'] . "</div>
                     <div class='col-sm-7 text-right'>" . $pagination['links'] . "</div>";
         $datos['lista_docentes_validar'] = $data['lista_docentes_validar'];
         $datos['string_values'] = $data['string_values'];
-        echo $links . $this->load->view('validador_censo/tabla_resultados_validador', $datos, TRUE) . $links . '
+        echo $links . $this->load->view('evaluacion_currucular_doc/tabla_resultados_validador', $datos, TRUE) . $links . '
                 <script>
                 $("ul.pagination li a").click(function(event){
                     data_ajax(this, "' . $form['form_recurso'] . '", "' . $form['elemento_resultado'] . '");
                     event.preventDefault();
                 });
                 </script>';
+    }
+
+    public function cargar_bloques_información_docente() {
+        
     }
 
     /*     * **********Fin de buscador de docentes ************************** */
@@ -289,21 +314,22 @@ class Evaluacion_curricular_validar extends MY_Controller {
             if ($this->input->post()) {
                 $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
                 $this->lang->load('interface', 'spanish');
-                $string_values = $this->lang->line('interface')['validador_censo'];
+                $string_values = $this->lang->line('interface')['evaluacion_curricular_validar'];
                 $data_comentario['string_values'] = $string_values;
                 $hist_val_cve = intval($this->seguridad->decrypt_base64($datos_post['hist_val_cve'])); //Des encripta la clave de la historia que viene de post
-                $resul_coment = $this->vdm->get_comentario_hist_validaso($hist_val_cve); //Consulta datos del historico
+                $resul_coment = $this->ecvm->get_comentario_hist_validacion_evaluacion($hist_val_cve); //Consulta datos del historico
+                pr($resul_coment);
                 if (!empty($resul_coment)) {
                     $data_comentario['comentario_justificacion'] = $resul_coment->comentartio_estado;
-                    $color_sattus = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['color_status']; //Color del estado
+                    $color_sattus = $this->config->item('estados_val_evaluacion')[$resul_coment->hist_estado]['color_status']; //Color del estado
                     $color_sattus = $this->config->item('cvalidacion_curso_estado')[$color_sattus]['color']; //Color del estado
                     $data_comentario['color_estado'] = $color_sattus;
                     $data_comentario['tipo_transicion'] = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['tipo_transaccion'];
                     ;
                     $data = array(
                         'titulo_modal' => $string_values['titulo_moal_comentario'] . $resul_coment->nom_validador,
-                        'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
-                        'pie_modal' => $this->load->view('validador_censo/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
+                        'cuerpo_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/comentario_estado', $data_comentario, TRUE),
+                        'pie_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
                     );
                     echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
                 }

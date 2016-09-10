@@ -3284,7 +3284,6 @@ class Perfil extends MY_Controller {
             $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
             $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion'); //Asignamos id usuario a variable
 //            pr($convocatoria_delegacion);
-
 //            exit();
             $data = array();
 //            pr($this->session->userdata());
@@ -3292,25 +3291,46 @@ class Perfil extends MY_Controller {
             $this->lang->load('interface', 'spanish');
             $data['string_values'] = $string_values;
             //Obtiene el historial completo de la validación del docente según la convocatoría
-            if (!empty($convocatoria_delegacion)) {
+            if (!empty($convocatoria_delegacion)) {//Busca si existe la convocatoría, de otro modo no se puede subir ni cargar nada
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
-//            pr($historia_docente);
+                $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
+                pr($historia_docente);
                 if (!empty($historia_docente)) {//Tiene historial en validación
+                    $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
                     $tmp_validado['estado_actual'] = $historia_docente->estado_validacion;
                     $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
-                    $tmp_validado['delegacion_cve'] = $this->session->userdata('delegacion_cve');
+                    $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
+
                     $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
+                    $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria_delegacion['idconv']); //Busca mensajes generales enviados a la corrección;
+//                pr($historia_docente);
+//                exit();
+//                    pr($historia_docente);
 
-                    $data['historial_estados'] = $historia_docente;
-
-                    $pie_pag = $this->load->view('validador_censo/valida_docente/opciones_validacion_pie', $data_pie, TRUE);
+                    $pie_pag = $this->load->view('perfil/enviar_validacion/opciones_validacion_pie', $data_pie, TRUE);
                     $data['pie_pag'] = $pie_pag;
-                    $this->load->view('validador_censo/valida_docente/valida_docente_tpl', $data, FALSE);
-
-//            if ($this->input->post()) {//Después de cargar el formulario
-//            }
+                    $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
                 } else {//No tiene historia como docente en validacion de sus datos
+                    //Verificar si su estado debe cambiar a completo por datos
+                    $res = $this->validar_cursos_status_completa_docente($result_id_empleado, $delegacion_doecente_cve);
+                    if ($res === 1) {//Recarga el método
+                        $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
+//                        pr($historia_docente);
+                        exit();
+                        $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
+                        $tmp_validado['estado_actual'] = $historia_docente->estado_validacion;
+                        $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
+                        $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
+
+                        $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
+                        $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria_delegacion['idconv']); //Busca mensajes generales enviados a la corrección;
+                        $pie_pag = $this->load->view('perfil/enviar_validacion/opciones_validacion_pie', $data_pie, TRUE);
+                        $data['pie_pag'] = $pie_pag;
+                        $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
+                    } else {
+                        
+                    }
                 }
             }
         } else {
@@ -3334,8 +3354,8 @@ class Perfil extends MY_Controller {
         $parametros_insert_hist_val['IS_ACTUAL'] = 1;
         $cve_hist_actual['VALIDACION_CVE'] = $datos_empleado_validar['validacion_cve'];
         $parametro_hist_actual_mod['IS_ACTUAL'] = 0;
-
         //Efectúa la actualización del nuevo estado
+        $this->load->model('Validacion_docente_model', 'vdm');
         $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual);
         if (!empty($result_cam_estado)) {
             //Cambio datos variable sesión "datosvalidadoactual" por los nuevos valores
@@ -3344,6 +3364,7 @@ class Perfil extends MY_Controller {
             $this->session->set_userdata('datosvalidadoactual', $datos_empleado_validar); //Asigna datos nuevos datos del validado a la variable de sesión 
             //Registra la bitacora
             //Actualización 
+            $parametro_hist_actual_mod['VALIDACION_CVE'] = $cve_hist_actual;
             $array_datos_entidad['hist_validacion'] = $parametro_hist_actual_mod; //Pertenece a bitacora
             $array_operacion_id_entidades['hist_validacion'] = array('update' => $parametro_hist_actual_mod['VALIDACION_CVE']); //Pertenece a bitacora 
             //Insersion nueva
@@ -3385,25 +3406,26 @@ class Perfil extends MY_Controller {
                 }
 
                 if ($pasa_validacion || $this->form_validation->run()) {
-                    $tipo_msg = $this->config->item('alert_msg');
-                    $datos_empleado_validar['VAL_ESTADO_CVE'] = $estado_cambio_cve;
-                    $datos_empleado_validar['VALIDACION_GRAL_CVE'] = $datos_empleado_validar['val_grl_cve'];
-                    $datos_empleado_validar['IS_ACTUAL'] = 1;
+                    $datos_validado_actual = $this->session->userdata('datosvalidadoactual');
+                    if (!empty($datos_validado_actual)) {
+                        $tipo_msg = $this->config->item('alert_msg');
+                        $datos_empleado_validar['val_grl_cve'] = $datos_validado_actual->validaor_grl_cve;
+                        $datos_empleado_validar['validacion_cve'] = $datos_validado_actual->validacion_cve;
+                        $result_cambio = $this->cambio_estado_validacion_censo($estado_cambio_cve, $datos_post['comentario_justificacion'], $datos_empleado_validar);
 
-                    $result_cambio = $this->cambio_estado_validacion_censo($estado_cambio_cve, $datos_post['comentario_justificacion'], $datos_empleado_validar);
-
-                    //Efectúa la actualización del nuevo estado
-                    if ($result_cambio === 1) {
-                        $data['error'] = $string_values['save_estado_cambio_envio']; //
-                        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
-                        $data['result'] = 1; //Error resultado success
-                    } else {
-                        $data['error'] = $string_values['save_estado_error']; //
-                        $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
-                        $data['result'] = 0; //Error resultado success
+                        //Efectúa la actualización del nuevo estado
+                        if ($result_cambio === 1) {
+                            $data['error'] = $string_values['save_estado_cambio_envio']; //
+                            $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
+                            $data['result'] = 1; //Error resultado success
+                        } else {
+                            $data['error'] = $string_values['save_estado_error']; //
+                            $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
+                            $data['result'] = 0; //Error resultado success
+                        }
+                        echo json_encode($data);
+                        exit();
                     }
-                    echo json_encode($data);
-                    exit();
                 }
 
                 $data['string_values'] = $string_values;
@@ -3412,29 +3434,50 @@ class Perfil extends MY_Controller {
                 $tmp_validado['tipo_validador_rol'] = $this->obtener_rol_usuario();
                 $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
 
-                $pie_pag = $this->load->view('validador_censo/valida_docente/opciones_validacion_pie', $data_pie, TRUE);
+                $pie_pag = $this->load->view('perfil/enviar_validacion/opciones_validacion_pie', $data_pie, TRUE);
                 $data['pie_pag'] = $pie_pag;
-                $this->load->view('validador_censo/valida_docente/valida_docente_tpl', $data, FALSE);
+                $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
             }
         } else {
             redirect(site_url());
         }
     }
 
-    private function validar_cursos_status_completa_docente($empleado_id = null, $delegacion_cve = '09') {
+    private function validar_cursos_status_completa_docente() {
+        $empleado_id = $this->session->userdata('idempleado');
+//        $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
+        $datos_validacion = $this->modPerfil->get_estado_valida_completa($empleado_id);
+        if ($datos_validacion->total_prof_salud > 0 AND $datos_validacion->total_act_docente > 0) {//Cambio de estado a completo 
+//            pr($datos_validacion);
+            $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion');
+            if (!empty($convocatoria_delegacion)) {//Valida que exista una convocatoría
+                // Carga datos para entidad de validacion general
+                $parametro_gral['VAL_CONV_CVE'] = $convocatoria_delegacion['idconv'];
+                $parametro_gral['EMPLEADO_CVE'] = $empleado_id;
+                //Carga parametros para hist_validación
+                $parametros_hist['VAL_ESTADO_CVE'] = Enum_ev::Completa;
+                $parametros_hist['IS_ACTUAL'] = 1;
 
-//        $delegacion = $this->session->userdata('delegacion_cve');
-//        $convocatoria = $this->session->userdata('convocatoria_delegacion');
-//
-//        pr($convocatoria);
-//        $ultim_convocatoria = $this->cg->get_estado_valida_completa($delegacion_cve); //Checa si existe almenos un registro en formación en salud y actividad docente, y que además marco acctividad principal
-//        $datos_validacion = $this->modPerfil->get_estado_valida_completa($empleado_id); //Checa si existe almenos un registro en formación en salud y actividad docente, y que además marco acctividad principal
-//        $delegacion = '14';
-//        $res_conv = $this->cg->get_convocatoria_delegacion($delegacion_cve); //Obtiene la convocatoría a la que pertenece el usuario
-    }
-
-    private function hist_validacion_docente($empleado_cve, $convocatoria_cve) {
-        $estado_docente = $this->vdm->get_hist_estado_validacion_docente_actual($empleado_cve, $convocatoria_cve); //Checa si existe almenos un registro en formación en salud y actividad docente, y que además marco acctividad principal
+                $this->load->model('Validacion_docente_model', 'vdm');
+                $result_cam_estado = $this->vdm->insert_inicio_estado_correccion($parametros_hist, $parametro_gral);
+                //Efectúa la actualización del nuevo estado
+                if (!empty($result_cam_estado)) {
+                    $array_datos_entidad['hist_validacion'] = $result_cam_estado['hist_validacion']; //Pertenece a bitacora
+                    $array_operacion_id_entidades['hist_validacion'] = array('insert' => $result_cam_estado['hist_validacion']['VALIDACION_CVE']); //Pertenece a bitacora 
+                    //Insersion nueva
+                    $array_datos_entidad['validacion_gral'] = $result_cam_estado['validacion_gral']; //Pertenece a bitacora
+                    $array_operacion_id_entidades['validacion_gral'] = array('insert' => $result_cam_estado['validacion_gral']['VALIDACION_GRAL_CVE']); //Pertenece a bitacora 
+                    $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
+                    $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualización o insersión a las entidades involucradas
+                    //Datos de bitacora el registro del usuario
+//                    registro_bitacora($this->session->userdata('identificador'), null, $json_datos_entidad, null, $json_registro_bitacora, null);
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+        return 0;
     }
 
 }

@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Validacion_docente_model extends CI_Model {
+class Evaluacion_curricular_validar_model extends CI_Model {
 
     public function __construct() {
         // Call the CI_Model constructor
@@ -11,49 +11,57 @@ class Validacion_docente_model extends CI_Model {
         $this->string_values = $this->lang->line('interface')['model']; //Cargar textos utilizados en vista
     }
 
-    public function get_buscar_docentes_validar($params) {
+    public function get_buscar_docentes_validar_evaluacion_c($params) {
         $arra_buscar_por = array(
-            'matricula' => 'em.EMP_MATRICULA',
-            'clavecategoria' => 'em.CATEGORIA_CVE',
-            'nombre' => array('em.EMP_NOMBRE', 'em.EMP_APE_PATERNO', 'em.EMP_APE_MATERNO')
+            'matricula' => 'ems.EMP_MATRICULA',
+            'clavecategoria' => 'ems.CATEGORIA_CVE',
+            'nombre' => array('ems.EMP_NOMBRE', 'ems.EMP_APE_PATERNO', 'ems.EMP_APE_MATERNO')
         );
         $busqueda_text = $arra_buscar_por[$params['menu_busqueda']]; //busqueda en texto por
-        $select = array('em.EMPLEADO_CVE "empleado_cve"', 'em.EMP_MATRICULA "matricula"',
-            'concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO) as "nom_docente"',
-            'hv.VAL_ESTADO_CVE "estado_validacion"', 'cve.VAL_EST_NOMBRE "nombre_estado_validacion"',
-            'if(hv.VAL_COMENTARIO is null or hv.VAL_COMENTARIO = "",0,1) "is_comentario"', 'hv.VAL_FCH "fecha_estado_validacion"',
-            'hv.VALIDADOR_CVE  "validador_cve"', 'em.ADSCRIPCION_CVE "emp_adscripcion_cve"',
-            'em.DELEGACION_CVE "emp_delegacion_cve"', 'em.CATEGORIA_CVE "emp_categoria"',
-            'hv.VALIDACION_CVE "hist_validacion_cve"', 'vg.VALIDACION_GRAL_CVE "validaor_grl_cve"',
-            'em.USUARIO_CVE "usuario_cve"', 'vg.VAL_CONV_CVE "convocatoria_cve"'
+        $select = array('es.VALIDACION_CVE "solicitu_cve"', 'es.EMPLEADO_CVE "empleado_cve"',
+            'ems.emp_matricula "matricula"',
+            'concat(ems.EMP_NOMBRE, " ", ems.EMP_APE_PATERNO, " ", ems.EMP_APE_MATERNO) "nom_docente"',
+            'cd.DEL_NOMBRE "nom_delegacion"', 'cdp.dep_nombre "unidad_adscripcion"', 'cc.nom_categoria "nom_categoria"',
+            'es.CESE_CVE "estado_solicitud"', 'ehv.hist_validacion_cve "historia_validacion_cve"',
+            'ehv.convocatoria_cve "convocatori_cve"', 'ehv.est_validacion_cve "estado_validacion"',
+            'cev.EST_VALIDA_DESC "nom_estado_validacion"', 'ehv.fch_registro_historia "fecha_ultima_actualizacion"',
+            'if(ehv.msg_correcciones is null or ehv.msg_correcciones = "",0,1) "is_comentario"'
         );
 
         $this->db->start_cache();
-//        $this->db->from('cdepartamento as dp');
-        $this->db->join('empleado em', 'em.EMPLEADO_CVE = vg.EMPLEADO_CVE');
-        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
-        $this->db->join('cvalidacion_estado cve', 'cve.VAL_ESTADO_CVE = hv.VAL_ESTADO_CVE');
+//        $this->db->from('evaluacion_solicitud es');
+        $this->db->join('evaluacion_hist_validacion ehv', 'ehv.solicitud_cve = es.VALIDACION_CVE');
+        $this->db->join('cestado_validacion cev', 'cev.EST_VALIDACION_CVE = ehv.est_validacion_cve');
+        $this->db->join('empleado ems', 'ems.EMPLEADO_CVE = es.EMPLEADO_CVE');
+        $this->db->join('cdelegacion cd', 'cd.delegacion_cve = ems.delegacion_cve');
+        $this->db->join('cdepartamento cdp', 'cdp.departamento_cve = ems.ADSCRIPCION_CVE', 'left');
+        $this->db->join('ccategoria cc', 'cc.id_cat = ems.CATEGORIA_CVE', 'left');
         //where que son obligatorios
-        $this->db->where('em.EDO_LABORAL_CVE', 1);
-        $this->db->where('hv.IS_ACTUAL', 1);
-        if ($params['rol_seleccionado'] === Enum_rols::Profesionalizacion) {
-            if ($params['DELEGACION_CVE'] > 0) {
-                $this->db->where('em.DELEGACION_CVE', $params['DELEGACION_CVE']);
-            }
-            if ($params['VAL_CON_CVE'] > 0) {
-                $this->db->where('vg.VAL_CONV_CVE', $params['VAL_CON_CVE']);
-            }
-        } else {
-            if ($params['rol_seleccionado'] === Enum_rols::Validador_N1) {//Sólo aplica departamento para validador n1
-                $this->db->where('em.ADSCRIPCION_CVE', $params['DEPARTAMENTO_CVE']);
-            }
-            $this->db->where('em.DELEGACION_CVE', $params['DELEGACION_CVE']);
-            $this->db->where('vg.VAL_CONV_CVE', $params['VAL_CON_CVE']);
+        $this->db->where('ems.EDO_LABORAL_CVE', 1); //Empleado activos en el sistema
+        $this->db->where('ehv.is_actual', 1); //obtiene el último estado de la historia
+        $rol = intval($params['rol_seleccionado']);
+        switch ($rol) {
+            case Enum_rols::Profesionalizacion:
+                if ($params['DELEGACION_CVE'] > 0) {
+                    $this->db->where('ems.DELEGACION_CVE', $params['DELEGACION_CVE']);
+                }
+                if($params['departamento_cve']>0){
+                    $this->db->where('ems.ADSCRIPCION_CVE', $params['departamento_cve']);
+                }
+                break;
+            case Enum_rols::Validador_N2:
+                if($params['departamento_cve']>0){
+                    $this->db->where('ems.ADSCRIPCION_CVE', $params['departamento_cve']);
+                }
+                break;
+            case Enum_rols::Validador_N1:
+                break;
         }
-        if (!empty($params['cvalidacion_estado'])) {//where estado de la validación, no es obligatorio
-            $this->db->where('hv.VAL_ESTADO_CVE', $params['cvalidacion_estado']);
+        //Estado de la validación
+        if (!empty($params['cestado_validacion'])) {//where estado de la validación, no es obligatorio
+            $this->db->where('cev.EST_VALIDACION_CVE', $params['cestado_validacion']);
         }
-
+        
         if (is_array($busqueda_text)) {//si es un array lo recorre, ejemplo es la concatenación de nombre, ap y am
             foreach ($busqueda_text as $value) {
                 $this->db->or_like($value, $params['buscador_docente']);
@@ -64,7 +72,7 @@ class Validacion_docente_model extends CI_Model {
         $this->db->stop_cache();
 
         //Cuenta la cantidad de registros
-        $num_rows = $this->db->query($this->db->select('count(*) as total')->get_compiled_select('validacion_gral as vg'))->result();
+        $num_rows = $this->db->query($this->db->select('count(*) as total')->get_compiled_select('evaluacion_solicitud es'))->result();
         $this->db->reset_query(); //Reset de query 
         $this->db->select($select); //Crea query de consulta
         if (isset($params['per_page']) && isset($params['current_row'])) { //Establecer límite definido para paginación 
@@ -77,336 +85,48 @@ class Validacion_docente_model extends CI_Model {
             $orden = $params['order'];
 //            pr($orden);
             if ($orden === 'fullname') {
-                $orden = 'em.EMP_NOMBRE, em.EMP_APE_PATERNO, em.EMP_APE_MATERNO';
+                $orden = 'ems.EMP_NOMBRE, ems.EMP_APE_PATERNO, ems.EMP_APE_MATERNO';
             }
             $this->db->order_by($orden, $order_type);
         }
 
-        $ejecuta = $this->db->get('validacion_gral as vg'); //Prepara la consulta ( aún no la ejecuta)
+        $ejecuta = $this->db->get('evaluacion_solicitud es'); //Prepara la consulta ( aún no la ejecuta)
         $query = $ejecuta->result_array();
-        pr($this->db->last_query());
 //        $query->free_result();
+        pr($this->db->last_query());
         $this->db->flush_cache(); //Limpia la cache
         $result['result'] = $query;
         $result['total'] = $num_rows[0]->total;
         return $result;
     }
 
-    public function get_obtener_empleado($id_empleado = null) {
-        if (is_null($id_empleado)) {
-            return array();
-        }
-        $select = array('e.EMP_MATRICULA "matricula"', 'e.EMPLEADO_CVE "empleado_cve"', 'e.EDO_LABORAL_CVE "status"'
-            , 'concat(e.EMP_MATRICULA, "  " ,e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO) as "nom_empleado"'
-            , 'e.EMP_NOMBRE "nombre"', 'e.EMP_APE_PATERNO "paterno"', 'e.EMP_APE_MATERNO "materno"'
-            , 'id_cat "categoria_id"', 'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"'
-            , 'e.DELEGACION_CVE "delegacion_cve"', 'dl.DEL_NOMBRE "nom_delegacion"'
-            , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"'
-        );
-
-        $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
-        $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
-        $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = dp.cve_delegacion');
-
-        $this->db->where('e.EMPLEADO_CVE', $id_empleado);
+    /**
+     * Obtiene la última convocatoría de la validación de evaluación curricular 
+     * llave primaria ADMIN_VALIDADOR_CVE "convocatoria_cve"
+     * y una etapa de convocatoria "etapa_convocatoria"
+     * scd = etapa de solicitud del docente para evaluación
+     * vn1 = etapa de validación del n1
+     * vn2 = etapa de validación del n2
+     * fcv = termino la convocatoria (fin de última convocatoria )
+     */
+    public function get_convocatoria_actual_evaluacion() {
+        $select = array(
+            'ADMIN_VALIDADOR_CVE "convocatoria_cve"',
+            'if(DATE_FORMAT(now(),"%Y-%m-%d") <= ec.FCH_FIN_REG_DOCENTE, "scd", 
+        (if(DATE_FORMAT(now(),"%Y-%m-%d") between ec.FCH_FIN_REG_DOCENTE and ec.FCH_FIN_VALIDACION_1,"vn1",
+        (if(DATE_FORMAT(now(),"%Y-%m-%d) between ec.FCH_FIN_VALIDACION_1 and ec.FCH_FIN_VALIDACION_2, "vn2", "fcv"))
+        )))
+        "etapa_convocatoria"');
         $this->db->select($select);
-
-        $ejecuta = $this->db->get('ccategoria as c'); //
-        $query = $ejecuta->result_array();
+        $this->db->where('ec.is_actual', 1);
+        $get = $this->db->get('evaluacion_convocatoria ec'); //Prepara la consulta ( aún no la ejecuta)
+        $query = $get->result_array();
+        if (!empty($query)) {
+            $query = $query[0];
+        }
         return $query;
     }
-
-    public function delete_vinculo_validador($id_validador = null) {
-        $result_asignar_validador['result'] = -1;
-        $result_asignar_validador['entidad'] = '';
-        if (is_null($id_validador)) {
-            return $result_asignar_validador;
-        }
-        $res = $this->get_validador($id_validador);
-        if (!empty($res)) {
-            $res = $res[0];
-            $this->db->where('VALIDADOR_CVE', $id_validador);
-            $this->db->delete('validador');
-            if ($this->db->trans_status() === FALSE) {
-                $this->db->trans_rollback();
-            } else {
-                $result_asignar_validador['result'] = $id_validador;
-                $result_asignar_validador['entidad'] = $res;
-            }
-        }
-        return $result_asignar_validador;
-    }
-
-    /**
-     * 
-     * @param autor LEAS
-     * @param type $validador
-     * @return type
-     */
-    public function get_validador($validador = null) {
-        if (!is_null($validador)) {
-            $this->db->where('VALIDADOR_CVE', $validador);
-        }
-        $query = $this->db->get('validador');
-        $array_validador = $query->result_array();
-        $query->free_result();
-        return $array_validador;
-    }
-
-    public function insert_designar_validador($parametros) {
-        if (empty($parametros)) {
-            return -1;
-        }
-        $parametros['DELEGACION_CVE'] = (strlen($parametros['DELEGACION_CVE']) < 2) ? '0' . $parametros['DELEGACION_CVE'] : $parametros['DELEGACION_CVE'];
-        $this->db->insert('validador', $parametros); //Almacena usuario
-        $obtiene_id_validador_designado = $this->db->insert_id();
-//        pr($this->db->last_query());
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            return -1;
-        } else {
-            return $obtiene_id_validador_designado;
-        }
-    }
-
-    public function get_buscar_empleado_delegacion($id_empleado = null, $id_delegacion = null) {
-        if (is_null($id_empleado)) {
-            return array();
-        }
-        $select = array('e.EMP_MATRICULA "matricula"', 'e.EMPLEADO_CVE "empleado_cve"', 'e.EDO_LABORAL_CVE "status"'
-            , 'concat(e.EMP_MATRICULA, "  " ,e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO) as "nom_empleado"'
-            , 'e.EMP_NOMBRE "nombre"', 'e.EMP_APE_PATERNO "paterno"', 'e.EMP_APE_MATERNO "materno"'
-            , 'id_cat "categoria_id"', 'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"'
-            , 'e.DELEGACION_CVE "delegacion_cve"', 'dl.DEL_NOMBRE "nom_delegacion"'
-            , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"'
-        );
-
-        $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
-        $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
-        $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = dp.cve_delegacion');
-
-        $this->db->where('e.EMP_MATRICULA', $id_empleado);
-        $this->db->where('e.DELEGACION_CVE', $id_delegacion);
-        $this->db->select($select);
-        $ejecuta = $this->db->get('ccategoria as c'); //
-        $query = $ejecuta->result_array();
-//        pr($this->db->last_query());
-        return $query;
-    }
-
-    public function get_buscar_candidatos_validador_por_unidad_delegacion_categoria($params) {
-        if (!empty($params['departamento_cve']) AND ! empty($params['delegacion_cve'] AND ! empty($params['categorias']))) {
-
-            $select = array('e.EMP_MATRICULA "matricula"', 'e.EMPLEADO_CVE "empleado_cve"'
-                , 'concat(e.EMP_MATRICULA, "  " ,e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO) as "nom_empleado"'
-                , 'id_cat "categoria_id"', 'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"'
-                , 'e.DELEGACION_CVE "delegacion_cve"', 'dl.DEL_NOMBRE "nom_delegacion"'
-                , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"'
-            );
-
-            $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
-            $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
-            $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = dp.cve_delegacion');
-
-            $this->db->where('e.EDO_LABORAL_CVE=', 1);
-            $this->db->where('dp.departamento_cve', $params['departamento_cve']);
-            $this->db->where('dl.DELEGACION_CVE', $params['delegacion_cve']);
-        }
-
-        $this->db->where_in('c.des_clave', $params['categorias']);
-
-        $this->db->select($select);
-        $orden = 'e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO';
-        $this->db->order_by($orden, 'asc');
-
-        $ejecuta = $this->db->get('ccategoria as c'); //
-        $query = $ejecuta->result_array();
-        return $query;
-    }
-
-    public function get_buscar_usuarios_categoria_sied($params = null) {
-        $result = array();
-        if (is_null($params)) {
-            return $result;
-        }
-
-        $result = array('resp_info' => null, 'resultado' => 'false');
-        $params = array("Delegacion" => "{$data_siap['reg_delegacion']}", "Matricula" => "{$data_siap['asp_matricula']}", "RFC" => '');
-
-        $client = new SoapClient("http://172.26.18.156/ServiciosWeb/wsSIED.asmx?WSDL");
-        $resultado_siap = $client->__soapCall("ConsultaSIED", array($params));
-        $resultado = simplexml_load_string($resultado_siap->ConsultaSIEDResult->any); //obtenemos la consulta xml
-        $res_json = json_encode($resultado); // la codificamos en json
-        $array_result = json_decode($res_json); // y la decodificamos en un arreglo compatible php
-
-        $result['resp_info'] = $array_result;
-        if (isset($resultado->EMPLEADOS)) {
-            $result['resultado'] = true;
-            $return_info = $this->regresa_datos($result, $data_siap['reg_delegacion']);
-        }
-        return $return_info;
-    }
-
-    public function get_validacion_registro($params = null) {
-        $resultado = array();
-
-        if (array_key_exists('fields', $params)) {
-            if (is_array($params['fields'])) {
-                $this->db->select($params['fields'][0], $params['fields'][1]);
-            } else {
-                $this->db->select($params['fields']);
-            }
-        }
-        if (array_key_exists('conditions', $params)) {
-            $this->db->where($params['conditions']);
-        }
-        if (array_key_exists('order', $params)) {
-            $this->db->order_by($params['order']);
-        }
-        $this->db->join('cvalidacion_curso_estado', "{$params['table']}.VAL_CUR_EST_CVE=cvalidacion_curso_estado.VAL_CUR_EST_CVE", 'left');
-        $this->db->join('hist_validacion', "{$params['table']}.VALIDACION_CVE=hist_validacion.VALIDACION_CVE", 'left');
-        $this->db->join('validador', "hist_validacion.VALIDADOR_CVE=validador.VALIDADOR_CVE", 'left');
-        $this->db->join('crol', "validador.ROL_CVE=crol.ROL_CVE", 'left');
-        //pr($params);
-        $query = $this->db->get($params['table']); //Obtener conjunto de registros
-        //pr($this->db->last_query());
-        $resultado = $query->result_array();
-
-        $query->free_result(); //Libera la memoria
-
-        return $resultado;
-    }
-
-    public function insert_validacion_registro($tabla, $datos) {
-        $resultado = array('result' => null, 'msg' => '', 'data' => null);
-
-        $this->db->trans_begin(); //Definir inicio de transacción
-
-        $this->db->insert($tabla, $datos); //Inserción de registro
-
-        $data_id = $this->db->insert_id(); //Obtener identificador insertado
-
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            $resultado['result'] = FALSE;
-            $resultado['msg'] = $this->string_values['error'];
-        } else {
-            $this->db->trans_commit();
-            $resultado['data']['identificador'] = $data_id;
-            $resultado['msg'] = $this->string_values['insercion'];
-            $resultado['result'] = TRUE;
-        }
-        //pr($this->db->last_query());
-        return $resultado;
-    }
-
-    public function update_validacion_registro($identificador, $tabla, $datos) {
-        $resultado = array('result' => null, 'msg' => '', 'data' => null);
-
-        $this->db->trans_begin(); //Definir inicio de transacción
-        $this->db->where($identificador);
-        $this->db->update($tabla, $datos); //Inserción de registro
-
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            $resultado['result'] = FALSE;
-            $resultado['msg'] = $this->string_values['error'];
-        } else {
-            $this->db->trans_commit();
-            $resultado['data']['identificador'] = $identificador;
-            $resultado['msg'] = $this->string_values['actualizacion'];
-            $resultado['result'] = TRUE;
-        }
-        //pr($this->db->last_query());
-        return $resultado;
-    }
-
-    /**
-     * @author LEAS 
-     * @fecha 29/08/2016
-     * @param $empleado_cve empleado del validador
-     * @param $rol_cve rol que del usuario que inicio sesion
-     * @return datos del validador
-     */
-    function get_validador_empleado_rol($empleado_cve = null, $rol_cve = null) {
-
-        $this->db->where('EMPLEADO_CVE=', intval($empleado_cve));
-        $this->db->where('ROL_CVE=', intval($rol_cve));
-
-        $query = $this->db->get('validador'); //Obtener conjunto de registros
-        //pr($this->db->last_query());
-        $resultado = $query->result_array();
-        if (!empty($resultado)) {
-            $resultado = $resultado[0];
-        }
-
-        $query->free_result(); //Libera la memoria
-
-        return $resultado;
-    }
-
-    /**
-     * @author LEAS 
-     * @fecha 30/08/2016
-     * @param $empleado_cve 
-     * @param $convocatoria 
-     * @return datos del validador
-     */
-    function get_hist_estado_validacion_docente_actual($empleado_cve = null, $convocatoria = null) {
-        if (is_null($convocatoria) || is_null($empleado_cve) || empty($convocatoria) || empty($empleado_cve)) {
-//            pr('ashdlasldakl  es vacia');
-            return array();
-        }
-        $select = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
-            'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"',
-            'hv.VAL_COMENTARIO "comentario_estado"');
-        $this->db->where('hv.IS_ACTUAL', 1); //Para obtener el último registro de la actualización
-        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
-        $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
-        $this->db->select($select);
-
-        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
-
-        $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
-//        pr($this->db->last_query());
-        $row_query = $query->row();
-        pr($row_query);
-//        if (!empty($row_query)) {
-//            $row_query = $row_query[0];
-//        }
-        return $row_query;
-    }
-
-    /**
-     * @author LEAS 
-     * @fecha 30/08/2016
-     * @param $empleado_cve 
-     * @param $convocatoria 
-     * @return Historias de los estados de validación del docente, incluye todos 
-     * los mensajes y comentarios de los validadores en el proceso de validación
-     */
-    function get_hist_estados_validacion_docente($empleado_cve, $convocatoria) {
-        $select = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
-            'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"',
-            'cve.VAL_EST_NOMBRE "nom_estado_validacion"', 'hv.VAL_COMENTARIO "comentario_estado"',
-            'if(hv.VAL_COMENTARIO is null or hv.VAL_COMENTARIO = "",0,1) "is_comentario"',
-            'concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO) as "nom_validador"'
-        );
-
-        $this->db->select($select);
-        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
-        $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
-        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
-        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.VALIDADOR_CVE');
-        $this->db->join('cvalidacion_estado cve', 'cve.VAL_ESTADO_CVE = hv.VAL_ESTADO_CVE');
-        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE');
-        $this->db->order_by('vg.VAL_CONV_CVE', "desc");
-        $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
-//        pr($this->db->last_query());
-        $result = $query->result_array();
-        return $result;
-    }
-
+    
     /**
      * 
      * @autor LEAS
@@ -414,38 +134,18 @@ class Validacion_docente_model extends CI_Model {
      * @param type $validadacion_cve
      * @return Obtiene la historia completa indicada por la clave
      */
-    public function get_comentario_hist_validaso($validadacion_cve) {
+    public function get_comentario_hist_validacion_evaluacion($validadacion_cve) {
         $select = array('concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO) as "nom_validador"',
-            'hv.VAL_COMENTARIO "comentartio_estado"', 'hv.VAL_ESTADO_CVE "hist_estado"');
-        $this->db->where('hv.VALIDACION_CVE', $validadacion_cve);
-        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.VALIDADOR_CVE');
-        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE');
+            'hv.msg_correcciones "comentartio_estado"', 'hv.est_validacion_cve "hist_estado"');
+        $this->db->where('hv.hist_validacion_cve', $validadacion_cve);
+        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.validador_cve', 'left');
+        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
+//        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.validador_cve');
+//        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE');
         $this->db->select($select);
-        $query = $this->db->get('hist_validacion hv');
+        $query = $this->db->get('evaluacion_hist_validacion hv');
         $row_hist = $query->row();
+        pr($this->db->last_query());
         return $row_hist;
     }
-
-    public function update_insert_estado_val_docente($parametros_insert_nuevo_hist, $parametros_update_hist_actual, $condicion_hist_actual) {
-
-        $this->db->trans_begin(); //Definir inicio de transacción
-
-        $this->db->where($condicion_hist_actual);
-        $this->db->update('hist_validacion', $parametros_update_hist_actual); //Inserción de registro
-
-
-        $this->db->insert('hist_validacion', $parametros_insert_nuevo_hist); //Inserción de registro
-        $data_hist_id = $this->db->insert_id(); //Obtener identificador insertado
-
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            return array();
-        } else {
-            $this->db->trans_commit();
-            $parametros_insert_nuevo_hist['VALIDACION_CVE'] = $data_hist_id;
-            return $parametros_insert_nuevo_hist;
-        }
-        //pr($this->db->last_query());
-    }
-
 }
