@@ -152,6 +152,8 @@ class Login_model extends CI_Model {
         if (is_null($matricula) && is_null($password)) {
             return null;
         }
+        $result = new stdClass();
+        $result->cantidad_reg = 0;
         $select = array('us.USUARIO_CVE "user_cve"',
             'us.USU_MATRICULA "usr_matricula"', 'us.USU_NOMBRE "usr_nombre"',
             'us.USU_PATERNO "usr_paterno"', 'us.USU_MATERNO "usr_materno"',
@@ -167,8 +169,8 @@ class Login_model extends CI_Model {
 //        $this->db->where('us.USU_CONTRASENIA', $password_encrypt); //Aplica condición password
         $this->db->limit(1);
         $query = $this->db->get('usuario as us');
-        $result = $query->row();
-        $result->cantidad_reg = count($result);
+        $result->cantidad_reg = $query->num_rows();
+        //count($result);
         if (!isset($result)) {
             $result = null;
         } else if (empty($result)) {
