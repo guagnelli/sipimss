@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Clase que gestiona el login
  * @version 	: 1.0.0
  * @autor 		: Mr. Guag
- * fecha: 29/07/2016
+ * fecha: 29/08/2016
  */
 class Solicitar_evaluacion extends MY_Controller {
 
@@ -19,8 +19,12 @@ class Solicitar_evaluacion extends MY_Controller {
     }
     
     function index(){
-        $this->lang->load('interface_sed', 'spanish');
+        $this->lang->load('interface', 'spanish');
         $data["string_value"] = $this->lang->line('interface_secd');
+        
+        $this->load->model("Solicitud_ecv_model","secv");
+        $data["actividades"]=$this->secv->getValidatedCourses($this->session->idempleado);
+        
         $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$data, true);
         //$this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);

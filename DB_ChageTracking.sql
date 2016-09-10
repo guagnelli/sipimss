@@ -628,7 +628,11 @@ create table evaluacion_bloques_val(
     
     constraint fk_ebv_cvce
     foreign key(estado_validacion_cve)
-    references cvalidacion_curso_estado(VAL_CUR_EST_CVE)
+    references cvalidacion_curso_estado(VAL_CUR_EST_CVE),
+    
+    constraint fk_ebv_csi
+    foreign key(sec_info_cve)
+    references cseccion_informacion(sec_info_cve)
     
 );
 
@@ -649,3 +653,6 @@ create table evaluacion_curso_validacion(
     foreign key(csi_cve)
     references cseccion_informacion(sec_info_cve)
 );
+
+alter table evaluacion_validador rename validador;
+alter table cseccion_informacion add column nom_camp_pk varchar(20) not null;
