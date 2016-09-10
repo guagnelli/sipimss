@@ -644,10 +644,14 @@ $lang['interface'] = array(
     ),
 );
 $lang['interface_secd'] = array(
-    'lbl_titulo'=> "Solicitud de evaluaci&oacute;n curricular docente",
+    'lbl_secd_titulo'=> "Solicitud de evaluaci&oacute;n curricular docente",
     'lbl_titulo_convocatoria'=> "Requisitos m&iacute;nimos para la evaluaci&oacute;n",
-    'lbl_titulo_solicitudes'=> "Listado de solicitudes",
+    'lbl_list_sol_title'=> "Listado de solicitudes",
     'lbl_convocatoria'=> "esta es una convocatoria",
+);
+$lang["interface_tpl"]=array(
+    'lbl_link_logout'=>'Cerrar sesión',
+    'lbl_link_profile'=>'Mi perfil',
 );
 
 

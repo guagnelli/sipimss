@@ -12,10 +12,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Template {
 
     private $elements;
+    var $lang;
+    var $lang_text;
+    var $multiligual;
 
     public function __construct() {
         $this->CI = & get_instance();
         $this->CI->load->helper('html');
+        $this->lang = "spanish";
+        $this->new_tpl = FALSE;
+        $this->lang_text = array();
         $this->elements = array(
             "title" => null,
             "menu" => null,
@@ -43,6 +49,12 @@ class Template {
      */
 
     function getTemplate($tipo = FALSE,$tpl = 'template/home.tpl.php') {
+        //if(!empty($this->lang_text)){ $this->elements = $this->elements+$this->lang_text }
+        if($this->multiligual){
+            $this->CI->lang->load('interface', $this->lang);
+            $this->elements["string_tpl"] = $this->CI->lang->line('interface_tpl');
+           // pr($this->elements);
+        }
         if ($tipo) {
             $this->CI->load->view($tpl, $this->elements, TRUE);
         }
