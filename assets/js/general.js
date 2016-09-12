@@ -9,7 +9,7 @@ $(document).ready(function () {
 function create_loader(optionalPadding = '200px') {
 optionalPadding = (typeof optionalPadding === 'undefined') ? '200px' : optionalPadding;
         return '<div id="ajax_loader" align="center" style="padding-top:' + optionalPadding + '; padding-bottom:' + optionalPadding + ';"><img src="' + img_url_loader + '" alt="Cargando..." title="Cargando..." /></div>';
-        }
+}
 
 /**
  *	Método que remueve el contenedor e imagen de cargando
@@ -140,7 +140,7 @@ function data_ajax_post(path, form_recurso, elemento_resultado) {
             .done(function (response) {
 //                     result = 1;
                 try {
-                     var json = $.parseJSON(response);
+                    var json = $.parseJSON(response);
                 } catch (e) {
                     $(elemento_resultado).html(response);
                 }
@@ -307,4 +307,29 @@ function cargar_archivo(req, form) {
         $(error).html(create_loader());
         $(error).html(html_message("Debe seleccionar un archivo. Por favor elija uno.", 'danger'));
     }
+}
+/**
+ * @author LEAS
+ * @fecha 10/09/2016
+ *  * @param {type} tabla
+ * @param {type} check_box_control
+ * @returns {undefined}
+ */
+function seleccionar_todos_checkbox_tabla(tabla, check_box_control) {
+    var isSeleccion = $(check_box_control).is(':checked');
+    var obj_row;
+    var obj_check = null;
+    for (var i = 1; i < document.getElementById(tabla).rows.length; i++) {
+        obj_row = $(document.getElementById(tabla).rows[i]);
+
+        $('td input:checkbox', obj_row).each(function () {
+            this.checked = isSeleccion;
+//			if($("input[name=checktodos]:checked").length == 1){
+//			} else {
+//				this.checked = false;
+//			}
+        });
+        ;
+    }
+
 }

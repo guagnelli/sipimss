@@ -8,7 +8,6 @@ $label_just = $string_values['lbl_jus_comentario'] . ((isset($tipo_transicion)) 
     .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
 </style>
 
-<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_censo_profesores/validador_docente.js"></script>
 
 <!-- Inicio informacion personal -->
 <?php echo form_open('', array('id' => 'form_validar_docente')); ?>

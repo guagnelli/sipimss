@@ -26,7 +26,7 @@
                     <div class="list-group-item">
                             <label for="matricula">Seleccione rol </label>
                             <?php 
-                            echo $this->form_complete->create_element(array('id' => 'seleciion_role', 'type' => 'dropdown', 'options' => $lista_roles, 'first' => array('' => 'Seleccione rol'), 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Categorías', 'onchange' => "data_ajax(site_url+'/listado_empleados_c/get_data_ajax', '#form_empleado', '#listado_resultado_empleado')"))); 
+                            echo $this->form_complete->create_element(array('id' => 'seleciion_role', 'type' => 'dropdown', 'options' => $lista_roles, 'first' => array('' => 'Seleccione rol'), 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Rol' ))); 
                             ?>
                             <span class="text-danger"> <?php echo form_error('rol','','');?> </span>
                     </div>

@@ -67,8 +67,9 @@ function funcion_ver_validacion_empleado(element) {
     $('#select_perfil_validar').empty();
     var obj_post = {empcve: empcve, matricula: matricula, estval: estval, validadorcve: validadorcve,
         histvalcve: histvalcve, valgrlcve: valgrlcve, usuariocve: usuariocve, convocatoria_cve: convocatoria_cve};
-    data_ajax_post(site_url + '/validacion_censo_profesores/seccion_index', null, '#select_perfil_validar', obj_post);
+    data_ajax_post(site_url + '/Evaluacion_curricular_validar/seccion_index', null, '#select_perfil_validar', obj_post);
 }
+
 function funcion_cerrar_validacion_empleado(element) {
 //    alert('jsahjhdadas');
     $('#select_perfil_validar').empty();
@@ -81,4 +82,8 @@ function ver_comentario_estado_doc(element) {
     var formData = {hist_val_cve: hist_val_cve};
     data_ajax_post(site_url + '/evaluacion_curricular_validar/ver_comentario_estado', null, '#modal_content', formData);
 }
-    
+
+function seleccionar_deseleccionar_profesionalizacion(element) {
+//    }
+    seleccionar_todos_checkbox_tabla('tabla_resultados_validacion_evaluacion', '#check_seleccionar_todo');
+}
