@@ -212,20 +212,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 if (!empty($filtros['estval'])) {
                     $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($filtros['estval']); //Identificador de la comisión
                 }
-                if (!empty($filtros['validadorcve'])) {
-                    $datos_validacion['validador_cve'] = $this->seguridad->decrypt_base64($filtros['validadorcve']); //Identificador de la comisión
-                }
                 if (!empty($filtros['histvalcve'])) {
-                    $datos_validacion['validacion_cve'] = $this->seguridad->decrypt_base64($filtros['histvalcve']); //Identificador de la comisión
+                    $datos_validacion['hist_validacion_cve'] = $this->seguridad->decrypt_base64($filtros['histvalcve']); //Identificador de la comisión
                 }
-                if (!empty($filtros['valgrlcve'])) {
-                    $datos_validacion['val_grl_cve'] = $this->seguridad->decrypt_base64($filtros['valgrlcve']); //Identificador de la comisión
-                }
-                if (!empty($filtros['usuariocve'])) {
-                    $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($filtros['usuariocve']); //Identificador de la comisión
+                if (!empty($filtros['solicitud_cve'])) {
+                    $datos_validacion['solicitud_cve'] = $this->seguridad->decrypt_base64($filtros['solicitud_cve']); //Identificador de la comisión
                 }
                 if (!empty($filtros['convocatoria_cve'])) {
-                    $datos_validacion['VAL_CON_CVE'] = $this->seguridad->decrypt_base64($filtros['convocatoria_cve']); //Identificador de la comisión
+                    $datos_validacion['ADMIN_VALIDADOR_CVE'] = $this->seguridad->decrypt_base64($filtros['convocatoria_cve']); //Identificador de la comisión
                 }
                 //Manda el identificador de la delegación del usuario
                 $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la información del usuario al que se va a validar

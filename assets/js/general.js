@@ -318,7 +318,6 @@ function cargar_archivo(req, form) {
 function seleccionar_todos_checkbox_tabla(tabla, check_box_control) {
     var isSeleccion = $(check_box_control).is(':checked');
     var obj_row;
-    var obj_check = null;
     for (var i = 1; i < document.getElementById(tabla).rows.length; i++) {
         obj_row = $(document.getElementById(tabla).rows[i]);
 

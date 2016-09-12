@@ -79,7 +79,7 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'check_selecci
                 echo "<td>" . $val['nom_estado_validacion'] . "</td>";
                 echo "<td>" . $val['fecha_ultima_actualizacion'] . "</td>";
                 echo "<td> ";
-                echo "<span  " . $link_ver_curso . "><a data-toggle='tab' href='#select_perfil_validar'> " . $string_values['lbl_validar_empleado'] . " </a></span>";
+                echo "<span  " . $link_ver_curso . "><a data-toggle='tab' href='#select_perfil_validar_evaluacion'> " . $string_values['lbl_validar_empleado'] . " </a></span>";
                 echo "<span class='text-center'>" . $link_ver_comentario . "</span>";
                 echo "</td> ";
                 echo "</tr>";

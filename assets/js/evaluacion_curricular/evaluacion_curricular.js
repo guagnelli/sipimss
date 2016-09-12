@@ -57,17 +57,15 @@ function funcion_ver_validacion_empleado(element) {
     var empcve = button_obj.data('empcve');
     var matricula = button_obj.data('matricula');
     var estval = button_obj.data('estval');
-    var validadorcve = button_obj.data('validadorcve');
     var histvalcve = button_obj.data('histvalcve');
-    var valgrlcve = button_obj.data('valgrlcve');
-    var usuariocve = button_obj.data('usuariocve');
+    var solicitud_cve = button_obj.data('solicitudcve');
     var convocatoria_cve = button_obj.data('convocatoriacve');
     var idrow = button_obj.data('usuariocve');
     //Remover contenido de un div 
     $('#select_perfil_validar').empty();
-    var obj_post = {empcve: empcve, matricula: matricula, estval: estval, validadorcve: validadorcve,
-        histvalcve: histvalcve, valgrlcve: valgrlcve, usuariocve: usuariocve, convocatoria_cve: convocatoria_cve};
-    data_ajax_post(site_url + '/Evaluacion_curricular_validar/seccion_index', null, '#select_perfil_validar', obj_post);
+    var obj_post = {empcve: empcve, matricula: matricula, estval: estval,
+        histvalcve: histvalcve, solicitud_cve: solicitud_cve, convocatoria_cve: convocatoria_cve};
+    data_ajax_post(site_url + '/evaluacion_curricular_validar/seccion_index', null, '#select_perfil_validar_evaluacion', obj_post);
 }
 
 function funcion_cerrar_validacion_empleado(element) {
