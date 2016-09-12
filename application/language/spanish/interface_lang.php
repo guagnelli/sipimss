@@ -648,6 +648,7 @@ $lang['interface_secd'] = array(
     'lbl_titulo_convocatoria'=> "Requisitos m&iacute;nimos para la evaluaci&oacute;n",
     'lbl_list_sol_title'=> "Listado de solicitudes",
     'lbl_convocatoria'=> "esta es una convocatoria",
+    'lbl_link_convocatoria'=>'Si desea con sultar la convocatoria, puede hacerlo en la esiguiente URL: <a href="#">Convoctoria</a>',
 );
 $lang["interface_tpl"]=array(
     'lbl_link_logout'=>'Cerrar sesión',

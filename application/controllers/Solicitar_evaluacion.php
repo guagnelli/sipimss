@@ -31,7 +31,7 @@ class Solicitar_evaluacion extends MY_Controller {
         //$this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->multiligual = TRUE;
         $this->template->setTitle("SECD");
-        $this->template->setMainTitle($data["string_value"]["lbl_titulo"]);
+        $this->template->setMainTitle($data["string_value"]["lbl_secd_titulo"]);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
     }

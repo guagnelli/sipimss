@@ -86,7 +86,7 @@ if (exist_and_not_null($usuario_logueado)) { ///Validar si usuario inicio sesió
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="' . site_url() . '">
-                    <span class="glyphicon glyphicon-user"></span>ghkj<?php echo $this->session->userdata("nombre") . " " .$this->session->userdata("apaterno") . " " .$this->session->userdata("amaterno") ?>
+                    <span class="glyphicon glyphicon-user"></span><?php echo $this->session->userdata("nombre") . " " .$this->session->userdata("apaterno") . " " .$this->session->userdata("amaterno") ?>
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
