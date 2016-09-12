@@ -72,10 +72,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $array_catalogos[] = enum_ecg::cdelegacion;
                     $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
                     $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1);
+                    $dictamen_admin = $this->ecvm->get_admin_dictamen_evaluacion();//Obtiene dictamen por iniciar
+                    $data['cdictamen'] = dropdown_options($dictamen_admin, 'ADMIN_DICTAMEN_EVA_CVE', 'fecha_dicatmen');
                     break;
             }
-        
-            $datos_validador['ROL_CVE'] = $rol_usuario; 
+
+            $datos_validador['ROL_CVE'] = $rol_usuario;
 
             $this->session->set_userdata('datos_validador', $datos_validador);
 
@@ -107,9 +109,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $filtros['delegacion_cve'] = $this->session->userdata('delegacion_cve');
                 }
                 $resutlado = $this->ecvm->get_buscar_docentes_validar_evaluacion_c($filtros);
+                $resutlado['result'][] = $resutlado['result'][0];//de prueba agrga más registros
+                $resutlado['result'][] = $resutlado['result'][0];//de prueba agrga más registros
+                
 //                pr($resutlado['result']);
+//                pr($resutlado);
                 $data['string_values'] = $string_values;
                 $data['lista_docentes_validar'] = $resutlado['result'];
+                $data['rol_sesion'] = $rol_seleccionado;
                 $data['total'] = $resutlado['total'];
                 $data['current_row'] = $filtros['current_row'];
                 $data['per_page'] = $this->input->post('per_page');
@@ -136,6 +143,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     <div class='col-sm-7 text-right'>" . $pagination['links'] . "</div>";
         $datos['lista_docentes_validar'] = $data['lista_docentes_validar'];
         $datos['string_values'] = $data['string_values'];
+        $datos['rol_sesion'] = $data['rol_sesion'];
         echo $links . $this->load->view('evaluacion_currucular_doc/tabla_resultados_validador', $datos, TRUE) . $links . '
                 <script>
                 $("ul.pagination li a").click(function(event){
@@ -318,16 +326,17 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $data_comentario['string_values'] = $string_values;
                 $hist_val_cve = intval($this->seguridad->decrypt_base64($datos_post['hist_val_cve'])); //Des encripta la clave de la historia que viene de post
                 $resul_coment = $this->ecvm->get_comentario_hist_validacion_evaluacion($hist_val_cve); //Consulta datos del historico
-                pr($resul_coment);
+//                pr($resul_coment);
                 if (!empty($resul_coment)) {
                     $data_comentario['comentario_justificacion'] = $resul_coment->comentartio_estado;
                     $color_sattus = $this->config->item('estados_val_evaluacion')[$resul_coment->hist_estado]['color_status']; //Color del estado
                     $color_sattus = $this->config->item('cvalidacion_curso_estado')[$color_sattus]['color']; //Color del estado
                     $data_comentario['color_estado'] = $color_sattus;
-                    $data_comentario['tipo_transicion'] = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['tipo_transaccion'];
-                    ;
+                    $data_comentario['tipo_transicion'] = $this->config->item('estados_val_evaluacion')[$resul_coment->hist_estado]['tipo_transaccion'];
+                    $text_titulo_modal = ($resul_coment->existe_validador === 1)? $string_values['titulo_modal_comentario_v'] : $string_values['titulo_modal_comentario_d'];
+                    
                     $data = array(
-                        'titulo_modal' => $string_values['titulo_moal_comentario'] . $resul_coment->nom_validador,
+                        'titulo_modal' => $text_titulo_modal . $resul_coment->nom_validador,
                         'cuerpo_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/comentario_estado', $data_comentario, TRUE),
                         'pie_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
                     );

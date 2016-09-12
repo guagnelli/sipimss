@@ -30,58 +30,8 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                     <h4><?php echo $string_values['titulo_template']; ?> </h4>
                     <br>
                 </div>
-                <?php if (isset($cdelegacion)) { ?>
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <div class="panel-body input-group ">
-                                <span class="input-group-addon"><?php echo $string_values['lbl_delegacion'];?></span>
-                                <?php
-                                echo $this->form_complete->create_element(array('id' => 'DELEGACION_CVE',
-                                    'type' => 'dropdown',
-                                    'options' => $cdelegacion,
-                                    'first' => array('' => $string_values['drop_delegacion']),
-                                    'value' => '',
-                                    'class' => 'form-control',
-                                    'attributes' => array('class' => 'form-control', 'aria-describedby' => "help-tipo-comprobante",
-                                        'placeholder' => $string_values['lbl_delegacion'],
-                                        'data-toggle' => 'tooltip',
-                                        'data-placement' => 'top',
-                                        'title' => $string_values['lbl_delegacion'])));
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-md-3"></div>
-                    </div>
-                <?php } ?>
-                <?php if (isset($cdepartamento)) { ?>
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <div class="panel-body input-group ">
-                                <span class="input-group-addon"><?php echo $string_values['lbl_departamento'];?></span>
-                                <?php
-                                echo $this->form_complete->create_element(array('id' => 'departamento_cve',
-                                    'type' => 'dropdown',
-                                    'options' => $cdepartamento,
-                                    'first' => array('' => $string_values['drop_departamento']),
-                                    'value' => '',
-                                    'class' => 'form-control',
-                                    'attributes' => array('class' => 'form-control', 'aria-describedby' => "help-tipo-comprobante",
-                                        'placeholder' => $string_values['lbl_departamento'],
-                                        'data-toggle' => 'tooltip',
-                                        'data-placement' => 'top',
-                                        'title' => $string_values['lbl_departamento'])));
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-md-3"></div>
-                    </div>
-                <?php } ?>
-                
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-lg-6">
                         <div class="panel-body input-group ">
                             <span class="input-group-addon"><?php echo $string_values['lbl_estado_validacion']; ?></span>
                             <?php
@@ -99,12 +49,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                             ?>
                         </div>
                     </div>
-                    <div class="col-md-3"></div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-lg-6">
                         <div class="panel-body input-group">
                             <input type="hidden" id="menu_select" name="menu_busqueda" value="matricula">
                             <div class="input-group-btn">
@@ -142,7 +87,48 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3"></div>
+                </div>
+                <div class="row">
+                    <?php if (isset($cdelegacion)) { ?>
+                        <div class="col-md-6">
+                            <div class="panel-body input-group ">
+                                <span class="input-group-addon"><?php echo $string_values['lbl_delegacion']; ?></span>
+                                <?php
+                                echo $this->form_complete->create_element(array('id' => 'DELEGACION_CVE',
+                                    'type' => 'dropdown',
+                                    'options' => $cdelegacion,
+                                    'first' => array('' => $string_values['drop_delegacion']),
+                                    'value' => '',
+                                    'class' => 'form-control',
+                                    'attributes' => array('class' => 'form-control', 'aria-describedby' => "help-tipo-comprobante",
+                                        'placeholder' => $string_values['lbl_delegacion'],
+                                        'data-toggle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        'title' => $string_values['lbl_delegacion'])));
+                                ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <?php if (isset($cdepartamento)) { ?>
+                        <div class="col-md-6">
+                            <div class="panel-body input-group ">
+                                <span class="input-group-addon"><?php echo $string_values['lbl_departamento']; ?></span>
+                                <?php
+                                echo $this->form_complete->create_element(array('id' => 'departamento_cve',
+                                    'type' => 'dropdown',
+                                    'options' => $cdepartamento,
+                                    'first' => array('' => $string_values['drop_departamento']),
+                                    'value' => '',
+                                    'class' => 'form-control',
+                                    'attributes' => array('class' => 'form-control', 'aria-describedby' => "help-tipo-comprobante",
+                                        'placeholder' => $string_values['lbl_departamento'],
+                                        'data-toggle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        'title' => $string_values['lbl_departamento'])));
+                                ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-sm-4">
@@ -164,6 +150,45 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                         </div>
                     </div>
                 </div>
+                <?php if (isset($cdictamen)) { ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel-body input-group ">
+                                <span class="input-group-addon"><?php echo $string_values['lbl_enviar_evaluacion']; ?></span>
+                                <?php
+                                echo $this->form_complete->create_element(array('id' => 'cdictamen',
+                                    'type' => 'dropdown',
+                                    'options' => $cdictamen,
+                                    'first' => array('' => $string_values['drop_dictamen']),
+                                    'value' => '',
+                                    'attributes' => array('class' => 'form-control', 'aria-describedby' => "help-tipo-comprobante",
+                                        'placeholder' => $string_values['lbl_dictamen'],
+                                        'data-toggle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        'title' => $string_values['lbl_dictamen'])));
+                                ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel-body input-group ">
+                                <?php
+                                echo $this->form_complete->create_element(array('id' => 'cdictamen',
+                                    'type' => 'button',
+                                    'options' => $cdictamen,
+                                    'value' => $string_values['lbl_enviar_evaluacion'],
+                                    'class' => 'form-control',
+                                    'attributes' => array(
+                                        'placeholder' => $string_values['lbl_enviar_evaluacion'],
+                                        'class' => 'btn btn-success btn-md',
+                                        'data-toggle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        'title' => $string_values['lbl_enviar_evaluacion'])));
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+
                 <?php echo form_close(); ?>
                 <div class="row" >
                     <div id="div_result_docentes_validacion_evaluacion" class="row" style="padding:0 20px;">

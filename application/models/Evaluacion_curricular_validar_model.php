@@ -45,12 +45,12 @@ class Evaluacion_curricular_validar_model extends CI_Model {
                 if ($params['DELEGACION_CVE'] > 0) {
                     $this->db->where('ems.DELEGACION_CVE', $params['DELEGACION_CVE']);
                 }
-                if($params['departamento_cve']>0){
+                if ($params['departamento_cve'] > 0) {
                     $this->db->where('ems.ADSCRIPCION_CVE', $params['departamento_cve']);
                 }
                 break;
             case Enum_rols::Validador_N2:
-                if($params['departamento_cve']>0){
+                if ($params['departamento_cve'] > 0) {
                     $this->db->where('ems.ADSCRIPCION_CVE', $params['departamento_cve']);
                 }
                 break;
@@ -61,7 +61,7 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         if (!empty($params['cestado_validacion'])) {//where estado de la validación, no es obligatorio
             $this->db->where('cev.EST_VALIDACION_CVE', $params['cestado_validacion']);
         }
-        
+
         if (is_array($busqueda_text)) {//si es un array lo recorre, ejemplo es la concatenación de nombre, ap y am
             foreach ($busqueda_text as $value) {
                 $this->db->or_like($value, $params['buscador_docente']);
@@ -93,7 +93,7 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         $ejecuta = $this->db->get('evaluacion_solicitud es'); //Prepara la consulta ( aún no la ejecuta)
         $query = $ejecuta->result_array();
 //        $query->free_result();
-        pr($this->db->last_query());
+//        pr($this->db->last_query());
         $this->db->flush_cache(); //Limpia la cache
         $result['result'] = $query;
         $result['total'] = $num_rows[0]->total;
@@ -126,18 +126,23 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         }
         return $query;
     }
-    
+
     /**
      * 
      * @autor LEAS
-     * @fecha 01/09/2016
+     * @fecha 09/09/2016
      * @param type $validadacion_cve
      * @return Obtiene la historia completa indicada por la clave
      */
     public function get_comentario_hist_validacion_evaluacion($validadacion_cve) {
-        $select = array('concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO) as "nom_validador"',
+        $select = array('if(hv.validador_cve is null,0,1) "existe_validador"',
+            'if(hv.validador_cve is null,
+            concat(emd.EMP_NOMBRE, " ", emd.EMP_APE_PATERNO, " ",emd.EMP_APE_MATERNO),
+            concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO)) as "nom_validador"',
             'hv.msg_correcciones "comentartio_estado"', 'hv.est_validacion_cve "hist_estado"');
         $this->db->where('hv.hist_validacion_cve', $validadacion_cve);
+        $this->db->join('evaluacion_solicitud es', 'es.VALIDACION_CVE = hv.solicitud_cve');
+        $this->db->join('empleado emd', 'emd.EMPLEADO_CVE = es.EMPLEADO_CVE');
         $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.validador_cve', 'left');
         $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
 //        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.validador_cve');
@@ -145,7 +150,26 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         $this->db->select($select);
         $query = $this->db->get('evaluacion_hist_validacion hv');
         $row_hist = $query->row();
-        pr($this->db->last_query());
+//        pr($this->db->last_query());
         return $row_hist;
     }
+
+    /**
+     * 
+     * @autor LEAS
+     * @fecha 10/09/2016
+     * @return Obtiene las fechas de dictamen que inician después de la fecha actual
+     */
+    public function get_admin_dictamen_evaluacion() {
+        $select = array('ADMIN_DICTAMEN_EVA_CVE',
+            'concat("Inicio: ",DATE_FORMAT(FCH_INICIO_EVALUACION,"%d-%m-%Y"),"  Fin: ", DATE_FORMAT(FCH_FIN_EVALUACION,"%d-%m-%Y")) "fecha_dicatmen"'
+        );
+        $this->db->where('DATE_FORMAT(now(),"%Y-%m-%d")<= ade.FCH_INICIO_EVALUACION');
+        $this->db->select($select);
+        $query = $this->db->get('admin_dictamen_evaluacion ade');
+        $row_hist = $query->result_array();
+//        pr($this->db->last_query());
+        return $row_hist;
+    }
+
 }
