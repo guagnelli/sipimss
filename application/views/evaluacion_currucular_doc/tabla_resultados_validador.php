@@ -8,9 +8,10 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'check_selecci
         'onclick' => 'seleccionar_deseleccionar_profesionalizacion(this)',
         'title' => $string_values['chek_selct_profesionalizacion'])));
 ?>
-<div id="div_tabla_res_busqueda_docentes" class="table-responsive">
+<div id="div_tabla_res_busqueda_docentes" class="table-responsive"> 
     <!--Mostrará la tabla de actividad docente --> 
-    <table class="table table-striped table-hover table-bordered" id="tabla_resultados_validacion_evaluacion">
+    <!--<table class="table table-striped table-hover table-bordered" id="tabla_resultados_validacion_evaluacion">-->
+    <table class="table " id="tabla_resultados_validacion_evaluacion">
         <thead>
             <tr class="bg-info">
                 <th><?php echo $string_values['lbl_seleccionar'] . "&nbsp" . $seleccionar ?></th>
@@ -36,6 +37,7 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'check_selecci
                 $hist_val_cve = $this->seguridad->encrypt_base64(intval($val['historia_validacion_cve']));
                 $estado_val = $this->seguridad->encrypt_base64(intval($val['estado_validacion']));
                 $convocatoria_cve = $this->seguridad->encrypt_base64(intval($val['convocatori_cve']));
+                $usuario_cve = $this->seguridad->encrypt_base64(intval($val['usuario_cve']));
                 $link_ver_comentario = '';
                 if (intval($val['is_comentario']) === 1) {//link_ver_comentario
                     $link_ver_comentario = '<button '
@@ -57,7 +59,8 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'check_selecci
                         . 'data-estval="' . $estado_val . '"'
                         . 'data-histvalcve="' . $hist_val_cve . '"'
                         . 'data-solicitudcve="' . $solicitud_cve . '"'
-                        . 'data-convocatoriacve="' . $convocatoria_cve . '"';
+                        . 'data-convocatoriacve="' . $convocatoria_cve . '"'
+                        . 'data-usuariocve="' . $usuario_cve . '"';
                 $checkbox_profesionalizacio = '';
                 if ($val['estado_solicitud'] == Enum_es::Validado_profesionalizacion AND $rol_sesion == Enum_rols::Profesionalizacion) {//Si la solicitud se encuentra en el estado profesionalización, y es un rol de profesionalización, debe aparecer la opción enviar a evaluación
                     $checkbox_profesionalizacio = $this->form_complete->create_element(array(

@@ -25,7 +25,8 @@ class Evaluacion_curricular_validar_model extends CI_Model {
             'es.CESE_CVE "estado_solicitud"', 'ehv.hist_validacion_cve "historia_validacion_cve"',
             'ehv.convocatoria_cve "convocatori_cve"', 'ehv.est_validacion_cve "estado_validacion"',
             'cev.EST_VALIDA_DESC "nom_estado_validacion"', 'ehv.fch_registro_historia "fecha_ultima_actualizacion"',
-            'if(ehv.msg_correcciones is null or ehv.msg_correcciones = "",0,1) "is_comentario"'
+            'if(ehv.msg_correcciones is null or ehv.msg_correcciones = "",0,1) "is_comentario"',
+            'ems.USUARIO_CVE "usuario_cve"'
         );
 
         $this->db->start_cache();

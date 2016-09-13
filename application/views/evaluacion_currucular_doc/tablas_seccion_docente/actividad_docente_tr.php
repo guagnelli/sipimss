@@ -1,6 +1,28 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+
+<!--invoice-->
+<section class="invoice">
+    <div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="icon fa fa-info"></i>&nbsp;&nbsp;<?php // echo $string_value["lbl_titulo_convocatoria"]?></h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+          <i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="box-body">
+      <?php // echo $string_value['titulo_template']?>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer text-right">
+      <?php // echo $string_value['lbl_link_convocatoria']?>
+    </div>
+    <!-- /.box-footer-->
+</div>
+    
 <div id="div_tabla_res_busqueda_docentes" class="table-responsive">
     <!--Mostrará la tabla de actividad docente --> 
     <table class="table table-striped table-hover table-bordered" id="tabla_resultados_validacion_evaluacion">

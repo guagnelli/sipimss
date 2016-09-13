@@ -3,20 +3,6 @@ menu_busqueda_validar_censo['matricula'] = 'Matrícula';
 menu_busqueda_validar_censo['nombre'] = 'Nombre del empleado';
 menu_busqueda_validar_censo['clavecategoria'] = 'Categoría';
 
-$(function () {
-    $('#btnEditarNombre').on('click', function () {
-        var isReadOnly = $('.nameFields').prop('readonly');
-        $('.nameFields').prop('readonly', !isReadOnly);
-    });
-
-
-
-    var hash = window.location.hash;
-    $('.nav.nav-pills a[href="' + hash + '"]').tab('show', function () {
-        $(document).scrollTop();
-    });
-});
-
 
 function funcion_buscar_docentes_validar() {
     var path = site_url + '/evaluacion_curricular_validar/data_buscar_docentes_validar_evaluacion_curr/0';
@@ -60,10 +46,11 @@ function funcion_ver_validacion_empleado(element) {
     var histvalcve = button_obj.data('histvalcve');
     var solicitud_cve = button_obj.data('solicitudcve');
     var convocatoria_cve = button_obj.data('convocatoriacve');
+    var usuario_cve = button_obj.data('usuariocve');
     var idrow = button_obj.data('usuariocve');
     //Remover contenido de un div 
     $('#select_perfil_validar').empty();
-    var obj_post = {empcve: empcve, matricula: matricula, estval: estval,
+    var obj_post = {empcve: empcve, matricula: matricula, estval: estval, usuario_cve: usuario_cve,
         histvalcve: histvalcve, solicitud_cve: solicitud_cve, convocatoria_cve: convocatoria_cve};
     data_ajax_post(site_url + '/evaluacion_curricular_validar/seccion_index', null, '#select_perfil_validar_evaluacion', obj_post);
 }
@@ -84,4 +71,11 @@ function ver_comentario_estado_doc(element) {
 function seleccionar_deseleccionar_profesionalizacion(element) {
 //    }
     seleccionar_todos_checkbox_tabla('tabla_resultados_validacion_evaluacion', '#check_seleccionar_todo');
+}
+
+
+function funcion_cerrar_validacion_empleado(element) {
+//    alert('jsahjhdadas');
+    $('#select_perfil_validar_evaluacion').empty();
+    data_ajax_post(site_url + '/evaluacion_curricular_validar/seccion_delete_datos_validado', null, null);
 }

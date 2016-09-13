@@ -24,7 +24,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
     <div class="list-group-item">
 
         <div class="panel-body tab-content">
-            <div id="select_buscador_validar" class="tab-pane fade active in">
+            <div id="select_buscador_validar_evaluacion" class="tab-pane fade active in">
                 <div>
                     <br>
                     <h4><?php echo $string_values['titulo_template']; ?> </h4>

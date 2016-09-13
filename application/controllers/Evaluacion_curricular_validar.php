@@ -84,9 +84,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $array_catalogos[] = enum_ecg::cestado_validacion;
             $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cestado_validacion => 'EST_VALIDACION_CVE')); //Carga el catálogo de ejercicio predominante
             $main_contet = $this->load->view('evaluacion_currucular_doc/evaluacion_curricular_validar_tpl', $data, true);
-            $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
+            
+//            $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
+            $this->template->setTitle("Evaluación");
             $this->template->setMainContent($main_contet);
             $this->template->getTemplate();
+//             $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
             /* carga buscador */
 //            $result = get_is_valida_validacion_censo(12, 3, 8);
         } else {//No existe el validador. Mostrar leyenda de que no es un valiador
@@ -194,37 +197,42 @@ class Evaluacion_curricular_validar extends MY_Controller {
      * 
      */
     public function seccion_index() {
-        //echo "SOY UN INDEX....";
         if ($this->input->is_ajax_request()) {
             if (!is_null($this->input->post())) {
                 $this->lang->load('interface', 'spanish');
-                $filtros = $this->input->post(null, true); //Obtenemos el post o los valores
+                 $data["string_value"] = $this->lang->line('evaluacion_curricular_validar');
+                $data_post = $this->input->post(null, true); //Obtenemos el post o los valores
                 $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
                 $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generé el menú y cargue los datos de perfil
-                $datosPerfil['array_menu'] = $array_menu;
+//                pr($array_menu);
+                $data['array_menu'] = $array_menu;
                 $datos_validacion = array();
-                if (!empty($filtros['empcve'])) {
-                    $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($filtros['empcve']); //Identificador de la comisión
+                if (!empty($data_post['empcve'])) {
+                    $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($data_post['empcve']); //Identificador de la comisión
                 }
-                if (!empty($filtros['matricula'])) {
-                    $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($filtros['matricula']); //Identificador de la comisión
+                if (!empty($data_post['matricula'])) {
+                    $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($data_post['matricula']); //Identificador de la comisión
                 }
-                if (!empty($filtros['estval'])) {
-                    $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($filtros['estval']); //Identificador de la comisión
+                if (!empty($data_post['estval'])) {
+                    $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($data_post['estval']); //Identificador de la comisión
                 }
-                if (!empty($filtros['histvalcve'])) {
-                    $datos_validacion['hist_validacion_cve'] = $this->seguridad->decrypt_base64($filtros['histvalcve']); //Identificador de la comisión
+                if (!empty($data_post['histvalcve'])) {
+                    $datos_validacion['hist_validacion_cve'] = $this->seguridad->decrypt_base64($data_post['histvalcve']); //Identificador de la comisión
                 }
-                if (!empty($filtros['solicitud_cve'])) {
-                    $datos_validacion['solicitud_cve'] = $this->seguridad->decrypt_base64($filtros['solicitud_cve']); //Identificador de la comisión
+                if (!empty($data_post['solicitud_cve'])) {
+                    $datos_validacion['solicitud_cve'] = $this->seguridad->decrypt_base64($data_post['solicitud_cve']); //Identificador de la comisión
                 }
-                if (!empty($filtros['convocatoria_cve'])) {
-                    $datos_validacion['ADMIN_VALIDADOR_CVE'] = $this->seguridad->decrypt_base64($filtros['convocatoria_cve']); //Identificador de la comisión
+                if (!empty($data_post['convocatoria_cve'])) {
+                    $datos_validacion['ADMIN_VALIDADOR_CVE'] = $this->seguridad->decrypt_base64($data_post['convocatoria_cve']); //Identificador de la comisión
+                }
+                if (!empty($data_post['usuario_cve'])) {
+                    $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($data_post['usuario_cve']); //Identificador de la comisión
                 }
                 //Manda el identificador de la delegación del usuario
                 $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la información del usuario al que se va a validar
 //                pr($this->session->userdata());
-                echo $this->load->view('validador_censo/index', $datosPerfil, true);
+                echo $this->load->view('evaluacion_currucular_doc/index', $data, true);
+//                echo $this->load->view('evaluacion_currucular_doc/index', $datosPerfil, true);
             }
         } else {
             redirect(site_url());
@@ -266,7 +274,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
     private function obtener_id_validacion() {
         if (!is_null($this->session->userdata('datosvalidadoactual'))) {
-            return $this->session->userdata('datosvalidadoactual')['validacion_cve'];
+            return $this->session->userdata('datosvalidadoactual')['hist_validacion_cve'];
         }
 //        return $this->session->userdata('idempleado');
         return NULL;
