@@ -71,9 +71,21 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                     foreach ($formacion_salud['inicial'] as $key_ini => $fsi) {
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
                                                         $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                                        $btn_validar = ($this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                        ///////////Inicio ver liga de validación
+                                                        $validation_estado = (isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])) ? $fsi['validation_estado'] : '';
+                                                        $validation_estado_anterior = (isset($fsi['validation_estado_anterior']) && !empty($fsi['validation_estado_anterior'])) ? $fsi['validation_estado_anterior'] : null;
+                                                        $btn_validar = ($this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                        ///////////Fin ver liga de validación
+                                                        /*if(isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])){
+                                                            $btn_validar = $this->seguridad->verificar_estado_correccion($fsi['validation_estado'], $btn_validar);
+                                                            $validation_estado = $fsi['validation_estado'];
+                                                        }*/
+                                                        //pr($fsi['validation_estado_anterior']);
+                                                        /*if(isset($fsi['validation_estado_anterior']) && !empty($fsi['validation_estado_anterior']) && $fsi['validation_estado_anterior'] != $this->config->item('cvalidacion_curso_estado')['CORRECCION']['id']){
+                                                            $btn_validar = '';
+                                                        }*/
                                                         echo '<tr id="tr_'.$id.'">
-                                                                <td class="text-center">'.html_verificar_validacion_registro($fsi['validation'], $fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
+                                                                <td class="text-center">'.$this->seguridad->html_verificar_validacion_registro($fsi['validation'], $fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
@@ -119,9 +131,22 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                     foreach ($formacion_salud['continua'] as $key_ini => $fsi) {
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
                                                         $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                                        $btn_validar = ($this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                        //$validation_estado_anterior = (isset($fsi['validation_estado_anterior']) && !empty($fsi['validation_estado_anterior'])) ? $fsi['validation_estado_anterior'] : null;
+                                                        //$btn_validar = ($this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado_anterior)) ?                   '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                        $validation_estado = (isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])) ? $fsi['validation_estado'] : '';
+                                                        $validation_estado_anterior = (isset($fsi['validation_estado_anterior']) && !empty($fsi['validation_estado_anterior'])) ? $fsi['validation_estado_anterior'] : null;
+                                                        $btn_validar = ($this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                        /*$validation_estado = null;
+                                                        if(isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])){
+                                                            $btn_validar = $this->seguridad->verificar_estado_correccion($fsi['validation_estado'], $btn_validar);
+                                                            $validation_estado = $fsi['validation_estado'];
+                                                        }*/
+                                                        //pr($fsi['validation_estado_anterior']);
+                                                        /*if(isset($fsi['validation_estado_anterior']) && !empty($fsi['validation_estado_anterior']) && $fsi['validation_estado_anterior'] != $this->config->item('cvalidacion_curso_estado')['CORRECCION']['id']){
+                                                            $btn_validar = '';
+                                                        }*/
                                                         echo '<tr id="tr_'.$id.'">
-                                                                <td class="text-center">'.html_verificar_validacion_registro($fsi['validation'], $fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
+                                                                <td class="text-center">'.$this->seguridad->html_verificar_validacion_registro($fsi['validation'], $fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
@@ -201,9 +226,19 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                                         foreach ($formacion_docente[$key_tfp][$key_sfp] as $key_fd => $for_doc) {
                                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
                                                                                             $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                                                                            $btn_validar = ($this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                                                            /*$btn_validar = ($this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ?                                                '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                                                            $validation_estado = null;
+                                                                                            if(isset($for_doc['validation_estado']) && !empty($for_doc['validation_estado'])){
+                                                                                                $btn_validar = $this->seguridad->verificar_estado_correccion($for_doc['validation_estado'], $btn_validar);
+                                                                                                $validation_estado = $for_doc['validation_estado'];
+                                                                                            }*/
+                                                                                            ///////////Inicio ver liga de validación
+                                                                                            $validation_estado = (isset($for_doc['validation_estado']) && !empty($for_doc['validation_estado'])) ? $for_doc['validation_estado'] : '';
+                                                                                            $validation_estado_anterior = (isset($for_doc['validation_estado_anterior']) && !empty($for_doc['validation_estado_anterior'])) ? $for_doc['validation_estado_anterior'] : null;
+                                                                                            $btn_validar = ($this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                                                            ///////////Fin ver liga de validación
                                                                                             echo '<tr id="tr_'.$id.'">
-                                                                                                <td class="text-center">'.html_verificar_validacion_registro($for_doc['validation'], $for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
+                                                                                                <td class="text-center">'.$this->seguridad->html_verificar_validacion_registro($for_doc['validation'], $for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior).'</td>
                                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
@@ -256,10 +291,20 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
                                                                             $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
                                                                             //pr($this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION']));
-                                                                            $btn_validar = ($this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                                            /*$btn_validar = ($this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ?                                                '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                                            $validation_estado = null;
+                                                                            if(isset($for_doc['validation_estado']) && !empty($for_doc['validation_estado'])){
+                                                                                $btn_validar = $this->seguridad->verificar_estado_correccion($for_doc['validation_estado'], $btn_validar);
+                                                                                $validation_estado = $for_doc['validation_estado'];
+                                                                            }*/
+                                                                            ///////////Inicio ver liga de validación
+                                                                            $validation_estado = (isset($for_doc['validation_estado']) && !empty($for_doc['validation_estado'])) ? $for_doc['validation_estado'] : '';
+                                                                            $validation_estado_anterior = (isset($for_doc['validation_estado_anterior']) && !empty($for_doc['validation_estado_anterior'])) ? $for_doc['validation_estado_anterior'] : null;
+                                                                            $btn_validar = ($this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fd(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                                                            ///////////Fin ver liga de validación
                                                                             //$this->seguridad->verificar_liga_validar($for_doc['IS_VALIDO_PROFESIONALIZACION']);
                                                                             echo '<tr id="tr_'.$id.'">
-                                                                                <td class="text-center">'.html_verificar_validacion_registro($for_doc['validation'], $for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
+                                                                                <td class="text-center">'.$this->seguridad->html_verificar_validacion_registro($for_doc['validation'], $for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior).'</td>
                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
@@ -293,4 +338,3 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
             </div>
         </div>
     </div>
-<?php

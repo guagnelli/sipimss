@@ -254,6 +254,33 @@ class Validacion_docente_model extends CI_Model {
         }
         return $return_info;
     }
+    
+    public function get_validacion_historico($params = null) {
+        $resultado = array();
+
+        if (array_key_exists('fields', $params)) {
+            if (is_array($params['fields'])) {
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }
+        if (array_key_exists('conditions', $params)) {
+            $this->db->where($params['conditions']);
+        }
+        if (array_key_exists('order', $params)) {
+            $this->db->order_by($params['order']);
+        }
+        $this->db->join('validacion_gral', "validacion_gral.VALIDACION_GRAL_CVE=hist_validacion.VALIDACION_GRAL_CVE");
+        //pr($params);
+        $query = $this->db->get('hist_validacion'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado = $query->result_array();
+
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
 
     public function get_validacion_registro($params = null) {
         $resultado = array();

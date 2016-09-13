@@ -7,13 +7,11 @@
     
     <!-- Inicio informacion personal -->
     <div class='row'>
-        <h3 class='pinfo'><?php echo $string_values['perfil']['lbl_informacion_general_informacion_personal']; ?> <small><span class="rojo">*</span> <?php echo $string_values['registro']['lbl_campos_obligatorios']; ?></small></h3>
+        <h3 class='pinfo'><?php echo $string_values['perfil']['lbl_informacion_general_informacion_personal']; ?></h3>
     </div>
-    <?php echo form_open('', array('id'=>'form_informacion_general')); ?>
     <div class='row'> 
         <div class="form-group col-xs-4 col-md-4">
             <label for='perfil_apellido_paterno' class="control-label">
-                <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_apellido_paterno']; ?>
             </label>
             <div class="input-group">
@@ -21,13 +19,6 @@
                     <span class="glyphicon glyphicon-pencil"> </span>
                 </span>
             <?php
-            echo $this->form_complete->create_element(
-                    array(
-                        'id'=>'EMPLEADO_CVE',
-                        'type'=>'hidden',
-                        'value' => $emp_id
-                    )
-                );
             echo $this->form_complete->create_element(
                     array(
                         'id'=>'emp_ape_paterno',
@@ -40,13 +31,13 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_paterno'],
-                            'maxlength'=>30,                              
+                            'maxlength'=>30,
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
             </div>
-            <?php echo form_error_format('emp_ape_paterno'); ?>
         </div>
         <div class="form-group col-xs-4 col-md-4">
             <label for='perfil_apellido_materno' class="control-label">
@@ -70,16 +61,16 @@
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_apellido_materno'],
                             'maxlength'=>30,
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
             </div>
-            <?php   echo form_error_format('emp_ape_materno'); ?>
         </div>
         <div class="form-group col-xs-4 col-md-4">
             <label for='perfil_nombre' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre']; ?>
             </label>
             <div class="input-group">
@@ -100,12 +91,12 @@
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_nombre'],
                             'maxlength'=>30,
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
             </div>
-            <?php   echo form_error_format('emp_nombre'); ?>
         </div>
     </div>
     <div class="row">
@@ -129,13 +120,13 @@
                             'autocomplete'=>'off',
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
-                            'readonly' => 'readonly'
+                            'readonly' => 'readonly',
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('perfil_edad'); ?>    
+            </div>    
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_genero' class="control-label">
@@ -158,19 +149,19 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'maxlength'=>30,
-                            'readonly' => 'readonly'
+                            'readonly' => 'readonly',
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_genero'); ?> 
         </div>
     </div>
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_estado_civil' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_estado_civil']; ?>
             </label>
             <div class="input-group">
@@ -191,16 +182,16 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_estado_civil'],
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('CESTADO_CIVIL_CVE'); ?>    
+            </div>  
         </div>
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_correo_electronico' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_correo_electronico']; ?>
             </label>
             <div class="input-group">
@@ -218,19 +209,19 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_correo_electronico'],
-                            'maxlength'=>30
+                            'maxlength'=>30,
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
             </div>
-            <?php echo form_error_format('EMP_EMAIL'); ?>
         </div>
     </div>
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
             <label for='perfil_telefono_particular' class="control-label">
-                <b class="rojo">*</b>
+                
                 <?php echo $string_values['perfil']['lbl_informacion_general_telefono_particular']; ?>
             </label>
             <div class="input-group">
@@ -250,17 +241,16 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_telefono_particular'],
-                            'maxlength'=>30
+                            'maxlength'=>30,
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
             </div>
-            <?php echo form_error_format('EMP_TEL_PARTICULAR'); ?>
         </div>
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_telefono_laboral' class="control-label">
-                <b class="rojo">*</b>
                 <?php echo $string_values['perfil']['lbl_informacion_general_telefono_laboral']; ?>
             </label>
             <div class="input-group">
@@ -280,13 +270,13 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_telefono_laboral'],
-                            'maxlength'=>30
+                            'maxlength'=>30,
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('EMP_TEL_LABORAL'); ?>    
+            </div>   
         </div>    
     </div>
     <div class="row">
@@ -311,23 +301,15 @@
                             'data-toggle'=>'tooltip',
                             'data-placement'=>'bottom',
                             'title'=>$string_values['perfil']['plh_informacion_general_empleos_actuales'],
-                            'maxlength'=>30
+                            'maxlength'=>30,
+                            'disabled' => true,
                             )
                         )
                     );
             ?>
             </div>
-            <?php echo form_error_format('EMP_NUM_FUE_IMSS'); ?> 
         </div>
     </div>
-    <div class="row">
-        <div class="form-group col-xs-4 col-md-4 col-md-offset-4 text-center">
-            <button type="button" class="btn btn-success" id="btn_informacion_general_personal">
-               <?php echo $string_values['perfil']['btn_informacion_general_guardar_informacion_personal']; ?> 
-            </button>
-        </div>    
-    </div>
-    <?php echo form_close(); ?>
     <!-- Fin informacion personal-->
     <!--Inicio informacion IMSS-->
     <div class='row'>
@@ -357,11 +339,9 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_matricula'); ?>    
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-            <label for='perfil_delegacion' class="control-label">
-                
+            <label for='perfil_delegacion' class="control-label">                
                 <?php echo $string_values['perfil']['lbl_informacion_general_delegacion']; ?>
             </label>
             <div class="input-group">
@@ -382,14 +362,12 @@
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('perfil_delegacion'); ?> 
+            </div> 
         </div>
     </div>
     <div class="row">
         <div class="form-group col-xs-5 col-md-5">
-            <label for='perfil_nombre_categoria' class="control-label">
-                
+            <label for='perfil_nombre_categoria' class="control-label">                
                 <?php echo $string_values['perfil']['lbl_informacion_general_nombre_categoria']; ?>
             </label>
             <div class="input-group">
@@ -410,8 +388,7 @@
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('perfil_nombre_categoria'); ?>    
+            </div>    
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_clave_categoria' class="control-label">
@@ -437,7 +414,6 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_clave_categoria'); ?> 
         </div>
     </div>    
     <div class="row">
@@ -464,8 +440,7 @@
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('perfil_nombre_area_adscripcion'); ?>    
+            </div>  
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_nombre_unidad_adscripcion' class="control-label">
@@ -491,7 +466,6 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_nombre_unidad_adscripcion'); ?> 
         </div>
     </div>
     <div class="row">
@@ -517,8 +491,7 @@
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('perfil_nombre_clave_adscripcion'); ?>    
+            </div>   
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_clave_antiguedad' class="control-label">                
@@ -595,7 +568,6 @@
                     <small><?php echo $string_values['perfil']['lbl_informacion_general_antiguedad_dias']; ?></small>
                 </div>
             </div>
-            <?php echo form_error_format('perfil_antiguedad'); ?> 
         </div>
     </div>
     <div class="row">
@@ -621,8 +593,7 @@
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('perfil_tipo_contratacion'); ?>    
+            </div>  
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_estatus_empleado' class="control-label">                
@@ -647,7 +618,6 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_estatus_empleado'); ?> 
         </div>
     </div>
     <div class="row">
@@ -673,8 +643,7 @@
                         )
                     );
             ?>
-            </div>
-            <?php echo form_error_format('perfil_clave_presupuestal'); ?>    
+            </div> 
         </div> 
         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
             <label for='perfil_curp' class="control-label">
@@ -700,8 +669,5 @@
                     );
             ?>
             </div>
-            <?php echo form_error_format('perfil_curp'); ?> 
         </div>
     </div>
-    <!--Fin informacion IMSS-->
-<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_censo_profesores/informacionGeneral.js"></script>

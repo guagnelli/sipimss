@@ -135,6 +135,37 @@ class Actividad_docente_model extends CI_Model {
         if (isset($actividad_docente_general_cve) AND is_nan($actividad_docente_general_cve)) {
             return -1;
         }
+        ////////Inicio agregar validaciones de estado
+        $sead = $seed = $seem = '';
+        $val_correc_sead = $validation_est_corr_sead = $val_correc_seed = $validation_est_corr_seed = $val_correc_seem = $validation_est_corr_seem = '';
+        $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+        if($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
+            $val_correc_sead = '(SELECT VAL_CUR_EST_CVE FROM hist_efpd_validacion_curso WHERE
+                hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND 
+                VALIDACION_CVE != '.$validacion_cve_session.' order by VAL_CUR_FCH DESC limit 1) AS validation_estado, ';
+            $val_correc_seed = '(SELECT VAL_CUR_EST_CVE FROM hist_edd_validacion_curso WHERE
+                hist_edd_validacion_curso.EMP_EDU_DISTANCIA_CVE=eed.EMP_EDU_DISTANCIA_CVE AND 
+                VALIDACION_CVE != '.$validacion_cve_session.' order by VAL_CUR_FCH DESC limit 1) AS validation_estado, ';
+            $val_correc_seem = '(SELECT VAL_CUR_EST_CVE FROM hist_eem_validacion_curso WHERE
+                hist_eem_validacion_curso.EMP_ESP_MEDICA_CVE=esm.EMP_ESP_MEDICA_CVE AND 
+                VALIDACION_CVE != '.$validacion_cve_session.' order by VAL_CUR_FCH DESC limit 1) AS validation_estado, ';
+        }
+        if(isset($this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['result']) && $this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['result']==true) {
+            $validation_est_corr_sead = '(SELECT VAL_CUR_EST_CVE FROM hist_efpd_validacion_curso WHERE
+                hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND 
+                VALIDACION_CVE='.$this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['VALIDACION_CVE'].' 
+                order by VAL_CUR_FCH DESC limit 1) AS validation_estado_anterior, ';
+            $validation_est_corr_seed = '(SELECT VAL_CUR_EST_CVE FROM hist_edd_validacion_curso WHERE
+                hist_edd_validacion_curso.EMP_EDU_DISTANCIA_CVE=eed.EMP_EDU_DISTANCIA_CVE AND 
+                VALIDACION_CVE='.$this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['VALIDACION_CVE'].' 
+                order by VAL_CUR_FCH DESC limit 1) AS validation_estado_anterior, ';
+            $validation_est_corr_seem = '(SELECT VAL_CUR_EST_CVE FROM hist_eem_validacion_curso WHERE
+                hist_eem_validacion_curso.EMP_ESP_MEDICA_CVE=esm.EMP_ESP_MEDICA_CVE AND 
+                VALIDACION_CVE='.$this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['VALIDACION_CVE'].' 
+                order by VAL_CUR_FCH DESC limit 1) AS validation_estado_anterior, ';
+
+        }
+        /////////Fin agregar validaciones de estado
         if(!is_null($validacion_cve_session)){
             $sead = '(SELECT COUNT(*) AS validation FROM hist_efpd_validacion_curso WHERE
                 hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,';
@@ -142,12 +173,10 @@ class Actividad_docente_model extends CI_Model {
                 hist_edd_validacion_curso.EMP_EDU_DISTANCIA_CVE=eed.EMP_EDU_DISTANCIA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,';
             $seem = '(SELECT COUNT(*) AS validation FROM hist_eem_validacion_curso WHERE
                 hist_eem_validacion_curso.EMP_ESP_MEDICA_CVE=esm.EMP_ESP_MEDICA_CVE AND VALIDACION_CVE='.$validacion_cve_session.') AS validation,';
-        } else {
-            $sead = $seed = $seem = '';
         }
         
         //Entidad de emp_actividad_docente 
-        $select_emp_actividad_docente = 'select '.$sead.'
+        $select_emp_actividad_docente = 'select '.$sead.' '.$val_correc_sead.' '.$validation_est_corr_sead.' 
             ead.EMP_ACT_DOCENTE_CVE "cve_actividad_docente", ead.EAD_ANIO_CURSO "anio", ead.EAD_DURACION "duracion"
             ,ead.EAD_FCH_INICIO "fecha_inicio", ead.EAD_FCH_FIN "fecha_fin", ead.COMPROBANTE_CVE "comprobante"
             ,ead.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", ead.ACT_DOC_GRAL_CVE "actividad_general_cve"
@@ -156,7 +185,7 @@ class Actividad_docente_model extends CI_Model {
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = ead.TIP_ACT_DOC_CVE
             where ead.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
         //Entidad de emp_educacion_distancia 
-        $select_emp_educacion_distancia = 'select '.$seed.'
+        $select_emp_educacion_distancia = 'select '.$seed.' '.$val_correc_seed.' '.$validation_est_corr_seed.'
             eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente", eed.EDD_CUR_ANIO "anio", eed.EED_DURACION "duracion"
             ,eed.EDD_FCH_INICIO "fecha_inicio", eed.EED_FCH_FIN "fecha_fin", eed.COMPROBANTE_CVE "comprobante"
             ,eed.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", eed.ACT_DOC_GRAL_CVE "actividad_general_cve"
@@ -165,7 +194,7 @@ class Actividad_docente_model extends CI_Model {
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = eed.TIP_ACT_DOC_CVE
             where eed.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
         //Entidad de emp_esp_medica
-        $select_emp_esp_medica = 'select '.$seem.'
+        $select_emp_esp_medica = 'select '.$seem.' '.$val_correc_seem.' '.$validation_est_corr_seem.'
             esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente", esm.EEM_ANIO_FUNGIO "anio", esm.EEM_DURACION "duracion"
             ,esm.EEM_FCH_INICIO "fecha_inicio", esm.EEM_FCH_FIN "fecha_fin", esm.COMPROBANTE_CVE "comprobante"
             ,esm.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", esm.ACT_DOC_GRAL_CVE "actividad_general_cve"
