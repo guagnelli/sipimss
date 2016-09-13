@@ -139,7 +139,7 @@ class Actividad_docente_model extends CI_Model {
         $sead = $seed = $seem = '';
         $val_correc_sead = $validation_est_corr_sead = $val_correc_seed = $validation_est_corr_seed = $val_correc_seem = $validation_est_corr_seem = '';
         $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
-        if($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
+        if(!empty($estado_validacion_actual) && $this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
             $val_correc_sead = '(SELECT VAL_CUR_EST_CVE FROM hist_efpd_validacion_curso WHERE
                 hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND 
                 VALIDACION_CVE != '.$validacion_cve_session.' order by VAL_CUR_FCH DESC limit 1) AS validation_estado, ';
