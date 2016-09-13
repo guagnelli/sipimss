@@ -3291,8 +3291,7 @@ class Perfil extends MY_Controller {
             $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
             $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
             $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion'); //Asignamos id usuario a variable
-//            pr($convocatoria_delegacion);
-//            exit();
+                    
             $data = array();
 //            pr($this->session->userdata());
             $tipo_msg = $this->config->item('alert_msg');
@@ -3418,8 +3417,8 @@ class Perfil extends MY_Controller {
                     $datos_validado_actual = $this->session->userdata('datosvalidadoactual');
                     if (!empty($datos_validado_actual)) {
                         $tipo_msg = $this->config->item('alert_msg');
-                        $datos_empleado_validar['val_grl_cve'] = $datos_validado_actual->validaor_grl_cve;
-                        $datos_empleado_validar['validacion_cve'] = $datos_validado_actual->validacion_cve;
+                        $datos_empleado_validar['val_grl_cve'] = $datos_validado_actual['val_grl_cve'];
+                        $datos_empleado_validar['validacion_cve'] = $datos_validado_actual['validacion_cve'];
                         $result_cambio = $this->cambio_estado_validacion_censo($estado_cambio_cve, $datos_post['comentario_justificacion'], $datos_empleado_validar);
 
                         //Efectúa la actualización del nuevo estado
