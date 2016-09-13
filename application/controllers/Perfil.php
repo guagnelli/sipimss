@@ -55,6 +55,14 @@ class Perfil extends MY_Controller {
         //Asigna la convocatoria ala variable de sesión
         $this->session->set_userdata('convocatoria_delegacion', $convocatoria);
 
+
+        $result_id_empleado = $this->session->userdata('idempleado');
+
+        $this->load->model('Validacion_docente_model', 'vdm');
+        $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
+        $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
+
+
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
@@ -3294,11 +3302,12 @@ class Perfil extends MY_Controller {
             if (!empty($convocatoria_delegacion)) {//Busca si existe la convocatoría, de otro modo no se puede subir ni cargar nada
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
+//                pr($historia_docente);
                 $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
-                pr($historia_docente);
+                //pr($historia_docente);
                 if (!empty($historia_docente)) {//Tiene historial en validación
                     $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
-                    $tmp_validado['estado_actual'] = $historia_docente->estado_validacion;
+                    $tmp_validado['estado_actual'] = $historia_docente['est_val'];
                     $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
                     $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
 
@@ -3316,10 +3325,10 @@ class Perfil extends MY_Controller {
                     $res = $this->validar_cursos_status_completa_docente($result_id_empleado, $delegacion_doecente_cve);
                     if ($res === 1) {//Recarga el método
                         $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
-//                        pr($historia_docente);
-                        exit();
+                        //                        pr($historia_docente);
+//                        exit();
                         $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
-                        $tmp_validado['estado_actual'] = $historia_docente->estado_validacion;
+                        $tmp_validado['estado_actual'] = $historia_docente['est_val'];
                         $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
                         $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
 
@@ -3445,6 +3454,9 @@ class Perfil extends MY_Controller {
 
     private function validar_cursos_status_completa_docente() {
         $empleado_id = $this->session->userdata('idempleado');
+        pr('-------------------------------');
+        pr($empleado_id);
+        pr('-------------------------------');
 //        $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
         $datos_validacion = $this->modPerfil->get_estado_valida_completa($empleado_id);
         if ($datos_validacion->total_prof_salud > 0 AND $datos_validacion->total_act_docente > 0) {//Cambio de estado a completo 

@@ -255,6 +255,33 @@ class Validacion_docente_model extends CI_Model {
         return $return_info;
     }
 
+    public function get_validacion_historico($params = null) {
+        $resultado = array();
+
+        if (array_key_exists('fields', $params)) {
+            if (is_array($params['fields'])) {
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }
+        if (array_key_exists('conditions', $params)) {
+            $this->db->where($params['conditions']);
+        }
+        if (array_key_exists('order', $params)) {
+            $this->db->order_by($params['order']);
+        }
+        $this->db->join('validacion_gral', "validacion_gral.VALIDACION_GRAL_CVE=hist_validacion.VALIDACION_GRAL_CVE");
+        //pr($params);
+        $query = $this->db->get('hist_validacion'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado = $query->result_array();
+
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
+
     public function get_validacion_registro($params = null) {
         $resultado = array();
 
@@ -367,11 +394,11 @@ class Validacion_docente_model extends CI_Model {
         }
 //        pr($convocatoria);
 //        pr($empleado_cve);
-        $select = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
-            'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"',
+        $select = array('vg.VALIDACION_GRAL_CVE "val_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
+            'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "est_val"', 'vg.VAL_CONV_CVE',
             'hv.VAL_COMENTARIO "comentario_estado"');
         $this->db->where('hv.IS_ACTUAL', 1); //Para obtener el último registro de la actualización
-        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
+        $this->db->where('vg.VAL_CONV_CVE', $convocatoria); 
         $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
         $this->db->select($select);
 
@@ -381,12 +408,14 @@ class Validacion_docente_model extends CI_Model {
 //        pr($this->db->last_query());
 //        pr($query);
 //        if (!is_null($query->row()) AND is_object($query->row())) {
-        $row_query = $query->row();
-//        }
+        $row_query = $query->result_array();
 //        pr($row_query);
-//        if (!empty($row_query)) {
-//            $row_query = $row_query[0];
 //        }
+//        
+//        pr($row_query);
+        if (!empty($row_query)) {
+            $row_query = $row_query[0];
+        }
         return $row_query;
     }
 
@@ -585,7 +614,7 @@ class Validacion_docente_model extends CI_Model {
 
         $query = $this->db->query($select)->result();
         $this->db->reset_query();
-        if(!empty($query)){
+        if (!empty($query)) {
             $query = $query[0];
         }
         return $query;

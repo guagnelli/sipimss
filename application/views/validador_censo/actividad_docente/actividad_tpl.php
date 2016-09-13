@@ -76,9 +76,14 @@ echo js('validacion_censo_profesores/actividad_docente.js');
                                             $btn_comprobante = '';
                                         }
                                         $id = $this->seguridad->encrypt_base64($value['cve_actividad_docente']);
-                                        $btn_validar = ($this->seguridad->verificar_liga_validar($value['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_validar_ad" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_ad(this, '.$value['ta_cve'].');" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                        //$btn_validar = ($this->seguridad->verificar_liga_validar($value['IS_VALIDO_PROFESIONALIZACION'])) ?                                                '<button type="button" class="btn btn-link btn-sm btn_validar_ad" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_ad(this, '.$value['ta_cve'].');" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                        ///////////Inicio ver liga de validación
+                                        $validation_estado = (isset($value['validation_estado']) && !empty($value['validation_estado'])) ? $value['validation_estado'] : '';
+                                        $validation_estado_anterior = (isset($value['validation_estado_anterior']) && !empty($value['validation_estado_anterior'])) ? $value['validation_estado_anterior'] : null;
+                                        $btn_validar = ($this->seguridad->verificar_liga_validar($value['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_ad" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_ad(this, '.$value['ta_cve'].');" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                                        ///////////Fin ver liga de validación
                                         echo "<tr data-keyrow=".$key.">";
-                                        echo '<td class="text-center">'.html_verificar_validacion_registro($value['validation'], $value['IS_VALIDO_PROFESIONALIZACION']).'</td>';
+                                        echo '<td class="text-center">'.$this->seguridad->html_verificar_validacion_registro($value['validation'], $value['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior).'</td>';
                                         echo "<td >".$checked."</td>";
                                         echo "<td class='class_titulo'>" . $value['nombre_tp_actividad'] . "</td>";
                                         echo "<td >" . $value['anio'] . "</td>";
