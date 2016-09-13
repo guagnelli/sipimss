@@ -86,14 +86,15 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $main_contet = $this->load->view('evaluacion_currucular_doc/evaluacion_curricular_validar_tpl', $data, true);
             
 //            $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
-            $this->template->setTitle("Evaluación");
-            $this->template->setMainContent($main_contet);
-            $this->template->getTemplate();
 //             $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
             /* carga buscador */
 //            $result = get_is_valida_validacion_censo(12, 3, 8);
         } else {//No existe el validador. Mostrar leyenda de que no es un valiador
+            $main_contet = '<span>No se encuentrá asignado el validador</span>';
         }
+            $this->template->setTitle("Evaluación");
+            $this->template->setMainContent($main_contet);
+            $this->template->getTemplate();
     }
 
     public function data_buscar_docentes_validar_evaluacion_curr($current_row = null) {
