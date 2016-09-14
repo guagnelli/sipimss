@@ -27,6 +27,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$lang['interface_'][''][''] = '';
 //$lang['interface']['registro']['texto_bienvenida'] = 'Hola mundo';
 $lang['interface'] = array(
+    'secciones'=>array(
+        'lbl_ca_titulo'=>'Comisión académica',
+        'lbl_fs_titulo'=>'Formaci&oacute;n en salud',
+        'lbl_is_titulo'=>'Investigaci&oacute;n en salud',
+        'lbl_ie_titulo'=>'Investigaci&oacute;n educativa',
+        'lbl_b_titulo'=>'Becas y Comisiones',
+        'lbl_fp_titulo'=>'Formaci&oacute;n profesional',
+        'lbl_me_titulo'=>'Material educativo',
+        'lbl_ed_titulo'=>'Educaci&oacute; a distancia',
+        'lbl_em_titulo'=>'Especialidad m&ecuate;dica',
+        'lbl_ad_titulo'=>'Actividad docente'
+    ),
     'registro' => array(
         'lbl_bienvenido' => 'Bienvenido',
         'lbl_formulario' => 'Registro de docentes al censo de profesores',
@@ -651,10 +663,19 @@ $lang['interface'] = array(
 );
 $lang['interface_secd'] = array(
     'lbl_secd_titulo'=> "Solicitud de evaluaci&oacute;n curricular docente",
+    'lbl_solicitud_titulo'=> "Solicitud",
+    'lbl_info_prof'=> "Informaci&oacute;n del profesor(a):",
     'lbl_titulo_convocatoria'=> "Requisitos m&iacute;nimos para la evaluaci&oacute;n",
     'lbl_list_sol_title'=> "Listado de solicitudes",
-    'lbl_convocatoria'=> "esta es una convocatoria",
-    'lbl_link_convocatoria'=>'Si desea con sultar la convocatoria, puede hacerlo en la esiguiente URL: <a href="#">Convoctoria</a>',
+    "lbl_info_nombre"=>"Nombre:",
+    "lbl_info_matricula"=>"Matr&iacute;cula:",
+    "lbl_info_categoria"=>"Categoría:",
+    "lbl_info_del"=>"Delegaci&oacute;n:",
+    "lbl_info_adscripcion"=>"Adscripci&oacute;n:",
+    "lbl_info_vigencia"=>"Vigencia:",
+    "lbl_info_submit"=>"Enviar solicitud",
+    'lbl_convocatoria'=> "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    'lbl_link_convocatoria'=>'Si desea consultar la convocatoria, puede hacerlo en la esiguiente URL: <a href="#">Convoctoria</a>',
 );
 $lang["interface_tpl"]=array(
     'lbl_link_logout'=>'Cerrar sesión',

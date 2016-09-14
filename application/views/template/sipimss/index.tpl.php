@@ -89,7 +89,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <?php if(!$this->session->userdata('usuario_logeado')){ ?>
+      <?php if($this->session->userdata('usuario_logeado')){ ?>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
@@ -513,5 +513,6 @@
         }});
     });
 </script>
+<?php echo js("general.js"); ?>
 </body>
 </html>

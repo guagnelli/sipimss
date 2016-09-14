@@ -26,6 +26,7 @@ class Template {
             "title" => null,
             "menu" => null,
             "main_title" => null,
+            "sub_title" => null,
             "main_content" => null,
             "css_files" => null,
             "js_files" => null,
@@ -73,6 +74,7 @@ class Template {
         $this->elements['title'] = (array_key_exists('title', $elements)) ? $elements['title'] : null;
         $this->elements['menu'] = $this->templete_menu(); //(array_key_exists('menu', $elements)) ? $elements['menu'] : null;
         $this->elements['main_title'] = (array_key_exists('main_title', $elements)) ? $elements['main_title'] : null;
+        $this->elements['sub_title'] = (array_key_exists('sub_title', $elements)) ? $elements['sub_title'] : null;
         $this->elements['main_content'] = (array_key_exists('main_content', $elements)) ? $elements['main_content'] : null;
         $this->elements['css_files'] = (array_key_exists('css_files', $elements)) ? $elements['css_files'] : null;
         $this->elements['js_files'] = (array_key_exists('js_files', $elements)) ? $elements['js_files'] : null;
@@ -169,6 +171,17 @@ class Template {
 
     function setMainTitle($main_title = null) {
         $this->elements["main_title"] = $main_title;
+    }
+    
+    /*
+     * Asigna la propiedad de título de la sección en la plantilla
+     * @author  : Miguel Guagnelli
+     * @method: void setMainTitle($main_title)
+     * @param: string $main_title Titulo de la sección en la que se encuentra el usuario
+     */
+
+    function setSubTitle($sub_title = null) {
+        $this->elements["sub_title"] = $sub_title;
     }
 
     /*

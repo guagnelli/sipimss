@@ -500,62 +500,73 @@ $config['cvalidacion_curso_estado'] = array(
     'REVISION' => array('id' => 4, 'color' => 'info')
 );
 
+//nombre de la tabla cseccióninformacion
 $config['TABLAS'] = array(
     'COMISION_ACADEMICA' => array(
+        'id' => 1,
         'tabla_censo'=>'emp_comision', 
         'tabla_validacion'=>'hist_comision_validacion_curso', 
         'campo'=>'EMP_COMISION_CVE',
         'lbl'=>'lbl_ca_titulo'
     ),
     'FORMACION_SALUD' => array(
+        'id' => 2,
         'tabla_censo'=>'emp_for_personal_continua_salud', 
         'tabla_validacion'=>'hist_fpcs_validacion_curso', 
         'campo'=>'FPCS_CVE',
         'lbl'=>'lbl_fs_titulo'
     ),
     'INVESTIGACION_SALUD' => array(
+        'id' => 3,
         'tabla_censo'=>'emp_desa_inv_salud', 
         'tabla_validacion'=>'hist_edis_validacion_curso', 
         'campo'=>'EDIS_CVE',
         'lbl'=>'lbl_is_titulo'
     ),
     'INVESTIGACION_EDUCATIVA' => array(
+        'id' => 4,
         'tabla_censo'=>'emp_act_inv_edu', 
         'tabla_validacion'=>'hist_eaid_validacion_curso', 
         'campo'=>'EAID_CVE',
         'lbl'=>'lbl_ie_titulo'
     ),
     'BECA' => array(
+        'id' => 5,
         'tabla_censo'=>'emp_beca', 
         'tabla_validacion'=>'hist_beca_validacion_curso', 
         'campo'=>'EMP_BECA_CVE',
         'lbl'=>'lbl_b_titulo'
     ),
     'FORMACION_PROFESIONAL' => array(
+        'id' => 6,
         'tabla_censo'=>'emp_formacion_profesional', 
         'tabla_validacion'=>'hist_efp_validacion_curso', 
         'campo'=>'EMP_FORMACION_PROFESIONAL_CVE',
         'lbl'=>'lbl_fp_titulo'
     ),
     'MATERIAL_EDUCATIVO' => array(
+        'id' => 7,
         'tabla_censo'=>'emp_materia_educativo', 
         'tabla_validacion'=>'hist_me_validacion_curso', 
         'campo'=>'MATERIA_EDUCATIVO_CVE',
         'lbl'=>'lbl_me_titulo'
     ),
     'EDUCACION_DISTANCIA' => array(
+        'id' => 8,
         'tabla_censo'=>'emp_educacion_distancia', 
         'tabla_validacion'=>'hist_edd_validacion_curso', 
         'campo'=>'EMP_EDU_DISTANCIA_CVE',
         'lbl'=>'lbl_ed_titulo'
     ),
     'ESPECIALIDAD_MEDICA' => array(
+        'id' => 9,
         'tabla_censo'=>'emp_esp_medica', 
         'tabla_validacion'=>'hist_eem_validacion_curso', 
         'campo'=>'EMP_ESP_MEDICA_CVE',
         'lbl'=>'lbl_em_titulo'
     ),
     'ACTIVIDAD_DOCENTE' => array(
+        'id' => 10,
         'tabla_censo'=>'emp_actividad_docente', 
         'tabla_validacion'=>'hist_efpd_validacion_curso', 
         'campo'=>'EMP_ACT_DOCENTE_CVE',

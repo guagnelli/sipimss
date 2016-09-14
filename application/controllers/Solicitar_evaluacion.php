@@ -21,11 +21,13 @@ class Solicitar_evaluacion extends MY_Controller {
     function index(){
         $this->lang->load('interface', 'spanish');
         //$this->template->lang_text["string_tpl"] = $this->lang->line('interface_tpl');
+        $this->load->model("Empleado_model","emp");
+        $this->emp->toString();
         
-        $data["string_value"] = $this->lang->line('interface_secd');
+        $data["string_value"] = $this->lang->line('interface_secd')+$this->lang->line('interface')["secciones"];
 
         $this->load->model("Solicitud_ecv_model","secd");
-        $data["actividades"]=$this->secd->getValidatedCourses($this->session->idempleado);
+        $data["actividades"]=$this->secd->getAllCourses($this->session->idempleado);
        
         $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$data, true);
         //$this->template->setCuerpoModal($this->ventana_modal->carga_modal());
@@ -34,6 +36,10 @@ class Solicitar_evaluacion extends MY_Controller {
         $this->template->setMainTitle($data["string_value"]["lbl_secd_titulo"]);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
+    }
+    
+    function secd(){
+        
     }
     
 }

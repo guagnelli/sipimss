@@ -18,7 +18,7 @@ class Solicitud_ecv_model extends CI_Model {
         $this->string_values = $this->lang->line('interface_secd');
     }
     
-    function getValidatedCourses($emp_cve = null){
+    function getAllCourses($emp_cve = null,$validated=1){
         if(is_null($emp_cve)){
             return false;
         }
@@ -26,17 +26,25 @@ class Solicitud_ecv_model extends CI_Model {
         $actividades = array();
         //pr($secciones);
         foreach($secciones as $id_sec=>$seccion){
+            $this->db->where("sec_info_cve",$seccion['id']);
+            $nombre = $this->db->get("cseccion_informacion");
+            $secciones[$id_sec]["nombre"] = $nombre = $nombre->result_array()[0];
+            
+            $this->db->flush_cache();
             //pr($seccion);
-            $this->db->where("is_valido_profesionalizacion","1");
+            echo "{$nombre['csi_entidad']}.{$nombre['nom_camp_pk']}={}";
+            //$this->db->join($nombre['csi_entidad'], "{$nombre['csi_entidad'].$nombre['nom_camp_pk']}={})";
+            $this->db->where("is_valido_profesionalizacion",$validated);
             $this->db->where("empleado_cve",$emp_cve);
             $actividades = $this->db->get($seccion["tabla_censo"]);
-            if($actividades->num_rows()){
-              $secciones[$id_sec]["actividades"]=$actividades->result_array();  
+            if($actividades->num_rows() > 0){
+              $secciones[$id_sec]["actividades"]=$actividades->result_array();
+              unset($secciones[$id_sec]["tabla_censo"]);
+              unset($secciones[$id_sec]["tabla_validacion"]);
+            }else{
+              unset($secciones[$id_sec]);
             }
-            //
-            unset($secciones[$id_sec]["tabla_censo"]);
-            unset($secciones[$id_sec]["tabla_validacion"]);
         }
-        return $actividades;
+        return $secciones;
     }
 }
