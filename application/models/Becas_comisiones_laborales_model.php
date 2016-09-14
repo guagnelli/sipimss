@@ -9,27 +9,44 @@ class Becas_comisiones_laborales_model extends CI_Model {
         $this->load->database();
     }
 
+    private function get_formacion_subquery($params){
+        if(array_key_exists('fields', $params)){
+            if(is_array($params['fields'])){
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        if(array_key_exists('order', $params)){
+            $this->db->order_by($params['order']);
+        }
+        if(array_key_exists('limit', $params)){
+            $this->db->limit($params['limit']);
+        }
+        $subquery = $this->db->get_compiled_select($params['table']); //Obtener conjunto de registros
+        return $subquery;
+    }
+
     public function get_lista_becas($empleado_cve, $params=null) {
         if ($empleado_cve < 1) {
             return -1;
         }
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(isset($params) && !is_null($params)){
-            if(array_key_exists('validation', $params)){
-                if(array_key_exists('fields', $params['validation'])){
-                    if(is_array($params['validation']['fields'])){
-                        $this->db->select($params['validation']['fields'][0], $params['validation']['fields'][1]);
-                    } else {
-                        $this->db->select($params['validation']['fields']);
-                    }
-                }
-                if(array_key_exists('conditions', $params['validation'])){
-                    $this->db->where($params['validation']['conditions']);
-                }
-                $subquery = $this->db->get_compiled_select($params['validation']['table']); //Obtener conjunto de registros
-
-                $this->db->select('('.$subquery.') AS validation');
-            }
+        $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
+        $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
+        $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
+        
+        if(!is_null($subquery)){
+            $this->db->select('('.$subquery.') AS validation');
+        }
+        if(!is_null($subquery1)){
+            $this->db->select('('.$subquery1.') AS validation_estado');
+        }
+        if(!is_null($subquery2)){
+            $this->db->select('('.$subquery2.') AS validation_estado_anterior');
         }
         ////////////////////////////////Fin verificación existencia de validación actual
 
@@ -59,22 +76,18 @@ class Becas_comisiones_laborales_model extends CI_Model {
             return -1;
         }
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(isset($params) && !is_null($params)){
-            if(array_key_exists('validation', $params)){
-                if(array_key_exists('fields', $params['validation'])){
-                    if(is_array($params['validation']['fields'])){
-                        $this->db->select($params['validation']['fields'][0], $params['validation']['fields'][1]);
-                    } else {
-                        $this->db->select($params['validation']['fields']);
-                    }
-                }
-                if(array_key_exists('conditions', $params['validation'])){
-                    $this->db->where($params['validation']['conditions']);
-                }
-                $subquery = $this->db->get_compiled_select($params['validation']['table']); //Obtener conjunto de registros
-
-                $this->db->select('('.$subquery.') AS validation');
-            }
+        $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
+        $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
+        $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
+        
+        if(!is_null($subquery)){
+            $this->db->select('('.$subquery.') AS validation');
+        }
+        if(!is_null($subquery1)){
+            $this->db->select('('.$subquery1.') AS validation_estado');
+        }
+        if(!is_null($subquery2)){
+            $this->db->select('('.$subquery2.') AS validation_estado_anterior');
         }
         ////////////////////////////////Fin verificación existencia de validación actual
         $select = array('ecm.EMP_COMISION_CVE "emp_comision_cve"', 'ecm.EMPLEADO_CVE "empleado_cve"',

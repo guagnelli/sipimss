@@ -500,7 +500,13 @@ $config['cvalidacion_curso_estado'] = array(
     'REVISION' => array('id' => 4, 'color' => 'info')
 );
 
+
 //nombre de la tabla cseccióninformacion
+$config['CORRECCION'] = 'CORRECCION';
+
+$config['IS_ACTUAL'] = 1;
+$config['IS_NOT_ACTUAL'] = 0;
+
 $config['TABLAS'] = array(
     'COMISION_ACADEMICA' => array(
         'id' => 1,
@@ -579,7 +585,7 @@ $config['TABLAS'] = array(
  * 
  *  
  */
-$config['estados_val_censo'] = array(
+/*$config['estados_val_censo'] = array(
     Enum_ev::Inicio => array('value' => 'Inicio', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => '', 'funcion_demandada' => '', 'value_boton' => '', 'tipo_transaccion'=>'', 'color_status' => ''),
     Enum_ev::Incompleta => array('value' => 'Incompleta', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => '', 'tipo_transaccion'=>'', 'color_status' => ''), 
     Enum_ev::Completa => array('value' => 'Completa', 'rol_permite' => array(Enum_rols::Docente), 'estados_transicion' => array(Enum_ev::Por_validar_n1), 'value_boton' => 'Enviar a validación', 'funcion_demandada' => '', 'tipo_transaccion'=>'', 'color_status' => 'NO_VALIDO'), 
@@ -593,10 +599,25 @@ $config['estados_val_censo'] = array(
     Enum_ev::En_revision_profesionalizacion => array('value' => 'En revisión profesionalización', 'rol_permite' =>array(Enum_rols::Profesionalizacion),'estados_transicion' => array(Enum_ev::Correccion_n2, Enum_ev::Validado), 'value_boton' => 'Enviar a revisión profesionalización', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => FALSE, 'tipo_transaccion'=>'revisión', 'color_status' => 'REVISION', 'est_apr_para_validacion'=>array(Enum_ev::Val_n2_por_validar_profesionalizacion, Enum_ev::En_revision_profesionalizacion)),
     Enum_ev::Correccion_n2 => array('value' => 'Corrección N2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::Correccion_n1, Enum_ev::Val_n2_por_validar_profesionalizacion), 'value_boton' => 'Enviar a corrección por nivel 2', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'corrección', 'color_status' => 'CORRECCION', 'est_apr_para_validacion'=>array(Enum_ev::Val_n1_por_validar_n2, Enum_ev::En_revision_n2, Enum_ev::Correccion_n2)),
     Enum_ev::Validado => array('value' => 'Validado profesionalización', 'rol_permite' =>array(),'estados_transicion' => array(), 'value_boton' => 'Validar', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'validación', 'color_status' => 'VALIDO'),
+);*/
+$config['estados_val_censo'] = array(
+    Enum_ev::Inicio => array('value' => 'Inicio', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => '', 'funcion_demandada' => '', 'value_boton' => '', 'tipo_transaccion'=>'', 'color_status' => '', 'cambiar_estado_revision' => false),
+    Enum_ev::Incompleta => array('value' => 'Incompleta', 'rol_permite' =>array(Enum_rols::Docente), 'estados_transicion' => array(), 'value_boton' => '', 'tipo_transaccion'=>'', 'color_status' => '', 'cambiar_estado_revision' => false), 
+    Enum_ev::Completa => array('value' => 'Completa', 'rol_permite' => array(Enum_rols::Docente), 'estados_transicion' => array(Enum_ev::Por_validar_n1), 'value_boton' => 'Enviar a validación', 'funcion_demandada' => '', 'tipo_transaccion'=>'', 'color_status' => 'NO_VALIDO', 'cambiar_estado_revision' => false), 
+    Enum_ev::Por_validar_n1 => array('value' => 'Por validar N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::En_revision_n1), 'value_boton' => 'Enviar a revisión nivel 1', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'', 'color_status' => 'REVISION', 'cambiar_estado_revision' => true),
+    Enum_ev::En_revision_n1 => array('value' => 'En revisión N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::Correccion_docente, Enum_ev::Val_n1_por_validar_n2), 'value_boton' => 'Enviar a revisión nivel 1', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)' ,'is_boton' => FALSE, 'tipo_transaccion'=>'revisión', 'color_status' => 'REVISION', 'cambiar_estado_revision' => false, 'est_apr_para_validacion'=>array(Enum_ev::Por_validar_n1, Enum_ev::En_revision_n1, Enum_ev::Correccion_n1)),
+    Enum_ev::Correccion_docente => array('value' => 'Corrección docente', 'rol_permite' =>  array(Enum_rols::Docente),'estados_transicion' => array(Enum_ev::Por_validar_n1), 'value_boton' => 'Enviar a corrección por docente', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'corrección', 'color_status' => 'CORRECCION', 'cambiar_estado_revision' => false),
+    Enum_ev::Val_n1_por_validar_n2 => array('value' => 'Validado Nivel 1-Por validar Nivel 2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::En_revision_n2), 'value_boton' => 'Enviar a validar por nivel 2', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)','is_boton' => TRUE, 'tipo_transaccion'=>'validación', 'color_status' => 'VALIDO', 'cambiar_estado_revision' => true),
+    Enum_ev::En_revision_n2 => array('value' => 'En revisión N2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::Correccion_n1, Enum_ev::Val_n2_por_validar_profesionalizacion), 'value_boton' => 'Enviar a revisión nivel 2', 'funcion_demandada' => 'envio_revision(this)','is_boton' => FALSE, 'tipo_transaccion'=>'revisión', 'color_status' => 'REVISION', 'cambiar_estado_revision' => false, 'est_apr_para_validacion'=>array(Enum_ev::Val_n1_por_validar_n2, Enum_ev::En_revision_n2, Enum_ev::Correccion_n2)),
+    Enum_ev::Correccion_n1 => array('value' => 'Corrección N1', 'rol_permite' =>array(Enum_rols::Validador_N1),'estados_transicion' => array(Enum_ev::Correccion_docente, Enum_ev::Val_n1_por_validar_n2), 'value_boton' => 'Enviar a corrección por nivel 1', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'corrección', 'color_status' => 'CORRECCION', 'cambiar_estado_revision' => false, 'est_apr_para_validacion'=>array(Enum_ev::Por_validar_n1, Enum_ev::En_revision_n1, Enum_ev::Correccion_n1)),
+    Enum_ev::Val_n2_por_validar_profesionalizacion => array('value' => 'Validado Nivel 2-Por validar profesionalización', 'rol_permite' =>array(Enum_rols::Profesionalizacion),'estados_transicion' => array(Enum_ev::En_revision_profesionalizacion), 'value_boton' => 'Enviar a validar por profesionalización', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'validación', 'color_status' => 'VALIDO', 'cambiar_estado_revision' => true),
+    Enum_ev::En_revision_profesionalizacion => array('value' => 'En revisión profesionalización', 'rol_permite' =>array(Enum_rols::Profesionalizacion),'estados_transicion' => array(Enum_ev::Correccion_n2, Enum_ev::Validado), 'value_boton' => 'Enviar a revisión profesionalización', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => FALSE, 'tipo_transaccion'=>'revisión', 'color_status' => 'REVISION', 'cambiar_estado_revision' => false, 'est_apr_para_validacion'=>array(Enum_ev::Val_n2_por_validar_profesionalizacion, Enum_ev::En_revision_profesionalizacion)),
+    Enum_ev::Correccion_n2 => array('value' => 'Corrección N2', 'rol_permite' =>array(Enum_rols::Validador_N2),'estados_transicion' => array(Enum_ev::Correccion_n1, Enum_ev::Val_n2_por_validar_profesionalizacion), 'value_boton' => 'Enviar a corrección por nivel 2', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'corrección', 'color_status' => 'CORRECCION', 'cambiar_estado_revision' => false, 'est_apr_para_validacion'=>array(Enum_ev::Val_n1_por_validar_n2, Enum_ev::En_revision_n2, Enum_ev::Correccion_n2)),
+    Enum_ev::Validado => array('value' => 'Validado profesionalización', 'rol_permite' =>array(),'estados_transicion' => array(), 'value_boton' => 'Validar', 'funcion_demandada' => 'envio_cambio_estado_validacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'validación', 'color_status' => 'VALIDO', 'cambiar_estado_revision' => false),
 );
 /**
  *  Array de los estados que conforman la validación para la evaluacion curricular del docente
- * 
+ *  @param : est_apr_para_validacion : Estados 
  *  
  */
 $config['estados_val_evaluacion'] = array(

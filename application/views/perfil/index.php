@@ -85,7 +85,7 @@ $string_values = $this->lang->line('interface');
                         $pos = strpos($value['ruta'], ':');
                         if ($pos > 0) {
                             $separa = explode(":", $value['ruta']);
-//                            $val = str_replace($array_quitar, "", $separa[0]);
+//                            $val = str_replace($array_quitar, "", $separa [0]);
                             $val = $separa[0];
                         } else {
 //                            $val = str_replace($array_quitar, "", $value['ruta']);

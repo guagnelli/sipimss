@@ -11,7 +11,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-Class empleado extends My_Model{
+Class Empleado_model extends My_Model{
 
 	private $EMP_NOMBRE; //varchar(30)
 	private $EMP_APE_PATERNO; //varchar(30)
@@ -47,13 +47,69 @@ Class empleado extends My_Model{
         $this->load->database();
     }
 
-    public function get($fields = array()){}
+    function get($args){
+    	if(isset($args["fields"])){
+    		if(is_array($args["fields"])){
+    			//echo $args["fields"] = implode(",",$args["fields"]);
+    		}
+    		$this->db->select($args["fields"]);
+    	}
+    	if(isset($args["conditions"])){
+    		$this->db->where($args["conditions"]);
+    	}
+    	$empleado = $this->db->get('empleado');
+    	return $empleado->result_array();
+    }
+
+    /**
+     * 
+     * @param int $identificador
+     */
+    public function getEmpleadoData($identificador) {
+        $this->db->select(array(
+            'EMPLEADO_CVE as emp_id',
+            'EMP_NOMBRE as nombre',
+            'EMP_APE_PATERNO as apellidoPaterno',
+            'EMP_APE_MATERNO as apellidoMaterno',
+            'EMP_CURP as curp',
+            //'EMP_EDAD as edad',
+            'EMP_ANTIGUEDAD as antiguedad',
+            'emp_fch_nac as fecha_nacimiento',
+            'EMP_GENERO as generoSelected',
+            'CESTADO_CIVIL_CVE as estadoCivilSelected',
+            'EMP_EMAIL as correoElectronico',
+            'EMP_TEL_PARTICULAR as telParticular',
+            'EMP_TEL_LABORAL as telLaboral',
+            'EMP_NUM_FUE_IMSS as empleosFueraImss',
+            'EMP_MATRICULA as matricula',
+            'DEL_NOMBRE as delegacion',
+            'NOM_CATEGORIA as nombreCategoria',
+            'EM.CATEGORIA_CVE as claveCategoria',
+            'ADS_NOM_AREA as nombreAreaAdscripcion',
+            'ADS_NOM_UNIDAD as nombreUnidadAdscripcion',
+            'EM.ADSCRIPCION_CVE as claveAdscripcion',
+            'TIP_CON_NOMBRE as tipoContratacion',
+            'EMP_TEL_PARTICULAR as estatusEmpleado',
+            'CP.PRE_NOMBRE as clavePresupuestal',
+            ''
+        ));
+        $this->db->from('empleado AS EM');
+        $this->db->join('cdelegacion AS CDEL', 'CDEL.DELEGACION_CVE = EM.DELEGACION_CVE', 'left');
+        $this->db->join('ccategoria AS CCAT', 'CCAT.ID_CAT = EM.CATEGORIA_CVE', 'left');
+        $this->db->join('adscripcion AS ADS', 'ADS.ADSCRIPCION_CVE = EM.ADSCRIPCION_CVE', 'left');
+        $this->db->join('ctipo_contratacion AS CTC', 'EM.tip_contratacion_cve =  CTC.tip_contratacion_cve', 'left');
+        $this->db->join('cdepartamento AS CD', 'CD.DEPARTAMENTO_CVE =  EM.DEPARTAMENTO_CVE', 'left');
+        $this->db->join('cpresupuestal AS CP', 'CP.PRESUPUESTAL_CVE =  CD.PRESUPUESTAL_CVE  ', 'left');
+        $this->db->where('EM.USUARIO_CVE', $identificador);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 
     /**
      * New object to the class. Don´t forget to save this new object "as new" by using the function $class->Save_Active_Row_as_New(); 
      *
      */
-	public function New_empleado($EMP_NOMBRE,-$EMP_APE_PATERNO,$EMP_APE_MATERNO,$EMP_CURP,$EMP_GENERO,$EMP_ANTIGUEDAD,$EMP_NUM_FUE_IMSS,$EMP_EMAIL,$EMP_TEL_LABORAL,$EMP_TEL_PARTICULAR,$CATEGORIA_CVE,$ADSCRIPCION_CVE,$DELEGACION_CVE,$emp_eje_pro_cve,$eje_pro_cve,$TIP_CONTRATACION_CVE,$CESTADO_CIVIL_CVE,$EDO_LABORAL_CVE,$emp_matricula,$USUARIO_CVE,$DEPARTAMENTO_CVE,$PRESUPUESTAL_ADSCRIPCION_CVE,$emp_fch_ingreso,$EMP_FCH_CREACION,$emp_fch_nac,$EMP_FCH_MODIF){
+	public function New_empleado($EMP_NOMBRE,$EMP_APE_PATERNO,$EMP_APE_MATERNO,$EMP_CURP,$EMP_GENERO,$EMP_ANTIGUEDAD,$EMP_NUM_FUE_IMSS,$EMP_EMAIL,$EMP_TEL_LABORAL,$EMP_TEL_PARTICULAR,$CATEGORIA_CVE,$ADSCRIPCION_CVE,$DELEGACION_CVE,$emp_eje_pro_cve,$eje_pro_cve,$TIP_CONTRATACION_CVE,$CESTADO_CIVIL_CVE,$EDO_LABORAL_CVE,$emp_matricula,$USUARIO_CVE,$DEPARTAMENTO_CVE,$PRESUPUESTAL_ADSCRIPCION_CVE,$emp_fch_ingreso,$EMP_FCH_CREACION,$emp_fch_nac,$EMP_FCH_MODIF){
 		$this->EMP_NOMBRE = $EMP_NOMBRE;
 		$this->EMP_APE_PATERNO = $EMP_APE_PATERNO;
 		$this->EMP_APE_MATERNO = $EMP_APE_MATERNO;

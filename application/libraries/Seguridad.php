@@ -106,7 +106,7 @@
         return $password;
     }
 
-    public function verificar_liga_validar($IS_VALIDO_PROFESIONALIZACION=null){
+    public function verificar_liga_validar($IS_VALIDO_PROFESIONALIZACION=null, $validation_estado=null, $validation_estado_anterior=null){
         //$this->CI->load->config('general');
         $flag_validar = false;
         $estados_val_censo = $this->CI->config->item('estados_val_censo'); ///Obtener listado de estados de la validación, definidos en archivo de configuración
@@ -114,10 +114,80 @@
         $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Obtener de sesión el estado actual de la validación
         //pr($this->CI->session->userdata());
         //pr($estados_val_censo[$estado_validacion_actual]['rol_permite']);
-        //echo $IS_VALIDO_PROFESIONALIZACION."|".$rol_validador_actual."|".$estado_validacion_actual;
+        //echo $IS_VALIDO_PROFESIONALIZACION."|".$rol_validador_actual."|".$estado_validacion_actual; pr('<br>');
+        $fue_validado = $this->CI->session->userdata('datosvalidadoactual')['estado']['fue_validado'];
         if($IS_VALIDO_PROFESIONALIZACION==0 && in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite'])){
-            $flag_validar = true;
+            //pr('////////////////////////////////////////////////');
+            //pr('entro');
+            if($fue_validado['result']==true){
+                //pr('entro1: '.$validation_estado_anterior.'|'.$this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id']);
+                if($validation_estado_anterior == $this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id']){
+                    /*pr('entro2');
+                    pr('/////////');
+                    pr($validation_estado_anterior);
+                    pr($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id']);*/
+                    $flag_validar = true;
+                }
+            } else {
+                //pr('else');
+                $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+                if($this->CI->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->CI->config->item('CORRECCION')
+                    && ($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] != $validation_estado)) { //Validar estado en corrección
+                    $flag_validar = false;
+                    //pr('else2');
+                } else {
+                    $flag_validar = true;
+                }
+            }
         }
-    return $flag_validar;
-}
+        return $flag_validar;
+    }
+
+    /*public function verificar_estado_correccion($estado, $btn){
+        $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+        if($this->CI->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->CI->config->item('CORRECCION')
+            && ($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] != $estado)) { //Validar estado en corrección
+            $btn = '';
+        }
+
+        return $btn;
+    }*/
+
+    public function html_verificar_validacion_registro($is_validado, $is_valido_profesionalizacion, $estado_actual, $validation_estado_anterior){
+        $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+        $fue_validado = $this->CI->session->userdata('datosvalidadoactual')['estado']['fue_validado'];
+        //pr($this->CI->session->userdata());
+        $html_valido = '<span class="class_validacion_registro ' . (($is_valido_profesionalizacion == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($is_valido_profesionalizacion == 1) ? 'Validación confirmada por profesionalización' : 'Validación realizada') . '"></span>';
+        $html = $html_no_valido = '-';
+
+
+        $estados_val_censo = $this->CI->config->item('estados_val_censo'); ///Obtener listado de estados de la validación, definidos en archivo de configuración
+        $rol_validador_actual = $this->CI->session->userdata('datos_validador')['ROL_CVE']; //Obtener de sesión el rol del usuario que validará
+        $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Obtener de sesión el estado actual de la validación
+        //pr($estados_val_censo);
+        //pr($rol_validador_actual);
+        //pr($estado_validacion_actual);
+        //pr(in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite']));
+        //pr($fue_validado['result']);
+        if(in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite'])==false && $fue_validado['result']==false){
+            $html = $html_no_valido;
+        } elseif(in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite'])==false && $fue_validado['result']==true){
+            //pr(in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite']));
+            $html = $html_valido;
+            //pr('***');
+        } else {
+            //pr('////');
+            //echo $is_validado."|".$is_valido_profesionalizacion."|".$estado_actual."|".$validation_estado_anterior; pr('<br>');
+            $html = ($is_validado > 0 || $is_valido_profesionalizacion == 1 || 
+                    ($this->CI->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->CI->config->item('CORRECCION')
+                        && ($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] != $estado_actual))
+                )
+                ? $html_valido : $html_no_valido;
+            if($fue_validado['result']==true && $validation_estado_anterior != $this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id']
+                && $is_validado == 0){ ///Modificar icono en caso de que se haya validado con anterioridad y el estado de la anterior validación sea corrección
+                $html = $html_valido;
+            }
+        }
+        return $html;
+    }
 }

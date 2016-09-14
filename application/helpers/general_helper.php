@@ -691,13 +691,13 @@ if (!function_exists('antiguedad_format')) {
 }
 /* End of file general_helper.php */
 
-if (!function_exists('html_verificar_validacion_registro')) {
+/*if (!function_exists('html_verificar_validacion_registro')) {
 
     function html_verificar_validacion_registro($valor = 0, $color = 0) {
         return ($valor > 0 || $color == 1) ? '<span class="class_validacion_registro ' . (($color == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($color == 1) ? 'Validación confirmada por profesionalización' : 'Validación realizada') . '"></span>' : '-';
     }
 
-}
+}*/
 
 if (!function_exists('genera_botones_estado_validacion')) {
 

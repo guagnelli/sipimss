@@ -52,6 +52,8 @@ class MY_Model extends CI_Model {
     	$this->tabla = $tabla;
     }
 
-    function toString(){}
+    function toString(){
+    	$this->getNombre();
+    }
 
 }

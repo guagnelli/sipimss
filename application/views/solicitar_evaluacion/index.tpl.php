@@ -51,7 +51,9 @@
         <!--/ info row -->
       <?php 
       echo form_open('secd'); 
+          pr($empleado);
           pr($actividades);
+
       ?>
       <div class="box-group" id="accordion">    
       <?php
