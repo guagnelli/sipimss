@@ -403,9 +403,11 @@ class Validacion_censo_profesores extends MY_Controller {
         $parametro_hist_actual_mod['IS_ACTUAL'] = 0;
 
         $pasa_validacion = 1;
+        $estado_actual = $this->session->userdata('datosvalidadoactual')['est_val'];
+        $prop_estado = $this->config->item('estados_val_censo')[$estado_actual];
+        
         //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
         if (isset($prop_estado['est_apr_para_validacion'])) {
-            $prop_estado = $this->config->item('estados_val_censo')[$estado_cambio_cve];
             $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
             $this->load->model('Validacion_docente_model', 'vdm');
             $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);

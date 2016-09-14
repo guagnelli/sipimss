@@ -676,7 +676,7 @@ class Perfil extends MY_Controller {
 
             if (!empty($data['ejercicio_profesional']['emp_eje_pro_cve'])) { //En caso de que exista valor en ejercicio profesional
                 $data['formacion_salud']['inicial'] = $this->fm->get_formacion_salud(array('conditions' => array('EMPLEADO_CVE' => $this->session->userdata('idempleado'), 'EFPCS_FOR_INICIAL' => 1), 'order' => 'EFPCS_FCH_INICIO desc', 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE'));
-                $data['formacion_salud']['continua'] = $this->fm->get_formacion_salud(array('conditions' => array('EMPLEADO_CVE=' . $this->session->userdata('idempleado'), 'EFPCS_FOR_INICIAL' => 2), 'order' => 'EFPCS_FCH_INICIO desc', 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE'));
+                $data['formacion_salud']['continua'] = $this->fm->get_formacion_salud(array('conditions' => array('EMPLEADO_CVE' => $this->session->userdata('idempleado'), 'EFPCS_FOR_INICIAL' => 2), 'order' => 'EFPCS_FCH_INICIO desc', 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE'));
             } else {
                 $data['formacion_salud']['inicial'] = array();
                 $data['formacion_salud']['continua'] = array();
