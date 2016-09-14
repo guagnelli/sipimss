@@ -527,6 +527,7 @@ class Validacion_docente_model extends CI_Model {
             $result_estados .= $or . ' hv.VAL_ESTADO_CVE = ' . $value;
             $or = ' or ';
         }
+        $where_estados = ' hgn.VAL_CUR_EST_CVE in(1,2) ';
 
         $select = 'select sum(A1) "num_registros_cargados", sum(B1) "num_registros_est_valido"  
             from (
@@ -556,61 +557,61 @@ class Validacion_docente_model extends CI_Model {
             from hist_comision_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Formacion en salud*/
             select 0 "A1", count(*) "B1"
             from hist_fpcs_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Investigacion en salud*/
             select 0 "A1", count(*) "B1"
             from hist_edis_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Investigación educativa*/
             select 0 "A1", count(*) "B1"
             from hist_eaid_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Beca*/
             select 0 "A1", count(*) "B1"
             from hist_beca_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*formación profesional*/
             select 0 "A1", count(*) "B1"
             from hist_efp_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Material educativo*/
             select 0 "A1", count(*) "B1"
             from hist_me_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Educación a distancia*/
             select 0 "A1", count(*) "B1"
             from hist_edd_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and ( ' . $result_estados . ' ) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and ( ' . $result_estados . ' ) and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Especialidad medica*/
             select 0 "A1", count(*) "B1"
             from hist_eem_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             union /*Actividad docente*/
             select 0 "A1", count(*) "B1"
             from hist_efpd_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  ' . $where_estados . ' and (' . $result_estados . ') and  vg.EMPLEADO_CVE = ' . $empleado . '
             ) as res';
 
         $query = $this->db->query($select)->result();
@@ -620,7 +621,7 @@ class Validacion_docente_model extends CI_Model {
         if (!empty($query)) {
             $num_reg_cargados = intval($query[0]->num_registros_cargados);
             $numero_registros_validos = intval($query[0]->num_registros_est_valido);
-            $is_validados = ($num_reg_cargados == $numero_registros_validos)?1:0; //Si el valor es igual, entonces todo se encuentra validado
+            $is_validados = ($num_reg_cargados == $numero_registros_validos) ? 1 : 0; //Si el valor es igual, entonces todo se encuentra validado
         }
 //        pr($this->db->last_query());
         return $is_validados;

@@ -398,7 +398,7 @@ $lang['interface'] = array(
         'text_estado_revision' => 'En revisión',
         'msj_no_completo_envio_validacion_censo' => 'No es posible enviar a validación del censo en este momento, 
         para ello requiere cumplir con los siguientes requisitos. <br> 1. Debe contar por lo menos con una actividad de docente. 
-        <br> 2.- Debe contar por lo menos con un registro de formación en salud.
+        <br> 2.- Debe contar por lo menos con un registro de formación en salud. <br> 3.- Debe seleccionar un curso principal en actividad docente 
         ',
         'msj_envio_validacion'=>'Envió de datos a validación del censo',
     ),
