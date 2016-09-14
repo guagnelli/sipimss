@@ -41,21 +41,23 @@ class Material_educativo_model extends CI_Model {
             return -1;
         }
         /////////////////////////////////Inicio verificación existencia de validación actual
-        $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
-        $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
-        $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
-        
-        if(!is_null($subquery)){
-            $this->db->select('('.$subquery.') AS validation');
-        }
-        if(!is_null($subquery1)){
-            $this->db->select('('.$subquery1.') AS validation_estado');
-        }
-        if(!is_null($subquery2)){
-            $this->db->select('('.$subquery2.') AS validation_estado_anterior');
+        if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
+            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
+            $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
+            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
+            
+            if(!is_null($subquery)){
+                $this->db->select('('.$subquery.') AS validation');
+            }
+            if(!is_null($subquery1)){
+                $this->db->select('('.$subquery1.') AS validation_estado');
+            }
+            if(!is_null($subquery2)){
+                $this->db->select('('.$subquery2.') AS validation_estado_anterior');
+            }
         }
         ////////////////////////////////Fin verificación existencia de validación actual
-        
+
         $select = array('eme.MATERIA_EDUCATIVO_CVE "emp_material_educativo_cve"',
             'eme.NOMBRE_MATERIAL_EDUCATIVO "nombre_material"',
             'eme.MAT_EDU_ANIO "material_educativo_anio"', 'eme.COMPROBANTE_CVE "comprobante"',
