@@ -128,7 +128,6 @@ $lang['interface'] = array(
         'plh_formacion_salud_formacion_profesional' => 'Seleccione una formación profesional',
         'plh_formacion_salud_subtipo_formacion_profesional' => 'Seleccione un subtipo de formación profesional',
         'save_estado_cambio_envio' => 'El envío a validación se efectuo correctamente',
-        'save_estado_error' => 'No fue posible enviar a validación. <br>Por favor intente más tarde',
     ),
     //Selección de roles del usuario 
     'rol' => array(
@@ -396,7 +395,12 @@ $lang['interface'] = array(
         'titulo_estado_validacion' => 'Estado de la validación: ',
         'drop_delegacion' => 'Seleccione delegación',
         'lbl_delegacion' => 'Delegación',
-        'text_estado_revision' => 'En revisión'
+        'text_estado_revision' => 'En revisión',
+        'msj_no_completo_envio_validacion_censo' => 'No es posible enviar a validación del censo en este momento, 
+        para ello requiere cumplir con los siguientes requisitos. <br> 1. Debe contar por lo menos con una actividad de docente. 
+        <br> 2.- Debe contar por lo menos con un registro de formación en salud.
+        ',
+        'msj_envio_validacion'=>'Envió de datos a validación del censo',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',

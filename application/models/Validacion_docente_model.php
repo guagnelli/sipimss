@@ -398,14 +398,13 @@ class Validacion_docente_model extends CI_Model {
             'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "est_val"', 'vg.VAL_CONV_CVE',
             'hv.VAL_COMENTARIO "comentario_estado"');
         $this->db->where('hv.IS_ACTUAL', 1); //Para obtener el último registro de la actualización
-        $this->db->where('vg.VAL_CONV_CVE', $convocatoria); 
+        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
         $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
         $this->db->select($select);
 
         $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
 
         $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
-//        pr($this->db->last_query());
 //        pr($query);
 //        if (!is_null($query->row()) AND is_object($query->row())) {
         $row_query = $query->result_array();
@@ -416,6 +415,7 @@ class Validacion_docente_model extends CI_Model {
         if (!empty($row_query)) {
             $row_query = $row_query[0];
         }
+//        pr($this->db->last_query());
         return $row_query;
     }
 
@@ -442,6 +442,7 @@ class Validacion_docente_model extends CI_Model {
         $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.VALIDADOR_CVE');
         $this->db->join('cvalidacion_estado cve', 'cve.VAL_ESTADO_CVE = hv.VAL_ESTADO_CVE');
         $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE');
+        $this->db->order_by('hv.VALIDACION_CVE', "desc");
         $this->db->order_by('vg.VAL_CONV_CVE', "desc");
         $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
 //        pr($this->db->last_query());
@@ -530,25 +531,25 @@ class Validacion_docente_model extends CI_Model {
         $select = 'select sum(A1) "num_registros_cargados", sum(B1) "num_registros_est_valido"  
             from (
             /*Comisiones academicas*/
-            select count(*) "A1", 0 "B1"  from emp_comision where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1"  from emp_comision where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union/*Formacion en salud*/
-            select count(*) "A1", 0 "B1" from emp_for_personal_continua_salud where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_for_personal_continua_salud where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union /*Investigacion en salud*/
             select count(*) "A1", 0 "B1" from emp_desa_inv_salud where EMPLEADO_CVE = ' . $empleado . '
             union /*Investigación educativa*/
-            select count(*) "A1", 0 "B1" from emp_act_inv_edu where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_act_inv_edu where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union /*Beca*/
-            select count(*) "A1", 0 "B1" from emp_beca where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_beca where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union /*formación profesional*/
-            select count(*) "A1", 0 "B1" from emp_formacion_profesional where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_formacion_profesional where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union /*Material educativo*/
-            select count(*) "A1", 0 "B1" from emp_materia_educativo where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_materia_educativo where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union /*Educación a distancia*/
-            select count(*) "A1", 0 "B1" from emp_educacion_distancia where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_educacion_distancia where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union /*Especialidad medica*/
-            select count(*) "A1", 0 "B1" from emp_esp_medica where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_esp_medica where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union /*Actividad docente*/
-            select count(*) "A1", 0 "B1" from emp_actividad_docente where EMPLEADO_CVE = ' . $empleado . '
+            select count(*) "A1", 0 "B1" from emp_actividad_docente where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0
             union 
             /*Comisiones academicas*/
             select 0 "A1", count(*) "B1"
@@ -614,10 +615,15 @@ class Validacion_docente_model extends CI_Model {
 
         $query = $this->db->query($select)->result();
         $this->db->reset_query();
+        $is_validados = 1;
+//        pr($query);
         if (!empty($query)) {
-            $query = $query[0];
+            $num_reg_cargados = intval($query[0]->num_registros_cargados);
+            $numero_registros_validos = intval($query[0]->num_registros_est_valido);
+            $is_validados = ($num_reg_cargados == $numero_registros_validos)?1:0; //Si el valor es igual, entonces todo se encuentra validado
         }
-        return $query;
+//        pr($this->db->last_query());
+        return $is_validados;
     }
 
 }

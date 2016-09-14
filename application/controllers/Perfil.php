@@ -61,8 +61,7 @@ class Perfil extends MY_Controller {
         $this->load->model('Validacion_docente_model', 'vdm');
         $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
         $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
-
-
+        //        pr($this->session->userdata());
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
@@ -3291,7 +3290,7 @@ class Perfil extends MY_Controller {
             $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
             $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
             $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion'); //Asignamos id usuario a variable
-                    
+
             $data = array();
 //            pr($this->session->userdata());
             $tipo_msg = $this->config->item('alert_msg');
@@ -3337,7 +3336,8 @@ class Perfil extends MY_Controller {
                         $data['pie_pag'] = $pie_pag;
                         $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
                     } else {
-                        
+                        $data['mensaje'] = $string_values['msj_no_completo_envio_validacion_censo'];
+                        $this->load->view('perfil/enviar_validacion/mensajes_info', $data, FALSE);
                     }
                 }
             }
@@ -3453,11 +3453,12 @@ class Perfil extends MY_Controller {
 
     private function validar_cursos_status_completa_docente() {
         $empleado_id = $this->session->userdata('idempleado');
-        pr('-------------------------------');
-        pr($empleado_id);
-        pr('-------------------------------');
+//        pr('-------------------------------');
+//        pr($empleado_id);
+//        pr('-------------------------------');
 //        $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
         $datos_validacion = $this->modPerfil->get_estado_valida_completa($empleado_id);
+//        pr($datos_validacion);
         if ($datos_validacion->total_prof_salud > 0 AND $datos_validacion->total_act_docente > 0) {//Cambio de estado a completo 
 //            pr($datos_validacion);
             $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion');
@@ -3468,7 +3469,9 @@ class Perfil extends MY_Controller {
                 //Carga parametros para hist_validación
                 $parametros_hist['VAL_ESTADO_CVE'] = Enum_ev::Completa;
                 $parametros_hist['IS_ACTUAL'] = 1;
-
+                $this->lang->load('interface', 'spanish');
+                $mensaje_envio_validacion = $this->lang->line('interface')['validador_censo']; //Carga textos a utilizar 
+                $parametros_hist['VAL_COMENTARIO'] = $mensaje_envio_validacion['msj_envio_validacion'];
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $result_cam_estado = $this->vdm->insert_inicio_estado_correccion($parametros_hist, $parametro_gral);
                 //Efectúa la actualización del nuevo estado
