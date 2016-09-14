@@ -1811,7 +1811,7 @@ class Validacion_censo_profesores extends MY_Controller {
             }
             /////////Fin agregar validaciones de estado
 
-            $data['lista_investigaciones'] = $this->id->get_lista_datos_investigacion_docente($this->obtener_id_empleado(), array_merge(array('validation' => array('table' => 'hist_eaid_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_eaid_validacion_curso.EAID_CVE=eaid.EAID_CVE AND VALIDACION_CVE=' . $validacion_cve_session), $val_correc_inv, $validation_est_corr_inv)));
+            $data['lista_investigaciones'] = $this->id->get_lista_datos_investigacion_docente($this->obtener_id_empleado(), array_merge(array('validation' => array('table' => 'hist_eaid_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_eaid_validacion_curso.EAID_CVE=eaid.EAID_CVE AND VALIDACION_CVE=' . $validacion_cve_session)), $val_correc_inv, $validation_est_corr_inv));
             $this->load->view('validador_censo/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrán la lista
             /* } else {
               //Error, No existe el empleado
@@ -3814,71 +3814,56 @@ class Validacion_censo_profesores extends MY_Controller {
 }
 
 class Validacion_registro_dao {
-
     //public $HIST_VAL_CURSO_CVE;
     public $VALIDACION_CVE;
     public $VAL_CUR_EST_CVE;
     public $VAL_CUR_COMENTARIO;
-
     //public $VAL_CUR_FCH;
     //public $EMP_COMISION_CVE;
 }
 
 class Emp_comision_dao {
-
     //public $EMP_COMISION_CVE;
     public $EMPLEADO_CVE;
     public $TIP_COMISION_CVE;
     public $COMPROBANTE_CVE;
-
 }
 
 class Direccion_tesis_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $COM_AREA_CVE;
     public $NIV_ACADEMICO_CVE;
-
 }
 
 class Comite_educacion_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $TIP_CURSO_CVE;
-
 }
 
 class Sinodal_examen_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $NIV_ACADEMICO_CVE;
-
 }
 
 class Coordinador_tutores_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $EC_FCH_INICIO;
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
     public $CURSO_CVE;
-
 }
 
 class Coordinador_curso_dao extends Emp_comision_dao {
-
     public $EC_ANIO;
     public $EC_FCH_INICIO;
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
     public $CURSO_CVE;
-
 }
 
 class Formacion_salud_dao {
-
     //public $FPCS_CVE;
     public $EMPLEADO_CVE;
     public $COMPROBANTE_CVE;
@@ -3887,11 +3872,9 @@ class Formacion_salud_dao {
     public $EFPCS_FOR_INICIAL;
     public $TIP_FORM_SALUD_CVE;
     public $CSUBTIP_FORM_SALUD_CVE;
-
 }
 
 class Formacion_docente_dao {
-
     //public $EMP_FORMACION_PROFESIONAL_CVE;
     public $EMPLEADO_CVE;
     public $COMPROBANTE_CVE;
@@ -3905,13 +3888,10 @@ class Formacion_docente_dao {
     public $SUB_FOR_PRO_CVE;
     public $EFO_ANIO_CURSO;
     public $EFP_NOMBRE_CURSO;
-
 }
 
 class Formacion_docente_tematica_dao {
-
     //public $RFORM_PROF_TEMATICA_CVE;
     public $TEMATICA_CVE;
     public $EMP_FORMACION_PROFESIONAL_CVE;
-
 }
