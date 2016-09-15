@@ -983,7 +983,7 @@ class Perfil extends MY_Controller {
      * author LEAS
      * Guarda actividad docente general
      */
-    public function seccion_actividad_docente() {
+    public function seccion_actividad_docente() {   
 //        pr($_SERVER);
         $data = array();
         $tipo_msg = $this->config->item('alert_msg');
@@ -1129,6 +1129,7 @@ class Perfil extends MY_Controller {
                         //Carga dsatos de píe 
                         $datos_pie['tp_actividad_cve'] = $id_tp_act_doc;
                         $datos_pie['act_doc_cve'] = $this->input->post('act_doc_cve');
+                        $datos_pie['string_values'] = $string_values;
                         //Todo lo de comprobante *********************************************************
                         $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
                         $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
@@ -1720,6 +1721,7 @@ class Perfil extends MY_Controller {
                 if (isset($datos_post['cve_inv'])) {
                     $datos_pie['cve_inv'] = $datos_post['cve_inv'];
                     $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
+                    $datos_pie['string_values'] = $string_values;
                     $id_inv = $this->seguridad->decrypt_base64($datos_post['cve_inv']);
                     $data_investigacion_load = $this->idm->get_datos_investigacion_docente(intval($id_inv)); //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
                     if (!empty($data_investigacion_load)) {//Si es diferente de vacio 
@@ -2144,6 +2146,7 @@ class Perfil extends MY_Controller {
             $datos_mat_edu['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
             //**** fi de comprobante *******************************************
             $datos_pie = array();
+            $datos_pie['string_values'] = $string_values;
             $data = array(
                 'titulo_modal' => $string_values['title_material_eduacativo'],
                 'cuerpo_modal' => $this->load->view('perfil/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE),
@@ -2705,6 +2708,7 @@ class Perfil extends MY_Controller {
             $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cclase_beca, enum_ecg::cbeca_interrumpida, enum_ecg::cmotivo_becado);
             $data_becas = carga_catalogos_generales($entidades_, $data_becas);
             $datos_pie = array();
+            $datos_pie['string_values'] = $string_values;
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
@@ -2732,6 +2736,7 @@ class Perfil extends MY_Controller {
             $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
             $data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
             $datos_pie = array();
+            $datos_pie['string_values'] = $string_values;
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);

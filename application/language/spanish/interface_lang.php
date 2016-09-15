@@ -259,6 +259,9 @@ $lang['interface'] = array(
         'msj_selecciona_actividad_docente' => 'Debe seleccionar una actividad docente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
     ),
     'investigacion_docente' => array(
         'title_investigacion' => 'Investigación',
@@ -302,6 +305,9 @@ $lang['interface'] = array(
         'update_investigacion_docente' => 'La información de investigación docente se actualizo correctamente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
     ),
     'designar_validador' => array(
         'placeholder_formato_fecha' => 'AAAA-MMDD',
@@ -540,6 +546,10 @@ $lang['interface'] = array(
         'succesfull_actualizar' => 'Los datos se actualizarón correctamente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
+            
     ),
     'material_educativo' => array(
         'placeholder_formato_fecha' => 'AAAA-MMDD',
@@ -564,10 +574,8 @@ $lang['interface'] = array(
         'lbl_tipo_material_anio_elaboro' => 'Año que elaboró material educativo',
         'texto_tipo_material_anio_elaboro' => 'Año en que elaboró',
         'drop_tipo_material' => 'Seleccione el tipo de material educativo',
-
         'drop_cantidad_hojas' => 'Seleccione cantidad de hojas',
         'lbl_cantidad_hojas' => 'Cantidad de hojas',
-
         'lbl_nombre_unidad' => 'Nombre de la unidad',
         'text_nombre_unidad' => 'Nombre de la unidad',
         'lbl_numero_horas' => 'Número de horas',
@@ -584,6 +592,9 @@ $lang['interface'] = array(
         'succesfull_actualizar' => 'Los datos de material educativo se actualizarón correctamente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
     ),
     'password_reset'=>array(
         'title_begin_password_reset' => 'Recuperar tu contraseña en SIPIMSS',

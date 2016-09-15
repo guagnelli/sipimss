@@ -409,16 +409,24 @@ class Validacion_censo_profesores extends MY_Controller {
         $estado_actual = $this->session->userdata('datosvalidadoactual')['est_val'];
         $prop_estado = $this->config->item('estados_val_censo')[$estado_actual];
 
+//        pr($prop_estado);
         //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
         if (isset($prop_estado['est_apr_para_validacion'])) {
-            $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
-            $this->load->model('Validacion_docente_model', 'vdm');
-            $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
+            if ($estado_cambio_cve == Enum_ev::Val_n1_por_validar_n2 || $estado_cambio_cve == Enum_ev::Val_n2_por_validar_profesionalizacion || $estado_cambio_cve == Enum_ev::Validado) {
+                //Validación 
+                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
+                $this->load->model('Validacion_docente_model', 'vdm');
+                $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
+            } else {//corrección
+            
+                
+            }
         }
-
+//        pr($pasa_validacion);
         if ($pasa_validacion) {
             //Efectúa la actualización del nuevo estado
             $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual);
+//            pr($result_cam_estado);
             if (!empty($result_cam_estado)) {
                 $this->actualizar_estado_validar_a_revision($validacion_id, $tabla_validacion, $validacion_registro, $result_cam_estado['VALIDACION_CVE']);
 

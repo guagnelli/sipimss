@@ -3,7 +3,7 @@
     <div class="row">
         <!--<div class="col-xs-12 col-sm-12 col-md-6 text-right rightSpring" >-->
         <div class="col-xs-6 col-sm-6 col-md-6 text-right ">
-            <button type="button" id="close_modal_censo" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal"><?php echo $string_values['btn_cerrar'];?></button>
         </div>
         <!--</div>-->
         <?php if (isset($act_doc_cve)) {//Actualizar?> 
@@ -13,7 +13,7 @@
                         data-comprobantecve= "<?php echo $comprobantecve; ?>" 
                         data-tpactividadcve="<?php echo (isset($tp_actividad_cve)) ? $tp_actividad_cve : ''; ?>"
                         onclick="funcion_actualizar_actividad_docente(this)" >
-                    Actualizar 
+                    <?php echo $string_values['btn_actualizar'];?> 
                 </button>
             </div>
         <?php } else { //Guardar ?> 
@@ -21,7 +21,7 @@
                 <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-success"
                         data-actgralcve="<?php echo (isset($act_gral_cve))?$act_gral_cve :''; ?> "
                         onclick="funcion_guardar(this)" >
-                    Guardar
+                    <?php echo $string_values['btn_guardar'];?>
                 </button>
             </div>
         <?php } ?> 
