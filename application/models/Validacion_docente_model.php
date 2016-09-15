@@ -367,6 +367,7 @@ class Validacion_docente_model extends CI_Model {
 
         $this->db->where('EMPLEADO_CVE=', intval($empleado_cve));
         $this->db->where('ROL_CVE=', intval($rol_cve));
+        $this->db->where('IS_ACTUAL=', 1);
 
         $query = $this->db->get('validador'); //Obtener conjunto de registros
         //pr($this->db->last_query());

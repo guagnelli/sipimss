@@ -222,6 +222,7 @@ class Validacion_censo_profesores extends MY_Controller {
 
                 echo $this->load->view('validador_censo/index', $datosPerfil, true);
             }
+//            pr($this->session->userdata('datosvalidadoactual'));$datos_empleado_validar
         } else {
             redirect(site_url());
         }
@@ -321,8 +322,10 @@ class Validacion_censo_profesores extends MY_Controller {
             //Obtiene el historial completo de la validación del docente según la convocatoría
             $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($this->obtener_id_empleado(), $this->obtener_convocatoria());
             $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
-            $pie_pag = $this->load->view('validador_censo/valida_docente/opciones_validacion_pie', $data_pie, TRUE);
-            $data['pie_pag'] = $pie_pag;
+            if (!empty($data_pie['botones_validador'])) {
+                $pie_pag = $this->load->view('validador_censo/valida_docente/opciones_validacion_pie', $data_pie, TRUE);
+                $data['pie_pag'] = $pie_pag;
+            }
             $this->load->view('validador_censo/valida_docente/valida_docente_tpl', $data, FALSE);
         } else {
             redirect(site_url());
@@ -405,14 +408,14 @@ class Validacion_censo_profesores extends MY_Controller {
         $pasa_validacion = 1;
         $estado_actual = $this->session->userdata('datosvalidadoactual')['est_val'];
         $prop_estado = $this->config->item('estados_val_censo')[$estado_actual];
-        
+
         //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
         if (isset($prop_estado['est_apr_para_validacion'])) {
             $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
             $this->load->model('Validacion_docente_model', 'vdm');
             $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
         }
-        
+
         if ($pasa_validacion) {
             //Efectúa la actualización del nuevo estado
             $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual);
@@ -424,6 +427,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 $datos_empleado_validar['validador_cve'] = $result_cam_estado['VALIDADOR_CVE']; //Asigna el id del validador actual
                 $datos_empleado_validar['validacion_cve'] = $result_cam_estado['VALIDACION_CVE']; //Asigna nuevo id de la validacion historia
                 $datos_empleado_validar['est_val'] = $result_cam_estado['VAL_ESTADO_CVE']; //Asigna nuevo estado
+                $datos_empleado_validar['estado'] = $this->obtener_validacion_correccion($datos_empleado_validar['val_grl_cve']);
                 $this->session->set_userdata('datosvalidadoactual', $datos_empleado_validar); //Asigna datos nuevos datos del validado a la variable de sesión 
                 //Registra la bitacora
                 //Actualización 
@@ -3816,56 +3820,71 @@ class Validacion_censo_profesores extends MY_Controller {
 }
 
 class Validacion_registro_dao {
+
     //public $HIST_VAL_CURSO_CVE;
     public $VALIDACION_CVE;
     public $VAL_CUR_EST_CVE;
     public $VAL_CUR_COMENTARIO;
+
     //public $VAL_CUR_FCH;
     //public $EMP_COMISION_CVE;
 }
 
 class Emp_comision_dao {
+
     //public $EMP_COMISION_CVE;
     public $EMPLEADO_CVE;
     public $TIP_COMISION_CVE;
     public $COMPROBANTE_CVE;
+
 }
 
 class Direccion_tesis_dao extends Emp_comision_dao {
+
     public $EC_ANIO;
     public $COM_AREA_CVE;
     public $NIV_ACADEMICO_CVE;
+
 }
 
 class Comite_educacion_dao extends Emp_comision_dao {
+
     public $EC_ANIO;
     public $TIP_CURSO_CVE;
+
 }
 
 class Sinodal_examen_dao extends Emp_comision_dao {
+
     public $EC_ANIO;
     public $NIV_ACADEMICO_CVE;
+
 }
 
 class Coordinador_tutores_dao extends Emp_comision_dao {
+
     public $EC_ANIO;
     public $EC_FCH_INICIO;
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
     public $CURSO_CVE;
+
 }
 
 class Coordinador_curso_dao extends Emp_comision_dao {
+
     public $EC_ANIO;
     public $EC_FCH_INICIO;
     public $EC_FCH_FIN;
     public $EC_DURACION;
     public $TIP_CURSO_CVE;
     public $CURSO_CVE;
+
 }
 
 class Formacion_salud_dao {
+
     //public $FPCS_CVE;
     public $EMPLEADO_CVE;
     public $COMPROBANTE_CVE;
@@ -3874,9 +3893,11 @@ class Formacion_salud_dao {
     public $EFPCS_FOR_INICIAL;
     public $TIP_FORM_SALUD_CVE;
     public $CSUBTIP_FORM_SALUD_CVE;
+
 }
 
 class Formacion_docente_dao {
+
     //public $EMP_FORMACION_PROFESIONAL_CVE;
     public $EMPLEADO_CVE;
     public $COMPROBANTE_CVE;
@@ -3890,10 +3911,13 @@ class Formacion_docente_dao {
     public $SUB_FOR_PRO_CVE;
     public $EFO_ANIO_CURSO;
     public $EFP_NOMBRE_CURSO;
+
 }
 
 class Formacion_docente_tematica_dao {
+
     //public $RFORM_PROF_TEMATICA_CVE;
     public $TEMATICA_CVE;
     public $EMP_FORMACION_PROFESIONAL_CVE;
+
 }

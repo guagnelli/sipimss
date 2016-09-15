@@ -256,7 +256,7 @@ $config = array(
         array(
             'field' => 'actividad_anios_dedicados_docencia',
             'label' => 'años dedicados',
-            'rules' => 'required|greater_than[1]|numeric'
+            'rules' => 'required|greater_than[-1]|numeric'
         ),
         array(
             'field' => 'ejercicio_predominante',

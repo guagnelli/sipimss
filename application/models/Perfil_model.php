@@ -103,7 +103,7 @@ class Perfil_model extends CI_Model {
                     join emp_for_personal_continua_salud efpcs on efpcs.EMPLEADO_CVE = em.EMPLEADO_CVE
                     where em.EMPLEADO_CVE = ' . $id_empleado . '
                     union
-                    select 0 "count_salud", count(ead.EMPLEADO_CVE ) "count_act_doc"
+                    select 0 "count_salud", count(ead.EMPLEADO_CVE) "count_act_doc"
                     from empleado as em
                     join emp_actividad_docente ead on ead.EMPLEADO_CVE = em.EMPLEADO_CVE
                     join actividad_docente_gral ag on ag.EMPLEADO_CVE = em.EMPLEADO_CVE

@@ -43,6 +43,8 @@ class Actividad_docente_model extends CI_Model {
             $this->db->trans_rollback();
             $result['return'] = -1;
         } else {
+            $this->db->trans_commit();
+            $result['return'] = $index;
             $datos_actividad_docente['ACT_DOC_GRAL_CVE'] = $index;
             $result['actualizados'] = $datos_actividad_docente;
         }
@@ -137,7 +139,7 @@ class Actividad_docente_model extends CI_Model {
         $sead = $seed = $seem = '';
         $val_correc_sead = $validation_est_corr_sead = $val_correc_seed = $validation_est_corr_seed = $val_correc_seem = $validation_est_corr_seem = '';
         $estado_validacion_actual = $this->session->userdata('datosvalidadoactual'); //Estado actual de la validación
-        if (!empty($estado_validacion_actual) && isset($estado_validacion_actual['est_val']) && !empty($estado_validacion_actual['est_val']) && $this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
+        if (isset($estado_validacion_actual) && isset($estado_validacion_actual['est_val']) && !empty($estado_validacion_actual['est_val']) && $this->config->item('estados_val_censo')[$estado_validacion_actual['est_val']]['color_status'] == $this->config->item('cvalidacion_curso_estado')['CORRECCION']) { ///Verificar que se encuentre en estado corrección para poder agregar
             $val_correc_sead = '(SELECT VAL_CUR_EST_CVE FROM hist_efpd_validacion_curso WHERE
                 hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND 
                 VALIDACION_CVE != ' . $validacion_cve_session . ' order by VAL_CUR_FCH DESC limit 1) AS validation_estado, ';

@@ -991,6 +991,7 @@ class Perfil extends MY_Controller {
         $string_values = $this->lang->line('interface')['actividad_docente'];
         $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
         $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
+        $guardado_correcto = '';
 //        pr($actividad_docente);
         if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
             $this->config->load('form_validation'); //Cargar archivo con validaciones
@@ -1013,11 +1014,13 @@ class Perfil extends MY_Controller {
                             $data['error'] = $string_values['error_insertar']; //Mensaje de que no encontro empleado
                             $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                         } else {//Los datos se insertaron correctamente
-                            $data['error'] = $string_values['succesfull_insertar']; //Mensaje de que los datos se insertaron correctamente
-                            $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de éxito
+                            $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
+                            $guardado_correcto = '@' . $string_values['succesfull_insertar'] . '@';
+//                            $data['error'] = $string_values['succesfull_insertar']; //Mensaje de que los datos se insertaron correctamente
+//                            $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de éxito
                             //Datos de bitacora el actividad general del docente del usuario
                             $json = json_encode($resultado['parametros']);
-                            $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'ACT_DOC_GRAL_CVE-' . $resultado['ACT_DOC_GRAL_CVE'], $json, 'insert');
+                            $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'ACT_DOC_GRAL_CVE-' . $resultado['actualizados']['ACT_DOC_GRAL_CVE'], $json, 'insert');
                         }
                     } else {//No existe el empleado, manda un mensaje
                         $data['error'] = $this->lang->line('interface')['general']['msg_no_existe_empleado']; //Mensaje de que no encontro empleado
@@ -1034,11 +1037,13 @@ class Perfil extends MY_Controller {
                         $data['error'] = $string_values['error_actualizar']; //Mensaje de existio un error al actualizar los datos de actividad docente
                         $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                     } else {//Los datos se insertaron correctamente
-                        $data['error'] = $string_values['succesfull_actualizar']; //Mensaje de que los datos se actualizarón correctamente
-                        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de éxito
+                        $guardado_correcto = '@' . $string_values['succesfull_actualizar'] . '@';
+//                        $data['error'] = $string_values['succesfull_actualizar']; //Mensaje de que los datos se actualizarón correctamente
+//                        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de éxito
 //                        //Datos de bitacora el actividad general del docente del usuario
                         $json = json_encode($resultado['actualizados']);
                         $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'EMPLEADO_CVE', $json, 'update');
+                    
                     }
                 }
 //                $parse = json_encode($data);
@@ -1062,7 +1067,7 @@ class Perfil extends MY_Controller {
             $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE']); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
 //            pr($data['datos_tabla_actividades_docente']);
         }
-
+        $data['guardado_correcto'] = $guardado_correcto;
         $this->load->view('perfil/actividad_docente/actividad_tpl', $data, FALSE);
     }
 

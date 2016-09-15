@@ -17,8 +17,8 @@ $colapso_div_ejercicio_profesional = 'collapse in';
 <!-- Inicio informacion personal -->
 <?php echo form_open('', array('id' => 'form_actividad_docente')); ?>
 
+<?php echo $guardado_correcto; ?>
 <div class="list-group">
-
     <div class="list-group-item">
             <div class="panel-body">
                 <div>
@@ -218,7 +218,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                     <div class="row">
                         <div id='mensaje_error_div' class='alert'>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <span id='mensaje_error'><?php echo $string_values['alert_no_existe_actividad_principal']; ?></span>
+                            <span id='mensaje_error' class="alert-info"><?php echo $string_values['alert_no_existe_actividad_principal']; ?></span>
                         </div>
                     </div>
                     <?php } ?>
