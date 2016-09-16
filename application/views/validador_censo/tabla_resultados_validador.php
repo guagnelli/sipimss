@@ -38,6 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             . 'class="btn btn-link btn-sm" '
                             . 'data-idrow ="' . $key_ai . '"'
                             . 'data-histvalcve="' . $hist_val_cve . '"' 
+                            . 'data-empcve="' . $empleado_cve . '"' 
                             . 'data-toggle="modal"'
                             . 'data-target="#modal_censo"'
                             . 'onclick="ver_comentario_estado_doc(this)" >' .

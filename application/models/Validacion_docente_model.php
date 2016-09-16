@@ -432,7 +432,8 @@ class Validacion_docente_model extends CI_Model {
         $select = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
             'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"',
             'cve.VAL_EST_NOMBRE "nom_estado_validacion"', 'hv.VAL_COMENTARIO "comentario_estado"',
-            'if(hv.VAL_COMENTARIO is null or hv.VAL_COMENTARIO = "",0,1) "is_comentario"',
+            'if(hv.VAL_COMENTARIO is null or hv.VAL_COMENTARIO = "",0,1) "is_comentario"', 
+            'hv.VAL_FCH "fecha_validacion"',
             'concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO) as "nom_validador"'
         );
 

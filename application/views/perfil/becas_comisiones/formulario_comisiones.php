@@ -16,7 +16,9 @@ if (isset($informacion_comisiones)) {
             },
             format: 'YYYY-MM-DD',
             locale: 'es',
-            useCurrent: false
+            useCurrent: false,
+            minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+            maxDate: 'now'
         });
         $('#datetimepicker2').datetimepicker({
             icons: {
@@ -27,7 +29,16 @@ if (isset($informacion_comisiones)) {
             },
             format: 'YYYY-MM-DD',
             locale: 'es',
-            useCurrent: false
+            useCurrent: false,
+            minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+            maxDate: 'now'
+        });
+
+        $("#datetimepicker1").on("dp.change", function (e) {
+            $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker2").on("dp.change", function (e) {
+            $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
         });
     });
      $('.btn_subir_comprobante').click(function () {

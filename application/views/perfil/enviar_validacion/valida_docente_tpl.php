@@ -45,8 +45,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
     </div>
     <br>
-    pr
-    <?php if (isset($pie_pag)) { ?>
+    <?php if (isset($pie_pag) AND !empty($pie_pag)) { ?>
         <div class="row">
             <div class="col-md-12">
                 <label for='lbl_jus_validacion' class="control-label">

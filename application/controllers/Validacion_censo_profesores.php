@@ -340,22 +340,36 @@ class Validacion_censo_profesores extends MY_Controller {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['validador_censo'];
                 $data_comentario['string_values'] = $string_values;
-                $hist_val_cve = intval($this->seguridad->decrypt_base64($datos_post['hist_val_cve'])); //Des encripta la clave de la historia que viene de post
-                $resul_coment = $this->vdm->get_comentario_hist_validaso($hist_val_cve); //Consulta datos del historico
-                if (!empty($resul_coment)) {
-                    $data_comentario['comentario_justificacion'] = $resul_coment->comentartio_estado;
-                    $color_sattus = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['color_status']; //Color del estado
-                    $color_sattus = $this->config->item('cvalidacion_curso_estado')[$color_sattus]['color']; //Color del estado
-                    $data_comentario['color_estado'] = $color_sattus;
-                    $data_comentario['tipo_transicion'] = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['tipo_transaccion'];
-                    ;
-                    $data = array(
-                        'titulo_modal' => $string_values['titulo_moal_comentario'] . $resul_coment->nom_validador,
+//                $hist_val_cve = intval($this->seguridad->decrypt_base64($datos_post['hist_val_cve'])); //Des encripta la clave de la historia que viene de post
+                $empleado_cve = intval($this->seguridad->decrypt_base64($datos_post['empleado_cve'])); //Des encripta la clave de la historia que viene de post
+//                $resul_coment = $this->vdm->get_comentario_hist_validaso($hist_val_cve); //Consulta datos del historico
+                $data_comentario['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($empleado_cve, $this->obtener_convocatoria());
+//                if (!empty($data_comentario)) {
+//                pr($data_comentario['historial_estados']);
+
+
+
+                    $data = array(  
+                        'titulo_modal' => $string_values['titulo_moal_comentario'] .'dOCENTO ',
                         'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
                         'pie_modal' => $this->load->view('validador_censo/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
                     );
                     echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
-                }
+//                }
+//                if (!empty($resul_coment)) {
+//                    $data_comentario['comentario_justificacion'] = $resul_coment->comentartio_estado;
+//                    $color_sattus = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['color_status']; //Color del estado
+//                    $color_sattus = $this->config->item('cvalidacion_curso_estado')[$color_sattus]['color']; //Color del estado
+//                    $data_comentario['color_estado'] = $color_sattus;
+//                    $data_comentario['tipo_transicion'] = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['tipo_transaccion'];
+//                    ;
+//                    $data = array(
+//                        'titulo_modal' => $string_values['titulo_moal_comentario'] . $resul_coment->nom_validador,
+//                        'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
+//                        'pie_modal' => $this->load->view('validador_censo/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
+//                    );
+//                    echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+//                }
             }
         } else {
             redirect(site_url());

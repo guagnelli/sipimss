@@ -88,9 +88,10 @@ function funcion_cerrar_validacion_empleado(element) {
 function ver_comentario_estado_doc(element) {
     var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
     var hist_val_cve = obj.data('histvalcve');
-    var formData = {hist_val_cve: hist_val_cve};
+    var empleado_cve = obj.data('empcve');
+    var formData = {hist_val_cve: hist_val_cve, empleado_cve: empleado_cve};
     data_ajax_post(site_url + '/validacion_censo_profesores/ver_comentario_estado', null, '#modal_content', formData);
 }
-    
-    
+
+
     
