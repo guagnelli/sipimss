@@ -142,7 +142,7 @@
         }
         return $flag_validar;
     }
-
+    
     /*public function verificar_estado_correccion($estado, $btn){
         $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
         if($this->CI->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->CI->config->item('CORRECCION')

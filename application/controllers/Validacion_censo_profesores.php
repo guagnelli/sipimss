@@ -208,7 +208,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 if (!empty($filtros['valgrlcve'])) {
                     $datos_validacion['val_grl_cve'] = $this->seguridad->decrypt_base64($filtros['valgrlcve']); //Identificador de la comisión
                     /////Inicio estado corrección. Obtener si el empleado ya cuenta con validación en estado corrección
-                    $datos_validacion['estado'] = $this->obtener_validacion_correccion($datos_validacion['val_grl_cve']);
+                    $datos_validacion['estado'] = $this->obtener_validacion_correccion($datos_validacion['val_grl_cve'], $datos_validacion['est_val']);
                     ////Fin obtener estado corrección
                 }
                 if (!empty($filtros['usuariocve'])) {
@@ -228,8 +228,9 @@ class Validacion_censo_profesores extends MY_Controller {
         }
     }
 
-    private function obtener_validacion_correccion($validacion_gral_cve) {
+    private function obtener_validacion_correccion($validacion_gral_cve, $est_val) {
         $resultado = array('correccion' => array('result' => false, 'VALIDACION_CVE' => null), 'fue_validado' => array('result' => false, 'VALIDACION_CVE' => null));
+        $estado_anterior_verificar = $this->config->item('estados_val_censo')[$est_val]['estado_anterior_verificar'];
         ///Método que obtiene el histórico de validaciones para 'validacion_gral_cve', importante mantener ordenamiento por fecha, en sesión se añade la fecha más actual
         $historico = $this->vdm->get_validacion_historico(array('conditions' => array('hist_validacion.VALIDACION_GRAL_CVE' => $validacion_gral_cve), 'order' => 'VAL_FCH'));
 
@@ -242,7 +243,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 }
             }
             ///Se verifica si se ha validado (IS_ACTUAL=0) por el usuario logueado
-            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE']) {
+            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE'] && $hist['VAL_ESTADO_CVE']==$estado_anterior_verificar) {
                 $resultado['fue_validado']['result'] = true; //Si es así se envian datos para ser almacenados en sesión
                 $resultado['fue_validado']['VALIDACION_CVE'] = $hist['VALIDACION_CVE'];
             }
@@ -435,7 +436,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 $datos_empleado_validar['validador_cve'] = $result_cam_estado['VALIDADOR_CVE']; //Asigna el id del validador actual
                 $datos_empleado_validar['validacion_cve'] = $result_cam_estado['VALIDACION_CVE']; //Asigna nuevo id de la validacion historia
                 $datos_empleado_validar['est_val'] = $result_cam_estado['VAL_ESTADO_CVE']; //Asigna nuevo estado
-                $datos_empleado_validar['estado'] = $this->obtener_validacion_correccion($datos_empleado_validar['val_grl_cve']);
+                $datos_empleado_validar['estado'] = $this->obtener_validacion_correccion($datos_empleado_validar['val_grl_cve'], $datos_empleado_validar['est_val']);
                 $this->session->set_userdata('datosvalidadoactual', $datos_empleado_validar); //Asigna datos nuevos datos del validado a la variable de sesión 
                 //Registra la bitacora
                 //Actualización 
@@ -945,7 +946,7 @@ class Validacion_censo_profesores extends MY_Controller {
 
             ///Obtener dato de ejercicio profesional, para mostrar datos de formación en salud
             $data['ejercicio_profesional'] = $this->fm->get_ejercicio_profesional(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()), 'fields' => 'emp_eje_pro_cve, EJE_PRO_NOMBRE'))[0];
-
+            //pr($this->session->userdata());
             ////////Inicio agregar validaciones de estado
             $val_correc_for_sal = $val_correc_for_doc = $validation_est_corr_for_sal = $validation_est_corr_for_doc = array();
             $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
@@ -2360,6 +2361,7 @@ class Validacion_censo_profesores extends MY_Controller {
             $empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
             if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
                 ////////Inicio agregar validaciones de estado
+                $validacion_cve_session = $this->obtener_id_validacion();
                 $val_correc_mat = $validation_est_corr_mat = array();
                 $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
                 if ($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
@@ -2938,6 +2940,7 @@ class Validacion_censo_profesores extends MY_Controller {
             $empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
             if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
                 ////////Inicio agregar validaciones de estado
+                $validacion_cve_session = $this->obtener_id_validacion();
                 $val_correc_bec = $validation_est_corr_bec = $val_correc_com = $validation_est_corr_com = array();
                 $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
                 if ($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
