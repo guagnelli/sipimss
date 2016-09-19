@@ -21,7 +21,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                 <br>
             </div>
         </div>
-
+        <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
         <div class='row'>
             <div class="col-xs-12 col-md-12 col-lg-12 text-right">
                 <button type="button" class="btn btn-success btn-lg" id="btn_gregar_material_educativo" data-toggle="modal" data-target="#modal_censo">
@@ -30,6 +30,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
             </div>
         </div>
         <br>
+        <?php } ?>
         <div class='row'> 
             <div class="form-group col-xs-12 col-md-12">
                 <?php // pr($lista_material_educativo); ?>
@@ -62,40 +63,17 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                 $comprobante = 0;
                                 $btn_comprobante  = '';
                             }
+                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : null;
+                            $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" onclick="funcion_eliminar_reg_material_educativo(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
+                            $btn_editar = ($this->seguridad->verificar_liga_editar_docente($val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_material_educativo(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
                             echo "<td>" . $val['nombre_material'] . "</td>";
                             echo "<td>" . $desc_tipo_material . "</td>";
                             echo "<td>" . $val['material_educativo_anio'] . "</td>";
                             echo "<td>" . $btn_comprobante . "</td>";
-                            echo "<td>" 
-                            . '<button '
-                            . 'type="button" '
-                            . 'class="btn btn-link btn-sm" '
-                            . 'id="btn_editar_mat_educativo" '
-                            . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-mateducve ="' . $key . '"'
-                            . 'data-tpmateducve ="' . $key_tp_mat_edu . '"'
-                            . 'data-comprobantecve ="' . $idcomprobante . '"'
-                            . 'data-toggle="modal"'
-                            . 'data-target="#modal_censo"'
-                            . 'onclick="funcion_editar_material_educativo(this)" >' .
-                            $string_values['tab_titulo_editar']
-                            . '</button>'
-                            . "</td>";
-                            echo "<td>"//Botón eliminar
-                            . '<button '
-                            . 'type="button" '
-                            . 'class="btn btn-link btn-sm" '
-                            . 'id="btn_editar_mat_educativo" '
-                            . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-mateducve ="' . $key . '"'
-                            . 'data-tpmateducve ="' . $key_tp_mat_edu . '"'
-                            . 'data-comprobantecve ="' . $idcomprobante . '"'
-                            . 'onclick="funcion_eliminar_reg_material_educativo(this)" >' .
-                            $string_values['tab_titulo_eliminar']
-                            . '</button>'
-                            . "</td>";
+                            echo "<td>".$btn_eliminar."</td>";
+                            echo "<td>".$btn_editar."</td>";
                             echo "</tr>";
                         }
                         ?>

@@ -2165,7 +2165,15 @@ class Perfil extends MY_Controller {
             $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             $empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
             if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
-                $lista_material_educativo = $this->mem->get_lista_material_educativo($empleado);
+                ///////Inicio agregar validaciones de estado
+                $val_correc_mat = array();
+                $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+                $validacion_cve_session = $this->obtener_id_validacion();
+                if ($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
+                    $val_correc_mat = array('validation_estado' => array('table' => 'hist_me_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_me_validacion_curso.MATERIA_EDUCATIVO_CVE=eme.MATERIA_EDUCATIVO_CVE AND VALIDACION_CVE != ' . $validacion_cve_session, 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
+                }
+                /////////Fin agregar validaciones de estado
+                $lista_material_educativo = $this->mem->get_lista_material_educativo($empleado, $val_correc_mat);
                 $data['lista_material_educativo'] = $lista_material_educativo;
                 $this->load->view('perfil/material_educativo/elaboracion_material_edu_tpl', $data, FALSE); //Valores que muestrán la lista
             }
