@@ -23,6 +23,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 							</div>
 							<div id="collapseOne_<?php echo $key_tc; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="head_<?php echo $key_tc; ?>">
 								<div class="panel-body">
+									<?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
 									<div class="row">
 									    <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
 									    	<div>
@@ -32,6 +33,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 								            </div>
 									    </div>
 									</div><br>
+									<?php } ?>
 									<div class="row" >
 			                            <div id="div_comision_academica" class="table-responsive">
 			                                <table class="table table-striped table-hover table-bordered" id="tabla_comision_academica">
@@ -48,21 +50,17 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 			                                        <?php //Generará la tabla que muestrá las actividades del docente
 		                                    		foreach ($comisiones[$key_tc] as $key_ca => $comision_academica) {
 		                                    			$id = $this->seguridad->encrypt_base64($comision_academica['EMP_COMISION_CVE']);
+		                                    			$validation_estado = (isset($comision_academica['validation_estado']) && !empty($comision_academica['validation_estado'])) ? $comision_academica['validation_estado'] : null;
 		                                    			$btn_comprobante = (!is_null($comision_academica['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($comision_academica['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
 														echo '<tr id="tr_'.$id.'">';
 														foreach ($columns[$key_tc] as $key_dato => $dato) {
 															echo '<td>'.$comision_academica[$key_dato].'</td>';
 														}
+														$btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($comision_academica['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
+                                                        $btn_editar = ($this->seguridad->verificar_liga_editar_docente($comision_academica['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.$string_values['editar'].'</button>' : '';
 														echo '<td>'.$btn_comprobante.'</td>
-															<td><button type="button" class="btn btn-link btn-sm btn_editar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
-							                                       $string_values['editar'].
-							                                    '</button>
-							                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_ca" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" data-com="'.$this->seguridad->encrypt_base64($key_tc).'">'.
-							                                       $string_values['validar'].
-							                                    '</button> -->
-							                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
-							                                           $string_values['eliminar'].
-							                                        '</button>
+															<td>'.$btn_editar.'
+                                                                '.$btn_eliminar.'							                                    
 							                                </td>
 														</tr>';
 													}

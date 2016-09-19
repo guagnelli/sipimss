@@ -190,4 +190,41 @@
         }
         return $html;
     }
+
+    public function verificar_liga_agregar_docente(){
+        $estado_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val'];
+
+        if($this->CI->config->item('estados_val_censo')[$estado_actual]['agregar_docente']){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function verificar_liga_eliminar_docente($is_valido_profesionalizacion){
+        $estado_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val'];
+
+        if(!$is_valido_profesionalizacion && $this->CI->config->item('estados_val_censo')[$estado_actual]['eliminacion_docente']){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function verificar_liga_editar_docente($is_valido_profesionalizacion, $estado_actual_registro){
+        $estado_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val'];
+
+        if(!$is_valido_profesionalizacion){
+            if($this->CI->config->item('estados_val_censo')[$estado_actual]['edicion_docente']){ //En caso de que se permita la edición
+                if($estado_actual==Enum_ev::Correccion_docente){ //Validar estado corrección, solo se mostrará liga a los marcados como en corrección
+                    if($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] == $estado_actual_registro){
+                        return true;
+                    }
+                } else { ///En caso de que sea parte de la edición
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

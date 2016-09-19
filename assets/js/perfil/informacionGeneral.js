@@ -18,8 +18,8 @@ $(document).ready(function () {
                         $('#msg_general').show();        
                         $('#msg_general').text(resp.message);
                         //alert($('#msg_general').attr("class"));
-                        if(resp.result==true){
-                             $('#msg_general').addClass('alert-success');
+                        if(resp.result=="true"){
+                            $('#msg_general').addClass('alert-success');
                         }else{
                             $('#msg_general').addClass('alert-danger');
                         }

@@ -12,6 +12,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                    <br>
                 </div>
                 <div id="mensaje"></div>
+                <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
                 <div class="row">
 				    <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
 				    	<div>
@@ -21,7 +22,8 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
 			            </div>
 				    </div>
 				</div><br>
-                <?php if(isset($lista_direccion)){?>
+				<?php }
+				if(isset($lista_direccion)){?>
                     <div class="row" >
                             <div id="div_direccion_tesis" class="table-responsive">
                                 <table class="table table-striped table-hover table-bordered" id="tabla_direccion_tesis">
@@ -38,21 +40,17 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                         <?php //Generará la tabla que muestrá las actividades del docente
                                     		foreach ($lista_direccion as $key_ld => $direccion) {
                                     			$id = $this->seguridad->encrypt_base64($direccion['EMP_COMISION_CVE']);
+                                    			$validation_estado = (isset($direccion['validation_estado']) && !empty($direccion['validation_estado'])) ? $direccion['validation_estado'] : null;
                                     			$btn_comprobante = (!is_null($direccion['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($direccion['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
+                                    			$btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($direccion['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
+                                                $btn_editar = ($this->seguridad->verificar_liga_editar_docente($direccion['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
 												echo '<tr id="tr_'.$id.'">
 													<td>'.$direccion['EC_ANIO'].'</td>
 													<td>'.$direccion['NIV_ACA_NOMBRE'].'</td>
 													<td>'.$direccion['COM_ARE_NOMBRE'].'</td>
 													<td>'.$btn_comprobante.'</td>
-													<td><button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-					                                       $string_values['editar'].
-					                                    '</button>
-					                                    <!-- <button type="button" class="btn btn-link btn-sm btn_validar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.
-					                                       $string_values['validar'].
-					                                    '</button> -->
-					                                    <button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="'.$id.'">'.
-					                                           $string_values['eliminar'].
-					                                        '</button>
+													<td>'.$btn_editar.'
+                                                        '.$btn_eliminar.'					                                    
 					                                </td>
 												</tr>';
 										}
