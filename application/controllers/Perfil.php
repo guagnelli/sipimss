@@ -1638,7 +1638,15 @@ class Perfil extends MY_Controller {
         $empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
         if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
             $this->load->model('Investigacion_docente_model', 'id');
-            $lista_investigacion = $this->id->get_lista_datos_investigacion_docente($empleado[0]['EMPLEADO_CVE']);
+            ////////Inicio agregar validaciones de estado
+            $val_correc_inv = array();
+            $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+            $validacion_cve_session = $this->obtener_id_validacion();
+            if ($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
+                $val_correc_inv = array('validation_estado' => array('table' => 'hist_eaid_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_eaid_validacion_curso.EAID_CVE=eaid.EAID_CVE AND VALIDACION_CVE != ' . $validacion_cve_session, 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
+            }
+            /////////Fin agregar validaciones de estado
+            $lista_investigacion = $this->id->get_lista_datos_investigacion_docente($empleado[0]['EMPLEADO_CVE'], $val_correc_inv);
             $data['lista_investigaciones'] = $lista_investigacion;
             $this->load->view('perfil/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrán la lista
         } else {

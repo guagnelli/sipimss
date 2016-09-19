@@ -18,7 +18,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                 <h4>Investigación </h4>
                 <br>
             </div>
-
+            <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
             <div class="row">
                 <div class="form-group col-xs-12 col-md-12 col-lg-12 text-right">
                     <button type="button" class="btn btn-success btn-lg" id="btn_agregar_investigacion_modal" data-toggle="modal" data-target="#modal_censo">
@@ -26,7 +26,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                     </button>
                 </div>
             </div>
-
+            <?php } ?>
             <div class="row" >
                 <div id="tabla_actividades_docente" class="table-responsive">
                     <!--Mostrará la tabla de actividad docente --> 
@@ -72,38 +72,17 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                                             $string_values['text_con_cita']
                                             . '</button>';
                                 }
+                                $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : null;
+                                $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="' . $key_ai . '" data-invcve ="' . $key . '" data-comprobantecve ="' . $comprobante . '" onclick="funcion_eliminar_reg_investigacion(this)" >'.$string_values['tab_titulo_eliminar']. '</button>' : '';
+                                $btn_editar = ($this->seguridad->verificar_liga_editar_docente($val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="' . $key_ai . '" data-invcve ="' . $key . '" data-comprobantecve ="' . $comprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_investigacion(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
                                 //Crea los row de la tabla
                                 echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
                                 echo "<td>" . $val['tpad_nombre'] . "</td>";
                                 echo "<td>" . $val['nombre_investigacion'] . "</td>";
                                 echo "<td>" . $val['folio_investigacion'] . "</td>";
                                 echo "<td>" . $tiene_cita_comprobante . "</td>";
-                                echo "<td>"
-                                . '<button '
-                                . 'type="button" '
-                                . 'class="btn btn-link btn-sm" '
-                                . 'id="btn_eliminar_actividad_modal" '
-                                . 'data-idrow ="' . $key_ai . '"'
-                                . 'data-invcve ="' . $key . '"'
-                                . 'data-comprobantecve ="' . $comprobante . '"'
-                                . 'data-toggle="modal"'
-                                . 'data-target="#modal_censo"'
-                                . 'onclick="funcion_editar_reg_investigacion(this)" >' .
-                                $string_values['tab_titulo_editar']
-                                . '</button>'
-                                . "</td>";
-                                echo "<td>"//Botón eliminar
-                                . '<button '
-                                . 'type="button" '
-                                . 'class="btn btn-link btn-sm"'
-                                . 'id="btn_eliminar_actividad_modal" '
-                                . 'data-idrow ="' . $key_ai . '"'
-                                . 'data-invcve ="' . $key . '"'
-                                . 'data-comprobantecve ="' . $comprobante . '"'
-                                . 'onclick="funcion_eliminar_reg_investigacion(this)" >' .
-                                $string_values['tab_titulo_eliminar']
-                                . '</button>'
-                                . "</td>";
+                                echo "<td>".$btn_editar."</td>";
+                                echo "<td>".$btn_eliminar."</td>";
                                 echo "</tr>";
                             }
                             ?>
