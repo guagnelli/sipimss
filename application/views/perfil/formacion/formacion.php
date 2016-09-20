@@ -2,7 +2,14 @@
 <script type="text/javascript">
 var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion']; ?>";
 </script>
-<?php echo js('perfil/formacion.js'); ?>
+<?php echo js('perfil/formacion.js'); 
+if($this->seguridad->verificar_liga_agregar_docente()){
+    $readonly = '';
+    $disabled = '';
+} else {
+    $readonly = 'readonly';
+    $disabled = 'disabled';
+}?>
     <ul id="tabList" class="nav nav-tabs">
         <li class="active">
             <a data-toggle="tab" href="#formacionPersonalSalud">
@@ -35,7 +42,7 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <?php
-                                    echo $this->form_complete->create_element(array('id'=>'ejercicio_profesional', 'type'=>'dropdown', 'value'=>$ejercicio_profesional['emp_eje_pro_cve'], 'options'=>$catalogos['cejercicio_profesional'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['lbl_ejercicio_profesional'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_ejercicio_profesional'])));
+                                    echo $this->form_complete->create_element(array('id'=>'ejercicio_profesional', 'type'=>'dropdown', 'value'=>$ejercicio_profesional['emp_eje_pro_cve'], 'options'=>$catalogos['cejercicio_profesional'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', $readonly => $readonly, $disabled => $disabled, 'placeholder'=>$string_values['lbl_ejercicio_profesional'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_ejercicio_profesional'])));
                                     ?>                      
                                 </div>
                             </div>

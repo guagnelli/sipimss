@@ -27,6 +27,18 @@ class Perfil extends MY_Controller {
         $this->load->library('Ventana_modal');
         $this->load->config('general');
         //$this->lang->load('interface');
+
+        if(!isset($this->session->userdata('datosvalidadoactual')['est_val'])){
+            $this->load->model('Validacion_docente_model', 'vdm');
+            $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
+            $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion'); //Asignamos id usuario a variable
+            $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
+            if(empty($historia_docente)){
+                $this->session->set_userdata(array('datosvalidadoactual'=>array('est_val'=>Enum_ev::Inicio)));
+            }
+            //pr($this->session->userdata());
+            //pr($historia_docente);
+        }
     }
 
     /**
@@ -36,9 +48,9 @@ class Perfil extends MY_Controller {
         //echo "SOY UN INDEX....";
         $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
         //////////////////Para validación temporal
-        $this->session->set_userdata('validar', 'validar');
+        /*$this->session->set_userdata('validar', 'validar');
         $this->session->set_userdata('validacion_cve', 1);
-        $this->session->set_userdata('validacion_gral_cve', 1);
+        $this->session->set_userdata('validacion_gral_cve', 1);*/
 //        pr($rol_seleccionado);
         $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1));
         $this->lang->load('interface', 'spanish');
@@ -684,7 +696,7 @@ class Perfil extends MY_Controller {
     }
 
     private function obtener_id_validacion() {
-        if (!is_null($this->session->userdata('datosvalidadoactual'))) {
+        if (!is_null($this->session->userdata('datosvalidadoactual')) && isset($this->session->userdata('datosvalidadoactual')['validacion_cve'])) {
             return $this->session->userdata('datosvalidadoactual')['validacion_cve'];
         }
 //        return $this->session->userdata('idempleado');
@@ -1104,10 +1116,11 @@ class Perfil extends MY_Controller {
 
         if (!empty($actividad_docente)) {
 //            pr($actividad_docente);
+            $validacion_cve_session = $this->obtener_id_validacion();
             $data['curso_principal'] = $actividad_docente[0]['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
             $data['actividad_general_cve'] = $actividad_docente[0]['ACT_DOC_GRAL_CVE']; //Identificador del curso principal 
             $data['curso_principal_entidad_contiene'] = $actividad_docente[0]['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
-            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE']); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
+            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE'], $validacion_cve_session); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
 //            pr($data['datos_tabla_actividades_docente']);
         }
         $data['guardado_correcto'] = $guardado_correcto;
@@ -2743,8 +2756,17 @@ class Perfil extends MY_Controller {
             $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             $empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
             if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
-                $lista_becas = $this->bcl->get_lista_becas($empleado);
-                $lista_comisiones = $this->bcl->get_lista_comisiones($empleado);
+                ////////Inicio agregar validaciones de estado
+                $val_correc_bec = $val_correc_com = array();
+                $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+                $validacion_cve_session = $this->obtener_id_validacion();
+                if ($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
+                    $val_correc_bec = array('validation_estado' => array('table' => 'hist_beca_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_beca_validacion_curso.EMP_BECA_CVE=eb.EMP_BECA_CVE AND VALIDACION_CVE != ' . $validacion_cve_session, 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
+                    $val_correc_com = array('validation_estado' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=ecm.EMP_COMISION_CVE AND VALIDACION_CVE != ' . $validacion_cve_session, 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
+                }
+                /////////Fin agregar validaciones de estado
+                $lista_becas = $this->bcl->get_lista_becas($empleado, $val_correc_bec);
+                $lista_comisiones = $this->bcl->get_lista_comisiones($empleado, $val_correc_com);
                 $data_becas['lista_becas'] = $lista_becas;
                 $data_comision['lista_comisiones'] = $lista_comisiones;
                 $data_becas['string_values'] = $string_values;

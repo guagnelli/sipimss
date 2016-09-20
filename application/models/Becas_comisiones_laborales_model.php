@@ -35,7 +35,7 @@ class Becas_comisiones_laborales_model extends CI_Model {
             return -1;
         }
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(!is_null($params) && isset($params['validation'])){
+        if(!is_null($params) && (isset($params['validation']) || isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
             $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
             $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
             $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
@@ -69,7 +69,7 @@ class Becas_comisiones_laborales_model extends CI_Model {
         $this->db->join('ctipo_comprobante tc', 'tc.TIPO_COMPROBANTE_CVE = c.TIPO_COMPROBANTE_CVE', 'left');
         $this->db->where('eb.EMPLEADO_CVE', $empleado_cve);
         $query = $this->db->get();
-//        pr($this->db->last_query());
+        //pr($this->db->last_query());
         return $query->result_array();
     }
 
