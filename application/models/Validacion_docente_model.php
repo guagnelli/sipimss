@@ -441,9 +441,9 @@ class Validacion_docente_model extends CI_Model {
         $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
         $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
         $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
-        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.VALIDADOR_CVE');
         $this->db->join('cvalidacion_estado cve', 'cve.VAL_ESTADO_CVE = hv.VAL_ESTADO_CVE');
-        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE');
+        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.VALIDADOR_CVE', 'left');
+        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
         $this->db->order_by('hv.VALIDACION_CVE', "desc");
         $this->db->order_by('vg.VAL_CONV_CVE', "desc");
         $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros

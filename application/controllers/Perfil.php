@@ -27,18 +27,6 @@ class Perfil extends MY_Controller {
         $this->load->library('Ventana_modal');
         $this->load->config('general');
         //$this->lang->load('interface');
-
-        if(!isset($this->session->userdata('datosvalidadoactual')['est_val'])){
-            $this->load->model('Validacion_docente_model', 'vdm');
-            $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
-            $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion'); //Asignamos id usuario a variable
-            $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
-            if(empty($historia_docente)){
-                $this->session->set_userdata(array('datosvalidadoactual'=>array('est_val'=>Enum_ev::Inicio)));
-            }
-            //pr($this->session->userdata());
-            //pr($historia_docente);
-        }
     }
 
     /**
@@ -48,9 +36,9 @@ class Perfil extends MY_Controller {
         //echo "SOY UN INDEX....";
         $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
         //////////////////Para validación temporal
-        /*$this->session->set_userdata('validar', 'validar');
-        $this->session->set_userdata('validacion_cve', 1);
-        $this->session->set_userdata('validacion_gral_cve', 1);*/
+        /* $this->session->set_userdata('validar', 'validar');
+          $this->session->set_userdata('validacion_cve', 1);
+          $this->session->set_userdata('validacion_gral_cve', 1); */
 //        pr($rol_seleccionado);
         $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1));
         $this->lang->load('interface', 'spanish');
@@ -67,12 +55,19 @@ class Perfil extends MY_Controller {
         //Asigna la convocatoria ala variable de sesión
         $this->session->set_userdata('convocatoria_delegacion', $convocatoria);
 
+        /** Asignar datos de validador actual */
+        if ($convocatoria['aplica_conv_rol'] == 1) {//Pasa convocatoria o aplica la convocatoria
+            $result_id_empleado = $this->session->userdata('idempleado');
+            $this->load->model('Validacion_docente_model', 'vdm');
+            $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
+//            pr($historia_docente);
+            if (empty($historia_docente)) {
+                $this->session->set_userdata(array('datosvalidadoactual' => array('est_val' => Enum_ev::Inicio)));
+            } else {
+                $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
+            }
+        }
 
-        $result_id_empleado = $this->session->userdata('idempleado');
-
-        $this->load->model('Validacion_docente_model', 'vdm');
-        $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
-        $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
         //        pr($this->session->userdata());
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
@@ -154,7 +149,7 @@ class Perfil extends MY_Controller {
 
         $estado_actual = $this->session->userdata('datosvalidadoactual')['est_val'];
 
-        if($this->config->item('estados_val_censo')[$estado_actual]['agregar_docente']){
+        if ($this->config->item('estados_val_censo')[$estado_actual]['agregar_docente']) {
             $vista_info_general = 'perfil/informacionGeneral';
         } else {
             $vista_info_general = 'validador_censo/informacionGeneral';
@@ -198,7 +193,7 @@ class Perfil extends MY_Controller {
                 $this->config->item('tipo_comision')['SINODAL_EXAMEN']['id'] => array('EC_ANIO' => $data['string_values']['t_h_anio_'], 'NIV_ACA_NOMBRE' => $data['string_values']['t_h_nivel_academico']),
                 $this->config->item('tipo_comision')['COORDINADOR_TUTORES']['id'] => array('EC_ANIO' => $data['string_values']['t_h_anio_'], 'TIP_CUR_NOMBRE' => $data['string_values']['t_h_tipo'], 'EC_FCH_INICIO' => $data['string_values']['t_h_fch_inicio'], 'EC_FCH_FIN' => $data['string_values']['t_h_fch_fin'], 'EC_DURACION' => $data['string_values']['t_h_duracion']),
                 $this->config->item('tipo_comision')['COORDINADOR_CURSO']['id'] => array('EC_ANIO' => $data['string_values']['t_h_anio_'], 'TIP_CUR_NOMBRE' => $data['string_values']['t_h_tipo'], 'EC_FCH_INICIO' => $data['string_values']['t_h_fch_inicio'], 'EC_FCH_FIN' => $data['string_values']['t_h_fch_fin'], 'EC_DURACION' => $data['string_values']['t_h_duracion']));
-            
+
             $data['comisiones'] = array();
             foreach ($data['catalogos']['ctipo_comision'] as $ctc => $tc) {
                 ////////Inicio agregar validaciones de estado
@@ -1038,7 +1033,7 @@ class Perfil extends MY_Controller {
      * author LEAS
      * Guarda actividad docente general
      */
-    public function seccion_actividad_docente() {   
+    public function seccion_actividad_docente() {
 //        pr($_SERVER);
         $data = array();
         $tipo_msg = $this->config->item('alert_msg');
@@ -1098,7 +1093,6 @@ class Perfil extends MY_Controller {
 //                        //Datos de bitacora el actividad general del docente del usuario
                         $json = json_encode($resultado['actualizados']);
                         $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'EMPLEADO_CVE', $json, 'update');
-                    
                     }
                 }
 //                $parse = json_encode($data);
@@ -3389,11 +3383,12 @@ class Perfil extends MY_Controller {
             $data['string_values'] = $string_values;
             //Obtiene el historial completo de la validación del docente según la convocatoría
             if (!empty($convocatoria_delegacion)) {//Busca si existe la convocatoría, de otro modo no se puede subir ni cargar nada
+                //Vuelve a cargar la historia del usuario 
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
-//                pr($historia_docente);
                 $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
                 //pr($historia_docente);
+                //Pregunta si existe el historial del usuario
                 if (!empty($historia_docente)) {//Tiene historial en validación
                     $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
                     $tmp_validado['estado_actual'] = $historia_docente['est_val'];
@@ -3402,7 +3397,7 @@ class Perfil extends MY_Controller {
 
                     $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
                     $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria_delegacion['idconv']); //Busca mensajes generales enviados a la corrección;
-//                pr($historia_docente);
+//                    pr($data['historial_estados']);
 //                exit();
 //                    pr($historia_docente);
 
@@ -3427,6 +3422,9 @@ class Perfil extends MY_Controller {
                         $data['pie_pag'] = $pie_pag;
                         $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
                     } else {
+                        //Asigna estado de incompleto 
+                        $this->session->set_userdata(array('datosvalidadoactual' => array('est_val' => Enum_ev::Inicio)));
+                        
                         $data['mensaje'] = $string_values['msj_no_completo_envio_validacion_censo'];
                         $this->load->view('perfil/enviar_validacion/mensajes_info', $data, FALSE);
                     }
@@ -3562,7 +3560,7 @@ class Perfil extends MY_Controller {
                 $parametros_hist['IS_ACTUAL'] = 1;
                 $this->lang->load('interface', 'spanish');
                 $mensaje_envio_validacion = $this->lang->line('interface')['validador_censo']; //Carga textos a utilizar 
-                $parametros_hist['VAL_COMENTARIO'] = $mensaje_envio_validacion['msj_envio_validacion'];
+                $parametros_hist['VAL_COMENTARIO'] = $mensaje_envio_validacion['msj_completa_info_docente'];
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $result_cam_estado = $this->vdm->insert_inicio_estado_correccion($parametros_hist, $parametro_gral);
                 //Efectúa la actualización del nuevo estado

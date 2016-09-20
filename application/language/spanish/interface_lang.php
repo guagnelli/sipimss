@@ -408,6 +408,7 @@ $lang['interface'] = array(
         <br> 2.- Debe contar por lo menos con un registro de formación en salud. <br> 3.- Debe seleccionar un curso principal en actividad docente 
         ',
         'msj_envio_validacion'=>'Envió de datos a validación del censo',
+        'msj_completa_info_docente'=>'El docente completo los requisitos minimos. Para enviar a validar el censo',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',

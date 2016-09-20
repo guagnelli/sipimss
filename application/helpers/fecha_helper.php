@@ -76,6 +76,9 @@ if (!function_exists('get_fecha_local')) {
                 setlocale(LC_TIME, 'es_ES');
                 $fecha = strftime("%a, %d de %B de %Y",  strtotime($date));
                 break;
+            default :
+                setlocale(LC_TIME, 'es_ES');
+                $fecha = strftime("%a, %d de %B de %Y",  strtotime($date));
         }
         return $fecha;
     }

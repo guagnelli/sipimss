@@ -674,5 +674,267 @@ FOREIGN KEY (`VALIDACION_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE
 -------------------2016/09/13 ----------------------------------------------
 ALTER TABLE `validador` ADD IS_ACTUAL BOOLEAN NOT NULL DEFAULT 1; 
 
+-------------------2016/09/19 Responsable Jesus, Miguel Luis, ejecución cambios LEAS-----------------------------
+
+/*Crea tablas valtantes para total de puntos y relación con solicitud de evaluación "evaluacion_for_profesonal"
+"evaluacion_esp_medica" "evaluacion_beca"  */
+CREATE TABLE `evaluacion_for_profesional` (
+  `EVALUACION_CVE` int(11) NOT NULL AUTO_INCREMENT,
+  `TOTAL_PUNTOS` int(11) DEFAULT NULL,
+  `MSG_INCONFORMIDAD` varchar(200) DEFAULT NULL,
+  `SOLICITUD_VAL_CVE` int(11) DEFAULT NULL,
+  `EST_EVALUACION_CVE` int(11) DEFAULT NULL,
+  PRIMARY KEY (`EVALUACION_CVE`),
+  KEY `XIF10EVALUACION_FOR_PROFESIONAL` (`SOLICITUD_VAL_CVE`),
+  KEY `XIF011EVALUACION_ACT_DOC` (`EST_EVALUACION_CVE`),
+  CONSTRAINT `evaluacion_for_profesonal_esfk_10` FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud` (`VALIDACION_CVE`),
+  CONSTRAINT `evaluacion_fpcs_ibfk_011` FOREIGN KEY (`EST_EVALUACION_CVE`) REFERENCES `cestado_evaluacion` (`EST_EVALUACION_CVE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `evaluacion_esp_medica` (
+  `EVALUACION_CVE` int(11) NOT NULL AUTO_INCREMENT,
+  `TOTAL_PUNTOS` int(11) DEFAULT NULL,
+  `MSG_INCONFORMIDAD` varchar(200) DEFAULT NULL,
+  `SOLICITUD_VAL_CVE` int(11) DEFAULT NULL,
+  `EST_EVALUACION_CVE` int(11) DEFAULT NULL,
+  PRIMARY KEY (`EVALUACION_CVE`),
+  KEY `XIF11EVALUACION_ESP_MEDICA` (`SOLICITUD_VAL_CVE`),
+  KEY `XIF012EVALUACION_ACT_DOC` (`EST_EVALUACION_CVE`),
+  CONSTRAINT `evaluacion_esp_medica_esfk_11` FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud` (`VALIDACION_CVE`),
+  CONSTRAINT `evaluacion_fpcs_ibfk_013` FOREIGN KEY (`EST_EVALUACION_CVE`) REFERENCES `cestado_evaluacion` (`EST_EVALUACION_CVE`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `evaluacion_beca` (
+  `EVALUACION_CVE` int(11) NOT NULL AUTO_INCREMENT,
+  `TOTAL_PUNTOS` int(11) DEFAULT NULL,
+  `MSG_INCONFORMIDAD` varchar(200) DEFAULT NULL,
+  `SOLICITUD_VAL_CVE` int(11) DEFAULT NULL,
+  `EST_EVALUACION_CVE` int(11) DEFAULT NULL,
+  PRIMARY KEY (`EVALUACION_CVE`),
+  KEY `XIF12EVALUACION_BECA` (`SOLICITUD_VAL_CVE`),
+  KEY `XIF014EVALUACION_ACT_DOC` (`EST_EVALUACION_CVE`),
+  CONSTRAINT `evaluacion_beca_esfk_12` FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud` (`VALIDACION_CVE`),
+  CONSTRAINT `evaluacion_fpcs_ibfk_014` FOREIGN KEY (`EST_EVALUACION_CVE`) REFERENCES `cestado_evaluacion` (`EST_EVALUACION_CVE`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `evaluacion_edu_dis` ADD CONSTRAINT `evaluacion_edu_dis_ibfk_1` FOREIGN KEY (`EST_EVALUACION_CVE`) REFERENCES `cestado_evaluacion` (`EST_EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+/*Crea llave primaria a las siguientes entidades "evaluacion_act_doc", "evaluacion_act_inv_edu", "evaluacion_comision",
+"evaluacion_edu_dis", "evaluacion_fpcs", "evaluacion_mat_edu" */
+ALTER TABLE evaluacion_act_doc ADD EVALUACION_CVE INT(11) not null;
+ALTER table evaluacion_act_doc add primary key (EVALUACION_CVE);
+ALTER TABLE evaluacion_act_doc CHANGE `EVALUACION_CVE` `EVALUACION_CVE` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE evaluacion_act_inv_edu ADD EVALUACION_CVE INT(11) not null;
+ALTER table evaluacion_act_inv_edu add primary key (EVALUACION_CVE);
+ALTER TABLE evaluacion_act_inv_edu CHANGE `EVALUACION_CVE` `EVALUACION_CVE` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE evaluacion_comision ADD EVALUACION_CVE INT(11) not null;
+ALTER table evaluacion_comision add primary key (EVALUACION_CVE);
+ALTER TABLE evaluacion_comision CHANGE `EVALUACION_CVE` `EVALUACION_CVE` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE evaluacion_edu_dis ADD EVALUACION_CVE INT(11) not null;
+ALTER table evaluacion_edu_dis add primary key (EVALUACION_CVE);
+ALTER TABLE evaluacion_edu_dis CHANGE `EVALUACION_CVE` `EVALUACION_CVE` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE evaluacion_fpcs ADD EVALUACION_CVE INT(11) not null;
+ALTER table evaluacion_fpcs add primary key (EVALUACION_CVE);
+ALTER TABLE evaluacion_fpcs CHANGE `EVALUACION_CVE` `EVALUACION_CVE` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE evaluacion_mat_edu ADD EVALUACION_CVE INT(11) not null;
+ALTER table evaluacion_mat_edu add primary key (EVALUACION_CVE);
+ALTER TABLE evaluacion_mat_edu CHANGE `EVALUACION_CVE` `EVALUACION_CVE` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+/*Eliminar fore key  y campo "EVA_CURSO_CVE" "evaluacion_act_doc", "evaluacion_act_inv_edu", "evaluacion_comision",
+"evaluacion_edu_dis", "evaluacion_fpcs", "evaluacion_mat_edu" */
+
+ALTER TABLE `evaluacion_act_doc` DROP FOREIGN KEY `evaluacion_act_doc_ibfk_1`; 
+ALTER TABLE `evaluacion_act_doc` DROP FOREIGN KEY `evaluacion_act_doc_ibfk_2`; 
+ALTER TABLE `evaluacion_act_doc` DROP FOREIGN KEY `evaluacion_act_doc_ibfk_3`; 
+ALTER TABLE evaluacion_act_doc DROP EVA_CURSO_CVE;
+
+ALTER TABLE `evaluacion_act_inv_edu` DROP FOREIGN KEY `evaluacion_act_inv_edu_ibfk_1`;
+ALTER TABLE evaluacion_act_inv_edu DROP EVA_CURSO_CVE;
+
+ALTER TABLE `evaluacion_comision` DROP FOREIGN KEY `evaluacion_comision_ibfk_1`;
+ALTER TABLE evaluacion_comision DROP EVA_CURSO_CVE;
+
+ALTER TABLE `evaluacion_edu_dis` DROP FOREIGN KEY `evaluacion_edu_dis_ibfk_2`;
+ALTER TABLE evaluacion_edu_dis DROP EVA_CURSO_CVE;
+
+ALTER TABLE `evaluacion_fpcs` DROP FOREIGN KEY `evaluacion_fpcs_ibfk_1`;
+ALTER TABLE evaluacion_fpcs DROP EVA_CURSO_CVE;
+
+ALTER TABLE `evaluacion_mat_edu` DROP FOREIGN KEY `evaluacion_mat_edu_ibfk_1`;
+ALTER TABLE evaluacion_mat_edu DROP EVA_CURSO_CVE;
+
+/*Relacionar solicitud_cve a las siguientes entidades "SOLICITUD_VAL_CVE" "evaluacion_act_doc", "evaluacion_act_inv_edu", "evaluacion_comision",
+"evaluacion_edu_dis", "evaluacion_fpcs", "evaluacion_mat_edu" */
+
+ALTER TABLE `evaluacion_act_doc` ADD `SOLICITUD_VAL_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_act_doc" */
+CREATE INDEX XIF14EVALUACION_ACT_DOC ON evaluacion_act_doc (SOLICITUD_VAL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_act_doc` ADD CONSTRAINT `evaluacion_act_doc_esfk`   /* Asigna llave foran */
+FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_act_inv_edu` ADD `SOLICITUD_VAL_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_act_inv_edu" */
+CREATE INDEX XIF15EVALUACION_ACT_INV ON evaluacion_act_inv_edu (SOLICITUD_VAL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_act_inv_edu` ADD CONSTRAINT `evaluacion_act_inv_edu_esfk`   /* Asigna llave foran */
+FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_comision` ADD `SOLICITUD_VAL_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_comision" */
+CREATE INDEX XIF16EVALUACION_COMISION ON evaluacion_comision (SOLICITUD_VAL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_comision` ADD CONSTRAINT `evaluacion_comision_esfk`   /* Asigna llave foran */
+FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_edu_dis` ADD `SOLICITUD_VAL_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_edu_dis" */
+CREATE INDEX XIF17EVALUACION_EDU_DIS ON evaluacion_edu_dis (SOLICITUD_VAL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_edu_dis` ADD CONSTRAINT `evaluacion_edu_dis_esfk`   /* Asigna llave foran */
+FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_fpcs` ADD `SOLICITUD_VAL_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_fpcs" */
+CREATE INDEX XIF18EVALUACION_FPCS ON evaluacion_fpcs (SOLICITUD_VAL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_fpcs` ADD CONSTRAINT `evaluacion_fpcs_esfk`   /* Asigna llave foran */
+FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_mat_edu` ADD `SOLICITUD_VAL_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_mat_edu" */
+CREATE INDEX XIF19EVALUACION_MAT_EDU ON evaluacion_mat_edu (SOLICITUD_VAL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_mat_edu` ADD CONSTRAINT `evaluacion_mat_edu_esfk`   /* Asigna llave foran */
+FOREIGN KEY (`SOLICITUD_VAL_CVE`) REFERENCES `evaluacion_solicitud`(`VALIDACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+/*Relacionar SECCION_informacion  a las siguientes entidades "SOLICITUD_VAL_CVE" "evaluacion_act_doc", "evaluacion_act_inv_edu", "evaluacion_comision", "evaluacion_edu_dis", "evaluacion_fpcs", "evaluacion_mat_edu", "evaluacion_for_profesonal", "evaluacion_esp_medica", "evaluacion_beca" */
+
+ALTER TABLE `evaluacion_act_doc` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_act_doc" */
+CREATE INDEX XIF141EVALUACION_ACT_DOC ON evaluacion_act_doc (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_act_doc` ADD CONSTRAINT `evaluacion_act_doc_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_act_inv_edu` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_act_inv_edu" */
+CREATE INDEX XIF151EVALUACION_ACT_INV ON evaluacion_act_inv_edu (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_act_inv_edu` ADD CONSTRAINT `evaluacion_act_inv_edu_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_comision` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_comision" */
+CREATE INDEX XIF161EVALUACION_COMISION ON evaluacion_comision (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_comision` ADD CONSTRAINT `evaluacion_comision_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_edu_dis` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_edu_dis" */
+CREATE INDEX XIF171EVALUACION_EDU_DIS ON evaluacion_edu_dis (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_edu_dis` ADD CONSTRAINT `evaluacion_edu_dis_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_fpcs` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_fpcs" */
+CREATE INDEX XIF181EVALUACION_FPCS ON evaluacion_fpcs (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_fpcs` ADD CONSTRAINT `evaluacion_fpcs_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_mat_edu` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_mat_edu" */
+CREATE INDEX XIF191EVALUACION_MAT_EDU ON evaluacion_mat_edu (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_mat_edu` ADD CONSTRAINT `evaluacion_mat_edu_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_for_profesional` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_for_profesional" */
+CREATE INDEX XIF111EVALUACION_FORMACION_PROFESIONAL ON evaluacion_for_profesional (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_for_profesional` ADD CONSTRAINT `evaluacion_for_profesonal_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_esp_medica` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_esp_medica" */
+CREATE INDEX XIF121EVALUACION_ESP_MEDICA ON evaluacion_esp_medica (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_esp_medica` ADD CONSTRAINT `evaluacion_esp_medica_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE `evaluacion_beca` ADD `sec_info_cve` INT(11) NOT NULL;  /*Campo agregado a la tabla "evaluacion_beca" */
+CREATE INDEX XIF131EVALUACION_BECA ON evaluacion_beca (sec_info_cve);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_beca` ADD CONSTRAINT `evaluacion_beca_csifk`   /* Asigna llave foran */
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+/*Relacionar SECCION_informacion  a las siguientes entidades "SOLICITUD_VAL_CVE" "evaluacion_act_doc", "evaluacion_act_inv_edu", "evaluacion_comision", "evaluacion_edu_dis", "evaluacion_fpcs", "evaluacion_mat_edu", "evaluacion_for_profesonal", "evaluacion_esp_medica", "evaluacion_beca" */
+
+ALTER TABLE `evaluacion_curso_act_docente` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_act_docente" */
+CREATE INDEX XIF131EVALUACION_CURSO_ACT_DOCENTE ON evaluacion_curso_act_docente (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_act_docente` ADD CONSTRAINT `evaluacion_curso_act_docente_eadfk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_act_doc`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_act_inv_edu` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_act_inv_edu" */
+CREATE INDEX XIF132EVALUACION_CURSO_INT_EDU ON evaluacion_curso_act_inv_edu (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_act_inv_edu` ADD CONSTRAINT `evaluacion_curso_act_inv_edu_eaiefk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_act_inv_edu`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_comision` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_comision" */
+CREATE INDEX XIF133EVALUACION_CURSO_COMISION ON evaluacion_curso_comision (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_comision` ADD CONSTRAINT `evaluacion_curso_comision_eaiefk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_comision`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_edu_dis` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_edu_dis" */
+CREATE INDEX XIF134EVALUACION_CURSO_EDU_DIS ON evaluacion_curso_edu_dis (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_edu_dis` ADD CONSTRAINT `evaluacion_curso_edu_dis_eedfk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_edu_dis`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE `evaluacion_curso_fpcs` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_fpcs" */
+CREATE INDEX XIF135EVALUACION_CURSO_FPCS ON evaluacion_curso_fpcs (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_fpcs` ADD CONSTRAINT `evaluacion_curso_fpcs_efpcsfk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_fpcs`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_mat_edu` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_mat_edu" */
+CREATE INDEX XIF136EVALUACION_CURSO_MAT_EDU ON evaluacion_curso_mat_edu (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_mat_edu` ADD CONSTRAINT `evaluacion_curso_mat_edu_emefk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_mat_edu`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+rename table evaluacion_curso_for_profesonal to evaluacion_curso_for_profesional; /*Modifica NOMBRE DE la entidad */
+
+ALTER TABLE `evaluacion_curso_for_profesional` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_for_profesional" */
+CREATE INDEX XIF137EVALUACION_CURSO_FOR_PROFESIONAL ON evaluacion_curso_for_profesional (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_for_profesional` ADD CONSTRAINT `evaluacion_curso_for_profesional_efpfk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_for_profesional`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE `evaluacion_curso_esp_medica` ADD `EVALUACION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_esp_medica" */
+CREATE INDEX XIF138EVALUACION_CURSO_ESP_MEDICA ON evaluacion_curso_esp_medica (EVALUACION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_esp_medica` ADD CONSTRAINT `evaluacion_curso_esp_medica_eemfk`   /* Asigna llave foran */
+FOREIGN KEY (`EVALUACION_CVE`) REFERENCES `evaluacion_esp_medica`(`EVALUACION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+evaluacion_act_doc
+evaluacion_act_inv_edu
+evaluacion_comision
+evaluacion_edu_dis
+evaluacion_fpcs
+evaluacion_mat_edu
+/* faltantes OK*/
+evaluacion_for_profesional
+evaluacion_esp_medica
+evaluacion_beca   
+
+evaluacion_curso_act_docente
+evaluacion_curso_act_inv_edu
+evaluacion_curso_comision
+evaluacion_curso_edu_dis
+evaluacion_curso_fpcs
+evaluacion_curso_mat_edu
+evaluacion_curso_for_profesional
+evaluacion_curso_esp_medica
+/* faltante DUDA*/
+evaluacion_curso_beca    
+
+
+emp_actividad_docente
+emp_act_inv_edu
+emp_comision
+emp_educacion_distancia
+emp_for_personal_continua_salud
+emp_formacion_profesional
+emp_materia_educativo
+emp_esp_medica
+emp_beca
+emp_desa_inv_salud /*No contar por ahora*/
+
+evaluacion_solicitud
+
+
+
+
 
 
