@@ -156,13 +156,14 @@ function envio_cambio_estado_validacion(element) {
             .done(function (response) {
                 try {
                     var response = $.parseJSON(response);
-                    if (response.result === 1) {
+                    if (response.result === 1) {//Los datos se guardaron correctamente al cambio de estado
                         $('#mensaje_error_index').html(response.error);
                         $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass('alert-' + response.tipo_msg);
                         $('#div_error_index').show();
                         setTimeout("$('#div_error_index').hide()", 5000);
                         try {
                             cargar_datos_menu_perfil('seccion_enviar_validacion');
+                            array_menu_perfil = new Array(15);
                         } catch (e) {
                             $('#seccion_enviar_validacion').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
                         }

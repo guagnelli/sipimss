@@ -3448,6 +3448,7 @@ class Perfil extends MY_Controller {
         $parametros_insert_hist_val = array();
         $parametros_insert_hist_val['VAL_ESTADO_CVE'] = $estado_cambio_cve;
         $parametros_insert_hist_val['VALIDACION_GRAL_CVE'] = $datos_empleado_validar['val_grl_cve'];
+        $parametros_insert_hist_val['VAL_COMENTARIO'] = $comentario_justificacion;
         $parametros_insert_hist_val['IS_ACTUAL'] = 1;
         $cve_hist_actual['VALIDACION_CVE'] = $datos_empleado_validar['validacion_cve'];
         $parametro_hist_actual_mod['IS_ACTUAL'] = 0;
