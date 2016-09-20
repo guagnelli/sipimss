@@ -16,10 +16,9 @@ $label_just = $string_values['lbl_jus_comentario'] . ((isset($tipo_transicion)) 
                 $color = $array_colores[$estado['color_status']]['color']; //Obtiene los array de color del estado
                 ?>
                 <div class="alert alert-<?php echo $color; ?>">
-                    
                     <span><?php echo $string_values['titulo_fecha_validacion'] . get_fecha_local($value['fecha_validacion']); ?></span><br>
                     <span><?php echo $string_values['titulo_estado_validacion'] . $value['nom_estado_validacion']; ?></span><br>
-                    <span><?php echo $string_values['titulo_moal_comentario'] . $value['nom_validador']; ?></span><br>
+                    <span><?php echo $string_values['titulo_validador'] . $value['nom_validador']; ?></span><br>
                     <span><?php echo $string_values['lbl_comentario'] . $value['comentario_estado']; ?></span>
                 </div>
 

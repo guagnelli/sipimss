@@ -243,7 +243,7 @@ class Validacion_censo_profesores extends MY_Controller {
                 }
             }
             ///Se verifica si se ha validado (IS_ACTUAL=0) por el usuario logueado
-            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE'] && $hist['VAL_ESTADO_CVE']==$estado_anterior_verificar) {
+            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE'] && $hist['VAL_ESTADO_CVE'] == $estado_anterior_verificar) {
                 $resultado['fue_validado']['result'] = true; //Si es así se envian datos para ser almacenados en sesión
                 $resultado['fue_validado']['VALIDACION_CVE'] = $hist['VALIDACION_CVE'];
             }
@@ -344,32 +344,12 @@ class Validacion_censo_profesores extends MY_Controller {
                 $empleado_cve = intval($this->seguridad->decrypt_base64($datos_post['empleado_cve'])); //Des encripta la clave de la historia que viene de post
 //                $resul_coment = $this->vdm->get_comentario_hist_validaso($hist_val_cve); //Consulta datos del historico
                 $data_comentario['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($empleado_cve, $this->obtener_convocatoria());
-//                if (!empty($data_comentario)) {
-//                pr($data_comentario['historial_estados']);
-
-
-
-                    $data = array(  
-                        'titulo_modal' => $string_values['titulo_moal_comentario'] .'dOCENTO ',
-                        'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
-                        'pie_modal' => $this->load->view('validador_censo/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
-                    );
-                    echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
-//                }
-//                if (!empty($resul_coment)) {
-//                    $data_comentario['comentario_justificacion'] = $resul_coment->comentartio_estado;
-//                    $color_sattus = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['color_status']; //Color del estado
-//                    $color_sattus = $this->config->item('cvalidacion_curso_estado')[$color_sattus]['color']; //Color del estado
-//                    $data_comentario['color_estado'] = $color_sattus;
-//                    $data_comentario['tipo_transicion'] = $this->config->item('estados_val_censo')[$resul_coment->hist_estado]['tipo_transaccion'];
-//                    ;
-//                    $data = array(
-//                        'titulo_modal' => $string_values['titulo_moal_comentario'] . $resul_coment->nom_validador,
-//                        'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
-//                        'pie_modal' => $this->load->view('validador_censo/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
-//                    );
-//                    echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
-//                }
+                $data = array(
+                    'titulo_modal' => $string_values['titulo_modal_comentario'] ,
+                    'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
+                    'pie_modal' => $this->load->view('validador_censo/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
+                );
+                echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
             }
         } else {
             redirect(site_url());
@@ -433,8 +413,6 @@ class Validacion_censo_profesores extends MY_Controller {
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
             } else {//corrección
-            
-                
             }
         }
 //        pr($pasa_validacion);
