@@ -536,55 +536,55 @@ class Validacion_docente_model extends CI_Model {
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10, 11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Formacion en salud*/
+        union /*Formacion en salud*/
             select  hgn.FPCS_CVE "B1", 2 "clave"
             from hist_fpcs_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Investigacion en salud*/            
+        union /*Investigacion en salud*/            
             select  hgn.EDIS_CVE "B1", 3 "clave"
             from hist_edis_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Investigación educativa*/
+        union /*Investigación educativa*/
             select  hgn.EAID_CVE "B1", 4 "clave"
             from hist_eaid_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Beca*/            
+        union /*Beca*/            
             select  hgn.EMP_BECA_CVE "B1", 5 "clave"
             from hist_beca_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*formación profesional*/            
+        union /*formación profesional*/            
             select  EMP_FORMACION_PROFESIONAL_CVE "B1", 6 "clave"
             from hist_efp_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Material educativo*/            
+        union /*Material educativo*/            
             select  hgn.MATERIA_EDUCATIVO_CVE "B1", 7 "clave"
             from hist_me_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Educación a distancia*/
+        union /*Educación a distancia*/
             select  hgn.EMP_EDU_DISTANCIA_CVE "B1", 8 "clave"
             from hist_edd_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Especialidad medica*/
+        union /*Especialidad medica*/
             select  hgn.EMP_ESP_MEDICA_CVE "B1", 9 "clave"
             from hist_eem_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
             where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
-            union /*Actividad docente*/
+        union /*Actividad docente*/
             select  hgn.EMP_ACT_DOCENTE_CVE "B1", 10 "clave" 
             from hist_efpd_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
@@ -594,26 +594,49 @@ class Validacion_docente_model extends CI_Model {
 
         $query = $this->db->query($select)->result();
         $this->db->reset_query();
+//        pr($this->db->last_query());
 //        pr($query);
         if (!empty($query)) {//Construye los querys update
             /* [0] => stdClass Object(
               [id_registros_estado_valido] => 160
               [seccion_informacion] => 1) */
-            $this->genera_querys_update_is_profesionalizacion($query);
+            $this->genera_querys_update_is_profesionalizacion($query, 47);
         }
         return 1;
     }
 
-    private function genera_querys_update_is_profesionalizacion($array_ids) {
-        $seccion_id = $this->config->item('secciones_id');
+    private function genera_querys_update_is_profesionalizacion($array_ids, $empleado) {
         $secciones_propiedades = $this->config->item('secciones');
         $prop = '';
-        foreach ($array_ids as $value) {
-            $seccion_id[$value->seccion_informacion];
-            $prop = $seccion_id[$seccion_id['id']];
-            pr($value->seccion_informacion);
-            pr($value->id_registros_estado_valido);
+        $puntero = '';
+        $array_res = array();
+        $string = '';
+        for ($i = 0; $i < count($array_ids); $i++) {
+            $value = $array_ids[$i];
+            $prop = $secciones_propiedades[$value->seccion_informacion];
+            if (!isset($array_res[$value->seccion_informacion])) {//si no existe el array, se crea el espacio
+                if (!empty($puntero)) {
+                    $tmp = $array_res[$puntero];
+                    $tmp .= $string . " where EMPLEADO_CVE = " . $empleado . " AND IS_VALIDO_PROFESIONALIZACION = 0 ";
+                    $array_res[$puntero] = $tmp;
+                }
+                $array_res[$value->seccion_informacion] = "update " . $prop['entidad'] . " set ";
+                $string = $prop['pk'] . " = " . $value->id_registros_estado_valido;
+                $puntero = $value->seccion_informacion;
+            } else {
+                $string .= ", " . $prop['pk'] . " = " . $value->id_registros_estado_valido;
+            }
+
+            if (!isset($array_ids[$i + 1])) {//Si no existe el siguiente indice, lo termina
+                if (!empty($puntero)) {
+                    $tmp = $array_res[$puntero];
+                    $tmp .= $string . " where EMPLEADO_CVE = " . $empleado . " AND IS_VALIDO_PROFESIONALIZACION = 0 ";
+                    $array_res[$puntero] = $tmp;
+                }
+            }
         }
+
+//        pr($array_res);
     }
 
     public function insert_inicio_estado_correccion($parametros_hist, $parametros_val_gen) {
