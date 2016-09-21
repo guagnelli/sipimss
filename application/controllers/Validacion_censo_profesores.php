@@ -435,11 +435,12 @@ class Validacion_censo_profesores extends MY_Controller {
             }
         }
 //        pr($pasa_validacion);
+        
         if ($pasa_validacion) {
 //            if ($estado_cambio_cve == Enum_ev::Validado) {//Es la validacion por profecionalización, por lo que hay que cambiar el estado de todos los registros validados
 //                $rol_v = Enum_rols::Profesionalizacion;
 //            } else {
-//                $rol_v = null;
+                $rol_v = null;
 //            }
 //            $this->vdm->update_cambiar_estado_validados_profesionalizacion($datos_empleado_validar['empleado_cve']);
 //            exit();
