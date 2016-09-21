@@ -437,13 +437,14 @@ class Validacion_censo_profesores extends MY_Controller {
 //        pr($pasa_validacion);
         if ($pasa_validacion) {
             $updates = null;
+             $empleado = $datos_empleado_validar['empleado_cve'];
             if ($estado_cambio_cve == Enum_ev::Validado) {//Es la validacion por profecionalización, por lo que hay que cambiar el estado de todos los registros validados
                 $updates = $this->vdm->get_querys_updates_estado_validados_profesionalizacion($datos_empleado_validar['empleado_cve']);
             }
 //            pr($updates);
 //            exit();
             //Efectúa la actualización del nuevo estado
-            $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual, $updates);
+            $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual, $empleado, $updates);
 //            pr($result_cam_estado);
             if (!empty($result_cam_estado)) {
                 $this->actualizar_estado_validar_a_revision($validacion_id, $tabla_validacion, $validacion_registro, $result_cam_estado['VALIDACION_CVE']);

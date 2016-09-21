@@ -515,17 +515,16 @@ class Validacion_docente_model extends CI_Model {
                 $actualizacion_correcta = 1;
                 foreach ($update as $key => $val) {
                     $prop = $secciones_propiedades[$key];
-                    $string . " where EMPLEADO_CVE = " . $empleado . " AND IS_VALIDO_PROFESIONALIZACION = 0 ";
                     $array_validacion = array('IS_VALIDO_PROFESIONALIZACION' => 1, 'EMPLEADO_CVE' => $empleado);
                     $this->db->where_in($prop['pk'], $val);
-                    $this->db->update('validador', $array_validacion);
+                    $this->db->update($prop['entidad'], $array_validacion);
                     
                     if ($this->db->trans_status() === FALSE) {
                         $actualizacion_correcta = 0;
                         break;
                     }
                 }
-
+//                pr($actualizacion_correcta);
                 if ($actualizacion_correcta == 1) {//Se actualizo correctamente
                     $this->db->trans_commit();
                     $parametros_insert_nuevo_hist['VALIDACION_CVE'] = $data_hist_id;
