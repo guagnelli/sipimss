@@ -65,7 +65,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     break;
                 case Enum_rols::Validador_N2:
                     $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
-                    $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1);
+                    $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1, 'cve_delegacion'=>$delegacion_cve);
                     break;
                 case Enum_rols::Profesionalizacion:
                     $datos_validador['DELEGACION_CVE'] = 0;

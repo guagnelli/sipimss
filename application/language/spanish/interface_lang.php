@@ -403,6 +403,8 @@ $lang['interface'] = array(
         'titulo_fecha_validacion' => 'Fecha de la validación: ',
         'drop_delegacion' => 'Seleccione delegación',
         'lbl_delegacion' => 'Delegación',
+        'drop_departamento' => 'Seleccione departamento',
+        'lbl_departamento' => 'Unidad',
         'text_estado_revision' => 'En revisión',
         'msj_no_completo_envio_validacion_censo' => 'No es posible enviar a validación del censo en este momento, 
         para ello requiere cumplir con los siguientes requisitos. <br> 1. Debe contar por lo menos con una actividad de docente. 

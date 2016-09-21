@@ -1042,7 +1042,7 @@ class Perfil extends MY_Controller {
         $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
         $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
         $guardado_correcto = '';
-//        pr($actividad_docente);
+//        pr($this->input->post(null, true));
         if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
             $this->config->load('form_validation'); //Cargar archivo con validaciones
             $validations = $this->config->item('form_actividad_docente_general'); //Obtener validaciones de archivo

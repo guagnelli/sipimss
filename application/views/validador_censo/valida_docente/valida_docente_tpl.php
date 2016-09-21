@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             ?>
                             <div class="alert alert-<?php echo $color; ?>">
                                 <span><?php echo $string_values['titulo_estado_validacion'] . $value['nom_estado_validacion']; ?></span><br>
-                                <span><?php echo $string_values['titulo_moal_comentario'] . $value['nom_validador']; ?></span><br>
+                                <span><?php echo $string_values['titulo_validador'] . $value['nom_validador']; ?></span><br>
                                 <span><?php echo $string_values['lbl_comentario'] . $value['comentario_estado']; ?></span>
                             </div>
 

@@ -654,3 +654,27 @@ $config['estados_val_evaluacion'] = array(
 $config['solicitar_evaluacion'] = (object)array("tabla"=>"emp_formacion_profesional",
                                                 "campo"=>"efp_aplica_ecd",
                                                 "validacion"=>array());
+$config["secciones"] = array(
+    "ca"=>array("id"=>"1", "entidad"=>"emp_comision","curso"=>"TIP_CUR_NOMBRE","tipo_curso"=>"TIP_COM_NOMBRE","pk"=>"EMP_COMISION_CVE"),
+    "fs"=>array("id"=>"2","entidad"=>"emp_for_personal_continua_salud","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "is"=>array("id"=>"3","entidad"=>"emp_desa_inv_salud","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ie"=>array("id"=>"4","entidad"=>"emp_act_inv_edu","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "b"=>array("id"=>"5","entidad"=>"emp_beca ","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "fp"=>array("id"=>"6","entidad"=>"emp_formacion_profesional","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "me"=>array("id"=>"7","entidad"=>"emp_materia_educativo","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ed"=>array("id"=>"8","entidad"=>"emp_educacion_distancia","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "em"=>array("id"=>"9","entidad"=>"emp_esp_medica","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ad"=>array("id"=>"10","entidad"=>"emp_actividad_docente","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+);
+$config["secciones_id"] = array(
+    1=>array("id"=>"ca"),
+    2=>array("id"=>"fs"),
+    3=>array("id"=>"is"),
+    4=>array("id"=>"ie"),
+    5=>array("id"=>"b"),
+    6=>array("id"=>"fp"),
+    7=>array("id"=>"me"),
+    8=>array("id"=>"ed"),
+    9=>array("id"=>"em"),
+    10=>array("id"=>"ad"),
+);

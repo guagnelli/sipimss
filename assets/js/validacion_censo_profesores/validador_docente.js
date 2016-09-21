@@ -34,6 +34,11 @@ function envio_cambio_estado_validacion(element) {
                         $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-success').addClass('alert-' + response.tipo_msg);
                         $('#div_error_index').show();
                         setTimeout("$('#div_error_index').hide()", 5000);
+                        try {
+                            cargar_datos_menu_perfil();
+                        } catch (e) {
+                            $('#seccion_validar').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
+                        }
 
                     }
                 } catch (e) {

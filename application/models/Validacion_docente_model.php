@@ -25,39 +25,63 @@ class Validacion_docente_model extends CI_Model {
             'hv.VALIDADOR_CVE  "validador_cve"', 'em.ADSCRIPCION_CVE "emp_adscripcion_cve"',
             'em.DELEGACION_CVE "emp_delegacion_cve"', 'em.CATEGORIA_CVE "emp_categoria"',
             'hv.VALIDACION_CVE "hist_validacion_cve"', 'vg.VALIDACION_GRAL_CVE "validaor_grl_cve"',
-            'em.USUARIO_CVE "usuario_cve"', 'vg.VAL_CONV_CVE "convocatoria_cve"'
+            'em.USUARIO_CVE "usuario_cve"', 'vg.VAL_CONV_CVE "convocatoria_cve"', 'cc.nom_categoria "nom_categoria"'
         );
 
-        $this->db->start_cache();
+        $this->db->start_cache();/**         * *************Inicio cache  *************** */
 //        $this->db->from('cdepartamento as dp');
         $this->db->join('empleado em', 'em.EMPLEADO_CVE = vg.EMPLEADO_CVE');
+        $this->db->join('ccategoria cc', 'cc.id_cat = em.CATEGORIA_CVE', 'left');
         $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
         $this->db->join('cvalidacion_estado cve', 'cve.VAL_ESTADO_CVE = hv.VAL_ESTADO_CVE');
         //where que son obligatorios
         $this->db->where('em.EDO_LABORAL_CVE', 1);
         $this->db->where('hv.IS_ACTUAL', 1);
-        if ($params['rol_seleccionado'] === Enum_rols::Profesionalizacion) {
-            if ($params['DELEGACION_CVE'] > 0) {
-                $this->db->where('em.DELEGACION_CVE', $params['DELEGACION_CVE']);
-            }
-            if ($params['VAL_CON_CVE'] > 0) {
-                $this->db->where('vg.VAL_CONV_CVE', $params['VAL_CON_CVE']);
-            }
-        } else {
-            if ($params['rol_seleccionado'] === Enum_rols::Validador_N1) {//Sólo aplica departamento para validador n1
+
+        switch ($params['rol_seleccionado']) {
+            case Enum_rols::Profesionalizacion:
+                if ($params['DELEGACION_CVE'] > 0) {
+                    $this->db->where('em.DELEGACION_CVE', $params['DELEGACION_CVE']);
+                }
+                if ($params['VAL_CON_CVE'] > 0) {
+                    $this->db->where('vg.VAL_CONV_CVE', $params['VAL_CON_CVE']);
+                }
+//                pr($params['departamento_cve']);
+                if (!empty($params['departamento_cve'])) {
+                    $this->db->where('em.ADSCRIPCION_CVE', $params['departamento_cve']);
+                }
+                break;
+            case Enum_rols::Validador_N2:
+                if ($params['departamento_cve'] > 0) {
+                    $this->db->where('em.ADSCRIPCION_CVE', $params['departamento_cve']);
+                }
+                if (isset($params['DELEGACION_CVE'])) {
+                    $this->db->where('em.DELEGACION_CVE', $params['DELEGACION_CVE']);
+                } else {//Condision de seguridad, si el validador no existe en la entidad validación
+                    $this->db->where('em.DELEGACION_CVE', 0);
+                }
+                if (isset($params['VAL_CON_CVE'])) {
+                    $this->db->where('vg.VAL_CONV_CVE', $params['VAL_CON_CVE']);
+                } else {//Condision de seguridad, si el validador no existe en la entidad validación
+                    $this->db->where('vg.VAL_CONV_CVE', 0);
+                }
+                break;
+            case Enum_rols::Validador_N1:
+                if (isset($params['DELEGACION_CVE'])) {
+                    $this->db->where('em.DELEGACION_CVE', $params['DELEGACION_CVE']);
+                } else {//Condision de seguridad, si el validador no existe en la entidad validación
+                    $this->db->where('em.DELEGACION_CVE', 0);
+                }
                 $this->db->where('em.ADSCRIPCION_CVE', $params['DEPARTAMENTO_CVE']);
-            }
-            if (isset($params['DELEGACION_CVE'])) {
-                $this->db->where('em.DELEGACION_CVE', $params['DELEGACION_CVE']);
-            } else {//Condision de seguridad, si el validador no existe en la entidad validación
-                $this->db->where('em.DELEGACION_CVE', 0);
-            }
-            if (isset($params['VAL_CON_CVE'])) {
-                $this->db->where('vg.VAL_CONV_CVE', $params['VAL_CON_CVE']);
-            } else {//Condision de seguridad, si el validador no existe en la entidad validación
-                $this->db->where('vg.VAL_CONV_CVE', 0);
-            }
+                if (isset($params['VAL_CON_CVE'])) {
+                    $this->db->where('vg.VAL_CONV_CVE', $params['VAL_CON_CVE']);
+                } else {//Condision de seguridad, si el validador no existe en la entidad validación
+                    $this->db->where('vg.VAL_CONV_CVE', 0);
+                }
+                break;
         }
+
+
         if (!empty($params['cvalidacion_estado'])) {//where estado de la validación, no es obligatorio
             $this->db->where('hv.VAL_ESTADO_CVE', $params['cvalidacion_estado']);
         }
@@ -69,8 +93,8 @@ class Validacion_docente_model extends CI_Model {
         } else {//pone un like para buscar por matricula, o categoria
             $this->db->like($busqueda_text, $params['buscador_docente']);
         }
-        $this->db->stop_cache();
 
+        $this->db->stop_cache(); //************************************Fin cache
         //Cuenta la cantidad de registros
         $num_rows = $this->db->query($this->db->select('count(*) as total')->get_compiled_select('validacion_gral as vg'))->result();
         $this->db->reset_query(); //Reset de query 
@@ -432,7 +456,7 @@ class Validacion_docente_model extends CI_Model {
         $select = array('vg.VALIDACION_GRAL_CVE "validaor_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
             'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "estado_validacion"',
             'cve.VAL_EST_NOMBRE "nom_estado_validacion"', 'hv.VAL_COMENTARIO "comentario_estado"',
-            'if(hv.VAL_COMENTARIO is null or hv.VAL_COMENTARIO = "",0,1) "is_comentario"', 
+            'if(hv.VAL_COMENTARIO is null or hv.VAL_COMENTARIO = "",0,1) "is_comentario"',
             'hv.VAL_FCH "fecha_validacion"',
             'concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO) as "nom_validador"'
         );
@@ -471,7 +495,7 @@ class Validacion_docente_model extends CI_Model {
         return $row_hist;
     }
 
-    public function update_insert_estado_val_docente($parametros_insert_nuevo_hist, $parametros_update_hist_actual, $condicion_hist_actual) {
+    public function update_insert_estado_val_docente($parametros_insert_nuevo_hist, $parametros_update_hist_actual, $condicion_hist_actual, $rol = null) {
 
         $this->db->trans_begin(); //Definir inicio de transacción
 
@@ -486,11 +510,110 @@ class Validacion_docente_model extends CI_Model {
             $this->db->trans_rollback();
             return array();
         } else {
-            $this->db->trans_commit();
-            $parametros_insert_nuevo_hist['VALIDACION_CVE'] = $data_hist_id;
+            if (!is_null($rol) AND $rol == Enum_rols::Profesionalizacion) {
+                $result = $this->update_cambiar_estado_validados_profesionalizacion();
+                if ($result == 1) {//Se actualizo correctamente
+                    $this->db->trans_commit();
+                    $parametros_insert_nuevo_hist['VALIDACION_CVE'] = $data_hist_id;
+                } else {
+                    $this->db->trans_rollback();
+                    return array();
+                }
+            } else {//No es validación por profesionalización, 
+                $this->db->trans_commit();
+                $parametros_insert_nuevo_hist['VALIDACION_CVE'] = $data_hist_id;
+            }
             return $parametros_insert_nuevo_hist;
         }
         //pr($this->db->last_query());
+    }
+
+    public function update_cambiar_estado_validados_profesionalizacion($empleado) {
+        $select = 'select B1 "id_registros_estado_valido", clave "seccion_informacion"
+        from (
+        select  hgn.EMP_COMISION_CVE "B1" , 1 "clave"
+            from hist_comision_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10, 11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Formacion en salud*/
+            select  hgn.FPCS_CVE "B1", 2 "clave"
+            from hist_fpcs_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Investigacion en salud*/            
+            select  hgn.EDIS_CVE "B1", 3 "clave"
+            from hist_edis_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Investigación educativa*/
+            select  hgn.EAID_CVE "B1", 4 "clave"
+            from hist_eaid_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Beca*/            
+            select  hgn.EMP_BECA_CVE "B1", 5 "clave"
+            from hist_beca_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*formación profesional*/            
+            select  EMP_FORMACION_PROFESIONAL_CVE "B1", 6 "clave"
+            from hist_efp_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Material educativo*/            
+            select  hgn.MATERIA_EDUCATIVO_CVE "B1", 7 "clave"
+            from hist_me_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Educación a distancia*/
+            select  hgn.EMP_EDU_DISTANCIA_CVE "B1", 8 "clave"
+            from hist_edd_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Especialidad medica*/
+            select  hgn.EMP_ESP_MEDICA_CVE "B1", 9 "clave"
+            from hist_eem_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            union /*Actividad docente*/
+            select  hgn.EMP_ACT_DOCENTE_CVE "B1", 10 "clave" 
+            from hist_efpd_validacion_curso hgn 
+            join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
+            join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
+            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+    ) as res order by clave;';
+
+        $query = $this->db->query($select)->result();
+        $this->db->reset_query();
+//        pr($query);
+        if (!empty($query)) {//Construye los querys update
+            /* [0] => stdClass Object(
+              [id_registros_estado_valido] => 160
+              [seccion_informacion] => 1) */
+            $this->genera_querys_update_is_profesionalizacion($query);
+        }
+        return 1;
+    }
+
+    private function genera_querys_update_is_profesionalizacion($array_ids) {
+        $seccion_id = $this->config->item('secciones_id');
+        $secciones_propiedades = $this->config->item('secciones');
+        $prop = '';
+        foreach ($array_ids as $value) {
+            $seccion_id[$value->seccion_informacion];
+            $prop = $seccion_id[$seccion_id['id']];
+            pr($value->seccion_informacion);
+            pr($value->id_registros_estado_valido);
+        }
     }
 
     public function insert_inicio_estado_correccion($parametros_hist, $parametros_val_gen) {

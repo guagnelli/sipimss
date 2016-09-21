@@ -37,8 +37,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             . 'type="button" '
                             . 'class="btn btn-link btn-sm" '
                             . 'data-idrow ="' . $key_ai . '"'
-                            . 'data-histvalcve="' . $hist_val_cve . '"' 
                             . 'data-empcve="' . $empleado_cve . '"' 
+                            . 'data-convocatoriacve="' . $convocatoria_cve . '"'
                             . 'data-toggle="modal"'
                             . 'data-target="#modal_censo"'
                             . 'onclick="ver_comentario_estado_doc(this)" >' .
@@ -57,7 +57,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
                 echo "<td>" . $val['matricula'] . "</td>";
                 echo "<td>" . $val['nom_docente'] . "</td>";
-                echo "<td>" . $val['emp_categoria'] . "</td>";
+                echo "<td>" . $val['nom_categoria'] . "</td>";
                 echo "<td>" . $val['fecha_estado_validacion'] . "</td>";
                 echo "<td>" . $val['nombre_estado_validacion'] . "</td>";
                 echo "<td class='text-center'>" . $link_ver_comentario . "</td>";
