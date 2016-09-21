@@ -495,7 +495,7 @@ class Validacion_docente_model extends CI_Model {
         return $row_hist;
     }
 
-    public function update_insert_estado_val_docente($parametros_insert_nuevo_hist, $parametros_update_hist_actual, $condicion_hist_actual, $rol = null) {
+    public function update_insert_estado_val_docente($parametros_insert_nuevo_hist, $parametros_update_hist_actual, $condicion_hist_actual, $empleado = null, $update = null) {
 
         $this->db->trans_begin(); //Definir inicio de transacción
 
@@ -510,9 +510,23 @@ class Validacion_docente_model extends CI_Model {
             $this->db->trans_rollback();
             return array();
         } else {
-            if (!is_null($rol) AND $rol == Enum_rols::Profesionalizacion) {
-                $result = $this->update_cambiar_estado_validados_profesionalizacion();
-                if ($result == 1) {//Se actualizo correctamente
+            if (!is_null($update)) {
+                $secciones_propiedades = $this->config->item('secciones');
+                $actualizacion_correcta = 1;
+                foreach ($update as $key => $val) {
+                    $prop = $secciones_propiedades[$key];
+                    $string . " where EMPLEADO_CVE = " . $empleado . " AND IS_VALIDO_PROFESIONALIZACION = 0 ";
+                    $array_validacion = array('IS_VALIDO_PROFESIONALIZACION' => 1, 'EMPLEADO_CVE' => $empleado);
+                    $this->db->where_in($prop['pk'], $val);
+                    $this->db->update('validador', $array_validacion);
+                    
+                    if ($this->db->trans_status() === FALSE) {
+                        $actualizacion_correcta = 0;
+                        break;
+                    }
+                }
+
+                if ($actualizacion_correcta == 1) {//Se actualizo correctamente
                     $this->db->trans_commit();
                     $parametros_insert_nuevo_hist['VALIDACION_CVE'] = $data_hist_id;
                 } else {
@@ -528,7 +542,12 @@ class Validacion_docente_model extends CI_Model {
         //pr($this->db->last_query());
     }
 
-    public function update_cambiar_estado_validados_profesionalizacion($empleado) {
+    /**
+     * @author LEAS
+     * @param type $empleado
+     * @return Querys de actualización para indicar curso validado por profesionalización   
+     */
+    public function get_querys_updates_estado_validados_profesionalizacion($empleado) {
         $select = 'select B1 "id_registros_estado_valido", clave "seccion_informacion"
         from (
         select  hgn.EMP_COMISION_CVE "B1" , 1 "clave"
@@ -595,16 +614,45 @@ class Validacion_docente_model extends CI_Model {
         $query = $this->db->query($select)->result();
         $this->db->reset_query();
 //        pr($this->db->last_query());
-//        pr($query);
+        $updates = array();
         if (!empty($query)) {//Construye los querys update
             /* [0] => stdClass Object(
               [id_registros_estado_valido] => 160
               [seccion_informacion] => 1) */
-            $this->genera_querys_update_is_profesionalizacion($query, 47);
+//            $updates = $this->genera_querys_update_is_profesionalizacion($query, $empleado);
+            $updates = $this->genera_array_querys_update_is_profesionalizacion($query);
         }
-        return 1;
+        return $updates;
     }
 
+    /**
+     * 
+     * @author LEAS
+     * @param type $array_ids
+     * @param type $empleado
+     * Crear los querys de actual
+     */
+    private function genera_array_querys_update_is_profesionalizacion($array_ids) {
+        $array_res = array();
+        for ($i = 0; $i < count($array_ids); $i++) {
+            $value = $array_ids[$i];
+            if (!isset($array_res[$value->seccion_informacion])) {//si no existe el array, se crea el espacio
+                $array_res[$value->seccion_informacion] = array();
+                $array_res[$value->seccion_informacion][] = $value->id_registros_estado_valido;
+            } else {
+                $array_res[$value->seccion_informacion][] = $value->id_registros_estado_valido;
+            }
+        }
+        return $array_res;
+    }
+
+    /**
+     * 
+     * @author LEAS
+     * @param type $array_ids
+     * @param type $empleado
+     * Crear los querys de actual
+     */
     private function genera_querys_update_is_profesionalizacion($array_ids, $empleado) {
         $secciones_propiedades = $this->config->item('secciones');
         $prop = '';
