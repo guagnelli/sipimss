@@ -549,65 +549,65 @@ class Validacion_docente_model extends CI_Model {
     public function get_querys_updates_estado_validados_profesionalizacion($empleado) {
         $select = 'select B1 "id_registros_estado_valido", clave "seccion_informacion"
         from (
-        select  hgn.EMP_COMISION_CVE "B1" , 1 "clave"
+         select  hgn.EMP_COMISION_CVE "B1" , 1 "clave"
             from hist_comision_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10, 11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10, 11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Formacion en salud*/
             select  hgn.FPCS_CVE "B1", 2 "clave"
             from hist_fpcs_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Investigacion en salud*/            
             select  hgn.EDIS_CVE "B1", 3 "clave"
             from hist_edis_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Investigación educativa*/
             select  hgn.EAID_CVE "B1", 4 "clave"
             from hist_eaid_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Beca*/            
             select  hgn.EMP_BECA_CVE "B1", 5 "clave"
             from hist_beca_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*formación profesional*/            
             select  EMP_FORMACION_PROFESIONAL_CVE "B1", 6 "clave"
             from hist_efp_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Material educativo*/            
             select  hgn.MATERIA_EDUCATIVO_CVE "B1", 7 "clave"
             from hist_me_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Educación a distancia*/
             select  hgn.EMP_EDU_DISTANCIA_CVE "B1", 8 "clave"
             from hist_edd_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Especialidad medica*/
             select  hgn.EMP_ESP_MEDICA_CVE "B1", 9 "clave"
             from hist_eem_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
         union /*Actividad docente*/
             select  hgn.EMP_ACT_DOCENTE_CVE "B1", 10 "clave" 
             from hist_efpd_validacion_curso hgn 
             join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE
             join validacion_gral vg on vg.VALIDACION_GRAL_CVE = hv.VALIDACION_GRAL_CVE
-            where  hgn.VAL_CUR_EST_CVE = 1 and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
+            where  hgn.VAL_CUR_EST_CVE in(1, 2) and hv.VAL_ESTADO_CVE in(10,11) and  vg.EMPLEADO_CVE = ' . $empleado . '
     ) as res order by clave;';
 
         $query = $this->db->query($select)->result();

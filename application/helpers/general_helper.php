@@ -691,13 +691,13 @@ if (!function_exists('antiguedad_format')) {
 }
 /* End of file general_helper.php */
 
-/*if (!function_exists('html_verificar_validacion_registro')) {
+/* if (!function_exists('html_verificar_validacion_registro')) {
 
-    function html_verificar_validacion_registro($valor = 0, $color = 0) {
-        return ($valor > 0 || $color == 1) ? '<span class="class_validacion_registro ' . (($color == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($color == 1) ? 'Validación confirmada por profesionalización' : 'Validación realizada') . '"></span>' : '-';
-    }
+  function html_verificar_validacion_registro($valor = 0, $color = 0) {
+  return ($valor > 0 || $color == 1) ? '<span class="class_validacion_registro ' . (($color == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($color == 1) ? 'Validación confirmada por profesionalización' : 'Validación realizada') . '"></span>' : '-';
+  }
 
-}*/
+  } */
 
 if (!function_exists('genera_botones_estado_validacion')) {
 
@@ -721,7 +721,10 @@ if (!function_exists('genera_botones_estado_validacion')) {
             $pro_estado_actual = $propiedades_gen_estado[$estado_actual]; //Carga el estado actual del docente 
 //            $estado_transicion = $pro_estado_actual['estados_transicion'];
             $CI->load->library('seguridad');
-            $pasa_convocatoria_val = get_convocatoria_delegacion_val_censo($delegacion_validador, $tipo_validador_rol);
+            /* Valida convocatoria para n1 y n2 por delegación */
+            if ($tipo_validador_rol == Enum_rols::Validador_N1 || $tipo_validador_rol == Enum_rols::Validador_N2) {
+                $pasa_convocatoria_val = get_convocatoria_delegacion_val_censo($delegacion_validador, $tipo_validador_rol);
+            }
 //            pr($pro_estado_actual['estados_transicion']);
             foreach ($pro_estado_actual['estados_transicion'] as $value_est_trans) {
                 $estados_trans = $propiedades_gen_estado[$value_est_trans];
@@ -811,7 +814,7 @@ if (!function_exists('get_convocatoria_delegacion')) {
             //Existe la convocatoría
             return array('idconv' => $convocatoria->convocatoria_cve, 'aplica_conv_rol' => $valida_paso_convocatoria);
         } else {
-            return array();//NO existe una convocatoría
+            return array(); //NO existe una convocatoría
         }
     }
 

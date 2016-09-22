@@ -3382,7 +3382,7 @@ class Perfil extends MY_Controller {
             $this->lang->load('interface', 'spanish');
             $data['string_values'] = $string_values;
             //Obtiene el historial completo de la validación del docente según la convocatoría
-            if (!empty($convocatoria_delegacion)) {//Busca si existe la convocatoría, de otro modo no se puede subir ni cargar nada
+            if (!empty($convocatoria_delegacion) AND $convocatoria_delegacion['aplica_conv_rol'] == 1) {//Busca si existe la convocatoría, de otro modo no se puede subir ni cargar nada
                 //Vuelve a cargar la historia del usuario 
                 $this->load->model('Validacion_docente_model', 'vdm');
                 $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
