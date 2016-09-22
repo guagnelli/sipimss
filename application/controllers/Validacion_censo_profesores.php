@@ -386,8 +386,18 @@ class Validacion_censo_profesores extends MY_Controller {
 
     /**
      * @author LEAS
-     * Función que cambia de estado n1 a en revisión, según el validador que se encuentrá haciendo la revisión
-     * @return type 1 = cambio a revisión satisfactoriamente; 0= fallo en la transición  
+     * @fecha 05/09/2016
+     * @fechaMod 21/09/2016
+     * @param type $validacion_id
+     * @param type $tabla_validacion
+     * @param type $validacion_registro
+     * Función que 
+     * cambia de estado Por validar n1 a en revisión n1;
+     * cambia de estado Por validar n2 a en revisión n2;
+     * cambia de estado correccion n1 a en revisión de corrección n1
+     * cambia de estado correccion n2 a en revisión de corrección n2
+     * según el validador que se encuentrá haciendo la revisión
+     * @return int 1 = cambio a revisión satisfactoriamente; 0= fallo en la transición  
      */
     private function cambiar_estado_revision_validador($validacion_id, $tabla_validacion, $validacion_registro) {
         $datos_validador = $this->session->userdata('datos_validador');

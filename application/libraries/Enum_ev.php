@@ -1,31 +1,6 @@
 <?php
 
-abstract class MyEnum_ev {
-
-    final public function __construct($value = null) {
-        $c = new ReflectionClass($this);
-        if (!in_array($value, $c->getConstants())) {
-            throw IllegalArgumentException();
-        }
-        $this->value = $value;
-    }
-
-    final public function buscar($value = null) {
-        $text = $this->getTextoEnum($value);
-        $this->texto = $text;
-    }
-
-    final public function __toString() {
-        return $this->value;
-    }
-
-    function getTextoEnum($value = null) {
-        return "";
-    }
-
-}
-
-class Enum_ev extends MyEnum_ev {
+class Enum_ev {
 
     const
             __default = 0,
@@ -41,7 +16,9 @@ class Enum_ev extends MyEnum_ev {
             Val_n2_por_validar_profesionalizacion = 10,
             En_revision_profesionalizacion = 11,
             Correccion_n2 = 12,
-            Validado = 13
+            Validado = 13,
+            En_revision_de_correccion_n1 = 14,
+            En_revision_de_correccion_n2 = 15
 
     ;
     /*
