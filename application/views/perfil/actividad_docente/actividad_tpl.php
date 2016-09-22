@@ -132,6 +132,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                             <table class="table table-striped table-hover table-bordered" id="tabla_actividades">
                                 <thead>
                                     <tr class='btn-default'>
+                                        <th><?php echo $string_values['validado']; ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_cur_principal'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_actividad'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_anio'] ?></th>
@@ -172,7 +173,8 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                             $comprobante = 0;
                                             $btn_comprobante = '';
                                         }
-                                        echo "<tr class='" . $reg_principal . "' id='id_row_" . $key . "' data-cp='" . $cp . "' data-keyrow=" . $key . " >";
+                                        echo "<tr class='" . $reg_principal . "' id='id_row_" . $key . "' data-cp='" . $cp . "' data-keyrow=" . $key . " >
+                                            <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($value['IS_VALIDO_PROFESIONALIZACION'])."</td>";
                                         echo "<td >" . $this->form_complete->create_element(
                                                 array('id' => 'radio_curso_principal', 'type' => 'radio',
                                                     'value' => $value['cve_actividad_docente'],
@@ -190,6 +192,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                     )
                                         )) .
                                         "</td>";
+                                        $id = $this->seguridad->encrypt_base64($value['cve_actividad_docente']);
                                         $validation_estado = (isset($value['validation_estado']) && !empty($value['validation_estado'])) ? $value['validation_estado'] : null;
                                         $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($value['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="' . $key . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-cp ="' . $is_cur_principal . '" onclick="funcion_eliminar_actividad_docente(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
                                         $btn_editar = ($this->seguridad->verificar_liga_editar_docente($value['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" data-idrow ="' . $key . '" data-becacve ="' . $value['cve_actividad_docente'] . '" data-comprobantecve ="' . $idcomprobante . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_actividad(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
@@ -198,8 +201,11 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                         echo "<td >" . $value['duracion'] . "</td>";
                                         echo "<td >" . $value['fecha_inicio'] . "</td>";
                                         echo "<td >" . $value['fecha_fin'] . "</td>";
-                                         echo "<td>" . $btn_comprobante . "</td>";
-                                        echo '<td>'.$btn_editar.'</td>';
+                                        echo "<td>" . $btn_comprobante . "</td>";
+                                        echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_ad" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_ad(this, '.$value['ta_cve'].');">'.
+                                               $string_values['ver'].
+                                            '</button>
+                                            '.$btn_editar.'</td>';
                                         echo '<td>'.$btn_eliminar.'</td>';
                                         echo "</tr>";
                                     }

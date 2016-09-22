@@ -88,6 +88,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                             <table class='table table-striped'>
                                                 <thead>
                                                     <tr>
+                                                        <th><?php echo $string_values['validado']; ?></th>
                                                         <th><?php echo $string_values['lbl_fecha_inicio']; ?></th>
                                                         <th><?php echo $string_values['lbl_fecha_final']; ?></th>
                                                         <th><?php echo $string_values['lbl_tipo_formacion']; ?></th>
@@ -104,11 +105,15 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                         $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
                                                         $btn_editar = ($this->seguridad->verificar_liga_editar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                         echo '<tr id="tr_'.$id.'">
+                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
                                                                 <td>'.$btn_comprobante.'</td>
-                                                                <td>'.$btn_editar.'
+                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fs(this);">'.
+                                                                       $string_values['ver'].
+                                                                    '</button>
+                                                                    '.$btn_editar.'
                                                                     '.$btn_eliminar.'
                                                                 </td>
                                                             </tr>';
@@ -145,6 +150,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                             <table class='table table-striped'>
                                                 <thead>
                                                     <tr>
+                                                        <th><?php echo $string_values['validado']; ?></th>
                                                         <th><?php echo $string_values['lbl_fecha_inicio']; ?></th>
                                                         <th><?php echo $string_values['lbl_fecha_final']; ?></th>
                                                         <th><?php echo $string_values['lbl_tipo_formacion']; ?></th>
@@ -161,11 +167,15 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                         $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
                                                         $btn_editar = ($this->seguridad->verificar_liga_editar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                         echo '<tr id="tr_'.$id.'">
+                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
                                                                 <td>'.$btn_comprobante.'</td>
-                                                                <td>'.$btn_editar.'
+                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fs(this);">'.
+                                                                       $string_values['ver'].
+                                                                    '</button>
+                                                                    '.$btn_editar.'
                                                                     '.$btn_eliminar.'
                                                                 </td>
                                                             </tr>';
@@ -230,6 +240,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                                         <table class="table table-striped table-hover table-bordered" id="tabla_formacion_docente_<?php echo $key_tfp.'_'.$key_sfp; ?>">
                                                                             <thead>
                                                                                 <tr class='btn-default'>
+                                                                                    <th><?php echo $string_values['validado']; ?></th>
                                                                                     <th><?php echo $string_values['t_h_anio']; ?></th>
                                                                                     <th><?php echo $string_values['lbl_tipo_formacion_docente']; ?></th>
                                                                                     <th><?php echo $string_values['t_h_curso']; ?></th>
@@ -252,13 +263,17 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                                                             $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
                                                                                             $btn_editar = ($this->seguridad->verificar_liga_editar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                                                             echo '<tr id="tr_'.$id.'">
+                                                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
                                                                                                 <td>'.$for_doc['IA_NOMBRE'].'</td>
                                                                                                 <td>'.$for_doc['MOD_NOMBRE'].'</td>
                                                                                                 <td>'.$btn_comprobante.'</td>
-                                                                                                <td>'.$btn_editar.'
+                                                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fd(this);">'.
+                                                                                                       $string_values['ver'].
+                                                                                                    '</button>
+                                                                                                    '.$btn_editar.'
                                                                                                     '.$btn_eliminar.'
                                                                                                 </td>
                                                                                             </tr>';
@@ -284,6 +299,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                         <table class="table table-striped table-hover table-bordered" id="tabla_formacion_docente_<?php echo $key_tfp; ?>">
                                                             <thead>
                                                                 <tr class='btn-default'>
+                                                                    <th><?php echo $string_values['validado']; ?></th>
                                                                     <th><?php echo $string_values['t_h_anio']; ?></th>
                                                                     <th><?php echo $string_values['lbl_tipo_formacion_docente']; ?></th>
                                                                     <th><?php echo $string_values['t_h_curso']; ?></th>
@@ -304,13 +320,17 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                                             $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
                                                                             $btn_editar = ($this->seguridad->verificar_liga_editar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                                             echo '<tr id="tr_'.$id.'">
+                                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
                                                                                 <td>'.$for_doc['IA_NOMBRE'].'</td>
                                                                                 <td>'.$for_doc['MOD_NOMBRE'].'</td>
                                                                                 <td>'.$btn_comprobante.'</td>
-                                                                                <td>'.$btn_editar.'
+                                                                                <td><button type="button" class="btn btn-link btn-sm btn_ver_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_fd(this);">'.
+                                                                                       $string_values['ver'].
+                                                                                    '</button>
+                                                                                    '.$btn_editar.'
                                                                                     '.$btn_eliminar.'
                                                                                 </td>
                                                                             </tr>';

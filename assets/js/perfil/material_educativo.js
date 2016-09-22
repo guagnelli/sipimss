@@ -18,6 +18,9 @@ $(function () {
 
 });
 
+function ver_me(elemento){
+    data_ajax(site_url+'/perfil_registro/carga_datos_editar_material_educativo/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
 
 function funcion_cargar_campos_tipo_material_educativo() {
     var a = hrutes['seccion_material_educativo'];

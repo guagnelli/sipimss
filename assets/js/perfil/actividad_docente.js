@@ -49,6 +49,10 @@ $(function () {
     });
 });
 
+function ver_ad(elemento, tipo){
+    data_ajax(site_url+'/perfil_registro/carga_datos_actividad/'+$(elemento).attr('data-value')+'?t='+tipo, null, '#modal_content');
+}
+
 function funcion_eliminar_actividad_docente(element) {
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
     var a = hrutes['seccion_actividad_docente'];

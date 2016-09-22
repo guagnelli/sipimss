@@ -37,6 +37,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                 <table class="table table-striped table-hover table-bordered" id="tabla_becas">
                     <thead>
                         <tr class="btn-default">
+                            <th><?php echo $string_values['validado']; ?></th>
                             <th><?php echo $string_values['title_tab_mat_edu_nombre_mat']; ?></th>
                             <th><?php echo $string_values['title_tab_mat_edu_tipo_mat']; ?></th>
                             <th><?php echo $string_values['title_tab_mat_edu_anio']; ?></th>
@@ -67,12 +68,15 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                             $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" onclick="funcion_eliminar_reg_material_educativo(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
                             $btn_editar = ($this->seguridad->verificar_liga_editar_docente($val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_material_educativo(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
                             //Crea los row de la tabla
-                            echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
+                            echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">
+                                <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'])."</td>";
                             echo "<td>" . $val['nombre_material'] . "</td>";
                             echo "<td>" . $desc_tipo_material . "</td>";
                             echo "<td>" . $val['material_educativo_anio'] . "</td>";
                             echo "<td>" . $btn_comprobante . "</td>";
-                            echo "<td>".$btn_eliminar."</td>";
+                            echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="ver_me(this);">'.
+                                       $string_values['ver'].
+                                    '</button>'.$btn_eliminar.'</td>';
                             echo "<td>".$btn_editar."</td>";
                             echo "</tr>";
                         }

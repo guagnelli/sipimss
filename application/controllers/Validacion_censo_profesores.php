@@ -250,8 +250,9 @@ class Validacion_censo_profesores extends MY_Controller {
         $resultado = array('correccion' => array('result' => false, 'VALIDACION_CVE' => null), 'fue_validado' => array('result' => false, 'VALIDACION_CVE' => null));
         $estado_anterior_verificar = $this->config->item('estados_val_censo')[$est_val]['estado_anterior_verificar'];
         ///Método que obtiene el histórico de validaciones para 'validacion_gral_cve', importante mantener ordenamiento por fecha, en sesión se añade la fecha más actual
-        $historico = $this->vdm->get_validacion_historico(array('conditions' => array('hist_validacion.VALIDACION_GRAL_CVE' => $validacion_gral_cve), 'order' => 'VAL_FCH'));
-
+        $historico = $this->vdm->get_validacion_historico(array('conditions' => array('hist_validacion.VALIDACION_GRAL_CVE' => $validacion_gral_cve), 'fields'=>'hist_validacion.*, validacion_gral.*, validador.ROL_CVE', 'order' => 'VAL_FCH'));
+        //pr($historico);
+        //pr($est_val);
         foreach ($historico as $key_hist => $hist) {
             foreach ($this->config->item('estados_val_censo') as $key_evc => $evc) {
                 if ($evc['color_status'] == $this->config->item('CORRECCION') && $hist['VAL_ESTADO_CVE'] == $key_evc) { //Se verifica si existe en el histórico alguna validación en CORRECCIÓN
@@ -261,9 +262,17 @@ class Validacion_censo_profesores extends MY_Controller {
                 }
             }
             ///Se verifica si se ha validado (IS_ACTUAL=0) por el usuario logueado
-            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE'] && $hist['VAL_ESTADO_CVE'] == $estado_anterior_verificar) {
+            //if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE'] && $hist['VAL_ESTADO_CVE'] == $estado_anterior_verificar) {
+            //if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE']) {
+            $condition = true;
+            if(!is_null($est_val) && $this->config->item('estados_val_censo')[$est_val]['color_status'] == $this->config->item('CORRECCION')){ ///Agregar condición cuando se realice una corrección
+                $condition = ($hist['VAL_ESTADO_CVE'] == $estado_anterior_verificar) ? true : false;
+            }
+
+            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['ROL_CVE'] == $hist['ROL_CVE'] && $condition===true) {
                 $resultado['fue_validado']['result'] = true; //Si es así se envian datos para ser almacenados en sesión
                 $resultado['fue_validado']['VALIDACION_CVE'] = $hist['VALIDACION_CVE'];
+                //pr($resultado); echo "-------";
             }
         }
         return $resultado;
@@ -790,7 +799,8 @@ class Validacion_censo_profesores extends MY_Controller {
 
             ///Obtener dato de ejercicio profesional, para mostrar datos de formación en salud
             $data['ejercicio_profesional'] = $this->fm->get_ejercicio_profesional(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()), 'fields' => 'emp_eje_pro_cve, EJE_PRO_NOMBRE'))[0];
-            //pr($this->session->userdata());
+            //pr($this->session->userdata('datos_validador'));
+            //pr($this->session->userdata('datosvalidadoactual'));
             ////////Inicio agregar validaciones de estado
             $val_correc_for_sal = $val_correc_for_doc = $validation_est_corr_for_sal = $validation_est_corr_for_doc = array();
             $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
@@ -1318,12 +1328,7 @@ class Validacion_censo_profesores extends MY_Controller {
             $id_inv = $this->seguridad->decrypt_base64($identificador);
             $data_investigacion['dir_tes'] = $this->idm->get_datos_investigacion_docente($id_inv); //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
 
-            /* if (!empty($data_investigacion_load)) {//Si es diferente de vacio 
-              $data_investigacion['select_inv'] = $data_investigacion_load;
-              $divulgacion = $data_investigacion_load['med_divulgacion_cve']; //Carga el index de la opción divulgación
-              if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
-              $data_investigacion_load['idc'] = $datos_post['comprobantecve'];
-              } */
+            
             //Selecciona divulgación
             $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($data_investigacion['dir_tes']['med_divulgacion_cve'], $data_investigacion, TRUE);
             //}

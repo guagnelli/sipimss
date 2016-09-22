@@ -296,6 +296,7 @@ class Validacion_docente_model extends CI_Model {
             $this->db->order_by($params['order']);
         }
         $this->db->join('validacion_gral', "validacion_gral.VALIDACION_GRAL_CVE=hist_validacion.VALIDACION_GRAL_CVE");
+        $this->db->join('validador', 'validador.VALIDADOR_CVE=hist_validacion.VALIDADOR_CVE', 'left');
         //pr($params);
         $query = $this->db->get('hist_validacion'); //Obtener conjunto de registros
         //pr($this->db->last_query());
@@ -421,7 +422,7 @@ class Validacion_docente_model extends CI_Model {
 //        pr($empleado_cve);
         $select = array('vg.VALIDACION_GRAL_CVE "val_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
             'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "est_val"', 'vg.VAL_CONV_CVE',
-            'hv.VAL_COMENTARIO "comentario_estado"');
+            'hv.VAL_COMENTARIO "comentario_estado"', 'vg.EMPLEADO_CVE "empleado_cve"');
         $this->db->where('hv.IS_ACTUAL', 1); //Para obtener el último registro de la actualización
         $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
         $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);

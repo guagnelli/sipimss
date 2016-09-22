@@ -1038,7 +1038,7 @@ class Perfil extends MY_Controller {
         $data = array();
         $tipo_msg = $this->config->item('alert_msg');
         $this->lang->load('interface', 'spanish');
-        $string_values = $this->lang->line('interface')['actividad_docente'];
+        $string_values = array_merge($this->lang->line('interface')['actividad_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
         $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
         $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
         $guardado_correcto = '';
@@ -1639,7 +1639,7 @@ class Perfil extends MY_Controller {
     public function seccion_investigacion() {
         $data = array();
         $this->lang->load('interface', 'spanish');
-        $string_values = $this->lang->line('interface')['investigacion_docente'];
+        $string_values = array_merge($this->lang->line('interface')['investigacion_docente'], $this->lang->line('interface')['general']);
         $data['string_values'] = $string_values;
         $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
         $empleado = $this->cg->getDatos_empleado($result_id_user); //Obtenemos datos del empleado
@@ -2175,7 +2175,7 @@ class Perfil extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             $data = array();
             $this->lang->load('interface', 'spanish');
-            $string_values = $this->lang->line('interface')['material_educativo'];
+            $string_values = array_merge($this->lang->line('interface')['material_educativo'], $this->lang->line('interface')['general']);
             $data['string_values'] = $string_values;
             $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             $empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
@@ -2745,7 +2745,7 @@ class Perfil extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             $data = array();
             $this->lang->load('interface', 'spanish');
-            $string_values = $this->lang->line('interface')['becas_comisiones'];
+            $string_values = array_merge($this->lang->line('interface')['becas_comisiones'], $this->lang->line('interface')['general']);
             $data['string_values'] = $string_values;
             $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             $empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable

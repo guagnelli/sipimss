@@ -153,11 +153,15 @@
         return $btn;
     }*/
 
+    public function html_verificar_valido_profesionalizacion($is_valido_profesionalizacion=null){
+        return ($is_valido_profesionalizacion == 1) ? '<span class="class_validacion_registro text-black glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="Validaci&oacute;n confirmada por profesionalizaci&oacute;n"></span>' : '';
+    }
+
     public function html_verificar_validacion_registro($is_validado, $is_valido_profesionalizacion, $estado_actual, $validation_estado_anterior){
         $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
         $fue_validado = $this->CI->session->userdata('datosvalidadoactual')['estado']['fue_validado'];
         //pr($this->CI->session->userdata());
-        $html_valido = '<span class="class_validacion_registro ' . (($is_valido_profesionalizacion == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($is_valido_profesionalizacion == 1) ? 'Validación confirmada por profesionalización' : 'Validación realizada') . '"></span>';
+        $html_valido = '<span class="class_validacion_registro ' . (($is_valido_profesionalizacion == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($is_valido_profesionalizacion == 1) ? 'Validaci&oacute;n confirmada por profesionalizaci&oacute;n' : 'Validaci&oacute;n realizada') . '"></span>';
         $html = $html_no_valido = '-';
 
 

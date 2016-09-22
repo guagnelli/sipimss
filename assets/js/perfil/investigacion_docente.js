@@ -45,6 +45,10 @@ $(function () {
 
 });
 
+function ver_in(elemento){
+    data_ajax(site_url+'/perfil_registro/carga_datos_investigacion/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
+
 function funcion_eliminar_reg_investigacion(element) {
     var a = hrutes['seccion_investigacion'];
     var cad_split = a.split(":");
