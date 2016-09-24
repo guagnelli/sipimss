@@ -1,17 +1,19 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
     <script type='text/javascript'>
-        $(function() {
-            $('#datetimepicker1').datetimepicker({
+        $(function () {
+        $('#datetimepicker1').datetimepicker({
             icons: {
                 time: "fa fa-clock-o",
                 date: "fa fa-calendar",
                 up: "fa fa-arrow-up",
                 down: "fa fa-arrow-down"
             },
-            format:'YYYY-MM-DD',
+            format: 'YYYY-MM-DD',
             locale: 'es',
-            useCurrent: false
+            useCurrent: false,
+            minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+            maxDate: 'now'
         });
         $('#datetimepicker2').datetimepicker({
             icons: {
@@ -20,13 +22,24 @@
                 up: "fa fa-arrow-up",
                 down: "fa fa-arrow-down"
             },
-            format:'YYYY-MM-DD',
+            format: 'YYYY-MM-DD',
             locale: 'es',
-            useCurrent: false
+            useCurrent: false,
+            minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+            maxDate: 'now'
         });
+
         $("#datetimepicker_anio").datetimepicker({
             format: "YYYY", // Notice the Extra space at the beginning
-            viewMode: "years"
+            viewMode: "years",
+            minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+            maxDate : 'now'
+        });
+        $("#datetimepicker1").on("dp.change", function (e) {
+            $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker2").on("dp.change", function (e) {
+            $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
         });
     });
     </script>

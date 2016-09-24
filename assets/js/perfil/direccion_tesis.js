@@ -60,3 +60,6 @@ $(function () {
         });
     }*/
 });
+function ver_dt(elemento){
+    data_ajax(site_url+'/perfil_registro/direccion_tesis_detalle/'+$(elemento).attr('data-value'), null, '#modal_content');
+}

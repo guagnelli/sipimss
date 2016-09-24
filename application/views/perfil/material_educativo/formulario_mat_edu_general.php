@@ -9,8 +9,11 @@ if (isset($info_material_educativo)) {
 <script type="text/javascript">
     $("#datetimepicker1").datetimepicker({
         format: "YYYY", // Notice the Extra space at the beginning
-        viewMode: "years"
+        viewMode: "years",
+        minDate: moment("<?php echo $this->config->item('minDate'); ?>"),
+        maxDate : 'now'
     });
+    
     $('.btn_subir_comprobante').click(function () {
         cargar_archivo($(this).attr('data-key'), "#form_material_educativo");
     });

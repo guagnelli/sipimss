@@ -51,6 +51,9 @@ $(function () {
         });
     }
 });
+function ver_ca(elemento){
+    data_ajax(site_url+'/perfil_registro/comision_academica_detalle/'+$(elemento).attr('data-com')+'/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
 function mostrar_horas_fechas(horas) {
     if (horas == 'none') {
         $('#div_horas_dedicadas').hide('slow');

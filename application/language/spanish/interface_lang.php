@@ -28,6 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$lang['interface']['registro']['texto_bienvenida'] = 'Hola mundo';
 $lang['interface'] = array(
     'secciones'=>array(
+<<<<<<< HEAD
         'lbl_ca_titulo'=>'Comisión académica',
         'lbl_fs_titulo'=>'Formaci&oacute;n en salud',
         'lbl_is_titulo'=>'Investigaci&oacute;n en salud',
@@ -38,6 +39,19 @@ $lang['interface'] = array(
         'lbl_ed_titulo'=>'Educaci&oacute; a distancia',
         'lbl_em_titulo'=>'Especialidad m&ecuate;dica',
         'lbl_ad_titulo'=>'Actividad docente'
+=======
+       'lbl_ig_titulo'=>'Información general',
+       'lbl_ca_titulo'=>'Comisión académica',
+       'lbl_fs_titulo'=>'Formaci&oacute;n en salud',
+       'lbl_is_titulo'=>'Investigaci&oacute;n en salud',
+       'lbl_ie_titulo'=>'Investigaci&oacute;n educativa',
+       'lbl_b_titulo'=>'Becas y Comisiones',
+       'lbl_fp_titulo'=>'Formaci&oacute;n profesional',
+       'lbl_me_titulo'=>'Material educativo',
+       'lbl_ed_titulo'=>'Educaci&oacute; a distancia',
+       'lbl_em_titulo'=>'Especialidad m&ecuate;dica',
+       'lbl_ad_titulo'=>'Actividad docente',
+>>>>>>> c3e0bee352a86542d363f2647e81cf6aa4e2119e
     ),
     'registro' => array(
         'lbl_bienvenido' => 'Bienvenido',
@@ -181,7 +195,7 @@ $lang['interface'] = array(
         'title_investigacion' => 'Investigación',
         'placeholder_formato_fecha' => 'AAAA-MM-DD',
         'error_no_registro' => 'No existe un registro',
-        'alert_no_existe_actividad_principal' => 'No existe una actividad principal',
+        'alert_no_existe_actividad_principal' => 'No existe una actividad principal. Para poder agregar actividades, es necesario que indique <br> el ejercicio predominante y los años dedicados a la actividad (en caso de que lleve menos de un año, por favor, indique cero)',
         'lbl_pregunta_eliminar_actividad_docente' => 'Confirme que realmente desea eliminar la actividad [field]',
         'lbl_info_no_elimina_actividad_curso_principal' => 'La actividad [field] no puede ser removida. <br>Debe seleccionar otra actividad como curso principal',
         'save_curso_principal_modificado' => 'El curso principal se actualizo correctamente',
@@ -189,7 +203,7 @@ $lang['interface'] = array(
         'error_insertar' => 'No se pudierón almacenar los datos de la actividad del docente',
         'error_actualizar' => 'No se pudierón actualizar los datos de la actividad del docente',
         'error_eliminar' => 'No se pudo eliminar la actividad [field]. <br>Por favor intente más tarde',
-        'succesfull_insertar' => 'Los datos datos de la actividad del docente se almacenarón correctamente',
+        'succesfull_insertar' => 'Los datos de la actividad del docente se almacenarón correctamente',
         'succesfull_actualizar' => 'Los datos de la actividad del docente se actualizarón correctamente',
         'succesfull_eliminar' => 'Los datos de la actividad [field] fueron removidos correctamente',
         'tl_titulo' => 'Actividad del docente',
@@ -271,6 +285,9 @@ $lang['interface'] = array(
         'msj_selecciona_actividad_docente' => 'Debe seleccionar una actividad docente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
     ),
     'investigacion_docente' => array(
         'title_investigacion' => 'Investigación',
@@ -314,6 +331,9 @@ $lang['interface'] = array(
         'update_investigacion_docente' => 'La información de investigación docente se actualizo correctamente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
     ),
     'designar_validador' => array(
         'placeholder_formato_fecha' => 'AAAA-MMDD',
@@ -390,6 +410,7 @@ $lang['interface'] = array(
         'link_ver_comentario' => 'Ver comentario',
         't_h_fecha' => 'Fecha',
         't_h_rol' => 'Rol',
+        'titulo_validador' => 'Validador: ',
         'falta_estado_validacion' => 'Debe seleccionar el estado de la validación. Elijalo por favor.',
         'error_datos_enviados' => 'No han sido enviados datos, por favor intentelo nuevamente.',
         'lbl_historico_validaciones' => 'Histórico de validaciones',
@@ -400,19 +421,23 @@ $lang['interface'] = array(
         'save_estado_cambio_envio' => 'La validación se efectuo correctamente',
         'save_estado_cambio_correccion' => 'El envío a corrección se efectuo correctamente',
         'save_estado_error' => 'No fue posible llevar a cabo la validación. <br>Por favor intente más tarde',
-        'titulo_moal_comentario' => 'Validador: ',
+        'titulo_modal_comentario' => 'Mensajes del proceso de validación del docente',
         'lbl_jus_comentario' => 'Justificación de la ',
         'msj_sin_comntarios_estado' => 'No existen mensajes de estado',
         'btn_text_collapse_mensajes' => 'Ver comentarios',
         'titulo_estado_validacion' => 'Estado de la validación: ',
+        'titulo_fecha_validacion' => 'Fecha de la validación: ',
         'drop_delegacion' => 'Seleccione delegación',
         'lbl_delegacion' => 'Delegación',
+        'drop_departamento' => 'Seleccione departamento',
+        'lbl_departamento' => 'Unidad',
         'text_estado_revision' => 'En revisión',
         'msj_no_completo_envio_validacion_censo' => 'No es posible enviar a validación del censo en este momento, 
         para ello requiere cumplir con los siguientes requisitos. <br> 1. Debe contar por lo menos con una actividad de docente. 
-        <br> 2.- Debe contar por lo menos con un registro de formación en salud.
+        <br> 2.- Debe contar por lo menos con un registro de formación en salud. <br> 3.- Debe seleccionar un curso principal en actividad docente 
         ',
         'msj_envio_validacion'=>'Envió de datos a validación del censo',
+        'msj_completa_info_docente'=>'El docente completo los requisitos minimos. Para enviar a validar el censo',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',
@@ -552,6 +577,10 @@ $lang['interface'] = array(
         'succesfull_actualizar' => 'Los datos se actualizarón correctamente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
+            
     ),
     'material_educativo' => array(
         'placeholder_formato_fecha' => 'AAAA-MMDD',
@@ -576,10 +605,8 @@ $lang['interface'] = array(
         'lbl_tipo_material_anio_elaboro' => 'Año que elaboró material educativo',
         'texto_tipo_material_anio_elaboro' => 'Año en que elaboró',
         'drop_tipo_material' => 'Seleccione el tipo de material educativo',
-
         'drop_cantidad_hojas' => 'Seleccione cantidad de hojas',
         'lbl_cantidad_hojas' => 'Cantidad de hojas',
-
         'lbl_nombre_unidad' => 'Nombre de la unidad',
         'text_nombre_unidad' => 'Nombre de la unidad',
         'lbl_numero_horas' => 'Número de horas',
@@ -596,6 +623,9 @@ $lang['interface'] = array(
         'succesfull_actualizar' => 'Los datos de material educativo se actualizarón correctamente',
         'tab_titulo_g_ver' => 'Ver',
         'tab_titulo_g_validar' => 'Validar',
+        'btn_guardar' => 'Guardar',
+        'btn_cerrar' => 'Cerrar',
+        'btn_actualizar' => 'Actualizar',
     ),
     'password_reset'=>array(
         'title_begin_password_reset' => 'Recuperar tu contraseña en SIPIMSS',
@@ -648,6 +678,7 @@ $lang['interface'] = array(
         'li_clave_adscripcion' => 'Clave de adscripción',
         'lbl_comentario' => 'Comentarios',
         'titulo_estado_validacion' => 'Estado de la validación: ',
+        'titulo_fecha_validacion' => 'Fecha de la validación: ',
         'drop_delegacion' => 'Seleccione delegación',
         'lbl_delegacion' => 'Delegación',
         'drop_dictamen' => 'Seleccione dictamen',

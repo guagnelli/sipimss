@@ -65,14 +65,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     break;
                 case Enum_rols::Validador_N2:
                     $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
-                    $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1);
+                    $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1, 'cve_delegacion' => $delegacion_cve);
                     break;
                 case Enum_rols::Profesionalizacion:
                     $datos_validador['DELEGACION_CVE'] = 0;
                     $array_catalogos[] = enum_ecg::cdelegacion;
                     $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
                     $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1);
-                    $dictamen_admin = $this->ecvm->get_admin_dictamen_evaluacion();//Obtiene dictamen por iniciar
+                    $dictamen_admin = $this->ecvm->get_admin_dictamen_evaluacion(); //Obtiene dictamen por iniciar
                     $data['cdictamen'] = dropdown_options($dictamen_admin, 'ADMIN_DICTAMEN_EVA_CVE', 'fecha_dicatmen');
                     break;
             }
@@ -84,7 +84,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $array_catalogos[] = enum_ecg::cestado_validacion;
             $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cestado_validacion => 'EST_VALIDACION_CVE')); //Carga el catálogo de ejercicio predominante
             $main_contet = $this->load->view('evaluacion_currucular_doc/evaluacion_curricular_validar_tpl', $data, true);
-            
+
 //            $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
 //             $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
             /* carga buscador */
@@ -92,9 +92,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
         } else {//No existe el validador. Mostrar leyenda de que no es un valiador
             $main_contet = '<span>No se encuentrá asignado el validador</span>';
         }
-            $this->template->setTitle("Evaluación");
-            $this->template->setMainContent($main_contet);
-            $this->template->getTemplate();
+        $this->template->setTitle("Evaluación");
+        $this->template->setMainContent($main_contet);
+        $this->template->getTemplate();
     }
 
     public function data_buscar_docentes_validar_evaluacion_curr($current_row = null) {
@@ -113,9 +113,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $filtros['delegacion_cve'] = $this->session->userdata('delegacion_cve');
                 }
                 $resutlado = $this->ecvm->get_buscar_docentes_validar_evaluacion_c($filtros);
-                $resutlado['result'][] = $resutlado['result'][0];//de prueba agrga más registros
-                $resutlado['result'][] = $resutlado['result'][0];//de prueba agrga más registros
-                
+                $resutlado['result'][] = $resutlado['result'][0]; //de prueba agrga más registros
+                $resutlado['result'][] = $resutlado['result'][0]; //de prueba agrga más registros
 //                pr($resutlado['result']);
 //                pr($resutlado);
                 $data['string_values'] = $string_values;
@@ -194,6 +193,23 @@ class Evaluacion_curricular_validar extends MY_Controller {
         }
     }
 
+    private function obtener_secciones_evaluacion($string_text = array(), $name_controlador = 'controlador_validacion') {
+        $secciones = $this->config->item('secciones');
+        $result_array = array();
+        foreach ($secciones as $value) {
+            $prop = $this->config->item('secciones_cont_val_solicitud_eval')[$value['acronimo']];
+            if ($prop['isActivo']) {
+                $controlador['ruta'] = $prop['seccion'];
+                $controlador['ruta_padre'] = $prop[$name_controlador];
+//                pr('lbl_'.$value['acronimo'].'_titulo');
+                $controlador['nombre_modulo'] = $string_text['lbl_'.$value['acronimo'].'_titulo'];
+                $result_array[] = $controlador;
+            }
+        }
+//        pr($result_array);
+        return $result_array;
+    }
+
     /**
      * 
      */
@@ -201,12 +217,15 @@ class Evaluacion_curricular_validar extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             if (!is_null($this->input->post())) {
                 $this->lang->load('interface', 'spanish');
-                 $data["string_value"] = $this->lang->line('evaluacion_curricular_validar');
+                $interface = $this->lang->line('interface');
+                $data["string_value"] = $interface['evaluacion_curricular_validar'];
                 $data_post = $this->input->post(null, true); //Obtenemos el post o los valores
                 $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
-                $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generé el menú y cargue los datos de perfil
+//                $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generé el menú y cargue los datos de perfil
 //                pr($array_menu);
-                $data['array_menu'] = $array_menu;
+                $string_text = $interface['secciones'];
+                $data['array_menu'] = $this->obtener_secciones_evaluacion($string_text);
+//                $data['array_menu'] = $array_menu;
                 $datos_validacion = array();
                 if (!empty($data_post['empcve'])) {
                     $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($data_post['empcve']); //Identificador de la comisión
@@ -336,8 +355,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $color_sattus = $this->config->item('cvalidacion_curso_estado')[$color_sattus]['color']; //Color del estado
                     $data_comentario['color_estado'] = $color_sattus;
                     $data_comentario['tipo_transicion'] = $this->config->item('estados_val_evaluacion')[$resul_coment->hist_estado]['tipo_transaccion'];
-                    $text_titulo_modal = ($resul_coment->existe_validador === 1)? $string_values['titulo_modal_comentario_v'] : $string_values['titulo_modal_comentario_d'];
-                    
+                    $text_titulo_modal = ($resul_coment->existe_validador === 1) ? $string_values['titulo_modal_comentario_v'] : $string_values['titulo_modal_comentario_d'];
+
                     $data = array(
                         'titulo_modal' => $text_titulo_modal . $resul_coment->nom_validador,
                         'cuerpo_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/comentario_estado', $data_comentario, TRUE),

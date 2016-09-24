@@ -25,11 +25,15 @@ $(function () {
                 })
                         .done(function (response) {
 //                            alert(response);
+                            var html_result = response.split("@");
+                            if (html_result.length > 1) {
+                                $('#mensaje_error_index').html(html_result[1]);
+                                $('#mensaje_error_div_index').removeClass('alert-danger').removeClass('alert-warning').removeClass('alert-info').removeClass('alert-success').addClass('alert-success');
+                                $('#div_error_index').show();
+                                setTimeout("$('#div_error_index').hide()", 6000);
+                                response = html_result[0] + html_result[2];//Carga texto html a mostrar
+                            }
                             $('#seccion_actividad_docente').html(response);
-                            $('#mensaje_error').html('Los datos se almacenaron correctamente');
-                            $('#mensaje_error_div').removeClass('alert-danger').addClass('alert-success');
-                            $('#div_error').show();
-                            setTimeout("$('#div_error').hide()", 5000);//desaparece div
                         })
                         .fail(function (jqXHR, response) {
                             $('#seccion_actividad_docente').html('Ocurrió un error durante el proceso, inténtelo más tarde.');
@@ -44,6 +48,10 @@ $(function () {
         });
     });
 });
+
+function ver_ad(elemento, tipo){
+    data_ajax(site_url+'/perfil_registro/carga_datos_actividad/'+$(elemento).attr('data-value')+'?t='+tipo, null, '#modal_content');
+}
 
 function funcion_eliminar_actividad_docente(element) {
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)

@@ -56,6 +56,7 @@ class Evaluacion_curricular_validar_model extends CI_Model {
                 }
                 break;
             case Enum_rols::Validador_N1:
+                $this->db->where('em.ADSCRIPCION_CVE', $params['DEPARTAMENTO_CVE']);
                 break;
         }
         //Estado de la validación

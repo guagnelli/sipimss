@@ -15,10 +15,19 @@ $colapso_div_ejercicio_profesional = 'collapse in';
 <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/perfil/actividad_docente.js"></script>
 
 <!-- Inicio informacion personal -->
-<?php echo form_open('', array('id' => 'form_actividad_docente')); ?>
+<?php echo form_open('', array('id' => 'form_actividad_docente')); 
+if($this->seguridad->verificar_liga_agregar_docente()){
+    $readonly = '';    
+    $function = 'funcion_asignar_curso_principal(this)';
+    $disabled = '';
+} else {
+    $readonly = 'readonly';
+    $disabled = 'disabled';
+    $function = '';
+}?>
 
+<?php echo $guardado_correcto; ?>
 <div class="list-group">
-
     <div class="list-group-item">
             <div class="panel-body">
                 <div>
@@ -46,6 +55,8 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                             'placeholder' => $string_values['lbl_anios_dad'],
                                             'min' => '0',
                                             'max' => '50',
+                                            $readonly => $readonly,
+                                            $disabled => $disabled,
                                             'data-toggle' => 'tooltip',
                                             'data-placement' => 'bottom',
                                             'title' => $string_values['lbl_anios_dad'],
@@ -72,6 +83,8 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                 'first' => array('' => 'Selecciona ejercicio'),
                                 'value' => empty($actividad_docente) ? '' : $actividad_docente[0]['EJER_PREDOMI_CVE'],
                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control',
+                                    $readonly => $readonly,
+                                    $disabled => $disabled,
                                     'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top',
                                     'title' => $string_values['lbl_ejercicio_pd'])));
                             ?>
@@ -80,33 +93,36 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                     </div>
 
                 </div>
+                <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                    <div class="row">
+                        <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
+                            <!--<a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >-->
+                                <?php // echo $string_values['btn_guardar_cp'];  ?>
+                            <!--</a>-->
 
-                <div class="row">
-                    <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
-                        <!--<a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >-->
-                            <?php // echo $string_values['btn_guardar_cp'];  ?>
-                        <!--</a>-->
-
-                        <button type="button" class="btn btn-success" id="btn_guardar_actividad" value="ajax">
-                            <?php echo $string_values['btn_guardar_cp']; ?>
-                            <?php // echo $string_values['perfil']['btn_informacion_general_editar_nombre'];  ?> 
-                        </button>
-                    </div>    
-                </div>
+                            <button type="button" class="btn btn-success" id="btn_guardar_actividad" value="ajax">
+                                <?php echo $string_values['btn_guardar_cp']; ?>
+                                <?php // echo $string_values['perfil']['btn_informacion_general_editar_nombre'];  ?> 
+                            </button>
+                        </div>    
+                    </div>
+                <?php } ?>
                 <div class="row">
                     <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
 
 
                     </div>
-                            <?php if (isset($datos_tabla_actividades_docente)) { ?>
-                        <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
-                            <button type="button" class="btn btn-success btn-lg" id="btn_agregar_actividad_modal_nueva" 
-                                    data-actgralcve =" <?php echo $actividad_general_cve;?>"
-                                    data-toggle="modal" data-target="#modal_censo">
-                            <?php echo $string_values['btn_add_new_actividad']; ?>
-                            </button>
-                        </div>
-                <?php } ?>
+                        <?php if (isset($datos_tabla_actividades_docente)) { ?>
+                            <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                                <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
+                                    <button type="button" class="btn btn-success btn-lg" id="btn_agregar_actividad_modal_nueva" 
+                                            data-actgralcve =" <?php echo $actividad_general_cve;?>"
+                                            data-toggle="modal" data-target="#modal_censo">
+                                    <?php echo $string_values['btn_add_new_actividad']; ?>
+                                    </button>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
                 </div>
                             <?php if (isset($datos_tabla_actividades_docente)) { ?>
                     <div class="row" >
@@ -116,6 +132,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                             <table class="table table-striped table-hover table-bordered" id="tabla_actividades">
                                 <thead>
                                     <tr class='btn-default'>
+                                        <th><?php echo $string_values['validado']; ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_cur_principal'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_actividad'] ?></th>
                                         <th><?php echo $string_values['tab_titulo_pro_salud_anio'] ?></th>
@@ -156,16 +173,17 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                             $comprobante = 0;
                                             $btn_comprobante = '';
                                         }
-                                        
-                                        echo "<tr class='" . $reg_principal . "' id='id_row_" . $key . "' data-cp='" . $cp . "' data-keyrow=" . $key . " >";
+                                        echo "<tr class='" . $reg_principal . "' id='id_row_" . $key . "' data-cp='" . $cp . "' data-keyrow=" . $key . " >
+                                            <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($value['IS_VALIDO_PROFESIONALIZACION'])."</td>";
                                         echo "<td >" . $this->form_complete->create_element(
                                                 array('id' => 'radio_curso_principal', 'type' => 'radio',
                                                     'value' => $value['cve_actividad_docente'],
                                                     'attributes' => array(
                                                         'class' => 'radio-inline m-r-sm',
-                                                        //                                                    'disabled'=> '',
+                                                        $readonly => $readonly,
+                                                        $disabled => $disabled,
                                                         $checked => $checked,
-                                                        'onchange' => 'funcion_asignar_curso_principal(this)',
+                                                        'onchange' => $function,
                                                         'data-entidadtpacve' => "'" . $value['ta_cve'] . "'", //cve del catálogo tipo de actividad (ctipo_actividad)
                                                         'data-actividadgeneralcve' => "'" . $value['actividad_general_cve'] . "'", //actividad general cve
                                                         'data-actividaddocentecve' => "'" . $value['cve_actividad_docente'] . "'", //actividad de docente cve, según la entidad (emp_actividad_docente, emp_esp_med o emp_educacion_distancia)
@@ -174,39 +192,21 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                                                     )
                                         )) .
                                         "</td>";
+                                        $id = $this->seguridad->encrypt_base64($value['cve_actividad_docente']);
+                                        $validation_estado = (isset($value['validation_estado']) && !empty($value['validation_estado'])) ? $value['validation_estado'] : null;
+                                        $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($value['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="' . $key . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-cp ="' . $is_cur_principal . '" onclick="funcion_eliminar_actividad_docente(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
+                                        $btn_editar = ($this->seguridad->verificar_liga_editar_docente($value['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" data-idrow ="' . $key . '" data-becacve ="' . $value['cve_actividad_docente'] . '" data-comprobantecve ="' . $idcomprobante . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_actividad(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
                                         echo "<td class='class_titulo'>" . $value['nombre_tp_actividad'] . "</td>";
                                         echo "<td >" . $value['anio'] . "</td>";
                                         echo "<td >" . $value['duracion'] . "</td>";
                                         echo "<td >" . $value['fecha_inicio'] . "</td>";
                                         echo "<td >" . $value['fecha_fin'] . "</td>";
-                                         echo "<td>" . $btn_comprobante . "</td>";
-                                        echo '<td>'
-                                        . '<button '
-                                        . 'type="button" '
-                                        . 'class="btn btn-link btn-sm" '
-                                        . 'data-idrow ="' . $key . '"'
-                                        . 'data-becacve ="' . $value['cve_actividad_docente'] . '"'
-                                        . 'data-comprobantecve ="' . $idcomprobante . '"'
-                                        . 'data-tacve ="' . $value['ta_cve'] . '"'
-                                        . 'data-cvead ="' . $value['cve_actividad_docente'] . '"'
-                                        . 'data-toggle="modal"'
-                                        . 'data-target="#modal_censo"'
-                                        . 'onclick="funcion_editar_reg_actividad(this)" >' .
-                                        $string_values['tab_titulo_editar']
-                                        . '</td>';
-                                        echo '<td>'
-                                        . '<button '
-                                        . 'type="button" '
-                                        . 'class="btn btn-link btn-sm" '
-                                        . 'id="btn_eliminar_actividad_modal" '
-                                        . 'data-idrow ="' . $key . '"'
-                                        . 'data-tacve ="' . $value['ta_cve'] . '"'
-                                        . 'data-cvead ="' . $value['cve_actividad_docente'] . '"'
-                                        . 'data-cp ="' . $is_cur_principal . '"'
-                                        . 'onclick="funcion_eliminar_actividad_docente(this)" >' .
-                                        $string_values['tab_titulo_eliminar']
-                                        . '</button>'
-                                        . '</td>';
+                                        echo "<td>" . $btn_comprobante . "</td>";
+                                        echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_ad" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="ver_ad(this, '.$value['ta_cve'].');">'.
+                                               $string_values['ver'].
+                                            '</button>
+                                            '.$btn_editar.'</td>';
+                                        echo '<td>'.$btn_eliminar.'</td>';
                                         echo "</tr>";
                                     }
                                     ?>
@@ -218,7 +218,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                     <div class="row">
                         <div id='mensaje_error_div' class='alert'>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <span id='mensaje_error'><?php echo $string_values['alert_no_existe_actividad_principal']; ?></span>
+                            <span id='mensaje_error' class="alert-info"><?php echo $string_values['alert_no_existe_actividad_principal']; ?></span>
                         </div>
                     </div>
                     <?php } ?>

@@ -128,7 +128,12 @@ $(function () {
         });
     }
 });
-
+function ver_fs(elemento){
+    data_ajax(site_url+'/perfil_registro/formacion_salud_detalle/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
+function ver_fd(elemento){
+    data_ajax(site_url+'/perfil_registro/formacion_docente_detalle/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
 function mostrar_horas_fechas(horas) {
     if (horas == 'none') {
         $('#div_horas_dedicadas').hide('slow');

@@ -16,6 +16,14 @@ $(function () {
     });
 });
 
+function ver_be(elemento){
+    data_ajax(site_url+'/perfil_registro/carga_datos_editar_beca/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
+
+function ver_co(elemento){
+    data_ajax(site_url+'/perfil_registro/carga_datos_editar_comision/'+$(elemento).attr('data-value'), null, '#modal_content');
+}
+
 function funcion_eliminar_reg_beca(element) {
     var a = hrutes['seccion_becas_comisiones'];
     var cad_split = a.split(":");

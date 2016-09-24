@@ -61,6 +61,7 @@ $(function () {
             }
         } else {
             if (id.indexOf('seccion') > -1 && array_menu_perfil_validar.indexOf(id) < 0) {
+//            alert(array_menu_perfil_validar.indexOf(id));
                 //alert();
                 array_menu_perfil_validar.push(id);
                 //Separar en 4, 0controlador; 1nombre del método ajax; 2nombre del formulario; 3nombre del div
@@ -116,6 +117,7 @@ function cargar_datos_menu_perfil(id) {
     try {
         var cadena = hrutes[id];
         var cad_split = cadena.split(":");
+//        alert('comprueba.....');
         data_ajax(site_url + '/' + cad_split[0] + '/' + cad_split[1], cad_split[2], cad_split[3]);
     } catch (e) {//Carga los datos de la recarga de la páginas
         var URLactual = window.location;
