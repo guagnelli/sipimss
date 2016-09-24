@@ -13,12 +13,9 @@ class Enum_sec {
             materia_educativo = 7,
             educacion_distancia = 8,
             esp_medica = 9,
-            actividad_docente = 10
-
+            actividad_docente = 10,
+            //*No estan en la  base de datos las siguientes secciones*//
+            informacion_general = 11
+            
     ;
-    /*
-      guardar actuación (evaluaciones)
-      corregir
-
-     */
 }

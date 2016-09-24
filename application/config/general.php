@@ -659,8 +659,18 @@ $config['estados_val_evaluacion'] = array(
 $config['solicitar_evaluacion'] = (object)array("tabla"=>"emp_formacion_profesional",
                                                 "campo"=>"efp_aplica_ecd",
                                                 "validacion"=>array());
+
+
+/**
+ * @acronimo : clave diminutiva para identificar el curso
+ * @entidad : Nombre de la entidad en la base de datos
+ * @curso : Nombre del curso o campo de donde se optiene el nombre del curso
+ * @tipo_curso: Tipo de curso 
+ * @pk : Llave primaria de la entidad en base de datos
+ */
 $config["secciones"] = array(
-    Enum_sec::comision=>array("acronimo"=>"ca",  "entidad"=>"emp_comision","curso"=>"TIP_CUR_NOMBRE","tipo_curso"=>"TIP_COM_NOMBRE","pk"=>"EMP_COMISION_CVE"),
+    Enum_sec::informacion_general=>array("acronimo"=>"ig", "entidad"=>"empleado","curso"=>"","tipo_curso"=>"","pk"=>"EMPLEADO_CVE"),
+    Enum_sec::comision=>array("acronimo"=>"ca", "entidad"=>"emp_comision","curso"=>"TIP_CUR_NOMBRE","tipo_curso"=>"TIP_COM_NOMBRE","pk"=>"EMP_COMISION_CVE"),
     Enum_sec::for_personal_continua_salud=>array("acronimo"=>"fs","entidad"=>"emp_for_personal_continua_salud","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
     Enum_sec::desa_inv_salud=>array("acronimo"=>"is","entidad"=>"emp_desa_inv_salud","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"EDIS_CVE"),
     Enum_sec::act_inv_edu=>array("acronimo"=>"ie","entidad"=>"emp_act_inv_edu","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"EAID_CVE"),
@@ -671,3 +681,31 @@ $config["secciones"] = array(
     Enum_sec::esp_medica=>array("acronimo"=>"em","entidad"=>"emp_esp_medica","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"EMP_ESP_MEDICA_CVE"),
     Enum_sec::actividad_docente=>array("acronimo"=>"ad","entidad"=>"emp_actividad_docente","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"EMP_ACT_DOCENTE_CVE"),
 );
+
+$config["secciones_cont_val_solicitud_eval"] = array(
+    "ca"=>array("seccion" => 'seccion_comision_academica', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "fs"=>array("seccion" => 'seccion_formacion_salud', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "is"=>array("seccion" => 'seccion_investigacion_salud', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "ie"=>array("seccion" => 'seccion_investigacion_educativa', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "b"=> array("seccion" => 'seccion_becas_comisiones', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "fp"=>array("seccion" => 'seccion_formacion_profesional', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "me"=>array("seccion" => 'seccion_material_educativo', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "ed"=>array("seccion" => 'seccion_educacion_distancia', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "em"=>array("seccion" => 'seccion_especialidad_medica', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "ad"=>array("seccion" => 'seccion_actividad_docente', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "ig"=>array("seccion" => 'seccion_info_general', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+);
+
+
+
+
+
+//seccion_becas_comisiones
+//
+//
+//seccion_direccion_tesis
+//
+//seccion_validar_evaluacion
+
+
+
