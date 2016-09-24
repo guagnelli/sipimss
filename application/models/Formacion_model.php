@@ -36,7 +36,7 @@ class Formacion_model extends CI_Model {
     public function get_formacion_salud($params=null){
         $resultado = array();
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
+        if(!is_null($params) && (isset($params['validation']) || isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
             $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
             $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
             $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;

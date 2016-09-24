@@ -65,34 +65,45 @@ Class Empleado_model extends My_Model{
      * 
      * @param int $identificador
      */
-    public function getEmpleadoData($identificador) {
-        $this->db->select(array(
-            'EMPLEADO_CVE as emp_id',
-            'EMP_NOMBRE as nombre',
-            'EMP_APE_PATERNO as apellidoPaterno',
-            'EMP_APE_MATERNO as apellidoMaterno',
-            'EMP_CURP as curp',
-            //'EMP_EDAD as edad',
-            'EMP_ANTIGUEDAD as antiguedad',
-            'emp_fch_nac as fecha_nacimiento',
-            'EMP_GENERO as generoSelected',
-            'CESTADO_CIVIL_CVE as estadoCivilSelected',
-            'EMP_EMAIL as correoElectronico',
-            'EMP_TEL_PARTICULAR as telParticular',
-            'EMP_TEL_LABORAL as telLaboral',
-            'EMP_NUM_FUE_IMSS as empleosFueraImss',
-            'EMP_MATRICULA as matricula',
-            'DEL_NOMBRE as delegacion',
-            'NOM_CATEGORIA as nombreCategoria',
-            'EM.CATEGORIA_CVE as claveCategoria',
-            'ADS_NOM_AREA as nombreAreaAdscripcion',
-            'ADS_NOM_UNIDAD as nombreUnidadAdscripcion',
-            'EM.ADSCRIPCION_CVE as claveAdscripcion',
-            'TIP_CON_NOMBRE as tipoContratacion',
-            'EMP_TEL_PARTICULAR as estatusEmpleado',
-            'CP.PRE_NOMBRE as clavePresupuestal',
-            ''
-        ));
+    public function getEmpRelationships($args) {
+    	if(isset($args["fields"])){
+    		if(is_array($args["fields"])){
+    			//echo $args["fields"] = implode(",",$args["fields"]);
+    		}
+    		$this->db->select($args["fields"]);
+    	}
+    	else{
+    		$this->db->select(array(
+	            'EMPLEADO_CVE as emp_id',
+	            'EMP_NOMBRE as nombre',
+	            'EMP_APE_PATERNO as apellidoPaterno',
+	            'EMP_APE_MATERNO as apellidoMaterno',
+	            'EMP_CURP as curp',
+	            //'EMP_EDAD as edad',
+	            'EMP_ANTIGUEDAD as antiguedad',
+	            'emp_fch_nac as fecha_nacimiento',
+	            'EMP_GENERO as generoSelected',
+	            'CESTADO_CIVIL_CVE as estadoCivilSelected',
+	            'EMP_EMAIL as correoElectronico',
+	            'EMP_TEL_PARTICULAR as telParticular',
+	            'EMP_TEL_LABORAL as telLaboral',
+	            'EMP_NUM_FUE_IMSS as empleosFueraImss',
+	            'EMP_MATRICULA as matricula',
+	            'DEL_NOMBRE as delegacion',
+	            'NOM_CATEGORIA as nombreCategoria',
+	            'EM.CATEGORIA_CVE as claveCategoria',
+	            'ADS_NOM_AREA as nombreAreaAdscripcion',
+	            'ADS_NOM_UNIDAD as nombreUnidadAdscripcion',
+	            'EM.ADSCRIPCION_CVE as claveAdscripcion',
+	            'TIP_CON_NOMBRE as tipoContratacion',
+	            'EMP_TEL_PARTICULAR as estatusEmpleado',
+	            'CP.PRE_NOMBRE as clavePresupuestal'
+        	));
+    	}
+    	if(isset($args["conditions"])){
+    		$this->db->where($args["conditions"]);
+    	}
+        
         $this->db->from('empleado AS EM');
         $this->db->join('cdelegacion AS CDEL', 'CDEL.DELEGACION_CVE = EM.DELEGACION_CVE', 'left');
         $this->db->join('ccategoria AS CCAT', 'CCAT.ID_CAT = EM.CATEGORIA_CVE', 'left');
@@ -100,122 +111,65 @@ Class Empleado_model extends My_Model{
         $this->db->join('ctipo_contratacion AS CTC', 'EM.tip_contratacion_cve =  CTC.tip_contratacion_cve', 'left');
         $this->db->join('cdepartamento AS CD', 'CD.DEPARTAMENTO_CVE =  EM.DEPARTAMENTO_CVE', 'left');
         $this->db->join('cpresupuestal AS CP', 'CP.PRESUPUESTAL_CVE =  CD.PRESUPUESTAL_CVE  ', 'left');
-        $this->db->where('EM.USUARIO_CVE', $identificador);
+        // $this->db->where('EM.EMPLEADO_CVE', $identificador);
         $query = $this->db->get();
         return $query->result_array();
     }
 
     /**
-     * New object to the class. Don´t forget to save this new object "as new" by using the function $class->Save_Active_Row_as_New(); 
-     *
-     */
-	public function New_empleado($EMP_NOMBRE,$EMP_APE_PATERNO,$EMP_APE_MATERNO,$EMP_CURP,$EMP_GENERO,$EMP_ANTIGUEDAD,$EMP_NUM_FUE_IMSS,$EMP_EMAIL,$EMP_TEL_LABORAL,$EMP_TEL_PARTICULAR,$CATEGORIA_CVE,$ADSCRIPCION_CVE,$DELEGACION_CVE,$emp_eje_pro_cve,$eje_pro_cve,$TIP_CONTRATACION_CVE,$CESTADO_CIVIL_CVE,$EDO_LABORAL_CVE,$emp_matricula,$USUARIO_CVE,$DEPARTAMENTO_CVE,$PRESUPUESTAL_ADSCRIPCION_CVE,$emp_fch_ingreso,$EMP_FCH_CREACION,$emp_fch_nac,$EMP_FCH_MODIF){
-		$this->EMP_NOMBRE = $EMP_NOMBRE;
-		$this->EMP_APE_PATERNO = $EMP_APE_PATERNO;
-		$this->EMP_APE_MATERNO = $EMP_APE_MATERNO;
-		$this->EMP_CURP = $EMP_CURP;
-		$this->EMP_GENERO = $EMP_GENERO;
-		$this->EMP_ANTIGUEDAD = $EMP_ANTIGUEDAD;
-		$this->EMP_NUM_FUE_IMSS = $EMP_NUM_FUE_IMSS;
-		$this->EMP_EMAIL = $EMP_EMAIL;
-		$this->EMP_TEL_LABORAL = $EMP_TEL_LABORAL;
-		$this->EMP_TEL_PARTICULAR = $EMP_TEL_PARTICULAR;
-		$this->CATEGORIA_CVE = $CATEGORIA_CVE;
-		$this->ADSCRIPCION_CVE = $ADSCRIPCION_CVE;
-		$this->DELEGACION_CVE = $DELEGACION_CVE;
-		$this->emp_eje_pro_cve = $emp_eje_pro_cve;
-		$this->eje_pro_cve = $eje_pro_cve;
-		$this->TIP_CONTRATACION_CVE = $TIP_CONTRATACION_CVE;
-		$this->CESTADO_CIVIL_CVE = $CESTADO_CIVIL_CVE;
-		$this->EDO_LABORAL_CVE = $EDO_LABORAL_CVE;
-		$this->emp_matricula = $emp_matricula;
-		$this->USUARIO_CVE = $USUARIO_CVE;
-		$this->DEPARTAMENTO_CVE = $DEPARTAMENTO_CVE;
-		$this->PRESUPUESTAL_ADSCRIPCION_CVE = $PRESUPUESTAL_ADSCRIPCION_CVE;
-		$this->emp_fch_ingreso = $emp_fch_ingreso;
-		$this->EMP_FCH_CREACION = $EMP_FCH_CREACION;
-		$this->emp_fch_nac = $emp_fch_nac;
-		$this->EMP_FCH_MODIF = $EMP_FCH_MODIF;
-	}
-
-    /**
-     * Load one row into var_class. To use the vars use for exemple echo $class->getVar_name; 
-     *
-     * @param key_table_type $key_row
      * 
+     * @param int $identificador
      */
-	public function Load_from_key($key_row){
-		$result = $this->connection->RunQuery("Select * from empleado where EMPLEADO_CVE = \"$key_row\" ");
-		while($row = $result->fetch_array(MYSQLI_ASSOC)){
-			$this->EMP_NOMBRE = $row["EMP_NOMBRE"];
-			$this->EMP_APE_PATERNO = $row["EMP_APE_PATERNO"];
-			$this->EMP_APE_MATERNO = $row["EMP_APE_MATERNO"];
-			$this->EMP_CURP = $row["EMP_CURP"];
-			$this->EMP_GENERO = $row["EMP_GENERO"];
-			$this->EMP_ANTIGUEDAD = $row["EMP_ANTIGUEDAD"];
-			$this->EMP_NUM_FUE_IMSS = $row["EMP_NUM_FUE_IMSS"];
-			$this->EMP_EMAIL = $row["EMP_EMAIL"];
-			$this->EMP_TEL_LABORAL = $row["EMP_TEL_LABORAL"];
-			$this->EMP_TEL_PARTICULAR = $row["EMP_TEL_PARTICULAR"];
-			$this->CATEGORIA_CVE = $row["CATEGORIA_CVE"];
-			$this->ADSCRIPCION_CVE = $row["ADSCRIPCION_CVE"];
-			$this->EMPLEADO_CVE = $row["EMPLEADO_CVE"];
-			$this->DELEGACION_CVE = $row["DELEGACION_CVE"];
-			$this->emp_eje_pro_cve = $row["emp_eje_pro_cve"];
-			$this->eje_pro_cve = $row["eje_pro_cve"];
-			$this->TIP_CONTRATACION_CVE = $row["TIP_CONTRATACION_CVE"];
-			$this->CESTADO_CIVIL_CVE = $row["CESTADO_CIVIL_CVE"];
-			$this->EDO_LABORAL_CVE = $row["EDO_LABORAL_CVE"];
-			$this->emp_matricula = $row["emp_matricula"];
-			$this->USUARIO_CVE = $row["USUARIO_CVE"];
-			$this->DEPARTAMENTO_CVE = $row["DEPARTAMENTO_CVE"];
-			$this->PRESUPUESTAL_ADSCRIPCION_CVE = $row["PRESUPUESTAL_ADSCRIPCION_CVE"];
-			$this->emp_fch_ingreso = $row["emp_fch_ingreso"];
-			$this->EMP_FCH_CREACION = $row["EMP_FCH_CREACION"];
-			$this->emp_fch_nac = $row["emp_fch_nac"];
-			$this->EMP_FCH_MODIF = $row["EMP_FCH_MODIF"];
-		}
-	}
+    public function getEmpECD($args) {
+    	if(isset($args["fields"])){
+    		if(is_array($args["fields"])){
+    			//echo $args["fields"] = implode(",",$args["fields"]);
+    		}
+    		$this->db->select($args["fields"]);
+    	}
+    	else{
+    		$this->db->select(array(
+	            'EMPLEADO_CVE as emp_id',
+	            'EMP_NOMBRE as nombre',
+	            'EMP_APE_PATERNO as apellidoPaterno',
+	            'EMP_APE_MATERNO as apellidoMaterno',
+	            'EMP_CURP as curp',
+	            'emp_fch_nac as fecha_nacimiento',
+	            'EMP_MATRICULA as matricula',
+	            'DEL_NOMBRE as delegacion',
+	            'NOM_CATEGORIA as nombreCategoria',
+	            'EM.CATEGORIA_CVE as claveCategoria',
+	            'ADS_NOM_AREA as nombreAreaAdscripcion',
+	            'ADS_NOM_UNIDAD as nombreUnidadAdscripcion',
+	            'EM.ADSCRIPCION_CVE as claveAdscripcion',
+	            'EMP_TEL_PARTICULAR as estatusEmpleado',
+        	));
+    	}
+    	if(isset($args["conditions"])){
+    		$this->db->where($args["conditions"]);
+    	}
+        
+        $this->db->from('empleado AS EM');
+        $this->db->join('cdelegacion AS CDEL', 'CDEL.DELEGACION_CVE = EM.DELEGACION_CVE', 'left');
+        $this->db->join('ccategoria AS CCAT', 'CCAT.ID_CAT = EM.CATEGORIA_CVE', 'left');
+        $this->db->join('adscripcion AS ADS', 'ADS.ADSCRIPCION_CVE = EM.ADSCRIPCION_CVE', 'left');
+        $this->db->join('ctipo_contratacion AS CTC', 'EM.tip_contratacion_cve =  CTC.tip_contratacion_cve', 'left');
+        $this->db->join('cdepartamento AS CD', 'CD.DEPARTAMENTO_CVE =  EM.DEPARTAMENTO_CVE', 'left');
+        $this->db->join('cpresupuestal AS CP', 'CP.PRESUPUESTAL_CVE =  CD.PRESUPUESTAL_CVE  ', 'left');
+        /*
+		'pendiente la relación del dictamen....
 
-    /**
-     * Delete the row by using the key as arg
-     *
-     * @param key_table_type $key_row
-     *
-     */
-	public function Delete_row_from_key($key_row){
-		$this->connection->RunQuery("DELETE FROM empleado WHERE EMPLEADO_CVE = $key_row");
-	}
-
-    /**
-     * Update the active row table on table
-     */
-	public function Save_Active_Row(){
-		$this->connection->RunQuery("UPDATE empleado set EMP_NOMBRE = \"$this->EMP_NOMBRE\", EMP_APE_PATERNO = \"$this->EMP_APE_PATERNO\", EMP_APE_MATERNO = \"$this->EMP_APE_MATERNO\", EMP_CURP = \"$this->EMP_CURP\", EMP_GENERO = \"$this->EMP_GENERO\", EMP_ANTIGUEDAD = \"$this->EMP_ANTIGUEDAD\", EMP_NUM_FUE_IMSS = \"$this->EMP_NUM_FUE_IMSS\", EMP_EMAIL = \"$this->EMP_EMAIL\", EMP_TEL_LABORAL = \"$this->EMP_TEL_LABORAL\", EMP_TEL_PARTICULAR = \"$this->EMP_TEL_PARTICULAR\", CATEGORIA_CVE = \"$this->CATEGORIA_CVE\", ADSCRIPCION_CVE = \"$this->ADSCRIPCION_CVE\", DELEGACION_CVE = \"$this->DELEGACION_CVE\", emp_eje_pro_cve = \"$this->emp_eje_pro_cve\", eje_pro_cve = \"$this->eje_pro_cve\", TIP_CONTRATACION_CVE = \"$this->TIP_CONTRATACION_CVE\", CESTADO_CIVIL_CVE = \"$this->CESTADO_CIVIL_CVE\", EDO_LABORAL_CVE = \"$this->EDO_LABORAL_CVE\", emp_matricula = \"$this->emp_matricula\", USUARIO_CVE = \"$this->USUARIO_CVE\", DEPARTAMENTO_CVE = \"$this->DEPARTAMENTO_CVE\", PRESUPUESTAL_ADSCRIPCION_CVE = \"$this->PRESUPUESTAL_ADSCRIPCION_CVE\", emp_fch_ingreso = \"$this->emp_fch_ingreso\", EMP_FCH_CREACION = \"$this->EMP_FCH_CREACION\", emp_fch_nac = \"$this->emp_fch_nac\", EMP_FCH_MODIF = \"$this->EMP_FCH_MODIF\" where EMPLEADO_CVE = \"$this->EMPLEADO_CVE\"");
-	}
-
-    /**
-     * Save the active var class as a new row on table
-     */
-	public function Save_Active_Row_as_New(){
-		$this->connection->RunQuery("Insert into empleado (EMP_NOMBRE, EMP_APE_PATERNO, EMP_APE_MATERNO, EMP_CURP, EMP_GENERO, EMP_ANTIGUEDAD, EMP_NUM_FUE_IMSS, EMP_EMAIL, EMP_TEL_LABORAL, EMP_TEL_PARTICULAR, CATEGORIA_CVE, ADSCRIPCION_CVE, DELEGACION_CVE, emp_eje_pro_cve, eje_pro_cve, TIP_CONTRATACION_CVE, CESTADO_CIVIL_CVE, EDO_LABORAL_CVE, emp_matricula, USUARIO_CVE, DEPARTAMENTO_CVE, PRESUPUESTAL_ADSCRIPCION_CVE, emp_fch_ingreso, EMP_FCH_CREACION, emp_fch_nac, EMP_FCH_MODIF) values (\"$this->EMP_NOMBRE\", \"$this->EMP_APE_PATERNO\", \"$this->EMP_APE_MATERNO\", \"$this->EMP_CURP\", \"$this->EMP_GENERO\", \"$this->EMP_ANTIGUEDAD\", \"$this->EMP_NUM_FUE_IMSS\", \"$this->EMP_EMAIL\", \"$this->EMP_TEL_LABORAL\", \"$this->EMP_TEL_PARTICULAR\", \"$this->CATEGORIA_CVE\", \"$this->ADSCRIPCION_CVE\", \"$this->DELEGACION_CVE\", \"$this->emp_eje_pro_cve\", \"$this->eje_pro_cve\", \"$this->TIP_CONTRATACION_CVE\", \"$this->CESTADO_CIVIL_CVE\", \"$this->EDO_LABORAL_CVE\", \"$this->emp_matricula\", \"$this->USUARIO_CVE\", \"$this->DEPARTAMENTO_CVE\", \"$this->PRESUPUESTAL_ADSCRIPCION_CVE\", \"$this->emp_fch_ingreso\", \"$this->EMP_FCH_CREACION\", \"$this->emp_fch_nac\", \"$this->EMP_FCH_MODIF\")");
-	}
-
-    /**
-     * Returns array of keys order by $column -> name of column $order -> desc or acs
-     *
-     * @param string $column
-     * @param string $order
-     */
-	public function GetKeysOrderBy($column, $order){
-		$keys = array(); $i = 0;
-		$result = $this->connection->RunQuery("SELECT EMPLEADO_CVE from empleado order by $column $order");
-			while($row = $result->fetch_array(MYSQLI_ASSOC)){
-				$keys[$i] = $row["EMPLEADO_CVE"];
-				$i++;
-			}
-	return $keys;
-	}
+        */
+        // $this->db->where('EM.EMPLEADO_CVE', $identificador);
+        $query = $this->db->get();
+        // echo "Hola mundo".$query->num_rows(); 
+        if($query->num_rows() > 0){
+        	return $query->row_array();
+        }elseif($query->num_rows() > 1){
+        	return $query->result_array();
+        }
+        
+    }
 
 	/**
 	 * @return EMP_NOMBRE - varchar(30)

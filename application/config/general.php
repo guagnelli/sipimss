@@ -663,6 +663,15 @@ $config['estados_val_evaluacion'] = array(
 //TIPO_COMPROBANTE_CVE *
 
 //////////////solicitud de evaluacion curricular
-$config['solicitar_evaluacion'] = (object)array("tabla"=>"emp_formacion_profesional",
-                                                "campo"=>"efp_aplica_ecd",
-                                                "validacion"=>array());
+$config["secciones"] = array(
+    "ca"=>array("id"=>"1","curso"=>"TIP_CUR_NOMBRE","tipo_curso"=>"TIP_COM_NOMBRE","pk"=>"EMP_COMISION_CVE"),
+    "fs"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "is"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ie"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "b"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "fp"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "me"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ed"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "em"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ad"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+);

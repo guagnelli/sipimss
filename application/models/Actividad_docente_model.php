@@ -131,13 +131,13 @@ class Actividad_docente_model extends CI_Model {
      */
     public function get_actividades_docente($actividad_docente_general_cve = null, $validacion_cve_session = null) {
         if (isset($actividad_docente_general_cve) AND is_nan($actividad_docente_general_cve)) {
-            return -1;
-        }
-        ////////Inicio agregar validaciones de estado
-        $sead = $seed = $seem = '';
-        $val_correc_sead = $validation_est_corr_sead = $val_correc_seed = $validation_est_corr_seed = $val_correc_seem = $validation_est_corr_seem = '';
-        $estado_validacion_actual = $this->session->userdata('datosvalidadoactual'); //Estado actual de la validación
-        if (!empty($estado_validacion_actual) && isset($estado_validacion_actual['est_val']) && !empty($estado_validacion_actual['est_val']) && $this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
+           return -1;
+       }
+       ////////Inicio agregar validaciones de estado
+       $sead = $seed = $seem = '';
+       $val_correc_sead = $validation_est_corr_sead = $val_correc_seed = $validation_est_corr_seed = $val_correc_seem = $validation_est_corr_seem = '';
+       $estado_validacion_actual = $this->session->userdata('datosvalidadoactual'); //Estado actual de la validación
+       if (isset($estado_validacion_actual) && isset($estado_validacion_actual['est_val']) && !empty($estado_validacion_actual['est_val']) && $this->config->item('estados_val_censo')[$estado_validacion_actual['est_val']]['color_status'] == $this->config->item('cvalidacion_curso_estado')['CORRECCION']) { ///Verificar que se encuentre en estado corrección para poder agregar
             $val_correc_sead = '(SELECT VAL_CUR_EST_CVE FROM hist_efpd_validacion_curso WHERE
                 hist_efpd_validacion_curso.EMP_ACT_DOCENTE_CVE=ead.EMP_ACT_DOCENTE_CVE AND 
                 VALIDACION_CVE != ' . $validacion_cve_session . ' order by VAL_CUR_FCH DESC limit 1) AS validation_estado, ';

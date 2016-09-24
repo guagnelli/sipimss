@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Comision_academica_model extends CI_Model {
+class Comision_academica_model extends My_model {
     var $string_values;
 
     public function __construct() {
@@ -73,6 +73,7 @@ class Comision_academica_model extends CI_Model {
         $this->db->join('comprobante', 'comprobante.comprobante_cve=emp_comision.comprobante_cve', 'left');
         $this->db->join('ctipo_curso', 'ctipo_curso.TIP_CURSO_CVE=emp_comision.TIP_CURSO_CVE', 'left');
         $this->db->join('ccurso', 'ccurso.CURSO_CVE=emp_comision.CURSO_CVE', 'left');
+        $this->db->join('ctipo_comision', 'ctipo_comision.TIP_COMISION_CVE=emp_comision.TIP_COMISION_CVE', 'left');
 
         $query = $this->db->get('emp_comision'); //Obtener conjunto de registros
         //pr($this->db->last_query());
