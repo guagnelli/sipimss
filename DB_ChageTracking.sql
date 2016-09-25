@@ -303,7 +303,7 @@ REFERENCES `emp_formacion_profesional` (`EMP_FORMACION_PROFESIONAL_CVE`);
 /* Elimina relación entre "ctematica" y "emp_formacion_profesional"*/
 ALTER TABLE `emp_formacion_profesional` DROP FOREIGN KEY `emp_formacion_profesional_ibfk_1`;
 ALTER TABLE `emp_formacion_profesional` DROP TEMATICA_CVE;
-/* Agrega a la entidad "emplead" la relacion con "cejercicio_profesional;"*/
+/* Agrega a la entidad "empleado" la relacion con "cejercicio_profesional;"*/
 ALTER TABLE `empleado` ADD `emp_eje_pro_cve` INT(11) NULL AFTER `delegacion_cve`;  /*Campo agregado a la tabla "emp_comision"*/
 CREATE INDEX XIF12_EMPLEADO ON empleado (emp_eje_pro_cve);  /* Se vuelve index el campo */
 ALTER TABLE `empleado` ADD CONSTRAINT `cejercicio_profesional_cjpfk_12`   /* Asigna llave foran*/
@@ -1075,3 +1075,28 @@ ALTER TABLE emp_materia_educativo ADD IS_CARGA_SISTEMA BOOLEAN NOT NULL DEFAULT 
 ALTER TABLE empleado  ADD IS_CARGA_SISTEMA BOOLEAN NOT NULL DEFAULT 0;
 
 ALTER TABLE cvalidacion_curso_estado MODIFY COLUMN VAl_CUR_EST_NOMBRE varchar(21) NOT NULL;
+
+-------------------2016/09/24 Responsable JESUS, EN ejecución cambios LEAS----------------------------
+alter table crol_evaluador drop column CROL_EVALUADOR_NOMBRE;
+----empleado----- 
+ALTER TABLE `crol_evaluador` ADD `EMPLEADO_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "crol_evaluador"*/
+CREATE INDEX XIF110CROL_EVALUADOR ON crol_evaluador (EMPLEADO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `crol_evaluador` ADD CONSTRAINT `crol_empleado_empfk_110`   /* Asigna llave foranea*/
+FOREIGN KEY (`EMPLEADO_CVE`) REFERENCES `empleado`(`EMPLEADO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+-----crol------
+ALTER TABLE `crol_evaluador` ADD `ROL_CVE` INT(11) NOT NULL;  /*Campo agregado a la tabla "crol_evaluador"*/
+CREATE INDEX XIF111CROL_EVALUADOR ON crol_evaluador (ROL_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `crol_evaluador` ADD CONSTRAINT `crol_evaluador_empfk_111`   /* Asigna llave foranea*/
+FOREIGN KEY (`ROL_CVE`) REFERENCES `crol`(`ROL_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+alter table crol_evaluador ADD fch_insert datetime not null default current_timestamp; 
+alter table crol_evaluador ADD IS_ACTUAL  boolean not null default 1; 
+
+ALTER TABLE `campos_catalogos` ADD `TIPO_COMPROBANTE_CVE` INT(11) NULL;  /*Campo agregado a la tabla "campos_catalogos"*/
+CREATE INDEX XIF111CAMPOS_CATALOGOS ON campos_catalogos (TIPO_COMPROBANTE_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `campos_catalogos` ADD CONSTRAINT `campos_catalogos_ctcfk_111`   /* Asigna llave foranea*/
+FOREIGN KEY (`TIPO_COMPROBANTE_CVE`) REFERENCES `ctipo_comprobante`(`TIPO_COMPROBANTE_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE ctipo_comprobante MODIFY COLUMN TIP_COM_NOMBRE varchar(50) NOT NULL;
+
+
