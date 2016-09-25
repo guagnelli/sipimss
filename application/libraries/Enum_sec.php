@@ -17,5 +17,6 @@ class Enum_sec {
             //*No estan en la  base de datos las siguientes secciones*//
             informacion_general = 11
             
+            
     ;
 }
