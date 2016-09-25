@@ -30,13 +30,7 @@ class Solicitar_evaluacion extends MY_Controller {
         $this->load->model("Investigacion_docente_model","id");
 
         // $this->load->model("Empleado_model","emp");
-        // $this->load->model("Empleado_model","emp");
-        // $this->load->model("Empleado_model","emp");
-        // $this->load->model("Empleado_model","emp");
-        // $this->load->model("Empleado_model","emp");
-        // $this->load->model("Empleado_model","emp");
-        // $this->load->model("Empleado_model","emp");
-
+       
         /*
         'lbl_fs_titulo'=>'Formaci&oacute;n en salud',
         'lbl_is_titulo'=>'Investigaci&oacute;n en salud',

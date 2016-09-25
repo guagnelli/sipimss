@@ -105,7 +105,7 @@ $db['default'] = array(
    'hostname' => 'localhost',
    'username' => 'root',
    'password' => 'mysql',
-   'database' => 'sipimss_15092016',
+   'database' => 'sipimss_20160915',
   
     
     'dbdriver' => 'mysqli',

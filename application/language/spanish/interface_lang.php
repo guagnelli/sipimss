@@ -28,7 +28,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$lang['interface']['registro']['texto_bienvenida'] = 'Hola mundo';
 $lang['interface'] = array(
     'secciones'=>array(
-<<<<<<< HEAD
         'lbl_ca_titulo'=>'Comisión académica',
         'lbl_fs_titulo'=>'Formaci&oacute;n en salud',
         'lbl_is_titulo'=>'Investigaci&oacute;n en salud',
@@ -39,19 +38,6 @@ $lang['interface'] = array(
         'lbl_ed_titulo'=>'Educaci&oacute; a distancia',
         'lbl_em_titulo'=>'Especialidad m&ecuate;dica',
         'lbl_ad_titulo'=>'Actividad docente'
-=======
-       'lbl_ig_titulo'=>'Información general',
-       'lbl_ca_titulo'=>'Comisión académica',
-       'lbl_fs_titulo'=>'Formaci&oacute;n en salud',
-       'lbl_is_titulo'=>'Investigaci&oacute;n en salud',
-       'lbl_ie_titulo'=>'Investigaci&oacute;n educativa',
-       'lbl_b_titulo'=>'Becas y Comisiones',
-       'lbl_fp_titulo'=>'Formaci&oacute;n profesional',
-       'lbl_me_titulo'=>'Material educativo',
-       'lbl_ed_titulo'=>'Educaci&oacute; a distancia',
-       'lbl_em_titulo'=>'Especialidad m&ecuate;dica',
-       'lbl_ad_titulo'=>'Actividad docente',
->>>>>>> c3e0bee352a86542d363f2647e81cf6aa4e2119e
     ),
     'registro' => array(
         'lbl_bienvenido' => 'Bienvenido',
