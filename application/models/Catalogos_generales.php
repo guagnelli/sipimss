@@ -60,7 +60,7 @@ class Catalogos_generales extends CI_Model {
      * en el caso de que el usuario sea nullo o algo ocurrio en la base de datos, devuelve 0
      */
     public function set_bitacora_gral($parametros = null) {
-       if (!isset($parametros)) {
+        if (!isset($parametros)) {
             return false;
         }
 
@@ -520,6 +520,26 @@ class Catalogos_generales extends CI_Model {
             $num_rows = $num_rows[0];
         }
         return $num_rows;
+    }
+    
+    /**
+     * 
+     * @param type $MODULO_CVE Modulo cve hace referencia al módulo descrito en 
+     * el archivo de constantes "En_cat_mod" 
+     * @param type $nom_campo
+     * @return type
+     */
+    public function get_condiciones_modulos_($MODULO_CVE = null, $nom_campo = null) {
+        if (is_null($MODULO_CVE) AND is_null($nom_campo)) {
+            return array();
+        }
+        $this->db->select($nom_campo . ' as cve');//Nombre del campo de la entidad solicitada
+        $this->db->where('MODULO_CVE', $MODULO_CVE);
+        $query = $this->db->get('campos_catalogos');
+        $array_comprobante = $query->result_array();
+        $query->free_result();
+//        pr($this->db->last_query());
+        return $array_comprobante;
     }
 
 }

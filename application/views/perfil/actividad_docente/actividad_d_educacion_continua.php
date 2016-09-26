@@ -57,6 +57,28 @@
                             <?php } ?>
                             <div class='row'>
                                 <div class="col-md-6">
+                                    <label for='lbl_tipo_curso' class="control-label">
+                                         <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_tipo_curso']; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-user"> </span>
+                                        </span>
+                                        <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'ctipo_curso', 'type' => 'dropdown', 
+                                                'options' => $ctipo_curso, 
+                                                'first' => array('' => $string_values['drop_tipo_curso']), 
+                                                'value' => isset($ctipo_curso_cve)? $ctipo_curso_cve: '',
+                                                'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
+                                                'placeholder' => '', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+//                                                'onchange' =>  "cargar_curso()",   
+                                                'title' => $string_values['lbl_tipo_curso'] ))); 
+                                        ?>
+                                   </div>
+                                   <?php   echo form_error_format('ctipo_curso'); ?>
+                                </div>
+                                <div class="col-md-6">
                                     <label for='lbl_curso' class="control-label">
                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_curso']; ?>
@@ -79,6 +101,8 @@
                                    </div>
                                    <?php   echo form_error_format('nombre_curso'); ?>
                                 </div>
+                            </div>
+                            <div class='row'>
                                 <div class="col-md-6">
                                      <label for='lbl_rol_desempenia' class="control-label">
                                          <b class="rojo">*</b>
@@ -100,9 +124,7 @@
                                    </div>
                                    <?php   echo form_error_format('crol_desempenia'); ?>
                                 </div>
-                            </div>
-                            <div class='row'>
-                                 <div class="col-md-6">
+                                <div class="col-md-6">
                                     <label for='lbl_recibe_pago_extra' class="control-label">
                                         <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_recibe_pago_extra']; ?>
@@ -145,27 +167,7 @@
                                     </div>
                                    <?php   echo form_error_format('pago_extra'); ?>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for='lbl_area' class="control-label">
-                                        <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_area']; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-plus"> </span>
-                                        </span>
-                                        <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'carea', 'type' => 'dropdown', 
-                                                'options' => $carea, 
-                                                'first' => array('' => $string_values['drop_area']), 
-                                                'value' => (isset($carea_cve))? $carea_cve : '',
-                                                'attributes' => array('name' => 'carea_name', 'class' => 'form-control', 
-                                                'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_area'] ))); 
-                                        ?>
-                                   </div>
-                                   <?php   echo form_error_format('carea'); ?>
-                                </div>
+                                
                             </div>
                             <div class='row'>
                                 <div class="col-md-6">
@@ -188,6 +190,29 @@
                                         ?>
                                    </div>
                                    <?php   echo form_error_format('cmodalidad'); ?>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class="col-md-6">
+                                    <label for='lbl_area' class="control-label">
+                                        <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_area']; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-plus"> </span>
+                                        </span>
+                                        <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'carea', 'type' => 'dropdown', 
+                                                'options' => $carea, 
+                                                'first' => array('' => $string_values['drop_area']), 
+                                                'value' => (isset($carea_cve))? $carea_cve : '',
+                                                'attributes' => array('name' => 'carea_name', 'class' => 'form-control', 
+                                                'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_area'] ))); 
+                                        ?>
+                                   </div>
+                                   <?php   echo form_error_format('carea'); ?>
                                 </div>
                                 <div class="col-md-6">
                                         <label for='lbl_anio_que_impartio_curso' class="control-label">
@@ -216,7 +241,7 @@
                                         ?>
                                         </div>
                                         <?php echo form_error_format('actividad_anios_dedicados_docencia'); ?>
-                                </div>
+                                </div>   
                             </div>
                         <br>
                             <div class='row'>

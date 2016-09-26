@@ -67,8 +67,9 @@ class Perfil extends MY_Controller {
                 $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
             }
         }
-
-        //        pr($this->session->userdata());
+//        $res = get_condiciones_catalogos_modulos(En_cat_mod::Comision_educativa, Enum_ecg::ctipo_comprobante);
+//        pr($res);
+//        pr($this->session->userdata());
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
@@ -1040,6 +1041,7 @@ class Perfil extends MY_Controller {
         $this->lang->load('interface', 'spanish');
         $string_values = array_merge($this->lang->line('interface')['actividad_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
         $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
+        $empleado_cve = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
         $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
         $guardado_correcto = '';
 //        pr($this->input->post(null, true));
@@ -1114,7 +1116,7 @@ class Perfil extends MY_Controller {
             $data['curso_principal'] = $actividad_docente[0]['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
             $data['actividad_general_cve'] = $actividad_docente[0]['ACT_DOC_GRAL_CVE']; //Identificador del curso principal 
             $data['curso_principal_entidad_contiene'] = $actividad_docente[0]['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
-            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE'], $validacion_cve_session); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
+            $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($actividad_docente[0]['ACT_DOC_GRAL_CVE'], $validacion_cve_session, $empleado_cve); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
 //            pr($data['datos_tabla_actividades_docente']);
         }
         $data['guardado_correcto'] = $guardado_correcto;
