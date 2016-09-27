@@ -131,7 +131,7 @@ class Actividad_docente_model extends CI_Model {
      * @param int $actividad_docente_general_cve Lista de actividades del docente
      * 
      */
-    public function get_actividades_docente($actividad_docente_general_cve = null, $validacion_cve_session = null) {
+    public function get_actividades_docente($actividad_docente_general_cve = null, $validacion_cve_session = null, $empleado_cve) {
         if (isset($actividad_docente_general_cve) AND is_nan($actividad_docente_general_cve)) {
 
             return -1;
@@ -187,7 +187,7 @@ class Actividad_docente_model extends CI_Model {
             , ead.IS_VALIDO_PROFESIONALIZACION
             from emp_actividad_docente as ead
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = ead.TIP_ACT_DOC_CVE
-            where ead.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
+            where ead.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve . ' AND ead.EMPLEADO_CVE = ' . $empleado_cve;
         //Entidad de emp_educacion_distancia 
         $select_emp_educacion_distancia = 'select ' . $seed . ' ' . $val_correc_seed . ' ' . $validation_est_corr_seed . '
             eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente", eed.EDD_CUR_ANIO "anio", eed.EED_DURACION "duracion"
@@ -196,7 +196,7 @@ class Actividad_docente_model extends CI_Model {
             , eed.IS_VALIDO_PROFESIONALIZACION
             from emp_educacion_distancia as eed
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = eed.TIP_ACT_DOC_CVE
-            where eed.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
+            where eed.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve . ' AND eed.EMPLEADO_CVE = ' . $empleado_cve;
         //Entidad de emp_esp_medica
         $select_emp_esp_medica = 'select ' . $seem . ' ' . $val_correc_seem . ' ' . $validation_est_corr_seem . '
             esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente", esm.EEM_ANIO_FUNGIO "anio", esm.EEM_DURACION "duracion"
@@ -205,7 +205,7 @@ class Actividad_docente_model extends CI_Model {
             , esm.IS_VALIDO_PROFESIONALIZACION
             from emp_esp_medica as esm
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = esm.TIP_ACT_DOC_CVE
-            where esm.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve;
+            where esm.ACT_DOC_GRAL_CVE = ' . $actividad_docente_general_cve . ' AND esm.EMPLEADO_CVE = ' . $empleado_cve;
 
         $query = $this->db->query($select_emp_actividad_docente . " UNION " . $select_emp_educacion_distancia . " UNION " . $select_emp_esp_medica);
 //        pr($this->db->last_query());

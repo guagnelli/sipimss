@@ -323,6 +323,7 @@ if (!function_exists('crear_formato_array')) {
     }
 
 }
+
 if (!function_exists('get_is_valida_validacion_censo')) {
 
     function get_is_valida_validacion_censo($empleado = null, $rol = null, $estado_actual = null) {
@@ -343,6 +344,26 @@ if (!function_exists('get_is_valida_validacion_censo')) {
         }
         //El rol seleccionado no puede enviar a validacion 
         return 0;
+    }
+
+}
+
+if (!function_exists('get_condiciones_catalogos_modulos')) {
+
+    function get_condiciones_catalogos_modulos($modulo_catalogo = null, $ccatalogo = null) {
+        if (is_null($modulo_catalogo) AND is_null($ccatalogo)) {
+            return array();
+        }
+        $CI = & get_instance();
+        //Carga 
+        $nom_identificador_entidad = $CI->config->item('catalogos_definidos')[$ccatalogo]['id'];
+        $CI->load->model('Catalogos_generales', 'cg');
+        $resultado = $CI->cg->get_condiciones_modulos_($modulo_catalogo, $nom_identificador_entidad);
+        $array_result = array();
+        foreach ($resultado as $value) {
+            $array_result[] = $value['cve'];
+        }
+        return $array_result;
     }
 
 }

@@ -1099,4 +1099,23 @@ FOREIGN KEY (`TIPO_COMPROBANTE_CVE`) REFERENCES `ctipo_comprobante`(`TIPO_COMPRO
 
 ALTER TABLE ctipo_comprobante MODIFY COLUMN TIP_COM_NOMBRE varchar(50) NOT NULL;
 
+-------------------2016/09/26 Responsable Jesus, Miguel, Pablo y Luis, En ejecución cambios LEAS----------------------------
+ALTER TABLE `cmedio_divulgacion` ADD `is_otra` INT(1) NOT NULL DEFAULT 0;  /*Campo agregado a la tabla "cmedio_divulgacion"*/
+ALTER TABLE `cmedio_divulgacion` ADD `is_reconocido` BOOLEAN NOT NULL DEFAULT 0;
+ALTER TABLE `cmedio_divulgacion` ADD `tp_f_r_l` char(1) NULL;
+
+alter table emp_act_inv_edu add is_edic_comp char(2) null;
+alter table emp_act_inv_edu add num_capitulos int(2) null;
+alter table emp_act_inv_edu add num_paginas int(5) null;
+
+ALTER TABLE cparametros CHANGE PERAM_PERIODO_INCONFORMIDAD NOM_DESCRIPCION varchar(100);
+ALTER TABLE cparametros CHANGE PARAM_VIGENCIA VALOR int(11);
+ALTER TABLE cparametros drop PARAM_RE_EVALUACION;
+
+--------------------------Ejecución Jesús Días -------------------------------
+ALTER TABLE tabulador_dir_tesis MODIFY COLUMN TDT_NIVEL_ESTUDIOS int(11) NULL;
+ALTER TABLE tabulador_ela_meterial MODIFY COLUMN TEM_RANGO_1 varchar(40) NULL;
+ALTER TABLE tabulador_ela_meterial MODIFY COLUMN TEM_RANGO_2 varchar(40) NULL;
+
+
 
