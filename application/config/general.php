@@ -669,7 +669,13 @@ $config['solicitar_evaluacion'] = (object)array("tabla"=>"emp_formacion_profesio
  * @pk : Llave primaria de la entidad en base de datos
  */
 $config["secciones"] = array(
-    Enum_sec::informacion_general=>array("acronimo"=>"ig", "entidad"=>"empleado","curso"=>"","tipo_curso"=>"","pk"=>"EMPLEADO_CVE"),
+    Enum_sec::informacion_general=>array(
+        "acronimo"=>"ig", 
+        "entidad"=>"empleado",
+        "curso"=>"",
+        "tipo_curso"=>"",
+        "pk"=>"EMPLEADO_CVE"
+    ),
     Enum_sec::comision=>array("acronimo"=>"ca", "entidad"=>"emp_comision","curso"=>"TIP_CUR_NOMBRE","tipo_curso"=>"TIP_COM_NOMBRE","pk"=>"EMP_COMISION_CVE"),
     Enum_sec::for_personal_continua_salud=>array("acronimo"=>"fs","entidad"=>"emp_for_personal_continua_salud","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
     Enum_sec::desa_inv_salud=>array("acronimo"=>"is","entidad"=>"emp_desa_inv_salud","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"EDIS_CVE"),
@@ -696,13 +702,109 @@ $config["secciones_cont_val_solicitud_eval"] = array(
     "ig"=>array("seccion" => 'seccion_info_general', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
 );
 
+///////////*//solicitud de evaluacion curricular
+$config["secciones"] = array(
+    "ca"=>array("id"=>"1","curso"=>"TIP_CUR_NOMBRE","tipo_curso"=>"TIP_COM_NOMBRE","pk"=>"EMP_COMISION_CVE"),
+    "fs"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "is"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ie"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+     "b"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "fp"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "me"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ed"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "em"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+    "ad"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
+);
 
-
-
-
-//seccion_becas_comisiones
-//
-//
-//seccion_direccion_tesis
-//
-//seccion_validar_evaluacion
+$config["get_secciones"] = array(
+    Enum_sec::comision=>array(
+        "acronimo"=>"ca",
+        "entidad"=>"emp_comision",
+        "curso"=>"TIP_CUR_NOMBRE",
+        "tipo_curso"=>"TIP_COM_NOMBRE",
+        "pk"=>"EMP_COMISION_CVE",
+        "model"=>"Comision_academica_model",
+        "function"=>"get_comision_academica",
+    ),
+    Enum_sec::for_personal_continua_salud=>array(
+        "acronimo"=>"fs",
+        "entidad"=>"emp_for_personal_continua_salud",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"FPCS_CVE",
+        "model"=>"Formacion_model",
+        "function"=>"get_formacion_salud",
+    ),
+    /*Enum_sec::desa_inv_salud=>array(
+        "acronimo"=>"is",
+        "entidad"=>"emp_desa_inv_salud",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"EDIS_CVE",
+        "model"=>"Investigacion_docente_model",
+        "function"=>"get_lista_datos_investigacion_docente",
+    ),
+    Enum_sec::act_inv_edu=>array(
+        "acronimo"=>"ie",
+        "entidad"=>"emp_act_inv_edu",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"EAID_CVE",
+        "model"=>"",
+        "function"=>"",
+    ),
+    Enum_sec::beca=>array(
+        "acronimo"=>"b",
+        "entidad"=>"emp_beca ",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"EMP_BECA_CVE",
+        "model"=>"",
+        "function"=>"",
+    ),
+    Enum_sec::formacion_profesional=>array(
+        "acronimo"=>"fp",
+        "entidad"=>"emp_formacion_profesional",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"EMP_FORMACION_PROFESIONAL_CVE",
+        "model"=>"",
+        "function"=>"",
+    ),
+    Enum_sec::materia_educativo=>array(
+        "acronimo"=>"me",
+        "entidad"=>"emp_materia_educativo",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"MATERIA_EDUCATIVO_CVE",
+        "model"=>"",
+        "function"=>"",
+    ),
+    Enum_sec::educacion_distancia=>array(
+        "acronimo"=>"ed",
+        "entidad"=>"emp_educacion_distancia",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"EMP_EDU_DISTANCIA_CVE",
+        "model"=>"",
+        "function"=>"",
+    ),
+    Enum_sec::esp_medica=>array(
+        "acronimo"=>"em",
+        "entidad"=>"emp_esp_medica",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"EMP_ESP_MEDICA_CVE",
+        "model"=>"",
+        "function"=>"",
+    ),
+    Enum_sec::actividad_docente=>array(
+        "acronimo"=>"ad",
+        "entidad"=>"emp_actividad_docente",
+        "curso"=>"SUBTIP_NOMBRE",
+        "tipo_curso"=>"TIP_FORM_SALUD_NOMBRE",
+        "pk"=>"EMP_ACT_DOCENTE_CVE",
+        "model"=>"",
+        "function"=>"",
+    ),*/
+);

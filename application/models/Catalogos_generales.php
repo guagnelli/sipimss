@@ -522,4 +522,67 @@ class Catalogos_generales extends CI_Model {
         return $num_rows;
     }
 
+    /**
+* Clase que gestiona el login
+* @version     : 1.0.0
+* @autor       : Mr. Guag
+* @date: 26/09/2016
+* @attributes: 
+*              $empleado_cve: Id del empleado
+*              $validado: si es nulo ignora la condición; si es TRUE busca todos los registros validados, 
+*                          si es FALSE busca todos los registros sin validación.
+*              $where: debe ir con el formato array("campo"=>valor)
+* @returns: Mixed array()
+* @comments: Usa el archivo de configuración con el arreglo asosiativo
+*               $config["get_secciones"]
+*               @acronimo : clave diminutiva para identificar el curso
+*               @entidad : Nombre de la entidad en la base de datos
+*               @curso : Nombre del curso o campo de donde se optiene el nombre del curso
+*               @tipo_curso: Tipo de curso 
+*               @pk : Llave primaria de la entidad en base de datos
+*               @model : nombre del modelo 
+*               @function : nombre de la funcion que regresa los datos de la sección
+*/
+
+    function getAll($empleado_cve = null, $validado = null, $where=null){
+        if(is_null($empleado_cve)){
+            throw new Exception('Id de usuario nulo');
+        }
+
+        //información del profesor
+        $params = array("conditions"=>array("empleado_cve"=>$empleado_cve));
+        
+        $this->load->model("Empleado_model","emp");
+        $data["empleado"] = $this->emp->getEmpECD($params);
+
+        if(!is_null($validado)){
+            if(is_bool($validado)){
+                $paramas["conditions"]["IS_VALIDO_PROFESIONALIZACION"]=$validado;
+            }else{
+                throw new Exception('La función espera un valor booleano');       
+            }
+        }
+
+        if(!is_null($where)){
+            $paramas["conditions"] += $where;
+        }
+
+        $this->lang->load('interface', 'spanish');
+
+        //Etiquetas
+        $data["string_value"] = $this->lang->line('interface_secd')+$this->lang->line('interface')["secciones"];
+        // $data["cfg_actividad"] = $this->config->item("get_secciones");
+        $secciones = $this->config->item("get_secciones");
+
+        foreach ($secciones as $key => $seccion) {
+            $this->load->model($seccion["model"],$seccion["acronimo"]);
+            $res = $this->{$seccion["acronimo"]}->$seccion["function"]($params);
+            if(!empty($res)){
+                $data["actividades"][$seccion["acronimo"]] = $res;
+                $data["labels"][$seccion["acronimo"]] = "lbl_".$seccion["acronimo"]."_titulo";
+            }
+        }
+        return $data;
+    }
+
 }
