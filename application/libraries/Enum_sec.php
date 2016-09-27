@@ -13,6 +13,7 @@ class Enum_sec {
             materia_educativo = 7,
             educacion_distancia = 8,
             esp_medica = 9,
+            direccion_tesis = 12,
             actividad_docente = 10,
             //*No estan en la  base de datos las siguientes secciones*//
             informacion_general = 11

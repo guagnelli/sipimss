@@ -8,7 +8,11 @@
       </div>
     </div>
     <div class="box-body">
-      <?php echo $string_value['lbl_convocatoria']?> 
+      <?php 
+      echo $string_value['lbl_convocatoria'];
+      // pr($actividades);
+      ?> 
+
     </div>
     <!-- /.box-body -->
     <div class="box-footer text-right">
@@ -64,7 +68,6 @@
       <div class="box-group" id="accordion">    
       <?php
       if(isset($actividades)){
-        pr($actividades);
         foreach($actividades as  $id=>$actividad):
       ?>
         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->

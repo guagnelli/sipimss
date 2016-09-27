@@ -34,6 +34,7 @@ class Investigacion_docente_model extends CI_Model {
         if (isset($empleado_cve) AND is_null($empleado_cve)) {
             return -1;
         }
+        
         /////////////////////////////////Inicio verificación existencia de validación actual
         if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
             $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
@@ -59,7 +60,12 @@ class Investigacion_docente_model extends CI_Model {
         $this->db->select($select);
         $this->db->from('emp_act_inv_edu as eaid');
         $this->db->join('ctipo_actividad_docente as ctad', 'ctad.TIP_ACT_DOC_CVE = eaid.TIP_ACT_DOC_CVE');
-        $this->db->where('eaid.EMPLEADO_CVE', $empleado_cve);
+        //pr($empleado_cve);
+        if(is_array($empleado_cve)&& isset($empleado_cve["conditions"])){
+            $this->db->where($empleado_cve["conditions"]);
+        }else{
+            $this->db->where('eaid.EMPLEADO_CVE', $empleado_cve);    
+        }
         $query = $this->db->get();
         //pr($this->db->last_query());
         return $query->result_array();
