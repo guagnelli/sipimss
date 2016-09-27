@@ -592,14 +592,18 @@ class Catalogos_generales extends CI_Model {
         //Etiquetas
         $data["string_value"] = $this->lang->line('interface_secd')+$this->lang->line('interface')["secciones"];
         // $data["cfg_actividad"] = $this->config->item("get_secciones");
-        $secciones = $this->config->item("get_secciones");
+        $secciones = $this->config->item("secciones_model");
 
         foreach ($secciones as $key => $seccion) {
             $this->load->model($seccion["model"],$seccion["acronimo"]);
             $res = $this->{$seccion["acronimo"]}->$seccion["function"]($params);
+            unset($seccion["model"]);
+            unset($seccion["function"]);
             if(!empty($res)){
                 $data["actividades"][$seccion["acronimo"]] = $res;
                 $data["labels"][$seccion["acronimo"]] = "lbl_".$seccion["acronimo"]."_titulo";
+                $data["cfg_actividad"][$seccion["acronimo"]]  = $seccion;
+
             }
         }
         return $data;

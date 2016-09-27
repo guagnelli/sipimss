@@ -716,7 +716,7 @@ $config["secciones"] = array(
     "ad"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
 );
 
-$config["get_secciones"] = array(
+$config["secciones_model"] = array(
     Enum_sec::comision=>array(
         "acronimo"=>"ca",
         "entidad"=>"emp_comision",

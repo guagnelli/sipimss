@@ -21,7 +21,8 @@ class Solicitar_evaluacion extends MY_Controller {
     }
     
     function index(){
-        $data = $this->getAll($this->session->idempleado);
+        $this->load->model("Catalogos_generales","gral");
+        $data = $this->gral->getAll($this->session->idempleado);
 
         $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$data, true);
         //$this->template->setCuerpoModal($this->ventana_modal->carga_modal());
@@ -38,6 +39,8 @@ class Solicitar_evaluacion extends MY_Controller {
         pr($this->input->post());
     }
 
+    /*
+Mejora de menus... LEAS
     private function obtener_secciones_evaluacion($string_text = array(), $name_controlador = 'controlador_validacion') {
        $secciones = $this->config->item('secciones');
        $result_array = array();
@@ -53,6 +56,6 @@ class Solicitar_evaluacion extends MY_Controller {
        }
 //        pr($result_array);
        return $result_array;
-   }
+   }*/
     
 }
