@@ -681,6 +681,11 @@ $lang['interface'] = array(
         'titulo_modal_comentario_d' => 'Docente: ',
         'chek_selct_profesionalizacion' => 'Seleccionar para evaluación',
         'lbl_seleccionar' => 'Seleccionar',
+        'title_curso' => 'Cuerso',
+        'title_tipo_curso' => 'Tipo',
+        'title_horas' => 'Duración',
+        'title_acciones' => 'Acciones',
+        'accion_ver' => 'Ver',
     ),
 );
 $lang['interface_secd'] = array(

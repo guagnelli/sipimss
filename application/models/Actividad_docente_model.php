@@ -192,7 +192,7 @@ class Actividad_docente_model extends CI_Model {
             ead.EMP_ACT_DOCENTE_CVE "cve_actividad_docente", ead.EAD_ANIO_CURSO "anio", ead.EAD_DURACION "duracion"
             ,ead.EAD_FCH_INICIO "fecha_inicio", ead.EAD_FCH_FIN "fecha_fin", ead.COMPROBANTE_CVE "comprobante"
             ,ead.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", ead.ACT_DOC_GRAL_CVE "actividad_general_cve"
-            , ead.IS_VALIDO_PROFESIONALIZACION
+            , ead.IS_VALIDO_PROFESIONALIZACION, ead.EAD_NOMBRE_CURSO "nom_curso"
             from emp_actividad_docente as ead
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = ead.TIP_ACT_DOC_CVE
             where ead.EMPLEADO_CVE = ' . $empleado_cve;
@@ -201,7 +201,7 @@ class Actividad_docente_model extends CI_Model {
             eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente", eed.EDD_CUR_ANIO "anio", eed.EED_DURACION "duracion"
             ,eed.EDD_FCH_INICIO "fecha_inicio", eed.EED_FCH_FIN "fecha_fin", eed.COMPROBANTE_CVE "comprobante"
             ,eed.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", eed.ACT_DOC_GRAL_CVE "actividad_general_cve"
-            , eed.IS_VALIDO_PROFESIONALIZACION
+            , eed.IS_VALIDO_PROFESIONALIZACION, eed.EED_NOMBRE_CURSO "nom_curso"
             from emp_educacion_distancia as eed
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = eed.TIP_ACT_DOC_CVE
             where eed.EMPLEADO_CVE = ' . $empleado_cve;
@@ -210,9 +210,10 @@ class Actividad_docente_model extends CI_Model {
             esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente", esm.EEM_ANIO_FUNGIO "anio", esm.EEM_DURACION "duracion"
             ,esm.EEM_FCH_INICIO "fecha_inicio", esm.EEM_FCH_FIN "fecha_fin", esm.COMPROBANTE_CVE "comprobante"
             ,esm.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", esm.ACT_DOC_GRAL_CVE "actividad_general_cve"
-            , esm.IS_VALIDO_PROFESIONALIZACION
+            , esm.IS_VALIDO_PROFESIONALIZACION, cte.TIP_ESP_MED_NOMBRE "nom_curso"
             from emp_esp_medica as esm
             inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = esm.TIP_ACT_DOC_CVE
+            inner join ctipo_especialidad cte on cte.TIP_ESP_MEDICA_CVE = esm.TIP_ESP_MEDICA_CVE
             where esm.EMPLEADO_CVE = ' . $empleado_cve;
 
         if(is_array($actividad_docente_general_cve) && isset($actividad_docente_general_cve["validations"]["IS_VALIDO_PROFESIONALIZACION"])){

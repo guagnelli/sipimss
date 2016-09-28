@@ -316,6 +316,7 @@ function cargar_archivo(req, form) {
  * @returns {undefined}
  */
 function seleccionar_todos_checkbox_tabla(tabla, check_box_control) {
+//    alert(tabla + check_box_control);
     var isSeleccion = $(check_box_control).is(':checked');
     var obj_row;
     for (var i = 1; i < document.getElementById(tabla).rows.length; i++) {

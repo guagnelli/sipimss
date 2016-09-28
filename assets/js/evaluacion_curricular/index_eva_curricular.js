@@ -16,7 +16,7 @@ $(function () {
                 //alert();
                 array_menu_perfil_validar_eva.push(id);
                 //Separar en 4, 0controlador; 1nombre del método ajax; 2nombre del formulario; 3nombre del div
-                cargar_datos_menu_perfil(id);
+//                cargar_datos_menu_perfil(id);
             }
         }
         seccion_seleccionada = id;

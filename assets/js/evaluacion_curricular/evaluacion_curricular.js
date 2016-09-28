@@ -69,8 +69,15 @@ function ver_comentario_estado_doc(element) {
 }
 
 function seleccionar_deseleccionar_profesionalizacion(element) {
-//    }
     seleccionar_todos_checkbox_tabla('tabla_resultados_validacion_evaluacion', '#check_seleccionar_todo');
+}
+
+function seleccionar_deseleccionar_tablas(element) {
+    var obj = $(element);
+    var tabla = obj.data('tabla');
+    var check = obj.data('check');
+//    alert(tabla + check);
+    seleccionar_todos_checkbox_tabla(tabla.toString(), '#' + check.toString());
 }
 
 
@@ -78,4 +85,11 @@ function funcion_cerrar_validacion_empleado(element) {
 //    alert('jsahjhdadas');
     $('#select_perfil_validar_evaluacion').empty();
     data_ajax_post(site_url + '/evaluacion_curricular_validar/seccion_delete_datos_validado', null, null);
+}
+
+function ver_curso(elemento) {
+    var curso = $(elemento).attr('data-value');
+    var seccion = $(elemento).attr('data-seccion');
+
+    data_ajax(site_url + '/perfil_registro/' + seccion + '/' + curso, null, '#modal_content');
 }

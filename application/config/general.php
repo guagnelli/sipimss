@@ -699,6 +699,7 @@ $config["secciones_cont_val_solicitud_eval"] = array(
     "ed"=>array("seccion" => 'seccion_educacion_distancia', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
     "em"=>array("seccion" => 'seccion_especialidad_medica', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
     "ad"=>array("seccion" => 'seccion_actividad_docente', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
+    "dt"=>array("seccion" => 'seccion_direccion_tesis', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
     "ig"=>array("seccion" => 'seccion_info_general', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
 );
 
@@ -725,6 +726,7 @@ $config["secciones_model"] = array(
         "pk"=>"EMP_COMISION_CVE",
         "model"=>"Comision_academica_model",
         "function"=>"get_comision_academica",
+        "ver_datos"=>"",
     ),
     Enum_sec::for_personal_continua_salud=>array(
         "acronimo"=>"fs",
@@ -734,6 +736,7 @@ $config["secciones_model"] = array(
         "pk"=>"FPCS_CVE",
         "model"=>"Formacion_model",
         "function"=>"get_formacion_salud",
+        "ver_datos"=>"",
     ),
     Enum_sec::desa_inv_salud=>array(
         "acronimo"=>"is",
@@ -743,6 +746,7 @@ $config["secciones_model"] = array(
         "pk"=>"cve_investigacion",
         "model"=>"Investigacion_docente_model",
         "function"=>"get_lista_datos_investigacion_docente",
+        "ver_datos"=>"",
     ),
     Enum_sec::beca=>array(
         "acronimo"=>"b",
@@ -752,6 +756,7 @@ $config["secciones_model"] = array(
         "pk"=>"emp_beca_cve",
         "model"=>"Becas_comisiones_laborales_model",
         "function"=>"get_lista_becas",
+        "ver_datos"=>"",
     ),
     Enum_sec::formacion_profesional=>array(
         "acronimo"=>"fp",
@@ -761,6 +766,7 @@ $config["secciones_model"] = array(
         "pk"=>"EMP_FORMACION_PROFESIONAL_CVE",
         "model"=>"Formacion_model",
         "function"=>"get_formacion_docente",
+        "ver_datos"=>"",
     ),
     Enum_sec::materia_educativo=>array(
         "acronimo"=>"me",
@@ -770,15 +776,17 @@ $config["secciones_model"] = array(
         "pk"=>"emp_material_educativo_cve",
         "model"=>"Material_educativo_model",
         "function"=>"get_lista_material_educativo",
+        "ver_datos"=>"carga_datos_editar_material_educativo",
     ),
     Enum_sec::actividad_docente=>array(
         "acronimo"=>"ad",
         "entidad"=>"emp_actividad_docente",
-        "curso"=>"nombre_tp_actividad",
-        "tipo_curso"=>"",
+        "curso"=>"nom_curso",
+        "tipo_curso"=>"nombre_tp_actividad",
         "pk"=>"cve_actividad_docente",
         "model"=>"Actividad_docente_model",
         "function"=>"get_actividades_docente",
+        "ver_datos"=>"",
     ),
     Enum_sec::direccion_tesis=>array(
         "acronimo"=>"dt",
@@ -788,5 +796,6 @@ $config["secciones_model"] = array(
         "pk"=>"EMP_COMISION_CVE",
         "model"=>"Direccion_tesis_model",
         "function"=>"get_lista_datos_direccion_tesis",
+        "ver_datos"=>"",
     ),
 );

@@ -7,7 +7,7 @@ $string_values = $this->lang->line('interface');
 ?>
 <?php echo css("style-sipimss.css"); ?>
 
-<script type='text/javascript' src="<?php echo base_url(); ?>assets/js/evaluacion_curricular/index_eva_curricular.js"></script>
+<!--<script type='text/javascript' src="<?php // echo base_url(); ?>assets/js/evaluacion_curricular/index_eva_curricular.js"></script>-->
 <script>
     $('.botonF1').hover(function () {
         $('.btn').addClass('animacionVer');
@@ -23,20 +23,19 @@ $string_values = $this->lang->line('interface');
         ?>
         <script >
             /*Guarda los datos de configuración para el uso de ajax en javascript*/
-            hrutes['<?php echo $value_tab['ruta']; ?>'] = '<?php echo $value_tab['ruta_padre']; ?>';
+//            hrutes['<?php echo $value_tab['ruta']; ?>'] = '<?php echo $value_tab['ruta_padre']; ?>';
         </script>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $value_tab['ruta'] ?>">
-                        <span class="glyphicon glyphicon-th"></span>
+        <div class="panel box box-success">
+            <div class="box-header with-border">
+                <h4 class="box-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $value_tab['ruta'] ?>" class="collapsed" aria-expanded="false">
                         <?php echo $value_tab['nombre_modulo'] ?>
                     </a>
                 </h4>
             </div>
             <div id="<?php echo $value_tab['ruta'] ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                 <div id="cuerpo_<?php echo $value_tab['ruta'] ?>" class="box-body">
-                    <?php echo $value_tab['ruta'] ?>
+                    <?php echo $value_tab['tabla'] ?>
                 </div>
             </div>
         </div>
