@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //pr($lista_unidades);
 ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_docente/validar_censo.js"></script>
-<div id="tabla_designar_validador" class="table-responsive">
+<div id="tabla_designar_validador" class="col-lg-12 table-responsive">
     <!--Mostrará la tabla de actividad docente --> 
     <table class="table table-striped table-hover table-bordered" id="tabla_investigacion_docente">
         <thead>

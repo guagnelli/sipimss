@@ -1103,7 +1103,7 @@ ALTER TABLE ctipo_comprobante MODIFY COLUMN TIP_COM_NOMBRE varchar(50) NOT NULL;
 ALTER TABLE `cmedio_divulgacion` ADD `is_otra` INT(1) NOT NULL DEFAULT 0;  /*Campo agregado a la tabla "cmedio_divulgacion"*/
 ALTER TABLE `cmedio_divulgacion` ADD `is_reconocido` BOOLEAN NOT NULL DEFAULT 0;
 ALTER TABLE `cmedio_divulgacion` ADD `tp_f_r_l` char(1) NULL;
-ALTER TABLE `cmedio_divulgacion` ADD `isbn_lib` varchar(25) NULL;
+ALTER TABLE `emp_act_inv_edu` ADD `ISBN_LIB` varchar(25) NULL;
 
 alter table emp_act_inv_edu add is_edic_comp char(2) null;
 alter table emp_act_inv_edu add num_capitulos int(2) null;
@@ -1220,3 +1220,12 @@ DROP TABLE IF EXISTS `evaluacion_mat_edu`;
 DROP TABLE IF EXISTS `evaluacion_for_profesional`;
 DROP TABLE IF EXISTS `evaluacion_esp_medica`;
 DROP TABLE IF EXISTS `evaluacion_beca`;
+
+-------------------2016/09/28 Responsable LEAS, En ejecución cambios LEAS----------------------------
+ALTER TABLE `cseccion_informacion` ADD `PADRE_SEC_INF_CVE` INT(11) NULL;  /*Campo agregado a la tabla "cseccion_informacion" */
+CREATE INDEX XIF148CSECCION_INFORMACION ON cseccion_informacion (PADRE_SEC_INF_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `cseccion_informacion` ADD CONSTRAINT `cseccion_informacion_csifk148`   /* Asigna llave foran */
+FOREIGN KEY (`PADRE_SEC_INF_CVE`) REFERENCES `cseccion_informacion`(`sec_info_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE cseccion_informacion  DROP FOREIGN KEY  cseccion_informacion_csifk148;
+alter table cseccion_informacion drop column PADRE_SEC_INF_CVE;

@@ -8,7 +8,7 @@ class Enum_sec {
             for_personal_continua_salud = 2,
             desa_inv_salud = 3,
             act_inv_edu = 4,
-            beca = 5,
+            beca_comisiones_laborales = 5, //Becas y comisiones laborales
             formacion_profesional = 6,
             materia_educativo = 7,
             educacion_distancia = 8,
@@ -16,7 +16,8 @@ class Enum_sec {
             direccion_tesis = 12,
             actividad_docente = 10,
             //*No estan en la  base de datos las siguientes secciones*//
-            informacion_general = 11
+            comisiones = 11,
+            informacion_general = 12
             
             
     ;

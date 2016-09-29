@@ -8,7 +8,7 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'check_selecci
         'onclick' => 'seleccionar_deseleccionar_profesionalizacion(this)',
         'title' => $string_values['chek_selct_profesionalizacion'])));
 ?>
-<div id="div_tabla_res_busqueda_docentes" class="table-responsive"> 
+<div id="div_tabla_res_busqueda_docentes" class="col-lg-12 table-responsive"> 
     <!--Mostrará la tabla de actividad docente --> 
     <!--<table class="table table-striped table-hover table-bordered" id="tabla_resultados_validacion_evaluacion">-->
     <table class="table " id="tabla_resultados_validacion_evaluacion">

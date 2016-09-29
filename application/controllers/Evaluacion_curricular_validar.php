@@ -85,16 +85,16 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cestado_validacion => 'EST_VALIDACION_CVE')); //Carga el catÃ¡logo de ejercicio predominante
             $main_contet = $this->load->view('evaluacion_currucular_doc/evaluacion_curricular_validar_tpl', $data, true);
 
-//            $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
-//             $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
             /* carga buscador */
 //            $result = get_is_valida_validacion_censo(12, 3, 8);
         } else {//No existe el validador. Mostrar leyenda de que no es un valiador
-            $main_contet = '<span>No se encuentrÃ¡ asignado el validador</span>';
+            $main_contet = '<span>No se encuentra¡ asignado el validador</span>';
         }
-        $this->template->setTitle("EvaluaciÃ³n");
+        $this->template->setTitle("Evaluación");
+        $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_contet);
-        $this->template->getTemplate();
+        $this->template->getTemplate(FALSE, 'template/sipimss/index.tpl.php');
+//        $this->template->getTemplate();
     }
 
     public function data_buscar_docentes_validar_evaluacion_curr($current_row = null) {
@@ -261,7 +261,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $info_docente = $this->cg->getAll($datos_validacion['empleado_cve'], true);
                 $string_text_secciones['secciones'] = $interface['secciones'];
                 $string_text_secciones['string_values'] = $data["string_values"];
-                $info_docente['actividades']['ig'] =  $info_docente['empleado'];//Agrega datos ingormación general del docente
+                $info_docente['actividades']['ig'] = $info_docente['empleado']; //Agrega datos ingormación general del docente
 //                pr($info_docente);
 //                exit();
                 $data['array_menu'] = $this->obtener_secciones_evaluacion($info_docente['actividades'], $string_text_secciones);

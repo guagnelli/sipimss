@@ -92,7 +92,8 @@ class Validacion_censo_profesores extends MY_Controller {
         $main_contet = $this->load->view('validador_censo/validador_censo_tpl', $data, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_contet);
-        $this->template->getTemplate();
+        $this->template->getTemplate(FALSE, 'template/sipimss/index.tpl.php');
+//        $this->template->getTemplate();
     }
 
     public function data_buscar_docentes_validar($current_row = null) {

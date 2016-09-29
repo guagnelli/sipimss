@@ -13,10 +13,10 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'checkall_' . 
 <table class="table table-striped table-hover table-bordered" id="trve_<?php echo $acronimo; ?>">
     <thead>
         <tr class='success'>
-            <th><?php echo $string_values['lbl_seleccionar'] . "&nbsp" . $seleccionar ?></th>
-            <th><?php echo $string_values['title_curso'] ?></th>
-            <th><?php echo $string_values['title_tipo_curso'] ?></th>
-            <th><?php echo $string_values['title_acciones'] ?></th>
+            <th class="text-center"><?php echo $string_values['lbl_seleccionar'] . "&nbsp" . $seleccionar ?></th>
+            <th class="text-center"><?php echo $string_values['title_curso'] ?></th>
+            <th class="text-center"><?php echo $string_values['title_tipo_curso'] ?></th>
+            <th class="text-center"><?php echo $string_values['title_acciones'] ?></th>
         </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'checkall_' . 
         <?php
 //Generará la tabla que muestrá las actividades del docente
         foreach ($datos_modulo as $key_ai => $value) {
-            $key = $this->seguridad->encrypt_base64($value[$pk]);
+            $key = $this->seguridad->encrypt_base64($value[$pk]);//
             $seccion_metodo = $ver_datos;
             $checkbox_profesionalizacio = $this->form_complete->create_element(array(
                 'id' => 'check_' . $key_ai,

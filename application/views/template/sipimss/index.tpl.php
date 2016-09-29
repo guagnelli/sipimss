@@ -1,3 +1,8 @@
+<?php
+    $tipo_color = array("text-red", "text-yellow", "text-orange","text-blue", "text-maroon", 
+        "text-gray", "text-fuchsia", "text-aqua", "text-green");
+    
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -189,7 +194,7 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">Opciones principales</li>
-        <li><a href="#"><i class="fa fa-home"></i> <span>Inicio</span></a></li>
+        <li><a href="<?php echo site_url('/'); ?>"><i class="fa fa-home"></i> <span>Inicio</span></a></li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
@@ -223,9 +228,22 @@
           </a>
         </li>
         <li class="header">Opciones de secci&oacute;n</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+        <!--Crear menu-->
+        <?php if($this->uri->segment(1)!=='rol' AND !is_null($this->session->userdata("rol_seleccionado"))){
+                        $rol_opciones = $this->session->userdata("rol_seleccionado");
+                        $tam_array_color = sizeof($tipo_color) - 1;
+                        $color = '';     
+//                        pr($rol_opciones);
+                        foreach($rol_opciones as $key => $value){
+                            if(empty(!$value['is_controlador'])AND intval($value['is_controlador']) ===1){
+                            $color = $tipo_color[rand(0, $tam_array_color)];//Asignar un color
+        ?>  
+        <li><a href="<?php echo site_url($value['ruta']); ?>"><i class="fa fa-circle-o <?php echo $color; ?>"></i> <span><?php  echo $value['nombre_modulo'];?></span></a></li>
+        <?php
+                }
+            }
+        }//fin if 
+        ?>
       </ul>
     </section>
     <!-- /.sidebar -->
