@@ -21,6 +21,21 @@
   <!-- Pace style -->
   <link rel="stylesheet" href="<?php echo asset_url();?>plugins/pace/pace.css">
 
+  <!-- jQuery 2.2.3 -->
+  <script src="<?php echo asset_url();?>plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="<?php echo asset_url();?>bootstrap/js/bootstrap.min.js"></script>
+  <!-- PACE -->
+  <script src="<?php echo asset_url();?>plugins/pace/pace.min.js"></script>
+  <!-- SlimScroll -->
+  <script src="<?php echo asset_url();?>plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- FastClick -->
+  <script src="<?php echo asset_url();?>plugins/fastclick/fastclick.js"></script>
+  <!-- AdminLTE App -->
+  <script src="<?php echo asset_url();?>sipimss/js/app.min.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="<?php echo asset_url();?>sipimss/js/demo.js"></script>
+  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -489,20 +504,6 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 2.2.3 -->
-<script src="<?php echo asset_url();?>plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="<?php echo asset_url();?>bootstrap/js/bootstrap.min.js"></script>
-<!-- PACE -->
-<script src="<?php echo asset_url();?>plugins/pace/pace.min.js"></script>
-<!-- SlimScroll -->
-<script src="<?php echo asset_url();?>plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="<?php echo asset_url();?>plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo asset_url();?>sipimss/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="<?php echo asset_url();?>sipimss/js/demo.js"></script>
 <!-- page script -->
 <script type="text/javascript">
 	// To make Pace works on Ajax calls

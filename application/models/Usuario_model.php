@@ -135,6 +135,7 @@ class Usuario_model extends CI_Model {
         $resultado['data'] = $query->result_array();
         //pr($resultado['data']);
         $this->db->flush_cache();
+        
         $query->free_result(); //Libera la memoria
 
         return $resultado;

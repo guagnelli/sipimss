@@ -72,6 +72,8 @@ class Rol extends MY_Controller {
                         redirect('validacion_censo_profesores');
                     case 5:
                         redirect('designar_validador');
+                    case Enum_rols::Vocal:
+                        redirect('evaluacion_docente');
                 }
                 exit();
             }

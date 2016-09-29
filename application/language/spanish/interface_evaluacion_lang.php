@@ -82,7 +82,8 @@ $lang['interface_evaluacion'] = array(
             'tab_head_vigencia' => 'Vigencia',
             'tab_head_periodo_inconformidad' => 'Periodo de inconformidad **',
             'tab_head_inconformidad' => 'Inconformidad **',
-            'enviar_inconformidad' => 'Enviar inconformidad'
+            'enviar_inconformidad' => 'Enviar inconformidad',
+            'permiso_acceso' => 'Usuario seleccionado no tiene acceso a este módulo.'
         ),
         'model' => array(
             'insercion' => 'Se ha insertado correctamente la información.',
@@ -90,6 +91,19 @@ $lang['interface_evaluacion'] = array(
             'eliminacion' => 'Se ha eliminado correctamente.',
             'error' => 'Ocurrió un error, por favor intentelo de nuevo más tarde.',
         ),
+        'dictamen' => array(
+            'datos_docente' => 'Datos del docente',
+            'nombre_docente' => 'Nombre',
+            'matricula_docente' => 'Matrícula',
+            'delegacion' => 'Delegación',
+            'adscripcion' => 'Adscripción',
+            'categoria' => 'Categoría',
+            'estado' => 'Estado',
+            'periodo_actual_evaluacion' => 'Período actual de evaluación',
+            'txt_buscar_docentes' => 'Buscar docentes',
+            'curso' => 'Curso',
+            'tipo_curso' => 'Tipo de curso'
+        )
     ),
     'general' => array(
         'acciones' => 'Acciones',
@@ -97,7 +111,11 @@ $lang['interface_evaluacion'] = array(
         'eliminar' => 'Eliminar',
         'enviar' => 'Enviar',
         'cancelar' => 'Cancelar',
+        'buscar' => 'Buscar',
+        'evaluar' => 'Evaluar',
+        'seleccionar' => 'Seleccionar',
         'no_existe_datos' => 'No existen datos.',
+        'opciones' => 'Opciones',
         'confirmar_eliminacion' => 'Confirme que realmente desea eliminar los datos',
         'compare_date' => 'El campo %s debería ser menor o igual que el campo predecesor.',
         'detalle_fechas' => 'Detalle de fechas'

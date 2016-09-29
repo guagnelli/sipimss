@@ -569,23 +569,19 @@ class Catalogos_generales extends CI_Model {
         }
 
         //información del profesor
-        $params = array("conditions" => array("empleado_cve" => $empleado_cve));
+        $parametros = array("conditions"=>array("empleado_cve"=>$empleado_cve));
 
         $this->load->model("Empleado_model", "emp");
         $data["empleado"] = $this->emp->getEmpECD($params);
 
         if (!is_null($validado)) {
             if (is_bool($validado)) {
-                $paramas["conditions"]["IS_VALIDO_PROFESIONALIZACION"] = $validado;
+                $parametros["conditions"]["IS_VALIDO_PROFESIONALIZACION"]=$validado;
             } else {
                 throw new Exception('La función espera un valor booleano');
             }
         }
-
-        if (!is_null($where)) {
-            $paramas["conditions"] += $where;
-        }
-
+        
         $this->lang->load('interface', 'spanish');
 
         //Etiquetas
@@ -594,6 +590,8 @@ class Catalogos_generales extends CI_Model {
         $secciones = $this->config->item("secciones_model");
 
         foreach ($secciones as $key => $seccion) {
+            $params["conditions"] = (isset($where[$key]) && !is_null($where[$key])) ? array_merge($parametros["conditions"], $where[$key]) : $parametros["conditions"];
+            
             $this->load->model($seccion["model"], $seccion["acronimo"]);
             $res = $this->{$seccion["acronimo"]}->$seccion["function"]($params);
             unset($seccion["model"]);

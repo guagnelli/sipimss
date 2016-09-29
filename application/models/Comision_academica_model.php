@@ -76,7 +76,7 @@ class Comision_academica_model extends My_model {
         $this->db->join('ctipo_comision', 'ctipo_comision.TIP_COMISION_CVE=emp_comision.TIP_COMISION_CVE', 'left');
 
         $query = $this->db->get('emp_comision'); //Obtener conjunto de registros
-        //pr($this->db->last_query());
+        pr($this->db->last_query());
         $resultado=$query->result_array();
 
         $query->free_result(); //Libera la memoria

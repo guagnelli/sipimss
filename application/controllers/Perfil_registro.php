@@ -35,6 +35,7 @@ class Perfil_registro extends MY_Controller {
     }
 
     public function formacion_salud_detalle($identificador = null, $validar = null) {
+        //pr($this->session->userdata());
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
             $this->load->model('Formacion_model', 'fm');
             $this->lang->load('interface');
@@ -457,7 +458,7 @@ class Perfil_registro extends MY_Controller {
     private function obtener_id_empleado() {
         if (!is_null($this->session->userdata('datosvalidadoactual'))) {
             $array_validado = $this->session->userdata('datosvalidadoactual');
-            return intval($array_validado['empleado_cve']);
+            return (!isset($array_validado['empleado_cve'])) ? $this->session->userdata('idempleado') : intval($array_validado['empleado_cve']);
         }
         return NULL;
     }

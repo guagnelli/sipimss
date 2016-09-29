@@ -631,6 +631,12 @@ $config['estados_val_evaluacion'] = array(
 
 ////////////////////////////////////////Fin parámetros de validación
 
+$config['cestado_evaluacion'] = array(
+    Enum_ee::Por_evaluar => array('value'=>'Por evaluar'),
+    Enum_ee::En_revision => array('value'=>'En revisión'),
+    Enum_ee::Completa => array('value'=>'Completa')
+);
+
 //    EAD_DURACION
 //    EAD_FCH_INICIO
 //    EAD_FCH_FIN

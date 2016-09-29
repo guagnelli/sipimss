@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Clase que contiene la petición, vista de estatus y envío de evaluación docente.
+ * Clase que gestiona la evaluación docente por parte del grupo.
  * @version 	: 1.0.0
  * @author      : Jesús Z. Díaz P.
  * */
@@ -13,12 +13,15 @@ class Evaluacion_docente extends MY_Controller {
      */
     function __construct() {
         parent::__construct();
-        /*$this->load->library('form_complete');
-        $this->load->library('form_validation');*/
+        $this->load->library('form_complete');
+        /*$this->load->library('form_validation');*/
         $this->load->library('seguridad');
         $this->load->model('evaluacion_docente_model','eval_doce_model');
         $this->lang->load('interface_evaluacion');
         $this->load->helper('date');
+        $this->lang->load('interface');
+        //pr($_SESSION);
+        //$this->session->set_userdata('rol_seleccionado_cve', '8');
     }
 
     /** 
@@ -26,7 +29,7 @@ class Evaluacion_docente extends MY_Controller {
      * @method: void index()
      * @author: Jesús Z. Díaz P.
      */
-    public function index() {
+    /*public function index() {
         $main_content = null;
         $datos = array();
         $anio_actual = $this->anio_actual(); //Obtener año seleccionado para mostrar convocatorias
@@ -37,230 +40,195 @@ class Evaluacion_docente extends MY_Controller {
         ////Obtener listado de evaluaciones de acuerdo al año seleccionado
         $datos['dictamen'] = $this->eval_doce_model->get_evaluacion_docente(array('conditions'=>"EMPLEADO_CVE='".$empleado_cve."'"));
         
-        pr($datos);
         $main_content = $this->load->view('evaluacion/evaluacion_docente/listado', $datos, true);
         $this->template->setMainContent($main_content);
         $this->template->getTemplate();
-    }
+        //pr($datos);
+        //exit();
+    }*/
 
-    /**
-     * Función que permite agregar y actualizar convocatorias
-     * @method: void gestionar_convocatoria()
-     * @author: Jesús Z. Díaz P.
-     */
-    public function gestionar_convocatoria($identificador = null){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            $datos['identificador'] = $identificador;
-            $datos['msg'] = null;
-            $convocatoria_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
-            $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['agregar'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['general']); //Cargar textos utilizados en vista
+    public function index(){
+        $main_content = null;
+        $datos = array();
 
-            if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
-                $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                //pr($datos_formulario);
-                $this->config->load('form_validation'); //Cargar archivo con validaciones
-                
-                $validations = $this->config->item('form_convocatoria_evaluacion'); //Obtener validaciones de archivo
-                $this->form_validation->set_rules($validations);
-
-                if(!empty($datos_formulario['FCH_FIN_REG_DOCENTE']) && !empty($datos_formulario['FCH_FIN_VALIDACION_1']) && !empty($datos_formulario['FCH_FIN_VALIDACION_2'])){ ///Agregar validación de comparación de fechas
-                    $this->form_validation->set_rules(array(
-                        array('field' => 'FCH_FIN_VALIDACION_1', 'label' => $datos['string_values']['tab_head_fecha_fin_validacion1'], 'rules' => 'required|callback_compare_date['.$datos_formulario['FCH_FIN_REG_DOCENTE'].']'),
-                        array('field' => 'FCH_FIN_VALIDACION_2', 'label' => $datos['string_values']['tab_head_fecha_fin_validacion2'], 'rules' => 'required|callback_compare_date['.$datos_formulario['FCH_FIN_VALIDACION_1'].']')
-                    ));
-                    $this->form_validation->set_message('compare_date', $datos['string_values']['compare_date']);
-                }
-
-                if($this->form_validation->run() == TRUE){ //Validar datos
-                    ///Se forma el objeto para ser insertado
-                    $ce_vo = $this->convocatoria_evaluacion_vo(array('FCH_FIN_REG_DOCENTE'=>(!empty($datos_formulario['FCH_FIN_REG_DOCENTE']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_REG_DOCENTE'])) : null ),
-                        'FCH_FIN_VALIDACION_1'=>(!empty($datos_formulario['FCH_FIN_VALIDACION_1']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_VALIDACION_1'])) : null ),
-                        'FCH_FIN_VALIDACION_2'=>(!empty($datos_formulario['FCH_FIN_VALIDACION_2']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_VALIDACION_2'])) : null )));
-
-                    if(!is_null($convocatoria_id) && !empty($convocatoria_id)){ //Se almacena en la base de datos
-                        $resultado = $this->conv_eval_model->update_convocatoria_evaluacion($convocatoria_id, $ce_vo); //Actualización
-                    } else {
-                        $resultado = $this->conv_eval_model->insert_convocatoria_evaluacion($ce_vo); //Inserción
-                        $datos['identificador'] = $this->seguridad->encrypt_base64($resultado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
-                    }
-                    $datos['msg'] = imprimir_resultado($resultado); ///Muestra mensaje
-                }
-            }
-            if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
-                $datos['dato_convocatoria'] = $this->conv_eval_model->get_convocatoria_evaluacion(array('conditions'=>array('ADMIN_VALIDADOR_CVE'=>$convocatoria_id))); //Obtener datos
-            }            
-            echo $this->load->view('evaluacion/convocatoria/convocatoria_formulario', $datos, true);
-        } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
-        }
-    }
-
-    /**
-     * Función que permite listar dictamenes
-     * @method: void eliminar_convocatoria()
-     * @param: $Identificador   string en base64    Identificador de la convocatoria codificado en base64
-     * @author: Jesús Z. Díaz P.
-     */
-    public function eliminar_convocatoria($identificador){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            $datos['identificador'] = $identificador; //Identificador de convocatoria
-            $datos['msg'] = null;
-            $convocatoria_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
-
-            $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['buscador'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['general']); //Cargar textos utilizados en vista
-
-            $datos['dictamen_evaluacion'] = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('conditions'=>array('ADMIN_VALIDADOR_CVE'=>$convocatoria_id))); //Obtener datos
-            if(empty($datos['dictamen_evaluacion'])){ //En caso de que este vacío se elimina
-                $resultado = $this->conv_eval_model->delete_convocatoria_evaluacion(array('conditions'=>array('ADMIN_VALIDADOR_CVE'=>$convocatoria_id))); //Eliminar datos
-            } else {
-                $resultado = array('result'=>FALSE, 'msg'=>$datos['string_values']['eliminacion_imposible']);
-            }            
-            
-            //echo json_encode(imprimir_resultado($resultado)); ///Muestra mensaje
-            echo json_encode($resultado); ///Muestra mensaje
-            
-            //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
-        } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
-        }
-    }
-
-    /**
-     * Función que permite listar dictamenes
-     * @method: void listar_dictamen()
-     * @param: $Identificador   string en base64    Identificador de la convocatoria codificado en base64
-     * @author: Jesús Z. Díaz P.
-     */
-    public function listar_dictamen($identificador = null){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            $datos['identificador'] = $identificador; //Identificador de convocatoria
-            $datos['msg'] = null;
-            $convocatoria_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
-
-            $datos['dictamen_evaluacion'] = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('conditions'=>array('ADMIN_VALIDADOR_CVE'=>$convocatoria_id))); //Obtener datos
-            
-            $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['buscador_dictamen'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['general']); //Cargar textos utilizados en vista
-            
-            echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
-        } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
-        }
-    }
-
-    /**
-     * Función que permite agregar y actualizar dictamenes
-     * @method: void gestionar_dictamen()
-     * @author: Jesús Z. Díaz P.
-     */
-    public function gestionar_dictamen($convocatoria = null , $identificador = null){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            $datos['identificador'] = $identificador;
-            $datos['msg'] = null;
-            $dictamen_id = $this->seguridad->decrypt_base64($identificador); //Identificador del dictamen
-            $convocatoria_id = $this->seguridad->decrypt_base64($convocatoria); //Identificador de la convocatoria
-
-            $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['buscador_dictamen'], $this->lang->line('interface_evaluacion')['convocatoria_evaluacion']['general']); //Cargar textos utilizados en vista
-
-            if(!is_null($this->input->post()) && !empty($this->input->post())){ //Se verifica que se haya recibido información por método post
-                $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                
-                $this->config->load('form_validation'); //Cargar archivo con validaciones
-                
-                $validations = $this->config->item('form_dictamen_evaluacion'); //Obtener validaciones de archivo
-                $this->form_validation->set_rules($validations);
-
-                if(!empty($datos_formulario['FCH_INICIO_EVALUACION']) && !empty($datos_formulario['FCH_FIN_EVALUACION']) && !empty($datos_formulario['FCH_FIN_INCONFORMIDAD'])){ ///Agregar validación de comparación de fechas
-                    $this->form_validation->set_rules(array(
-                        array('field' => 'FCH_FIN_EVALUACION', 'label' => $datos['string_values']['tab_head_fecha_fin_evaluacion'], 'rules' => 'required|callback_compare_date['.$datos_formulario['FCH_INICIO_EVALUACION'].']'),
-                        array('field' => 'FCH_FIN_INCONFORMIDAD', 'label' => $datos['string_values']['tab_head_fecha_fin_inconformidad'], 'rules' => 'required|callback_compare_date['.$datos_formulario['FCH_FIN_EVALUACION'].']')
-                    ));
-                    $this->form_validation->set_message('compare_date', $datos['string_values']['compare_date']);
-                }
-
-                if($this->form_validation->run() == TRUE){ //Validar datos
-                    ///Se forma el objeto para ser insertado
-                    $de_vo = $this->convocatoria_evaluacion_dictamen_vo(array('FCH_INICIO_EVALUACION'=>(!empty($datos_formulario['FCH_INICIO_EVALUACION']) ? date("Y-m-d", strtotime($datos_formulario['FCH_INICIO_EVALUACION'])) : null ),
-                        'FCH_FIN_EVALUACION'=>(!empty($datos_formulario['FCH_FIN_EVALUACION']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_EVALUACION'])) : null ),
-                        'FCH_FIN_INCONFORMIDAD'=>(!empty($datos_formulario['FCH_FIN_INCONFORMIDAD']) ? date("Y-m-d", strtotime($datos_formulario['FCH_FIN_INCONFORMIDAD'])) : null ),
-                        'ADMIN_VALIDADOR_CVE'=>(!empty($convocatoria_id) ? $convocatoria_id : null )
-                    ));
-
-                    if(!is_null($dictamen_id) && !empty($dictamen_id)){ //Se almacena en la base de datos
-                        $resultado = $this->conv_eval_model->update_dictamen_evaluacion($dictamen_id, $de_vo); //Actualización
-                    } else {
-                        $resultado = $this->conv_eval_model->insert_dictamen_evaluacion($de_vo); //Inserción
-                        $datos['identificador'] = $this->seguridad->encrypt_base64($resultado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
-                    }
-                    $datos['msg'] = imprimir_resultado($resultado); ///Muestra mensaje
-                }
-            }
-            if(!is_null($identificador)){ ///En caso de que se haya elegido alguna convocatoria                
-                $datos['dato_dictamen'] = $this->conv_eval_model->get_convocatoria_dictamen_evaluacion(array('conditions'=>array('ADMIN_DICTAMEN_EVA_CVE'=>$dictamen_id))); //Obtener datos
+        if($this->validar_evaluador()){
+            $dictamen = $this->eval_doce_model->get_dictamen(array('conditions'=>'now() between FCH_INICIO_EVALUACION and FCH_FIN_EVALUACION')); ////Obtener listado de solicitudes a evaluar de acuerdo a convocatoria activa
+            if(!empty($dictamen)){ //Agregar dictamen a sesión
+                $this->session->set_userdata(array('dictamen'=>$dictamen[0]));
+                $datos['dictamen'] = $dictamen;
             }
 
-            echo $this->load->view('evaluacion/convocatoria/dictamen_formulario', $datos, true);
-        } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+            $datos['string_values'] = array_merge($this->lang->line('interface_evaluacion')['evaluacion']['dictamen'], $this->lang->line('interface_evaluacion')['evaluacion']['docente'], $this->lang->line('interface_evaluacion')['general']); //Cargar textos utilizados en vista
+            $datos['order_columns'] = array('empleado.EMP_MATRICULA' => $datos['string_values']['matricula_docente'], 'empleado.EMP_NOMBRE' => $datos['string_values']['nombre_docente']);
+            //pr($datos);
+            $main_content = $this->load->view('evaluacion/evaluacion_docente/evaluacion_formulario', $datos, true);
+            /*$this->template->setMainContent($main_content);
+            $this->template->getTemplate();*/
+            $this->template->setTitle($datos['string_values']["titulo"]);
+            $this->template->setMainTitle($datos['string_values']["titulo"]);
+            $this->template->setMainContent($main_content);
+            $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
         }
     }
 
-    public function eliminar_dictamen($identificador){
-        if($this->input->is_ajax_request()){ //Solo se accede al método a través de una petición ajax
-            $datos['identificador'] = $identificador; //Identificador de convocatoria
-            $datos['msg'] = null;
-            $dictamen_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la convocatoria
+    public function seccion_index(){
+        if ($this->input->is_ajax_request()) {
+            if (!is_null($this->input->post())) {
+                $filtros = $this->input->post(null, true); //Obtenemos el post o los valores
+                //$rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
+                //$array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generé el menú y cargue los datos de perfil
+                //$datosPerfil['array_menu'] = $array_menu;
+                $datos_validacion = array();
+                //$datos_validacion['estado_correccion'] = null;
 
-            $resultado = $this->conv_eval_model->delete_dictamen_evaluacion(array('conditions'=>array('ADMIN_DICTAMEN_EVA_CVE'=>$dictamen_id))); //Eliminar datos
-            
-            echo json_encode($resultado); ///Muestra mensaje
+                if (!empty($filtros['empcve'])) {
+                    $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($filtros['empcve']); //Identificador de la comisión
+                }
+                if (!empty($filtros['matricula'])) {
+                    $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($filtros['matricula']); //Identificador de la comisión
+                }
+                if (!empty($filtros['estval'])) {
+                    $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($filtros['estval']); //Identificador de la comisión
+                }
+                /*if (!empty($filtros['usuariocve'])) {
+                    $datos_validacion['validador_cve'] = $this->seguridad->decrypt_base64($filtros['usuariocve']); //Identificador de la comisión
+                }
+                if (!empty($filtros['histvalcve'])) {
+                    $datos_validacion['validacion_cve'] = $this->seguridad->decrypt_base64($filtros['histvalcve']); //Identificador de la comisión
+                }*/
+                if (!empty($filtros['solicitud_cve'])) {
+                    $datos_validacion['validacion_cve'] = $this->seguridad->decrypt_base64($filtros['solicitud_cve']); //Identificador de la comisión
+                }
+                /*if (!empty($filtros['valgrlcve'])) {
+                    $datos_validacion['val_grl_cve'] = $this->seguridad->decrypt_base64($filtros['valgrlcve']); //Identificador de la comisión
+                    /////Inicio estado corrección. Obtener si el empleado ya cuenta con validación en estado corrección
+                    $datos_validacion['estado'] = $this->obtener_validacion_correccion($datos_validacion['val_grl_cve'], $datos_validacion['est_val']);
+                    ////Fin obtener estado corrección
+                }*/
+                if (!empty($filtros['usuario_cve'])) {
+                    $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($filtros['usuario_cve']); //Identificador de la comisión
+                }
+                //Manda el identificador de la delegación del usuario
+                $this->session->set_userdata('evaluacion', $datos_validacion); //Asigna la información del usuario al que se va a validar
+
+                $this->load->model("Catalogos_generales","gral");
+                $conditions = array(Enum_sec::comision=>array('emp_comision.TIP_COMISION_CVE !=' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']),
+                    Enum_sec::direccion_tesis=>array('emp_comision.TIP_COMISION_CVE' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']));
+                $datosPerfil = $this->gral->getAll($this->obtener_id_empleado(), null, $conditions);
+                //pr($datosPerfil);
+                //pr($this->lang->line('interface_evaluacion')['evaluacion']['dictamen']);
+                $datosPerfil['string_value'] = array_merge($datosPerfil['string_value'], $this->lang->line('interface_evaluacion')['evaluacion']['dictamen'], $this->lang->line('interface_evaluacion')['evaluacion']['docente'], $this->lang->line('interface_evaluacion')['general']);
+                pr($datosPerfil);
+                //echo $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$data, true);
+
+                echo $this->load->view('evaluacion/evaluacion_docente/listado_cursos', $datosPerfil, true);
+            }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+            redirect(site_url());
         }
     }
 
-
-    public function compare_date($end, $start){
-        if($start>$end){
-            return false;
+    public function seccion_delete_datos_validado() {
+        if ($this->input->is_ajax_request()) {
+            $this->delete_datos_validado(); //Elimina los datos de empleado validado, si se encuentran los datos almacenados en la variable de sesión
         } else {
-            return true;
+            redirect(site_url());
         }
     }
 
-    private function anio_actual(){
-        $anio_seleccionado = $this->input->get('a', true);
-        return (is_null($anio_seleccionado) || empty($anio_seleccionado)) ? date('Y') : $anio_seleccionado;
+    /*
+     * Permite evaluar
+    */
+    private function validar_evaluador(){
+        $evaluador = $this->eval_doce_model->get_evaluador(array('conditions'=>array('IS_ACTUAL'=>1, 'EMPLEADO_CVE'=>$this->obtener_id_empleado())));
+        if(count($evaluador)==0){
+            $main_content = "<div>".$this->lang->line('interface_evaluacion')['evaluacion']['docente']['permiso_acceso']."</div>";
+            $this->template->setMainContent($main_content);
+            $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
+            return FALSE;
+        }
+        return TRUE;
+    }
+    
+    public function buscar_docentes_evaluacion($identificador = null){
+        if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
+            if (!is_null($this->input->post())) {
+                $datos_busqueda = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
+                $condition_extra = array();
+                if(isset($datos_busqueda['menu_busqueda']) && !empty($datos_busqueda['menu_busqueda'])) {
+                    switch ($datos_busqueda['menu_busqueda']) {
+                        case 'matricula':
+                            $condition_extra = "AND emp_matricula like '%".$datos_busqueda['buscador_docente']."%'";
+                            break;                        
+                        case 'nombre':
+                            $condition_extra = "AND (EMP_NOMBRE like '%".$datos_busqueda['buscador_docente']."%' OR EMP_APE_PATERNO like '%".$datos_busqueda['buscador_docente']."%' OR EMP_APE_MATERNO like '%".$datos_busqueda['buscador_docente']."%')";
+                            break;
+                    }                   
+                }
+
+                $datos_busqueda['current_row'] = (isset($current_row) && !empty($current_row)) ? $current_row : 0; //Registro actual, donde inicia la visualización de registros
+                $datos_busqueda['conditions'] = 'evaluacion_solicitud.CESE_CVE >='.Enum_es::Envio_evaluacion.' AND ADMIN_DICTAMEN_EVA_CVE='.$this->obtener_id_dictamen().' '.$condition_extra;
+                $datos_busqueda['fields'] = "if(evaluacion_solicitud.CESE_CVE=".Enum_es::Envio_evaluacion.", (select EST_EVALUACION_CVE from hist_evaluacion_dic where hist_evaluacion_dic.SOLICITUD_VAL_CVE=evaluacion_solicitud.VALIDACION_CVE), 0) AS estado, evaluacion_solicitud.*, cestado_solicitud_evauacion.CESE_NOMBRE, empleado.*, DEL_NOMBRE, nom_categoria";
+                
+                $datos['evaluacion'] = $this->eval_doce_model->get_evaluacion_docente($datos_busqueda); ////Obtener listado de evaluaciones de acuerdo al año seleccionado
+                $datos['evaluacion']['string_values'] = array_merge($this->lang->line('interface_evaluacion')['evaluacion']['dictamen'], $this->lang->line('interface_evaluacion')['evaluacion']['docente'], $this->lang->line('interface_evaluacion')['general']); //Cargar textos utilizados en vista
+
+                $datos['evaluacion']['current_row'] = $datos_busqueda['current_row'];
+                $datos['evaluacion']['per_page'] = $this->input->post('per_page'); //Número de registros a mostrar por página
+                
+                $this->resultado_listado($datos['evaluacion'], array('form_recurso'=>'#form_search', 'elemento_resultado'=>'#resultado_busqueda')); //Generar listado en caso de obtener datos
+            }
+        } else {
+            redirect(site_url());
+        }
     }
 
-    private function convocatoria_evaluacion_vo($convocatoria){
-        $ce = new Convocatoria_evaluacion_dao;
-        $ce->FCH_FIN_REG_DOCENTE = (isset($convocatoria['FCH_FIN_REG_DOCENTE']) && isset($convocatoria['FCH_FIN_REG_DOCENTE'])) ? $convocatoria['FCH_FIN_REG_DOCENTE'] : NULL;
-        $ce->FCH_FIN_VALIDACION_1 = (isset($convocatoria['FCH_FIN_VALIDACION_1']) && isset($convocatoria['FCH_FIN_VALIDACION_1'])) ? $convocatoria['FCH_FIN_VALIDACION_1'] : NULL;
-        $ce->FCH_FIN_VALIDACION_2 = (isset($convocatoria['FCH_FIN_VALIDACION_2']) && isset($convocatoria['FCH_FIN_VALIDACION_2'])) ? $convocatoria['FCH_FIN_VALIDACION_2'] : NULL;
-        return $ce;
+    /**
+     * Método que imprime el listado, se agrega paginación.
+     * @autor       : Jesús Díaz P.
+     * @modified    : 
+     * @access      : private
+     * @param       : mixed[] $data Arreglo de publicaciones y de información necesaria para generar los links para la paginación
+     * @param       : mixed[] $form Arreglo asociativo con 2 elementos. 
+     *                  form_recurso -> identificador del formulario que contiene los elementos de filtración
+     *                  elemento_resultado -> identificador del elemento donde se mostrará el listado
+     */
+    private function resultado_listado($data, $form){
+        //$this->load->library('seguridad');
+        $data['controller'] = 'evaluacion_docente';
+        $data['action'] = 'buscar_docentes_evaluacion';
+        $pagination = $this->template->pagination_data($data); //Crear mensaje y links de paginación
+        $links = "<div class='col-sm-5 dataTables_info'>".$pagination['total']."</div>
+                <div class='col-sm-7'>".$pagination['links']."</div><input type='hidden' id='cr', name='cr' value='".$data['current_row']."'>";
+        echo $links.$this->load->view('evaluacion/evaluacion_docente/resultado_busqueda', $data, TRUE).$links.'
+            <script>
+            $("ul.pagination li a").click(function(event){
+                data_ajax(this, "'.$form['form_recurso'].'", "'.$form['elemento_resultado'].'");
+                event.preventDefault();
+            });
+            </script>';
     }
 
-    private function convocatoria_evaluacion_dictamen_vo($dictamen){
-        $ced = new Convocatoria_evaluacion_dictamen_dao;
-        $ced->FCH_INICIO_EVALUACION = (isset($dictamen['FCH_INICIO_EVALUACION']) && isset($dictamen['FCH_INICIO_EVALUACION'])) ? $dictamen['FCH_INICIO_EVALUACION'] : NULL;
-        $ced->FCH_FIN_EVALUACION = (isset($dictamen['FCH_FIN_EVALUACION']) && isset($dictamen['FCH_FIN_EVALUACION'])) ? $dictamen['FCH_FIN_EVALUACION'] : NULL;
-        $ced->FCH_FIN_INCONFORMIDAD = (isset($dictamen['FCH_FIN_INCONFORMIDAD']) && isset($dictamen['FCH_FIN_INCONFORMIDAD'])) ? $dictamen['FCH_FIN_INCONFORMIDAD'] : NULL;
-        $ced->ADMIN_VALIDADOR_CVE = (isset($dictamen['ADMIN_VALIDADOR_CVE']) && isset($dictamen['ADMIN_VALIDADOR_CVE'])) ? $dictamen['ADMIN_VALIDADOR_CVE'] : NULL;
-        return $ced;
+    /**
+     * Elimina los datos o información del usuario u empleado a validar
+     */
+    private function delete_datos_validado() {
+        if (!is_null($this->session->userdata('evaluacion'))) {
+            $this->session->unset_userdata('evaluacion');
+        }
     }
-}
 
-class Convocatoria_evaluacion_dao {
-    //public $ADMIN_VALIDADOR_CVE;
-    public $FCH_FIN_REG_DOCENTE;
-    public $FCH_FIN_VALIDACION_1;
-    public $FCH_FIN_VALIDACION_2;
-}
+    private function obtener_id_dictamen() {
+        if (!is_null($this->session->userdata('dictamen'))) {
+            return $this->session->userdata('dictamen')['ADMIN_DICTAMEN_EVA_CVE'];
+        }
+        return NULL;
+    }
 
-class Convocatoria_evaluacion_dictamen_dao {
-    //public $ADMIN_VALIDADOR_CVE;
-    public $FCH_INICIO_EVALUACION;
-    public $FCH_FIN_EVALUACION;
-    public $FCH_FIN_INCONFORMIDAD;
-    public $ADMIN_VALIDADOR_CVE;
+    private function obtener_id_empleado() {
+        if (!is_null($this->session->userdata('idempleado'))) {
+            return $this->session->userdata('idempleado');
+        }
+        return NULL;
+    }
 }
