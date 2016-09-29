@@ -18,6 +18,7 @@ class Account extends MY_Controller {
         $this->load->model('Account_model', 'modAccount');
         $this->load->library('Ventana_modal');
         $this->load->config('general');
+        $this->config->load('general');
         $this->lang->load('interface', 'spanish');
     }
 
@@ -281,8 +282,10 @@ class Account extends MY_Controller {
                                 );
 
                                 $update_code_reset = $this->modAccount->get_exist_code_password_reset($params_cod_rec);
+                                //pr($update_code_reset);
+                                //exit();
 
-                                if ($update_code_reset['REC_CON_ESTADO'] != 1) {
+                                if (isset($update_code_reset['data']['REC_CON_ESTADO']) && $update_code_reset['data']['REC_CON_ESTADO'] ==0 ) {
 
                                     $is_on_time = $this->compareDateCodeGenerated($update_code_reset['data']['REC_CON_FCH']);
 
@@ -294,7 +297,7 @@ class Account extends MY_Controller {
                                                 'USU_CONTRASENIA'=>contrasenia_formato($data_form_middle['matricula'],$data_form_middle['nueva_contrasenia'])
                                             );
 
-                                        pr($params_reseted);
+                                        //pr($params_reseted);
 
                                         $password_reseted_commit = $this->modAccount->reset_password_commit($params_reseted);
 
@@ -406,6 +409,16 @@ class Account extends MY_Controller {
     {
 
 
+    }
+    
+    public function pre_dictamen_example()
+    {
+        $this->load->helper(array('dompdf'));
+        $html = $this->load->view('dictamen/formatos/dictamen_formato.php',null,true);
+
+        $nombre_archivo = "Dictamen_".date("d-m-Y_h-i-s");
+
+        generarPdf($html, $nombre_archivo);
     }
 
 
