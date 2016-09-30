@@ -18,6 +18,29 @@ $string_values = $this->lang->line('interface');
 </script>
 
 <div class="panel-group" id="accordion">
+    <div class="row">
+        <div class="col-sm-6">
+            <strong><?php echo $string_value["lbl_info_nombre"]?></strong>
+                    <?php echo $empleado["nombre"]." "
+                          .$empleado["apellidoPaterno"]." "
+                          .$empleado["apellidoMaterno"]?><br />
+            <strong><?php echo $string_value["lbl_info_matricula"]?></strong>
+                    <?php echo $empleado["matricula"]?><br />
+            <strong><?php //echo $string_value["lbl_info_categoria"]?></strong>
+                    <?php //echo $empleado["categoria_PD"]?>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6 ">
+            <strong><?php echo $string_value["lbl_info_del"]?></strong>
+                    <?php echo $empleado["delegacion"]?><br />
+            <strong><?php echo $string_value["lbl_info_adscripcion"]?></strong>
+                    <?php echo $empleado["nombreUnidadAdscripcion"]?><br />
+            <strong><?php //echo $string_value["lbl_info_vigencia"]?></strong>
+                    <?php // $empleado["vigencia"]?>
+        </div>
+        <!-- /.col -->
+      </div>
+    <br>
     <?php
     foreach ($array_menu as $key_tab => $value_tab) {
         ?>
@@ -42,6 +65,18 @@ $string_values = $this->lang->line('interface');
         <?php
     }
     ?>
+    <br>    
+    <div class="row">
+         <div class="col-sm-12 text-center">
+            <?php  //Crea los botones de validación
+                if (!empty($botones_validador)) {
+                    foreach ($botones_validador as $value) {
+                        echo $value . ' &nbsp';
+                    }
+                }
+            ?> 
+         </div>    
+    </div>    
 </div>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 contenedor" >

@@ -90,6 +90,7 @@ class Validacion_censo_profesores extends MY_Controller {
         $array_catalogos[] = enum_ecg::cvalidacion_estado;
         $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cvalidacion_estado => 'VAL_ESTADO_CVE')); //Carga el catálogo de ejercicio predominante
         $main_contet = $this->load->view('validador_censo/validador_censo_tpl', $data, true);
+        $this->template->multiligual = TRUE;
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_contet);
         $this->template->getTemplate(FALSE, 'template/sipimss/index.tpl.php');

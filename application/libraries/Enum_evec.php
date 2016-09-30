@@ -5,20 +5,16 @@ class Enum_evec {
             __default = 0,
             Inicio =1,
             No_validado_censo = 2,
-            Envio_solicitud_evaluacion = 3,
-            Por_validar_n1 = 4,
-            En_revision_n1 = 5,
-            Correccion_docente = 6,
-            Val_n1_por_validar_n2 = 7,
-            En_revision_n2 = 8,
-            Correccion_n1 = 9,
-            Val_n2_por_validar_profesionalizacion = 10,
-            En_revision_profesionalizacion = 11,
-            Correccion_n2 = 12,
-            Validado_prof_por_validar_GAECUD = 13,
-            En_revision_GAECUD = 14,
-            Correccion_secretario = 15,
-            Dictaminar = 16
+            Por_validar_n1 = 3,
+            En_revision_n1 = 4,
+            Correccion_docente = 5,
+            Val_n1_por_validar_n2 = 6,
+            En_revision_n2 = 7,
+            Correccion_n1 = 8,
+            Val_n2_por_validar_profesionalizacion = 9,
+            En_revision_profesionalizacion = 10,
+            Correccion_n2 = 11,
+            Validado_profesionalizacion = 12
 
     ;
 }

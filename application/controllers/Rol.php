@@ -52,30 +52,40 @@ class Rol extends MY_Controller {
             } else {
                 //Cargar controlador
                 $lista_roles_modulos = $this->session->userdata('lista_roles_modulos'); //Módulos de acceso del usuario
+
                 $rol_seleccionado = get_array_valor($lista_roles_modulos, $value_rol_cve);
-                $this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
-                $this->session->set_userdata('rol_seleccionado_cve', intval($value_rol_cve));
+                if (!empty($rol_seleccionado)) {
+
+                    $nombre_rol = '';
+                    foreach ($rol_seleccionado as $value) {//Obtiene nombre del rol
+                        $nombre_rol = $value['nombre_rol'];
+                        break;
+                    }
+                    $this->session->set_userdata('rol_seleccionado', $rol_seleccionado);
+                    $this->session->set_userdata('rol_seleccionado_cve', intval($value_rol_cve));
+                    $this->session->set_userdata('nombre_rol', $nombre_rol);
 //                pr($rol_seleccionado);
 //                exit();
-                switch ($value_rol_cve) {
-                    case 1:
-                        redirect('perfil');
-                    case 2:
-                        redirect('validacion_censo_profesores');
+                    switch ($value_rol_cve) {
+                        case 1:
+                            redirect('perfil');
+                        case 2:
+                            redirect('validacion_censo_profesores');
 //                        redirect('evaluacion_curricular_validar');
 //                        redirect('validacion_censo_profesores');
-                    case 3:
+                        case 3:
 //                        redirect('evaluacion_curricular_validar');
-                        redirect('validacion_censo_profesores');
-                    case 14:
+                            redirect('validacion_censo_profesores');
+                        case 14:
 //                        redirect('evaluacion_curricular_validar');
-                        redirect('validacion_censo_profesores');
-                    case 5:
-                        redirect('designar_validador');
-                    case Enum_rols::Vocal:
-                        redirect('evaluacion_docente');
+                            redirect('validacion_censo_profesores');
+                        case 5:
+                            redirect('designar_validador');
+                        case Enum_rols::Vocal:
+                            redirect('evaluacion_docente');
+                    }
+                    exit();
                 }
-                exit();
             }
         }
 //        pr($this->session->userdata('rol_seleccionado'));
@@ -97,7 +107,7 @@ class Rol extends MY_Controller {
          * 
          */
         $variables = array('rol_seleccionado', 'rol_seleccionado_cve', 'convocatoria_delegacion',
-            'datos_validador', 'datosvalidadoactual');
+            'datos_validador', 'datosvalidadoactual', 'nombre_rol');
         foreach ($variables as $value) {
             $this->session->unset_userdata($value);
         }

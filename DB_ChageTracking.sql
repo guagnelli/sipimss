@@ -1229,3 +1229,35 @@ FOREIGN KEY (`PADRE_SEC_INF_CVE`) REFERENCES `cseccion_informacion`(`sec_info_cv
 
 ALTER TABLE cseccion_informacion  DROP FOREIGN KEY  cseccion_informacion_csifk148;
 alter table cseccion_informacion drop column PADRE_SEC_INF_CVE;
+
+-------------------2016/09/29 Responsable Jesus, En ejecución Miguel y Jesus----------------------------
+--jesus
+ALTER TABLE cseccion MODIFY COLUMN SECCION_DES varchar(120) NULL;
+
+--Miguel 
+CREATE TABLE evaluacion_bloque_seccion(
+ebs_cve char(3) not null,
+ebs_nombre varchar(50) not null,
+constraint pk_ebs
+primary key(ebs_cve)
+);
+
+ALTER TABLE evaluacion_curso_validacion ADD 
+column ebs_cve char(3) null;
+
+ALTER TABLE evaluacion_curso_validacion ADD 
+constraint fk_ebs_ecv
+foreign key(ebs_cve)
+references evaluacion_bloque_seccion(ebs_cve);
+
+ALTER TABLE evaluacion_bloques_val drop ebs_cve;
+ALTER TABLE `evaluacion_bloques_val` ADD `ebs_cve` char(3) NOT NULL;
+ALTER TABLE evaluacion_bloques_val ADD 
+constraint ebv_ebsfk1
+foreign key(ebs_cve)
+references evaluacion_bloque_seccion(ebs_cve);
+--Agrega tipo de curso 
+ALTER TABLE `campos_catalogos` ADD `TIP_CURSO_CVE` INT(11) NULL;  /*Campo agregado a la tabla "campos_catalogos"*/
+CREATE INDEX XIF112CAMPOS_CATALOGOS ON campos_catalogos (TIP_CURSO_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `campos_catalogos` ADD CONSTRAINT `campos_catalogos_ctcurfk_112`   /* Asigna llave foranea*/
+FOREIGN KEY (`TIP_CURSO_CVE`) REFERENCES `ctipo_curso`(`TIP_CURSO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;

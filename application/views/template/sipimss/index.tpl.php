@@ -152,7 +152,7 @@
                   <a href="#" class="btn btn-default btn-flat"><?php echo $string_tpl["lbl_link_profile"]?></a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat"><?php echo $string_tpl["lbl_link_logout"]?></a>
+                  <a href="<?php echo site_url('login/cerrar_session'); ?>" class="btn btn-default btn-flat"><?php echo $string_tpl["lbl_link_logout"]?></a>
                 </div>
               </li>
             </ul>
@@ -177,9 +177,16 @@
         <div class="pull-left info">
           <p><?php echo $this->session->userdata("nombre") . "<br /> "  
                         . $this->session->userdata("apaterno") . "<br /> "
-                        . $this->session->userdata("amaterno") ?></p>
+                        . $this->session->userdata("amaterno") ;
+            ?>
+          </p>
         </div>
       </div>
+        <div class="user-body">
+            <p  class="bg-red">
+                <?php echo "Rol: " .$this->session->userdata("nombre_rol"); ?>
+            </p>
+        </div>
       <!-- search form 
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group">

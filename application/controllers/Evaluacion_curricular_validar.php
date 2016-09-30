@@ -90,6 +90,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         } else {//No existe el validador. Mostrar leyenda de que no es un valiador
             $main_contet = '<span>No se encuentra¡ asignado el validador</span>';
         }
+        $this->template->multiligual = TRUE;
         $this->template->setTitle("Evaluación");
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_contet);
@@ -229,6 +230,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             if (!is_null($this->input->post())) {
                 $this->lang->load('interface', 'spanish');
                 $interface = $this->lang->line('interface');
+                $datos_validador = $this->session->userdata('datos_validador');
                 $data["string_values"] = $interface['evaluacion_curricular_validar'];
                 $data_post = $this->input->post(null, true); //Obtenemos el post o los valores
                 $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
@@ -257,16 +259,32 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 if (!empty($data_post['usuario_cve'])) {
                     $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($data_post['usuario_cve']); //Identificador de la comisiÃ³n
                 }
+
+                //*****Obtiene el estado de la historia 
+                $historia_gral = $this->ecvm->get_last_hist_validacion_evaluacion($datos_validacion['solicitud_cve']);
+                $historias_bloques = $this->ecvm->get_last_estado_bloque_evluacion($historia_gral['historia_gral_cve']);
+//                $parametros_gen_boton['estado_actual'] = $historia_gral['estado_hist_validacion'];
+                $parametros_gen_boton['estado_actual'] = Enum_evec::En_revision_n1;
+                $parametros_gen_boton['tipo_validador_rol'] = $datos_validador['ROL_CVE'];
+                $parametros_gen_boton['delegacion_cve'] = $datos_validador['DELEGACION_CVE'];
+//                pr($datos_validador);
+                $data['botones_validador'] = genera_botones_estado_validacion_evaluacion($parametros_gen_boton); //Genera botones para validar según el estado actual de la validación 
+//                $pie_botones_validacion = $this->load->view('evaluacion_currucular_doc/valida_docente/opciones_validacion_pie', $botones, true);
+
                 //Obtener todos los registros almacenados en actividades del censo, docentes
                 $info_docente = $this->cg->getAll($datos_validacion['empleado_cve'], true);
+//                pr($info_docente);
                 $string_text_secciones['secciones'] = $interface['secciones'];
                 $string_text_secciones['string_values'] = $data["string_values"];
                 $info_docente['actividades']['ig'] = $info_docente['empleado']; //Agrega datos ingormación general del docente
 //                pr($info_docente);
 //                exit();
                 $data['array_menu'] = $this->obtener_secciones_evaluacion($info_docente['actividades'], $string_text_secciones);
-                //Manda el identificador de la delegaciÃ³n del usuario
+                $data['string_value'] = $info_docente['string_value']; //Agrega datos de información del docente
+                $data['empleado'] = $info_docente['empleado']; //Agrega datos de información del docente
                 $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la informaciÃ³n del usuario al que se va a validar
+//                $this->ecvm->get_last_hist_validacion_evaluacion();
+                //Manda el identificador de la delegaciÃ³n del usuario
 //                pr($this->session->userdata());
                 echo $this->load->view('evaluacion_currucular_doc/index', $data, true);
 //                echo $this->load->view('evaluacion_currucular_doc/index', $datosPerfil, true);
@@ -275,7 +293,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             redirect(site_url());
         }
     }
-
+    
     private function obtener_id_usuario() {
         if (!is_null($this->session->userdata('datosvalidadoactual'))) {
             $array_validado = $this->session->userdata('datosvalidadoactual');

@@ -56,7 +56,7 @@ class Evaluacion_curricular_validar_model extends CI_Model {
                 }
                 break;
             case Enum_rols::Validador_N1:
-                $this->db->where('em.ADSCRIPCION_CVE', $params['DEPARTAMENTO_CVE']);
+                $this->db->where('ems.ADSCRIPCION_CVE', $params['DEPARTAMENTO_CVE']);
                 break;
         }
         //Estado de la validación
@@ -169,6 +169,83 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         $this->db->where('DATE_FORMAT(now(),"%Y-%m-%d")<= ade.FCH_INICIO_EVALUACION');
         $this->db->select($select);
         $query = $this->db->get('admin_dictamen_evaluacion ade');
+        $row_hist = $query->result_array();
+//        pr($this->db->last_query());
+        return $row_hist;
+    }
+
+    /**
+     * 
+     * @autor LEAS
+     * @fecha 29/09/2016
+     * @param $solicitud_eva_cve Solicitud del docente para evaluar 
+     * @return los cursos que se enviaron a validar según la solicitud
+     */
+    public function get_cursos_validar_evaluar($solicitud_eva_cve, $parametros = null) {
+
+        if (is_null($parametros)) {
+            $parametros = array('ecv_cve "cursos_evaluacion_cve"', 'ebs_cve "bloque_seccion"',
+                'es_cve "solicitud_cve"', 'csi_cve "seccion_cve"',
+                'registro_cve "curso_actividad_cve"');
+        }
+        $this->db->where('es_cve', $solicitud_eva_cve);
+        $this->db->select($parametros);
+        $query = $this->db->get('evaluacion_curso_validacion');
+        $row_hist = $query->result_array();
+//        pr($this->db->last_query());
+        return $row_hist;
+    }
+
+    /**
+     * 
+     * @autor LEAS
+     * @fecha 29/09/2016
+     * @param $solicitud_eva_cve Solicitud del docente para evaluar 
+     * @param $parametros Parametros especificos 
+     * @return Historia de validación para la evaluación curricular el docente 
+     */
+    public function get_last_hist_validacion_evaluacion($solicitud_eva_cve, $parametros = null) {
+
+        if (is_null($parametros)) {
+            $parametros = array('ehv.hist_validacion_cve "historia_gral_cve"', 'ehv.validador_cve "validador_cve"',
+                'ehv.est_validacion_cve "estado_hist_validacion"', 'ehv.convocatoria_cve',
+                'ces.CESE_CVE "estado_solicitud_cve"', 'ces.EMPLEADO_CVE "empleado_cve"',
+                'ehv.fch_registro_historia "fecha_historia_validacion_grl"');
+        }
+        $this->db->where('ces.VALIDACION_CVE', $solicitud_eva_cve);
+        $this->db->where('ehv.is_actual', 1);
+        $this->db->select($parametros);
+        $this->db->join('evaluacion_solicitud ces', 'ces.VALIDACION_CVE = ehv.solicitud_cve');
+        $query = $this->db->get('evaluacion_hist_validacion ehv');
+        $row_hist = $query->result_array();
+        if (!empty($row_hist)) {
+            $row_hist = $row_hist[0];
+        }
+//        pr($this->db->last_query());
+        return $row_hist;
+    }
+
+    /**
+     * 
+     * @autor LEAS
+     * @fecha 29/09/2016
+     * @param $historia_cve clave historia general de la validación de la solicitud
+     * @param $parametros Parametros especificos 
+     * @return Historias de la validación de los bloques de sección 
+     */
+    public function get_last_estado_bloque_evluacion($historia_cve, $parametros = null) {
+
+        if (is_null($parametros)) {
+            $parametros = array('ece.ebv_cve "bloque_evaluacion_cve"', 'ece.ehv_cve "historia_gral_cve"',
+                'ece.estado_validacion_cve "estado_validacion"', 'cce.VAl_CUR_EST_NOMBRE "nom_estado_bloque"',
+                'ece.txt_descripcion "comentario_bloque"', 'ece.ebs_cve "bloque_seccion_cve"',
+                'ece.fch_insert "fecha_validacion"');
+        }
+        
+        $this->db->where('ece.ehv_cve', $historia_cve);
+        $this->db->select($parametros);
+        $this->db->join('cvalidacion_curso_estado cce', 'cce.VAL_CUR_EST_CVE = ece.estado_validacion_cve');
+        $query = $this->db->get('evaluacion_bloques_val ece');
         $row_hist = $query->result_array();
 //        pr($this->db->last_query());
         return $row_hist;
