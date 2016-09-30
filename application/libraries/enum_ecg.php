@@ -70,7 +70,8 @@ class Enum_ecg extends MyEnum3 {
             ctematica = 'ctematica',
             cvalidacion_estado = 'cvalidacion_estado',
             cvalidacion_curso_estado = 'cvalidacion_curso_estado',
-            cestado_evaluacion = 'cestado_evaluacion'
+            cestado_evaluacion = 'cestado_evaluacion',
+            cseccion = 'cseccion'
     ;
     /*
       guardar actuación (evaluaciones)

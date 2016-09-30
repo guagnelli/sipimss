@@ -467,6 +467,33 @@ $config = array(
             'rules' => 'required'//
         ),
         
+        'isbn_libro' => array(
+            'field' => 'isbn_libro',
+            'label' => 'ISBN del libro',
+            'rules' => 'alpha_numeric_spaces|trim'//
+        ),
+        'num_paginas' => array(
+            'field' => 'num_paginas',
+            'label' => 'Número de páginas',
+            'rules' => 'integer|less_than_equal_to[99999]'//
+        ),
+        'num_capitulos' => array(
+            'field' => 'num_capitulos',
+            'label' => 'Número de capitulos',
+            'rules' => 'integer|less_than_equal_to[5]'//
+        ),
+        'is_edic_comp' => array(
+            'field' => 'is_edic_comp',
+            'label' => 'Edición o compilación',
+            'rules' => 'integer'//
+        ),
+
+        'ISBN_LIB' => array(
+            'field' => 'ISBN_LIB',
+            'label' => 'ISBN / ISSN',
+            'rules' => 'alpha_numeric_spaces|trim'//
+        ),
+        
         /*'ctipo_comprobante' => array(
             'field' => 'ctipo_comprobante',
             'label' => 'tipo de comprobante',

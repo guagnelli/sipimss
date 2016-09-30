@@ -63,7 +63,7 @@ if (!empty($divulgacion)) {
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <label for='lbl_tipo_actividad_docente' class="control-label">
-                        <?php echo $string_values['lbl_tipo_actividad_docente']; ?>
+                        <?php echo $string_values['lbl_tipo_investigacion_docente']; ?>
                     </label>
                     <div class="input-group">
                         <span class="input-group-addon">
@@ -134,16 +134,16 @@ if (!empty($divulgacion)) {
                 </div>
             </div>
             <div class='row'>
-                <div class="col-md-6">
+                <!--<div class="col-md-6">
                     <label for='lbl_tipo_estudio' class="control-label">
                         <b class="rojo">*</b>
-                        <?php echo $string_values['lbl_tipo_estudio']; ?>
+                        <?php //echo $string_values['lbl_tipo_estudio']; ?>
                     </label>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-oil"> </span>
                         </span>
-                        <?php
+                        <?php /*
                         echo $this->form_complete->create_element(array('id' => 'ctipo_estudio', 'type' => 'dropdown',
                             'options' => $ctipo_estudio,
                             'first' => array('' => $string_values['drop_tipo_estudio']),
@@ -151,11 +151,11 @@ if (!empty($divulgacion)) {
                             'attributes' => array('name' => 'categoria', 'class' => 'form-control',
                                 'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top',
                                 'title' => $string_values['lbl_tipo_estudio'])));
-                        ?>
+                        */?>
                     </div>
-                    <?php echo form_error_format('ctipo_estudio'); ?>
-                </div>
-                <div class="col-md-6">
+                    <?php //echo form_error_format('ctipo_estudio'); ?>
+                </div>-->
+                <div class="col-md-6 pull-right">
                     <label for='lbl_tipo_participacion' class="control-label">
                         <b class="rojo">*</b>
                         <?php echo $string_values['lbl_tipo_participacion']; ?>
@@ -176,14 +176,21 @@ if (!empty($divulgacion)) {
                     </div>
                     <?php echo form_error_format('ctipo_participacion'); ?>
                 </div>
-            </div>
+             <!--</div>
             <br>
-            <div class='row'>
+            <div class='row'>-->
                 <div class='col-md-6 col-sm-6 col-lg-6' >
                     <label for='lbl_tipo_divulgacion' class="control-label">
                         <b class="rojo">*</b>
                         <?php echo $string_values['lbl_tipo_divulgacion']; ?>
                     </label>
+                    <div class="btn-group pull-right" data-toggle="buttons">
+                            <span class="btn btn-info btn-sm" onclick="funcion_mostrar_medio_divulgacion(1);"><input type="radio" name="articulo" id="articulo1" value="1" autocomplete="off">Foro</span>
+                            <span class="btn btn-info btn-sm" onclick="funcion_mostrar_medio_divulgacion(2);"><input type="radio" name="articulo" id="articulo1" value="2" autocomplete="off">Libro</span> <!-- data-toggle="collapse" data-target="#div_numero_paginas" aria-expanded="false" aria-controls="collapseExample" -->
+                            <span class="btn btn-info btn-sm" onclick="funcion_mostrar_medio_divulgacion(3);"><input type="radio" name="articulo" id="articulo1" value="3" autocomplete="off">Revista</span>
+                    </div>
+                    <br>
+                    <div id="medio_divulgacion_div">
                     <div class="input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-oil"> </span>
@@ -200,11 +207,61 @@ if (!empty($divulgacion)) {
                         )));
                         ?>
                     </div>
+                    </div>
+                    <!-- -->
+                    <!--
+                    <label data-toggle="collapse" data-target="#div_pregunta_padre" aria-expanded="false" aria-controls="collapseExample">
+                        <?php 
+                        //echo $this->form_complete->create_element(array('id' => 'tiene_pregunta_padre', 'type' => 'checkbox', 'value'=>1, 'attributes' => array('name' => 'tiene_pregunta_padre', 'checked'=>$check_padre))); 
+                        ?>
+                        Tiene pregunta padre
+                    </label><br>
+                    <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#div_pregunta_padre" aria-expanded="false" aria-controls="collapseExample">
+                        Seleccione aquí si el medio de divulgación fue libro
+                    </button>-->
+                    <!--<div class="collapse" id="div_numero_paginas">
+                        <div class="well">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <label for="num_paginas ">Número de páginas:</label>
+                                <?php 
+                                //echo $this->form_complete->create_element(array('id' => 'num_paginas', 'type' => 'number', 'attributes' => array('name' => 'numero_paginas', 'class' => 'form-control','maxlength'=>'5', 'placeholder' => 'Número de páginas', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Número de páginas'))); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
+                                ?>
+                                <span class="text-danger"> <?php //echo form_error('num_paginas','','');?> </span>
+                                <p class="help-block"></p>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <label for="num_capitulos">Número de capitulos:</label>
+                                <?php 
+                                //echo $this->form_complete->create_element(array('id' => 'num_capitulos', 'type' => 'number', 'attributes' => array('name' => 'numero_paginas', 'class' => 'form-control','max'=>'5', 'min'=>'0', 'placeholder' => 'Número de capitulos', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Número de capitulos'))); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
+                                ?>
+                                <span class="text-danger"> <?php //echo form_error('num_capitulos','','');?> </span>
+                                <p class="help-block"></p>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <label>
+                                    <?php 
+                                     //echo $this->form_complete->create_element(array('id' => 'is_edic_comp', 'name'=>'is_edic_comp', 'type' => 'radio', 'value'=>'1')); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
+                                    ?>
+                                    Edición
+                                </label>
+                                <label>
+                                    <?php 
+                                     //echo $this->form_complete->create_element(array('id' => 'is_edic_comp', 'name'=>'is_edic_comp', 'type' => 'radio', 'value'=>'2')); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
+                                    ?>
+                                    Compilación
+                                </label>
+                                <span class="text-danger"> <?php //echo form_error('is_edic_comp','','');?> </span>
+                                <p class="help-block"></p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>-->
+                    <!-- -->
                     <?php echo form_error_format('cmedio_divulgacion'); ?>
                 </div>
-                <div class='col-md-6 col-sm-6 col-lg-6' >
-                    <span id="help-tipo-comprobante" class="help-block"><?php echo $string_values['Texto_de_ayuda_divulgacion']; ?></span>
-                </div>
+                <!--<div class='col-md-6 col-sm-6 col-lg-6' >
+                    <span id="help-tipo-comprobante" class="help-block"><?php //echo $string_values['Texto_de_ayuda_divulgacion']; ?></span>
+                </div>-->
             </div>
             <div class='row' id="div_mostrar_comprobante_libro_revista">
                 <?php

@@ -102,7 +102,10 @@ $lang['interface_evaluacion'] = array(
             'periodo_actual_evaluacion' => 'Período actual de evaluación',
             'txt_buscar_docentes' => 'Buscar docentes',
             'curso' => 'Curso',
-            'tipo_curso' => 'Tipo de curso'
+            'tipo_curso' => 'Tipo de curso',
+            'valido' => 'Valido',
+            'puntos' => 'Puntuación',
+            'seccion' => 'Sección'
         )
     ),
     'general' => array(
