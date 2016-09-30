@@ -169,7 +169,8 @@
                     <tbody>
                         <tr class="table-row">
                             <td class="table-img">
-                              <?php echo img('in.jpg'); ?>
+                              <?php echo img('in.jpg');?>
+
                                <!--<img src="images/in.jpg" alt="" />-->
                             </td>
                             <td class="table-text">

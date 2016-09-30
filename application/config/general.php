@@ -673,7 +673,7 @@ $config['solicitar_evaluacion'] = (object)array("tabla"=>"emp_formacion_profesio
  * @curso : Nombre del curso o campo de donde se optiene el nombre del curso
  * @tipo_curso: Tipo de curso 
  * @pk : Llave primaria de la entidad en base de datos
- */
+ 
 $config["secciones"] = array(
     Enum_sec::informacion_general=>array(
         "acronimo"=>"ig", 
@@ -708,7 +708,7 @@ $config["secciones_cont_val_solicitud_eval"] = array(
     "dt"=>array("seccion" => 'seccion_direccion_tesis', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
     "ig"=>array("seccion" => 'seccion_info_general', 'isActivo'=>true, "controlador_validacion" => 'evaluacion_curricular_validar'),
 );
-
+*/
 ///////////*//solicitud de evaluacion curricular
 $config["secciones"] = array(
     "ca"=>array("id"=>"1","curso"=>"TIP_CUR_NOMBRE","tipo_curso"=>"TIP_COM_NOMBRE","pk"=>"EMP_COMISION_CVE"),
@@ -722,7 +722,7 @@ $config["secciones"] = array(
     "em"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
     "ad"=>array("id"=>"2","curso"=>"SUBTIP_NOMBRE","tipo_curso"=>"TIP_FORM_SALUD_NOMBRE","pk"=>"FPCS_CVE"),
 );
-
+/*
 $config["secciones_model"] = array(
     Enum_sec::comision=>array(
         "acronimo"=>"ca",
@@ -808,3 +808,4 @@ $config["secciones_model"] = array(
         "ver_datos"=>"direccion_tesis_detalle",
     ),
 );
+*/

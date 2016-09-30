@@ -109,7 +109,12 @@ class Becas_comisiones_laborales_model extends CI_Model {
         $this->db->join('comprobante c', 'c.COMPROBANTE_CVE = ecm.COMPROBANTE_CVE', 'left');
         $this->db->join('ctipo_comprobante tc', 'tc.TIPO_COMPROBANTE_CVE = c.TIPO_COMPROBANTE_CVE', 'left');
         $this->db->where('tcm.IS_COMISION_ACADEMICA', 0);
-        $this->db->where('ecm.EMPLEADO_CVE', $empleado_cve);
+        if(is_array($empleado_cve)){
+            $this->db->where($empleado_cve["conditions"]);
+        }else{
+            $this->db->where('ecm.EMPLEADO_CVE', $empleado_cve);
+        }
+        
         $query = $this->db->get();
 //        pr($this->db->last_query());
         return $query->result_array();

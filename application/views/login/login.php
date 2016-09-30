@@ -38,6 +38,7 @@
         <script src="<?php echo asset_url();?>/login/bootstrap/js/bootstrap.min.js"></script>
         <script src="<?php echo asset_url();?>/login/js/jquery.backstretch.min.js"></script>
         <script src="<?php echo asset_url();?>/login/js/scripts.js"></script>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
         <?php echo js("general.js");?>
         
         <!--[if lt IE 10]>
@@ -115,6 +116,7 @@
                                         </span>
 			                        </div>
                                     <div class="form-group">
+                                      <div class="g-recaptcha" data-sitekey="6LfBzAcUAAAAAHfyZEqyIaX4RBP68AENYyZhgsq6"></div>
                                         <div id="captcha_first" class="img-captcha">
                                             <!-- aqui va a ir la imagen captcha y el reload -->
                                         </div>
