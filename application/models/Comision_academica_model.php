@@ -76,7 +76,7 @@ class Comision_academica_model extends My_model {
         $this->db->join('ctipo_comision', 'ctipo_comision.TIP_COMISION_CVE=emp_comision.TIP_COMISION_CVE', 'left');
 
         $query = $this->db->get('emp_comision'); //Obtener conjunto de registros
-        pr($this->db->last_query());
+        //pr($this->db->last_query());
         $resultado=$query->result_array();
 
         $query->free_result(); //Libera la memoria
@@ -169,8 +169,8 @@ class Comision_academica_model extends My_model {
 
         $bandera_validar = $this->db->get('hist_comision_validacion_curso', true); //Se verifica que no tenga validaciones asociadas, de lo contrario no se borra
         $bv = $bandera_validar->result_array();
-        pr($this->db->last_query());
-        pr($bv);
+        //pr($this->db->last_query());
+        //pr($bv);
         if(!empty($bv)){
             $this->db->join('comprobante', 'emp_comision.COMPROBANTE_CVE=comprobante.COMPROBANTE_CVE', 'left');
             $subSql = $this->db->get('emp_comision', true); //Obtener ID de comprobante para eliminar

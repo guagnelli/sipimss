@@ -573,7 +573,7 @@ class Catalogos_generales extends CI_Model {
         $parametros = array("conditions"=>array("empleado_cve"=>$empleado_cve));
 
         $this->load->model("Empleado_model", "emp");
-        $data["empleado"] = $this->emp->getEmpECD($params);
+        $data["empleado"] = $this->emp->getEmpECD($parametros);
 
         if (!is_null($validado)) {
             if (is_bool($validado)) {

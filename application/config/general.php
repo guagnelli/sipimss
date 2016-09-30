@@ -223,6 +223,7 @@ $config['catalogos_definidos'] = array(//Catógos generales que existen actualme
     'ctematica' => array('id'=>'TEMATICA_CVE', 'nombre'=>'TEM_NOMBRE', 'where'=>null),
      'cvalidacion_estado' => array('id' => 'VAL_ESTADO_CVE', 'nombre' => 'VAL_EST_NOMBRE' , 'where' => null),
      'cvalidacion_curso_estado' => array('id'=>'VAL_CUR_EST_CVE', 'nombre'=>'VAl_CUR_EST_NOMBRE', 'where'=>null),
+     'cseccion' => array('id'=>'SECCION_CVE', 'nombre'=>'SECCION_DES', 'where'=>null),
      Enum_ecg::cestado_evaluacion => array('id' => 'EST_EVALUACION_CVE', 'nombre' => 'EST_EVA_NOMBRE' , 'where' => null),
     '' => array('id' => '', 'nombre' => '' , 'where' => null),
 );
