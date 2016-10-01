@@ -936,11 +936,15 @@ class Perfil extends MY_Controller {
                     $tmp = $datos_formulario;
                 }
             }
+            
             if (!is_null($identificador)) { ///En caso de que se haya elegido alguna convocatoria                
                 $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions' => array('FPCS_CVE' => $fs_id), 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
             } else {
                 $data['dir_tes'] = (array) $this->formacion_salud_vo($tmp); //Generar objeto para ser enviado al formulario
-                $data['dir_tes']['EFPCS_FOR_INICIAL'] = intval($this->input->get('es_inicial', true)); //Tomamos tipo de formación
+                $es_inicial = $this->input->get('es_inicial', true);
+                //$es_inicial = $this->input->post('es_inicial', true);
+                $valorr_es_inicial = !empty($es_inicial) ? $es_inicial : $this->input->post('es_inicial', true);
+                $data['dir_tes']['EFPCS_FOR_INICIAL'] = intval($valorr_es_inicial);//intval($this->input->get('es_inicial', true)); //Tomamos tipo de formación
             }
 
             $entidades_ = array(enum_ecg::ctipo_comprobante);
@@ -959,7 +963,7 @@ class Perfil extends MY_Controller {
         }
     }
 
-    public function subtipo_formacion($identificador, $CSUBTIP_FORM_SALUD_CVE = null) {
+    public function subtipo_formacion($identificador=null, $CSUBTIP_FORM_SALUD_CVE = null) {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
             $this->load->model('Formacion_model', 'fm');
             $this->lang->load('interface');

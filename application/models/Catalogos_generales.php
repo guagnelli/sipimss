@@ -535,7 +535,7 @@ class Catalogos_generales extends CI_Model {
         }
         $this->db->select($nom_campo . ' as cve'); //Nombre del campo de la entidad solicitada
         $this->db->where('MODULO_CVE', $MODULO_CVE);
-        $this->db->where($nom_campo, 'is not null');
+        $this->db->where($nom_campo.' is not null');
         $query = $this->db->get('campos_catalogos');
         $array_comprobante = $query->result_array();
         $query->free_result();

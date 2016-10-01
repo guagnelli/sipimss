@@ -221,7 +221,7 @@ class Formacion_model extends CI_Model {
             } else {
                 $this->db->select($params['fields']);
             }*/
-            $this->db->select('campos_catalogos.*, MED_DIV_NOMBRE, CUR_NOMBRE, TIP_CURSO_CVE, ROL_DESEMPENIA, TIP_MAT_NOMBRE, TIP_MAT_TIPO, LIC_NOMBRE, TIP_LICENCIATURA_CVE, ');
+            $this->db->select('campos_catalogos.*, MED_DIV_NOMBRE, ccurso.CUR_NOMBRE, ccurso.TIP_CURSO_CVE, ROL_DESEMPENIA, TIP_MAT_NOMBRE, TIP_MAT_TIPO, LIC_NOMBRE, TIP_LICENCIATURA_CVE, ');
         //}
         if(array_key_exists('conditions', $params)){
             $this->db->where($params['conditions']);
