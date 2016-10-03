@@ -1261,3 +1261,8 @@ ALTER TABLE `campos_catalogos` ADD `TIP_CURSO_CVE` INT(11) NULL;  /*Campo agrega
 CREATE INDEX XIF112CAMPOS_CATALOGOS ON campos_catalogos (TIP_CURSO_CVE);  /* Se vuelve index el campo */
 ALTER TABLE `campos_catalogos` ADD CONSTRAINT `campos_catalogos_ctcurfk_112`   /* Asigna llave foranea*/
 FOREIGN KEY (`TIP_CURSO_CVE`) REFERENCES `ctipo_curso`(`TIP_CURSO_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE evaluacion_curso_validacion DROP FOREIGN KEY  fk_ebs_ecv;
+
+

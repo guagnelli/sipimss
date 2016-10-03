@@ -194,12 +194,76 @@ class Evaluacion_curricular_validar extends MY_Controller {
         }
     }
 
-    private function obtener_secciones_evaluacion($array_datos = null, $datos_tabla = array()) {
+    private function obtener_secciones_evaluacion_prima($array_datos = null, $datos_tabla = array()) {
         $secciones = $this->config->item('secciones_model');
         $result_array = array();
         $controlador_validacion = 'controlador_validacion';
 //        pr($string_text);
         foreach ($secciones as $value) {
+//            pr($value);
+            if (isset($array_datos[$value['acronimo']])) {//Si existe registro alguno, lo crea
+                $prop = $this->config->item('secciones_cont_val_solicitud_eval')[$value['acronimo']];
+                if ($prop['isActivo']) {
+                    $datos_tabla['acronimo'] = $value['acronimo'];
+                    $datos_tabla['datos_modulo'] = $array_datos[$value['acronimo']];
+                    $datos_tabla['pk'] = $value['pk'];
+                    $datos_tabla['ver_datos'] = $value['ver_datos'];
+                    $datos_tabla['curso'] = $value['curso'];
+                    $datos_tabla['tipo_curso'] = $value['tipo_curso'];
+                    $controlador['ruta'] = $prop['seccion'];
+                    $controlador['ruta_padre'] = $prop['controlador_validacion'];
+                    $controlador['nombre_modulo'] = $datos_tabla['secciones']['lbl_' . $value['acronimo'] . '_titulo'];
+                    $controlador['tabla'] = $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/tab_gen_cursos', $datos_tabla, TRUE);
+                    $result_array[] = $controlador;
+                }
+            }
+        }
+//        pr($result_array);
+        return $result_array;
+    }
+
+    private function obtener_secciones_evaluacion($empleado_cve = null, $solicitud_cve = null) {
+        if (is_null($solicitud_cve) OR is_null($empleado_cve)) {
+            return array();
+        }
+        $array_result = array();
+        //Obtener todos los registros almacenados en actividades del censo, docentes
+        $this->load->model('Expediente_model', 'exp'); //Modelo clase que contiene todos los datos de las secciones
+        $info_docente = $this->exp->getAll($empleado_cve, true); //Resultado
+        $propiedades = $info_docente['cfg_actividad'];
+        $emp_bloques_seccion = $info_docente['bloques'];
+        $acro_b = 'bloque_';
+        $acro_s = 'seccion_';
+        //Obtiene
+        $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve);
+        foreach ($cursos_s_evaluar as $cursos) {//Recorre los cursos solicitados para evaluación y filtrar
+            $cve = $cursos['cursos_evaluacion_cve'];
+            $bloque = $cursos['bloque_seccion'];
+            $seccion = $cursos['seccion_cve'];
+            $activida_cve = $cursos['curso_actividad_cve'];
+            if (!isset($array_result[$bloque])) {//Verifica existencia del bloque en el array de resultado
+                $array_result[$bloque] = array(); //Agrega el dato
+            }
+            if (isset($emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion])) {
+                $array_result[$bloque] = $emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion];
+            }
+        }
+
+//        pr($emp_bloques_seccion);
+        pr($array_result);
+//        exit();
+
+
+        $info_docente['cfg_actividad'];
+        $meta_datos_bloques = $info_docente['cfg_actividad'];
+        $datos_bloques = $info_docente['bloques'];
+        $textos = $info_docente['string_value'];
+
+        $secciones = $this->config->item('secciones_model');
+        $result_array = array();
+        $controlador_validacion = 'controlador_validacion';
+//        pr($string_text);
+        foreach ($array_result as $key => $value) {
 //            pr($value);
             if (isset($array_datos[$value['acronimo']])) {//Si existe registro alguno, lo crea
                 $prop = $this->config->item('secciones_cont_val_solicitud_eval')[$value['acronimo']];
@@ -261,6 +325,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 }
 
                 //*****Obtiene el estado de la historia 
+
                 $historia_gral = $this->ecvm->get_last_hist_validacion_evaluacion($datos_validacion['solicitud_cve']);
                 $historias_bloques = $this->ecvm->get_last_estado_bloque_evluacion($historia_gral['historia_gral_cve']);
 //                $parametros_gen_boton['estado_actual'] = $historia_gral['estado_hist_validacion'];
@@ -270,16 +335,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
 //                pr($datos_validador);
                 $data['botones_validador'] = genera_botones_estado_validacion_evaluacion($parametros_gen_boton); //Genera botones para validar según el estado actual de la validación 
 //                $pie_botones_validacion = $this->load->view('evaluacion_currucular_doc/valida_docente/opciones_validacion_pie', $botones, true);
-
-                //Obtener todos los registros almacenados en actividades del censo, docentes
-                $info_docente = $this->cg->getAll($datos_validacion['empleado_cve'], true);
 //                pr($info_docente);
                 $string_text_secciones['secciones'] = $interface['secciones'];
                 $string_text_secciones['string_values'] = $data["string_values"];
-                $info_docente['actividades']['ig'] = $info_docente['empleado']; //Agrega datos ingormación general del docente
+//                $info_docente['actividades']['ig'] = $info_docente['empleado']; //Agrega datos información general del docente
 //                pr($info_docente);
 //                exit();
-                $data['array_menu'] = $this->obtener_secciones_evaluacion($info_docente['actividades'], $string_text_secciones);
+                $data['array_menu'] = $this->obtener_secciones_evaluacion($datos_validacion['empleado_cve'], $datos_validacion['solicitud_cve']);
                 $data['string_value'] = $info_docente['string_value']; //Agrega datos de información del docente
                 $data['empleado'] = $info_docente['empleado']; //Agrega datos de información del docente
                 $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la informaciÃ³n del usuario al que se va a validar
@@ -293,7 +355,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             redirect(site_url());
         }
     }
-    
+
     private function obtener_id_usuario() {
         if (!is_null($this->session->userdata('datosvalidadoactual'))) {
             $array_validado = $this->session->userdata('datosvalidadoactual');

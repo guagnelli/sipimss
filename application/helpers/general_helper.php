@@ -867,3 +867,53 @@ if (!function_exists('genera_botones_estado_validacion_evaluacion')) {
     }
 
 }
+
+//if (!function_exists('get_datos_cursos_solicitados_evaluacion')) {
+//
+//    function get_datos_cursos_solicitados_evaluacion($paramentros) {
+//        $mensaje = "No se encontrarón opciones";
+//        if (isset($paramentros['msj_vacio'])) {
+//            $mensaje = $paramentros['msj_vacio']; //Validador N1, Validador N2, Profesionalización o docente-->
+//        }
+//
+//        $estado_actual = $paramentros['estado_actual'];
+//        $tipo_validador_rol = $paramentros['tipo_validador_rol']; //Validador N1, Validador N2, Profesionalización o docente-->
+//        $delegacion_validador = $paramentros['delegacion_cve']; //Validador N1, Validador N2, Profesionalización o docente-->
+////        pr($estado_actual);
+////        pr($tipo_validador_rol);
+//        $CI = & get_instance();
+//        $propiedades_gen_estado = $CI->config->item('estados_val_evaluacion'); //Carga las propiedades de los estados de la validación del censo de docentes
+//        $valida_acceso_rol = valida_acceso_rol_validador($tipo_validador_rol, $estado_actual, 'estados_val_evaluacion'); //Valida el acceso al rol seleccionado
+//        $respuesta_html_botones = array();
+//        if ($valida_acceso_rol) {//**Tiene acceso el validar el estado actual la validación del docente 
+//            $pro_estado_actual = $propiedades_gen_estado[$estado_actual]; //Carga el estado actual del docente 
+//            
+////            $estado_transicion = $pro_estado_actual['estados_transicion'];
+//            $CI->load->library('seguridad');
+//            /* Valida convocatoria para n1 y n2 por delegación */
+//            if ($tipo_validador_rol == Enum_rols::Validador_N1 || $tipo_validador_rol == Enum_rols::Validador_N2) {
+//                $pasa_convocatoria_val = get_convocatoria_delegacion_val_censo($delegacion_validador, $tipo_validador_rol);
+//            }
+////            pr($pro_estado_actual['estados_transicion']);
+//            foreach ($pro_estado_actual['estados_transicion'] as $value_est_trans) {
+//                $estados_trans = $propiedades_gen_estado[$value_est_trans];
+//                if ($estados_trans['is_boton']) {//Verifica si es un botón o el cambio va implicito por el sistema, como es el caso del cambio de estado a "En revision por .."
+////                    pr($value_est_trans);
+//                    $value_est_trans = $CI->seguridad->encrypt_base64($value_est_trans);
+////                    $tipo_transicion = $CI->seguridad->encrypt_base64($estados_trans['color_status']);
+//                    $respuesta_html_botones[] = '<button '
+//                            . 'type="button" '
+//                            . 'class="btn btn-success" '
+//                            . 'data-estadocambiocve ="' . $value_est_trans . '"'
+////                            . 'data-tipotransicion ="' . $tipo_transicion . '"'
+//                            . 'onclick=' . $estados_trans['funcion_demandada'] . '>' .
+//                            $estados_trans['value_boton']
+//                            . '</button>';
+//                }
+//            }
+//        }
+//
+//        return $respuesta_html_botones;
+//    }
+//
+//}
