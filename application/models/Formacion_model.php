@@ -70,6 +70,7 @@ class Formacion_model extends CI_Model {
         $this->db->join('ctipo_formacion_salud', 'emp_for_personal_continua_salud.TIP_FORM_SALUD_CVE=ctipo_formacion_salud.TIP_FORM_SALUD_CVE', 'left');
         $this->db->join('csubtipo_formacion_salud', 'emp_for_personal_continua_salud.CSUBTIP_FORM_SALUD_CVE=csubtipo_formacion_salud.CSUBTIP_FORM_SALUD_CVE', 'left');
         $this->db->join('comprobante', 'emp_for_personal_continua_salud.comprobante_cve=comprobante.comprobante_cve', 'left');
+        $this->db->join('licenciatura', 'licenciatura.LICENCIATURA_CVE =  emp_for_personal_continua_salud.LICENCIATURA_CVE', 'left');
 
         $query = $this->db->get('emp_for_personal_continua_salud'); //Obtener conjunto de registros
 //        pr($this->db->last_query());

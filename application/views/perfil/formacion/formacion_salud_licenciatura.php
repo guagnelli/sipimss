@@ -8,7 +8,7 @@
     <div class="form-group">
         <div class="input-group">
             <?php
-            echo $this->form_complete->create_element(array('id' => 'licenciatura',
+            echo $this->form_complete->create_element(array('id' => 'LICENCIATURA_CVE',
                 'type' => 'dropdown',
                 'value' => (isset($dir_tes['LICENCIATURA_CVE'])) ? $dir_tes['LICENCIATURA_CVE'] : '',
                 'options' => $catalogos['licenciatura'],
@@ -20,10 +20,11 @@
             ?>
         </div>
     </div>
-    <?php //echo form_error_format('curso');  ?>	
+    <?php echo form_error_format('LICENCIATURA_CVE');  ?>	
 </div>
 <script type="text/javascript">
     <?php if (isset($dir_tes['TIP_LICENCIATURA_CVE']) && !empty($dir_tes['TIP_LICENCIATURA_CVE'])) { ?>
-        data_ajax(site_url+"/perfil/licenciaturas_formacion/"+$('#ctipo_licenciatura').val()+"/", null, '#capa_licenciaturas');
+        <?php $tmp_lic = (isset($dir_tes['LICENCIATURA_CVE']) && !empty($dir_tes['LICENCIATURA_CVE']))?$dir_tes['LICENCIATURA_CVE']:'';?>
+        data_ajax(site_url+"/perfil/licenciaturas_formacion/"+$('#ctipo_licenciatura').val()+"/<?php echo $tmp_lic; ?>", null, '#capa_licenciaturas');
     <?php } ?>
 </script>

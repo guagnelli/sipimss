@@ -60,6 +60,22 @@
 			</div>
 			<?php
 		}
+                if(isset($dir_tes['LICENCIATURA_CVE']) && !empty($dir_tes['LICENCIATURA_CVE'])) {
+                    ?>
+                    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
+                        <label class="control-label">
+                            <?php echo $string_values['lbl_licenciatura']; ?>:
+                        </label>
+                    </div>
+                    <div class='col-sm-12 col-md-12 col-lg-8 text-left'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="registro"><?php echo $dir_tes['LIC_NOMBRE']; ?></label>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
 		?>
 		<?php echo $formulario_carga_archivo; ?>
 		<?php echo $formulario_validacion; ?>

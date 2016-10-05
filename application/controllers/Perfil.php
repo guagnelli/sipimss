@@ -905,19 +905,31 @@ class Perfil extends MY_Controller {
 
             if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido información por método post
                 $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
-                pr($datos_formulario);
-                exit();
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
-                $validations = $this->config->item('form_formacion_salud'); //Obtener validaciones de archivo general de validaciones
-                $this->form_validation->set_rules($validations); //Añadir validaciones
-
-                $total_subtipo = $this->fm->get_subtipo_formacion_salud(array('conditions' => array('ctipo_formacion_salud.TIP_FORM_SALUD_CVE' => $datos_formulario['tipo_formacion']), 'fields' => 'count(*) AS total'))[0];
-                if ($total_subtipo['total'] > 0) {
-                    $this->form_validation->set_rules('subtipo', 'Subtipo de formación profesional', 'trim|required');
+//                pr($datos_formulario);
+//                pr($this->config->item('EFPCS_FOR_INICIAL')['LICENCIATURA']['id']);
+                //Verifica la licenciatura
+                $quita_tipo_lic = 0;
+                if (intval($datos_formulario['tipo_formacion']) == intval($this->config->item('EFPCS_FOR_INICIAL')['LICENCIATURA']['id'])) {
+                    $validations = $this->config->item('form_formacion_salud_complemento_licenciatura'); //Obtener validacion  para licenciatura
+                    $this->form_validation->set_rules($validations); //Añadir validaciones
+                    $quita_tipo_lic = 1;
+                } else {
+                    $validations = $this->config->item('form_formacion_salud'); //Obtener validaciones de archivo general de validaciones
+                    $this->form_validation->set_rules($validations); //Añadir validaciones
+                    $total_subtipo = $this->fm->get_subtipo_formacion_salud(array('conditions' => array('ctipo_formacion_salud.TIP_FORM_SALUD_CVE' => $datos_formulario['tipo_formacion']), 'fields' => 'count(*) AS total'))[0];
+                    if ($total_subtipo['total'] > 0) {
+                        $this->form_validation->set_rules('subtipo', 'Subtipo de formación profesional', 'trim|required');
+                    }
                 }
                 if ($this->form_validation->run() == TRUE) { //Validar datos
+//                    pr($validations);
+//                    exit();
                     $datos_formulario['empleado'] = $this->session->userdata('idempleado');
                     $data_fs = $this->formacion_salud_vo($datos_formulario); //Generar objeto para almacenar
+//                    if($quita_tipo_lic==1){//Quita tipo de curso
+                         unset($data_fs->TIP_LICENCIATURA_CVE);
+//                    }
                     if (empty($data['identificador'])) { //Insertar
                         $resultado_almacenado = $this->fm->insert_formacion_salud($data_fs);
                         $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
@@ -940,22 +952,26 @@ class Perfil extends MY_Controller {
             }
 
             if (!is_null($identificador)) { ///En caso de que se haya elegido alguna convocatoria                
-                $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions' => array('FPCS_CVE' => $fs_id), 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
-            } else {
+                $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions' => array('FPCS_CVE' => $fs_id), 'fields' => 'emp_for_personal_continua_salud.*, licenciatura.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
+//                pr($data['dir_tes']);
+                
+            } else {//Carga los datos de formación inicial
                 $data['dir_tes'] = (array) $this->formacion_salud_vo($tmp); //Generar objeto para ser enviado al formulario
-                $es_inicial = $this->input->get('es_inicial', true);
+                $es_inicial = $this->input->get('es_inicial', true); //Indican que es un curso inicial
                 //$es_inicial = $this->input->post('es_inicial', true);
-                $valorr_es_inicial = !empty($es_inicial) ? $es_inicial : $this->input->post('es_inicial', true);
+                $valorr_es_inicial = !empty($es_inicial) ? $es_inicial : $this->input->post('es_inicial', true); //Es inicial 
                 $data['dir_tes']['EFPCS_FOR_INICIAL'] = intval($valorr_es_inicial); //intval($this->input->get('es_inicial', true)); //Tomamos tipo de formación
             }
 
             $entidades_ = array(enum_ecg::ctipo_comprobante);
             $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
 
-            //Carga el ctipo_formación en salud
+            //Carga el condiciones de ctipo_formación en salud inicial o continua
             $condicion = ($data['dir_tes']['EFPCS_FOR_INICIAL'] == $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']) ?
                     'TIP_FORM_SALUD_CVE IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')' : 'TIP_FORM_SALUD_CVE NOT IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')'; //De acuerdo a tipo de formación mostramos opciones de tipo de formación
-            $data['catalogos']['ctipo_formacion_salud'] = dropdown_options($this->fm->get_tipo_formacion_salud(array('conditions' => $condicion)), 'TIP_FORM_SALUD_CVE', 'TIP_FORM_SALUD_NOMBRE');
+            //Carga los datos de tipo de formación según las condiciones
+            $data['catalogos']['ctipo_formacion_salud'] = dropdown_options($this->fm->get_tipo_formacion_salud(
+                            array('conditions' => $condicion)), 'TIP_FORM_SALUD_CVE', 'TIP_FORM_SALUD_NOMBRE');
 
 
             $data['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data, TRUE);
@@ -968,39 +984,46 @@ class Perfil extends MY_Controller {
         }
     }
 
-    public function subtipo_formacion($identificador = null, $CSUBTIP_FORM_SALUD_CVE = null) {
+    public function subtipo_formacion($identificador = null, $CSUBTIP_FORM_SALUD_CVE = null, $LICENCIATURA_CVE = null) {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
             $this->load->model('Formacion_model', 'fm');
             $this->lang->load('interface');
             $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
-            $data['dir_tes']['CSUBTIP_FORM_SALUD_CVE'] = $CSUBTIP_FORM_SALUD_CVE;
             if ($identificador == $this->config->item('EFPCS_FOR_INICIAL')['LICENCIATURA']['id']) { //Si es igual que id de licenciatura, carga vista para nueva licenciatura 
-            $entidades_ = array(enum_ecg::ctipo_licenciatura);
-            $data['catalogos'] = carga_catalogos_generales($entidades_, null);
-            echo $this->load->view('perfil/formacion/formacion_salud_tipo_licenciatura', $data, TRUE);
-            }else{
-            $entidades_ = array(enum_ecg::csubtipo_formacion_salud);
-            $condiciones_ = array(enum_ecg::csubtipo_formacion_salud => array('TIP_FORM_SALUD_CVE' => $identificador));
-            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
-            echo $this->load->view('perfil/formacion/formacion_salud_tipo_formacion', $data, TRUE);
-                
+                $data['dir_tes']['TIP_LICENCIATURA_CVE'] = $CSUBTIP_FORM_SALUD_CVE;
+                if (!is_null($LICENCIATURA_CVE) AND ! empty($LICENCIATURA_CVE)) {
+                    $data['dir_tes']['LICENCIATURA_CVE'] = $LICENCIATURA_CVE;
+                }
+                $entidades_ = array(enum_ecg::ctipo_licenciatura);
+                $data['catalogos'] = carga_catalogos_generales($entidades_, null);
+                echo $this->load->view('perfil/formacion/formacion_salud_tipo_licenciatura', $data, TRUE);
+            } else {
+                $data['dir_tes']['CSUBTIP_FORM_SALUD_CVE'] = $CSUBTIP_FORM_SALUD_CVE;
+                $entidades_ = array(enum_ecg::csubtipo_formacion_salud);
+                $condiciones_ = array(enum_ecg::csubtipo_formacion_salud => array('TIP_FORM_SALUD_CVE' => $identificador));
+                $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
+                echo $this->load->view('perfil/formacion/formacion_salud_tipo_formacion', $data, TRUE);
             }
-
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
     }
-    public function licenciaturas_formacion($identificador = null) {
-        if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
-            $this->load->model('Formacion_model', 'fm');
-            $this->lang->load('interface');
-            $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
-            $data['dir_tes']['LICENCIATURA_CVE'] = $identificador;
-            $entidades_ = array(enum_ecg::licenciatura);
-            $condiciones_ = array(enum_ecg::licenciatura => array('TIP_LICENCIATURA_CVE' => $identificador));
-            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
-            echo $this->load->view('perfil/formacion/formacion_salud_licenciatura', $data, TRUE);
 
+    public function licenciaturas_formacion($identificador_tp_lic = null, $LICENCIATURA_CVE = null) {
+        if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
+//            pr($LICENCIATURA_CVE);
+            if (!empty($identificador_tp_lic)) {
+                $this->lang->load('interface');
+                $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
+                $data['dir_tes']['LICENCIATURA_CVE'] = $LICENCIATURA_CVE;
+//                $data['dir_tes']['TIP_LICENCIATURA_CVE'] = $identificador_tp_lic;
+                $entidades_ = array(enum_ecg::licenciatura);
+                $condiciones_ = array(enum_ecg::licenciatura => array('TIP_LICENCIATURA_CVE' => $identificador_tp_lic));
+                $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
+                echo $this->load->view('perfil/formacion/formacion_salud_licenciatura', $data, TRUE);
+            } else {
+                echo '';
+            }
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
@@ -2300,6 +2323,8 @@ class Perfil extends MY_Controller {
         $for->EFPCS_FOR_INICIAL = (isset($formacion['es_inicial']) && !empty($formacion['es_inicial'])) ? $formacion['es_inicial'] : NULL;
         $for->TIP_FORM_SALUD_CVE = (isset($formacion['tipo_formacion']) && !empty($formacion['tipo_formacion'])) ? $formacion['tipo_formacion'] : NULL;
         $for->CSUBTIP_FORM_SALUD_CVE = (isset($formacion['subtipo']) && !empty($formacion['subtipo'])) ? $formacion['subtipo'] : NULL;
+        $for->TIP_LICENCIATURA_CVE = (isset($formacion['TIP_LICENCIATURA_CVE']) && !empty($formacion['TIP_LICENCIATURA_CVE'])) ? $formacion['TIP_LICENCIATURA_CVE'] : NULL;
+        $for->LICENCIATURA_CVE = (isset($formacion['LICENCIATURA_CVE']) && !empty($formacion['LICENCIATURA_CVE'])) ? $formacion['LICENCIATURA_CVE'] : NULL;
 
         return $for;
     }

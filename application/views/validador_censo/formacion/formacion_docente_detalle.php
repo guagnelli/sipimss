@@ -1,3 +1,4 @@
+<?php pr($dir_tes['LICENCIATURA_CVE']); ?>
 <div id="capa_html_docente">
 	<div id="capa_formacion_docente" style="padding:20px;">
 		<div class="row">

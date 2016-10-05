@@ -754,6 +754,39 @@ $config = array(
             'rules' => 'required'
         )
     ),
+    'form_formacion_salud_complemento_licenciatura' => array(
+         array(
+            'field' => 'fch_inicio',
+            'label' => 'Fecha de inicio',
+            'rules' => 'required|max_length[7]'
+        ),
+        array(
+            'field' => 'fch_fin',
+            'label' => 'Fecha de termino',
+            'rules' => 'required|max_length[7]' //|callback_valid_pass
+        ),
+        array(
+            'field' => 'tipo_formacion',
+            'label' => 'Formación profesional del profesor',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'tipo_comprobante',
+            'label' => 'Tipo de comprobante',
+            'rules' => 'required'
+        ),
+        array(
+            'field' => 'TIP_LICENCIATURA_CVE',
+            'label' => 'rama del conocimiento',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'LICENCIATURA_CVE',
+            'label' => 'licenciatura',
+            'rules' => 'trim|required'
+        )
+    ),
+    
     'form_ejercicio_profesional' => array(
         array(
             'field' => 'ejercicio_profesional',

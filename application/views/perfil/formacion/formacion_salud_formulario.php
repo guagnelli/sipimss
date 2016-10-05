@@ -1,3 +1,9 @@
+<?php 
+//pr($dir_tes['TIP_FORM_SALUD_CVE']);
+//pr($dir_tes['CSUBTIP_FORM_SALUD_CVE']);
+//pr($dir_tes['TIP_LICENCIATURA_CVE']);
+
+?>
 <div id="capa_html">
 	<?php echo form_open_multipart('', array('id'=>'formulario_formacion_salud')); ?>
 	<div id="capa_formacion_salud" style="padding:20px;">
@@ -189,8 +195,8 @@ $(function() {
     });
 	if($('#btn_guardar_formacion_salud').length){
         $('#btn_guardar_formacion_salud').on('click', function(e) {
-        	if($('#idc').length){ //Validar carga de archivo
-        		if($("#userfile").val()==""){ //Validar carga de archivo
+//        	if($('#idc').length){ //Validar carga de archivo
+//        		if($("#userfile").val()==""){ //Validar carga de archivo
             		//data_ajax(site_url+'/perfil/formacion_salud_formulario/<?php echo $identificador; ?>', '#formulario_formacion_salud', '#modal_content');
                 $.ajax({
 		                url: site_url+'/perfil/formacion_salud_formulario/<?php echo $identificador; ?>',
@@ -216,12 +222,12 @@ $(function() {
 		                remove_loader();
 		                recargar_fecha_ultima_actualizacion();
 		            });
-            	} else {
-            	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
-                }
-            } else {
-            	$('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
-            }
+//            	} else {
+//            	    $('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
+//                }
+//            } else {
+//            	$('#error_carga_archivo').html(html_message("<?php echo $string_values['falta_carga_archivo']; ?>", 'danger'));
+//            }
         });
     }
     $('.btn_subir_comprobante').click(function() {
@@ -239,13 +245,27 @@ $(function() {
 	});
 	if($('#tipo_formacion').length){
         $( "#tipo_formacion" ).change(function() {
+//            $("#capa_licenciaturas").remove();
             if($(this).val()!=""){
                 data_ajax(site_url+'/perfil/subtipo_formacion/'+$(this).val(), null, '#capa_subtipo');
             }
         });
         <?php
         if(isset($dir_tes['TIP_FORM_SALUD_CVE']) && !empty($dir_tes['TIP_FORM_SALUD_CVE'])){ ?>
-            data_ajax(site_url+"/perfil/subtipo_formacion/"+$('#tipo_formacion').val()+"/<?php echo ((isset($dir_tes['CSUBTIP_FORM_SALUD_CVE']) && !empty($dir_tes['CSUBTIP_FORM_SALUD_CVE'])) ? $dir_tes['CSUBTIP_FORM_SALUD_CVE'] : '')?>", null, '#capa_subtipo');
+            <?php 
+            $id_lic = '';
+            if(isset($dir_tes['CSUBTIP_FORM_SALUD_CVE']) && !empty($dir_tes['CSUBTIP_FORM_SALUD_CVE'])){
+                $id_tmp = $dir_tes['CSUBTIP_FORM_SALUD_CVE'];
+            }else if(isset($dir_tes['TIP_LICENCIATURA_CVE']) && !empty($dir_tes['TIP_LICENCIATURA_CVE'])){
+                $id_tmp = $dir_tes['TIP_LICENCIATURA_CVE'];
+                if(isset($dir_tes['LICENCIATURA_CVE']) && !empty($dir_tes['LICENCIATURA_CVE'])){
+                    $id_lic = '/'.$dir_tes['LICENCIATURA_CVE'];
+                }
+            }else{
+                $id_tmp = '';
+            }
+            ?>        
+            data_ajax(site_url+"/perfil/subtipo_formacion/"+$('#tipo_formacion').val()+"/<?php echo $id_tmp; ?><?php echo $id_lic; ?>", null, '#capa_subtipo');
         <?php } ?>
     }
 });
