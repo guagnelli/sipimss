@@ -2,10 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Clase que gestiona el login
- * @version 	: 1.0.0
- * @autor 		: Mr. Guag
- * fecha: 29/09/2016
+     * Clase que gestiona el login
+     * @version     : 1.2.2
+     * @autor       : Mr. Guag
+     * @date: 26/09/2016
+     * @attributes: 
+     				config
  */
 class Expediente_model extends MY_Model {
 	private   $config;
@@ -38,7 +40,7 @@ class Expediente_model extends MY_Model {
 		            "pk"=>"FPCS_CVE",
 		            "functions"=>array(
 		            	"get"=>"get_formacion_salud",
-		            )
+		            ),
 	        	),
 	        	//formacion docente
 				Enum_sec::S_FORMACION_PROFESIONAL=>array(
@@ -52,7 +54,7 @@ class Expediente_model extends MY_Model {
 			        "model"=>"Formacion_model",
 			        "functions"=>array(
 			        	"get"=>"get_formacion_docente",
-			        )
+			        ),"activo"=>1
 			    ),
 			),
 			Enum_sec::B_ACTIVIDAD_DOCENTE=>array(
@@ -67,7 +69,7 @@ class Expediente_model extends MY_Model {
 			        "model"=>"",
 			        "functions"=>array(
 			        	"get"=>"",
-			        )
+			        ),
 				),
 				Enum_sec::S_ESP_MEDICA=>array(
 					"acronimo"=>"",
@@ -80,7 +82,8 @@ class Expediente_model extends MY_Model {
 			        "model"=>"",
 			        "functions"=>array(
 			        	"get"=>"",
-			        )
+			        ),
+			        "activo"=>1
 				),
 				Enum_sec::S_ACTIVIDAD_DOCENTE=>array(
 					"acronimo"=>"ad",
@@ -94,7 +97,7 @@ class Expediente_model extends MY_Model {
 			        "functions"=>array(
 			        	"get"=>"get_actividades_docente",
 			        	"view"=>"carga_datos_actividad",
-			        )
+			        ),
 				),
 			),
 			Enum_sec::B_BECAS_COMISIONES_LABORALES=>array(
@@ -110,7 +113,7 @@ class Expediente_model extends MY_Model {
 			        "functions"=>array(
 			        	"get"=>"get_lista_becas",
 			        	// "view"=>"carga_datos_editar_beca",
-			        )
+			        ),
 				),
 				Enum_sec::S_COMISIONES_LABORALES=>array(
 					"acronimo"=>"cl",
@@ -124,7 +127,7 @@ class Expediente_model extends MY_Model {
 			        "functions"=>array(
 			        	"get"=>"get_lista_comisiones",
 			        	// "view"=>"carga_datos_editar_beca",
-			        )
+			        ),
 				),
 			),
 			Enum_sec::B_COMISIONES_ACADEMICAS=>array(
@@ -198,7 +201,7 @@ class Expediente_model extends MY_Model {
      * @version     : 1.2.2
      * @autor       : Mr. Guag
      * @date: 26/09/2016
-     * @attributes: 
+     * @params: 
      *              $empleado_cve: Id del empleado
      *              $validado: si es nulo ignora la condición; si es TRUE busca todos los registros validados, 
      *                          si es FALSE busca todos los registros sin validación.
@@ -262,6 +265,33 @@ class Expediente_model extends MY_Model {
         return $data;
     }
 
+    /**
+     * Clase que gestiona el login
+     * @version     : 1.2.2
+     * @autor       : Mr. Guag
+     * @date: 26/09/2016
+     * @params: 
+     *              $empleado_cve: Id del empleado
+     *              $validado: si es nulo ignora la condición; si es TRUE busca todos los registros validados, 
+     *                          si es FALSE busca todos los registros sin validación.
+     *              $where: debe ir con el formato array("campo"=>valor)
+     * @returns: Mixed array()
+     * @comments: Usa el archivo de configuración con el arreglo asosiativo
+     *               $config["get_secciones"]
+     *               @acronimo : clave diminutiva para identificar el curso
+     *               @entidad : Nombre de la entidad en la base de datos
+     *               @curso : Nombre del curso o campo de donde se optiene el nombre del curso
+     *               @tipo_curso: Tipo de curso 
+     *               @pk : Llave primaria de la entidad en base de datos
+     *               @model : nombre del modelo 
+     *               @function : nombre de la funcion que regresa los datos de la sección
+     */
+    function getECV($empleado_cve = null, $validado = null, $where = null) {
+        unset($this->config[Enum_sec::B_FORMACION][Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD]);
+        unset($this->config[Enum_sec::B_BECAS_COMISIONES_LABORALES]);
+        return $this->getAll($empleado_cve, $validado, $where);
+    }
+
     function setFunctions($bloque=null,$seccion=null,$funcs = array()){
 		if(is_null($bloque) && is_null($seccion)){
 			foreach ($this->config as $b_key => $bloque) {
@@ -305,6 +335,27 @@ class Expediente_model extends MY_Model {
 		else{
 			$this->config[$bloque][$seccion] = $campos;
 		}
+    }
+
+    /* @version     : 1.0.0
+     * @autor       : Mr. Guag
+     * @date: 05/10/2016
+     * @params: $bloque: number, identificador del bloque
+	 * 			$section: number, identificador de la seccion
+     * @description: Elimina una sección del arreglo de configuración
+     */ 
+    function rmSection($bloque,$section){
+    	unset($this->config[$bloque][$section]);
+    }
+
+    /* @version     : 1.0.0
+     * @autor       : Mr. Guag
+     * @date: 05/10/2016
+     * @params: $bloque: number, identificador del bloque
+     * @description: Elimina una bloque del arreglo de configuración
+     */ 
+    function rmBloque($bloque){
+    	unset($this->cfg_actividad[$bloque]);
     }
 
 }

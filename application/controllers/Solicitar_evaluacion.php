@@ -22,7 +22,7 @@ class Solicitar_evaluacion extends MY_Controller {
     
     function index(){
         $this->load->model("Expediente_model","exp");
-        $data = $this->exp->getAll($this->session->idempleado);
+        $data = $this->exp->getECV($this->session->idempleado);
         pr($data);
 
         $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$data, true);
