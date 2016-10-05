@@ -64,7 +64,13 @@
 		        <div class="form-group">
 		            <div class="input-group">
 		                <?php
-		                echo $this->form_complete->create_element(array('id'=>'tipo_formacion', 'type'=>'dropdown', 'value'=>$dir_tes['TIP_FORM_SALUD_CVE'], 'options'=>$catalogos['ctipo_formacion_salud'], 'first'=>array(''=>'Selecciona...'), 'attributes'=>array('class'=>'form-control', 'placeholder'=>$string_values['lbl_tipo_formacion'], 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title'=>$string_values['lbl_tipo_formacion'])));
+		                echo $this->form_complete->create_element(array('id'=>'tipo_formacion', 
+                                    'type'=>'dropdown', 'value'=>$dir_tes['TIP_FORM_SALUD_CVE'], 
+                                    'options'=>$catalogos['ctipo_formacion_salud'], 
+                                    'first'=>array(''=>'Selecciona...'), 
+                                    'attributes'=>array('class'=>'form-control', 
+                                    'placeholder'=>$string_values['lbl_tipo_formacion'], 'data-toggle'=>'tooltip', 
+                                    'data-placement'=>'top', 'title'=>$string_values['lbl_tipo_formacion'])));
 		                ?>
 		            </div>
 		        </div>
@@ -73,6 +79,9 @@
 		</div>
 		<div id="capa_subtipo" class="row"></div>
         <?php echo form_error_format('subtipo'); ?>
+                
+		<div id="capa_licenciaturas" class="row"></div>
+        <?php echo form_error_format('licenciatura'); ?>
 		<div class="row">
 		    <div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 		        <label class="control-label">

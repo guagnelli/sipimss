@@ -15,7 +15,7 @@
             <?php if(isset($ctipo_actividad_docente)){ ?>
            <div class="list-group-item">
                 <?php // echo form_open('', array('id'=>'form_actividad_docente_general')); ?>
-                <label for='lbl_tipo_actividad_docente_' class="control-label">
+                <label for='lbl_tipo_actividad_docente' class="control-label">
                      <?php echo $string_values['lbl_tipo_actividad_docente']; ?>
                 </label>
                 <div class="input-group">

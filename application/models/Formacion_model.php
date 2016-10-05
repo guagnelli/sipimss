@@ -72,7 +72,7 @@ class Formacion_model extends CI_Model {
         $this->db->join('comprobante', 'emp_for_personal_continua_salud.comprobante_cve=comprobante.comprobante_cve', 'left');
 
         $query = $this->db->get('emp_for_personal_continua_salud'); //Obtener conjunto de registros
-        //pr($this->db->last_query());
+//        pr($this->db->last_query());
         $resultado=$query->result_array();
 
         $query->free_result(); //Libera la memoria
@@ -263,7 +263,7 @@ class Formacion_model extends CI_Model {
         }
 
         $query = $this->db->get('ctipo_formacion_salud'); //Obtener conjunto de registros
-        //pr($this->db->last_query());
+//        pr($this->db->last_query());
         $resultado=$query->result_array();
 
         $query->free_result(); //Libera la memoria
@@ -290,7 +290,7 @@ class Formacion_model extends CI_Model {
         $this->db->join('ctipo_formacion_salud', 'ctipo_formacion_salud.TIP_FORM_SALUD_CVE=csubtipo_formacion_salud.TIP_FORM_SALUD_CVE', 'left');
 
         $query = $this->db->get('csubtipo_formacion_salud'); //Obtener conjunto de registros
-        //pr($this->db->last_query());
+//        pr($this->db->last_query());
         $resultado=$query->result_array();
 
         $query->free_result(); //Libera la memoria

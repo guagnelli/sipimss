@@ -344,11 +344,11 @@ class Perfil extends MY_Controller {
     private function comision_academica_configuracion($tipo_comision, $edicion = true) {
         $config = array('plantilla' => null, 'validacion' => null);
         /*
-                $condiciones_ = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $comp_conditions_ids));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
-                $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $condiciones_, true, $where_grup);
-        */
+          $condiciones_ = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $comp_conditions_ids));
+          $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
+          $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+          $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $condiciones_, true, $where_grup);
+         */
         $conditions = $where_grup = null;
         switch ($tipo_comision) {
             case $this->config->item('tipo_comision')['COMITE_EDUCACION']['id']:
@@ -357,7 +357,7 @@ class Perfil extends MY_Controller {
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_curso);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_educativa, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
                 break;
             case $this->config->item('tipo_comision')['SINODAL_EXAMEN']['id']:
                 $config['plantilla'] = ($edicion == true) ? 'perfil/comision_academica/comision_academica_sinodal_examen_formulario' : 'perfil/comision_academica/comision_academica_sinodal_examen_vista';
@@ -365,7 +365,7 @@ class Perfil extends MY_Controller {
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cnivel_academico);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Sinodal_de_examen, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
                 break;
             case $this->config->item('tipo_comision')['COORDINADOR_TUTORES']['id']:
                 $config['plantilla'] = ($edicion == true) ? 'perfil/comision_academica/comision_academica_coordinador_tutores_formulario' : 'perfil/comision_academica/comision_academica_coordinador_tutores_vista';
@@ -373,7 +373,7 @@ class Perfil extends MY_Controller {
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Coordinador_de_tutores_en_educacion_a_distancia, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
                 break;
             case $this->config->item('tipo_comision')['COORDINADOR_CURSO']['id']:
                 //$config['plantilla'] = 'perfil/comision_academica/comision_academica_coordinador_curso_formulario';
@@ -383,7 +383,7 @@ class Perfil extends MY_Controller {
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_educativa, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
                 break;
         }
         // carga_catalogos_generales($entidades_comprobante, null, $condiciones_, true, $where_grup);
@@ -431,7 +431,7 @@ class Perfil extends MY_Controller {
             /**/
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Direccion_de_tesis, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
             /**/
 
             $entidades_ = array(enum_ecg::comision_area, enum_ecg::ctipo_comprobante, enum_ecg::cnivel_academico);
@@ -905,6 +905,8 @@ class Perfil extends MY_Controller {
 
             if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido información por método post
                 $datos_formulario = $this->input->post(null, true); //Datos del formulario se envían para generar la consulta
+                pr($datos_formulario);
+                exit();
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_formacion_salud'); //Obtener validaciones de archivo general de validaciones
                 $this->form_validation->set_rules($validations); //Añadir validaciones
@@ -936,7 +938,7 @@ class Perfil extends MY_Controller {
                     $tmp = $datos_formulario;
                 }
             }
-            
+
             if (!is_null($identificador)) { ///En caso de que se haya elegido alguna convocatoria                
                 $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions' => array('FPCS_CVE' => $fs_id), 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
             } else {
@@ -944,14 +946,17 @@ class Perfil extends MY_Controller {
                 $es_inicial = $this->input->get('es_inicial', true);
                 //$es_inicial = $this->input->post('es_inicial', true);
                 $valorr_es_inicial = !empty($es_inicial) ? $es_inicial : $this->input->post('es_inicial', true);
-                $data['dir_tes']['EFPCS_FOR_INICIAL'] = intval($valorr_es_inicial);//intval($this->input->get('es_inicial', true)); //Tomamos tipo de formación
+                $data['dir_tes']['EFPCS_FOR_INICIAL'] = intval($valorr_es_inicial); //intval($this->input->get('es_inicial', true)); //Tomamos tipo de formación
             }
 
             $entidades_ = array(enum_ecg::ctipo_comprobante);
             $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
 
-            $condicion = ($data['dir_tes']['EFPCS_FOR_INICIAL'] == $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']) ? 'TIP_FORM_SALUD_CVE IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')' : 'TIP_FORM_SALUD_CVE NOT IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')'; //De acuerdo a tipo de formación mostramos opciones de tipo de formación
+            //Carga el ctipo_formación en salud
+            $condicion = ($data['dir_tes']['EFPCS_FOR_INICIAL'] == $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']) ?
+                    'TIP_FORM_SALUD_CVE IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')' : 'TIP_FORM_SALUD_CVE NOT IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')'; //De acuerdo a tipo de formación mostramos opciones de tipo de formación
             $data['catalogos']['ctipo_formacion_salud'] = dropdown_options($this->fm->get_tipo_formacion_salud(array('conditions' => $condicion)), 'TIP_FORM_SALUD_CVE', 'TIP_FORM_SALUD_NOMBRE');
+
 
             $data['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data, TRUE);
             $data['titulo_modal'] = $data['string_values']['title'];
@@ -963,18 +968,39 @@ class Perfil extends MY_Controller {
         }
     }
 
-    public function subtipo_formacion($identificador=null, $CSUBTIP_FORM_SALUD_CVE = null) {
+    public function subtipo_formacion($identificador = null, $CSUBTIP_FORM_SALUD_CVE = null) {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
             $this->load->model('Formacion_model', 'fm');
             $this->lang->load('interface');
             $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
             $data['dir_tes']['CSUBTIP_FORM_SALUD_CVE'] = $CSUBTIP_FORM_SALUD_CVE;
-
+            if ($identificador == $this->config->item('EFPCS_FOR_INICIAL')['LICENCIATURA']['id']) { //Si es igual que id de licenciatura, carga vista para nueva licenciatura 
+            $entidades_ = array(enum_ecg::ctipo_licenciatura);
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null);
+            echo $this->load->view('perfil/formacion/formacion_salud_tipo_licenciatura', $data, TRUE);
+            }else{
             $entidades_ = array(enum_ecg::csubtipo_formacion_salud);
             $condiciones_ = array(enum_ecg::csubtipo_formacion_salud => array('TIP_FORM_SALUD_CVE' => $identificador));
             $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
-
             echo $this->load->view('perfil/formacion/formacion_salud_tipo_formacion', $data, TRUE);
+                
+            }
+
+        } else {
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
+        }
+    }
+    public function licenciaturas_formacion($identificador = null) {
+        if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
+            $this->load->model('Formacion_model', 'fm');
+            $this->lang->load('interface');
+            $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
+            $data['dir_tes']['LICENCIATURA_CVE'] = $identificador;
+            $entidades_ = array(enum_ecg::licenciatura);
+            $condiciones_ = array(enum_ecg::licenciatura => array('TIP_LICENCIATURA_CVE' => $identificador));
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
+            echo $this->load->view('perfil/formacion/formacion_salud_licenciatura', $data, TRUE);
+
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
@@ -1218,7 +1244,11 @@ class Perfil extends MY_Controller {
                         //Todo lo de comprobante *********************************************************
                         $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
                         $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                        $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                        $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Actividad_docente, Enum_ecg::ctipo_comprobante);
+                        $conditions_comprobante = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
+                        $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+                        $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions_comprobante, true, $where_grup);
+
                         if (isset($data_formulario['comprobante']) AND ! empty($data_formulario['comprobante'])) {
                             $data_comprobante['idc'] = $this->seguridad->encrypt_base64($data_formulario['comprobante']);
                             $datos_pie['comprobantecve'] = $data_comprobante['idc'];
@@ -1237,7 +1267,7 @@ class Perfil extends MY_Controller {
                 }
 
                 $data = array(
-                    'titulo_modal' => 'Actividad docente',
+                    'titulo_modal' => $string_values['tl_titulo'],
                     'cuerpo_modal' => $this->load->view('perfil/actividad_docente/actividad_modal_tpl', $data_actividad, TRUE),
                     'pie_modal' => $this->load->view('perfil/actividad_docente/actividad_docente_pie', $datos_pie, true)
                 );
@@ -1304,8 +1334,13 @@ class Perfil extends MY_Controller {
                     $data_actividad_doc['string_values'] = $string_values;
                     //Todo lo de comprobante *******************************************
                     $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
+
                     $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                    $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                    $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Actividad_docente, Enum_ecg::ctipo_comprobante);
+                    $conditions_comprobante = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
+                    $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+                    $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions_comprobante, true, $where_grup);
+
                     $vista_comprobante['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
                     $data_actividad_doc['formulario_carga_comprobante'] = $this->load->view('perfil/actividad_docente/comprobante_actividad_docente', $vista_comprobante, TRUE);
                     //**** fi de comprobante *******************************************
@@ -1845,21 +1880,18 @@ class Perfil extends MY_Controller {
         }
     }
 
-    public function medio_divulgacion_por_tipo($tipo_divulgacion = null)
-    {
+    public function medio_divulgacion_por_tipo($tipo_divulgacion = null) {
         if ($this->input->is_ajax_request()) {
-            if (isset($tipo_divulgacion) && !empty($tipo_divulgacion) && $tipo_divulgacion >= 1 && $tipo_divulgacion <=3) {
+            if (isset($tipo_divulgacion) && !empty($tipo_divulgacion) && $tipo_divulgacion >= 1 && $tipo_divulgacion <= 3) {
                 $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
-                $data_investigacion['string_values'] = $string_values; 
-                $condiciones_ = array(enum_ecg::cmedio_divulgacion => array('tp_f_r_l ' => array((int)$tipo_divulgacion,4)));
-                $where_grup = array(Enum_ecg::cmedio_divulgacion=>'OR');
+                $data_investigacion['string_values'] = $string_values;
+                $condiciones_ = array(enum_ecg::cmedio_divulgacion => array('tp_f_r_l ' => array((int) $tipo_divulgacion, 4)));
+                $where_grup = array(Enum_ecg::cmedio_divulgacion => 'OR');
                 $entidades_ = array(enum_ecg::cmedio_divulgacion);
                 $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_, true, $where_grup);
                 echo $this->load->view('perfil/investigacion/investigacion_medio_divulgacion_input.php', $data_investigacion, TRUE); //Carga los div de modal                
             }
-
         }
-        
     }
 
     public function ajax_update_investigacion() {
@@ -1929,28 +1961,28 @@ class Perfil extends MY_Controller {
             //pr($data_divulgacion_type);
             $divulgacion_type = $data_divulgacion_type[0]['tp_f_r_l'];
 //            pr($array_comprobante);
-            /*if($divulgacion_type == 1){*/
+            /* if($divulgacion_type == 1){ */
             /*
-                TIPO_COMPROBANTE_CVE |TIP_COM_NOMBRE                         
-                ---------------------|---------------------------------------
-                1                    |Cédula                                 
-                2                    |Diploma                                
-                3                    |Certificado                            
-                4                    |Oficio                                 
-                5                    |Pliego de comision                     
-                6                    |Dictamen de beca                       
-                7                    |Carta                                  
-                8                    |Acta de examen                         
-                9                    |Constancia                             
-                10                   |Memorias                               
-                11                   |Portada de tesis y copia de acta de exa
-                12                   |Portada de tesis y acta de terminación 
-                13                   |Portada, datos de la editorial e índice
-                34                   |Editorial de Libro                     
-                33                   |Capítulo de libro                      
-                32                   |Artículo en revista                    
-                14                   |Portada y registro de derecho de autor 
-            */
+              TIPO_COMPROBANTE_CVE |TIP_COM_NOMBRE
+              ---------------------|---------------------------------------
+              1                    |Cédula
+              2                    |Diploma
+              3                    |Certificado
+              4                    |Oficio
+              5                    |Pliego de comision
+              6                    |Dictamen de beca
+              7                    |Carta
+              8                    |Acta de examen
+              9                    |Constancia
+              10                   |Memorias
+              11                   |Portada de tesis y copia de acta de exa
+              12                   |Portada de tesis y acta de terminación
+              13                   |Portada, datos de la editorial e índice
+              34                   |Editorial de Libro
+              33                   |Capítulo de libro
+              32                   |Artículo en revista
+              14                   |Portada y registro de derecho de autor
+             */
 
             switch ($divulgacion_type) {
                 case 2:
@@ -1958,87 +1990,85 @@ class Perfil extends MY_Controller {
                     if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante)) {
                         $data['bibliografia_libro'] = $array_comprobante['cita_publicada'];
                     }
-                    $comp_conditions_ids = array(34,33,32);
+                    $comp_conditions_ids = array(34, 33, 32);
                     //return $this->load->view('perfil/investigacion/bibliografia_libro', $data, TRUE);
-                    $vista_comprobante = $this->carga_vista_comprobante_foro($array_comprobante,$is_actualizacion,$comp_conditions_ids);
+                    $vista_comprobante = $this->carga_vista_comprobante_foro($array_comprobante, $is_actualizacion, $comp_conditions_ids);
                     $vista_div = $this->load->view('perfil/investigacion/bibliografia_libro', $data, TRUE);
-                    return $vista_div.$vista_comprobante;
+                    return $vista_div . $vista_comprobante;
                     break;
                 case 3:
                     $data['string_values'] = $this->lang->line('interface')['investigacion_docente'];
                     if ($is_actualizacion AND key_exists('cita_publicada', $array_comprobante)) {
                         $data['bibliografia_revista'] = $array_comprobante['cita_publicada'];
                     }
-                    $comp_conditions_ids = array(34,33,32);
+                    $comp_conditions_ids = array(34, 33, 32);
                     // return $this->load->view('perfil/investigacion/bibliografia_revista', $data, TRUE);
-                    $vista_comprobante = $this->carga_vista_comprobante_foro($array_comprobante,$is_actualizacion,$comp_conditions_ids);
+                    $vista_comprobante = $this->carga_vista_comprobante_foro($array_comprobante, $is_actualizacion, $comp_conditions_ids);
                     $vista_div = $this->load->view('perfil/investigacion/bibliografia_revista', $data, TRUE);
-                    return $vista_div.$vista_comprobante;
+                    return $vista_div . $vista_comprobante;
                     break;
                 case 1:
                     /*
-                    //Todo lo de comprobante *******************************************
-                    $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-                    $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                    $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                    if ($is_actualizacion) {
-                        if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
-//                        $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
-                            $data_comprobante['idc'] = $array_comprobante['idc'];
-                            $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
-                                'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
-                                'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
-                        }
-                    } else {
+                      //Todo lo de comprobante *******************************************
+                      $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
+                      $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+                      $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                      if ($is_actualizacion) {
+                      if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
+                      //                        $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
+                      $data_comprobante['idc'] = $array_comprobante['idc'];
+                      $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
+                      'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
+                      'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
+                      }
+                      } else {
 
-                        if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
-//                        $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
-                            $data_comprobante['idc'] = $array_comprobante['idc'];
-//                            pr($array_comprobante);
-                            $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
-                                'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
-                                'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
-                        }
-                    }
-                    //**** fi de comprobante *******************************************
-                    $data['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
-                    return $this->load->view('perfil/investigacion/comprobante_foro', $data, TRUE);*/
-                    $comp_conditions_ids = array(9,10);
+                      if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
+                      //                        $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
+                      $data_comprobante['idc'] = $array_comprobante['idc'];
+                      //                            pr($array_comprobante);
+                      $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
+                      'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
+                      'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
+                      }
+                      }
+                      //**** fi de comprobante *******************************************
+                      $data['vista_comprobante'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
+                      return $this->load->view('perfil/investigacion/comprobante_foro', $data, TRUE); */
+                    $comp_conditions_ids = array(9, 10);
 
-                    $vista_comprobante = $this->carga_vista_comprobante_foro($array_comprobante,$is_actualizacion,$comp_conditions_ids);
+                    $vista_comprobante = $this->carga_vista_comprobante_foro($array_comprobante, $is_actualizacion, $comp_conditions_ids);
                     return $vista_comprobante;
-                    
+
                 default :
                     return '';
-                    
             }
-            /*}*/
+            /* } */
             return '';
         }
     }
 
-    public function carga_vista_comprobante_foro($array_comprobante=array(), $is_actualizacion = FALSE, $comp_conditions_ids=null)
-    {
+    public function carga_vista_comprobante_foro($array_comprobante = array(), $is_actualizacion = FALSE, $comp_conditions_ids = null) {
         $this->lang->load('interface', 'spanish');
         $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
         $data_comprobante['catalogos'] = array();
         if (isset($comp_conditions_ids) && !empty($comp_conditions_ids) && is_array($comp_conditions_ids)) {
-                $condiciones_ = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $comp_conditions_ids));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
-                $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $condiciones_, true, $where_grup);
-        }else{
+            $condiciones_ = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $comp_conditions_ids));
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+            $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+            $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $condiciones_, true, $where_grup);
+        } else {
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
         }
-        
+
         if ($is_actualizacion) {
             if (!empty($array_comprobante) AND isset($array_comprobante['idc'])) {//si existe el id del comprobante
 //                        $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
                 $data_comprobante['idc'] = $array_comprobante['idc'];
                 $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
-                                'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
-                                'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
+                    'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
+                    'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
             }
         } else {
 
@@ -2047,8 +2077,8 @@ class Perfil extends MY_Controller {
                 $data_comprobante['idc'] = $array_comprobante['idc'];
 //                            pr($array_comprobante);
                 $data_comprobante['dir_tes'] = array('TIPO_COMPROBANTE_CVE' => $array_comprobante['tipo_comprobante'],
-                                'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
-                                'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
+                    'COM_NOMBRE' => isset($array_comprobante['text_comprobante']) ? $array_comprobante['text_comprobante'] : '',
+                    'COMPROBANTE_CVE' => isset($array_comprobante['comprobante_cve']) ? $array_comprobante['comprobante_cve'] : '');
             }
         }
         //**** fi de comprobante *******************************************
@@ -2344,11 +2374,11 @@ class Perfil extends MY_Controller {
             $datos_mat_edu = carga_catalogos_generales($entidades_, $datos_mat_edu, $condiciones_);
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-            /* inicia datos de obtencion de comprobantes*/
+            /* inicia datos de obtencion de comprobantes */
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Elaboracion_de_material_educativo, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
-            /* termina obtencion de comprobantes*/
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+            /* termina obtencion de comprobantes */
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -2392,11 +2422,11 @@ class Perfil extends MY_Controller {
             $data['string_values'] = $this->lang->line('interface')['general'];
             //$entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            /* inicia datos de obtencion de comprobantes*/
+            /* inicia datos de obtencion de comprobantes */
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Elaboracion_de_material_educativo, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
-            /* termina obtencion de comprobantes*/
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+            /* termina obtencion de comprobantes */
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -2547,14 +2577,14 @@ class Perfil extends MY_Controller {
 
             $data['string_values'] = $this->lang->line('interface')['general'];
             /*
-            $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-            $data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            */
-            /* inicia datos de obtencion de comprobantes*/
+              $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+              $data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+             */
+            /* inicia datos de obtencion de comprobantes */
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Elaboracion_de_material_educativo, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
-            /* termina obtencion de comprobantes*/
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+            /* termina obtencion de comprobantes */
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -2727,14 +2757,14 @@ class Perfil extends MY_Controller {
                     $data_comprobante['idc'] = $this->seguridad->encrypt_base64($datos_reg_mat_edu_validados['comprobante_cve']);
                 }
                 /*
-                $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                */
-                /* inicia datos de obtencion de comprobantes*/
+                  $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+                  $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                 */
+                /* inicia datos de obtencion de comprobantes */
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Elaboracion_de_material_educativo, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
-                /* termina obtencion de comprobantes*/
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+                /* termina obtencion de comprobantes */
                 $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
                 //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
                 $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -2897,14 +2927,14 @@ class Perfil extends MY_Controller {
                 //Todo lo de comprobante *******************************************
                 $data['string_values'] = $this->lang->line('interface')['general'];
                 /*
-                $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                $data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                */
-                /* inicia datos de obtencion de comprobantes*/
+                  $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+                  $data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                 */
+                /* inicia datos de obtencion de comprobantes */
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Elaboracion_de_material_educativo, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
-                /* termina obtencion de comprobantes*/
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+                /* termina obtencion de comprobantes */
                 $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
                 //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
                 $data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -2970,7 +3000,7 @@ class Perfil extends MY_Controller {
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Becas, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
             $data_becas['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
@@ -2999,10 +3029,10 @@ class Perfil extends MY_Controller {
             $datos_pie['string_values'] = $string_values;
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-            
+
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_laboral, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -3097,13 +3127,13 @@ class Perfil extends MY_Controller {
 
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
-            
+
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-            /*$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            */
+            /* $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+             */
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Becas, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
             if (isset($datos_post['idc'])) {//si existe el id del comprobante
@@ -3179,12 +3209,12 @@ class Perfil extends MY_Controller {
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
             /*
-            $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-            $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            */
+              $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+              $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+             */
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_laboral, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -3370,13 +3400,13 @@ class Perfil extends MY_Controller {
                 if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
                     $data_comprobante['idc'] = $datos_post['comprobantecve']; //Carga id del comprobante
                 }
-                
+
                 $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                /*$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                */
+                /* $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                 */
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Becas, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
                 //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
                 $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
                 $data_becas['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data_comprobante, TRUE);
@@ -3421,12 +3451,12 @@ class Perfil extends MY_Controller {
                     $data_comprobante['idc'] = $datos_post['comprobantecve']; //Carga id del comprobante
                 }
                 /*
-                $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-                $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-                */
+                  $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+                  $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+                 */
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_laboral, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-                $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+                $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
                 $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
                 //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
                 $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -3496,11 +3526,11 @@ class Perfil extends MY_Controller {
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-            /*$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            */
+            /* $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+             */
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Becas, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
             if (isset($datos_post['idc'])) {//si existe el id del comprobante
@@ -3563,18 +3593,18 @@ class Perfil extends MY_Controller {
                 }
             }//*************************Termina bloque de insertar nueva beca
             /*
-            $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-            $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            */
+              $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+              $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+             */
             //Todo lo de comprobante *******************************************
             $data_comprobante['string_values'] = $this->lang->line('interface')['general'];
             /*
-            $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
-            $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            */
+              $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
+              $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
+             */
             $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_laboral, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
-            $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR'); 
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
             $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
@@ -3658,7 +3688,7 @@ class Perfil extends MY_Controller {
                     } else {
                         //Asigna estado de incompleto 
                         $this->session->set_userdata(array('datosvalidadoactual' => array('est_val' => Enum_ev::Inicio)));
-                        
+
                         $data['mensaje'] = $string_values['msj_no_completo_envio_validacion_censo'];
                         $this->load->view('perfil/enviar_validacion/mensajes_info', $data, FALSE);
                     }

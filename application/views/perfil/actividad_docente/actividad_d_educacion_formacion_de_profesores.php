@@ -48,9 +48,9 @@
                 <div class="panel-body">
                             <div class='row'>
                                 <div class="col-md-6">
-                                    <label for='Seleccione tipo de curso' class="control-label">
+                                    <label for='lbl_tipo_formacion' class="control-label">
                                          <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_tipo_curso']; ?>
+                                         <?php echo $string_values['lbl_tipo_formacion']; ?>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
@@ -59,12 +59,12 @@
                                         <?php 
                                             echo $this->form_complete->create_element(array('id' => 'ctipo_curso', 'type' => 'dropdown', 
                                                 'options' => $ctipo_curso, 
-                                                'first' => array('' => $string_values['drop_tipo_curso']), 
+                                                'first' => array('' => $string_values['drop_tipo_formacion']), 
                                                 'value' => isset($ctipo_curso_cve)? $ctipo_curso_cve: '',
                                                 'attributes' => array('name' => 'categoria', 'class' => 'form-control', 
                                                 'placeholder' => 'Categoría', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
                                                 'onchange' =>  "cargar_curso()",
-                                                'title' => $string_values['lbl_tipo_curso'] ))); 
+                                                'title' => $string_values['lbl_tipo_formacion'] ))); 
                                         ?>
                                    </div>
                                    <?php   echo form_error_format('ctipo_curso'); ?>
@@ -145,27 +145,6 @@
                             </div>
                             <div class='row'>
                                 <div class="col-md-6">
-                                    <label for='lbl_tipo_formacion_profesional' class="control-label">
-                                         <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_tipo_formacion_profesional']; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-user"> </span>
-                                        </span>
-                                        <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'ctipo_formacion_profesional', 'type' => 'dropdown', 
-                                                'options' => $ctipo_formacion_profesional, 
-                                                'first' => array('' => $string_values['drop_tipo_formacion_profesional']), 
-                                                'value' => (isset($ctipo_formacion_profesional_cve))? $ctipo_formacion_profesional_cve : '',
-                                                'attributes' => array('name' => 'drop_tipo_formacion_profesional_name', 'class' => 'form-control', 
-                                                'placeholder' => $string_values['lbl_tipo_formacion_profesional'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_tipo_formacion_profesional'] ))); 
-                                        ?>
-                                   </div>
-                                   <?php   echo form_error_format('ctipo_formacion_profesional'); ?>
-                                </div>
-                                <div class="col-md-6">
                                      <label for='lbl_rol_desempenia' class="control-label">
                                          <b class="rojo">*</b>
                                          <?php echo $string_values['lbl_rol_desempenia']; ?>
@@ -185,6 +164,27 @@
                                         ?>
                                    </div>
                                    <?php   echo form_error_format('crol_desempenia'); ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for='lbl_modalidad' class="control-label">
+                                         <b class="rojo">*</b>
+                                         <?php echo $string_values['lbl_modalidad']; ?>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-user"> </span>
+                                        </span>
+                                        <?php 
+                                            echo $this->form_complete->create_element(array('id' => 'cmodalidad', 'type' => 'dropdown', 
+                                                'options' => $cmodalidad, 
+                                                'first' => array('' => $string_values['drop_modalidad']), 
+                                                'value' => (isset($cmodalidad_cve))? $cmodalidad_cve : '',
+                                                'attributes' => array('name' => 'modalidad_name', 'class' => 'form-control', 
+                                                'placeholder' => $string_values['lbl_modalidad'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
+                                                'title' => $string_values['lbl_modalidad'] ))); 
+                                        ?>
+                                   </div>
+                                   <?php   echo form_error_format('cmodalidad'); ?>
                                 </div>
                             </div>
                             <div class='row'>    
@@ -215,27 +215,6 @@
                                         ?>
                                         </div>
                                         <?php echo form_error_format('actividad_anios_dedicados_docencia'); ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for='lbl_modalidad' class="control-label">
-                                         <b class="rojo">*</b>
-                                         <?php echo $string_values['lbl_modalidad']; ?>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-user"> </span>
-                                        </span>
-                                        <?php 
-                                            echo $this->form_complete->create_element(array('id' => 'cmodalidad', 'type' => 'dropdown', 
-                                                'options' => $cmodalidad, 
-                                                'first' => array('' => $string_values['drop_modalidad']), 
-                                                'value' => (isset($cmodalidad_cve))? $cmodalidad_cve : '',
-                                                'attributes' => array('name' => 'modalidad_name', 'class' => 'form-control', 
-                                                'placeholder' => $string_values['lbl_modalidad'], 'data-toggle' => 'tooltip', 'data-placement' => 'top', 
-                                                'title' => $string_values['lbl_modalidad'] ))); 
-                                        ?>
-                                   </div>
-                                   <?php   echo form_error_format('cmodalidad'); ?>
                                 </div>
                             </div>
                         <br>

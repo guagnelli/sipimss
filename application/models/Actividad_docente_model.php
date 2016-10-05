@@ -222,7 +222,7 @@ class Actividad_docente_model extends CI_Model {
             $select_emp_esp_medica .= " AND IS_VALIDO_PROFESIONALIZACION = ".$actividad_docente_general_cve["validations"]["IS_VALIDO_PROFESIONALIZACION"];
         }
         $query = $this->db->query($select_emp_actividad_docente . " UNION " . $select_emp_educacion_distancia . " UNION " . $select_emp_esp_medica);
-//        pr($this->db->last_query());
+
         return $query->result_array();
     }
 

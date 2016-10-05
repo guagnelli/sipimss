@@ -40,16 +40,16 @@ class Evaluacion_curricular_validar extends MY_Controller {
     /**
      * 
      * @author Leas
-     * Fecha creaciÃ³n28072016
+     * Fecha creaciÃƒÂ³n28072016
      */
     public function index() {
 //        pr($this->session->userdata('rol_seleccionado'));
         $this->lang->load('interface');
         $string_values = $this->lang->line('interface')['evaluacion_curricular_validar'];
         $data = array();
-        $this->delete_datos_validado(); //Elimina los datos de empleado validado, si se encuentran los datos almacenados en la variable de sesiÃ³n
+        $this->delete_datos_validado(); //Elimina los datos de empleado validado, si se encuentran los datos almacenados en la variable de sesiÃƒÂ³n
         $data['string_values'] = $string_values;
-        $data['order_columns'] = array('ems.EMP_MATRICULA' => 'MatrÃ­cula', 'ems.EMP_NOMBRE' => 'Nombre', 'ems.CATEGORIA_CVE' => 'CategorÃ­a');
+        $data['order_columns'] = array('ems.EMP_MATRICULA' => 'MatrÃƒÂ­cula', 'ems.EMP_NOMBRE' => 'Nombre', 'ems.CATEGORIA_CVE' => 'CategorÃƒÂ­a');
 //        $empleado_cve = $this->session->userdata('idempleado');
         $rol_usuario = $this->session->userdata('rol_seleccionado_cve');
 
@@ -82,16 +82,16 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $this->session->set_userdata('datos_validador', $datos_validador);
 
             $array_catalogos[] = enum_ecg::cestado_validacion;
-            $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cestado_validacion => 'EST_VALIDACION_CVE')); //Carga el catÃ¡logo de ejercicio predominante
+            $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cestado_validacion => 'EST_VALIDACION_CVE')); //Carga el catÃƒÂ¡logo de ejercicio predominante
             $main_contet = $this->load->view('evaluacion_currucular_doc/evaluacion_curricular_validar_tpl', $data, true);
 
             /* carga buscador */
 //            $result = get_is_valida_validacion_censo(12, 3, 8);
         } else {//No existe el validador. Mostrar leyenda de que no es un valiador
-            $main_contet = '<span>No se encuentra¡ asignado el validador</span>';
+            $main_contet = '<span>No se encuentraÂ¡ asignado el validador</span>';
         }
         $this->template->multiligual = TRUE;
-        $this->template->setTitle("Evaluación");
+        $this->template->setTitle("EvaluaciÃ³n");
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_contet);
         $this->template->getTemplate(FALSE, 'template/sipimss/index.tpl.php');
@@ -99,7 +99,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
     }
 
     public function data_buscar_docentes_validar_evaluacion_curr($current_row = null) {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             if (!is_null($this->input->post())) {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['evaluacion_curricular_validar'];
@@ -114,8 +114,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $filtros['delegacion_cve'] = $this->session->userdata('delegacion_cve');
                 }
                 $resutlado = $this->ecvm->get_buscar_docentes_validar_evaluacion_c($filtros);
-//                $resutlado['result'][] = $resutlado['result'][0]; //de prueba agrga mÃ¡s registros
-//                $resutlado['result'][] = $resutlado['result'][0]; //de prueba agrga mÃ¡s registros
+//                $resutlado['result'][] = $resutlado['result'][0]; //de prueba agrga mÃƒÂ¡s registros
+//                $resutlado['result'][] = $resutlado['result'][0]; //de prueba agrga mÃƒÂ¡s registros
 //                pr($resutlado['result']);
 //                pr($resutlado);
                 $data['string_values'] = $string_values;
@@ -141,8 +141,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
     private function listado_resultado_unidades($data, $form) {
         $data['controller'] = 'evaluacion_curricular_validar';
         $data['action'] = 'data_buscar_docentes_validar_evaluacion_curr';
-        $pagination = $this->template->pagination_data($data); //Crear mensaje y links de paginaciÃ³n
-        //$pagination = $this->template->pagination_data_buscador_asignar_validador($data); //Crear mensaje y links de paginaciÃ³n
+        $pagination = $this->template->pagination_data($data); //Crear mensaje y links de paginaciÃƒÂ³n
+        //$pagination = $this->template->pagination_data_buscador_asignar_validador($data); //Crear mensaje y links de paginaciÃƒÂ³n
         $links = "<div class='col-sm-5 dataTables_info' style='line-height: 50px;'>" . $pagination['total'] . "</div>
                     <div class='col-sm-7 text-right'>" . $pagination['links'] . "</div>";
         $datos['lista_docentes_validar'] = $data['lista_docentes_validar'];
@@ -157,7 +157,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 </script>';
     }
 
-    public function cargar_bloques_informaciÃ³n_docente() {
+    public function cargar_bloques_informaciÃƒÂ³n_docente() {
         
     }
 
@@ -166,7 +166,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
     /*     * **********Inicio de carga perfil empleado validacion *********** */
 
     /**
-     * Elimina los datos o informaciÃ³n del usuario u empleado a validar
+     * Elimina los datos o informaciÃƒÂ³n del usuario u empleado a validar
      */
     private function delete_datos_validado() {
         if (!is_null($this->session->userdata('datosvalidadoactual'))) {
@@ -187,7 +187,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         if ($this->input->is_ajax_request()) {
 //            if ($this->input->post()) {
 //                $datos_post = $this->input->post(null, TRUE);
-            $this->delete_datos_validado(); //Elimina los datos de empleado validado, si se encuentran los datos almacenados en la variable de sesiÃ³n
+            $this->delete_datos_validado(); //Elimina los datos de empleado validado, si se encuentran los datos almacenados en la variable de sesiÃƒÂ³n
 //            }
         } else {
             redirect(site_url());
@@ -226,46 +226,59 @@ class Evaluacion_curricular_validar extends MY_Controller {
         if (is_null($solicitud_cve) OR is_null($empleado_cve)) {
             return array();
         }
-        $array_result = array();
+        $actividad_curso_validado = array();
         //Obtener todos los registros almacenados en actividades del censo, docentes
         $this->load->model('Expediente_model', 'exp'); //Modelo clase que contiene todos los datos de las secciones
         $info_docente = $this->exp->getAll($empleado_cve, true); //Resultado
-        $propiedades = $info_docente['cfg_actividad'];
+        pr($info_docente);
+        exit();
         $emp_bloques_seccion = $info_docente['bloques'];
         $acro_b = 'bloque_';
         $acro_s = 'seccion_';
+        $datos_curso = $info_docente['cfg_actividad'];
+        $textos = $info_docente['string_value'];
         //Obtiene
         $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve);
-        foreach ($cursos_s_evaluar as $cursos) {//Recorre los cursos solicitados para evaluación y filtrar
+        foreach ($cursos_s_evaluar as $cursos) {//Recorre los cursos solicitados para evaluaciÃ³n y filtrar
             $cve = $cursos['cursos_evaluacion_cve'];
             $bloque = $cursos['bloque_seccion'];
             $seccion = $cursos['seccion_cve'];
             $activida_cve = $cursos['curso_actividad_cve'];
-            if (!isset($array_result[$bloque])) {//Verifica existencia del bloque en el array de resultado
-                $array_result[$bloque] = array(); //Agrega el dato
+            if (!isset($actividad_curso_validado[$bloque])) {//Verifica existencia del bloque en el array de resultado
+                $actividad_curso_validado[$bloque] = array(); //Agrega el dato
             }
             if (isset($emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion])) {
-                $array_result[$bloque] = $emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion];
+                $tmp = $emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion];
+                $actividad_curso_validado[$bloque] = $tmp;
             }
+            $datos_tabla['acronimo'] = $value['acronimo'];
+            $datos_tabla['datos_modulo'] = $array_datos[$value['acronimo']];
+            $datos_tabla['pk'] = $value['pk'];
+            $datos_tabla['ver_datos'] = $value['ver_datos'];
+            $datos_tabla['curso'] = $value['curso'];
+            $datos_tabla['tipo_curso'] = $value['tipo_curso'];
+            $controlador['ruta'] = $prop['seccion'];
+            $controlador['ruta_padre'] = $prop['controlador_validacion'];
+            $controlador['nombre_modulo'] = $datos_tabla['secciones']['lbl_' . $value['acronimo'] . '_titulo'];
+            $controlador['tabla'] = $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/tab_gen_cursos', $datos_tabla, TRUE);
+            $result_array[] = $controlador;
+            
         }
 
 //        pr($emp_bloques_seccion);
-        pr($array_result);
+        pr($actividad_curso_validado);
 //        exit();
 
 
-        $info_docente['cfg_actividad'];
-        $meta_datos_bloques = $info_docente['cfg_actividad'];
-        $datos_bloques = $info_docente['bloques'];
-        $textos = $info_docente['string_value'];
 
-        $secciones = $this->config->item('secciones_model');
         $result_array = array();
         $controlador_validacion = 'controlador_validacion';
+//        pr($actividad_curso_validado);
+        pr($info_docente);
 //        pr($string_text);
-        foreach ($array_result as $key => $value) {
+        foreach ($actividad_curso_validado as $key => $value) {
 //            pr($value);
-            if (isset($array_datos[$value['acronimo']])) {//Si existe registro alguno, lo crea
+            if (isset($datos_curso[$key])) {//Si existe registro alguno, lo crea
                 $prop = $this->config->item('secciones_cont_val_solicitud_eval')[$value['acronimo']];
                 if ($prop['isActivo']) {
                     $datos_tabla['acronimo'] = $value['acronimo'];
@@ -298,30 +311,30 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $data["string_values"] = $interface['evaluacion_curricular_validar'];
                 $data_post = $this->input->post(null, true); //Obtenemos el post o los valores
                 $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
-//                $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generÃ© el menÃº y cargue los datos de perfil
+//                $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generÃƒÂ© el menÃƒÂº y cargue los datos de perfil
 //                pr($array_menu);
 //                $data['array_menu'] = $array_menu;
                 $datos_validacion = array();
                 if (!empty($data_post['empcve'])) {
-                    $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($data_post['empcve']); //Identificador de la comisiÃ³n
+                    $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($data_post['empcve']); //Identificador de la comisiÃƒÂ³n
                 }
                 if (!empty($data_post['matricula'])) {
-                    $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($data_post['matricula']); //Identificador de la comisiÃ³n
+                    $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($data_post['matricula']); //Identificador de la comisiÃƒÂ³n
                 }
                 if (!empty($data_post['estval'])) {
-                    $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($data_post['estval']); //Identificador de la comisiÃ³n
+                    $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($data_post['estval']); //Identificador de la comisiÃƒÂ³n
                 }
                 if (!empty($data_post['histvalcve'])) {
-                    $datos_validacion['hist_validacion_cve'] = $this->seguridad->decrypt_base64($data_post['histvalcve']); //Identificador de la comisiÃ³n
+                    $datos_validacion['hist_validacion_cve'] = $this->seguridad->decrypt_base64($data_post['histvalcve']); //Identificador de la comisiÃƒÂ³n
                 }
                 if (!empty($data_post['solicitud_cve'])) {
-                    $datos_validacion['solicitud_cve'] = $this->seguridad->decrypt_base64($data_post['solicitud_cve']); //Identificador de la comisiÃ³n
+                    $datos_validacion['solicitud_cve'] = $this->seguridad->decrypt_base64($data_post['solicitud_cve']); //Identificador de la comisiÃƒÂ³n
                 }
                 if (!empty($data_post['convocatoria_cve'])) {
-                    $datos_validacion['ADMIN_VALIDADOR_CVE'] = $this->seguridad->decrypt_base64($data_post['convocatoria_cve']); //Identificador de la comisiÃ³n
+                    $datos_validacion['ADMIN_VALIDADOR_CVE'] = $this->seguridad->decrypt_base64($data_post['convocatoria_cve']); //Identificador de la comisiÃƒÂ³n
                 }
                 if (!empty($data_post['usuario_cve'])) {
-                    $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($data_post['usuario_cve']); //Identificador de la comisiÃ³n
+                    $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($data_post['usuario_cve']); //Identificador de la comisiÃƒÂ³n
                 }
 
                 //*****Obtiene el estado de la historia 
@@ -333,20 +346,20 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $parametros_gen_boton['tipo_validador_rol'] = $datos_validador['ROL_CVE'];
                 $parametros_gen_boton['delegacion_cve'] = $datos_validador['DELEGACION_CVE'];
 //                pr($datos_validador);
-                $data['botones_validador'] = genera_botones_estado_validacion_evaluacion($parametros_gen_boton); //Genera botones para validar según el estado actual de la validación 
+                $data['botones_validador'] = genera_botones_estado_validacion_evaluacion($parametros_gen_boton); //Genera botones para validar segÃºn el estado actual de la validaciÃ³n 
 //                $pie_botones_validacion = $this->load->view('evaluacion_currucular_doc/valida_docente/opciones_validacion_pie', $botones, true);
 //                pr($info_docente);
                 $string_text_secciones['secciones'] = $interface['secciones'];
                 $string_text_secciones['string_values'] = $data["string_values"];
-//                $info_docente['actividades']['ig'] = $info_docente['empleado']; //Agrega datos información general del docente
+//                $info_docente['actividades']['ig'] = $info_docente['empleado']; //Agrega datos informaciÃ³n general del docente
 //                pr($info_docente);
 //                exit();
                 $data['array_menu'] = $this->obtener_secciones_evaluacion($datos_validacion['empleado_cve'], $datos_validacion['solicitud_cve']);
-                $data['string_value'] = $info_docente['string_value']; //Agrega datos de información del docente
-                $data['empleado'] = $info_docente['empleado']; //Agrega datos de información del docente
-                $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la informaciÃ³n del usuario al que se va a validar
+                $data['string_value'] = $info_docente['string_value']; //Agrega datos de informaciÃ³n del docente
+                $data['empleado'] = $info_docente['empleado']; //Agrega datos de informaciÃ³n del docente
+                $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la informaciÃƒÂ³n del usuario al que se va a validar
 //                $this->ecvm->get_last_hist_validacion_evaluacion();
-                //Manda el identificador de la delegaciÃ³n del usuario
+                //Manda el identificador de la delegaciÃƒÂ³n del usuario
 //                pr($this->session->userdata());
                 echo $this->load->view('evaluacion_currucular_doc/index', $data, true);
 //                echo $this->load->view('evaluacion_currucular_doc/index', $datosPerfil, true);
@@ -425,7 +438,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 //            $data_pie['string_values'] = $string_values;
             $tmp_validado['estado_actual'] = $this->obtener_estado_docente();
             $tmp_validado['tipo_validador_rol'] = $this->obtener_rol_usuario();
-            //Obtiene el historial completo de la validaciÃ³n del docente segÃºn la convocatorÃ­a
+            //Obtiene el historial completo de la validaciÃƒÂ³n del docente segÃƒÂºn la convocatorÃƒÂ­a
             $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($this->obtener_id_empleado(), $this->obtener_convocatoria());
             $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
             $pie_pag = $this->load->view('validador_censo/valida_docente/opciones_validacion_pie', $data_pie, TRUE);
@@ -469,8 +482,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
     /**
      * @author LEAS
-     * FunciÃ³n que cambia de estado n1 a en revisiÃ³n, segÃºn el validador que se encuentrÃ¡ haciendo la revisiÃ³n
-     * @return type 1 = cambio a revisiÃ³n satisfactoriamente; 0= fallo en la transiciÃ³n  
+     * FunciÃƒÂ³n que cambia de estado n1 a en revisiÃƒÂ³n, segÃƒÂºn el validador que se encuentrÃƒÂ¡ haciendo la revisiÃƒÂ³n
+     * @return type 1 = cambio a revisiÃƒÂ³n satisfactoriamente; 0= fallo en la transiciÃƒÂ³n  
      */
     private function cambiar_estado_revision_validador() {
         $datos_validador = $this->session->userdata('datos_validador');
@@ -511,24 +524,24 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $cve_hist_actual['VALIDACION_CVE'] = $datos_empleado_validar['validacion_cve'];
         $parametro_hist_actual_mod['IS_ACTUAL'] = 0;
 
-        //EfectÃºa la actualizaciÃ³n del nuevo estado
+        //EfectÃƒÂºa la actualizaciÃƒÂ³n del nuevo estado
         $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual);
         if (!empty($result_cam_estado)) {
             $parametro_hist_actual_mod['VALIDACION_CVE'] = $cve_hist_actual['VALIDACION_CVE'];
-            //Cambio datos variable sesiÃ³n "datosvalidadoactual" por los nuevos valores
+            //Cambio datos variable sesiÃƒÂ³n "datosvalidadoactual" por los nuevos valores
             $datos_empleado_validar['validador_cve'] = $result_cam_estado['VALIDADOR_CVE']; //Asigna el id del validador actual
             $datos_empleado_validar['validacion_cve'] = $result_cam_estado['VALIDACION_CVE']; //Asigna nuevo id de la validacion historia
             $datos_empleado_validar['est_val'] = $result_cam_estado['VAL_ESTADO_CVE']; //Asigna nuevo estado
-            $this->session->set_userdata('datosvalidadoactual', $datos_empleado_validar); //Asigna datos nuevos datos del validado a la variable de sesiÃ³n 
+            $this->session->set_userdata('datosvalidadoactual', $datos_empleado_validar); //Asigna datos nuevos datos del validado a la variable de sesiÃƒÂ³n 
             //Registra la bitacora
-            //ActualizaciÃ³n 
+            //ActualizaciÃƒÂ³n 
             $array_datos_entidad['hist_validacion'] = $parametro_hist_actual_mod; //Pertenece a bitacora
             $array_operacion_id_entidades['hist_validacion'] = array('update' => $parametro_hist_actual_mod['VALIDACION_CVE']); //Pertenece a bitacora 
             //Insersion nueva
             $array_datos_entidad['hist_validacion'] = $result_cam_estado; //Pertenece a bitacora
             $array_operacion_id_entidades['hist_validacion'] = array('insert' => $result_cam_estado['VALIDACION_CVE']); //Pertenece a bitacora 
             $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-            $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+            $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
             //Datos de bitacora el registro del usuario
             registro_bitacora($this->session->userdata('identificador'), null, $json_datos_entidad, null, $json_registro_bitacora, null);
             return 1;
@@ -544,21 +557,21 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['validador_censo'];
 
-                $estado_cambio_cve = $this->seguridad->decrypt_base64($datos_post['estado_cambio_cve']); //Identifica si es un tipo de validar, enviar a correccion o en revisiÃ³n el estado
-                $estado_a_validar = $this->config->item('estados_val_censo')[$estado_cambio_cve]['color_status']; //Verifica que tipo de estado es, para activar validacion de comentario obligatorio (caso de correcciÃ³n)
+                $estado_cambio_cve = $this->seguridad->decrypt_base64($datos_post['estado_cambio_cve']); //Identifica si es un tipo de validar, enviar a correccion o en revisiÃƒÂ³n el estado
+                $estado_a_validar = $this->config->item('estados_val_censo')[$estado_cambio_cve]['color_status']; //Verifica que tipo de estado es, para activar validacion de comentario obligatorio (caso de correcciÃƒÂ³n)
 
                 $validation = array();
-                $pasa_validacion = TRUE; //Si no requiere validaciÃ³n, estÃ¡ variable abre la puerta que no verifique validaciÃ³n
+                $pasa_validacion = TRUE; //Si no requiere validaciÃƒÂ³n, estÃƒÂ¡ variable abre la puerta que no verifique validaciÃƒÂ³n
                 if ($estado_a_validar === 'CORRECCION') {//Aplica validacion de mensaje obligatorio
                     $this->config->load('form_validation'); //Cargar archivo con validaciones
                     $validations_array = $this->config->item('validacion_docente'); //Obtener validaciones de archivo general
-                    //Busca validaciones para el envÃ­o a correcciÃ³n
+                    //Busca validaciones para el envÃƒÂ­o a correcciÃƒÂ³n
                     foreach ($datos_post as $key => $value) {
                         if (key_exists($key, $validations_array)) {
                             $validation[] = $validations_array[$key];
                         }
                     }
-                    $this->form_validation->set_rules($validation); //AÃ±adir validaciones
+                    $this->form_validation->set_rules($validation); //AÃƒÂ±adir validaciones
                     $pasa_validacion = FALSE;
                 }
 
@@ -568,7 +581,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $datos_empleado_validar = $this->session->userdata('datosvalidadoactual');
                     $result_cambio = $this->cambio_estado_validacion_censo($estado_cambio_cve, $datos_post['comentario_justificacion'], $datos_validador['VALIDADOR_CVE'], $datos_empleado_validar);
 
-                    //EfectÃºa la actualizaciÃ³n del nuevo estado
+                    //EfectÃƒÂºa la actualizaciÃƒÂ³n del nuevo estado
                     if ($result_cambio === 1) {
                         $buscar_mensaje = ($estado_a_validar === 'VALIDO') ? 'save_estado_cambio_envio' : 'save_estado_cambio_correccion';
                         $data['error'] = $string_values[$buscar_mensaje]; //
@@ -610,11 +623,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $string_values = $this->lang->line('interface')['perfil'];
         $id_usuario = $this->obtener_id_usuario();
 
-        /* Esto es de informaciÃ³n general */
+        /* Esto es de informaciÃƒÂ³n general */
         if ($this->input->post()) {
             $this->config->load('form_validation'); //Cargar archivo con validaciones
             $validations = $this->config->item('informacion_general'); //Obtener validaciones de archivo general
-            $this->form_validation->set_rules($validations); //AÃ±adir validaciones
+            $this->form_validation->set_rules($validations); //AÃƒÂ±adir validaciones
             if ($this->form_validation->run()) {
                 //pr("Validating-data, Saving-data");
                 //pr($this->input->post());
@@ -672,7 +685,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             return $this->load->view('validador_censo/informacionGeneral', $datosPerfil, $type);
         }
 
-        $this->load->view('validador_censo/informacionGeneral', $datosPerfil, $type); //Valores que muestrÃ¡n la lista  
+        $this->load->view('validador_censo/informacionGeneral', $datosPerfil, $type); //Valores que muestrÃƒÂ¡n la lista  
     }
 
     /**
@@ -713,20 +726,20 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $data['comisiones'][$ctc] = $this->ca->get_comision_academica(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'TIP_COMISION_CVE' => $ctc), 'order' => 'EC_ANIO desc', 'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE, TIP_CUR_NOMBRE', 'validation' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE=' . $validacion_cve_session)));
             }
             //pr($data);
-            echo $this->load->view('validador_censo/comision_academica/comision_academica.php', $data, true); //Valores que muestrÃ¡n la lista
+            echo $this->load->view('validador_censo/comision_academica/comision_academica.php', $data, true); //Valores que muestrÃƒÂ¡n la lista
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     /* public function comision_academica_formulario($tipo_comision = null, $identificador = null) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Comision_academica_model', 'ca');
       $this->lang->load('interface');
       $data['tipo_comision'] = $tipo_comision;
       $data['identificador'] = $identificador;
-      $tc_id = $this->seguridad->decrypt_base64($tipo_comision); //Identificador del tipo de comisiÃ³n
-      $ca_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+      $tc_id = $this->seguridad->decrypt_base64($tipo_comision); //Identificador del tipo de comisiÃƒÂ³n
+      $ca_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
       $data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
       $data['string_values'] = array_merge($this->lang->line('interface')['comision_academica'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
 
@@ -734,13 +747,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
       $data['catalogos'] = $config['catalogos'];
       $data['mostrar_hora_fecha_duracion'] = 0;
 
-      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃ³n por mÃ©todo post
-      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃ­an para generar la consulta
-      $data['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_formulario, 'duracion'); //MuestrÃ¡ validaciones de hora y fecha de inicio y termino segÃºn la opciÃ³n de duraciÃ³n
+      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃƒÂ³n por mÃƒÂ©todo post
+      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃƒÂ­an para generar la consulta
+      $data['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_formulario, 'duracion'); //MuestrÃƒÂ¡ validaciones de hora y fecha de inicio y termino segÃƒÂºn la opciÃƒÂ³n de duraciÃƒÂ³n
       //pr($datos_formulario);
       $this->config->load('form_validation'); //Cargar archivo con validaciones
       $validations = $this->config->item($config['validacion']); //Obtener validaciones de archivo general
-      $this->form_validation->set_rules($validations); //AÃ±adir validaciones
+      $this->form_validation->set_rules($validations); //AÃƒÂ±adir validaciones
       if (isset($datos_formulario['duracion']) && $datos_formulario['duracion'] == "fecha_dedicadas") { //Agregar validaciones
       $datos_formulario['hora_dedicadas'] = null;
       $this->form_validation->set_rules('fecha_inicio_pick', 'Fecha inicio', 'trim|required|validate_date_dd_mm_yyyy');
@@ -749,7 +762,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
       if (isset($datos_formulario['duracion'])) {
       $datos_formulario['fecha_inicio_pick'] = null;
       $datos_formulario['fecha_fin_pick'] = null;
-      $this->form_validation->set_rules('hora_dedicadas', 'DuraciÃ³n', 'trim|required|integer');
+      $this->form_validation->set_rules('hora_dedicadas', 'DuraciÃƒÂ³n', 'trim|required|integer');
       }
       }
       if (isset($datos_formulario['tipo_curso']) &&
@@ -767,7 +780,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
       if (empty($data['identificador'])) { //Insertar
       $resultado_almacenado = $this->ca->insert_comision($data_com);
       $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
-      } else { //ActualizaciÃ³n
+      } else { //ActualizaciÃƒÂ³n
       $resultado_almacenado = $this->ca->update_comision($ca_id, $data_com);
       }
       //////Inicio actualizar comprobante
@@ -794,12 +807,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
       echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       }
 
       public function curso($tipo_curso, $CURSO_CVE = null) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Comision_academica_model', 'ca');
       $this->lang->load('interface');
       $data['string_values'] = array_merge($this->lang->line('interface')['comision_academica'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
@@ -811,12 +824,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
       echo $this->load->view('validador_censo/comision_academica/comision_academica_curso', $data, TRUE);
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       } */
 
     public function curso_actividad_docente() {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             if ($this->input->post()) {
                 $datos_post = $datos_formulario = $this->input->post(null, true);
 //                pr($datos_post);
@@ -826,7 +839,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 }
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -872,9 +885,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
     }
 
     /////////////////////////Fin comisiones academicas
-    ////////////////////////Inicio DirecciÃ³n de tesis ////////////////////////
+    ////////////////////////Inicio DirecciÃƒÂ³n de tesis ////////////////////////
     public function seccion_direccion_tesis() {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             $this->lang->load('interface');
             $data['string_values'] = array_merge($this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general']);
             $validacion_cve_session = $this->obtener_id_validacion();
@@ -882,29 +895,29 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $this->load->model('Direccion_tesis_model', 'dt');
             $data['lista_direccion'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'TIP_COMISION_CVE' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']), 'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE', 'order' => 'EC_ANIO desc', 'validation' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE=' . $validacion_cve_session)));
             //pr($data);
-            echo $this->load->view('validador_censo/direccionTesis', $data, true); //Valores que muestrÃ¡n la lista
+            echo $this->load->view('validador_censo/direccionTesis', $data, true); //Valores que muestrÃƒÂ¡n la lista
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     /* public function direccion_tesis_formulario($identificador = null) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Direccion_tesis_model', 'dt');
       $this->lang->load('interface');
       $data['identificador'] = $identificador;
-      $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+      $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
       $data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
       $data['string_values'] = array_merge($this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
 
       $entidades_ = array(enum_ecg::comision_area, enum_ecg::ctipo_comprobante, enum_ecg::cnivel_academico);
       $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
-      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃ³n por mÃ©todo post
-      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃ­an para generar la consulta
+      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃƒÂ³n por mÃƒÂ©todo post
+      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃƒÂ­an para generar la consulta
 
       $this->config->load('form_validation'); //Cargar archivo con validaciones
       $validations = $this->config->item('form_direccion_tesis'); //Obtener validaciones de archivo general
-      $this->form_validation->set_rules($validations); //AÃ±adir validaciones
+      $this->form_validation->set_rules($validations); //AÃƒÂ±adir validaciones
 
       if ($this->form_validation->run() == TRUE) { //Validar datos
       $datos_formulario['tipo_comision'] = $this->config->item('tipo_comision')['DIRECCION_TESIS']['id'];
@@ -913,7 +926,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
       if (empty($data['identificador'])) { //Insertar
       $resultado_almacenado = $this->dt->insert_comision($data_com);
       $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
-      } else { //ActualizaciÃ³n
+      } else { //ActualizaciÃƒÂ³n
       $resultado_almacenado = $this->dt->update_comision($dt_id, $data_com);
       }
       //////Inicio actualizar comprobante
@@ -938,22 +951,22 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
       echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       } */
 
     /**
-     * FunciÃ³n que permite eliminar la direcciÃ³n de tesis
+     * FunciÃƒÂ³n que permite eliminar la direcciÃƒÂ³n de tesis
      * @method: void eliminar_convocatoria()
-     * @param: $Identificador   string en base64    Identificador de la direcciÃ³n de tesis codificado en base64
-     * @author: JesÃºs Z. DÃ­az P.
+     * @param: $Identificador   string en base64    Identificador de la direcciÃƒÂ³n de tesis codificado en base64
+     * @author: JesÃƒÂºs Z. DÃƒÂ­az P.
      */
     /* public function eliminar_direccion_tesis($identificador) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Direccion_tesis_model', 'dt');
-      $datos['identificador'] = $identificador; //Identificador de direcciÃ³n de tesis
+      $datos['identificador'] = $identificador; //Identificador de direcciÃƒÂ³n de tesis
       $datos['msg'] = null;
-      $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la direcciÃ³n de tesis
+      $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la direcciÃƒÂ³n de tesis
       $idempleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
       //$datos['string_values'] = $this->lang->line('interface')['general']; //Cargar textos utilizados en vista
 
@@ -965,16 +978,16 @@ class Evaluacion_curricular_validar extends MY_Controller {
       exit();
       //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       } */
 
     /**
-     * FunciÃ³n que elimina un archivo
+     * FunciÃƒÂ³n que elimina un archivo
      * @method: void eliminar_archivo()
      * @param: $data['archivo']   string     Nombre del archivo
-     * @param: $data['matricula']   string      MatrÃ­cula del empleado
-     * @author: JesÃºs Z. DÃ­az P.
+     * @param: $data['matricula']   string      MatrÃƒÂ­cula del empleado
+     * @author: JesÃƒÂºs Z. DÃƒÂ­az P.
      */
     private function eliminar_archivo($data) {
         $resultado = false;
@@ -992,7 +1005,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         return $resultado;
     }
 
-    /////////////////////////Inicio formaciÃ³n //////////////////////////
+    /////////////////////////Inicio formaciÃƒÂ³n //////////////////////////
     public function seccion_formacion() {
         if ($this->input->is_ajax_request()) {
             $this->load->model('Formacion_model', 'fm');
@@ -1005,7 +1018,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $entidades_ = array(enum_ecg::ctipo_formacion_profesional, enum_ecg::csubtipo_formacion_profesional);
             $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
 
-            ///Obtener dato de ejercicio profesional, para mostrar datos de formaciÃ³n en salud
+            ///Obtener dato de ejercicio profesional, para mostrar datos de formaciÃƒÂ³n en salud
             $data['ejercicio_profesional'] = $this->fm->get_ejercicio_profesional(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()), 'fields' => 'emp_eje_pro_cve, EJE_PRO_NOMBRE'))[0];
 
             if (!empty($data['ejercicio_profesional']['emp_eje_pro_cve'])) { //En caso de que exista valor en ejercicio profesional
@@ -1022,23 +1035,23 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $data['formacion_docente'][$fd['TIP_FOR_PROF_CVE']][$fd['SUB_FOR_PRO_CVE']][] = $fd;
             }
 
-            echo $this->load->view('validador_censo/formacion/formacion.php', $data, true); //Valores que muestrÃ¡n la lista
+            echo $this->load->view('validador_censo/formacion/formacion.php', $data, true); //Valores que muestrÃƒÂ¡n la lista
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     /* public function formacion_ejercicio_profesional() {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Formacion_model', 'fm');
       $this->lang->load('interface');
       //$data['string_values'] = array_merge($this->lang->line('interface')['formacion_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
       $data = array('msg' => '', 'result' => false);
-      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃ³n por mÃ©todo post
+      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃƒÂ³n por mÃƒÂ©todo post
       $data['identificador'] = $this->input->post('ejercicio_profesional', true);
       $this->config->load('form_validation'); //Cargar archivo con validaciones
       $validations = $this->config->item('form_ejercicio_profesional'); //Obtener validaciones de archivo general de validaciones
-      $this->form_validation->set_rules($validations); //AÃ±adir validaciones
+      $this->form_validation->set_rules($validations); //AÃƒÂ±adir validaciones
 
       if ($this->form_validation->run() == TRUE) { //Validar datos
       $resultado_almacenado = $this->fm->update_formacion_ejercicio_profesional($this->obtener_id_empleado(), array('emp_eje_pro_cve' => $data['identificador']));
@@ -1050,37 +1063,37 @@ class Evaluacion_curricular_validar extends MY_Controller {
       }
       echo json_encode($data);
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       } */
 
     /* public function formacion_docente_formulario($identificador = null) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Formacion_model', 'fm');
       $this->lang->load('interface');
       $data['identificador'] = $identificador;
-      $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+      $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
       $data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
       $data['string_values'] = array_merge($this->lang->line('interface')['formacion_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
       $tmp = $resultado_almacenado = array();
       $tmp_tematica = '0';
 
-      $condiciones_ = array(enum_ecg::cinstitucion_avala => array('IA_TIPO' => $this->config->item('institucion')['imparte'])); //Obtener catÃ¡logos para llenar listados desplegables
+      $condiciones_ = array(enum_ecg::cinstitucion_avala => array('IA_TIPO' => $this->config->item('institucion')['imparte'])); //Obtener catÃƒÂ¡logos para llenar listados desplegables
       $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cinstitucion_avala, enum_ecg::cmodalidad, enum_ecg::ctipo_formacion_profesional, enum_ecg::ctematica);
       $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
 
       $data['mostrar_hora_fecha_duracion'] = 0;
 
-      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃ³n por mÃ©todo post
-      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃ­an para generar la consulta
-      $data['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_formulario, 'duracion'); //MuestrÃ¡ validaciones de hora y fecha de inicio y termino segÃºn la opciÃ³n de duraciÃ³n
+      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃƒÂ³n por mÃƒÂ©todo post
+      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃƒÂ­an para generar la consulta
+      $data['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_formulario, 'duracion'); //MuestrÃƒÂ¡ validaciones de hora y fecha de inicio y termino segÃƒÂºn la opciÃƒÂ³n de duraciÃƒÂ³n
       $this->config->load('form_validation'); //Cargar archivo con validaciones
       $validations = $this->config->item('form_formacion_docente'); //Obtener validaciones de archivo general de validaciones
-      $this->form_validation->set_rules($validations); //AÃ±adir validaciones
+      $this->form_validation->set_rules($validations); //AÃƒÂ±adir validaciones
       //pr($datos_formulario);
       $total_subtipo = $this->fm->get_subtipo_formacion_docente(array('conditions' => array('ctipo_formacion_profesional.TIP_FOR_PROF_CVE' => $datos_formulario['tipo_formacion']), 'fields' => 'count(*) AS total'))[0];
       if ($total_subtipo['total'] > 0) {
-      $this->form_validation->set_rules('subtipo', 'Subtipo de formaciÃ³n profesional', 'trim|required');
+      $this->form_validation->set_rules('subtipo', 'Subtipo de formaciÃƒÂ³n profesional', 'trim|required');
       }
       if (isset($datos_formulario['duracion']) && $datos_formulario['duracion'] == "fecha_dedicadas") { //Agregar validaciones
       $datos_formulario['hora_dedicadas'] = null;
@@ -1090,7 +1103,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
       if (isset($datos_formulario['duracion'])) {
       $datos_formulario['fecha_inicio_pick'] = null;
       $datos_formulario['fecha_fin_pick'] = null;
-      $this->form_validation->set_rules('hora_dedicadas', 'DuraciÃ³n', 'trim|required|integer');
+      $this->form_validation->set_rules('hora_dedicadas', 'DuraciÃƒÂ³n', 'trim|required|integer');
       }
       }
       if (isset($datos_formulario['tipo_curso']) && ($datos_formulario['tipo_curso'] == $this->config->item('ccurso')['OTRO']['id'])) { //Agregar validaciones
@@ -1105,7 +1118,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
       $resultado_almacenado = $this->fm->insert_formacion_docente($data_fs, $data_tfd);
       $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
       $fs_id = $resultado_almacenado['data']['identificador'];
-      } else { //ActualizaciÃ³n
+      } else { //ActualizaciÃƒÂ³n
       $resultado_almacenado = $this->fm->update_formacion_docente($fs_id, $data_fs, $data_tfd);
       }
       //pr($resultado_almacenado);
@@ -1140,31 +1153,31 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
       echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       }
 
       public function formacion_salud_formulario($identificador = null) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Formacion_model', 'fm');
       $this->lang->load('interface');
       $data['identificador'] = $identificador;
-      $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+      $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
       $data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
       $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
       $tmp = array();
       $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_formacion_salud);
       $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
 
-      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃ³n por mÃ©todo post
-      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃ­an para generar la consulta
+      if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃƒÂ³n por mÃƒÂ©todo post
+      $datos_formulario = $this->input->post(null, true); //Datos del formulario se envÃƒÂ­an para generar la consulta
       $this->config->load('form_validation'); //Cargar archivo con validaciones
       $validations = $this->config->item('form_formacion_salud'); //Obtener validaciones de archivo general de validaciones
-      $this->form_validation->set_rules($validations); //AÃ±adir validaciones
+      $this->form_validation->set_rules($validations); //AÃƒÂ±adir validaciones
 
       $total_subtipo = $this->fm->get_subtipo_formacion_salud(array('conditions' => array('ctipo_formacion_salud.TIP_FORM_SALUD_CVE' => $datos_formulario['tipo_formacion']), 'fields' => 'count(*) AS total'))[0];
       if ($total_subtipo['total'] > 0) {
-      $this->form_validation->set_rules('subtipo', 'Subtipo de formaciÃ³n profesional', 'trim|required');
+      $this->form_validation->set_rules('subtipo', 'Subtipo de formaciÃƒÂ³n profesional', 'trim|required');
       }
       if ($this->form_validation->run() == TRUE) { //Validar datos
       $datos_formulario['empleado'] = $this->obtener_id_empleado();
@@ -1172,7 +1185,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
       if (empty($data['identificador'])) { //Insertar
       $resultado_almacenado = $this->fm->insert_formacion_salud($data_fs);
       $data['identificador'] = $this->seguridad->encrypt_base64($resultado_almacenado['data']['identificador']); //Obtenemos identificador de registro aceptado y se encripta
-      } else { //ActualizaciÃ³n
+      } else { //ActualizaciÃƒÂ³n
       $resultado_almacenado = $this->fm->update_formacion_salud($fs_id, $data_fs);
       }
       //////Inicio actualizar comprobante
@@ -1198,12 +1211,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
       echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       } */
 
     /* public function subtipo_formacion($identificador, $CSUBTIP_FORM_SALUD_CVE = null) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Formacion_model', 'fm');
       $this->lang->load('interface');
       $data['string_values'] = array_merge($this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
@@ -1215,12 +1228,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
       echo $this->load->view('validador_censo/formacion/formacion_salud_tipo_formacion', $data, TRUE);
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       }
 
       public function subtipo_formacion_docente($identificador, $SUB_FOR_PRO_CVE = null) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Formacion_model', 'fm');
       $this->lang->load('interface');
       $data['string_values'] = array_merge($this->lang->line('interface')['formacion_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
@@ -1247,22 +1260,22 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
       echo $this->load->view('validador_censo/formacion/formacion_docente_tipo_formacion', $data, TRUE);
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       } */
 
     /**
-     * FunciÃ³n que permite eliminar la direcciÃ³n de tesis
+     * FunciÃƒÂ³n que permite eliminar la direcciÃƒÂ³n de tesis
      * @method: void eliminar_convocatoria()
-     * @param: $Identificador   string en base64    Identificador de la direcciÃ³n de tesis codificado en base64
-     * @author: JesÃºs Z. DÃ­az P.
+     * @param: $Identificador   string en base64    Identificador de la direcciÃƒÂ³n de tesis codificado en base64
+     * @author: JesÃƒÂºs Z. DÃƒÂ­az P.
      */
     /* public function eliminar_formacion_salud($identificador) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Formacion_model', 'fm');
-      $datos['identificador'] = $identificador; //Identificador de direcciÃ³n de tesis
+      $datos['identificador'] = $identificador; //Identificador de direcciÃƒÂ³n de tesis
       $datos['msg'] = null;
-      $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la direcciÃ³n de tesis
+      $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la direcciÃƒÂ³n de tesis
       $idempleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
 
       $resultado = $this->fm->delete_formacion_salud(array('conditions' => array('FPCS_CVE' => $dt_id))); //Eliminar datos
@@ -1273,16 +1286,16 @@ class Evaluacion_curricular_validar extends MY_Controller {
       exit();
       //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       }
 
       public function eliminar_formacion_docente($identificador) {
-      if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+      if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
       $this->load->model('Formacion_model', 'fm');
-      $datos['identificador'] = $identificador; //Identificador de formaciÃ³n
+      $datos['identificador'] = $identificador; //Identificador de formaciÃƒÂ³n
       $datos['msg'] = null;
-      $fd_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la formaciÃ³n
+      $fd_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la formaciÃƒÂ³n
       $idempleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
 
       $resultado = $this->fm->delete_formacion_docente(array('conditions' => array('EMP_FORMACION_PROFESIONAL_CVE' => $fd_id))); //Eliminar datos
@@ -1293,12 +1306,12 @@ class Evaluacion_curricular_validar extends MY_Controller {
       exit();
       //echo $this->load->view('evaluacion/convocatoria/dictamen_listado', $datos, true);
       } else {
-      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+      redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
       }
       } */
 
-    /////////////////////////Fin formaciÃ³n //////////////////////////
-    /////////////////////////Fin direcciÃ³n de tesis //////////////////////////
+    /////////////////////////Fin formaciÃƒÂ³n //////////////////////////
+    /////////////////////////Fin direcciÃƒÂ³n de tesis //////////////////////////
 
     /*     * ******************Inicia actividad docente ********************* */
 
@@ -1315,13 +1328,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
         $actividad_docente = $this->adm->get_actividad_docente_general($result_id_user); //Verifica si existe el ususario ya contiene datos de actividad
 //        pr($actividad_docente);
-        if ($this->input->post()) { //Validar que la informaciÃ³n se haya enviado por mÃ©todo POST para almacenado
+        if ($this->input->post()) { //Validar que la informaciÃƒÂ³n se haya enviado por mÃƒÂ©todo POST para almacenado
             $this->config->load('form_validation'); //Cargar archivo con validaciones
             $validations = $this->config->item('form_actividad_docente_general'); //Obtener validaciones de archivo
 //            pr($validations);
             $this->form_validation->set_rules($validations);
 //            pr($this->input->post(null, true));
-            if ($this->form_validation->run()) { //Se ejecuta la validaciÃ³n de datos
+            if ($this->form_validation->run()) { //Se ejecuta la validaciÃƒÂ³n de datos
                 $datos_registro = $this->input->post(null, true);
                 if (empty($actividad_docente)) {//insertar nueva actividad
                     $empleado = $this->cg->getDatos_empleado($result_id_user);
@@ -1337,7 +1350,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                             $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                         } else {//Los datos se insertaron correctamente
                             $data['error'] = $string_values['succesfull_insertar']; //Mensaje de que los datos se insertaron correctamente
-                            $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de Ã©xito
+                            $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de ÃƒÂ©xito
                             //Datos de bitacora el actividad general del docente del usuario
                             $json = json_encode($resultado['parametros']);
                             $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'ACT_DOC_GRAL_CVE-' . $resultado['ACT_DOC_GRAL_CVE'], $json, 'insert');
@@ -1357,8 +1370,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
                         $data['error'] = $string_values['error_actualizar']; //Mensaje de existio un error al actualizar los datos de actividad docente
                         $data['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                     } else {//Los datos se insertaron correctamente
-                        $data['error'] = $string_values['succesfull_actualizar']; //Mensaje de que los datos se actualizarÃ³n correctamente
-                        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de Ã©xito
+                        $data['error'] = $string_values['succesfull_actualizar']; //Mensaje de que los datos se actualizarÃƒÂ³n correctamente
+                        $data['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de ÃƒÂ©xito
 //                        //Datos de bitacora el actividad general del docente del usuario
                         $json = json_encode($resultado['actualizados']);
                         $result = registro_bitacora($result_id_user, null, 'actividad_docente_gral', 'EMPLEADO_CVE', $json, 'update');
@@ -1372,8 +1385,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
         $data['string_values'] = $string_values; //Array de textos que muestra el formulario para actividad
 //        $condiciones = array(enum_ecg::cejercicio_predominante=>array('EJER_PREDOMI_CVE '=>'3'));//A manera de ejemplo
-        //Carga catÃ¡logos segÃºn array, visto en config->general->catalogos_indexados 
-        $data = carga_catalogos_generales(array(enum_ecg::cejercicio_predominante), $data); //Carga el catÃ¡logo de ejercicio predominante
+        //Carga catÃƒÂ¡logos segÃƒÂºn array, visto en config->general->catalogos_indexados 
+        $data = carga_catalogos_generales(array(enum_ecg::cejercicio_predominante), $data); //Carga el catÃƒÂ¡logo de ejercicio predominante
 
         $data['actividad_docente'] = $actividad_docente; //
 
@@ -1391,7 +1404,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
     /**
      * author LEAS
-     * Carga el modal con opciones de tipo de actividad, tambien carga la informaciÃ³n de una actividad
+     * Carga el modal con opciones de tipo de actividad, tambien carga la informaciÃƒÂ³n de una actividad
      * @param type $insertar si "insertar" es igual con "0" muestra el combo que 
      * carga los tipos de actividad docente. Si "insertar" es mayor que "0"
      */
@@ -1417,34 +1430,34 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $id_tp_act_doc = intval($data_post['tp_actividad_cve']);
                     if ($id_tp_act_doc > 0) {
                         $propiedades = $this->config->item('actividad_docente_componentes')[$id_tp_act_doc]; //Carga el nombre de la vista del diccionario 
-                        $data_formulario = $this->cargar_datos_actividad($id_tp_act_doc, $data_post['act_doc_cve'], $propiedades); //No mover posiciÃ³n puede romperse
+                        $data_formulario = $this->cargar_datos_actividad($id_tp_act_doc, $data_post['act_doc_cve'], $propiedades); //No mover posiciÃƒÂ³n puede romperse
 //                        pr($data_formulario);
                         $carga_extra = $propiedades['validaciones_extra'];
-                        $data_formulario = $this->cargar_extra($data_formulario, $carga_extra); //No mover posiciÃ³n puede romperse
+                        $data_formulario = $this->cargar_extra($data_formulario, $carga_extra); //No mover posiciÃƒÂ³n puede romperse
 //                        pr($data_formulario);
-                        $condiciones_ = array(); //Carga, Ãºnicamente el tipo de actividad docente
+                        $condiciones_ = array(); //Carga, ÃƒÂºnicamente el tipo de actividad docente
                         if (isset($propiedades['where'])) {
-                            $condiciones_ = $propiedades['where']; //Carga, Ãºnicamente el tipo de actividad docente
+                            $condiciones_ = $propiedades['where']; //Carga, ÃƒÂºnicamente el tipo de actividad docente
                         }
 
-                        $tipo_were = array(); //Carga, Ãºnicamente el tipo de actividad docente
+                        $tipo_were = array(); //Carga, ÃƒÂºnicamente el tipo de actividad docente
                         if (isset($propiedades['where_grup'])) {
-                            $tipo_were = $propiedades['where_grup']; //Carga, Ãºnicamente el tipo de actividad docente
+                            $tipo_were = $propiedades['where_grup']; //Carga, ÃƒÂºnicamente el tipo de actividad docente
                         }
-                        $catalogos_ = $propiedades['catalogos_indexados']; //Carga, Ãºnicamente el tipo de actividad docente
+                        $catalogos_ = $propiedades['catalogos_indexados']; //Carga, ÃƒÂºnicamente el tipo de actividad docente
                         $data_formulario = carga_catalogos_generales($catalogos_, $data_formulario, $condiciones_, true, $tipo_were);
                         //Condiciones extra "pago_extra" y "duracion"
                         $this->lang->load('interface', 'spanish');
                         $string_values = $this->lang->line('interface')['actividad_docente'];
-                        //************fin de la carga de catÃ¡logos ***************************************
-                        //*****************Carga ccurso segÃºn tipo de curso**************************
+                        //************fin de la carga de catÃƒÂ¡logos ***************************************
+                        //*****************Carga ccurso segÃƒÂºn tipo de curso**************************
                         $valua_entidad = $propiedades['tabla_guardado'] === 'emp_actividad_docente';
                         if ($valua_entidad AND isset($data_formulario['ctipo_curso_cve']) AND ! empty($data_formulario['ctipo_curso_cve']) AND isset($data_formulario['ccurso_cve']) AND ! empty($data_formulario['ccurso_cve'])) {//si existe el "ccurso" y "ctipo_curso", hay que pintarlo
                             $tipo_curso_cve = intval($data_formulario['ctipo_curso_cve']);
                             $data_formulario['ccurso_pinta'] = $this->vista_ccurso($tipo_curso_cve, $data_formulario['ccurso_cve']); //Punta el curso
                         }
                         //********************************************************************************
-                        //Carga dsatos de pÃ­e 
+                        //Carga dsatos de pÃƒÂ­e 
                         $datos_pie['tp_actividad_cve'] = $id_tp_act_doc;
                         $datos_pie['act_doc_cve'] = $this->input->post('act_doc_cve');
                         //Todo lo de comprobante *********************************************************
@@ -1518,9 +1531,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $tipo_msg = $this->config->item('alert_msg');
                 $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar 
                 if (!empty($datos_post['tp_actividad_cve']) AND $datos_post['tp_actividad_cve'] !== 'undefined') {//Carga el formulario correspondiente
-                    //Carga los catÃ¡logos y vistas correspondientes *****************************
+                    //Carga los catÃƒÂ¡logos y vistas correspondientes *****************************
                     $index_tp_actividad = intval($datos_post['tp_actividad_cve']);
-                    $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tp_actividad]; //Carga la configuraciÃ³n  del formularÃ­o
+                    $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tp_actividad]; //Carga la configuraciÃƒÂ³n  del formularÃƒÂ­o
                     $condiciones_ = null;
                     if (isset($configuracion_formularios_actividad_docente['where'])) {
                         $condiciones_ = $configuracion_formularios_actividad_docente['where'];
@@ -1529,9 +1542,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     if (isset($configuracion_formularios_actividad_docente['where_grup'])) {
                         $group_where = $configuracion_formularios_actividad_docente['where_grup'];
                     }
-                    $entidades_ = $configuracion_formularios_actividad_docente['catalogos_indexados']; //Nombre de los catÃ¡talogos a cargar
+                    $entidades_ = $configuracion_formularios_actividad_docente['catalogos_indexados']; //Nombre de los catÃƒÂ¡talogos a cargar
                     $data_actividad_doc = carga_catalogos_generales($entidades_, null, $condiciones_, true, $group_where);
-                    //************fin de la carga de catÃ¡logos ***********************************
+                    //************fin de la carga de catÃƒÂ¡logos ***********************************
                     $data_actividad_doc['mostrar_hora_fecha_duracion'] = 0; //
                     $data_actividad_doc['string_values'] = $string_values;
                     //Todo lo de comprobante *******************************************
@@ -1544,7 +1557,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     echo $this->load->view($configuracion_formularios_actividad_docente['vista'], $data_actividad_doc, TRUE);
                     exit();
                 } else {
-                    //Manda mensaje que debe cargar o seleccionar una opciÃ³n
+                    //Manda mensaje que debe cargar o seleccionar una opciÃƒÂ³n
                     $res_j['error'] = $string_values['msj_selecciona_actividad_docente']; //Mensaje
                     $res_j['tipo_msg'] = $tipo_msg['WARNING']['class']; //Tipo de mensaje de error
                     $res_j['satisfactorio'] = FALSE; //Tipo de mensaje de error
@@ -1566,7 +1579,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $datos_post = $this->input->post(null, true);
             if ($datos_post) {
                 $index_tipo_actividad_docente = intval($datos_post['cve_tipo_actividad']);
-                $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuraciÃ³n  del formularÃ­o
+                $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuraciÃƒÂ³n  del formularÃƒÂ­o
                 $tipo_msg = $this->config->item('alert_msg');
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['actividad_docente']; //Carga textos a utilizar
@@ -1574,8 +1587,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $data_actividad_doc['mostrar_hora_fecha_duracion'] = 0; //
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_ccl'); //Obtener validaciones de archivo
-                $data_actividad_doc['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_post, 'duracion'); //MuestrÃ¡ validaciones de hora y fecha de inicio y termino segÃºn la opciÃ³n de duraciÃ³n
-                $array_validaciones_extra_actividad = $configuracion_formularios_actividad_docente['validaciones_extra']; //Carga las validaciones extrÃ¡ de archivo config->general que no se pudieron automatizar con el post, es decir radio button etc
+                $data_actividad_doc['mostrar_hora_fecha_duracion'] = $this->get_valor_validacion($datos_post, 'duracion'); //MuestrÃƒÂ¡ validaciones de hora y fecha de inicio y termino segÃƒÂºn la opciÃƒÂ³n de duraciÃƒÂ³n
+                $array_validaciones_extra_actividad = $configuracion_formularios_actividad_docente['validaciones_extra']; //Carga las validaciones extrÃƒÂ¡ de archivo config->general que no se pudieron automatizar con el post, es decir radio button etc
                 $result_validacion = $this->analiza_validacion_actividades_docentes($validations, $datos_post, $array_validaciones_extra_actividad); //Genera las validaciones del formulario que realmente deben ser tomadas en cuenta
                 $validations = $result_validacion['validacion'];
 //                pr($result_validacion['insert_entidad']);
@@ -1590,9 +1603,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     exit();
                 }
 
-                if ($index_tipo_actividad_docente > 0) {//Checa si debe aparecer el botÃ²n de guardar 
-                    //Carga los catÃ¡logos y vistas correspondientes *****************************
-                    $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuraciÃ³n  del formularÃ­o
+                if ($index_tipo_actividad_docente > 0) {//Checa si debe aparecer el botÃƒÂ²n de guardar 
+                    //Carga los catÃƒÂ¡logos y vistas correspondientes *****************************
+                    $configuracion_formularios_actividad_docente = $this->config->item('actividad_docente_componentes')[$index_tipo_actividad_docente]; //Carga la configuraciÃƒÂ³n  del formularÃƒÂ­o
                     $condiciones_ = array();
                     if (isset($configuracion_formularios_actividad_docente['where'])) {
                         $condiciones_ = $configuracion_formularios_actividad_docente['where'];
@@ -1602,9 +1615,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     if (isset($configuracion_formularios_actividad_docente['where_grup'])) {
                         $group_where = $configuracion_formularios_actividad_docente['where_grup'];
                     }
-                    $entidades_ = $configuracion_formularios_actividad_docente['catalogos_indexados']; //Nombre de los catÃ¡talogos a cargar
+                    $entidades_ = $configuracion_formularios_actividad_docente['catalogos_indexados']; //Nombre de los catÃƒÂ¡talogos a cargar
                     $data_actividad_doc = carga_catalogos_generales($entidades_, $data_actividad_doc, $condiciones_, true, $group_where);
-                    //************fin de la carga de catÃ¡logos ***********************************
+                    //************fin de la carga de catÃƒÂ¡logos ***********************************
                     if (isset($datos_post['ctipo_curso']) AND ! empty(isset($datos_post['ctipo_curso'])) AND isset($datos_post['ccurso'])) {//si existe el "ccurso" y "ctipo_curso", hay que pintarlo
                         $tipo_curso_cve = intval($datos_post['ctipo_curso']);
                         $data_actividad_doc['ccurso_pinta'] = $this->vista_ccurso($tipo_curso_cve); //Punta el curso
@@ -1647,9 +1660,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
      * modificacion 17/08/2016
      * @param type $array_validacion
      * @param type $array_post
-     * @param type $validacion_extra Las validaciones extra estan pensadas mÃ¡s 
+     * @param type $validacion_extra Las validaciones extra estan pensadas mÃƒÂ¡s 
      *             para "radio button" validaciones_extra, es un array de reglas 
-     *             que se encuentrÃ¡ en 
+     *             que se encuentrÃƒÂ¡ en 
      * "config"->"general"->"actividad_docente_componentes"->"validaciones_extra"
      * y son de tipo textuales,
      * @return type
@@ -1677,13 +1690,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     break;
                 case 'act_doc_cve':
                     break;
-                case 'fecha_inicio_pick'://No carga si no hasta duraciÃ²n 
+                case 'fecha_inicio_pick'://No carga si no hasta duraciÃƒÂ²n 
 //                    $array_fechas['fecha_inicio_pick'] = date("Y-m-d", strtotime($value));
                     break;
-                case 'fecha_fin_pick'://No carga si no hasta duraciÃ²n
+                case 'fecha_fin_pick'://No carga si no hasta duraciÃƒÂ²n
 //                    $array_fechas['fecha_fin_pick'] = date("Y-m-d", strtotime($value));
                     break;
-                case 'hora_dedicadas'://No carga si no hasta duraciÃ²n
+                case 'hora_dedicadas'://No carga si no hasta duraciÃƒÂ²n
                     break;
                 case 'duracion':
                     if ($value === 'hora_dedicadas') {
@@ -1713,9 +1726,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     }
             }
         }
-        //Elimina claves vacias tipo de curso estÃ¡ vacia en "emp_actividad_docente" solo sirve para hacer la validaciÃ³n pero no guarda, solo guarda ccurso
+        //Elimina claves vacias tipo de curso estÃƒÂ¡ vacia en "emp_actividad_docente" solo sirve para hacer la validaciÃƒÂ³n pero no guarda, solo guarda ccurso
         unset($array_result['insert_entidad']['']);
-        //Busca si existen validaciones extra, ejemple pago extra o duraciÃ³n, que son radio button, pero no trae valor si no se selecciona 
+        //Busca si existen validaciones extra, ejemple pago extra o duraciÃƒÂ³n, que son radio button, pero no trae valor si no se selecciona 
         foreach ($validacion_extra as $value_extra) {
             if (!array_key_exists($value_extra, $array_post)) {
                 $array_result['validacion'][] = $array_validacion[$value_extra];
@@ -1741,7 +1754,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $entidad_guardado_pk = $array_propiedades_actividad['llave_primaria']; //Se obtiene la llave primaria de la entidad de guardado
         $tipo_msg = $this->config->item('alert_msg'); //Carga tipos de mensajes
         $res_j = array();
-        if ($actividad_docente_cve > 0) {//ActualizaciÃ³n de la actividad
+        if ($actividad_docente_cve > 0) {//ActualizaciÃƒÂ³n de la actividad
             $campos_entidad_vacios = $this->config->item($entidad_guardado);
             foreach ($campos_entidad_vacios as $key => $value) {
                 $campo = $value['insert'];
@@ -1757,14 +1770,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $array_datos_entidad[$entidad_guardado] = $array_campos_valores; //Pertenece a bitacora
                 $array_operacion_id_entidades[$entidad_guardado] = array('update' => $array_campos_valores[$entidad_guardado_pk]); //Pertenece a bitacora 
                 $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                 //Datos de bitacora el registro del usuario
                 registro_bitacora($user_cve, null, $json_datos_entidad, null, $json_registro_bitacora, null);
 
                 $res_j['error'] = $string_values['succesfull_actualizar']; //Mensaje de que no encontro empleado
                 $res_j['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
                 $res_j['satisfactorio'] = TRUE; //Tipo de mensaje de error
-            } else {//Error al guardar o en la transacciÃ³n 
+            } else {//Error al guardar o en la transacciÃƒÂ³n 
                 $res_j['error'] = $string_values['error_actualizar']; //Mensaje de que no encontro empleado
                 $res_j['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                 $res_j['satisfactorio'] = FALSE; //Tipo de mensaje de error
@@ -1779,14 +1792,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $array_datos_entidad[$entidad_guardado] = $array_campos_valores; //Pertenece a bitacora
                 $array_operacion_id_entidades[$entidad_guardado] = array('insert' => $array_campos_valores[$entidad_guardado_pk]); //Pertenece a bitacora 
                 $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                 //Datos de bitacora el registro del usuario
                 registro_bitacora($user_cve, null, $json_datos_entidad, null, $json_registro_bitacora, null);
 
                 $res_j['error'] = $string_values['succesfull_insertar']; //Mensaje de que no encontro empleado
                 $res_j['tipo_msg'] = $tipo_msg['SUCCESS']['class']; //Tipo de mensaje de error
                 $res_j['satisfactorio'] = TRUE; //Tipo de mensaje de error
-            } else {//Error al guardar o en la transacciÃ³n 
+            } else {//Error al guardar o en la transacciÃƒÂ³n 
                 $res_j['error'] = $string_values['error_insertar']; //Mensaje de que no encontro empleado
                 $res_j['tipo_msg'] = $tipo_msg['DANGER']['class']; //Tipo de mensaje de error
                 $res_j['satisfactorio'] = FALSE; //Tipo de mensaje de error
@@ -1902,7 +1915,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         }
     }
 
-//********************InvestigaciÃ³n educativa ******************************************************************************/
+//********************InvestigaciÃƒÂ³n educativa ******************************************************************************/
     public function seccion_investigacion() {
         $data = array();
         $this->lang->load('interface', 'spanish');
@@ -1914,11 +1927,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $this->load->model('Investigacion_docente_model', 'id');
             $lista_investigacion = $this->id->get_lista_datos_investigacion_docente($empleado[0]['EMPLEADO_CVE']);
             $data['lista_investigaciones'] = $lista_investigacion;
-            $this->load->view('validador_censo/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrÃ¡n la lista
+            $this->load->view('validador_censo/investigacion/investigacion_tpl', $data, FALSE); //Valores que muestrÃƒÂ¡n la lista
         } else {
             //Error, No existe el empleado
         }
-        //Consulta datos de empleado en investigaciÃ³n
+        //Consulta datos de empleado en investigaciÃƒÂ³n
     }
 
     public function cargar_formulario_investigacion() {
@@ -1933,7 +1946,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $datos_pie = array();
 
             $data = array(
-                'titulo_modal' => 'InvestigaciÃ³n',
+                'titulo_modal' => 'InvestigaciÃƒÂ³n',
                 'cuerpo_modal' => $this->load->view('validador_censo/investigacion/investigacion_formulario', $data_investigacion, TRUE),
                 'pie_modal' => $this->load->view('validador_censo/investigacion/investigacion_pie', $datos_pie, true)
             );
@@ -1945,7 +1958,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
     public function cargar_opcion_divulgacion() {
         if ($this->input->is_ajax_request()) {
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
                 $datos_post = $this->input->post(null, true);
                 $vista = $this->divulgacion_cargar($datos_post['cve_divulgacion']);
                 echo $vista;
@@ -1967,7 +1980,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $result_id_empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
             $datos_pie = array(); //Asignamos id usuario a variable
 
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
 //                pr($this->input->post());
                 $datos_post = $this->input->post(null, true);
 //                pr($datos_post);
@@ -1988,13 +2001,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
                         $array_insert_act_docente['COMPROBANTE_CVE'] = $this->seguridad->decrypt_base64($datos_post['idc']); //Asigna empleado
                     }
 
-                    $result_insert_investigacion = $this->idm->insert_investigacion_docente($array_insert_act_docente); //Inserta investigaciÃ³n 
+                    $result_insert_investigacion = $this->idm->insert_investigacion_docente($array_insert_act_docente); //Inserta investigaciÃƒÂ³n 
                     if ($result_insert_investigacion > 0) {//se inserto correctamente, se debe registrar en bitacora
-                        $array_insert_act_docente['EAID_CVE'] = $result_insert_investigacion; //Agrega identificador del registro de investigaciÃ³n insertado 
+                        $array_insert_act_docente['EAID_CVE'] = $result_insert_investigacion; //Agrega identificador del registro de investigaciÃƒÂ³n insertado 
                         $array_datos_entidad['emp_act_inv_edu'] = $array_insert_act_docente; //Pertenece a bitacora
                         $array_operacion_id_entidades['emp_act_inv_edu'] = array('insert' => $result_insert_investigacion); //Pertenece a bitacora 
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['phl_registro_correcto']; //Mensaje de que no encontro empleado
@@ -2007,7 +2020,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     }
                     echo json_encode($res_j);
                     exit();
-                }//*************************Termina bloque de insertar nueva investigaciÃ³n
+                }//*************************Termina bloque de insertar nueva investigaciÃƒÂ³n
             }
 
 //          $data_investigacion['divulgacion'] = $divulgacion; //Crea la variable
@@ -2039,14 +2052,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $datos_pie['cve_inv'] = $datos_post['cve_inv'];
                     $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
                     $id_inv = $this->seguridad->decrypt_base64($datos_post['cve_inv']);
-                    $data_investigacion_load = $this->idm->get_datos_investigacion_docente(intval($id_inv)); //Variable que carga los datos del registro de investigaciÃ³n, serÃ¡ enviada a la vista para cargar los datos
+                    $data_investigacion_load = $this->idm->get_datos_investigacion_docente(intval($id_inv)); //Variable que carga los datos del registro de investigaciÃƒÂ³n, serÃƒÂ¡ enviada a la vista para cargar los datos
                     if (!empty($data_investigacion_load)) {//Si es diferente de vacio 
                         $data_investigacion['select_inv'] = $data_investigacion_load;
-                        $divulgacion = $data_investigacion_load['med_divulgacion_cve']; //Carga el index de la opciÃ³n divulgaciÃ³n
+                        $divulgacion = $data_investigacion_load['med_divulgacion_cve']; //Carga el index de la opciÃƒÂ³n divulgaciÃƒÂ³n
                         if (!empty($datos_post['comprobantecve'])) {//Si existe comprobante, manda el identificador
                             $data_investigacion_load['idc'] = $datos_post['comprobantecve'];
                         }
-                        //Selecciona divulgaciÃ³n
+                        //Selecciona divulgaciÃƒÂ³n
                         $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($divulgacion, $data_investigacion_load, TRUE);
                     }
                 }
@@ -2057,7 +2070,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
             $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
             $data = array(
-                'titulo_modal' => 'InvestigaciÃ³n',
+                'titulo_modal' => 'InvestigaciÃƒÂ³n',
                 'cuerpo_modal' => $this->load->view('validador_censo/investigacion/investigacion_formulario', $data_investigacion, TRUE),
                 'pie_modal' => $this->load->view('validador_censo/investigacion/investigacion_pie', $datos_pie, true)
             );
@@ -2075,15 +2088,15 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $string_values = $this->lang->line('interface')['investigacion_docente']; //Carga textos a utilizar 
             $data_investigacion['string_values'] = $string_values; //Crea la variable 
             $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
                 $datos_post = $this->input->post(null, true);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $val = $this->config->item('form_investigacion_docente'); //Obtener validaciones de archivo
                 $validations = $this->analiza_validacion_investigacion_docente($val, $datos_post, $_FILES, TRUE);
 //                pr($datos_post);
 //                pr($validations['validacion']);
-                //Parametros iniciales que deben persistir en el botÃ³n de actualizaciÃ³n
-                $divulgacion = $datos_post['cmedio_divulgacion']; //Variable que carga los datos del registro de investigaciÃ³n, serÃ¡ enviada a la vista para cargar los datos
+                //Parametros iniciales que deben persistir en el botÃƒÂ³n de actualizaciÃƒÂ³n
+                $divulgacion = $datos_post['cmedio_divulgacion']; //Variable que carga los datos del registro de investigaciÃƒÂ³n, serÃƒÂ¡ enviada a la vista para cargar los datos
                 $this->form_validation->set_rules($validations['validacion']);
                 if ($this->form_validation->run()) {//Si pasa todas las validaciones, actualizar
                     $array_actualizacion_inv_doc = $validations['emp_act_inv_edu_update'];
@@ -2093,13 +2106,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     }
 
                     $id_investigacion = intval($this->seguridad->decrypt_base64($datos_post['cve_inv']));
-                    //Actualiza datos de investigaciÃ³n
+                    //Actualiza datos de investigaciÃƒÂ³n
                     $result_actualizacion_investigacion_docente = $this->idm->update_investigacion_docente($id_investigacion, $array_actualizacion_inv_doc);
                     if (!empty($result_actualizacion_investigacion_docente)) {
                         $array_datos_entidad['emp_act_inv_edu'] = $result_actualizacion_investigacion_docente; //Pertenece a bitacora
                         $array_operacion_id_entidades['emp_act_inv_edu'] = array('update' => $result_actualizacion_investigacion_docente['EAID_CVE']); //Pertenece a bitacora 
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['phl_registro_correcto']; //Mensaje de que no encontro empleado
@@ -2181,9 +2194,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
      * author LEAS
      * @param type $array_validaciones
      * @param type $array_elementos_post
-     * @param type $validacion_extra Las validaciones extra estan pensadas mÃ¡s 
+     * @param type $validacion_extra Las validaciones extra estan pensadas mÃƒÂ¡s 
      *             para "radio button" validaciones_extra, es un array de reglas 
-     *             que se encuentrÃ¡ en 
+     *             que se encuentrÃƒÂ¡ en 
      * "config"->"general"->"actividad_docente_componentes"->"validaciones_extra"
      * y son de tipo textuales,
      * @return type
@@ -2205,7 +2218,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             }
         }
 
-        if ($is_actualizacion) {//si es acyualizaciÃ³n limpÃ­a los datos de la entidad que no se ocupen, como limpiar el comprobante o la cita bibliografica
+        if ($is_actualizacion) {//si es acyualizaciÃƒÂ³n limpÃƒÂ­a los datos de la entidad que no se ocupen, como limpiar el comprobante o la cita bibliografica
             foreach ($emp_act_inv_edu as $value) {
                 $key_prima = $value['insert'];
                 if (!isset($array_result['emp_act_inv_edu_update'][$key_prima])) {//Si no existe el elemento lo agraga null
@@ -2237,7 +2250,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $array_operacion_id_entidades['emp_act_inv_edu'] = array('delete' => $id_inv_docente);
 
                     $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                    $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                    $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                     //Datos de bitacora el registro del usuario
                     registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
 
@@ -2275,14 +2288,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
     /**
      * @author LEAS
-     * @param type $name_comprobante //nombre del comprobante sin extenciÃ³n 
+     * @param type $name_comprobante //nombre del comprobante sin extenciÃƒÂ³n 
      * @return devuelve un mensaje de 
      */
     private function guardar_archivo($name_comprobante, $nom_propiedades = 'comprobantes') {
-        $config_comprobante = $this->config->item('upload_config')[$nom_propiedades]; //Carga configuraciÃ³n para subir archivo comprobante
+        $config_comprobante = $this->config->item('upload_config')[$nom_propiedades]; //Carga configuraciÃƒÂ³n para subir archivo comprobante
         $config_comprobante['file_name'] = $name_comprobante; //Asigna nombre del comprobante
         //$_FILE -> contiene contiene el archivo
-        $this->load->library('upload', $config_comprobante); //Carga la configuraciÃ³n para subir el archivo
+        $this->load->library('upload', $config_comprobante); //Carga la configuraciÃƒÂ³n para subir el archivo
         if (!$this->upload->do_upload('file')) {//Nombre del componente file
             $data['error'] = $this->upload->display_errors();
 //            pr('fin ------------>' . $data['error']);
@@ -2294,7 +2307,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         return $data;
     }
 
-    ////////////////////////Inicio Factory de tipos de comisiÃ³n
+    ////////////////////////Inicio Factory de tipos de comisiÃƒÂ³n
     private function emp_comision_fac($comision) {
         $com = new stdClass();
         switch ($comision['tipo_comision']) {
@@ -2395,7 +2408,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         return $for;
     }
 
-    ////////////////////////Fin Factory de tipos de comisiÃ³n
+    ////////////////////////Fin Factory de tipos de comisiÃƒÂ³n
     ////////////////////////Inicio formacion docente
     private function formacion_docente_vo($formacion) {
         $for = new Formacion_docente_dao;
@@ -2440,10 +2453,10 @@ class Evaluacion_curricular_validar extends MY_Controller {
             if (!empty($empleado)) {//Si existe un empleado, obtenemos datos
                 $lista_material_educativo = $this->mem->get_lista_material_educativo($empleado);
                 $data['lista_material_educativo'] = $lista_material_educativo;
-                $this->load->view('validador_censo/material_educativo/elaboracion_material_edu_tpl', $data, FALSE); //Valores que muestrÃ¡n la lista
+                $this->load->view('validador_censo/material_educativo/elaboracion_material_edu_tpl', $data, FALSE); //Valores que muestrÃƒÂ¡n la lista
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -2469,7 +2482,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             );
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -2480,7 +2493,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $string_values = $this->lang->line('interface')['material_educativo']; //Carga textos a utilizar 
             $datos_mat_edu['string_values'] = $string_values; //Crea la variable
 
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
                 $datos_post = $this->input->post(null, true);
 //                pr($datos_post);
                 if (!empty($datos_post['ctipo_material'])) {
@@ -2507,7 +2520,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             //**** fi de comprobante *******************************************
             echo $this->load->view('validador_censo/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE);
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -2520,11 +2533,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
         if ($is_actualizacion) {//Pone en nulo todos los campos de las entidades "ctipo_material" y "emp_materia_educativo" para actualizar
             foreach ($insert_ctipo_material as $value_t_m) {
 //                pr($value_t_m['insert']);
-                $array_result['insert_ctipo_material'][$value_t_m['insert']] = 'NULL'; //Limpia todos los registros`, ya que los campos que contenian informaciÃ³n, previamente y en la actualizaciÃ³n  ya no, estos no guarden informaciÃ³n que no deberÃ­a
+                $array_result['insert_ctipo_material'][$value_t_m['insert']] = 'NULL'; //Limpia todos los registros`, ya que los campos que contenian informaciÃƒÂ³n, previamente y en la actualizaciÃƒÂ³n  ya no, estos no guarden informaciÃƒÂ³n que no deberÃƒÂ­a
             }
             foreach ($insert_ctipo_material as $value_t_m) {
 //                pr($value_t_m['insert']);
-                $array_result['insert_emp_materia_educativo'][$value_t_m['insert']] = 'NULL'; //Limpia todos los registros`, ya que los campos que contenian informaciÃ³n, previamente y en la actualizaciÃ³n  ya no, estos no guarden informaciÃ³n que no deberÃ­a
+                $array_result['insert_emp_materia_educativo'][$value_t_m['insert']] = 'NULL'; //Limpia todos los registros`, ya que los campos que contenian informaciÃƒÂ³n, previamente y en la actualizaciÃƒÂ³n  ya no, estos no guarden informaciÃƒÂ³n que no deberÃƒÂ­a
             }
         }
 //        pr($insert_emp_materia_educativo);
@@ -2550,7 +2563,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             }
             if (array_key_exists($key, $insert_ctipo_material)) {//Verifica existencia de la llave
                 if ($is_actualizacion AND $key === 'ctipo_material') {
-                    if (intval($value) === 2 OR intval($value) === 5) {//El campo "TIP_MAT_TIPO" que es el padrÃ© lo ponemos en null, ya que no debe ya que la opcion 2 Ã³ 5 no contiene hijos
+                    if (intval($value) === 2 OR intval($value) === 5) {//El campo "TIP_MAT_TIPO" que es el padrÃƒÂ© lo ponemos en null, ya que no debe ya que la opcion 2 ÃƒÂ³ 5 no contiene hijos
                         $array_result['insert_ctipo_material'][$insert_ctipo_material[$key]['insert']] = 'NULL';
                     } else {
                         $array_result['insert_ctipo_material'][$insert_ctipo_material[$key]['insert']] = $value;
@@ -2571,19 +2584,19 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $string_values = $this->lang->line('interface')['material_educativo']; //Carga textos a utilizar 
             $datos_mat_edu['string_values'] = $string_values; //Crea la variable
             $carga_vista_extra = FALSE;
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
                 $datos_post = $this->input->post(null, true);
-                if (!empty($datos_post['ctipo_material'])) {//CondiciÃ³n  para mostrar vista extra
+                if (!empty($datos_post['ctipo_material'])) {//CondiciÃƒÂ³n  para mostrar vista extra
                     $carga_vista_extra = TRUE;
                 }
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_material_educativo'); //Carga array de validaciones 
                 $result_id_empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
-                $datos_post['empleado_cve'] = $result_id_empleado; //Asigna id del empleado al anÃ¡lisis
+                $datos_post['empleado_cve'] = $result_id_empleado; //Asigna id del empleado al anÃƒÂ¡lisis
                 $validations = $this->analiza_validacion_material_educativo($validations, $datos_post, $_FILES);
                 $array_datos_entidad = array(); //name_entidad => array(campos con valores)
                 $array_operacion_id_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
-                //Parametros iniciales que deben persistir en el botÃ³n de actualizaciÃ³n
+                //Parametros iniciales que deben persistir en el botÃƒÂ³n de actualizaciÃƒÂ³n
                 $this->form_validation->set_rules($validations['validacion']);
                 if ($this->form_validation->run()) {//Si pasa todas las validaciones, actualizar
                     $insert_ctipo_material = $validations['insert_ctipo_material'];
@@ -2597,16 +2610,16 @@ class Evaluacion_curricular_validar extends MY_Controller {
                         if (!empty($result)) {
                             //LLena los arrays para la bitacora
                             $array_datos_entidad['emp_materia_educativo'] = $result['emp_materia_educativo']; //Asigna para bitacora las los datos insertados
-                            $array_operacion_id_entidades['emp_materia_educativo'] = array('insert' => $result['emp_materia_educativo']['MATERIA_EDUCATIVO_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                            $array_operacion_id_entidades['emp_materia_educativo'] = array('insert' => $result['emp_materia_educativo']['MATERIA_EDUCATIVO_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                             $array_datos_entidad['ctipo_material'] = $result['ctipo_material']; //Asigna para bitacora las los datos insertados
-                            $array_operacion_id_entidades['ctipo_material'] = array('insert' => $result['ctipo_material']['TIP_MATERIAL_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                            $array_operacion_id_entidades['ctipo_material'] = array('insert' => $result['ctipo_material']['TIP_MATERIAL_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                             $guardado_correcto = TRUE;
                         }
                     } else {//Guarda directamente en la entidad "emp_materia_educativo", y, no guarda nada en la entidad "ctipo_material"
                         $id_emp_material_edu = $this->mem->insert_emp_materia_educativo($insert_emp_materia_educativo); //Inserta los datos de las dos tablas
                         if ($id_emp_material_edu > 0) {
                             $insert_emp_materia_educativo['MATERIA_EDUCATIVO_CVE'] = $id_emp_material_edu;
-                            $array_operacion_id_entidades['emp_materia_educativo'] = array('insert' => $id_emp_material_edu); //Asigna operaciÃ³n ejecutada a la entidad
+                            $array_operacion_id_entidades['emp_materia_educativo'] = array('insert' => $id_emp_material_edu); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                             $array_datos_entidad['emp_materia_educativo'] = $insert_emp_materia_educativo; //Asigna para bitacora las los datos insertados
                             $guardado_correcto = TRUE;
                         }
@@ -2614,7 +2627,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $tipo_msg = $this->config->item('alert_msg');
                     if ($guardado_correcto) {//Si el guardado fue satisfactorio, guarda bitacora
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['phl_registro_correcto']; //Mensaje de que no encontro empleado
@@ -2654,15 +2667,15 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->load->view('validador_censo/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE);
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     /**
-     * FunciÃ³n que permite eliminar la direcciÃ³n de tesis
+     * FunciÃƒÂ³n que permite eliminar la direcciÃƒÂ³n de tesis
      * @method: void eliminar_convocatoria()
-     * @param: $Identificador   string en base64    Identificador de la direcciÃ³n de tesis codificado en base64
-     * @author: JesÃºs Z. DÃ­az P.
+     * @param: $Identificador   string en base64    Identificador de la direcciÃƒÂ³n de tesis codificado en base64
+     * @author: JesÃƒÂºs Z. DÃƒÂ­az P.
      */
     public function eliminar_material_educativo() {
         if ($this->input->is_ajax_request()) {
@@ -2687,7 +2700,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $delete_emp_mat_edu = $this->cg->delete_registro_general('emp_materia_educativo', array('MATERIA_EDUCATIVO_CVE' => $emp_material_educativo_cve));
                 if ($delete_emp_mat_edu === 1) {//Guarda en bitacora
                     $array_datos_entidad['emp_materia_educativo'] = $registro_emp_mat_edu;
-                    $array_operacion_id_entidades['emp_materia_educativo'] = array('delete' => $registro_emp_mat_edu['MATERIA_EDUCATIVO_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                    $array_operacion_id_entidades['emp_materia_educativo'] = array('delete' => $registro_emp_mat_edu['MATERIA_EDUCATIVO_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                     $delete_satisfactorio = TRUE;
                 } else {
                     $delete_satisfactorio = FALSE;
@@ -2700,7 +2713,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
                     if ($delete_comprobante === 1) {//Guarda en bitacora
                         $array_datos_entidad['comprobante'] = $registro_comprobante;
-                        $array_operacion_id_entidades['comprobante'] = array('delete' => $registro_comprobante['COMPROBANTE_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['comprobante'] = array('delete' => $registro_comprobante['COMPROBANTE_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         //Eliminar archivo
                         $delete_satisfactorio = TRUE;
                     } else {
@@ -2708,11 +2721,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     }
                 }
 
-                if ($tipo_material_cve > 6) { //Los registros con id menor que 6, deben persistir, son de cajÃ³n por lo que no deben eliminarse
+                if ($tipo_material_cve > 6) { //Los registros con id menor que 6, deben persistir, son de cajÃƒÂ³n por lo que no deben eliminarse
                     $delete_tipo_meterial = $this->cg->delete_registro_general('ctipo_material', array('TIP_MATERIAL_CVE' => $tipo_material_cve));
                     if ($delete_tipo_meterial === 1) {//Guarda en bitacora
                         $array_datos_entidad['ctipo_material'] = $registro_tipo_meterial;
-                        $array_operacion_id_entidades['ctipo_material'] = array('delete' => $registro_tipo_meterial['TIP_MATERIAL_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['ctipo_material'] = array('delete' => $registro_tipo_meterial['TIP_MATERIAL_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         $delete_satisfactorio = TRUE;
                     } else {
                         $delete_satisfactorio = FALSE;
@@ -2721,7 +2734,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
 
                 $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                 //Datos de bitacora el registro del usuario
                 registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
 
@@ -2737,7 +2750,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 echo json_encode($data);
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -2750,8 +2763,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
         if (!empty($padre_tp_material_padre)) {
             $padre_tp_material_padre = intval($padre_tp_material_padre);
             $array_opciones = $this->config->item('opciones_tipo_material')[$padre_tp_material_padre];
-            foreach ($array_opciones as $key => $val) {//Asigna los valores a los campos de texto segÃºn el formulario secundario
-                if ($key === 'opt_tipo_material') {//Para seleccionar opciÃ³n
+            foreach ($array_opciones as $key => $val) {//Asigna los valores a los campos de texto segÃƒÂºn el formulario secundario
+                if ($key === 'opt_tipo_material') {//Para seleccionar opciÃƒÂ³n
                     $array_option = $this->config->item('opciones_tipo_material')[$val];
                     foreach ($array_option as $key_option => $value_option) {//Busca la llave del texto
                         if ($array_datos['opt_tipo_material'] === $value_option) {
@@ -2763,7 +2776,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $array_datos_res[$key] = $array_datos[$key];
                 }
             }
-            $array_datos_res['material_educativo_cve'] = $padre_tp_material_padre; //Agrega el id del padrÃ©
+            $array_datos_res['material_educativo_cve'] = $padre_tp_material_padre; //Agrega el id del padrÃƒÂ©
         } else {
             $array_datos_res['material_educativo_cve'] = $array_datos['tipo_material_cve']; //Agrega el id almacenado en "tipo_material_cve"
         }
@@ -2824,7 +2837,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $datos_form_secundario ['cantidad_hojas'] = $this->config->item('opciones_tipo_material')['cantidad_hojas'];
                 $datos_form_secundario ['numero_horas'] = $this->config->item('opciones_tipo_material')['numero_horas'];
                 $datos_mat_edu['formulario_complemento'] = $this->load->view('validador_censo/material_educativo/formulario_mat_edu_' . $datos_reg_mat_edu_validados['material_educativo_cve'], $datos_form_secundario, TRUE);
-                //Carga datos de pie de pÃ¡gina
+                //Carga datos de pie de pÃƒÂ¡gina
                 $datos_pie = array();
                 $datos_pie['cve_mat_edu'] = $datos_post['material_edu_cve']; //Cve del material encriptado base64
                 $datos_pie['cve_tp_mat_edu'] = $datos_post['ti_material_cve']; //Cve del material encriptado base64
@@ -2840,7 +2853,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -2856,7 +2869,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $tipo_material_cve = intval($this->seguridad->decrypt_base64($datos_post['ti_material_cve'])); //Identificador de materia_educativo
                 $datos_reg_mat_edu = $this->mem->get_datos_material_educativo($material_edu_cve);
                 $carga_vista_extra = FALSE;
-                if (!empty($datos_post['ctipo_material'])) {//CondiciÃ³n  para mostrar vista extra
+                if (!empty($datos_post['ctipo_material'])) {//CondiciÃƒÂ³n  para mostrar vista extra
                     $carga_vista_extra = TRUE;
                 }
 
@@ -2864,11 +2877,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $validations = $this->config->item('form_material_educativo'); //Carga array de validaciones
                 $result_id_empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
                 $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variabl
-                $datos_post['empleado_cve'] = $result_id_empleado; //Asigna id del empleado al anÃ¡lisis
+                $datos_post['empleado_cve'] = $result_id_empleado; //Asigna id del empleado al anÃƒÂ¡lisis
                 $validations = $this->analiza_validacion_material_educativo($validations, $datos_post, TRUE);
                 $array_datos_entidad = array(); //name_entidad => array(campos con valores)
                 $array_operacion_id_entidades = array(); //INSERT , UPDATE, DELETE Y SU IDENTIFICADOR DE ENTIDAD
-                //Parametros iniciales que deben persistir en el botÃ³n de actualizaciÃ³n
+                //Parametros iniciales que deben persistir en el botÃƒÂ³n de actualizaciÃƒÂ³n
 //                pr($validations['insert_emp_mat_educativo']);
 //                pr($validations['insert_ctipo_material']);
                 $this->form_validation->set_rules($validations['validacion']); //Carga las validaciones 
@@ -2879,37 +2892,37 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     //Preparando para actualizar los registros
                     $id_tip_m_cve = intval($insert_emp_materia_educativo['TIP_MATERIAL_CVE']);
 
-                    $condicion_actual_tipo_mat_cve = ($id_tip_m_cve === 0); //CondiciÃ³n de cambio actual en formulario
+                    $condicion_actual_tipo_mat_cve = ($id_tip_m_cve === 0); //CondiciÃƒÂ³n de cambio actual en formulario
                     $condicion_anterior_tipo_mat_cve = (($tipo_material_cve !== 2 AND $tipo_material_cve !== 5)); //Identificador que esta guardado en la base de datos actualmente, viene de post
 
                     if ($condicion_anterior_tipo_mat_cve AND $condicion_actual_tipo_mat_cve) {//Actualiza las dos tablas, es decir, "emp_mat_educativo" y "ctipo_material" 
                         //Actualiza la entidad de tipo de material educativo
                         unset($insert_ctipo_material['TIP_MATERIAL_CVE']);
                         $result_update_tme = $this->mem->update_tipo_material_educativo($tipo_material_cve, $insert_ctipo_material); //Inserta los datos de las dos tablas
-                        if (!empty($result_update_tme)) {//La actualizacioÃ³n se efectuo correctamente 
+                        if (!empty($result_update_tme)) {//La actualizacioÃƒÂ³n se efectuo correctamente 
                             //LLena los arrays para la bitacora
                             $array_datos_entidad['ctipo_material'] = $result_update_tme; //Asigna para bitacora las los datos insertados
-                            $array_operacion_id_entidades['ctipo_material'] = array('update' => $tipo_material_cve); //Asigna operaciÃ³n ejecutada a la entidad
+                            $array_operacion_id_entidades['ctipo_material'] = array('update' => $tipo_material_cve); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                             $insert_emp_materia_educativo['TIP_MATERIAL_CVE'] = $tipo_material_cve;
                             $result = $this->mem->update_material_educativo($material_edu_cve, $insert_emp_materia_educativo); //Inserta los datos de las dos tablas
-                            if (!empty($result)) {//La actualizacioÃ³n se efectuo correctamente 
+                            if (!empty($result)) {//La actualizacioÃƒÂ³n se efectuo correctamente 
                                 //LLena los arrays para la bitacora
                                 $array_datos_entidad['emp_materia_educativo'] = $result; //Asigna para bitacora las los datos insertados
-                                $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃ³n ejecutada a la entidad
+                                $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                                 $actualizado_correcto = TRUE;
                             }
                         }
                     } else if ($condicion_anterior_tipo_mat_cve AND ! $condicion_actual_tipo_mat_cve) {//Actualiza la entidad "emp_mat_educativo" y  elimina  la entidad "ctipo_material"
-                        //ActualoizÃ¡ la entidad "emp_mat_educativo" 
+                        //ActualoizÃƒÂ¡ la entidad "emp_mat_educativo" 
                         $result = $this->mem->update_material_educativo($material_edu_cve, $insert_emp_materia_educativo); //Inserta los datos de las dos tablas
-                        if (!empty($result)) {//La actualizacioÃ³n se efectuo correctamente 
+                        if (!empty($result)) {//La actualizacioÃƒÂ³n se efectuo correctamente 
                             $delete_tipo_meterial = $this->mem->delete_tipo_material_educativo($tipo_material_cve);
                             if (!empty($delete_tipo_meterial)) {//Guarda en bitacora
                                 $array_datos_entidad['ctipo_material'] = $delete_tipo_meterial;
-                                $array_operacion_id_entidades['ctipo_material'] = array('delete' => $delete_tipo_meterial['TIP_MATERIAL_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                                $array_operacion_id_entidades['ctipo_material'] = array('delete' => $delete_tipo_meterial['TIP_MATERIAL_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                                 //LLena los arrays para la bitacora de la entidad  "emp_materia_educativo"
                                 $array_datos_entidad['emp_materia_educativo'] = $result; //Asigna para bitacora las los datos insertados
-                                $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃ³n ejecutada a la entidad
+                                $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                                 $actualizado_correcto = TRUE;
                             }
                         }
@@ -2918,24 +2931,24 @@ class Evaluacion_curricular_validar extends MY_Controller {
                         if ($result_insert_ctipo_mat_edu > 0) {//El registro de tipo material docente se actualizo correctamente
                             $insert_emp_materia_educativo['TIP_MATERIAL_CVE'] = $result_insert_ctipo_mat_edu; //asicia el index de la entidad "ctipo_material" 
                             $result = $this->mem->update_material_educativo($material_edu_cve, $insert_emp_materia_educativo); //Inserta los datos de las dos tablas
-                            if (!empty($result)) {//La actualizacioÃ³n se efectuo correctamente 
+                            if (!empty($result)) {//La actualizacioÃƒÂ³n se efectuo correctamente 
                                 //LLena los arrays para la bitacora de la entidad "emp_materia_educativo"
                                 $array_datos_entidad['emp_materia_educativo'] = $result; //Asigna para bitacora las los datos insertados
-                                $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃ³n ejecutada a la entidad
+                                $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                                 //LLena los arrays para la bitacora de tipo de la entidad "ctipo_material" 
                                 $insert_ctipo_material['TIP_MATERIAL_CVE'] = $result_insert_ctipo_mat_edu;
                                 $array_datos_entidad['ctipo_material'] = $insert_ctipo_material; //Asigna para bitacora las los datos insertados
-                                $array_operacion_id_entidades['ctipo_material'] = array('insert' => $result_insert_ctipo_mat_edu); //Asigna operaciÃ³n ejecutada a la entidad
+                                $array_operacion_id_entidades['ctipo_material'] = array('insert' => $result_insert_ctipo_mat_edu); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                             }
                             $actualizado_correcto = TRUE;
                         }
-                    } else {//Las dos condiciones son falsas (los datos guardados en la base y los seleccionados actualmente, contienen un identificador sin hijos (2 Ã³ 5))
-                        //ActualoizÃ¡ la entidad "emp_mat_educativo" unicamente
+                    } else {//Las dos condiciones son falsas (los datos guardados en la base y los seleccionados actualmente, contienen un identificador sin hijos (2 ÃƒÂ³ 5))
+                        //ActualoizÃƒÂ¡ la entidad "emp_mat_educativo" unicamente
                         $result = $this->mem->update_material_educativo($material_edu_cve, $insert_emp_materia_educativo); //Inserta los datos de las dos tablas
-                        if (!empty($result)) {//La actualizacioÃ³n se efectuo correctamente 
+                        if (!empty($result)) {//La actualizacioÃƒÂ³n se efectuo correctamente 
                             //LLena los arrays para la bitacora
                             $array_datos_entidad['emp_materia_educativo'] = $result; //Asigna para bitacora las los datos insertados
-                            $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃ³n ejecutada a la entidad
+                            $array_operacion_id_entidades['emp_materia_educativo'] = array('update' => $material_edu_cve); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                             $actualizado_correcto = TRUE;
                         }
                     }
@@ -2943,7 +2956,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $tipo_msg = $this->config->item('alert_msg');
                     if ($actualizado_correcto) {//Si el guardado fue satisfactorio, guarda bitacora
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['phl_registro_actualizado_correcto']; //Mensaje de que no encontro empleado
@@ -2984,7 +2997,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 echo $this->load->view('validador_censo/material_educativo/formulario_mat_edu_general', $datos_mat_edu, TRUE);
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3005,13 +3018,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $data_comision['lista_comisiones'] = $lista_comisiones;
                 $data_becas['string_values'] = $string_values;
                 $data_comision['string_values'] = $string_values;
-                $data['cuerpo_becas'] = $this->load->view('validador_censo/becas_comisiones/becas_cuerpo', $data_becas, TRUE); //Valores que muestrÃ¡n la lista
-                $data['cuerpo_comisiones'] = $this->load->view('validador_censo/becas_comisiones/comisiones_cuerpo', $data_comision, TRUE); //Valores que muestrÃ¡n la lista
-                $this->load->view('validador_censo/becas_comisiones/becas_comisiones_tpl', $data, FALSE); //Valores que muestrÃ¡n la lista
+                $data['cuerpo_becas'] = $this->load->view('validador_censo/becas_comisiones/becas_cuerpo', $data_becas, TRUE); //Valores que muestrÃƒÂ¡n la lista
+                $data['cuerpo_comisiones'] = $this->load->view('validador_censo/becas_comisiones/comisiones_cuerpo', $data_comision, TRUE); //Valores que muestrÃƒÂ¡n la lista
+                $this->load->view('validador_censo/becas_comisiones/becas_comisiones_tpl', $data, FALSE); //Valores que muestrÃƒÂ¡n la lista
                 //Error, No existe el empleado
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3037,7 +3050,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             );
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3046,7 +3059,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
             $data_comisiones['string_values'] = $string_values; //Crea la variable
-            $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //SÃ³lo comisiones que no son academicas, es decir, puras comisiones laborales
+            $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //SÃƒÂ³lo comisiones que no son academicas, es decir, puras comisiones laborales
             $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
             $data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
             $datos_pie = array();
@@ -3064,7 +3077,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             );
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3072,7 +3085,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 //        pr($array_post);
 //        pr($array_validacion);
         $array_result = array();
-        //Carga la entidad emp_beca o, emp_comision segÃºn sea el caso
+        //Carga la entidad emp_beca o, emp_comision segÃƒÂºn sea el caso
         $insert_emp_entidad = $this->config->item($name_entidad);
 //        pr($array_post);
         foreach ($array_post as $key => $value) {
@@ -3099,7 +3112,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
             $result_id_empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
 
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
                 $datos_post = $this->input->post(null, true);
 //                pr($datos_post);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
@@ -3122,9 +3135,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     if (!empty($result)) {
                         //LLena los arrays para la bitacora
                         $array_datos_entidad['emp_beca'] = $result; //Asigna para bitacora las los datos insertados
-                        $array_operacion_id_entidades['emp_beca'] = array('insert' => $result['EMP_BECA_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['emp_beca'] = array('insert' => $result['EMP_BECA_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['phl_registro_correcto']; //Mensaje de que no encontro empleado
@@ -3156,7 +3169,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->load->view('validador_censo/becas_comisiones/formulario_becas', $data_becas, TRUE);
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3171,7 +3184,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
             $result_id_empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
 //            pr($_FILES);
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
 //                pr($this->input->post());
                 $datos_post = $this->input->post(null, true);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
@@ -3195,9 +3208,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     if (!empty($result)) {
                         //LLena los arrays para la bitacora
                         $array_datos_entidad['emp_comision'] = $result; //Asigna para bitacora las los datos insertados
-                        $array_operacion_id_entidades['emp_comision'] = array('insert' => $result['EMP_COMISION_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['emp_comision'] = array('insert' => $result['EMP_COMISION_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['phl_registro_correcto']; //Mensaje de que no encontro empleado
@@ -3213,7 +3226,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     exit();
                 }//*************************Termina bloque de insertar nueva beca
             }
-            $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //SÃ³lo comisiones que no son academicas, es decir, puras comisiones laborales
+            $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //SÃƒÂ³lo comisiones que no son academicas, es decir, puras comisiones laborales
             $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
             $data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
 
@@ -3230,7 +3243,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->load->view('validador_censo/becas_comisiones/formulario_comisiones', $data_comisiones, TRUE);
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3253,7 +3266,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $delete_emp_beca = $this->cg->delete_registro_general('emp_beca', array('EMP_BECA_CVE' => $emp_beca));
                 if ($delete_emp_beca === 1) {//Guarda en bitacora
                     $array_datos_entidad['emp_beca'] = $registro_emp_beca;
-                    $array_operacion_id_entidades['emp_beca'] = array('delete' => $registro_emp_beca['EMP_BECA_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                    $array_operacion_id_entidades['emp_beca'] = array('delete' => $registro_emp_beca['EMP_BECA_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                     $delete_satisfactorio = TRUE;
                 } else {
                     $delete_satisfactorio = FALSE;
@@ -3266,7 +3279,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
                     if ($delete_comprobante === 1) {//Guarda en bitacora
                         $array_datos_entidad['comprobante'] = $registro_comprobante;
-                        $array_operacion_id_entidades['comprobante'] = array('delete' => $registro_comprobante['COMPROBANTE_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['comprobante'] = array('delete' => $registro_comprobante['COMPROBANTE_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         //Eliminar archivo
 
                         $delete_satisfactorio = TRUE;
@@ -3276,7 +3289,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 }
 
                 $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                 //Datos de bitacora el registro del usuario
                 registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
 
@@ -3292,7 +3305,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 echo json_encode($data);
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3315,7 +3328,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $delete_emp_comision = $this->cg->delete_registro_general('emp_comision', array('EMP_COMISION_CVE' => $emp_beca));
                 if ($delete_emp_comision === 1) {//Guarda en bitacora
                     $array_datos_entidad['emp_comision'] = $registro_emp_comision;
-                    $array_operacion_id_entidades['emp_comision'] = array('delete' => $registro_emp_comision['EMP_COMISION_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                    $array_operacion_id_entidades['emp_comision'] = array('delete' => $registro_emp_comision['EMP_COMISION_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                     $delete_satisfactorio = TRUE;
                 } else {
                     $delete_satisfactorio = FALSE;
@@ -3328,7 +3341,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
                     if ($delete_comprobante === 1) {//Guarda en bitacora
                         $array_datos_entidad['comprobante'] = $registro_comprobante;
-                        $array_operacion_id_entidades['comprobante'] = array('delete' => $registro_comprobante['COMPROBANTE_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['comprobante'] = array('delete' => $registro_comprobante['COMPROBANTE_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         //Eliminar archivo
 
                         $delete_satisfactorio = TRUE;
@@ -3338,7 +3351,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 }
 
                 $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                 //Datos de bitacora el registro del usuario
                 registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
 
@@ -3354,7 +3367,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 echo json_encode($data);
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3384,7 +3397,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
                 $data_becas['string_values'] = $string_values; //Crea la variable
-                //Carga cÃ¡talogos de becas
+                //Carga cÃƒÂ¡talogos de becas
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cclase_beca, enum_ecg::cbeca_interrumpida, enum_ecg::cmotivo_becado);
                 $data_becas = carga_catalogos_generales($entidades_, $data_becas);
                 //Des encrypta id de la beca para hacer la consulta de las becas
@@ -3393,7 +3406,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $informacion_becas = $this->filtrar_datos_becas_comisiones($datos_reg_mat_edu, 'emp_beca');
                 $data_becas['informacion_becas'] = $informacion_becas;
 //                pr($informacion_becas);
-                //Carga datos de pÃ­e de pÃ¡gina ************************************
+                //Carga datos de pÃƒÂ­e de pÃƒÂ¡gina ************************************
                 $datos_pie = array();
                 $datos_pie['cve_beca'] = $datos_post['cve_beca'];
                 $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
@@ -3416,7 +3429,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3427,8 +3440,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['becas_comisiones']; //Carga textos a utilizar 
                 $data_comisiones['string_values'] = $string_values; //Crea la variable
-                //Carga cÃ¡talogos de becas
-                $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //SÃ³lo comisiones que no son academicas, es decir, puras comisiones laborales
+                //Carga cÃƒÂ¡talogos de becas
+                $condiciones_ = array(enum_ecg::ctipo_comision => array('IS_COMISION_ACADEMICA = ' => 0)); //SÃƒÂ³lo comisiones que no son academicas, es decir, puras comisiones laborales
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_comision);
                 $data_comisiones = carga_catalogos_generales($entidades_, $data_comisiones, $condiciones_);
                 //Des encrypta id de la beca para hacer la consulta de las becas
@@ -3436,7 +3449,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $datos_reg_comision = $this->bcl->get_datos_comisiones($cve_comision); //Datos de becas
                 $informacion_comisiones = $this->filtrar_datos_becas_comisiones($datos_reg_comision, 'emp_comision');
                 $data_comisiones['informacion_comisiones'] = $informacion_comisiones;
-                //Carga datos de pÃ­e de pÃ¡gina ************************************
+                //Carga datos de pÃƒÂ­e de pÃƒÂ¡gina ************************************
                 $datos_pie = array();
                 $datos_pie['cve_comision'] = $datos_post['cve_comision'];
                 $datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
@@ -3459,7 +3472,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3473,7 +3486,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
             $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
             $result_id_empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
                 $datos_post = $this->input->post(null, true); //
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
                 $validations = $this->config->item('form_beca'); //Obtener validaciones de archivo
@@ -3489,9 +3502,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     if (!empty($result_update_beca)) {//Actualizo la beca correctamente
                         //LLena los arrays para la bitacora
                         $array_datos_entidad['emp_beca'] = $result_update_beca; //Asigna para bitacora las los datos insertados
-                        $array_operacion_id_entidades['emp_beca'] = array('update' => $result_update_beca['EMP_BECA_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['emp_beca'] = array('update' => $result_update_beca['EMP_BECA_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['succesfull_actualizar']; //Mensaje de que no encontro empleado
@@ -3524,7 +3537,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->load->view('validador_censo/becas_comisiones/formulario_becas', $data_becas, TRUE);
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3538,7 +3551,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
             $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
             $result_id_empleado = $this->obtener_id_empleado(); //Asignamos id usuario a variable
-            if ($this->input->post()) {//DespuÃ©s de cargar el formulario
+            if ($this->input->post()) {//DespuÃƒÂ©s de cargar el formulario
                 $datos_post = $this->input->post(null, true); //
 //                pr($datos_post);
                 $this->config->load('form_validation'); //Cargar archivo con validaciones
@@ -3556,9 +3569,9 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     if (!empty($result_update_beca)) {//Actualizo la beca correctamente
                         //LLena los arrays para la bitacora
                         $array_datos_entidad['emp_comision'] = $result_update_beca; //Asigna para bitacora las los datos insertados
-                        $array_operacion_id_entidades['emp_comision'] = array('update' => $result_update_beca['EMP_COMISION_CVE']); //Asigna operaciÃ³n ejecutada a la entidad
+                        $array_operacion_id_entidades['emp_comision'] = array('update' => $result_update_beca['EMP_COMISION_CVE']); //Asigna operaciÃƒÂ³n ejecutada a la entidad
                         $json_datos_entidad = json_encode($array_operacion_id_entidades); //Codifica a json datos de entidad
-                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃ³n o insersiÃ³n a las entidades involucradas
+                        $json_registro_bitacora = json_encode($array_datos_entidad); //Codifica a json la actualizaciÃƒÂ³n o insersiÃƒÂ³n a las entidades involucradas
                         //Datos de bitacora el registro del usuario
                         registro_bitacora($result_id_user, null, $json_datos_entidad, null, $json_registro_bitacora, null);
                         $res_j['error'] = $string_values['succesfull_actualizar']; //Mensaje de que no encontro empleado
@@ -3589,7 +3602,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             //**** fi de comprobante *******************************************
             echo $this->load->view('validador_censo/becas_comisiones/formulario_comisiones', $data_comprobante, TRUE);
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
@@ -3607,18 +3620,18 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
     ///////////////////////////////////Inicio detalle de registros
     public function formacion_salud_detalle($identificador = null, $validar = null) {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             $this->load->model('Formacion_model', 'fm');
             $this->lang->load('interface');
             $data['identificador'] = $identificador;
-            $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+            $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
             //$data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
             $data['string_values'] = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['formacion_salud'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
 
             $data['dir_tes'] = $this->fm->get_formacion_salud(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'FPCS_CVE' => $fs_id), 'fields' => 'emp_for_personal_continua_salud.*, ctipo_formacion_salud.TIP_FORM_SALUD_NOMBRE, csubtipo_formacion_salud.SUBTIP_NOMBRE, TIPO_COMPROBANTE_CVE'))[0]; //Obtener datos
 
             $accion_general = $this->config->item('ACCION_GENERAL');
-            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃ³n almacenada
+            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃƒÂ³n almacenada
                 $data = $this->validar_registro(array_merge($data, array('tipo_id' => 'FORMACION_SALUD', 'seccion_actualizar' => 'seccion_formacion', 'identificador_registro' => $fs_id)));
             } else {
                 $data['formulario_validacion'] = $this->historico_registro(array_merge($data, array('tipo_id' => 'FORMACION_SALUD', 'seccion_actualizar' => 'seccion_formacion', 'identificador_registro' => $fs_id)));
@@ -3632,23 +3645,23 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     public function formacion_docente_detalle($identificador = null, $validar = null) {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             $this->load->model('Formacion_model', 'fm');
             $this->lang->load('interface');
             $data['identificador'] = $identificador;
-            $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+            $fs_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
             $validacion_cve_session = $this->obtener_id_validacion();
             $data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
             $data['string_values'] = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['formacion_docente'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
             $tmp = $resultado_almacenado = array();
             $tmp_tematica = '0';
 
-            $condiciones_ = array(enum_ecg::cinstitucion_avala => array('IA_TIPO' => $this->config->item('institucion')['imparte'])); //Obtener catÃ¡logos para llenar listados desplegables
+            $condiciones_ = array(enum_ecg::cinstitucion_avala => array('IA_TIPO' => $this->config->item('institucion')['imparte'])); //Obtener catÃƒÂ¡logos para llenar listados desplegables
             $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cinstitucion_avala, enum_ecg::cmodalidad, enum_ecg::ctipo_formacion_profesional, enum_ecg::ctematica);
             $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
 
@@ -3658,7 +3671,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
             $data['dir_tes']['tematica'] = $this->fm->get_formacion_docente_tematica(array('conditions' => array('EMP_FORMACION_PROFESIONAL_CVE' => $fs_id), 'order' => 'TEM_NOMBRE'));
 
             $accion_general = $this->config->item('ACCION_GENERAL');
-            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃ³n almacenada
+            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃƒÂ³n almacenada
                 $data = $this->validar_registro(array_merge($data, array('tipo_id' => 'FORMACION_PROFESIONAL', 'seccion_actualizar' => 'seccion_formacion', 'identificador_registro' => $fs_id)));
             } else {
                 $data['formulario_validacion'] = $this->historico_registro(array_merge($data, array('tipo_id' => 'FORMACION_PROFESIONAL', 'seccion_actualizar' => 'seccion_formacion', 'identificador_registro' => $fs_id)));
@@ -3672,22 +3685,22 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     public function direccion_tesis_detalle($identificador = null, $validar = null) {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             $this->load->model('Direccion_tesis_model', 'dt');
             $this->lang->load('interface');
             $data['identificador'] = $identificador;
-            $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+            $dt_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
             $data['string_values'] = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
             //pr($this->session->userdata());
             $data['dir_tes'] = $this->dt->get_lista_datos_direccion_tesis(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'EMP_COMISION_CVE' => $dt_id), 'fields' => 'emp_comision.*, comprobante.COM_NOMBRE, comprobante.TIPO_COMPROBANTE_CVE, ctipo_comprobante.TIP_COM_NOMBRE, cnivel_academico.NIV_ACA_NOMBRE, comision_area.COM_ARE_NOMBRE'))[0]; //Obtener datos
 
             $accion_general = $this->config->item('ACCION_GENERAL');
-            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃ³n almacenada
+            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃƒÂ³n almacenada
                 $data = $this->validar_registro(array_merge($data, array('tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_direccion_tesis', 'identificador_registro' => $dt_id)));
             } else {
                 $data['formulario_validacion'] = $this->historico_registro(array_merge($data, array('tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_direccion_tesis', 'identificador_registro' => $dt_id)));
@@ -3702,31 +3715,31 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     public function comision_academica_detalle($tipo_comision = null, $identificador = null) {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             $this->load->model('Comision_academica_model', 'ca');
             $this->lang->load('interface');
             $data['tipo_comision'] = $tipo_comision;
             $data['identificador'] = $identificador;
-            $tc_id = $this->seguridad->decrypt_base64($tipo_comision); //Identificador del tipo de comisiÃ³n
-            $ca_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
-            $validar = $this->input->get('dv'); //Bandera que habilita la validaciÃ³n
+            $tc_id = $this->seguridad->decrypt_base64($tipo_comision); //Identificador del tipo de comisiÃƒÂ³n
+            $ca_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
+            $validar = $this->input->get('dv'); //Bandera que habilita la validaciÃƒÂ³n
             //$data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
             $data['string_values'] = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['comision_academica'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
 
             $config = $this->comision_academica_configuracion($tc_id, false);
             $data['catalogos'] = $config['catalogos'];
 
-            $data['mostrar_hora_fecha_duracion'] = 0; //$this->get_valor_validacion($datos_formulario, 'duracion'); //MuestrÃ¡ validaciones de hora y fecha de inicio y termino segÃºn la opciÃ³n de duraciÃ³n
+            $data['mostrar_hora_fecha_duracion'] = 0; //$this->get_valor_validacion($datos_formulario, 'duracion'); //MuestrÃƒÂ¡ validaciones de hora y fecha de inicio y termino segÃƒÂºn la opciÃƒÂ³n de duraciÃƒÂ³n
 
             $data['dir_tes'] = $this->ca->get_comision_academica(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'EMP_COMISION_CVE' => $ca_id), 'fields' => 'emp_comision.*, comprobante.COM_NOMBRE, comprobante.TIPO_COMPROBANTE_CVE, ctipo_curso.TIP_CUR_NOMBRE, ccurso.CUR_NOMBRE, cnivel_academico.NIV_ACA_NOMBRE'))[0]; //Obtener datos
 
             $accion_general = $this->config->item('ACCION_GENERAL');
-            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃ³n almacenada
+            if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acciÃƒÂ³n almacenada
                 $data = $this->validar_registro(array_merge($data, array('tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_comision_academica', 'identificador_registro' => $ca_id)));
             } else {
                 $data['formulario_validacion'] = $this->historico_registro(array_merge($data, array('tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_comision_academica', 'identificador_registro' => $ca_id)));
@@ -3740,29 +3753,29 @@ class Evaluacion_curricular_validar extends MY_Controller {
 
             echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     /**
-     * MÃ©todo que permite agregar formulario de validaciÃ³n a las ventanas que muestran la informaciÃ³n del registro (curso, beca, comisiÃ³n, etc.)
-     * seccion_actualizar       SecciÃ³n que se actualizarÃ¡ al cierre del modal
-     * tipo_id                  Obtener tabla y campo donde se almacenarÃ¡
-     * identificador_registro   Identificador del registro (curso, beca, comisiÃ³n, etc) a validar
+     * MÃƒÂ©todo que permite agregar formulario de validaciÃƒÂ³n a las ventanas que muestran la informaciÃƒÂ³n del registro (curso, beca, comisiÃƒÂ³n, etc.)
+     * seccion_actualizar       SecciÃƒÂ³n que se actualizarÃƒÂ¡ al cierre del modal
+     * tipo_id                  Obtener tabla y campo donde se almacenarÃƒÂ¡
+     * identificador_registro   Identificador del registro (curso, beca, comisiÃƒÂ³n, etc) a validar
      */
     private function validar_registro($data) {
         $this->load->helper('date');
         $this->load->model('Validacion_docente_model', 'vd');
-        $tipo_id = $data['tipo_id']; //Definido en archivo de configuraciÃ³n general. Arreglo que contiene tablas y campo para la actualizaciÃ³n de datos
+        $tipo_id = $data['tipo_id']; //Definido en archivo de configuraciÃƒÂ³n general. Arreglo que contiene tablas y campo para la actualizaciÃƒÂ³n de datos
         $data['tipo'] = $this->seguridad->encrypt_base64($tipo_id);
-        $tipo_validacion = $this->config->item('TABLAS')[$tipo_id]; ///Obtener tabla y campo donde se almacenarÃ¡
+        $tipo_validacion = $this->config->item('TABLAS')[$tipo_id]; ///Obtener tabla y campo donde se almacenarÃƒÂ¡
 
-        $validacion_cve = $this->obtener_id_validacion(); //Se obtiene identificador de la validaciÃ³n de sesiÃ³n
+        $validacion_cve = $this->obtener_id_validacion(); //Se obtiene identificador de la validaciÃƒÂ³n de sesiÃƒÂ³n
 
-        $entidades_ = array(enum_ecg::cvalidacion_curso_estado); //Obtener catÃ¡logo de estados para la validaciÃ³n de cada curso
+        $entidades_ = array(enum_ecg::cvalidacion_curso_estado); //Obtener catÃƒÂ¡logo de estados para la validaciÃƒÂ³n de cada curso
         $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
 
-        ///Obtener validaciÃ³n del curso
+        ///Obtener validaciÃƒÂ³n del curso
         $data['registro_validado'] = $this->vd->get_validacion_registro(array('conditions' => array("{$tipo_validacion['tabla_validacion']}.validacion_cve" => $validacion_cve, "{$tipo_validacion['campo']}" => $data['identificador_registro']), 'table' => $tipo_validacion['tabla_validacion'], 'order' => 'VAL_CUR_FCH DESC'));
 
         $data['formulario_validacion'] = $this->load->view('validador_censo/validacion_formulario', $data, TRUE);
@@ -3771,41 +3784,41 @@ class Evaluacion_curricular_validar extends MY_Controller {
     }
 
     private function historico_registro($data) {
-        $tipo_id = $data['tipo_id']; //Definido en archivo de configuraciÃ³n general. Arreglo que contiene tablas y campo para la actualizaciÃ³n de datos
+        $tipo_id = $data['tipo_id']; //Definido en archivo de configuraciÃƒÂ³n general. Arreglo que contiene tablas y campo para la actualizaciÃƒÂ³n de datos
         $data['tipo'] = $this->seguridad->encrypt_base64($tipo_id);
         return $this->load->view('validador_censo/validacion_listado', $data, TRUE);
     }
 
     public function listado_estado_registro($identificador = null, $tipo = null) {
-        if ($this->input->is_ajax_request()) { //Solo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
+        if ($this->input->is_ajax_request()) { //Solo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
             $this->load->helper('date');
             $this->load->model('Validacion_docente_model', 'vd');
             $data['identificador'] = $identificador;
             $data['string_values'] = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['direccion_tesis'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']);
-            $id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃ³n
+            $id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisiÃƒÂ³n
             $tipo_id = $this->seguridad->decrypt_base64($tipo);
-            $tipo_validacion = $this->config->item('TABLAS')[$tipo_id]; ///Obtener tabla y campo donde se almacenarÃ¡
+            $tipo_validacion = $this->config->item('TABLAS')[$tipo_id]; ///Obtener tabla y campo donde se almacenarÃƒÂ¡
 
-            $validacion_cve = $this->obtener_id_validacion(); //Se obtiene identificador de la validaciÃ³n de sesiÃ³n
+            $validacion_cve = $this->obtener_id_validacion(); //Se obtiene identificador de la validaciÃƒÂ³n de sesiÃƒÂ³n
             $data['registro_validado'] = $this->vd->get_validacion_registro(array('conditions' => array("{$tipo_validacion['campo']}" => $id), 'table' => $tipo_validacion['tabla_validacion'], 'order' => 'VAL_CUR_FCH DESC'));
 
             echo $this->load->view('validador_censo/validacion_historico_listado', $data, TRUE);
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
     ///////////////////////////////////Fin detalle de registros
 
     /**
-     * MÃ©todo que almacena la validaciÃ³n del censo, registro por registro(curso, beca, comisiÃ³n, etc.)
-     * @autor       : JesÃºs Z. DÃ­az P.
+     * MÃƒÂ©todo que almacena la validaciÃƒÂ³n del censo, registro por registro(curso, beca, comisiÃƒÂ³n, etc.)
+     * @autor       : JesÃƒÂºs Z. DÃƒÂ­az P.
      * @modified    :
      * @access      : public
      */
     public function validar_censo_registro($identificador_registro = null, $identificador_validacion = null) {
-        if ($this->input->is_ajax_request()) { //SÃ³lo se accede al mÃ©todo a travÃ©s de una peticiÃ³n ajax
-            if ($this->input->post()) { //Validar si se recibiÃ³ informaciÃ³n
+        if ($this->input->is_ajax_request()) { //SÃƒÂ³lo se accede al mÃƒÂ©todo a travÃƒÂ©s de una peticiÃƒÂ³n ajax
+            if ($this->input->post()) { //Validar si se recibiÃƒÂ³ informaciÃƒÂ³n
                 $this->lang->load('interface');
                 $string_values = array_merge($this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general']);
                 $resultado = array('result' => false, 'msg' => '', 'id' => '');
@@ -3817,24 +3830,24 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $registro_id = $this->seguridad->decrypt_base64($identificador_registro); //Identificador del registro
                     $validacion_id = (!is_null($identificador_validacion)) ? $this->seguridad->decrypt_base64($identificador_validacion) : $identificador_validacion; //Identificador del registro
                     //pr($_SESSION);
-                    if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃ³n por mÃ©todo post
-                        $validacion_cve = $this->obtener_id_validacion(); ///Obtener de sesiÃ³n el identificador de la validaciÃ³n que se esta editando
-                        //$validacion_gral_cve = $this->session->userdata('validacion_gral_cve'); ///Obtener de sesiÃ³n el identificador de la validaciÃ³n que se esta editando
+                    if (!is_null($this->input->post()) && !empty($this->input->post())) { //Se verifica que se haya recibido informaciÃƒÂ³n por mÃƒÂ©todo post
+                        $validacion_cve = $this->obtener_id_validacion(); ///Obtener de sesiÃƒÂ³n el identificador de la validaciÃƒÂ³n que se esta editando
+                        //$validacion_gral_cve = $this->session->userdata('validacion_gral_cve'); ///Obtener de sesiÃƒÂ³n el identificador de la validaciÃƒÂ³n que se esta editando
                         $data['formulario'] = $this->input->post(null, true); //Se limpian y obtienen datos
 
                         $this->config->load('form_validation'); //Cargar archivo con validaciones
                         $validations = $this->config->item('form_validacion_registro'); //Obtener validaciones de archivo general
-                        $this->form_validation->set_rules($validations); //AÃ±adir validaciones
+                        $this->form_validation->set_rules($validations); //AÃƒÂ±adir validaciones
                         $cvalidacion_curso_estado = $this->config->item('cvalidacion_curso_estado');
 
-                        //////Agregar validaciÃ³n de comentario, si el estado elegido es no valido o en correcciÃ³n
+                        //////Agregar validaciÃƒÂ³n de comentario, si el estado elegido es no valido o en correcciÃƒÂ³n
                         if (in_array($data['formulario']['estado_validacion'], array($cvalidacion_curso_estado['NO_VALIDO']['id'], $cvalidacion_curso_estado['CORRECCION']['id']))) {
                             $this->form_validation->set_rules('comentario', 'Comentario', 'required');
                         }
 
                         if ($this->form_validation->run() == TRUE) { //Validar datos
                             $tipo_id = $this->seguridad->decrypt_base64($tipo); //Identificador del tipo
-                            $tipo_validacion = $this->config->item('TABLAS')[$tipo_id]; ///Obtener tabla y campo donde se almacenarÃ¡
+                            $tipo_validacion = $this->config->item('TABLAS')[$tipo_id]; ///Obtener tabla y campo donde se almacenarÃƒÂ¡
                             $validacion_registro = $this->validacion_registro_vo(array_merge($data['formulario'], array('validacion_cve' => $validacion_cve, 'registro' => $registro_id, 'tipo_validacion' => $tipo_validacion))); //'validacion_gral_cve' => $validacion_gral_cve
                             //$this->vdm->get_validacion_registro(array('table'=>$tipo_validacion['tabla_validacion'], 'conditions'=>''));
                             if (is_null($identificador_validacion)) {
@@ -3867,11 +3880,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 echo json_encode($resultado);
             }
         } else {
-            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃ©todo mediante una peticiÃ³n normal, no ajax
+            redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al mÃƒÂ©todo mediante una peticiÃƒÂ³n normal, no ajax
         }
     }
 
-    ////////////////////////Inicio Factory de validaciÃ³n
+    ////////////////////////Inicio Factory de validaciÃƒÂ³n
     private function validacion_registro_vo($validacion) {
         $val = new Validacion_registro_dao;
         $val->VALIDACION_CVE = (isset($validacion['validacion_cve']) && !empty($validacion['validacion_cve'])) ? $validacion['validacion_cve'] : NULL;

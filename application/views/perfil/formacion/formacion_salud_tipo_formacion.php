@@ -4,7 +4,7 @@ if(count($catalogos['csubtipo_formacion_salud'])>0){
 	<div class='col-sm-12 col-md-12 col-lg-4 text-right'>
 	    <label class="control-label">
 	        * <?php echo $string_values['lbl_subtipo_formacion']; ?>:
-	    </label>
+	    <!--</label>-->
 	</div>
 	<div class='col-sm-12 col-md-12 col-lg-8 text-left'>
 		<div class="form-group">

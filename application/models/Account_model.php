@@ -25,7 +25,6 @@ class Account_model extends CI_Model {
         $this->db->where('USU_MATRICULA', $matricula);
         $query = $this->db->get('usuario');
         $cantidad = $query->num_rows();
-
         if ($cantidad > 0) {
             $result['result'] = 1;
             $result['data'] =  $query->result_array()[0];
@@ -78,13 +77,10 @@ class Account_model extends CI_Model {
         $this->db->where('SHA2(concat(usuario.USUARIO_CVE,usuario.USU_MATRICULA), 512) = ', $token);
         $query = $this->db->get('usuario');
         $cantidad = $query->num_rows();
-
-        //pr($this->db->last_query());
-
+//        pr($this->db->last_query());
         if ($cantidad > 0) {
             $result['result'] = 1;
             $result['data'] =  $query->result_array()[0];
-
             return $result;
         } else {
             return $result;
@@ -107,7 +103,7 @@ class Account_model extends CI_Model {
             
         $this->db->insert('recuperar_contrasenia', $data_reset_password); //Almacena usuario
         $obtiene_id_password_reset = $this->db->insert_id();
-
+        pr($this->db->last_query());
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -125,31 +121,58 @@ class Account_model extends CI_Model {
      * @param type String: $code_password_reset
      * @return array() si el código de recuperación existe devuelve array('exists'=>1) de lo contrario devuelve array('exists'=>0)
      */
+//    public function get_exist_code_password_reset($params=array()) {
+//        $result = array('result'=>0, 'data'=>null);
+//        if (is_null($params)) {
+//            return $result;
+//        }
+//        $data_select = array(
+//            'MAX(REC_CON_FCH) as MAX_REC_CON_FCH',
+//            'REC_CON_CVE',
+//            'REC_CON_CODIGO',
+//            'REC_CON_FCH',
+//            'REC_CON_ESTADO',
+//            'USUARIO_CVE',
+//        );
+//
+//        $this->db->select($data_select);
+//        $this->db->where($params);
+//        //$this->db->where('REC_CON_ESTADO = 0');
+//        //$this->db->where('REC_CON_CODIGO', $code_password_reset);
+//        //$this->db->where('USU_MATRICULA', $matricula);
+//        $query = $this->db->get('recuperar_contrasenia');
+//        $cantidad = $query->num_rows();
+//        pr($this->db->last_query());
+//        if ($cantidad > 0) {
+//            $result['result'] = 1;
+//            $result['data'] =  $query->result_array()[0];
+//            return $result;
+//        } else {
+//            return $result;
+//        }
+//    
+//    }
+    
+    /**
+     * @author Pablo José D.J. 
+     * @fecha creación 18-08-2016 
+     * @param type String: $code_password_reset
+     * @return array() si el código de recuperación existe devuelve array('exists'=>1) de lo contrario devuelve array('exists'=>0)
+     */
     public function get_exist_code_password_reset($params=array()) {
         $result = array('result'=>0, 'data'=>null);
         if (is_null($params)) {
             return $result;
         }
-        $data_select = array(
-                    'MAX(REC_CON_FCH) as MAX_REC_CON_FCH',
-                    'REC_CON_CVE',
-                    'REC_CON_CODIGO',
-                    'REC_CON_FCH',
-                    'REC_CON_ESTADO',
-                    'USUARIO_CVE',
-                );
-
-        $this->db->select($data_select);
-        $this->db->where($params);
-        //$this->db->where('REC_CON_ESTADO = 0');
-        //$this->db->where('REC_CON_CODIGO', $code_password_reset);
-        //$this->db->where('USU_MATRICULA', $matricula);
-        $query = $this->db->get('recuperar_contrasenia');
-        $cantidad = $query->num_rows();
-
-        if ($cantidad > 0) {
+        $data_select = 'SELECT REC_CON_CVE, REC_CON_CODIGO, REC_CON_FCH, '
+                . 'REC_CON_ESTADO, USUARIO_CVE FROM recuperar_contrasenia '
+                . 'where REC_CON_FCH in (SELECT MAX(REC_CON_FCH) as MAX_FCH FROM recuperar_contrasenia WHERE USUARIO_CVE = ' . $params['USUARIO_CVE'] .') '
+                . 'and USUARIO_CVE = '.  $params['USUARIO_CVE'];
+        $query = $this->db->query($data_select);
+        $query = $query->result_array();
+        if (!empty($query)) {
             $result['result'] = 1;
-            $result['data'] =  $query->result_array()[0];
+            $result['data'] =  $query[0];
             return $result;
         } else {
             return $result;

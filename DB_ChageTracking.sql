@@ -1265,4 +1265,14 @@ FOREIGN KEY (`TIP_CURSO_CVE`) REFERENCES `ctipo_curso`(`TIP_CURSO_CVE`) ON DELET
 
 ALTER TABLE evaluacion_curso_validacion DROP FOREIGN KEY  fk_ebs_ecv;
 
+--------------------2016/10/04 Ejecución Luis Ramá del conocimiento ---------------------
+CREATE TABLE `crama_conocimiento` (
+  `RAMA_CONOC_CVE` int(11) NOT NULL AUTO_INCREMENT,
+  `NOMBRE_RAMA_CONOC` VARCHAR(30) NOT NULL,
+  PRIMARY KEY (`RAMA_CONOC_CVE`),
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ 
+ drop table crama_conocimiento; -- se elimino despúes  
+
+ 
 
