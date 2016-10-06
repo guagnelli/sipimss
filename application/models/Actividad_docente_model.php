@@ -225,6 +225,91 @@ class Actividad_docente_model extends CI_Model {
 
         return $query->result_array();
     }
+    
+    
+     /**
+     * @author LEAS
+     * @param int $param Lista de actividades del docente
+     * 
+     */
+    public function get_actividades_docente_unique($param = null) {
+        /*Validaciones para ciclo general getAll()*/
+        if(is_array($param) && isset($param["conditions"]["empleado_cve"])){
+            $empleado_cve = $param["conditions"]["empleado_cve"];
+        }
+
+        //Entidad de emp_actividad_docente 
+        $select_emp_actividad_docente = 'select 
+            ead.EMP_ACT_DOCENTE_CVE "cve_actividad_docente", ead.EAD_ANIO_CURSO "anio", ead.EAD_DURACION "duracion"
+            ,ead.EAD_FCH_INICIO "fecha_inicio", ead.EAD_FCH_FIN "fecha_fin", ead.COMPROBANTE_CVE "comprobante"
+            ,ead.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", ead.ACT_DOC_GRAL_CVE "actividad_general_cve"
+            , ead.IS_VALIDO_PROFESIONALIZACION, ead.EAD_NOMBRE_CURSO "nom_curso"
+            from emp_actividad_docente as ead
+            inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = ead.TIP_ACT_DOC_CVE
+            where ead.EMPLEADO_CVE = ' . $empleado_cve;
+
+        if(is_array($param) && isset($param["validations"]["IS_VALIDO_PROFESIONALIZACION"])){
+            $select_emp_actividad_docente .= " AND IS_VALIDO_PROFESIONALIZACION = ".$param["validations"]["IS_VALIDO_PROFESIONALIZACION"];
+        }
+        $query = $this->db->query($select_emp_actividad_docente);
+//        pr($this->db->last_query());
+        return $query->result_array();
+    }
+     /**
+     * @author LEAS
+     * @param int $param  Lista de actividades del docente
+     * 
+     */
+    public function get_act_docente_espec_med_unique($param  = null) {
+        
+        /*Validaciones para ciclo general getAll()*/
+        if(is_array($param ) && isset($param ["conditions"]["empleado_cve"])){
+            $empleado_cve = $param ["conditions"]["empleado_cve"];
+        }
+
+        //Entidad de emp_educacion_distancia 
+        $select_emp_esp_medica = 'select 
+            esm.EMP_ESP_MEDICA_CVE "cve_actividad_docente", esm.EEM_ANIO_FUNGIO "anio", esm.EEM_DURACION "duracion"
+            ,esm.EEM_FCH_INICIO "fecha_inicio", esm.EEM_FCH_FIN "fecha_fin", esm.COMPROBANTE_CVE "comprobante"
+            ,esm.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", esm.ACT_DOC_GRAL_CVE "actividad_general_cve"
+            , esm.IS_VALIDO_PROFESIONALIZACION, cte.TIP_ESP_MED_NOMBRE "nom_curso"
+            from emp_esp_medica as esm
+            inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = esm.TIP_ACT_DOC_CVE
+            inner join ctipo_especialidad cte on cte.TIP_ESP_MEDICA_CVE = esm.TIP_ESP_MEDICA_CVE
+            where esm.EMPLEADO_CVE = ' . $empleado_cve;
+
+        if(is_array($param ) && isset($param ["validations"]["IS_VALIDO_PROFESIONALIZACION"])){
+            $select_emp_esp_medica .= " AND IS_VALIDO_PROFESIONALIZACION = ".$param ["validations"]["IS_VALIDO_PROFESIONALIZACION"];
+        }
+        $query = $this->db->query($select_emp_esp_medica);
+//        pr($this->db->last_query());
+        return $query->result_array();
+    }
+    
+    public function get_act_docente_edu_dist_unique($param = null) {
+        
+        /*Validaciones para ciclo general getAll()*/
+        if(is_array($param) && isset($param["conditions"]["empleado_cve"])){
+            $empleado_cve = $param["conditions"]["empleado_cve"];
+        }
+
+        //Entidad de emp_educacion_distancia 
+        $select_emp_educacion_distancia = 'select 
+            eed.EMP_EDU_DISTANCIA_CVE "cve_actividad_docente", eed.EDD_CUR_ANIO "anio", eed.EED_DURACION "duracion"
+            ,eed.EDD_FCH_INICIO "fecha_inicio", eed.EED_FCH_FIN "fecha_fin", eed.COMPROBANTE_CVE "comprobante"
+            ,eed.TIP_ACT_DOC_CVE "ta_cve", ctad.TIP_ACT_DOC_NOMBRE "nombre_tp_actividad", eed.ACT_DOC_GRAL_CVE "actividad_general_cve"
+            , eed.IS_VALIDO_PROFESIONALIZACION, eed.EED_NOMBRE_CURSO "nom_curso"
+            from emp_educacion_distancia as eed
+            inner join ctipo_actividad_docente as ctad on ctad.TIP_ACT_DOC_CVE = eed.TIP_ACT_DOC_CVE
+            where eed.EMPLEADO_CVE = ' . $empleado_cve;
+        //Entidad de emp_esp_medica
+        if(is_array($param) && isset($param["validations"]["IS_VALIDO_PROFESIONALIZACION"])){
+            $select_emp_educacion_distancia .=  " AND IS_VALIDO_PROFESIONALIZACION = ".$param["validations"]["IS_VALIDO_PROFESIONALIZACION"];
+        }
+        $query = $this->db->query($select_emp_educacion_distancia);
+//        pr($this->db->last_query());
+        return $query->result_array();
+    }
 
     /**
      * 

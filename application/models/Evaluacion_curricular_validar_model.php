@@ -186,7 +186,7 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         if (is_null($parametros)) {
             $parametros = array('ecv_cve "cursos_evaluacion_cve"', 'ebs_cve "bloque_seccion"',
                 'es_cve "solicitud_cve"', 'csi_cve "seccion_cve"',
-                'registro_cve "curso_actividad_cve"');
+                'registro_cve "curso_registro_cve"');
         }
         $this->db->where('es_cve', $solicitud_eva_cve);
         $this->db->select($parametros);

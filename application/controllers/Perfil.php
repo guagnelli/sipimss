@@ -964,6 +964,11 @@ class Perfil extends MY_Controller {
             }
 
             $entidades_ = array(enum_ecg::ctipo_comprobante);
+            /*$entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
+            $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Formacion_continua_del_personal_de_salud, Enum_ecg::ctipo_comprobante);
+            $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $conditions, true, $where_grup);*/
             $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
 
             //Carga el condiciones de ctipo_formación en salud inicial o continua

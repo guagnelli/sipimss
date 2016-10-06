@@ -757,7 +757,7 @@ if (!function_exists('valida_acceso_rol_validador')) {
      * @param type $estado_validacion  Estado actual que se pretende validar por dicho rol
      * @return int 0=No tiene acceso el rol a la validación 1=Tiene acceso el rol a la validación
      */
-    function valida_acceso_rol_validador($rol_validador, $estado_validacion, $reglas_estados = 'estados_val_censo' ) {
+    function valida_acceso_rol_validador($rol_validador, $estado_validacion, $reglas_estados = 'estados_val_censo') {
         if (!is_null($estado_validacion) AND ! is_null($rol_validador) AND ! empty($estado_validacion) AND ! empty($rol_validador)) {
             $CI = & get_instance();
             $propiedades_gen_estado = $CI->config->item($reglas_estados)[$estado_validacion];
@@ -837,7 +837,6 @@ if (!function_exists('genera_botones_estado_validacion_evaluacion')) {
         $respuesta_html_botones = array();
         if ($valida_acceso_rol) {//**Tiene acceso el validar el estado actual la validación del docente 
             $pro_estado_actual = $propiedades_gen_estado[$estado_actual]; //Carga el estado actual del docente 
-            
 //            $estado_transicion = $pro_estado_actual['estados_transicion'];
             $CI->load->library('seguridad');
             /* Valida convocatoria para n1 y n2 por delegación */
@@ -868,52 +867,49 @@ if (!function_exists('genera_botones_estado_validacion_evaluacion')) {
 
 }
 
-//if (!function_exists('get_datos_cursos_solicitados_evaluacion')) {
-//
-//    function get_datos_cursos_solicitados_evaluacion($paramentros) {
-//        $mensaje = "No se encontrarón opciones";
-//        if (isset($paramentros['msj_vacio'])) {
-//            $mensaje = $paramentros['msj_vacio']; //Validador N1, Validador N2, Profesionalización o docente-->
-//        }
-//
-//        $estado_actual = $paramentros['estado_actual'];
-//        $tipo_validador_rol = $paramentros['tipo_validador_rol']; //Validador N1, Validador N2, Profesionalización o docente-->
-//        $delegacion_validador = $paramentros['delegacion_cve']; //Validador N1, Validador N2, Profesionalización o docente-->
-////        pr($estado_actual);
-////        pr($tipo_validador_rol);
-//        $CI = & get_instance();
-//        $propiedades_gen_estado = $CI->config->item('estados_val_evaluacion'); //Carga las propiedades de los estados de la validación del censo de docentes
-//        $valida_acceso_rol = valida_acceso_rol_validador($tipo_validador_rol, $estado_actual, 'estados_val_evaluacion'); //Valida el acceso al rol seleccionado
-//        $respuesta_html_botones = array();
-//        if ($valida_acceso_rol) {//**Tiene acceso el validar el estado actual la validación del docente 
-//            $pro_estado_actual = $propiedades_gen_estado[$estado_actual]; //Carga el estado actual del docente 
-//            
-////            $estado_transicion = $pro_estado_actual['estados_transicion'];
-//            $CI->load->library('seguridad');
-//            /* Valida convocatoria para n1 y n2 por delegación */
-//            if ($tipo_validador_rol == Enum_rols::Validador_N1 || $tipo_validador_rol == Enum_rols::Validador_N2) {
-//                $pasa_convocatoria_val = get_convocatoria_delegacion_val_censo($delegacion_validador, $tipo_validador_rol);
-//            }
-////            pr($pro_estado_actual['estados_transicion']);
-//            foreach ($pro_estado_actual['estados_transicion'] as $value_est_trans) {
-//                $estados_trans = $propiedades_gen_estado[$value_est_trans];
-//                if ($estados_trans['is_boton']) {//Verifica si es un botón o el cambio va implicito por el sistema, como es el caso del cambio de estado a "En revision por .."
-////                    pr($value_est_trans);
-//                    $value_est_trans = $CI->seguridad->encrypt_base64($value_est_trans);
-////                    $tipo_transicion = $CI->seguridad->encrypt_base64($estados_trans['color_status']);
-//                    $respuesta_html_botones[] = '<button '
-//                            . 'type="button" '
-//                            . 'class="btn btn-success" '
-//                            . 'data-estadocambiocve ="' . $value_est_trans . '"'
-////                            . 'data-tipotransicion ="' . $tipo_transicion . '"'
-//                            . 'onclick=' . $estados_trans['funcion_demandada'] . '>' .
-//                            $estados_trans['value_boton']
-//                            . '</button>';
-//                }
-//            }
-//        }
-//
-//        return $respuesta_html_botones;
-//    }
-//
-//}
+if (!function_exists('obtener_cursos_bloque_seccion_evaluacion')) {
+
+    /**
+     * @author LEAS
+     * @FECHA  05/10/2016
+     * @param type $fuente_cursos .- cursos totales por bloque y sección, se obtiene de modelo Expediente_mode->getAll();
+     * @param type $propiedades_curso
+     * @param type $cursos_solicitados
+     * Intersecta los cursos que se solicito evaluar y, con separacion por bloque y sección Expediente_model
+     */
+    function obtener_cursos_bloque_seccion_evaluacion($fuente_cursos, $propiedades_curso, $cursos_solicitados) {
+        $acro_b = 'bloque_';
+        $acro_s = 'seccion_';
+        $array_result = array();
+//        pr($fuente_cursos);
+        foreach ($cursos_solicitados as $curso) {
+            $curso_cve = $curso['curso_registro_cve'];
+            $bloque_cur_c = $acro_b . $curso['bloque_seccion']; //Bloque compuesto con el sufijo 'bloque_'
+            $seccion_cur_c = $acro_s . $curso['seccion_cve']; //Sección compuesta con el sufijo 'seccion_'
+            $bloque = $curso['bloque_seccion']; //Bloque acronimo ejem. 'F', 'AC',...,"x"
+            $seccion = $curso['seccion_cve']; //Seccioón identificador 1,2,3,4,...,"n"
+            //Si no existe la el bloque y la sección lo crea
+            if (!isset($array_result[$bloque][$seccion])) {
+                $array_result[$bloque][$seccion] = array();
+            }
+            //Busca el curso en la fuente de cursos
+            if (isset($fuente_cursos[$bloque_cur_c][$seccion_cur_c])) {
+                $pk = $propiedades_curso[$bloque][$seccion]['pk']; //Obtiene el nombre de la llave primaria del bloque y la sección seleccionada 
+                foreach ($fuente_cursos[$bloque_cur_c][$seccion_cur_c] as $datos_cur) {//Recorre los cursos de la seccion, hasta encontrar el curso
+//                    pr($datos_cur);
+                    if (isset($datos_cur[$pk]) AND intval($datos_cur[$pk]) == intval($curso_cve)) {
+//                        pr($curso_cve .' => '.$datos_cur[$pk]);
+                        $array_result[$bloque][$seccion][] = $datos_cur; //Agrega el curso 
+                        break; //Sale, por que ya encontro el curso
+//                          pr($datos_cur[$pk] . ' => ' . $curso_cve);
+//                    } else {
+//                        pr($datos_cur);
+                    }
+                }
+            }
+        }
+//        pr($array_result);
+        return $array_result;
+    }
+
+}

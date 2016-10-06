@@ -65,23 +65,27 @@ class Expediente_model extends MY_Model {
 			        	"lbl_".Enum_sec::S_EDUCACION_DISTANCIA."_nombre"=>"",
 			        	"lbl_".Enum_sec::S_EDUCACION_DISTANCIA."_tipo"=>""
 			        ),
-			        "pk"=>"",
-			        "model"=>"",
+//			        "pk"=>"EMP_EDU_DISTANCIA_CVE",
+			        "pk"=>"cve_actividad_docente",
+			        "model"=>"Actividad_docente_model",
 			        "functions"=>array(
-			        	"get"=>"",
+			        	"get"=>"get_act_docente_edu_dist_unique",
+			        	"view"=>"carga_datos_actividad",
 			        ),
 				),
 				Enum_sec::S_ESP_MEDICA=>array(
-					"acronimo"=>"",
+					"acronimo"=>"em",
 			        "entidad"=>"",
 			        "fields"=>array( 
 			        	"lbl_".Enum_sec::S_ESP_MEDICA."_nombre"=>"",
 			        	"lbl_".Enum_sec::S_ESP_MEDICA."_tipo"=>""
 			        ),
-			        "pk"=>"",
-			        "model"=>"",
+//			        "pk"=>"EMP_ESP_MEDICA_CVE",
+			        "pk"=>"cve_actividad_docente",
+			        "model"=>"Actividad_docente_model",
 			        "functions"=>array(
-			        	"get"=>"",
+			        	"get"=>"get_act_docente_espec_med_unique",
+			        	"view"=>"carga_datos_actividad",
 			        ),
 			        "activo"=>1
 				),
@@ -92,10 +96,11 @@ class Expediente_model extends MY_Model {
 			        	"lbl_".Enum_sec::S_ACTIVIDAD_DOCENTE."_nombre"=>"nom_curso",
 			        	"lbl_".Enum_sec::S_ACTIVIDAD_DOCENTE."_tipo"=>"nombre_tp_actividad"
 			        ),
+//			        "pk"=>"EMP_ACT_DOCENTE_CVE ",
 			        "pk"=>"cve_actividad_docente",
 			        "model"=>"Actividad_docente_model",
 			        "functions"=>array(
-			        	"get"=>"get_actividades_docente",
+			        	"get"=>"get_actividades_docente_unique",
 			        	"view"=>"carga_datos_actividad",
 			        ),
 				),
@@ -108,7 +113,7 @@ class Expediente_model extends MY_Model {
 			        	"lbl_".Enum_sec::S_ACTIVIDAD_DOCENTE."_nombre"=>"nom_beca",
 			        	"lbl_".Enum_sec::S_ACTIVIDAD_DOCENTE."_tipo"=>"nom_motivo_beca"
 			        ),
-			        "pk"=>"emp_beca_cve",
+			        "pk"=>"EMP_BECA_CVE",
 			        "model"=>"Becas_comisiones_laborales_model",
 			        "functions"=>array(
 			        	"get"=>"get_lista_becas",
@@ -116,13 +121,13 @@ class Expediente_model extends MY_Model {
 			        ),
 				),
 				Enum_sec::S_COMISIONES_LABORALES=>array(
-					"acronimo"=>"cl",
-			        "entidad"=>"emp_beca",
+                                "acronimo"=>"cl",
+			        "entidad"=>"emp_comision",
 			        "fields"=>array( 
 			        	"lbl_".Enum_sec::S_COMISIONES_LABORALES."_nombre"=>"nom_beca",
 			        	"lbl_".Enum_sec::S_COMISIONES_LABORALES."_tipo"=>"nom_motivo_beca"
 			        ),
-			        "pk"=>"emp_beca_cve",
+			        "pk"=>"EMP_COMISION_CVE",
 			        "model"=>"Becas_comisiones_laborales_model",
 			        "functions"=>array(
 			        	"get"=>"get_lista_comisiones",
@@ -147,14 +152,14 @@ class Expediente_model extends MY_Model {
 				),
 			),
 			Enum_sec::B_INVESTIGACION_EDUCATIVA=>array(
-				Enum_sec::S_DESA_INV_SALUD=>array(
+				Enum_sec::S_ACT_INV_EDU=>array(
 					"acronimo"=>"is",
-			        "entidad"=>"emp_desa_inv_salud",
+			        "entidad"=>"emp_act_inv_edu",
 			        "fields"=>array( 
-			        	"lbl_".Enum_sec::S_DESA_INV_SALUD."_nombre"=>"nombre_investigacion",
-			        	"lbl_".Enum_sec::S_DESA_INV_SALUD."_tipo"=>"tpad_nombre"
+			        	"lbl_".Enum_sec::S_ACT_INV_EDU."_nombre"=>"nombre_investigacion",
+			        	"lbl_".Enum_sec::S_ACT_INV_EDU."_tipo"=>"tpad_nombre"
 			        ),
-			        "pk"=>"cve_investigacion",
+			        "pk"=>"EAID_CVE",
 			        "model"=>"Investigacion_docente_model",
 			        "functions"=>array(
 			        	"get"=>"get_lista_datos_investigacion_docente",
@@ -186,7 +191,7 @@ class Expediente_model extends MY_Model {
 			        	"lbl_".Enum_sec::S_MATERIA_EDUCATIVO."_nombre"=>"nombre_material",
 			        	"lbl_".Enum_sec::S_MATERIA_EDUCATIVO."_tipo"=>"opt_tipo_material"
 			        ),
-			        "pk"=>"emp_material_educativo_cve",
+			        "pk"=>"MATERIA_EDUCATIVO_CVE",
 			        "model"=>"Material_educativo_model",
 			        "functions"=>array(
 			        	"get"=>"get_lista_material_educativo",

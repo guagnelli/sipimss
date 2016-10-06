@@ -230,39 +230,41 @@ class Evaluacion_curricular_validar extends MY_Controller {
         //Obtener todos los registros almacenados en actividades del censo, docentes
         $this->load->model('Expediente_model', 'exp'); //Modelo clase que contiene todos los datos de las secciones
         $info_docente = $this->exp->getAll($empleado_cve, true); //Resultado
-        pr($info_docente);
-        exit();
-        $emp_bloques_seccion = $info_docente['bloques'];
         $acro_b = 'bloque_';
         $acro_s = 'seccion_';
+//        pr($info_docente);
+        $emp_bloques_seccion = $info_docente['bloques'];
         $datos_curso = $info_docente['cfg_actividad'];
         $textos = $info_docente['string_value'];
         //Obtiene
-        $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve);
+        $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve);//Cursos a evaluar
+        $cursos = obtener_cursos_bloque_seccion_evaluacion($info_docente['bloques'], $info_docente['cfg_actividad'], $cursos_s_evaluar);//Depuración de cursos
+        exit();
         foreach ($cursos_s_evaluar as $cursos) {//Recorre los cursos solicitados para evaluaciÃ³n y filtrar
-            $cve = $cursos['cursos_evaluacion_cve'];
+            $cve = $cursos['curso_registro_cve'];
             $bloque = $cursos['bloque_seccion'];
             $seccion = $cursos['seccion_cve'];
             $activida_cve = $cursos['curso_actividad_cve'];
+//            pr($activida_cve);
             if (!isset($actividad_curso_validado[$bloque])) {//Verifica existencia del bloque en el array de resultado
                 $actividad_curso_validado[$bloque] = array(); //Agrega el dato
             }
             if (isset($emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion])) {
-                $tmp = $emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion];
+                $tmp[$acro_s . $seccion] = $emp_bloques_seccion[$acro_b . $bloque][$acro_s . $seccion];
                 $actividad_curso_validado[$bloque] = $tmp;
             }
-            $datos_tabla['acronimo'] = $value['acronimo'];
-            $datos_tabla['datos_modulo'] = $array_datos[$value['acronimo']];
-            $datos_tabla['pk'] = $value['pk'];
-            $datos_tabla['ver_datos'] = $value['ver_datos'];
-            $datos_tabla['curso'] = $value['curso'];
-            $datos_tabla['tipo_curso'] = $value['tipo_curso'];
-            $controlador['ruta'] = $prop['seccion'];
-            $controlador['ruta_padre'] = $prop['controlador_validacion'];
-            $controlador['nombre_modulo'] = $datos_tabla['secciones']['lbl_' . $value['acronimo'] . '_titulo'];
-            $controlador['tabla'] = $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/tab_gen_cursos', $datos_tabla, TRUE);
-            $result_array[] = $controlador;
-            
+
+//            $datos_tabla['acronimo'] = $value['acronimo'];
+//            $datos_tabla['datos_modulo'] = $array_datos[$value['acronimo']];
+//            $datos_tabla['pk'] = $value['pk'];
+//            $datos_tabla['ver_datos'] = $value['ver_datos'];
+//            $datos_tabla['curso'] = $value['curso'];
+//            $datos_tabla['tipo_curso'] = $value['tipo_curso'];
+//            $controlador['ruta'] = $prop['seccion'];
+//            $controlador['ruta_padre'] = $prop['controlador_validacion'];
+//            $controlador['nombre_modulo'] = $datos_tabla['secciones']['lbl_' . $value['acronimo'] . '_titulo'];
+//            $controlador['tabla'] = $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/tab_gen_cursos', $datos_tabla, TRUE);
+//            $result_array[] = $controlador;
         }
 
 //        pr($emp_bloques_seccion);
@@ -274,7 +276,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $result_array = array();
         $controlador_validacion = 'controlador_validacion';
 //        pr($actividad_curso_validado);
-        pr($info_docente);
+//        pr($info_docente);
 //        pr($string_text);
         foreach ($actividad_curso_validado as $key => $value) {
 //            pr($value);

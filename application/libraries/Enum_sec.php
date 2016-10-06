@@ -14,7 +14,7 @@ class Enum_sec {
             S_COMISIONES_ACADEMICAS = 1,
             S_FOR_PERSONAL_CONTINUA_SALUD = 2,
             S_DESA_INV_SALUD = 3,
-            // S_ACT_INV_EDU = 4,
+            S_ACT_INV_EDU = 4,
             S_BECAS_LABORALES = 5, //BECAS Y COMISIONES LABORALES
             S_FORMACION_PROFESIONAL = 6,
             S_MATERIA_EDUCATIVO = 7,
