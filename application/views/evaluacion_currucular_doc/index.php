@@ -1,9 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$this->lang->load('interface', 'spanish');
-$string_values = $this->lang->line('interface');
-//pr($array_menu);
 ?>
 <?php echo css("style-sipimss.css"); ?>
 
@@ -20,20 +17,20 @@ $string_values = $this->lang->line('interface');
 <div class="panel-group" id="accordion">
     <div class="row">
         <div class="col-sm-6">
-            <strong><?php echo $string_value["lbl_info_nombre"]?></strong>
+            <strong><?php echo $string_value_seccion["lbl_info_nombre"]?></strong>
                     <?php echo $empleado["nombre"]." "
                           .$empleado["apellidoPaterno"]." "
                           .$empleado["apellidoMaterno"]?><br />
-            <strong><?php echo $string_value["lbl_info_matricula"]?></strong>
+            <strong><?php echo $string_value_seccion["lbl_info_matricula"]?></strong>
                     <?php echo $empleado["matricula"]?><br />
             <strong><?php //echo $string_value["lbl_info_categoria"]?></strong>
                     <?php //echo $empleado["categoria_PD"]?>
         </div>
         <!-- /.col -->
         <div class="col-sm-6 ">
-            <strong><?php echo $string_value["lbl_info_del"]?></strong>
+            <strong><?php echo $string_value_seccion["lbl_info_del"]?></strong>
                     <?php echo $empleado["delegacion"]?><br />
-            <strong><?php echo $string_value["lbl_info_adscripcion"]?></strong>
+            <strong><?php echo $string_value_seccion["lbl_info_adscripcion"]?></strong>
                     <?php echo $empleado["nombreUnidadAdscripcion"]?><br />
             <strong><?php //echo $string_value["lbl_info_vigencia"]?></strong>
                     <?php // $empleado["vigencia"]?>
@@ -42,23 +39,23 @@ $string_values = $this->lang->line('interface');
       </div>
     <br>
     <?php
-    foreach ($array_menu as $key_tab => $value_tab) {
+    foreach ($array_menu as $bloque => $value_tab) {
         ?>
         <script >
             /*Guarda los datos de configuración para el uso de ajax en javascript*/
-//            hrutes['<?php echo $value_tab['ruta']; ?>'] = '<?php echo $value_tab['ruta_padre']; ?>';
+//            hrutes['<?php // echo $value_tab['ruta']; ?>'] = '<?php // echo $value_tab['ruta_padre']; ?>';
         </script>
         <div class="panel box box-success">
             <div class="box-header with-border">
                 <h4 class="box-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $value_tab['ruta'] ?>" class="collapsed" aria-expanded="false">
-                        <?php echo $value_tab['nombre_modulo'] ?>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo 'seccion_'.$bloque ?>" class="collapsed" aria-expanded="false">
+                        <?php echo $string_values[$labels_bloque[$bloque]];?>
                     </a>
                 </h4>
             </div>
-            <div id="<?php echo $value_tab['ruta'] ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                <div id="cuerpo_<?php echo $value_tab['ruta'] ?>" class="box-body">
-                    <?php echo $value_tab['tabla'] ?>
+            <div id="<?php echo 'seccion_'.$bloque ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div id="cuerpo_<?php echo $bloque ?>" class="box-body">
+                    <?php // echo $value_tab['tabla'] ?>
                 </div>
             </div>
         </div>
