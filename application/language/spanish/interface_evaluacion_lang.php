@@ -105,7 +105,8 @@ $lang['interface_evaluacion'] = array(
             'tipo_curso' => 'Tipo de curso',
             'valido' => 'Valido',
             'puntos' => 'Puntuación',
-            'seccion' => 'Sección'
+            'seccion' => 'Sección',
+            'error_guardar_puntos' => 'Para almacenar la puntuación del curso debe seleccionar la sección<br> y escribir los puntos obtenidos antes de continuar.'
         )
     ),
     'general' => array(

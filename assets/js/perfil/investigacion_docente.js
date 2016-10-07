@@ -366,6 +366,11 @@ function funcion_actualizar_investigacion(element) {
 
 }
 
+function funcion_mostrar_medio_divulgacion(tipo_medio) {
+   data_ajax(site_url+'/perfil/medio_divulgacion_por_tipo/'+tipo_medio, null, '#medio_divulgacion_div');
+   $('#div_mostrar_comprobante_libro_revista').html('<div class="clearfix"></div>');
+}
+
 //function funcion_cambio_texto(element) {
 //    $('#id_row_' + 14). $("#" + id_div + " p").each(function (i)
 //    {

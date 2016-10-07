@@ -33,6 +33,7 @@ $lang['interface'] = array(
         'lbl_is_titulo' => 'Investigaci&oacute;n',
         // 'lbl_ie_titulo'=>'Investigaci&oacute;n educativa',
         'lbl_b_titulo' => 'Becas y Comisiones',
+        'lbl_cl_titulo'=>'Comisiones laborales',
         'lbl_fp_titulo' => 'Formaci&oacute;n profesional',
         'lbl_me_titulo' => 'Material educativo',
         'lbl_ed_titulo' => 'Educaci&oacute; a distancia',

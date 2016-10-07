@@ -5,7 +5,7 @@ class En_cat_mod {
     const
             __default = 0,
             Datos_generales = 1,
-            Formacion_del_personal_de_salud2 = 2,
+            Formacion_del_personal_de_salud = 2,
             Formacion_continua_del_personal_de_salud = 3,
             Ejercicio_profesional_en_salud = 4,
             Desarrollo_de_investigacion_en_salud = 5,

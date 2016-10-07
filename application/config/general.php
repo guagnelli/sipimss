@@ -70,7 +70,7 @@ $config['USU_GENERO'] = array('M'=>'Masculino', 'F'=>'Femenino', 'H'=>'Masculino
 $config['categoria_participante'] = array('36112580', '35312180');
 
 $config['EFPCS_FOR_INICIAL'] = array(
-    'INICIAL'=>array('id'=>1, 'datos'=>array(2, 4)), 'CONTINUA'=>array('id'=>2), 'LICENCIATURA'=>array('id' => 4)
+    'INICIAL'=>array('id'=>1, 'datos'=>array(2, 4)), 'CONTINUA'=>array('id'=>2, 'datos'=>array(5,6,7,9,10,12,13)), 'LICENCIATURA'=>array('id' => 4)
 );
 //, 'attributes' => array('class' => 'btn btn-info btn-sm espacio'
 $config['listado_tareas'] = array(
@@ -639,6 +639,11 @@ $config['cestado_evaluacion'] = array(
     Enum_ee::Por_evaluar => array('value'=>'Por evaluar'),
     Enum_ee::En_revision => array('value'=>'En revisión'),
     Enum_ee::Completa => array('value'=>'Completa')
+);
+
+$config['EVA_CUR_VALIDO'] = array(
+    'VALIDO'=>array('id'=>1, 'value'=>'Válido'),
+    'NO_VALIDO'=>array('id'=>2, 'value'=>'No válido')
 );
 
 //    EAD_DURACION

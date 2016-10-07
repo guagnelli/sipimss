@@ -811,9 +811,12 @@ class Perfil extends MY_Controller {
             $tmp = $resultado_almacenado = array();
             $tmp_tematica = '0';
 
-            $condiciones_ = array(enum_ecg::cinstitucion_avala => array('IA_TIPO' => $this->config->item('institucion')['imparte'])); //Obtener catálogos para llenar listados desplegables
+            $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Formacion_docente, Enum_ecg::ctipo_comprobante);
+            $condiciones_ = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes), enum_ecg::cinstitucion_avala => array('IA_TIPO' => $this->config->item('institucion')['imparte'])); //Obtener catálogos para llenar listados desplegables
             $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cinstitucion_avala, enum_ecg::cmodalidad, enum_ecg::ctipo_formacion_profesional, enum_ecg::ctematica);
-            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_);
+            //$conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
+            $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $condiciones_, true, $where_grup);
 
             $data['mostrar_hora_fecha_duracion'] = 0;
 
@@ -964,16 +967,16 @@ class Perfil extends MY_Controller {
             }
 
             $entidades_ = array(enum_ecg::ctipo_comprobante);
-            /*$entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
-            $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Formacion_continua_del_personal_de_salud, Enum_ecg::ctipo_comprobante);
+            $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Formacion_del_personal_de_salud, Enum_ecg::ctipo_comprobante);
             $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
             $where_grup = array(Enum_ecg::ctipo_comprobante => 'OR');
-            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $conditions, true, $where_grup);*/
-            $data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+
+            //$data['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+            $data['catalogos'] = carga_catalogos_generales($entidades_, null, $conditions, true, $where_grup);
 
             //Carga el condiciones de ctipo_formación en salud inicial o continua
             $condicion = ($data['dir_tes']['EFPCS_FOR_INICIAL'] == $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']) ?
-                    'TIP_FORM_SALUD_CVE IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')' : 'TIP_FORM_SALUD_CVE NOT IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')'; //De acuerdo a tipo de formación mostramos opciones de tipo de formación
+                    'TIP_FORM_SALUD_CVE IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['datos']) . ')' : 'TIP_FORM_SALUD_CVE IN (' . implode(',', $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['datos']) . ')'; //De acuerdo a tipo de formación mostramos opciones de tipo de formación
             //Carga los datos de tipo de formación según las condiciones
             $data['catalogos']['ctipo_formacion_salud'] = dropdown_options($this->fm->get_tipo_formacion_salud(
                             array('conditions' => $condicion)), 'TIP_FORM_SALUD_CVE', 'TIP_FORM_SALUD_NOMBRE');
@@ -1767,8 +1770,9 @@ class Perfil extends MY_Controller {
             $data_investigacion['string_values'] = $string_values; //Crea la variable
             $data_investigacion['divulgacion'] = ''; //Crea la variable 
             $condiciones_ = array(enum_ecg::ctipo_actividad_docente => array('TIP_ACT_DOC_CVE > ' => 16));
-            $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio, enum_ecg::cmedio_divulgacion);
+            $entidades_ = array(enum_ecg::ctipo_actividad_docente, enum_ecg::ctipo_comprobante, enum_ecg::ctipo_participacion, enum_ecg::ctipo_estudio);
             $data_investigacion = carga_catalogos_generales($entidades_, $data_investigacion, $condiciones_);
+            $data_investigacion['cmedio_divulgacion'] = array();
             $datos_pie = array();
 
             $data = array(
@@ -2035,6 +2039,11 @@ class Perfil extends MY_Controller {
                     $vista_div = $this->load->view('perfil/investigacion/bibliografia_revista', $data, TRUE);
                     return $vista_div . $vista_comprobante;
                     break;
+                case 4:
+                   $comp_conditions_ids = array(9,10,34,33,32);
+
+                   $vista_comprobante = $this->carga_vista_comprobante_foro($array_comprobante,$is_actualizacion,$comp_conditions_ids);
+                   return $vista_comprobante;
                 case 1:
                     /*
                       //Todo lo de comprobante *******************************************

@@ -61,7 +61,7 @@ class Evaluacion_docente_model extends CI_Model {
         }
 
         $query = $this->db->get('evaluacion_solicitud'); //Obtener conjunto de registros
-        //pr($this->db->last_query());
+        pr($this->db->last_query());
         //$resultado=$query->result_array();
         $resultado['total'] = $num_rows[0]->total;
         $resultado['columns'] = $query->list_fields();

@@ -33,17 +33,17 @@
             <p class="help-block"></p>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <label for="num_paginas ">Número de páginas:</label>
+            <label for="num_paginas ">NÃºmero de pÃ¡ginas:</label>
             <?php 
-            echo $this->form_complete->create_element(array('id' => 'num_paginas', 'type' => 'number', 'attributes' => array('name' => 'num_paginas', 'class' => 'form-control','max'=>'999999','min'=>'0', 'placeholder' => 'Número de páginas', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Número de páginas'))); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
+            echo $this->form_complete->create_element(array('id' => 'num_paginas', 'type' => 'number', 'attributes' => array('name' => 'num_paginas', 'class' => 'form-control','max'=>'999999','min'=>'0', 'placeholder' => 'NÃºmero de pÃ¡ginas', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'NÃºmero de pÃ¡ginas'))); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
             ?>
             <span class="text-danger"> <?php echo form_error('num_paginas','','');?> </span>
             <p class="help-block"></p>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <label for="num_capitulos">Número de capitulos:</label>
+            <label for="num_capitulos">NÃºmero de capitulos:</label>
             <?php 
-            echo $this->form_complete->create_element(array('id' => 'num_capitulos', 'type' => 'number', 'attributes' => array('name' => 'num_capitulos', 'class' => 'form-control','max'=>'5', 'min'=>'0', 'placeholder' => 'Número de capitulos', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Número de capitulos'))); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
+            echo $this->form_complete->create_element(array('id' => 'num_capitulos', 'type' => 'number', 'attributes' => array('name' => 'num_capitulos', 'class' => 'form-control','max'=>'5', 'min'=>'0', 'placeholder' => 'NÃºmero de capitulos', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'NÃºmero de capitulos'))); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
             ?>
             <span class="text-danger"> <?php echo form_error('num_capitulos','','');?> </span>
             <p class="help-block"></p>
@@ -53,7 +53,7 @@
                 <?php 
                 echo $this->form_complete->create_element(array('id' => 'is_edic_comp', 'name'=>'is_edic_comp', 'type' => 'radio', 'value'=>'1')); //,'onchange' => "data_ajax(site_url+'/encuestas/get_respuesta_esperada_ajax/".$val_ref."', '#edita_pregunta', '#respuesta_esperada')"        --  'options' => $preguntas_padre,'value'=>$pregunta_padre
                 ?>
-                Edición
+                EdiciÃ³n
             </label>
             <label>
                 <?php 
@@ -61,7 +61,7 @@
 
 
                 ?>
-                Compilación
+                CompilaciÃ³n
             </label>
             <span class="text-danger"> <?php echo form_error('is_edic_comp','','');?> </span>
             <p class="help-block"></p>

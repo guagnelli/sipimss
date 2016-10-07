@@ -113,20 +113,33 @@ class Evaluacion_docente extends MY_Controller {
                 //Manda el identificador de la delegación del usuario
                 $this->session->set_userdata('evaluacion', $datos_validacion); //Asigna la información del usuario al que se va a validar
 
-                $this->load->model("Catalogos_generales","gral");
-                $conditions = array(Enum_sec::comision=>array('emp_comision.TIP_COMISION_CVE !=' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id'], 'IS_COMISION_ACADEMICA' => '1'),
-                    Enum_sec::direccion_tesis=>array('emp_comision.TIP_COMISION_CVE' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']));
-                $datosPerfil = $this->gral->getAll($this->obtener_id_empleado(), null, $conditions);
+                $this->load->model("Expediente_model","expediente");
+                $conditions = array(Enum_sec::B_COMISIONES_ACADEMICAS=>array('emp_comision.TIP_COMISION_CVE !=' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id'], 'IS_COMISION_ACADEMICA' => '1'),
+                    Enum_sec::B_DIRECCION_TESIS=>array('emp_comision.TIP_COMISION_CVE' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']));
+                $datosPerfil = $this->expediente->getAll($this->obtener_id_empleado(), null, $conditions);
                 //pr($datosPerfil);
                 $entidades_ = array(enum_ecg::cseccion);
                 //$condiciones_ = array(enum_ecg::ccurso => array('TIP_CURSO_CVE' => $tipo_curso));
                 $datosPerfil['catalogos'] = carga_catalogos_generales($entidades_, null, null);
+                $datosPerfil['catalogos']['EVA_CUR_VALIDO'] = dropdown_options($this->config->item('EVA_CUR_VALIDO'), 'id', 'value');
                 //pr($this->lang->line('interface_evaluacion')['evaluacion']['dictamen']);
                 $datosPerfil['string_value'] = array_merge($datosPerfil['string_value'], $this->lang->line('interface_evaluacion')['evaluacion']['dictamen'], $this->lang->line('interface_evaluacion')['evaluacion']['docente'], $this->lang->line('interface_evaluacion')['general']);
                 //pr($datosPerfil);
                 //echo $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$data, true);
 
                 echo $this->load->view('evaluacion/evaluacion_docente/listado_cursos', $datosPerfil, true);
+            }
+        } else {
+            redirect(site_url());
+        }
+    }
+
+    public function guardar_puntos_registro(){
+        if ($this->input->is_ajax_request()) {
+            if (!is_null($this->input->post())) {
+                $data = $this->input->post(null, true); //Obtenemos el post o los valores
+
+                pr($data);
             }
         } else {
             redirect(site_url());
@@ -151,7 +164,10 @@ class Evaluacion_docente extends MY_Controller {
             $this->template->setMainContent($main_content);
             $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
             return FALSE;
+        } else {
+            $this->session->set_userdata(array('evaluador'=>$evaluador[0])); //Agregar evaluador a sesión
         }
+        //pr($evaluador);
         return TRUE;
     }
     
@@ -170,10 +186,10 @@ class Evaluacion_docente extends MY_Controller {
                             break;
                     }                   
                 }
-
+                pr($_SESSION);
                 $datos_busqueda['current_row'] = (isset($current_row) && !empty($current_row)) ? $current_row : 0; //Registro actual, donde inicia la visualización de registros
                 $datos_busqueda['conditions'] = 'evaluacion_solicitud.CESE_CVE >='.Enum_es::Envio_evaluacion.' AND ADMIN_DICTAMEN_EVA_CVE='.$this->obtener_id_dictamen().' '.$condition_extra;
-                $datos_busqueda['fields'] = "if(evaluacion_solicitud.CESE_CVE=".Enum_es::Envio_evaluacion.", (select EST_EVALUACION_CVE from hist_evaluacion_dic where hist_evaluacion_dic.SOLICITUD_VAL_CVE=evaluacion_solicitud.VALIDACION_CVE), 0) AS estado, evaluacion_solicitud.*, cestado_solicitud_evauacion.CESE_NOMBRE, empleado.*, DEL_NOMBRE, nom_categoria";
+                $datos_busqueda['fields'] = "if(evaluacion_solicitud.CESE_CVE=".Enum_es::Envio_evaluacion.", (select EST_EVALUACION_CVE from hist_evaluacion_dic where hist_evaluacion_dic.SOLICITUD_VAL_CVE=evaluacion_solicitud.VALIDACION_CVE AND IS_ACTUAL=".$this->config->item('IS_ACTUAL')." AND EVALUADOR_CVE=1), 0) AS estado, evaluacion_solicitud.*, cestado_solicitud_evauacion.CESE_NOMBRE, empleado.*, DEL_NOMBRE, nom_categoria";
                 
                 $datos['evaluacion'] = $this->eval_doce_model->get_evaluacion_docente($datos_busqueda); ////Obtener listado de evaluaciones de acuerdo al año seleccionado
                 $datos['evaluacion']['string_values'] = array_merge($this->lang->line('interface_evaluacion')['evaluacion']['dictamen'], $this->lang->line('interface_evaluacion')['evaluacion']['docente'], $this->lang->line('interface_evaluacion')['general']); //Cargar textos utilizados en vista
@@ -247,37 +263,40 @@ class evaluacion_curso {
     public $EVA_CUR_MSG_RE_EVALUACION;
     public $EVA_CUR_PUNTOS_CURSO_ORIGINAL;
     public $FCH_EVALUACION_CURSO_GAECUD;
+    public $EVALUACION_CVE;
+    public $HIST_EVALUACION_CVE;
+    public $SECCION_CVE;
 }
 class evaluacion_curso_esp_medica extends evaluacion_curso {
-    public $TABU_ACT_DOCENTE_CVE;
+    //public $TABU_ACT_DOCENTE_CVE;
     public $EMP_ESP_MEDICA_CVE;
 }
 class evaluacion_curso_act_docente extends evaluacion_curso  {
-    public $TABU_ACT_DOCENTE_CVE;
+    //public $TABU_ACT_DOCENTE_CVE;
     public $EMP_ACT_DOCENTE_CVE;
 }
 class evaluacion_curso_for_profesional extends evaluacion_curso {
     public $EMP_FORMACION_PROFESIONAL_CVE;
 }
 class evaluacion_curso_act_inv_edu extends evaluacion_curso {
-    public $TABU_ACT_INV_EDU_CVE;
+    //public $TABU_ACT_INV_EDU_CVE;
     public $EAID_CVE;
 }
 class evaluacion_curso_mat_edu extends evaluacion_curso {
     public $MATERIA_EDUCATIVO_CVE;
-    public $TEM_ELA_MATERIAL_CVE;
+    //public $TEM_ELA_MATERIAL_CVE;
 }
 class evaluacion_curso_comision extends evaluacion_curso {
-    public $TABU_DIR_TESIS_CVE;
-    public $TAB_COM_ACADEMICA_CVE;
-    public $TABULADOR_COOR_CVE;
+    //public $TABU_DIR_TESIS_CVE;
+    //public $TAB_COM_ACADEMICA_CVE;
+    //public $TABULADOR_COOR_CVE;
     public $EMP_COMISION_CVE;
 }
 class evaluacion_curso_fpcs extends evaluacion_curso {
-    public $TABU_EDU_CONTINUA_CVE;
+    //public $TABU_EDU_CONTINUA_CVE;
     public $FPCS_CVE;
 }
 class evaluacion_curso_edu_dis extends evaluacion_curso {
-    public $TABU_EDU_DISTANCIA_CVE;
+    //public $TABU_EDU_DISTANCIA_CVE;
     public $EMP_EDU_DISTANCIA_CVE;
 }

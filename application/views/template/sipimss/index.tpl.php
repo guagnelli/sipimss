@@ -25,11 +25,15 @@
   <link rel="stylesheet" href="<?php echo asset_url();?>sipimss/css/skins/_all-skins.css">
   <!-- Pace style -->
   <link rel="stylesheet" href="<?php echo asset_url();?>plugins/pace/pace.css">
+  <!-- APPRISE -->
+  <?php echo css("apprise.css"); ?>
 
   <!-- jQuery 2.2.3 -->
   <script src="<?php echo asset_url();?>plugins/jQuery/jquery-2.2.3.min.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="<?php echo asset_url();?>bootstrap/js/bootstrap.min.js"></script>
+  <!-- APPRISE -->
+  <?php echo js("apprise.js"); ?>
   <!-- PACE -->
   <script src="<?php echo asset_url();?>plugins/pace/pace.min.js"></script>
   <!-- SlimScroll -->

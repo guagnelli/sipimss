@@ -195,5 +195,14 @@ class Investigacion_docente_model extends CI_Model {
         }
         return $query;
     }
-
+    
+    public function get_medio_divulgacion($medio_div_cve = null) {
+       
+       $this->db->where('MED_DIVULGACION_CVE', $medio_div_cve);
+       
+       $query = $this->db->get('cmedio_divulgacion');
+       $array_validador = $query->result_array();
+       $query->free_result();
+       return $array_validador;
+    }
 }
