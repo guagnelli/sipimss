@@ -39,7 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       </div>
     <br>
     <?php
-    foreach ($array_menu as $bloque => $value_tab) {
+    foreach ($array_menu as $key_bloque => $value_secc) {
         ?>
         <script >
             /*Guarda los datos de configuración para el uso de ajax en javascript*/
@@ -48,14 +48,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="panel box box-success">
             <div class="box-header with-border">
                 <h4 class="box-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo 'seccion_'.$bloque ?>" class="collapsed" aria-expanded="false">
-                        <?php echo $string_values[$labels_bloque[$bloque]];?>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo 'seccion_'.$key_bloque ?>" class="collapsed" aria-expanded="false">
+                        <?php echo $string_values[$labels_bloque[$key_bloque]];?>
                     </a>
                 </h4>
             </div>
-            <div id="<?php echo 'seccion_'.$bloque ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                <div id="cuerpo_<?php echo $bloque ?>" class="box-body">
-                    <?php // echo $value_tab['tabla'] ?>
+            <div id="<?php echo 'seccion_'.$key_bloque ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div id="cuerpo_<?php echo $key_bloque ?>" class="box-body">
+                    
+                    <?php foreach ($value_secc as $key_seccion => $value_mod) {
+                        $data['datos_modulo'] = $value_mod;
+                        $data['metadatos'] = $info_actividad;
+                        $data['pk'] = $info_actividad[$key_bloque][$key_seccion]['pk'];
+                        $data['curso'] = $info_actividad[$key_bloque][$key_seccion]['fields']["lbl_" . $key_seccion . "_nombre"];
+                        $data['tipo_curso'] = $info_actividad[$key_bloque][$key_seccion]['fields']["lbl_" . $key_seccion . "_tipo"];
+                        $data['tp_cve'] = $info_actividad[$key_bloque][$key_seccion]['fields']["tp_cve"];
+                        $data['seccion'] = $key_seccion;
+                        $data['bloque'] = $key_bloque;
+                        $data['view'] = $info_actividad[$key_bloque][$key_seccion]["functions"]["view"];
+                        $data['is_post'] = $info_actividad[$key_bloque][$key_seccion]["functions"]["is_post"];
+                        $data['string_values'] = $string_values;
+                        
+                        echo $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/tab_gen_cursos', $data, true);
+                    }
+                        echo $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/result_tpl', null, true);
+                    ?>
                 </div>
             </div>
         </div>

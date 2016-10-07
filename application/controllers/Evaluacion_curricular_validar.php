@@ -230,6 +230,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         //Obtener todos los registros almacenados en actividades del censo, docentes
         $this->load->model('Expediente_model', 'exp'); //Modelo clase que contiene todos los datos de las secciones
         $info_docente = $this->exp->getAll($empleado_cve, true); //Resultado
+//        pr($info_docente);
         $acro_b = 'bloque_';
         $acro_s = 'seccion_';
 //        pr($info_docente);
@@ -239,6 +240,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         //Obtiene
         $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve);//Cursos a evaluar
         $cursos_bloques = obtener_cursos_bloque_seccion_evaluacion($info_docente['bloques'], $info_docente['cfg_actividad'], $cursos_s_evaluar);//Depuración de cursos
+//        pr($cursos_bloques);
         $datos_tabla['array_menu'] = $cursos_bloques;
         $datos_tabla['info_actividad'] = $info_docente['cfg_actividad'];
         $datos_tabla['string_value_seccion'] = $info_docente['string_value'];

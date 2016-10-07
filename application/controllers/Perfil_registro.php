@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
@@ -8,6 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * fecha        : 21/09/2016
  */
 class Perfil_registro extends MY_Controller {
+
     /**
      * Class Constructor
      */
@@ -139,9 +141,17 @@ class Perfil_registro extends MY_Controller {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
             $this->load->model('Comision_academica_model', 'ca');
             $this->lang->load('interface');
+            if ($this->input->post()) {//
+                $data = $this->input->post(null, true);
+                $identificador = $data['value'];
+                if ($data['tipo'] AND ! empty($data['tipo'])) {
+                    $tipo_comision = $data['tipo'];
+                }
+            }
             $data['tipo_comision'] = $tipo_comision;
             $data['identificador'] = $identificador;
-            $tc_id = $this->seguridad->decrypt_base64($tipo_comision); //Identificador del tipo de comisión
+            $tc_id = (!is_numeric($tipo_comision)) ? $this->seguridad->decrypt_base64($tipo_comision) : $tipo_comision; //Identificador del tipo de comisión
+
             $ca_id = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
             $validar = $this->input->get('dv'); //Bandera que habilita la validación
             //$data['idc'] = $this->input->post('idc', true); //Campo necesario para mostrar link de comprobante
@@ -177,7 +187,7 @@ class Perfil_registro extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $data_investigacion['string_values'] = array_merge($this->lang->line('interface')['investigacion_docente'], $this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
-            
+
             $data_investigacion['identificador'] = $identificador;
             //$result_id_user = $this->obtener_id_usuario(); //Asignamos id usuario a variable
             //$matricula_user = $this->session->userdata('matricula');
@@ -209,11 +219,11 @@ class Perfil_registro extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $datos_mat_edu['string_values'] = array_merge($this->lang->line('interface')['material_educativo'], $this->lang->line('interface')['validador_censo'], $this->lang->line('interface')['general'], $this->lang->line('interface')['error']); //Carga textos a utilizar 
-            
+
             $material_edu_cve = $this->seguridad->decrypt_base64($identificador); //Identificador de materia_educativo
             $datos_mat_edu['identificador'] = $identificador;
             $datos_mat_edu['info_material_educativo'] = $this->mem->get_datos_material_educativo($material_edu_cve);
-            
+
             //Carga el formulario secundario segun la opcion de tipo de material educativo
             $datos_mat_edu['info_material_educativo']['material_educativo_cve'] = (!empty($datos_mat_edu['info_material_educativo']['padre_tp_material'])) ? $datos_mat_edu['info_material_educativo']['padre_tp_material'] : $datos_mat_edu['info_material_educativo']['tipo_material_cve'];
             $datos_form_secundario['datos'] = $datos_mat_edu['info_material_educativo'];
@@ -310,8 +320,9 @@ class Perfil_registro extends MY_Controller {
             $data_actividad['identificador'] = $identificador;
 
             $cve_actividad = $this->seguridad->decrypt_base64($identificador); //Identificador de la comisión
+//            pr($cve_actividad);
             $tipo_actividad_docente = $this->input->get('t', true);
-            
+
             if ($tipo_actividad_docente > 0) {
                 $propiedades = $this->config->item('actividad_docente_componentes')[$tipo_actividad_docente]; //Carga el nombre de la vista del diccionario 
                 $data_formulario = $this->cargar_datos_actividad($tipo_actividad_docente, $cve_actividad, $propiedades); //No mover posición puede romperse
@@ -330,13 +341,13 @@ class Perfil_registro extends MY_Controller {
                 }
                 $catalogos_ = $propiedades['catalogos_indexados']; //Carga, únicamente el tipo de actividad docente
                 $data_formulario = carga_catalogos_generales($catalogos_, $data_formulario, $condiciones_, true, $tipo_were);
-                
+
                 $valua_entidad = $propiedades['tabla_guardado'] === 'emp_actividad_docente';
                 if ($valua_entidad AND isset($data_formulario['ctipo_curso_cve']) AND ! empty($data_formulario['ctipo_curso_cve']) AND isset($data_formulario['ccurso_cve']) AND ! empty($data_formulario['ccurso_cve'])) {//si existe el "ccurso" y "ctipo_curso", hay que pintarlo
                     $tipo_curso_cve = intval($data_formulario['ctipo_curso_cve']);
                     $data_formulario['ccurso_pinta'] = $this->vista_ccurso($tipo_curso_cve, $data_formulario['CUR_NOMBRE']); //Punta el curso
                 }
-                
+
                 $data_formulario['string_values'] = $data_actividad['string_values'];
                 $data_formulario['identificador'] = $identificador;
                 $accion_general = $this->config->item('ACCION_GENERAL');
@@ -349,7 +360,7 @@ class Perfil_registro extends MY_Controller {
                     $data_formulario['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">' . $data_actividad['string_values']['cerrar'] . '</button></div>';
                 }
                 $data_formulario['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', array('dir_tes' => $data_formulario), TRUE);
-                
+
                 //Carga la vista del formulario                        
                 $data_actividad['formulario'] = $this->load->view($propiedades['vista_validacion'], $data_formulario, TRUE);
                 $data_actividad['nada'] = '';
@@ -417,7 +428,7 @@ class Perfil_registro extends MY_Controller {
                     }
                     return $this->load->view('validador_censo/investigacion/bibliografia_revista', $array_comprobante, TRUE);
                     break;
-                default :                    
+                default :
                     $data['vista_comprobante'] = $this->load->view('template/formulario_visualizar_archivo', $array_comprobante, TRUE);
                     return $this->load->view('validador_censo/investigacion/comprobante_foro', $data, TRUE);
             }
@@ -504,4 +515,5 @@ class Perfil_registro extends MY_Controller {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
     }
+
 }

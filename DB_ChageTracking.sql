@@ -1275,4 +1275,47 @@ CREATE TABLE `crama_conocimiento` (
  drop table crama_conocimiento; -- se elimino despúes  
 
  
+ALTER TABLE `sse_reglas_evaluacion` ADD `tipo_encuesta` INT(2) NULL; 
 
+--------------------2016/10/06  Responsable Jésus Días Ejecución LEAS---------------------
+ALTER TABLE `evaluacion_curso_act_docente` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_act_docente" */
+CREATE INDEX XIF161EVALUACION_CURSO_ACT_DOCENTE ON evaluacion_curso_act_docente (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_act_docente` ADD CONSTRAINT `evaluacion_curso_act_inv_edu_csecfk161`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_act_inv_edu` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_act_inv_edu" */
+CREATE INDEX XIF162EVALUACION_CURSO_INT_EDU ON evaluacion_curso_act_inv_edu (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_act_inv_edu` ADD CONSTRAINT `evaluacion_curso_act_inv_edu_csecfk162`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_comision` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_comision" */
+CREATE INDEX XIF163EVALUACION_CURSO_COMISION ON evaluacion_curso_comision (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_comision` ADD CONSTRAINT `evaluacion_curso_comision_csecfk163`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_edu_dis` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_edu_dis" */
+CREATE INDEX XIF164EVALUACION_CURSO_EDU_DIS ON evaluacion_curso_edu_dis (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_edu_dis` ADD CONSTRAINT `evaluacion_curso_edu_dis_csecfk164`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE `evaluacion_curso_fpcs` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_fpcs" */
+CREATE INDEX XIF165EVALUACION_CURSO_FPCS ON evaluacion_curso_fpcs (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_fpcs` ADD CONSTRAINT `evaluacion_curso_edu_dis_csecfk165`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_mat_edu` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_mat_edu" */
+CREATE INDEX XIF166EVALUACION_CURSO_MAT_EDU ON evaluacion_curso_mat_edu (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_mat_edu` ADD CONSTRAINT `evaluacion_curso_edu_dis_csecfk166`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `evaluacion_curso_for_profesional` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_for_profesional" */
+CREATE INDEX XIF167EVALUACION_CURSO_FOR_PROFESIONAL ON evaluacion_curso_for_profesional (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_for_profesional` ADD CONSTRAINT `evaluacion_curso_edu_dis_csecfk167`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE `evaluacion_curso_esp_medica` ADD `SECCION_CVE` INT(11) NULL;  /*Campo agregado a la tabla "evaluacion_curso_esp_medica" */
+CREATE INDEX XIF168EVALUACION_CURSO_ESP_MEDICA ON evaluacion_curso_esp_medica (SECCION_CVE);  /* Se vuelve index el campo */
+ALTER TABLE `evaluacion_curso_esp_medica` ADD CONSTRAINT `evaluacion_curso_edu_dis_csecfk168`   /* Asigna llave foran */
+FOREIGN KEY (`SECCION_CVE`) REFERENCES `cseccion`(`SECCION_CVE`) ON DELETE RESTRICT ON UPDATE RESTRICT;
