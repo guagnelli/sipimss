@@ -69,18 +69,27 @@ class Rol extends MY_Controller {
                     switch ($value_rol_cve) {
                         case 1:
                             redirect('perfil');
+                        break;
                         case 2:
                             redirect('validacion_censo_profesores');
 //                        redirect('evaluacion_curricular_validar');
 //                        redirect('validacion_censo_profesores');
+                        break;
                         case 3:
 //                        redirect('evaluacion_curricular_validar');
                             redirect('validacion_censo_profesores');
+                        break;
+                        case 5:
+                            redirect('designar_validador');
+                        break;
+                        case 6:
+                        case 7:
+                            redirect('dictamen');
+                        break;
                         case 14:
 //                        redirect('evaluacion_curricular_validar');
                             redirect('validacion_censo_profesores');
-                        case 5:
-                            redirect('designar_validador');
+                        break;
                         case Enum_rols::Vocal:
                             redirect('evaluacion_docente');
                     }
