@@ -89,10 +89,8 @@ class Dictamen extends CI_Controller {
     {
         $this->load->helper(array('dompdf'));
         $html = $this->load->view('dictamen/formatos/dictamen_formato.php',null,true);
-
 //        echo $html;
         $nombre_archivo = "Dictamen_".date("d-m-Y_h-i-s");
-//
         generarPdf($html, $nombre_archivo);
     }
     
