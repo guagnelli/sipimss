@@ -38,6 +38,7 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         $this->db->join('cdepartamento cdp', 'cdp.departamento_cve = ems.ADSCRIPCION_CVE', 'left');
         $this->db->join('ccategoria cc', 'cc.id_cat = ems.CATEGORIA_CVE', 'left');
         //where que son obligatorios
+        $this->db->where('es.CESE_CVE <', 4); //Sólo muestrá estados menores a la evaluación del docente (quitar comentario)
         $this->db->where('ems.EDO_LABORAL_CVE', 1); //Empleado activos en el sistema
         $this->db->where('ehv.is_actual', 1); //obtiene el último estado de la historia
         $rol = intval($params['rol_seleccionado']);
@@ -241,14 +242,32 @@ class Evaluacion_curricular_validar_model extends CI_Model {
                 'ece.txt_descripcion "comentario_bloque"', 'ece.ebs_cve "bloque_seccion_cve"',
                 'ece.fch_insert "fecha_validacion"');
         }
-        
+
         $this->db->where('ece.ehv_cve', $historia_cve);
         $this->db->select($parametros);
         $this->db->join('cvalidacion_curso_estado cce', 'cce.VAL_CUR_EST_CVE = ece.estado_validacion_cve');
         $query = $this->db->get('evaluacion_bloques_val ece');
         $row_hist = $query->result_array();
 //        pr($this->db->last_query());
-        return $row_hist;
+        $result = array();
+        if (empty($row_hist)) {
+            $result = $this->asignar_bloque_llave_hist_bloque($row_hist);
+        }
+        return $result;
+    }
+
+    /**
+     * @author LEAS
+     * @fecha 07/10/2016
+     * @param type $array_historial_bloque 
+     * Historial de bloques, pero le asigna como llave acronimo o clave 
+     * del bloque al que pertenece 
+     */
+    private function asignar_bloque_llave_hist_bloque($array_historial_bloque) {
+        $array_result = array();
+        foreach ($array_historial_bloque as $value) {
+            $array_result[$value['bloque_evaluacion_cve']] = $value;
+        }
     }
 
 }

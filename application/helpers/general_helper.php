@@ -883,17 +883,24 @@ if (!function_exists('obtener_cursos_bloque_seccion_evaluacion')) {
         $array_result = array();
 //        pr($fuente_cursos);
         foreach ($cursos_solicitados as $curso) {
+
             $curso_cve = $curso['curso_registro_cve'];
             $bloque_cur_c = $acro_b . $curso['bloque_seccion']; //Bloque compuesto con el sufijo 'bloque_'
             $seccion_cur_c = $acro_s . $curso['seccion_cve']; //Sección compuesta con el sufijo 'seccion_'
             $bloque = $curso['bloque_seccion']; //Bloque acronimo ejem. 'F', 'AC',...,"x"
             $seccion = $curso['seccion_cve']; //Seccioón identificador 1,2,3,4,...,"n"
-            //Si no existe la el bloque y la sección lo crea
-            if (!isset($array_result[$bloque][$seccion])) {
-                $array_result[$bloque][$seccion] = array();
+//            pr($fuente_cursos[$bloque_cur_c][$seccion_cur_c]);
+            if($bloque==Enum_sec::B_INVESTIGACION_EDUCATIVA){
+//                pr($curso_cve);
+//                pr($seccion);
+//                pr($fuente_cursos[$bloque_cur_c]);
             }
-            //Busca el curso en la fuente de cursos
-            if (isset($fuente_cursos[$bloque_cur_c][$seccion_cur_c])) {
+            if (isset($fuente_cursos[$bloque_cur_c][$seccion_cur_c]) AND !empty($fuente_cursos[$bloque_cur_c][$seccion_cur_c])) {
+                //Si no existe la el bloque y la sección lo crea
+                if (!isset($array_result[$bloque][$seccion])) {
+                    $array_result[$bloque][$seccion] = array();
+                }
+                //Busca el curso en la fuente de cursos
                 $pk = $propiedades_curso[$bloque][$seccion]['pk']; //Obtiene el nombre de la llave primaria del bloque y la sección seleccionada 
                 foreach ($fuente_cursos[$bloque_cur_c][$seccion_cur_c] as $datos_cur) {//Recorre los cursos de la seccion, hasta encontrar el curso
 //                    pr($datos_cur);
@@ -910,6 +917,22 @@ if (!function_exists('obtener_cursos_bloque_seccion_evaluacion')) {
         }
 //        pr($array_result);
         return $array_result;
+    }
+
+}
+
+if (!function_exists('recorrer_array_encontrar_hijos_vacios')) {
+
+    /**
+     * @author LEAS
+     * @FECHA  05/10/2016
+     * @param type $fuente_cursos .- cursos totales por bloque y sección, se obtiene de modelo Expediente_mode->getAll();
+     * @param type $propiedades_curso
+     * @param type $cursos_solicitados
+     * Intersecta los cursos que se solicito evaluar y, con separacion por bloque y sección Expediente_model
+     */
+    function recorrer_array_encontrar_hijos_vacios($fuente_cursos, $propiedades_curso, $cursos_solicitados) {
+        
     }
 
 }

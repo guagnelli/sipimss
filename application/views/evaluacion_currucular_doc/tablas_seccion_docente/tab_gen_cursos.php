@@ -9,7 +9,9 @@ $seleccionar = $this->form_complete->create_element(array('id' => 'checkall_' . 
         'data-check' => "checkall_" . $seccion,
         'title' => $string_values['chek_selct_profesionalizacion'])));
 ?>
-
+<?php if (!empty($titulo)) { ?>
+    <h4><?php echo $titulo; ?></h4>
+<?php } ?>
 <table class="table table-striped table-hover table-bordered" id="trve_<?php echo $seccion; ?>">
     <thead>
         <tr class='bg-info'>

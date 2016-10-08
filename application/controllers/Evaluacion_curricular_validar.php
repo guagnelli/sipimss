@@ -44,12 +44,15 @@ class Evaluacion_curricular_validar extends MY_Controller {
      */
     public function index() {
 //        pr($this->session->userdata('rol_seleccionado'));
+        $this->session->set_userdata('ctr_solicitante', 've');
         $this->lang->load('interface');
         $string_values = $this->lang->line('interface')['evaluacion_curricular_validar'];
         $data = array();
         $this->delete_datos_validado(); //Elimina los datos de empleado validado, si se encuentran los datos almacenados en la variable de sesiÃƒÂ³n
         $data['string_values'] = $string_values;
-        $data['order_columns'] = array('ems.EMP_MATRICULA' => 'MatrÃƒÂ­cula', 'ems.EMP_NOMBRE' => 'Nombre', 'ems.CATEGORIA_CVE' => 'CategorÃƒÂ­a');
+        $data['order_columns'] = array('ems.EMP_MATRICULA' => 'Matrícula',
+            'ems.EMP_NOMBRE' => 'Nombre',
+            'ems.CATEGORIA_CVE' => 'Categoría');
 //        $empleado_cve = $this->session->userdata('idempleado');
         $rol_usuario = $this->session->userdata('rol_seleccionado_cve');
 
@@ -194,34 +197,6 @@ class Evaluacion_curricular_validar extends MY_Controller {
         }
     }
 
-    private function obtener_secciones_evaluacion_prima($array_datos = null, $datos_tabla = array()) {
-        $secciones = $this->config->item('secciones_model');
-        $result_array = array();
-        $controlador_validacion = 'controlador_validacion';
-//        pr($string_text);
-        foreach ($secciones as $value) {
-//            pr($value);
-            if (isset($array_datos[$value['acronimo']])) {//Si existe registro alguno, lo crea
-                $prop = $this->config->item('secciones_cont_val_solicitud_eval')[$value['acronimo']];
-                if ($prop['isActivo']) {
-                    $datos_tabla['acronimo'] = $value['acronimo'];
-                    $datos_tabla['datos_modulo'] = $array_datos[$value['acronimo']];
-                    $datos_tabla['pk'] = $value['pk'];
-                    $datos_tabla['ver_datos'] = $value['ver_datos'];
-                    $datos_tabla['curso'] = $value['curso'];
-                    $datos_tabla['tipo_curso'] = $value['tipo_curso'];
-                    $controlador['ruta'] = $prop['seccion'];
-                    $controlador['ruta_padre'] = $prop['controlador_validacion'];
-                    $controlador['nombre_modulo'] = $datos_tabla['secciones']['lbl_' . $value['acronimo'] . '_titulo'];
-                    $controlador['tabla'] = $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/tab_gen_cursos', $datos_tabla, TRUE);
-                    $result_array[] = $controlador;
-                }
-            }
-        }
-//        pr($result_array);
-        return $result_array;
-    }
-
     private function obtener_secciones_evaluacion($empleado_cve = null, $solicitud_cve = null) {
         if (is_null($solicitud_cve) OR is_null($empleado_cve)) {
             return array();
@@ -237,9 +212,11 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $emp_bloques_seccion = $info_docente['bloques'];
         $datos_curso = $info_docente['cfg_actividad'];
 
+        //Obtiene los estados de validacón por bloques 
+        $estados_validacion = $this->ecvm->get_last_hist_validacion_evaluacion($solicitud_cve); //Cursos a evaluar
         //Obtiene
-        $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve);//Cursos a evaluar
-        $cursos_bloques = obtener_cursos_bloque_seccion_evaluacion($info_docente['bloques'], $info_docente['cfg_actividad'], $cursos_s_evaluar);//Depuración de cursos
+        $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve); //Cursos a evaluar
+        $cursos_bloques = obtener_cursos_bloque_seccion_evaluacion($info_docente['bloques'], $info_docente['cfg_actividad'], $cursos_s_evaluar); //Depuración de cursos
 //        pr($cursos_bloques);
         $datos_tabla['array_menu'] = $cursos_bloques;
         $datos_tabla['info_actividad'] = $info_docente['cfg_actividad'];
@@ -247,7 +224,8 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $datos_tabla['empleado'] = $info_docente['empleado'];
         $datos_tabla['labels_bloque'] = $info_docente['bloques']['labels_bloque'];
         $datos_tabla['labels_seccion'] = $info_docente['bloques']['labels'];
-        
+        $datos_tabla['estado_validacion_bloque'] = $estados_validacion;
+
         return $datos_tabla;
     }
 

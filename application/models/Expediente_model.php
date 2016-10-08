@@ -35,6 +35,7 @@ class Expediente_model extends MY_Model {
                 //formacion en salud
                 Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD => array(
                     "acronimo" => "fs",
+                    "title" => "Formación en salud",
                     "entidad" => "emp_for_personal_continua_salud",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD . "_nombre" => "SUBTIP_NOMBRE",
@@ -53,6 +54,7 @@ class Expediente_model extends MY_Model {
                 //formacion docente
                 Enum_sec::S_FORMACION_PROFESIONAL => array(
                     "acronimo" => "fp",
+                    "title" => "Formación en docente",
                     "entidad" => "emp_formacion_profesional",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_FORMACION_PROFESIONAL . "_nombre" => "SUB_FOR_PRO_NOMBRE",
@@ -72,6 +74,7 @@ class Expediente_model extends MY_Model {
             Enum_sec::B_ACTIVIDAD_DOCENTE => array(
                 Enum_sec::S_EDUCACION_DISTANCIA => array(
                     "acronimo" => "ed",
+                    "title" => "Educación a distancia",
                     "entidad" => "emp_educacion_distancia",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_EDUCACION_DISTANCIA . "_nombre" => "nom_curso",
@@ -89,6 +92,7 @@ class Expediente_model extends MY_Model {
                 ),
                 Enum_sec::S_ESP_MEDICA => array(
                     "acronimo" => "em",
+                    "title" => "Especialidades",
                     "entidad" => "emp_esp_medica",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_ESP_MEDICA . "_nombre" => "nom_curso",
@@ -107,6 +111,7 @@ class Expediente_model extends MY_Model {
                 ),
                 Enum_sec::S_ACTIVIDAD_DOCENTE => array(
                     "acronimo" => "ad",
+                    "title" => "Actividad",
                     "entidad" => "emp_actividad_docente",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_ACTIVIDAD_DOCENTE . "_nombre" => "nom_curso",
@@ -126,6 +131,7 @@ class Expediente_model extends MY_Model {
             Enum_sec::B_BECAS_COMISIONES_LABORALES => array(
                 Enum_sec::S_BECAS_LABORALES => array(
                     "acronimo" => "cl",
+                    "title" => "Becas laborales",
                     "entidad" => "emp_beca",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_BECAS_LABORALES . "_nombre" => "nom_beca",
@@ -143,6 +149,8 @@ class Expediente_model extends MY_Model {
                 Enum_sec::S_COMISIONES_LABORALES => array(
                     "acronimo" => "cl",
                     "entidad" => "emp_comision",
+                    "title" => "",
+                    "title" => "Comisiones laborales",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_COMISIONES_LABORALES . "_nombre" => "nom_comprobante",
                         "lbl_" . Enum_sec::S_COMISIONES_LABORALES . "_tipo" => "nom_tipo_comision",
@@ -160,6 +168,7 @@ class Expediente_model extends MY_Model {
             Enum_sec::B_COMISIONES_ACADEMICAS => array(
                 Enum_sec::S_COMISIONES_ACADEMICAS => array(
                     "acronimo" => "ca",
+                    "title" => "",
                     "entidad" => "emp_comision",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_COMISIONES_ACADEMICAS . "_nombre" => "COM_ARE_NOMBRE",
@@ -178,6 +187,7 @@ class Expediente_model extends MY_Model {
             Enum_sec::B_INVESTIGACION_EDUCATIVA => array(
                 Enum_sec::S_ACT_INV_EDU => array(
                     "acronimo" => "is",
+                    "title" => "",
                     "entidad" => "emp_act_inv_edu",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_ACT_INV_EDU . "_nombre" => "nombre_investigacion",
@@ -197,6 +207,7 @@ class Expediente_model extends MY_Model {
             Enum_sec::B_DIRECCION_TESIS => array(
                 Enum_sec::S_DIRECCION_TESIS => array(
                     "acronimo" => "dt",
+                    "title" => "",
                     "entidad" => "emp_comision",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_DIRECCION_TESIS . "_nombre" => "NIV_ACA_NOMBRE",
@@ -215,6 +226,7 @@ class Expediente_model extends MY_Model {
             Enum_sec::B_MATERIAL_EDUCATIVO => array(
                 Enum_sec::S_MATERIA_EDUCATIVO => array(
                     "acronimo" => "me",
+                    "title" => "",
                     "entidad" => "emp_materia_educativo",
                     "fields" => array(
                         "lbl_" . Enum_sec::S_MATERIA_EDUCATIVO . "_nombre" => "nombre_material",

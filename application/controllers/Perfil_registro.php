@@ -109,6 +109,7 @@ class Perfil_registro extends MY_Controller {
 
     public function direccion_tesis_detalle($identificador = null, $validar = null) {
         if ($this->input->is_ajax_request()) { //Solo se accede al método a través de una petición ajax
+            $controlador_solicitante = $this->session->userdata('ctr_solicitante');//Controlador que solicita que se carguen los datos
             $this->load->model('Direccion_tesis_model', 'dt');
             $this->lang->load('interface');
             $data['identificador'] = $identificador;

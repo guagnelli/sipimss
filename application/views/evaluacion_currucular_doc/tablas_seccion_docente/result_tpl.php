@@ -3,6 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
 <div id="div_pie" class="text-right">
+    <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-info" onclick="funcion_cargar_comentarios()" >
+        Ver comentarios
+    </button>
     <button id="btn_guardar_investigacion_docente" type="button" class="btn btn-info" onclick="funcion_guardar_material_educativo()" >
         Corregir
     </button>
