@@ -61,7 +61,7 @@ class Evaluacion_docente_model extends CI_Model {
         }
 
         $query = $this->db->get('evaluacion_solicitud'); //Obtener conjunto de registros
-        pr($this->db->last_query());
+        //pr($this->db->last_query());
         //$resultado=$query->result_array();
         $resultado['total'] = $num_rows[0]->total;
         $resultado['columns'] = $query->list_fields();
@@ -132,5 +132,85 @@ class Evaluacion_docente_model extends CI_Model {
         $query->free_result(); //Libera la memoria
 
         return $resultado;        
+    }
+
+    public function get_hist_evaluacion_dic($params=null){
+        $resultado = array();
+        if(array_key_exists('fields', $params)){
+            if(is_array($params['fields'])){
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }        
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        if(array_key_exists('order', $params)){
+            $this->db->order_by($params['order']);
+        }
+
+        if (isset($params['order']) && !empty($params['order'])) {
+            $tipo_orden = (isset($params['order_type']) && !empty($params['order_type'])) ? $params['order_type'] : "ASC";
+            $this->db->order_by($params['order'], $tipo_orden);
+        }
+
+        $this->db->join('evaluador', 'hist_evaluacion_dic.EVALUADOR_CVE=EVALUADOR.ROL_EVALUADOR_CVE', 'left');
+        $this->db->join('crol', 'evaluador.ROL_CVE=crol.ROL_CVE', 'left');
+        $this->db->join('cestado_evaluacion', 'hist_evaluacion_dic.EST_EVALUACION_CVE=cestado_evaluacion.EST_EVALUACION_CVE', 'left');
+
+        $query = $this->db->get('hist_evaluacion_dic'); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado=$query->result_array();
+        
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;        
+    }
+
+    public function update_evaluacion_curso($datos, $params){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+
+        $this->db->update('evaluacion_solicitud', $datos); //Inserción de registro
+                
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
+        
+        return $resultado;
+    }
+
+    public function update_hist_evaluacion_dic($datos, $params){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        $this->db->trans_begin(); //Definir inicio de transacción
+        
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+
+        $this->db->update('hist_evaluacion_dic', $datos); //Inserción de registro
+                
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
+        
+        return $resultado;
     }
 }

@@ -31,21 +31,22 @@
                         //. 'data-histvalcve="' . $hist_val_cve . '"'
                         . 'data-solicitudcve="' . $solicitud_cve . '"'
                         . 'data-usuariocve="' . $usuario_cve . '"';
-                    $estado = ($evaluacion['CESE_CVE']==Enum_es::Envio_evaluacion) ? ((empty($evaluacion['estado']) && $evaluacion['estado']==0) ? $this->config->item('cestado_evaluacion')[Enum_ee::Por_evaluar]['value'] : $this->config->item('cestado_evaluacion')[$evaluacion['estado']]['value']) : $evaluacion['CESE_NOMBRE'];
-                    $evaluar = ($evaluacion['CESE_CVE']==Enum_es::Envio_evaluacion || $evaluacion['CESE_CVE']==Enum_es::Evaluacion) ? '<span '.$link_ver_curso.'><a data-toggle="tab" href="#select_perfil_validar_evaluacion">'.$string_values['evaluar'].'</a></span>' : '';
+                    //$estado = ($evaluacion['CESE_CVE']==Enum_es::Envio_evaluacion) ? ((empty($evaluacion['estado']) && $evaluacion['estado']==0) ? $this->config->item('cestado_evaluacion')[Enum_ee::Por_evaluar]['value'] : $this->config->item('cestado_evaluacion')[$evaluacion['estado']]['value']) : $evaluacion['CESE_NOMBRE'];
+                    $revisar = ($evaluacion['CESE_CVE']==Enum_es::Evaluacion) ? '<span '.$link_ver_curso.'><a data-toggle="tab" href="#select_perfil_validar_evaluacion">'.$string_values['revisar'].'</a></span>' : '';
+                    $html_estados = '';
+                    foreach ($evaluacion['estados'] as $key_est => $estado) {
+                        $html_estados .= '<div class="row">
+                                <div class="col-lg-6 text-right">'.$estado['ROL_NOMBRE'].':</div>
+                                <div class="col-lg-6">'.$estado['EST_EVA_NOMBRE'].'</div>
+                            </div>';
+                    }
                     $html .= '<tr id="tr_'.$this->seguridad->encrypt_base64($evaluacion['VALIDACION_CVE']).'">
                             <td>'.$evaluacion['emp_matricula'].'</td>
                             <td>'.$evaluacion['EMP_NOMBRE'].' '.$evaluacion['EMP_APE_PATERNO'].' '.$evaluacion['EMP_APE_MATERNO'].'</td>
                             <td>'.$evaluacion['DEL_NOMBRE'].'</td>
                             <td>'.$evaluacion['nom_categoria'].'</td>
-                            <!-- <td></td> -->
-                            <td>'.$estado.'</td>
-                            <td>
-                                '.$evaluar.'
-                                <!-- <button type="button" class="btn btn-link btn-sm btn_evaluar" data-value="'.$this->seguridad->encrypt_base64($evaluacion['VALIDACION_CVE']).'">'.
-                                   $string_values['evaluar'].
-                                '</button> -->
-                            </td>
+                            <td>'.$html_estados.'</td>
+                            <td>'.$revisar.'</td>
                         </tr>';
                 }
                 echo $html;
