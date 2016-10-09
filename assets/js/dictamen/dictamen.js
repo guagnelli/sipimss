@@ -2,6 +2,17 @@ $(document).ready(function(){
     var path = site_url + '/dictamen/buscarDictamenes';
     data_ajax(path, '', '#container_tbl_dictamen', callbackIniDataTables('#dictamenTbl'));
     
+    // Borra la tabla
+    $('#btnLimpiar').click(function(){
+        $('#container_tbl_dictamen').html(' ');
+    });
+    
+    // Busqueda por parametros
+    $('#btnBuscarDocentes').click(function(){
+        var url = site_url + '/dictamen/buscarDictamenes';
+        data_ajax(url, '#frmBuscarDocentesDictamen', '#container_tbl_dictamen', callbackIniDataTables('#dictamenTbl'));
+    });
+    
 });
 
 // Función que pide los datos generales de un docente vía ajax
@@ -32,10 +43,17 @@ function showDocenteModalData(id){
     
 }
 
+function buscarDocenteTabla(){
+    var path = site_url + '/dictamen/buscarDictamenes';
+    data_ajax(path, '', '#container_tbl_dictamen', callbackIniDataTables('#dictamenTbl'));
+}
+
 // Para ir al dictamen
-function goToDictamen(){
-    var path = site_url + '/dictamen/dictamenFormato';
-    window.location.replace(path);
+function goToDictamen( emp, solic){
+//    var dataUrl = $('#frmDatosDocenteTablaSolic'+ solic +'Emp'+emp).serialize();
+//    var path = site_url + '/dictamen/dictamenFormato?'+dataUrl;
+//    window.location.replace(path);
+    $('#frmDatosDocenteTablaSolic'+ solic +'Emp'+emp).submit();
 }
 
 // Coloca los datos recuperados del docente en el modal y luego lo muestra

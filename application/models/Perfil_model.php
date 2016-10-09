@@ -47,7 +47,7 @@ class Perfil_model extends CI_Model {
      * 
      * @param int $identificador
      */
-    public function getEmpleadoData($identificador) {
+    public function getEmpleadoData($identificador, $campoId = 'EM.USUARIO_CVE') {
         $this->db->select(array(
             'EMPLEADO_CVE as emp_id',
             'EMP_NOMBRE as nombre',
@@ -82,7 +82,7 @@ class Perfil_model extends CI_Model {
         $this->db->join('ctipo_contratacion AS CTC', 'EM.tip_contratacion_cve =  CTC.tip_contratacion_cve', 'left');
         $this->db->join('cdepartamento AS CD', 'CD.DEPARTAMENTO_CVE =  EM.DEPARTAMENTO_CVE', 'left');
         $this->db->join('cpresupuestal AS CP', 'CP.PRESUPUESTAL_CVE =  CD.PRESUPUESTAL_CVE  ', 'left');
-        $this->db->where('EM.USUARIO_CVE', $identificador);
+        $this->db->where($campoId, $identificador);
         $query = $this->db->get();
         return $query->result_array();
     }

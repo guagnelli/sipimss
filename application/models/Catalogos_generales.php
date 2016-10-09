@@ -542,6 +542,18 @@ class Catalogos_generales extends CI_Model {
 //        pr($this->db->last_query());
         return $array_comprobante;
     }
+    
+    /*
+     * Retorna catálogo posibles dictamenes para asignar
+     * Return   ResultSet Array
+     */
+    public function get_cat_dictamen_result(){
+//        $sql = "SELECT * FROM ccategoria_dictamen";
+        $query = $this->db->get('ccategoria_dictamen'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); 
+        return $resultado;
+    }
 
 //Function getALL is Deprecated from this model, now, it's located in Expediente_model...
     /* Clase que gestiona el login

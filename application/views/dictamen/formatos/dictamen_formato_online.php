@@ -1,5 +1,6 @@
-<?php 	defined('BASEPATH') OR exit('No direct script access allowed');	?>
-        <style type="text/css">
+<?php 	defined('BASEPATH') OR exit('No direct script access allowed');	?> 
+    <script src="<?= base_url() ?>assets/js/dictamen/dictamen_formato.js" type="text/javascript"></script>
+    <style type="text/css">
             *,*:before,*:after {
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -108,36 +109,8 @@
         <table width="100%" id="tabla_padre" class="table_fath">
             <tr id="fila_encabezado">
               <td>
-                  <!--cabecera estilo más actual-->
-<!--                <table width="100%" id="tabla_encabezado">
-                  <tr>
-                        <td><br>
-                            <?php echo img("presidencia.jpg"); //no soparta png class="border_bottom" ?></td>
-                        
-                        <td style="text-align:right; font-size:7px">
-                            DIRECCIÓN DE PRESTACIONES MÉDICAS<br>
-                            DIRECCIÓN DE PRESTACIONES MÉDICAS<br>
-                            UNIDAD DE EDUCACIÓN, INVESTIGACIÓN Y POLÍTICAS DE SALUD<br>
-                            COORDINACIÓN DE EDUCACIÓN EN SALUD
-                        </td>
-                        <td><br>
-                            <?php echo img("imss.jpg"); //no soparta png class="border_bottom" ?></td>
-                  <tr>
-                </table>-->
-               
-                
               </td>
             </tr>
-<!--            <tr id="fila_nombre">
-              <td>
-                <table width="100%" style="text-align:center" id="tabla_titulo">
-                  <tr><td></td></tr>
-                  <tr>
-                    <td class="border-bottom"><strong id="nombre_doc">Dictamen de evaluación curricular docente</strong><br></td>
-                  </tr>
-                </table>
-              </td>
-            </tr>-->
             <tr id="fila_cuerpo">
               <td>
                 <table width="100%" id="tabla_dictamen">
@@ -145,15 +118,15 @@
                     <td class="td-table-container">
                       <table width="100%" id="tabla_datos_personal">
                         <tr>
-                            <td>Nombre: <span id="spanNombreDocente">MIGUEL ANGEL GONZALES GUAGNELLI</span></td>
+                            <td>Nombre: <span id="spanNombreDocente"><?= $empleado['nombre']. ' '.$empleado['apellidoPaterno']. ' '.$empleado['apellidoMaterno']   ?></span></td>
                             <td>No. de Expediente: <span id="spanNumExpediente">ECD-17546-97</span></td>
                         </tr>
                         <tr>
                             <td>Fecha de evaluación: <span id="spanFechaEvaluacion"> 07/10/2016 </span></td>
-                            <td>Delegación:  <span id="spanDelgacion">CAMPECHE</span></td>
+                            <td>Delegación:  <span id="spanDelgacion"><?= $empleado['delegacion'] ?></span></td>
                         </tr>
                         <tr>
-                            <td>Adscripción: <span id="spanAdscripcion" >COORDINACION DE EDUC</span></td>
+                            <td>Adscripción: <span id="spanAdscripcion" ><?= $empleado['nombreAreaAdscripcion'] ?></span></td>
                           <td></td>
                         </tr>
                       </table>
@@ -163,7 +136,7 @@
                       <td class="border-bottom td-table-container ">
                           <br>
                           <span class="texto-titulo">1. FORMACIÓN DOCENTE.</span> 
-                          <span id="spanFormacionDocente">Licenciatura, Maestría</span> <!-- aqui va la formación que ha tenido el docente-->
+                          <span id="spanFormacionDocente">Medico Cirujano </span> <!-- aqui va la formación que ha tenido el docente-->
                         <br><br>
                     </td>
                     
@@ -375,22 +348,28 @@
                         
                   </tr>
                   <tr id="dictamen">
-                      <td  style="padding-bottom: 9px;">                        
-                          <h4 style="margin-left: 12px;"><span style="font-weight: 900;">DICTAMEN:</span>
-                              <!-- Aquí va el dictamen  -->
-                               Aprovado.
-                          </h4>
-                        <br>
-                         <div style="text-align:left; float: left; display: table; width: 90%; margin-left: 12px;" id="subtotal">
-                                <div style="display: table-row">
-                                    <div style="display: table-cell; width: 10%; ">Observaciones: </div>
-                                    <!--<div style="display: table-cell; width: 90%; border-bottom: 1px solid  #c0c0c0"></div>-->
-                                    <input type="text" name="txt-observaciones-dictamen" style="width:100%" maxlength="130">
-                                    <button class="btn btn-default" style="margin-top: 5px;"> Guardar Observacinoes </button>   
-                                </div>
-                             
-                            </div>
-                    </td>
+                  
+                        <td  style="padding-bottom: 9px;">
+                            <h4 style="margin-left: 12px;"><span style="font-weight: 900;">DICTAMEN: &nbsp;&nbsp;</span>
+                                <!-- Aquí va el dictamen  -->
+                                  <select id="slcCatDictamen" form="formDictamen" name="slcCatDictamen">
+                                      <?php
+                                          foreach ($catalogo as $dictamen){
+                                              echo '<option value="'.$dictamen['CATEGORIA_CVE'].'" >'.$dictamen['CAT_NOMBRE'].'</option>';
+                                          }
+                                      ?>
+                                  </select>
+                            </h4>
+                          <br>
+                           <div style="text-align:left; float: left; display: table; width: 90%; margin-left: 12px;" id="subtotal">
+                              <div style="display: table-row">
+                                  <div style="display: table-cell; width: 10%; ">Observaciones: </div>
+                                  <!--<div style="display: table-cell; width: 90%; border-bottom: 1px solid  #c0c0c0"></div>-->
+                                  <input id="txtObservaciones" form="formDictamen" type="text" name="txtObservaciones" style="width:100%" maxlength="130">
+                              </div>
+                          </div>
+                        </td>
+                    
                   </tr>
                   <tr id="titulo_academico">
                     <td class="border-top" style="text-align:center">
@@ -485,12 +464,24 @@
                     </td>
                   </tr>
                 </table>
+                  <br>
               </td>
             </tr>
         </table>
-        
         <br>
         <div class="row">
+            <div class="col col-md-2">
+                <form id="formDictamen" action="<?= base_url() ?>index.php/dictamen/dictamina" method="post" >
+                    <input type="hidden" name="hddSolicCve" id="hddSolicCve" value="<?= $solicEvalCve ?>">
+                    <input type="hidden" name="hddempleadoCve" id="hddempleadoCve" value="<?= $empleadoCve ?>">
+                    <input type="submit" name="action" id="btnDictaminar" class="btn btn-success" disabled="disabled" value="Dictaminar">
+                </form>    
+            </div>
+            <div class="col col-md-2">
+                <button data-toggle="modal" data-target="#modalCorreccion"  id="btnCorreccion" class="btn btn-warning" >Enviar a Corrección</button>
+            </div>
+        </div>
+        <div class="row" style="margin-top:8px;">
             <div class="col-md-2">
                 <a class="btn btn-default" href="<?= base_url() ?>index.php/dictamen/" role="button">
                     <i class="glyphicon glyphicon-share-alt" style="-moz-transform: scale(-1, 1);
@@ -502,4 +493,34 @@
                 </a>
             </div>
         </div>
-
+<!-- Modal para correción de datos de dictamen -->
+<div class="modal fade" id="modalCorreccion" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><i class="glyphicon glyphicon-alert"></i>  Correción  </h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="txtMotivosCorrecion">Motivos para la correción</label>
+            <input type="text" form="formCorrecion" class="form-control" id="txtMotivosCorrecion" name="txtMotivosCorrecion" maxlength="120">
+        </div>  
+      </div>
+      <div class="modal-footer">
+          <div class="row">
+              <div class="col col-md-6">
+                <form id="formCorrecion" method="post" action="<?= base_url() ?>index.php/dictamen/correcion">
+                    <input type="hidden" name="hddSolicCveCorrecion" id="hddSolicCveCorrecion" value="<?= $solicEvalCve ?>">
+                    <input type="hidden" name="hddempleadoCveCorrecion" id="hddempleadoCveCorrecion" value="<?= $empleadoCve ?>">
+                    <input type="submit" class="btn btn-primary" value="Enviar">
+                </form>  
+              </div>
+              <div class="col col-md-6">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              </div>
+          </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

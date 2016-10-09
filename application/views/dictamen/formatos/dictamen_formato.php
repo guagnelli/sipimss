@@ -14,7 +14,7 @@
             body {
               font-family: "Arial", serif;
               font-size: 7px;
-              margin: 10mm 12mm 10mm 12mm;
+              margin: 6mm 8mm 6mm 8mm;
             }
             .texto-titulo{
                 font-size: 1.2em;
@@ -28,6 +28,13 @@
             .td-texto-centrado{
                 text-align: center;
             }
+            .img-firma-dr{
+                width: 50px;
+                height: 20px;
+/*                margin-left: auto;
+                margin-right: auto;
+                display: block;*/
+            }
             hr {
               page-break-after: always;
               border: 1;
@@ -38,7 +45,10 @@
                 border-top: 0.5px solid #c0c0c0;
             }
             .border-bottom{
-                border-bottom: 0.5px solid #c0c0c0 !important;
+                border-bottom: 0.5px solid #c0c0c0;
+            }
+            .border-none{
+                border: 0 solid white !important;
             }
             .table_fath {
                 border-collapse: collapse;
@@ -80,7 +90,7 @@
         </table>
         <table width="100%" class="table_fath" style="margin-bottom: 5px;">
             <tr>
-                <td  class="td-texto-centrado texto-negrita">
+                <td  class="td-texto-centrado texto-negrita" style="font-size: 0.8em">
                     <p style="margin: 0 ">INSTITUTO MEXICANO DEL SEGURO SOCIAL</p>
                     <!--<p style="margin: 0 ">DIRECCIÓN DE PRESTACIONES MÉDICAS</p>-->
                     <p style="margin: 0 ">DIRECCIÓN DE PRESTACIONES MÉDICAS</p>
@@ -89,7 +99,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="td-texto-centrado texto-negrita border-top" >
+                <td class="td-texto-centrado texto-negrita border-top" style="font-size: 0.8em" >
                     Dictamen de evaluación curricular docente
                 </td>                
             </tr>
@@ -104,23 +114,23 @@
                     <td>
                       <table width="100%" id="tabla_datos_personal">
                         <tr>
-                          <td>Nombre: </td>
-                          <td>No. de Expediente: </td>
+                          <td>Nombre: MIGUEL ANGEL GONZALES GUAGNELLI</td>
+                          <td>No. de Expediente:  ECD-17546-97</td>
                         </tr>
                         <tr>
-                          <td>Fecha de evaluación: </td>
-                          <td>Delegación: </td>
+                          <td>Fecha de evaluación: 07/10/2016</td>
+                          <td>Delegación: CAMPECHE</td>
                         </tr>
                         <tr>
-                          <td>Adscripción: </td>
+                          <td >Adscripción: COORDINACION DE EDUC</td>
                           <td></td>
                         </tr>
                       </table>
                     </td>
                   </tr>
                   <tr id="datos_formacion">
-                    <td class="border-bottom">1. FORMACIÓN DOCENTE. 
-                        <br><br>
+                    <td class="border-bottom">1. FORMACIÓN DOCENTE. Medico Cirujano
+                        
                     </td>
                   </tr>
                   <tr id="actividad_docente">
@@ -136,17 +146,17 @@
                               <td>Hasta un semestre</td>
                               <td>Hasta un año</td>
                             </tr>
-                            <tr>
+                            <tr style="text-align:center">
                               <td>Formación</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td>3</td>
+                              <td>1</td>
+                              <td>20</td>
                             </tr>
-                            <tr>
+                            <tr style="text-align:center">
                               <td>Educación continua</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
                             </tr>
                             <tr style="border: 0 solid white !important;">
                                 <td colspan="4" style="border: 0 solid white; border-bottom: 0 solid white;">
@@ -154,7 +164,9 @@
                                         <tr>
                                             <td style="border-width: 0px; text-align: right;">SUBTOTAL: </td>
                                             <td style="border-width: 0px; text-align: center
-                                                ; border-bottom: 0.5px solid #c0c0c0">  </td> <!-- subtotal -->
+                                                ; border-bottom: 0.5px solid #c0c0c0">
+                                                20
+                                            </td> <!-- subtotal -->
                                         </tr>
                                     </table>
                                 </td>
@@ -165,8 +177,8 @@
                   </tr>
                   <tr id="direccion_tesis">
                     <td>3. DIRECCIÓN DE TESIS.
-                        <table width="100%" class="table" id="tabla_actividad">                        
-                            <tr>
+                        <table width="100%" class="table" id="tabla_actividad" style="border-bottom: 0px solid white !important;">                        
+                            <tr style="text-align:center">
                               <td>Nivel</td>
                               <td>Técnico</td>
                               <td>Licenciatura</td>
@@ -174,13 +186,13 @@
                               <td>Maestría</td>
                               <td>Doctorado</td>
                             </tr>
-                            <tr>
+                            <tr style="text-align:center">
                               <td>Número</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td>2</td>
+                              <td>3</td>
+                              <td>3</td>
+                              <td>1</td>
+                              <td>0</td>
                             </tr>
                             <tr style="border: 0 solid white !important;">
                                 <td colspan="6" style="border: 0 solid white; border-bottom: 0 solid white;">
@@ -188,7 +200,9 @@
                                         <tr>
                                             <td style="border-width: 0px; text-align: right;">SUBTOTAL: </td>
                                             <td style="border-width: 0px; text-align: center
-                                                ; border-bottom: 0.5px solid #c0c0c0">  </td> <!-- subtotal -->
+                                                ; border-bottom: 0.5px solid #c0c0c0">
+                                                16
+                                            </td> <!-- subtotal -->
                                         </tr>
                                     </table>
                                 </td>
@@ -212,22 +226,24 @@
                               <td>Hasta un semestre</td>
                               <td>Hasta un año</td>
                             </tr>
-                            <tr>
+                            <tr style="text-align:center">
                               <td>Número</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td>2</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>2</td>
+                              <td>0</td>
+                              <td>0</td>
                             </tr>
                             <tr style="border: 0 solid white !important;">
                                 <td colspan="7" style="border: 0 solid white; border-bottom: 0 solid white;">
-                                    <table style="float: right; width: 100%; border-width: 0px">
-                                        <tr>
+                                    <table style="float: right; width: 100%; border-width: 0px"  class="border-none">
+                                        <tr  class="border-none">
                                             <td style="border-width: 0px; text-align: right;">SUBTOTAL: </td>
                                             <td style="border-width: 0px; text-align: center
-                                                ; border-bottom: 0.5px solid #c0c0c0">  </td> <!-- subtotal -->
+                                                ; border-bottom: 0.5px solid #c0c0c0">
+                                            20
+                                            </td> <!-- subtotal -->
                                         </tr>
                                     </table>
                                 </td>
@@ -239,25 +255,27 @@
                   <tr id="elab_material_educa">
                     <td>5. ELABORACIÓN DE MATERIAL EDUCATIVO.
                         <table width="100%" class="table" id="tabla_actividad">                        
-                            <tr>
+                            <tr style="text-align:center">
                               <td>Tipo</td>
                               <td>Antologías o manuales educativos</td>
                               <td>Digitales</td>
                               <td>Puntos</td>
                             </tr>
-                            <tr>
+                            <tr style="text-align:center">
                               <td>Número</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td>2</td>
+                              <td>6</td>
+                              <td>11</td>
                             </tr>
-                            <tr style="border: 0 solid white !important;">
+                           <tr style="border: 0 solid white !important;">
                                 <td colspan="4" style="border: 0 solid white; border-bottom: 0 solid white;">
                                     <table style="float: right; width: 100%; border-width: 0px">
                                         <tr>
                                             <td style="border-width: 0px; text-align: right;">SUBTOTAL: </td>
                                             <td style="border-width: 0px; text-align: center
-                                                ; border-bottom: 0.5px solid #c0c0c0">  </td> <!-- subtotal -->
+                                                ; border-bottom: 0.5px solid #c0c0c0">
+                                            11
+                                            </td> <!-- subtotal -->
                                         </tr>
                                     </table>
                                 </td>
@@ -273,30 +291,53 @@
                             <span style="text-align:right" id="subtotal">SUBTOTAL <small>__________________</small></span><br>
                             <div style="text-align:right" id="subtotal"> <strong>PUNTOS TOTALES:</strong> <small>__________________</small></div>
                         </p>                        -->
-                        <table>
+                        <table width="100%">
                             <tr>
-                                <td>
-                                    
+                                <td width="25%" style="text-align: right" >
+                                    Número (por periodos anuales):
                                 </td>
-                                <td>
-                                    
+                                <td class="border-bottom td-texto-centrado" width="25%">
+                                    2
                                 </td>
-                                <td>
-                                    
+                                <td width="25%" style="text-align: right">
+                                    SUBTOTAL:
                                 </td>
-                                <td>
-                                    
+                                <td class="border-bottom td-texto-centrado" width="25%">
+                                    2
                                 </td>
                             </tr>
                         </table>
                     </td>
                   </tr>
+                  <tr>
+                      <td>
+                          <table style="float: right; width: 100%; border-width: 0px"  class="border-none">
+                                <tr  class="border-none">
+                                    <td style="border-width: 0px; text-align: right;">PUNTOS TOTALES: </td>
+                                    <td style="border-width: 0px; text-align: center
+                                        ; border-bottom: 0.5px solid #c0c0c0">
+                                    69
+                                    </td> <!-- subtotal -->
+                                </tr>
+                            </table>
+                      </td>                    
+                  </tr>
                   <tr id="dictamen">
                     <td class="border-bottom">                        
-                        <strong>DICTAMEN:</strong>
+                        <span>DICTAMEN: Asociado C</span>
                         <br>
-                        <span>Observaciones: <small>______________________________________________________________</small></span>
-                        <br>
+                        <table width="100%" >
+                            <tr>
+                                <td width="15%" style="text-align: right" >
+                                    Observaciones:
+                                </td>
+                                <td class="border-bottom td-texto-centrado" width="85%">
+                                    Sin observaciones
+                                </td>
+                            </tr>
+                        </table>
+<!--                        <span>Observaciones: <small>______________________________________________________________</small></span>
+                        <br>-->
                     </td>
                   </tr>
                   <tr id="titulo_academico">
@@ -306,16 +347,28 @@
                   </tr>
                   <tr id="firma_vocales_1">
                     <td>
-                      <table width="100%" id="firma_vocal_1">
+                      <table width="100%"  id="firma_vocal_1">
                         <tr>
-                          <td class="border-bottom">&nbsp;</td>
-                          <td style="width:20px">&nbsp;</td>
-                          <td class="border-bottom">&nbsp;</td>
+                            <td class="border-bottom" height="37px" style="width:45%">
+                                <center><img src="<?= base_url() ?>assets/img/firmas/firma1.jpg" class="img-firma-dr"></center>
+                            </td>
+                          <td >&nbsp;</td>
+                          <td class="border-bottom" style="width:45%">
+                              <center><img src="<?= base_url() ?>assets/img/firmas/firma2.jpg" class="img-firma-dr"></center>
+                          </td>
                         </tr>
-                        <tr style="text-align:center">
-                          <td>Vocal Dr.</td>
-                          <td style="width:20px"></td>
-                          <td>Vocal Dr.</td>
+                        <tr style="text-align:center" class="texto-chico">
+                          <td style="width:45%">
+                              Vocal Dr.
+                              <br>
+                              Marco Antonio Chavez Arriaga
+                          </td>
+                          <td></td>
+                          <td style="width:45%">
+                              Vocal Dr.
+                              <br>
+                              Araceli Martinez Najera
+                          </td>
                         </tr>
                       </table>
                     </td>
@@ -324,14 +377,26 @@
                     <td> 
                       <table width="100%" id="firma_vocal_2">
                         <tr>
-                          <td class="border-bottom">&nbsp;</td>
-                          <td style="width:20px">&nbsp;</td>
-                          <td class="border-bottom">&nbsp;</td>
+                          <td class="border-bottom" height="37px" style="width:45%">
+                            <center>  <img src="<?= base_url() ?>assets/img/firmas/firma3.jpg" class="img-firma-dr"></center> 
+                          </td>
+                          <td >&nbsp;</td>
+                          <td class="border-bottom" style="width:45%">
+                          <center><img src="<?= base_url() ?>assets/img/firmas/firma4.jpg" class="img-firma-dr"></center>
+                          </td>
                         </tr>
-                        <tr style="text-align:center">
-                          <td>Vocal Dr.</td>
-                          <td style="width:20px"></td>
-                          <td>Secretaria Dra.</td>
+                        <tr style="text-align:center" class="texto-chico">
+                          <td style="width:45%">
+                              Vocal Dr.
+                              <br>
+                              Eduardo Javier Rios Cortéz
+                          </td>
+                          <td ></td>
+                          <td style="width:45%">
+                              Secretario(a) Dr.
+                              <br>
+                              Fernanada Gonzáles Gonzáles
+                          </td>
                         </tr>
                       </table>
                     </td>
@@ -340,10 +405,20 @@
                     <td>
                       <table width="100%" style="text-align:center" id="firma_presi">
                         <tr>
-                          <td><small>______________________________________________</small></td>
+                           <td></td>
+                           <td height="37px" class="border-bottom" >
+                               <center><img src="<?= base_url() ?>assets/img/firmas/firma5.jpg" class="img-firma-dr"></center>
+                           </td>
+                          <td></td>
                         </tr>
                         <tr>
-                          <td>Presidente Dr.</td>
+                          <td></td>
+                          <td class="texto-chico">
+                              Presidente(a) Dr.
+                              <br>
+                              Kattya Villanueva L.
+                          </td>
+                          <td></td>
                         </tr>
                       </table>
                     </td>

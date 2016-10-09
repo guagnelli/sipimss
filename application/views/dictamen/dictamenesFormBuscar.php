@@ -7,24 +7,24 @@
 <script src="<?= base_url(); ?>assets/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
 <script src="<?= base_url(); ?>assets/js/dictamen/dictamen.js"></script>
 <div class="container">
-    <form class="form-inline">
+    <form id="frmBuscarDocentesDictamen" contelass="form-inline" >
         <div class="row">
                 <div class="col-md-6 col-lg-6 col-sm-6">
                     <div class="panel-body input-group ">
                         <span class="input-group-addon">Nombre del docente</span>
-                             <input type="text" class="form-control" id="nombreDocente" >
+                             <input type="text" class="form-control" id="nombreDocente" name="nombreDocente"  >
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-sm-6">
                     <div class="panel-body input-group ">
                         <span class="input-group-addon">Matrícula del docente</span>
-                             <input type="text" class="form-control" id="matriculaDocente" >
+                             <input type="text" class="form-control" id="matriculaDocente" name="matriculaDocente" >
                     </div>
                 </div>
         </div>  
         <div class="row">
-            <button type="submit" class="btn btn-default" style="float:right">Buscar</button>
-            <button type="submit" class="btn btn-default" style="float:right">Limpiar</button>
+            <button type="button" id="btnBuscarDocentes" class="btn btn-default" style="float:right">Buscar</button>
+            <button type="button" id="btnLimpiar" class="btn btn-default" style="float:right">Limpiar</button>
         </div>
     </form>
     <div class="row"></div>
@@ -247,13 +247,8 @@
                     <div class="">
                      <input type="text" readonly name="perfil_estatus_empleado" value="" id="perfil_estatus_empleado" class="form-control form-control-personal "   maxlength="20" disabled="1">
                     </div>
-
                 </div>
             </div>
-          
-          
-          
-          
       </div>
         <!--/modal-body-->
       <div class="modal-footer">
@@ -263,3 +258,35 @@
   </div>
 </div>
 <!--/modal-->
+
+<!-- Modal para correción de datos de dictamen -->
+<div class="modal fade" id="modalCorreccion" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><i class="glyphicon glyphicon-alert"></i>  Correción  </h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="txtMotivosCorrecion">Motivos para la correción</label>
+            <input type="text" form="formCorrecion" class="form-control" id="txtMotivosCorrecion" name="txtMotivosCorrecion" maxlength="120">
+        </div>  
+      </div>
+      <div class="modal-footer">
+          <div class="row">
+              <div class="col col-md-6">
+                <form id="formCorrecion" method="post" action="<?= base_url() ?>index.php/dictamen/correcion">
+                    <input type="hidden" name="hddSolicCveCorrecion" id="hddSolicCveCorrecion" value="<?= $solicEvalCve ?>">
+                    <input type="hidden" name="hddempleadoCveCorrecion" id="hddempleadoCveCorrecion" value="<?= $empleadoCve ?>">
+                    <input type="submit" class="btn btn-primary" value="Enviar">
+                </form>  
+              </div>
+              <div class="col col-md-6">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              </div>
+          </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
