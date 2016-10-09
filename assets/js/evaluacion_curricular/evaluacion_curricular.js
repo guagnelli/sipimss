@@ -64,8 +64,8 @@ function funcion_cerrar_validacion_empleado(element) {
 
 function ver_comentario_estado_doc(element) {
     var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
-    var hist_val_cve = obj.data('histvalcve');
-    var formData = {hist_val_cve: hist_val_cve};
+    var solicitud_cve = obj.data('solicitudcve');
+    var formData = {solicitud_cve: solicitud_cve};
     data_ajax_post(site_url + '/evaluacion_curricular_validar/ver_comentario_estado', null, '#modal_content', formData);
 }
 
@@ -95,7 +95,7 @@ function ver_curso(elemento) {
     var is_post = $(elemento).attr('data-ispost');
 //    alert(curso + " " + seccion);
     if (parseInt(is_post) == 1) {
-        var objPost = {tipo: tipo, value : value}
+        var objPost = {tipo: tipo, value: value}
         data_ajax_post(site_url + '/perfil_registro/' + seccion + '/', null, '#modal_content', objPost);
     } else {
         if (tipo.length > 0) {
@@ -167,4 +167,24 @@ function envio_cambio_estado_validacion_evaluacion(element) {
             .always(function () {
                 remove_loader();
             });
+}
+
+function ver_cambio_estado_bloque(element) {
+    var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
+    var bloque = obj.data('bloque');
+    var objet = {bloque: bloque};
+    data_ajax_post(site_url + '/' + ctrl + '/validar_bloque', null, '#modal_content', objet);
+}
+
+/**
+ * 
+ * @param {type} element
+ * @returns 
+ * @description Carga todos los mensajes de la historia de validación de un bloque en especifico
+ */
+function ver_comentarios_bloque(element) {
+    var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
+    var bloque = obj.data('bloque');
+    var objet = {bloque: bloque};
+    data_ajax_post(site_url + '/' + ctrl + '/get_cometarios_bloque', null, '#modal_content', objet);
 }

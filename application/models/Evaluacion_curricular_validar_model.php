@@ -130,29 +130,35 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         return $query;
     }
 
-    /**
+            /**
      * 
      * @autor LEAS
      * @fecha 09/09/2016
      * @param type $validadacion_cve
      * @return Obtiene la historia completa indicada por la clave
      */
-    public function get_comentario_hist_validacion_evaluacion($validadacion_cve) {
+    public function get_comentario_hist_validacion_evaluacion($solicitud_cve) {
         $select = array('if(hv.validador_cve is null,0,1) "existe_validador"',
             'if(hv.validador_cve is null,
             concat(emd.EMP_NOMBRE, " ", emd.EMP_APE_PATERNO, " ",emd.EMP_APE_MATERNO),
             concat(em.EMP_NOMBRE, " ", em.EMP_APE_PATERNO, " ",em.EMP_APE_MATERNO)) as "nom_validador"',
-            'hv.msg_correcciones "comentartio_estado"', 'hv.est_validacion_cve "hist_estado"');
-        $this->db->where('hv.hist_validacion_cve', $validadacion_cve);
+            'hv.msg_correcciones "comentartio_estado"', 'hv.est_validacion_cve "hist_estado"',
+            'fch_registro_historia "fecha_validacion"',
+            'if(hv.msg_correcciones is null or hv.msg_correcciones = "",0,1) "is_comentario"',
+            'cev.EST_VALIDA_DESC "nom_estado_val"'
+        );
+        $this->db->where('hv.solicitud_cve', $solicitud_cve);
         $this->db->join('evaluacion_solicitud es', 'es.VALIDACION_CVE = hv.solicitud_cve');
+        $this->db->join('cestado_validacion cev', 'cev.EST_VALIDACION_CVE = hv.est_validacion_cve');
         $this->db->join('empleado emd', 'emd.EMPLEADO_CVE = es.EMPLEADO_CVE');
         $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.validador_cve', 'left');
         $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
+        $this->db->order_by('hv.hist_validacion_cve', 'desc');
 //        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.validador_cve');
 //        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE');
         $this->db->select($select);
         $query = $this->db->get('evaluacion_hist_validacion hv');
-        $row_hist = $query->row();
+        $row_hist = $query->result_array();
 //        pr($this->db->last_query());
         return $row_hist;
     }
@@ -248,9 +254,8 @@ class Evaluacion_curricular_validar_model extends CI_Model {
         $this->db->join('cvalidacion_curso_estado cce', 'cce.VAL_CUR_EST_CVE = ece.estado_validacion_cve');
         $query = $this->db->get('evaluacion_bloques_val ece');
         $row_hist = $query->result_array();
-//        pr($this->db->last_query());
         $result = array();
-        if (empty($row_hist)) {
+        if (!empty($row_hist)) {
             $result = $this->asignar_bloque_llave_hist_bloque($row_hist);
         }
         return $result;
@@ -266,8 +271,43 @@ class Evaluacion_curricular_validar_model extends CI_Model {
     private function asignar_bloque_llave_hist_bloque($array_historial_bloque) {
         $array_result = array();
         foreach ($array_historial_bloque as $value) {
-            $array_result[$value['bloque_evaluacion_cve']] = $value;
+            $array_result[$value['bloque_seccion_cve']] = $value;
         }
+        return $array_result;
+    }
+
+    /**
+     * 
+     * @autor LEAS
+     * @fecha 08/10/2016
+     * @param type $solicitud Solicitu de la validación
+     * @param string $parametros 
+     * @return type
+     */
+    public function get_estados_por_bloque($solicitud, $bloque, $parametros = null) {
+        if (is_null($parametros)) {
+            $parametros = array('ece.ebv_cve "bloque_evaluacion_cve"', 'ece.ehv_cve "historia_gral_cve"',
+                'ece.estado_validacion_cve "estado_validacion"', 'cce.VAl_CUR_EST_NOMBRE "nom_estado_bloque"',
+                'ece.txt_descripcion "comentario_bloque"', 'ece.ebs_cve "bloque_seccion_cve"', 
+                'ece.fch_insert "fecha_validacion"',
+                'concat(emv.EMP_NOMBRE, " ", emv.EMP_APE_PATERNO, " ", emv.EMP_APE_MATERNO) "nom_validador"',
+                'ehv.validador_cve "validador_cve"', 'if(ece.txt_descripcion is null or ece.txt_descripcion = "",0,1) "is_comentario"'
+            );
+        }
+
+        $this->db->where('ehv.solicitud_cve', $solicitud);
+        $this->db->where('ece.ebs_cve', $bloque);
+
+        $this->db->select($parametros);
+        $this->db->join('evaluacion_hist_validacion ehv', 'ehv.hist_validacion_cve = ece.ehv_cve');
+        $this->db->join('cvalidacion_curso_estado cce', 'cce.VAL_CUR_EST_CVE = ece.estado_validacion_cve');
+        $this->db->join('validador v', 'v.VALIDADOR_CVE = ehv.validador_cve', 'left');
+        $this->db->join('empleado emv', 'emv.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
+        $query = $this->db->get('evaluacion_bloques_val ece');
+        $this->db->order_by('ece.ebv_cve', 'desc');
+        $row_hist = $query->result_array();
+
+        return $row_hist;
     }
 
 }

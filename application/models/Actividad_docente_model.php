@@ -181,7 +181,6 @@ class Actividad_docente_model extends CI_Model {
             $seem = '(SELECT COUNT(*) AS validation FROM hist_eem_validacion_curso WHERE
                 hist_eem_validacion_curso.EMP_ESP_MEDICA_CVE=esm.EMP_ESP_MEDICA_CVE AND VALIDACION_CVE=' . $validacion_cve_session . ') AS validation,';
         }
-
         /*Validaciones para ciclo general getAll()*/
         if(is_array($actividad_docente_general_cve) && isset($actividad_docente_general_cve["conditions"]["empleado_cve"])){
             $empleado_cve = $actividad_docente_general_cve["conditions"]["empleado_cve"];
@@ -222,7 +221,7 @@ class Actividad_docente_model extends CI_Model {
             $select_emp_esp_medica .= " AND IS_VALIDO_PROFESIONALIZACION = ".$actividad_docente_general_cve["validations"]["IS_VALIDO_PROFESIONALIZACION"];
         }
         $query = $this->db->query($select_emp_actividad_docente . " UNION " . $select_emp_educacion_distancia . " UNION " . $select_emp_esp_medica);
-
+//        pr($this->last_query());
         return $query->result_array();
     }
     

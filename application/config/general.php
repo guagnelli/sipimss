@@ -632,12 +632,6 @@ $config['estados_val_evaluacion'] = array(
     Enum_evec::Validado_profesionalizacion => array('rol_permite' =>array(),'estados_transicion' => array(), 'value_boton' => 'Validar', 'funcion_demandada' => 'envio_cambio_estado_validacion_evaluacion(this)', 'is_boton' => TRUE, 'tipo_transaccion'=>'validación', 'color_status' => 'VALIDO'),
 );
 
-$config['estados_val_evaluacion_bloque'] = array(
-    $config['cvalidacion_curso_estado']['VALIDO']['id'] => array( ),
-    $config['cvalidacion_curso_estado']['NO_VALIDO']['id'] => array( ),
-    $config['cvalidacion_curso_estado']['CORRECCION']['id'] => array( ),
-    $config['cvalidacion_curso_estado']['REVISION']['id'] => array( ),
-);
 
 ////////////////////////////////////////Fin parámetros de validación
 

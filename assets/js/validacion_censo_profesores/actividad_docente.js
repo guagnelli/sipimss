@@ -102,8 +102,6 @@ function validar_ad(elemento, tipo){
             }
         });
     }
-
-
 }*/
 
 function cargar_curso(element) {
