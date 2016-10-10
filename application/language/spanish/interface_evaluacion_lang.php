@@ -111,7 +111,8 @@ $lang['interface_evaluacion'] = array(
             'error_guardar_puntos' => 'Para almacenar la puntuación del curso debe seleccionar la sección<br> y escribir los puntos obtenidos antes de continuar.',
             'error_guardar_puntos_valido' => 'Para almacenar la puntuación del curso debe seleccionar si es válido o no válido.',
             'faltante_validar' => 'No puede finalizar la evaluación, debe definir si cada registro es válido o no válido',
-            'terminar_evaluacion' => 'Se ha evaluado satisfactoriamente.'
+            'terminar_evaluacion' => 'Se ha evaluado satisfactoriamente.',
+            'enviar_correccion' => 'Enviar a corrección'
         )
     ),
     'general' => array(

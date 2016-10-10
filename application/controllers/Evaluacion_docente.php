@@ -231,23 +231,27 @@ class Evaluacion_docente extends MY_Controller {
                     $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($filtros['usuario_cve']); //Identificador de la comisión
                 }
                 $datos_hist_evaluacion_dic = $this->eval_doce_model->get_hist_evaluacion_dic(array('conditions'=>array('SOLICITUD_VAL_CVE'=>$datos_validacion['solicitud_cve'],
-                    'hist_evaluacion_dic.IS_ACTUAL'=>$this->config->item('IS_ACTUAL'), 'EVALUADOR_CVE'=>$this->obtener_id_evaluador())));
+                    'hist_evaluacion_dic.IS_ACTUAL'=>$this->config->item('IS_ACTUAL'))));
                 //pr($datos_hist_evaluacion_dic);
-                $datos_validacion['HIST_EVALUACION_CVE'] = $datos_validacion['EST_EVALUACION_CVE'] = null;
+                //$datos_validacion['HIST_EVALUACION_CVE'] = $datos_validacion['EST_EVALUACION_CVE'] = null;
                 if(!empty($datos_hist_evaluacion_dic)){
-                    $datos_validacion['HIST_EVALUACION_CVE'] = $datos_hist_evaluacion_dic[0]['HIST_EVALUACION_CVE'];
-                    $datos_validacion['EST_EVALUACION_CVE'] = $datos_hist_evaluacion_dic[0]['EST_EVALUACION_CVE'];
+                    /*$datos_validacion['HIST_EVALUACION_CVE'] = $datos_hist_evaluacion_dic[0]['HIST_EVALUACION_CVE'];
+                    $datos_validacion['EST_EVALUACION_CVE'] = $datos_hist_evaluacion_dic[0]['EST_EVALUACION_CVE'];*/
+                    foreach ($datos_hist_evaluacion_dic as $key_dhed => $dhed) {
+                        $datos_validacion['hist_evaluacion'] = $datos_hist_evaluacion_dic;
+                    }                    
                 }
                 //Manda el identificador de la delegación del usuario
                 $this->session->set_userdata('evaluacion', $datos_validacion); //Asigna la información del usuario al que se va a validar
                 //pr($_SESSION);
                 $this->load->model("Expediente_model","expediente");
                 
-                $conditions = array('conditions'=>array('HIST_EVALUACION_CVE'=>$this->session->userdata('evaluacion')['HIST_EVALUACION_CVE'],
+                /*$conditions = array('conditions'=>array('HIST_EVALUACION_CVE'=>$this->session->userdata('evaluacion')['HIST_EVALUACION_CVE'],
                     'EVALUACION_CVE'=>$this->session->userdata('evaluacion')['solicitud_cve'], 
-                    'EVALUADOR_CVE'=>$this->session->userdata('evaluador')['ROL_EVALUADOR_CVE']));
+                    'EVALUADOR_CVE'=>$this->session->userdata('evaluador')['ROL_EVALUADOR_CVE']));*/
+                $conditions = array('conditions'=>array('EVALUACION_CVE'=>$this->session->userdata('evaluacion')['solicitud_cve']));
                 $datosPerfil = $this->obtener_secciones_evaluacion($datos_validacion['empleado_cve'], $datos_validacion['solicitud_cve'], $conditions);
-                //pr($datosPerfil);
+                //pr($_SESSION);
                 $entidades_ = array(enum_ecg::cseccion);
                 //$condiciones_ = array(enum_ecg::ccurso => array('TIP_CURSO_CVE' => $tipo_curso));
                 $datosPerfil['catalogos'] = carga_catalogos_generales($entidades_, null, null);
@@ -255,7 +259,7 @@ class Evaluacion_docente extends MY_Controller {
                 $interface = $this->lang->line('interface');
                 $datosPerfil['string_values'] = array_merge($this->lang->line('interface_evaluacion')['evaluacion']['dictamen'], $this->lang->line('interface_evaluacion')['evaluacion']['docente'], $this->lang->line('interface_evaluacion')['general'], $interface['evaluacion_curricular_validar'], $interface['bloques']);
                 
-                echo $this->load->view('evaluacion/evaluacion_docente/listado_cursos', $datosPerfil, true);
+                echo $this->load->view('evaluacion/evaluacion_docente/listado_revisar_cursos', $datosPerfil, true);
             }
         } else {
             redirect(site_url());
@@ -272,6 +276,7 @@ class Evaluacion_docente extends MY_Controller {
         $this->load->model('Evaluacion_curricular_validar_model', 'ecvm');
         $info_docente = $this->exp->getAll($empleado_cve, true); //Resultado
         $info_cursos_evaluados = $this->exp->getAllEvaluacion($conditions);
+        //pr($info_cursos_evaluados);
         $acro_b = 'bloque_';
         $acro_s = 'seccion_';
         $emp_bloques_seccion = $info_docente['bloques'];

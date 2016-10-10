@@ -58,3 +58,21 @@ function funcion_cerrar_validacion_empleado(element) {
     $('#select_perfil_validar').empty();
     data_ajax_post(site_url + '/evaluacion_docente/seccion_delete_datos_validado', null, null);
 }
+
+function ver_curso(elemento) {
+    var value = $(elemento).attr('data-value');
+    var seccion = $(elemento).attr('data-seccion');
+    var tipo = $(elemento).attr('data-tipo');
+    var is_post = $(elemento).attr('data-ispost');
+//    alert(curso + " " + seccion);
+    if (parseInt(is_post) == 1) {
+        var objPost = {tipo: tipo, value: value}
+        data_ajax_post(site_url + '/perfil_registro/' + seccion + '/', null, '#modal_content', objPost);
+    } else {
+        if (tipo.length > 0) {
+            data_ajax(site_url + '/perfil_registro/' + seccion + '/' + value + '?t=' + tipo, null, '#modal_content');
+        } else {
+            data_ajax(site_url + '/perfil_registro/' + seccion + '/' + value, null, '#modal_content');
+        }
+    }
+}
