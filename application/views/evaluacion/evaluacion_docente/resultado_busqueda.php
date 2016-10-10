@@ -32,6 +32,7 @@
                         . 'data-solicitudcve="' . $solicitud_cve . '"'
                         . 'data-usuariocve="' . $usuario_cve . '"';
                     $estado = ($evaluacion['CESE_CVE']==Enum_es::Envio_evaluacion) ? ((empty($evaluacion['estado']) && $evaluacion['estado']==0) ? $this->config->item('cestado_evaluacion')[Enum_ee::Por_evaluar]['value'] : $this->config->item('cestado_evaluacion')[$evaluacion['estado']]['value']) : $evaluacion['CESE_NOMBRE'];
+                    $evaluar = ($evaluacion['CESE_CVE']==Enum_es::Envio_evaluacion || $evaluacion['CESE_CVE']==Enum_es::Evaluacion) ? '<span '.$link_ver_curso.'><a data-toggle="tab" href="#select_perfil_validar_evaluacion">'.$string_values['evaluar'].'</a></span>' : '';
                     $html .= '<tr id="tr_'.$this->seguridad->encrypt_base64($evaluacion['VALIDACION_CVE']).'">
                             <td>'.$evaluacion['emp_matricula'].'</td>
                             <td>'.$evaluacion['EMP_NOMBRE'].' '.$evaluacion['EMP_APE_PATERNO'].' '.$evaluacion['EMP_APE_MATERNO'].'</td>
@@ -40,7 +41,7 @@
                             <!-- <td></td> -->
                             <td>'.$estado.'</td>
                             <td>
-                                <span '.$link_ver_curso.'><a data-toggle="tab" href="#select_perfil_validar_evaluacion">'.$string_values['evaluar'].'</a></span>
+                                '.$evaluar.'
                                 <!-- <button type="button" class="btn btn-link btn-sm btn_evaluar" data-value="'.$this->seguridad->encrypt_base64($evaluacion['VALIDACION_CVE']).'">'.
                                    $string_values['evaluar'].
                                 '</button> -->

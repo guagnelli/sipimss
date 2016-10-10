@@ -1,53 +1,39 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$label_just = $string_values['lbl_jus_comentario'] . ((isset($tipo_transicion)) ? $tipo_transicion : '');
-?>
-
-<style type="text/css">
-    .button-padding {padding-top: 30px}
-    .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}
-</style>
-
-
-<!-- Inicio informacion personal -->
-<?php echo form_open('', array('id' => 'form_validar_docente')); ?>
-
-<div class="list-group">
-    <div class="row">
-        <div class="alert-<?php echo $color_estado; ?> col-md-12">
-            <label for='lbl_jus_validacion' class="control-label">
-                <?php echo $label_just; ?>
-            </label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-comment"> </span>
-                </span>
-                <?php
-                echo $this->form_complete->create_element(array('id' => 'comentario_justificacion',
-                    'type' => 'textarea',
-                    'value' => (isset($comentario_justificacion)) ? $comentario_justificacion : '',
-                    'attributes' => array(
-                        'class' => 'form-control',
-                        'placeholder' => $string_values['lbl_comentario'],
-                        'maxlength' => '4000',
-                        'data-toggle' => 'tooltip',
-                        'data-placement' => 'top',
-                        'title' => $string_values['lbl_comentario'])));
-                ?>
-            </div>
-            <?php echo form_error_format('comentario_justificacion'); ?>
+if (empty($comentarios)) {//No existen comentarios
+    ?>
+    <div class="list-group">
+        <div class="row">
+            <?php echo $string_values['no_comment']; ?>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
+<?php } else {
+    ?>
+    <div class="list-group">
+        <div class="row">
             <?php
-            if (isset($pie_pag)) {
-                echo $pie_pag;
-            }
-            ?>
+//            $estados_censo = $this->config->item('estados_val_evaluacion');
+            $this->load->helper('fecha');
+            foreach ($comentarios as $value) {
+                if (intval($value['is_comentario']) === 1) {
+//                    $estado = $estados_censo[$value['estado_validacion']];
+//                    $color = $estados_val[$value['estado_validacion']]['color']; //Obtiene los array de color del estado
+                    ?>
+                    <!--<div class="alert alert-<?php // echo $color; ?>">-->
+                    <div class="alert alert-info">
+                        <span><?php echo $string_values['titulo_fecha_validacion'] . get_fecha_local($value['fecha_validacion']); ?></span><br>
+                        <span><?php echo $string_values['titulo_estado_validacion'] . $value['nom_estado_val']; ?></span><br>
+                        <?php if (!empty($value['existe_validador'])) { ?>
+                            <span><?php echo $string_values['titulo_validador'] . $value['nom_validador']; ?></span><br>
+                        <?php }else{ ?>
+                            <span><?php echo $string_values['titulo_docente'] . $value['nom_validador']; ?></span><br>
+                        <?php } ?>
+                        <span><?php echo $string_values['lbl_comentario'] . ': ' . $value['comentartio_estado']; ?></span>
+                    </div>
+
+                <?php } ?>
+            <?php } ?>
         </div>
     </div>
+<?php } ?>
 
-</div>
-<?php echo form_close(); ?>
-  

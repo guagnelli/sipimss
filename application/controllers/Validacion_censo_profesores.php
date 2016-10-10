@@ -446,17 +446,17 @@ class Validacion_censo_profesores extends MY_Controller {
 
 //        pr($prop_estado);
         //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
-        if (isset($prop_estado['est_apr_para_validacion'])) {
-            if ($estado_cambio_cve == Enum_ev::Val_n1_por_validar_n2 || $estado_cambio_cve == Enum_ev::Val_n2_por_validar_profesionalizacion || $estado_cambio_cve == Enum_ev::Validado) {
-                //Validación 
-                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
-                $this->load->model('Validacion_docente_model', 'vdm');
-                $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
-            } else {//corrección
-            }
-        }
+//        if (isset($prop_estado['est_apr_para_validacion'])) {
+//            if ($estado_cambio_cve == Enum_ev::Val_n1_por_validar_n2 || $estado_cambio_cve == Enum_ev::Val_n2_por_validar_profesionalizacion || $estado_cambio_cve == Enum_ev::Validado) {
+//                //Validación 
+//                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
+//                $this->load->model('Validacion_docente_model', 'vdm');
+//                $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
+//            } else {//corrección
+//            }
+//        }
 //        pr($pasa_validacion);
-        if ($pasa_validacion) {
+//        if ($pasa_validacion) {
             $updates = null;
              $empleado = $datos_empleado_validar['empleado_cve'];
             if ($estado_cambio_cve == Enum_ev::Validado) {//Es la validacion por profecionalización, por lo que hay que cambiar el estado de todos los registros validados
@@ -492,9 +492,9 @@ class Validacion_censo_profesores extends MY_Controller {
             } else {
                 return 0;
             }
-        } else {
-            return 0;
-        }
+//        } else {
+//            return 0;
+//        }
     }
 
     public function enviar_cambio_estado_validacion() {
@@ -681,7 +681,7 @@ class Validacion_censo_profesores extends MY_Controller {
                     $validation_est_corr_comi = array('validation_estado_anterior' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE=' . $this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['VALIDACION_CVE'], 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
                 }
                 /////////Fin agregar validaciones de estado
-                $data['comisiones'][$ctc] = $this->ca->get_comision_academica(array_merge(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'TIP_COMISION_CVE' => $ctc), 'order' => 'EC_ANIO desc', 'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE, TIP_CUR_NOMBRE', 'validation' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE=' . $validacion_cve_session)), $val_correc_comi, $validation_est_corr_comi));
+                $data['comisiones'][$ctc] = $this->ca->get_comision_academica(array_merge(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'emp_comision.TIP_COMISION_CVE' => $ctc), 'order' => 'EC_ANIO desc', 'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE, TIP_CUR_NOMBRE', 'validation' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE=' . $validacion_cve_session)), $val_correc_comi, $validation_est_corr_comi));
             }
             //pr($data);
             echo $this->load->view('validador_censo/comision_academica/comision_academica.php', $data, true); //Valores que muestrán la lista
@@ -867,7 +867,7 @@ class Validacion_censo_profesores extends MY_Controller {
         $data['curso_principal'] = $data['actividad_docente']['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
         $data['actividad_general_cve'] = $data['actividad_docente']['ACT_DOC_GRAL_CVE']; //Identificador del curso principal 
         $data['curso_principal_entidad_contiene'] = $data['actividad_docente']['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
-        $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($data['actividad_docente']['ACT_DOC_GRAL_CVE'], $this->obtener_id_validacion()); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
+        $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($data['actividad_docente']['ACT_DOC_GRAL_CVE'], $this->obtener_id_validacion(),  $this->obtener_id_empleado()); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
         //}
 
         $this->load->view('validador_censo/actividad_docente/actividad_tpl', $data, FALSE);

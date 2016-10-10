@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   config
  */
 class Expediente_model extends MY_Model {
-
+    var $string_values;
     private $config;
     protected $bloque_secciones;
     protected $seccion;
@@ -19,6 +19,8 @@ class Expediente_model extends MY_Model {
 
     function __construct() {
         parent::__construct();
+        $this->lang->load('interface');
+        $this->string_values = $this->lang->line('interface')['model']; //Cargar textos utilizados en vista
         $this->setArray();
     }
 
@@ -27,6 +29,84 @@ class Expediente_model extends MY_Model {
       "fields_labels"=>array("curso"=>"","tipo_curso"=>""),
       "secciones"=>array()
       ); */
+    
+    public function insert_evaluacion_curso($datos, $data){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        $this->db->trans_begin(); //Definir inicio de transacción
+
+        $tabla = $this->config[$data['bloque']][$data['seccion']]['evaluacion']['entidad'];
+        $campo = $this->config[$data['bloque']][$data['seccion']]['evaluacion']['pk'];
+        $datos->{$campo} = $data['registro'];
+        
+        $this->db->insert($tabla, $datos); //Inserción de registro
+        
+        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['data']['identificador'] = $data_id;
+            $resultado['msg'] = $this->string_values['insercion'];
+            $resultado['result'] = TRUE;
+        }
+        
+        return $resultado;
+    }
+
+    public function update_evaluacion_curso($datos, $data){
+        $resultado = array('result'=>null, 'msg'=>'', 'data'=>null);
+        $this->db->trans_begin(); //Definir inicio de transacción
+
+        $tabla = $this->config[$data['bloque']][$data['seccion']]['evaluacion']['entidad'];
+        $campo = $this->config[$data['bloque']][$data['seccion']]['evaluacion']['pk'];
+        $datos->{$campo} = $data['registro'];
+        
+        $this->db->where('EVA_CURSO_CVE', $data['data_eva_curso']);
+        $this->db->update($tabla, $datos); //Inserción de registro
+        
+        $data_id = $this->db->insert_id(); //Obtener identificador insertado
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $resultado['result'] = FALSE;
+            $resultado['msg'] = $this->string_values['error'];
+        } else {
+            $this->db->trans_commit();
+            $resultado['msg'] = $this->string_values['actualizacion'];
+            $resultado['result'] = TRUE;
+        }
+        
+        return $resultado;
+    }
+
+    public function get_evaluacion_curso_registro($tabla, $params=null){
+        $resultado = array();
+
+        if(array_key_exists('fields', $params)){
+            if(is_array($params['fields'])){
+                $this->db->select($params['fields'][0], $params['fields'][1]);
+            } else {
+                $this->db->select($params['fields']);
+            }
+        }
+        if(array_key_exists('conditions', $params)){
+            $this->db->where($params['conditions']);
+        }
+        if(array_key_exists('order', $params)){
+            $this->db->order_by($params['order']);
+        }
+
+        $query = $this->db->get($tabla); //Obtener conjunto de registros
+        //pr($this->db->last_query());
+        $resultado=$query->result_array();
+
+        $query->free_result(); //Libera la memoria
+
+        return $resultado;
+    }
 
     function setArray() {
         //Formacion
@@ -50,6 +130,10 @@ class Expediente_model extends MY_Model {
                         "view" => "formacion_salud_detalle",
                         "is_post" => 0,
                     ),
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_fpcs",
+                        "pk"=>"FPCS_CVE"
+                    )
                 ),
                 //formacion docente
                 Enum_sec::S_FORMACION_PROFESIONAL => array(
@@ -68,7 +152,11 @@ class Expediente_model extends MY_Model {
                         "view" => "formacion_docente_detalle",
                         "is_post" => 0,
                     ), 
-                    "activo" => 1
+                    "activo" => 1,
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_for_profesional",
+                        "pk"=>"EMP_FORMACION_PROFESIONAL_CVE"
+                    )
                 ),
             ),
             Enum_sec::B_ACTIVIDAD_DOCENTE => array(
@@ -89,6 +177,10 @@ class Expediente_model extends MY_Model {
                         "view" => "carga_datos_actividad",
                         "is_post" => 0,
                     ),
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_edu_dis",
+                        "pk"=>"EMP_EDU_DISTANCIA_CVE"
+                    )
                 ),
                 Enum_sec::S_ESP_MEDICA => array(
                     "acronimo" => "em",
@@ -107,7 +199,11 @@ class Expediente_model extends MY_Model {
                         "view" => "carga_datos_actividad",
                         "is_post" => 0,
                     ),
-                    "activo" => 1
+                    "activo" => 1,
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_esp_medica",
+                        "pk"=>"EMP_ESP_MEDICA_CVE"
+                    )
                 ),
                 Enum_sec::S_ACTIVIDAD_DOCENTE => array(
                     "acronimo" => "ad",
@@ -126,6 +222,10 @@ class Expediente_model extends MY_Model {
                         "view" => "carga_datos_actividad",
                         "is_post" => 0,
                     ),
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_act_docente",
+                        "pk"=>"EMP_ACT_DOCENTE_CVE"
+                    )
                 ),
             ),
             Enum_sec::B_BECAS_COMISIONES_LABORALES => array(
@@ -181,6 +281,10 @@ class Expediente_model extends MY_Model {
                         "get" => "get_comision_academica",
                         "view" => "comision_academica_detalle",
                         "is_post" => 1,
+                    ),
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_comision",
+                        "pk"=>"EMP_COMISION_CVE"
                     )
                 ),
             ),
@@ -201,6 +305,10 @@ class Expediente_model extends MY_Model {
                         "get" => "get_lista_datos_investigacion_docente",
                         "view" => "carga_datos_investigacion",
                         "is_post" => 0,
+                    ),
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_act_inv_edu",
+                        "pk"=>"EAID_CVE"
                     )
                 ),
             ),
@@ -220,6 +328,10 @@ class Expediente_model extends MY_Model {
                         "get" => "get_lista_datos_direccion_tesis",
                         "view" => "direccion_tesis_detalle",
                         "is_post" => 0,
+                    ),
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_comision",
+                        "pk"=>"EMP_COMISION_CVE"
                     )
                 ),
             ),
@@ -239,6 +351,10 @@ class Expediente_model extends MY_Model {
                         "get" => "get_lista_material_educativo",
                         "view" => "carga_datos_editar_material_educativo",
                         "is_post" => 0,
+                    ),
+                    "evaluacion" => array( 
+                        "entidad"=>"evaluacion_curso_mat_edu",
+                        "pk"=>"MATERIA_EDUCATIVO_CVE"
                     )
                 ),
             ),
@@ -313,7 +429,24 @@ class Expediente_model extends MY_Model {
             if (!isset($data["bloques"]["labels_bloque"][$b_key])) {
                 $data["bloques"]["labels_bloque"][$b_key] = 'lbl_' . $b_key . '_titulo_b';
             }
-        }
+        } //pr($data);
+        return $data;
+    }
+
+    function getAllEvaluacion($params = null) {
+        $this->lang->load('interface');
+
+        $data = array();
+        foreach ($this->config as $b_key => $secciones) {
+            foreach ($secciones as $key => $seccion) {
+                if (isset($seccion['evaluacion']) && array_key_exists('entidad', $seccion['evaluacion'])) {
+                    $tmp_eva = $this->get_evaluacion_curso_registro($seccion["evaluacion"]['entidad'], $params); ////Obtenemos información de los registros
+                    foreach ($tmp_eva as $key_tmp => $eval) {
+                        $data["evaluaciones"][$b_key][$key][$eval[$seccion["evaluacion"]['pk']]] = $tmp_eva[$key_tmp];
+                    }
+                }
+            }
+        } //pr($data);
         return $data;
     }
 

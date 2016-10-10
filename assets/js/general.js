@@ -6,7 +6,8 @@ $(document).ready(function () {
  *	Método que muestra una imagen (gif animado) que indica que algo esta cargando
  *	@return	string	Contenedor e imagen del cargador.
  */
-function create_loader(optionalPadding = '200px') {
+function create_loader(padding) {
+var optionalPadding = padding || '200px';
 optionalPadding = (typeof optionalPadding === 'undefined') ? '200px' : optionalPadding;
         return '<div id="ajax_loader" align="center" style="padding-top:' + optionalPadding + '; padding-bottom:' + optionalPadding + ';"><img src="' + img_url_loader + '" alt="Cargando..." title="Cargando..." /></div>';
 }
@@ -33,27 +34,60 @@ function imprimir_resultado(resultado) {
     return "<div id='div_mensaje' class='row'><div class='col-lg-12 alert alert-" + tipo_mensaje + "'>" + resultado.msg + "</div></div>";
 }
 
-
-function data_ajax(path, form_recurso, elemento_resultado) {
+/*
+ * @author  ???
+ * @modified_by DPérez
+ * @param url para conexión ajax
+ * @param id html del formulario donde se obtienen los datos a enviar en ajax
+ * @param id html del elemento que contendrá los datos del resultado
+ * @param función que se ejecutará cuando el ajax es correcto y se tienen datos
+ * @returns none
+ */
+function data_ajax(path, form_recurso, elemento_resultado, callback) {
+    var dataSend = $(form_recurso).serialize();
     $.ajax({
         url: path,
-        data: $(form_recurso).serialize(),
+        data: dataSend,
         method: 'POST',
         beforeSend: function (xhr) {
             $(elemento_resultado).html(create_loader());
-//			$(elemento_resultado).html();
         }
     })
-            .done(function (response) {
-                $(elemento_resultado).html(response);
-            })
-            .fail(function (jqXHR, textStatus) {
-                $(elemento_resultado).html("Ocurrió un error durante el proceso, inténtelo más tarde.");
-            })
-            .always(function () {
-                remove_loader();
-            });
+    .done(function (response) {
+        if( typeof callback !== 'undefined' && typeof callback === 'function' ){
+            $(elemento_resultado).html(response).promise().done(callback());
+        }else{
+            $(elemento_resultado).html(response);
+        }
+    })
+    .fail(function (jqXHR, textStatus) {
+        $(elemento_resultado).html("Ocurrió un error durante el proceso, inténtelo más tarde.");
+    })
+    .always(function () {
+        remove_loader();
+    });
 
+}
+/*
+ *       Función que inicializa dataTables después de una petición ajax
+ * Se mandan a la función data_ajax en 4° parametro para ejecutar la función de inicio de dataTables.
+ * 
+ * @param   id html de la tabla que aplicará DataTables
+ * @returns function callback
+ */
+function callbackIniDataTables(idTabla){
+    return function(){
+        $(idTabla).DataTable(
+            {
+                "info": false
+                , "searching": false
+                , "lengthChange": false
+                , "scrollX": true
+//                , "order": [[ 1, "asc" ]]
+            }
+        );
+    }
+    
 }
 
 /**

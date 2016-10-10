@@ -34,7 +34,7 @@ $lang['interface'] = array(
         'lbl_is_titulo' => 'Investigaci&oacute;n',
         // 'lbl_ie_titulo'=>'Investigaci&oacute;n educativa',
         'lbl_b_titulo' => 'Becas y Comisiones',
-        'lbl_cl_titulo'=>'Comisiones laborales',
+        'lbl_cl_titulo' => 'Comisiones laborales',
         'lbl_fp_titulo' => 'Formaci&oacute;n profesional',
         'lbl_me_titulo' => 'Material educativo',
         'lbl_ed_titulo' => 'Educaci&oacute; a distancia',
@@ -682,6 +682,8 @@ $lang['interface'] = array(
         'lbl_comentario' => 'Comentarios',
         'titulo_estado_validacion' => 'Estado de la validación: ',
         'titulo_fecha_validacion' => 'Fecha de la validación: ',
+        'titulo_validador' => 'Validador: ',
+        'titulo_docente' => 'Docente: ',
         'drop_delegacion' => 'Seleccione delegación',
         'lbl_delegacion' => 'Delegación',
         'drop_dictamen' => 'Seleccione dictamen',
@@ -697,11 +699,15 @@ $lang['interface'] = array(
         'titulo_modal_comentario_d' => 'Docente: ',
         'chek_selct_profesionalizacion' => 'Seleccionar para evaluación',
         'lbl_seleccionar' => 'Seleccionar',
-        'title_curso' => 'Cuerso',
+        'title_curso' => 'Curso',
         'title_tipo_curso' => 'Tipo',
         'title_horas' => 'Duración',
         'title_acciones' => 'Acciones',
         'accion_ver' => 'Ver',
+        'text_btn_validar' => 'Validar',
+        'text_btn_comentarios' => 'Comentarios',
+        'text_seccion' => 'Sección',
+        'no_comment' => 'No existen comentarios',
     ),
 );
 $lang['interface_secd'] = array(
@@ -720,6 +726,7 @@ $lang['interface_secd'] = array(
     'lbl_convocatoria' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
     'lbl_link_convocatoria' => 'Si desea consultar la convocatoria, puede hacerlo en la esiguiente URL: <a href="#">Convoctoria</a>',
 );
+
 $lang["interface_tpl"] = array(
     'lbl_link_logout' => 'Cerrar sesión',
     'lbl_link_profile' => 'Mi perfil',
@@ -784,8 +791,6 @@ $lang["fields"]= array(
         ),
     ),
 );
-
-
 
 //$lang['interface_registro_profesor'] = 'Impresión de texto prueba';
 //$lang['interface_otro_mensaje'] = '&lsaquo; Primero';

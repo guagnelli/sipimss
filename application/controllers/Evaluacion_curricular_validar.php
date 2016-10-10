@@ -91,10 +91,10 @@ class Evaluacion_curricular_validar extends MY_Controller {
             /* carga buscador */
 //            $result = get_is_valida_validacion_censo(12, 3, 8);
         } else {//No existe el validador. Mostrar leyenda de que no es un valiador
-            $main_contet = '<span>No se encuentraÂ¡ asignado el validador</span>';
+            $main_contet = '<span>No se encuentraá¡ asignado el validador</span>';
         }
         $this->template->multiligual = TRUE;
-        $this->template->setTitle("EvaluaciÃ³n");
+        $this->template->setTitle("Evaluación");
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_contet);
         $this->template->getTemplate(FALSE, 'template/sipimss/index.tpl.php');
@@ -160,7 +160,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 </script>';
     }
 
-    public function cargar_bloques_informaciÃƒÂ³n_docente() {
+    public function cargar_bloques_informacion_docente() {
         
     }
 
@@ -213,7 +213,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $datos_curso = $info_docente['cfg_actividad'];
 
         //Obtiene los estados de validacón por bloques 
-        $estados_validacion = $this->ecvm->get_last_hist_validacion_evaluacion($solicitud_cve); //Cursos a evaluar
+        $estados_validacion = $this->ecvm->get_last_estado_bloque_evluacion($solicitud_cve); //Cursos a evaluar
         //Obtiene
         $cursos_s_evaluar = $this->ecvm->get_cursos_validar_evaluar($solicitud_cve); //Cursos a evaluar
         $cursos_bloques = obtener_cursos_bloque_seccion_evaluacion($info_docente['bloques'], $info_docente['cfg_actividad'], $cursos_s_evaluar); //Depuración de cursos
@@ -225,6 +225,7 @@ class Evaluacion_curricular_validar extends MY_Controller {
         $datos_tabla['labels_bloque'] = $info_docente['bloques']['labels_bloque'];
         $datos_tabla['labels_seccion'] = $info_docente['bloques']['labels'];
         $datos_tabla['estado_validacion_bloque'] = $estados_validacion;
+        $datos_tabla['solicitud_cve'] = $solicitud_cve;
 
         return $datos_tabla;
     }
@@ -267,17 +268,16 @@ class Evaluacion_curricular_validar extends MY_Controller {
                     $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($data_post['usuario_cve']); //Identificador de la comisiÃƒÂ³n
                 }
 
-                //*****Obtiene el estado de la historia 
-
-                $historia_gral = $this->ecvm->get_last_hist_validacion_evaluacion($datos_validacion['solicitud_cve']);
-                $historias_bloques = $this->ecvm->get_last_estado_bloque_evluacion($historia_gral['historia_gral_cve']);
 //                $parametros_gen_boton['estado_actual'] = $historia_gral['estado_hist_validacion'];
-                $parametros_gen_boton['estado_actual'] = Enum_evec::En_revision_n1;
+//                $parametros_gen_boton['estado_actual'] = Enum_evec::En_revision_n1;
+                $parametros_gen_boton['estado_actual'] = $datos_validacion['hist_validacion_cve'];
                 $parametros_gen_boton['tipo_validador_rol'] = $datos_validador['ROL_CVE'];
                 $parametros_gen_boton['delegacion_cve'] = $datos_validador['DELEGACION_CVE'];
 //                pr($datos_validador);
                 $data['botones_validador'] = genera_botones_estado_validacion_evaluacion($parametros_gen_boton); //Genera botones para validar segÃºn el estado actual de la validaciÃ³n 
                 $data += $this->obtener_secciones_evaluacion($datos_validacion['empleado_cve'], $datos_validacion['solicitud_cve']);
+                $data += $parametros_gen_boton;
+                $data['his_actual'] = $datos_validacion['hist_validacion_cve'];
 //                pr($data);
 //                pr($data);
                 $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la informaciÃƒÂ³n del usuario al que se va a validar
@@ -333,6 +333,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
         return NULL;
     }
 
+    private function obtener_solicitud_cve() {
+        if (!is_null($this->session->userdata('datosvalidadoactual'))) {
+            return $this->session->userdata('datosvalidadoactual')['solicitud_cve'];
+        }
+//        return $this->session->userdata('idempleado');
+        return NULL;
+    }
+
     private function obtener_estado_docente() {
 //        pr($this->session->userdata('datosvalidadoactual'));
         if (!is_null($this->session->userdata('datosvalidadoactual'))) {
@@ -349,6 +357,55 @@ class Evaluacion_curricular_validar extends MY_Controller {
 //        return $this->session->userdata('idempleado');
         return NULL;
     }
+
+    //*************************Inicio código nuevo *****************************
+    public function get_cometarios_bloque() {
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post()) {
+                $this->lang->load('interface', 'spanish');
+                $string_values = $this->lang->line('interface')['evaluacion_curricular_validar'] + $this->lang->line('interface')['bloques'];
+                $data['string_values'] = $string_values;
+
+                $datos_post = $this->input->post(null, true);
+                $solicitud_cve = $this->obtener_solicitud_cve();
+                $bloque = $datos_post['bloque'];
+                $data_comentario['comentarios'] = $this->ecvm->get_estados_por_bloque($solicitud_cve, $bloque); //Cursos a evaluar
+                $data_comentario['string_values'] = $string_values;
+                $data_comentario['estados_val'] = $this->get_estados_validacion();
+
+                $data = array(
+                    'titulo_modal' => $string_values['lbl_comentario'] . ': ' . $string_values['lbl_' . $bloque . '_titulo_b'],
+                    'cuerpo_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/comentario_estado_bloque', $data_comentario, TRUE),
+                    'pie_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
+                );
+
+                echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+            }
+        } else {
+            redirect(site_url());
+        }
+    }
+
+    private function get_estados_validacion() {
+        $array_result = array();
+        foreach ($this->config->item('cvalidacion_curso_estado') as $key => $value) {
+            $array_result[$value['id']] = array('desc' => $key, 'color' => $value['color']);
+        }
+        return $array_result;
+    }
+
+    public function validar_bloque() {
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post()) {
+                $datos_post = $this->input->post(null, true);
+                pr($datos_post);
+            }
+        } else {
+            redirect(site_url());
+        }
+    }
+
+    //*************************Fin codigo nuevo ********************************
 
     public function seccion_validar() {
         if ($this->input->is_ajax_request()) {
@@ -379,19 +436,14 @@ class Evaluacion_curricular_validar extends MY_Controller {
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['evaluacion_curricular_validar'];
                 $data_comentario['string_values'] = $string_values;
-                $hist_val_cve = intval($this->seguridad->decrypt_base64($datos_post['hist_val_cve'])); //Des encripta la clave de la historia que viene de post
-                $resul_coment = $this->ecvm->get_comentario_hist_validacion_evaluacion($hist_val_cve); //Consulta datos del historico
+                $solicitud_cve = intval($this->seguridad->decrypt_base64($datos_post['solicitud_cve'])); //Des encripta la clave de la historia que viene de post
+                $resul_coment = $this->ecvm->get_comentario_hist_validacion_evaluacion($solicitud_cve); //Consulta datos del historico
 //                pr($resul_coment);
                 if (!empty($resul_coment)) {
-                    $data_comentario['comentario_justificacion'] = $resul_coment->comentartio_estado;
-                    $color_sattus = $this->config->item('estados_val_evaluacion')[$resul_coment->hist_estado]['color_status']; //Color del estado
-                    $color_sattus = $this->config->item('cvalidacion_curso_estado')[$color_sattus]['color']; //Color del estado
-                    $data_comentario['color_estado'] = $color_sattus;
-                    $data_comentario['tipo_transicion'] = $this->config->item('estados_val_evaluacion')[$resul_coment->hist_estado]['tipo_transaccion'];
-                    $text_titulo_modal = ($resul_coment->existe_validador === 1) ? $string_values['titulo_modal_comentario_v'] : $string_values['titulo_modal_comentario_d'];
+                    $data_comentario['comentarios'] = $resul_coment;
 
                     $data = array(
-                        'titulo_modal' => $text_titulo_modal . $resul_coment->nom_validador,
+                        'titulo_modal' => $string_values['text_btn_comentarios'],
                         'cuerpo_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/comentario_estado', $data_comentario, TRUE),
                         'pie_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
                     );

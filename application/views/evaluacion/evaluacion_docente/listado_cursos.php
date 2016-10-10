@@ -1,41 +1,248 @@
-<!-- <div class="box box-info">
-    <div class="box-header with-border">
-      <h3 class="box-title"><i class="icon fa fa-info"></i>&nbsp;&nbsp;<?php //echo $string_value["lbl_titulo_convocatoria"]?></h3>
+<?php echo css("style-sipimss.css"); ?>
 
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-          <i class="fa fa-minus"></i></button>
-      </div>
-    </div>
-    <div class="box-body">
-      <?php 
-      //echo $string_value['lbl_convocatoria'];
-      // pr($actividades);
-      ?> 
+<!--<script type='text/javascript' src="<?php // echo base_url(); ?>assets/js/evaluacion_curricular/index_eva_curricular.js"></script>-->
+<script>
+    $('.botonF1').hover(function () {
+        $('.btn').addClass('animacionVer');
+    })
+    $('.contenedor').mouseleave(function () {
+        $('.btn').removeClass('animacionVer');
+    })
+</script>
 
-    </div>
-    <div class="box-footer text-right">
-      <?php //echo $string_value['lbl_link_convocatoria']?>
-    </div>
-</div> -->
- <div class="box box-primary">
-    <!-- <div class="box-header with-border">
-      <h3 class="box-title">
-          <i class="icon fa fa-info"></i>&nbsp;&nbsp;<?php echo $string_value["lbl_solicitud_titulo"]?>
-      </h3>
-    </div> -->
-    <div class="box-body">
-    <!-- title row -->
-      <div class="row">
-        <div class="col-xs-12">
-          <h2 class="page-header">
-            <i class="fa fa-globe"></i> <?php echo $string_value["lbl_info_prof"]?>
-          </h2>
+<div class="panel-group" id="accordion">
+    <div class="row">
+        <div class="col-sm-6">
+            <strong><?php echo $string_value_seccion["lbl_info_nombre"]?></strong>
+                    <?php echo $empleado["nombre"]." "
+                          .$empleado["apellidoPaterno"]." "
+                          .$empleado["apellidoMaterno"]?><br />
+            <strong><?php echo $string_value_seccion["lbl_info_matricula"]?></strong>
+                    <?php echo $empleado["matricula"]?><br />
+            <strong><?php //echo $string_value["lbl_info_categoria"]?></strong>
+                    <?php //echo $empleado["categoria_PD"]?>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6 ">
+            <strong><?php echo $string_value_seccion["lbl_info_del"]?></strong>
+                    <?php echo $empleado["delegacion"]?><br />
+            <strong><?php echo $string_value_seccion["lbl_info_adscripcion"]?></strong>
+                    <?php echo $empleado["nombreUnidadAdscripcion"]?><br />
+            <strong><?php //echo $string_value["lbl_info_vigencia"]?></strong>
+                    <?php // $empleado["vigencia"]?>
         </div>
         <!-- /.col -->
       </div>
-    <!-- /title row -->
-    <!-- info row -->
+    <br>
+    <?php
+    echo form_open('solicitar_evaluacion/secd');
+    foreach ($array_menu as $key_bloque => $value_secc) {
+        ?>
+        <script >
+            /*Guarda los datos de configuración para el uso de ajax en javascript*/
+//            hrutes['<?php // echo $value_tab['ruta']; ?>'] = '<?php // echo $value_tab['ruta_padre']; ?>';
+        </script>
+        <div class="panel box box-success">
+            <div class="box-header with-border">
+                <h4 class="box-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo 'seccion_'.$key_bloque ?>" class="collapsed" aria-expanded="false">
+                        <?php echo $string_values[$labels_bloque[$key_bloque]];?>
+                    </a>
+                </h4>
+            </div>
+            <div id="msg_<?php echo $key_bloque; ?>"></div>
+            <div id="<?php echo 'seccion_'.$key_bloque ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div id="cuerpo_<?php echo $key_bloque ?>" class="box-body">
+                    
+                    <?php foreach ($value_secc as $key_seccion => $value_mod) {
+                        $data['datos_modulo'] = $value_mod;
+                        $data['metadatos'] = $info_actividad;
+                        $data['pk'] = $info_actividad[$key_bloque][$key_seccion]['pk'];
+                        $data['curso'] = $info_actividad[$key_bloque][$key_seccion]['fields']["lbl_" . $key_seccion . "_nombre"];
+                        $data['tipo_curso'] = $info_actividad[$key_bloque][$key_seccion]['fields']["lbl_" . $key_seccion . "_tipo"];
+                        $data['tp_cve'] = $info_actividad[$key_bloque][$key_seccion]['fields']["tp_cve"];
+                        $data['seccion'] = $key_seccion;
+                        $data['bloque'] = $key_bloque;
+                        $data['view'] = $info_actividad[$key_bloque][$key_seccion]["functions"]["view"];
+                        $data['is_post'] = $info_actividad[$key_bloque][$key_seccion]["functions"]["is_post"];
+                        //$data['string_values'] = $string_values;
+                        
+                        //echo $this->load->view('evaluacion_currucular_doc/tablas_seccion_docente/tab_gen_cursos', $data, true);
+                        $seleccionar = $this->form_complete->create_element(array('id' => 'checkall_' . $data['bloque'] . '_' . $data['seccion'],
+                            'value' => '', 'type' => 'checkbox',
+                            'attributes' => array('class' => 'form-control',
+                                'placeholder' => $string_values['chek_selct_profesionalizacion'],
+                                'onclick' => "seleccionar_deseleccionar_tablas(this)",
+                                'data-tabla' => "trve_" . $data['seccion'],
+                                'data-check' => "checkall_" . $data['seccion'],
+                                'title' => $string_values['chek_selct_profesionalizacion'])));
+                        ?>
+                        <table class="table table-striped table-hover table-bordered" id="trve_<?php echo $data['seccion']; ?>">
+                            <thead>
+                                <tr class='bg-info'>
+                                    <th style="width: 12%">¿<?php echo $string_values['valido']; ?>?</th>
+                                    <th style="width: 30%"><?php echo $string_values['title_curso'] ?></th>
+                                    <th style="width: 25%"><?php echo $string_values['title_tipo_curso'] ?></th>
+                                    <th style="width: 20%"><?php echo $string_values['seccion']; ?></th>
+                                    <th style="width: 5%"> <?php echo $string_values['puntos']; ?></th>
+                                    <th style="width: 3%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                //Generará la tabla que muestrá las actividades del docente
+                                foreach ($data['datos_modulo'] as $key_ai => $value) {
+                                    //pr($data);
+                                    $reg = $value[$data['metadatos'][$data['bloque']][$data['seccion']]['pk']];
+                                    $identificador = $data['bloque']."_".$data['seccion']."_".$reg;
+                                    //pr($identificador);
+                                    $key = $this->seguridad->encrypt_base64($value[$data['pk']]); //
+                                    /*$seccion_metodo = $data['view'];
+                                    $checkbox_profesionalizacio = $this->form_complete->create_element(array(
+                                        'id' => 'check_' . $key_ai,
+                                        'value' => '', 'type' => 'checkbox',
+                                        'attributes' => array('class' => 'form-control')
+                                            )
+                                    );*/
+                                    $tipo = (isset($value[$data['tp_cve']]) ? $value[$data['tp_cve']] : '');
+                                    $ver = '<button type="button" class="btn btn-link btn-sm btn_ver_me" '
+                                            . 'aria-expanded="false" data-toggle="modal" '
+                                            . 'data-target="#modal_censo" '
+                                            . 'data-value="' . $key . '" '
+                                            . 'data-seccion="' . $data['view'] . '"'
+                                            . 'data-tipo="' . $tipo . '" '
+                                            . 'data-ispost="' . $data['is_post'] . '" '
+                                            . 'onclick="ver_curso(this);">' .
+                                            $string_values['accion_ver'] .
+                                            '</button>';
+                                    echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
+                        //            echo "<td>" . $checkbox_profesionalizacio . "</td>";
+                                    //pr($info_cursos_evaluados);
+                                    /*pr($key_bloque);
+                                    pr($key_seccion);*/
+                                    $ice = (isset($info_cursos_evaluados['evaluaciones'][$key_bloque]) && isset($info_cursos_evaluados['evaluaciones'][$key_bloque][$key_seccion])) ? $info_cursos_evaluados['evaluaciones'][$key_bloque][$key_seccion] : null;
+                                    echo '<td class="text-center">
+                                          <div class="form-group">
+                                            <div>
+                                              '.$this->form_complete->create_element(
+                                                  array('id'=>'valido_'.$identificador, 'type'=>'dropdown',
+                                                      'value' => (isset($ice[$reg])) ? $ice[$reg]['EVA_CUR_VALIDO'] : null,
+                                                      'options' => $catalogos['EVA_CUR_VALIDO'],
+                                                      'first'=>array(''=>'Selecciona...'), 
+                                                      'attributes'=>array(
+                                                        'class'=>'form-control valido',
+                                                        'data-toggle'=>'tooltip',
+                                                        //'data-bloque'=>$id,
+                                                        //'data-seccion'=>$key_seccion,
+                                                        'data-registro'=>$identificador,
+                                                        'title'=>'¿'.$string_values['valido'].'?'
+                                                      )
+                                                    )
+                                                ).'
+                                          </div>
+                                        </div>
+                                      </td>';
+                                    echo "<td>" . $value[$data['curso']] . "</td>";
+                                    echo "<td>" . $value[$data['tipo_curso']] . "</td>";
+                                    echo '<td>'.$this->form_complete->create_element(
+                                        array('id' => "seccion_".$identificador, 'type' => 'dropdown', 
+                                          'value' => (isset($ice[$reg])) ? $ice[$reg]['SECCION_CVE'] : null,
+                                          'options' => $catalogos['cseccion'], 'first'=>array(''=>'Selecciona...'), 
+                                          'attributes' => array('class' => 'form-control seccion_drop', 
+                                            'disabled'=>'disabled', 'readonly'=>'readonly',
+                                            'placeholder' => $string_values['seccion'], 'data-toggle' => 'tooltip', 
+                                            'data-placement' => 'top', 'title' => $string_values['seccion']))).'</td>';
+                                    echo '<td>'.$this->form_complete->create_element(
+                                      array('id'=>"puntos_".$identificador,'type'=>'text',
+                                            'value' => (isset($ice[$reg])) ? $ice[$reg]['EVA_CUR_PUNTOS_CURSO'] : null,
+                                            'attributes'=>array(
+                                              'class'=>"form-control puntos ".$data['bloque'],
+                                              'data-toggle'=>'tooltip',
+                                              'disabled'=>'disabled',
+                                              'data-bloque'=>$data['bloque'],
+                                              'data-seccion'=>$data['seccion'],
+                                              'readonly'=>'readonly',
+                                              'title'=>$string_values['puntos']
+                                            )
+                                        )
+                                    ).'</td>';
+                                    echo "<td>" . $ver . "</td>";
+                                    $btn_guardar = '';
+                                    if($this->session->userdata('evaluacion')['EST_EVALUACION_CVE']!=Enum_eei::Completa){
+                                      $btn_guardar = '<button type="button" class="btn btn-guardar" id="guardar_'.$identificador.'" data-bloque="'.$data['bloque'].'" 
+                                          data-seccion="'.$data['seccion'].'" data-registro="'.$value[$data['metadatos'][$data['bloque']][$data['seccion']]['pk']].'"
+                                          data-eva-curso="'.((isset($ice[$reg]['EVA_CURSO_CVE'])) ? $ice[$reg]['EVA_CURSO_CVE'] : null).'"><i class="fa fa-save fa-2x"></i></button>';
+                                    }
+                                    echo '<td>
+                                        '.$btn_guardar.'
+                                      </td>';
+                                    echo "</tr>";
+                                }
+                                ?>
+                              <tr>
+                                <td colspan="4" class="text-right">Total <?php echo $string_values[$labels_bloque[$key_bloque]]; ?>:</td>
+                                <td>
+                                  <?php echo $this->form_complete->create_element(
+                                    array('id'=>"puntos_seccion_{$data['bloque']}",'type'=>'text',
+                                      'value' => "",
+                                          'attributes'=>array(
+                                            'class'=>'form-control seccion',
+                                            'data-value'=>$data['bloque'],
+                                            'data-toggle'=>'tooltip',
+                                            'disabled'=>'disabled',
+                                            'readonly'=>'readonly',
+                                            'title'=>$string_values['puntos']
+                                          )
+                                      )
+                                  ); ?>
+                                </td>
+                              </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+        <?php
+      echo form_close();
+    }
+    ?>
+    <br>
+</div>
+<div class="row">
+  <div class="col-lg-12" id="msg_general"></div>
+  <div class="col-lg-9 text-right" style="padding-right:20px;">
+    <?php 
+    if($this->session->userdata('evaluacion')['EST_EVALUACION_CVE']!=Enum_eei::Completa){
+      echo '<button type="button" class="btn" id="btn-finalizar"><i class="fa fa-save fa-2x"></i> '.$string_values['enviar_corroborar'].'</button>';
+    } ?>
+  </div>
+  
+  <div class="col-lg-3 text-right" style="padding-right:20px;">
+    <h2><div id="total"></div></h2>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!--  <div class="box box-primary">
+    <div class="box-body">
+      <div class="row">
+        <div class="col-xs-12">
+          <h2 class="page-header">
+            <i class="fa fa-globe"></i> <?php /*echo $string_value["lbl_info_prof"]?>
+          </h2>
+        </div>
+      </div>
       <div class="row">
         <div class="col-sm-6">
             <strong><?php echo $string_value["lbl_info_nombre"]?></strong>
@@ -47,7 +254,6 @@
             <strong><?php //echo $string_value["lbl_info_categoria"]?></strong>
                     <?php //echo $empleado["categoria_PD"]?>
         </div>
-        <!-- /.col -->
         <div class="col-sm-6 ">
             <strong><?php echo $string_value["lbl_info_del"]?></strong>
                     <?php echo $empleado["delegacion"]?><br />
@@ -56,9 +262,7 @@
             <strong><?php //echo $string_value["lbl_info_vigencia"]?></strong>
                     <?php // $empleado["vigencia"]?>
         </div>
-        <!-- /.col -->
       </div><br />
-        <!--/ info row -->
       <?php 
       echo form_open('solicitar_evaluacion/secd'); 
           //pr($empleado);
@@ -69,7 +273,6 @@
         foreach($cfg_actividad as $id=>$actividad): 
           foreach ($bloques['bloque_'.$id] as $key_seccion => $seccion) {
             $seccion_id = str_replace("seccion_", "", $key_seccion); ?>
-            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
             <div class="panel box box-success">
               <div class="box-header with-border">
                 <h4 class="box-title">
@@ -99,7 +302,6 @@
                             <div class="form-group">
                               <div class="checkbox">
                                 <label>
-                                  <!-- <input type="checkbox" name="<?php //echo "{$id}"?>[<?php //echo $act_id?>]" value="<?php //echo $act_desc[$cfg_actividad[$id]["pk"]]?>" /> -->
                                   <?php echo $this->form_complete->create_element(
                                     array('id'=>'valido_'.$identificador, 'type'=>'dropdown',
                                         'value' => $catalogos['EVA_CUR_VALIDO'],
@@ -190,33 +392,79 @@
       }
       ?>
     </div>
-    <!-- /.box-body -->
     <div class="row">
       <div class="col-lg-12 text-right" style="padding-right:20px;">
         <h2><div id="total"></div></h2>
       </div>
     </div>
-    <!-- <div class="box-footer">
-       <button type="submit" class="btn btn-primary"><?php //echo $string_value["lbl_info_submit"]?></button>
-    </div> -->
-    <?php echo form_close(); ?>
-    <!-- /.box-footer-->
+    <?php echo form_close();*/ ?>
   </div>
-<!-- /.box-body -->
-</div>
+</div> -->
 <script type="text/javascript">
 $(document).ready(function(){
   $('.valido').on("click", function() {
     habilitar_puntos(this);
   });
   $('.puntos').on("keyup", function() {
-    var clase = $(this).attr('data-clase');
+    var clase = $(this).attr('data-bloque');
     calcular_puntos_seccion(clase);
   });
   $('.btn-guardar').on("click", function() {
     guardar_puntos(this);
   });
+  $('#btn-finalizar').on("click", function() {
+    finalizar();
+  });
+  jQuery.each( $('.valido'), function( i, val ) {
+    habilitar_puntos(val);
+  });
+  $.each( $('.puntos'), function( i, val ) {
+    if($(this).val()!=""){
+      var clase = $(this).attr('data-bloque');
+      calcular_puntos_seccion(clase);
+    }
+  });
 });
+function finalizar(){
+  var validacion = 0;
+  $.each($('.valido'), function(index, val) {
+    if($(this).val()===""){
+      validacion++;
+    }
+  });
+  if(validacion===0){
+    //data_ajax(site_url+'/evaluacion_docente/finalizar_evaluacion', null, '#msg_general');
+    $.ajax({
+        url: site_url + '/evaluacion_docente/finalizar_evaluacion',
+        method: 'POST',
+        dataType: "json",
+        beforeSend: function(xhr) {
+            $('#msg_general').html(create_loader());
+        }
+    })
+    .done(function(response) {
+        $('#msg_general').html(imprimir_resultado(response));
+        if(response.result==true){
+          $('.btn-guardar').hide();
+          $('#btn-finalizar').hide();
+          /*$('.puntos').attr('disabled', 'disabled');
+          $('.puntos').attr('readonly', 'readonly');
+          $('.seccion_drop').attr('disabled', 'disabled');
+          $('.seccion_drop').attr('readonly', 'readonly');
+          $('.valido').attr('disabled', 'disabled');
+          $('.valido').attr('readonly', 'readonly');*/
+        }
+    })
+    .fail(function(jqXHR, response) {
+        $('#msg_general').html(imprimir_resultado(response));
+    })
+    .always(function() {
+        remove_loader();
+    });
+  } else {
+    apprise('<?php echo $string_values["faltante_validar"]; ?>');
+  }
+}
 function habilitar_puntos(elemento){
   var id = $(elemento).attr('data-registro');
   var clase = $(elemento).attr('data-clase');
@@ -254,32 +502,38 @@ function guardar_puntos(elemento){
   var seccion = $(elemento).attr('data-seccion');
   var bloque = $(elemento).attr('data-bloque');
   var registro = $(elemento).attr('data-registro');
-  if($("#valido_"+bloque+"_"+seccion+"_"+registro).val()=="<?php echo $this->config->item('EVA_CUR_VALIDO')['VALIDO']['id']; ?>" && ($("#seccion_"+bloque+"_"+seccion+"_"+registro).val()=="" || $("#puntos_"+bloque+"_"+seccion+"_"+registro).val()=="")) {
-    apprise('<?php echo $string_value["error_guardar_puntos"]; ?>');
+  var valido = $("#valido_"+bloque+"_"+seccion+"_"+registro).val();
+  if( valido == "" ){
+    apprise('<?php echo $string_values["error_guardar_puntos_valido"]; ?>');
+  } else if(valido=="<?php echo $this->config->item('EVA_CUR_VALIDO')['VALIDO']['id']; ?>" && ($("#seccion_"+bloque+"_"+seccion+"_"+registro).val()=="" || $("#puntos_"+bloque+"_"+seccion+"_"+registro).val()=="")) {
+    apprise('<?php echo $string_values["error_guardar_puntos"]; ?>');
   } else {
-    if($("#valido_"+bloque+"_"+seccion+"_"+registro).val()=="<?php echo $this->config->item('EVA_CUR_VALIDO')['NO_VALIDO']['id']; ?>") { //Limpiar datos que puedan interferir
+    if(valido=="<?php echo $this->config->item('EVA_CUR_VALIDO')['NO_VALIDO']['id']; ?>") { //Limpiar datos que puedan interferir
       $("#seccion_"+bloque+"_"+seccion+"_"+registro).val('');
       $("#puntos_"+bloque+"_"+seccion+"_"+registro).val('');
     }
+    var puntos = $("#puntos_"+bloque+"_"+seccion+"_"+registro).val();
+    var seccion_dictamen = $("#seccion_"+bloque+"_"+seccion+"_"+registro).val();
+    var data_eva_curso = $(elemento).attr('data-eva-curso');
     $.ajax({
         url: site_url + '/evaluacion_docente/guardar_puntos_registro/',
         method: 'POST',
         dataType: "json",
-        data: {'bloque': bloque, 'seccion': seccion, 'registro': registro},
+        data: {'bloque': bloque, 'seccion': seccion, 'registro': registro, 'valido': valido, 'puntos': puntos, 'seccion_dictamen': seccion_dictamen, 'data_eva_curso': data_eva_curso},
         beforeSend: function(xhr) {
-            $('#msg_'+seccion).html(create_loader());
+            $('#msg_'+bloque).html(create_loader());
         }
     })
     .done(function(response) {
-        $('#mensaje').html(imprimir_resultado(response));
+        $('#msg_'+bloque).html(imprimir_resultado(response));
         if(response.result==true){
-            $('#tr_'+data_value).slideUp( "slow", function() { //Ocultar fila del registro
-                $('#tr_'+data_value).remove(); //Eliminar fila
-            });
+          if(response.accion=='I'){
+            $(elemento).attr('data-eva-curso', response.data.identificador);
+          }
         }
     })
     .fail(function(jqXHR, response) {
-        $('#msg_'+seccion).html(imprimir_resultado(response));
+        $('#msg_'+bloque).html(imprimir_resultado(response));
     })
     .always(function() {
         remove_loader();
@@ -288,9 +542,11 @@ function guardar_puntos(elemento){
 }
 function calcular_puntos_seccion(clase){
   var total = 0;
+  //console.log(clase);
   $("."+clase).each(function( index ) {
     total += Number($(this).val()); 
   });
+  //console.log(total);
   $("#puntos_seccion_"+clase).val(total);
   calcular_puntos_total();
 }
