@@ -446,17 +446,17 @@ class Validacion_censo_profesores extends MY_Controller {
 
 //        pr($prop_estado);
         //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
-        if (isset($prop_estado['est_apr_para_validacion'])) {
-            if ($estado_cambio_cve == Enum_ev::Val_n1_por_validar_n2 || $estado_cambio_cve == Enum_ev::Val_n2_por_validar_profesionalizacion || $estado_cambio_cve == Enum_ev::Validado) {
-                //Validación 
-                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
-                $this->load->model('Validacion_docente_model', 'vdm');
-                $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
-            } else {//corrección
-            }
-        }
+//        if (isset($prop_estado['est_apr_para_validacion'])) {
+//            if ($estado_cambio_cve == Enum_ev::Val_n1_por_validar_n2 || $estado_cambio_cve == Enum_ev::Val_n2_por_validar_profesionalizacion || $estado_cambio_cve == Enum_ev::Validado) {
+//                //Validación 
+//                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
+//                $this->load->model('Validacion_docente_model', 'vdm');
+//                $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
+//            } else {//corrección
+//            }
+//        }
 //        pr($pasa_validacion);
-        if ($pasa_validacion) {
+//        if ($pasa_validacion) {
             $updates = null;
              $empleado = $datos_empleado_validar['empleado_cve'];
             if ($estado_cambio_cve == Enum_ev::Validado) {//Es la validacion por profecionalización, por lo que hay que cambiar el estado de todos los registros validados
@@ -492,9 +492,9 @@ class Validacion_censo_profesores extends MY_Controller {
             } else {
                 return 0;
             }
-        } else {
-            return 0;
-        }
+//        } else {
+//            return 0;
+//        }
     }
 
     public function enviar_cambio_estado_validacion() {

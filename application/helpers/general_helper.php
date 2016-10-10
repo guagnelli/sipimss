@@ -829,8 +829,8 @@ if (!function_exists('genera_botones_estado_validacion_evaluacion')) {
         $estado_actual = $paramentros['estado_actual'];
         $tipo_validador_rol = $paramentros['tipo_validador_rol']; //Validador N1, Validador N2, Profesionalización o docente-->
         $delegacion_validador = $paramentros['delegacion_cve']; //Validador N1, Validador N2, Profesionalización o docente-->
-//        pr($estado_actual);
-//        pr($tipo_validador_rol);
+        pr($estado_actual);
+        pr($tipo_validador_rol);
         $CI = & get_instance();
         $propiedades_gen_estado = $CI->config->item('estados_val_evaluacion'); //Carga las propiedades de los estados de la validación del censo de docentes
         $valida_acceso_rol = valida_acceso_rol_validador($tipo_validador_rol, $estado_actual, 'estados_val_evaluacion'); //Valida el acceso al rol seleccionado
