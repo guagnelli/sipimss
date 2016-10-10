@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Clase que gestiona el login
+ * Clase que gestiona el expediente
  * @version     : 1.2.2
  * @autor       : Mr. Guag
  * @date: 26/09/2016
@@ -266,7 +266,7 @@ class Expediente_model extends MY_Model {
      *               @model : nombre del modelo 
      *               @function : nombre de la funcion que regresa los datos de la sección
      */
-    function getAll($empleado_cve = null, $validado = null, $where = null) {
+    function getAll($empleado_cve = null, $validado = null, $where = null, $where_gral = null) {
         if (is_null($empleado_cve)) {
             throw new Exception('Id de usuario nulo');
         }
@@ -288,7 +288,7 @@ class Expediente_model extends MY_Model {
         $this->lang->load('interface', 'spanish');
 
         //Etiquetas
-        $data["string_value"] = $this->lang->line('interface_secd') + $this->lang->line('interface')["secciones"];
+        $data["string_value"] = $this->lang->line('interface_secd') + $this->lang->line('interface')["secciones"] + $this->lang->line('fields');
         // $data["cfg_actividad"] = $this->config->item("get_secciones");
         //$secciones = $this->config->item("secciones_model");
         $data["cfg_actividad"] = $this->config;

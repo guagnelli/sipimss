@@ -27,6 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$lang['interface_'][''][''] = '';
 //$lang['interface']['registro']['texto_bienvenida'] = 'Hola mundo';
 $lang['interface'] = array(
+
     'secciones' => array(
         'lbl_ca_titulo' => 'Comisión académica',
         'lbl_fs_titulo' => 'Formaci&oacute;n en salud',
@@ -723,7 +724,66 @@ $lang["interface_tpl"] = array(
     'lbl_link_logout' => 'Cerrar sesión',
     'lbl_link_profile' => 'Mi perfil',
 );
-
+$lang["fields"]= array(
+    Enum_sec::B_FORMACION => array(
+        Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD => array(
+            "lbl_" . Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD . "_nombre" => "SUBTIP_NOMBRE",
+            "lbl_" . Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD . "_tipo" => "TIP_FORM_SALUD_NOMBRE",
+        ),
+        Enum_sec::S_FORMACION_PROFESIONAL => array(
+            "lbl_" . Enum_sec::S_FORMACION_PROFESIONAL . "_nombre" => "SUB_FOR_PRO_NOMBRE",
+            "lbl_" . Enum_sec::S_FORMACION_PROFESIONAL . "_tipo" => "TIP_FOR_PRO_NOMBRE",
+        ),
+    ),
+    Enum_sec::B_ACTIVIDAD_DOCENTE => array(
+        Enum_sec::S_EDUCACION_DISTANCIA => array(
+            "lbl_" . Enum_sec::S_EDUCACION_DISTANCIA . "_nombre" => "nom_curso",
+            "lbl_" . Enum_sec::S_EDUCACION_DISTANCIA . "_tipo" => "nombre_tp_actividad",
+        ),
+        Enum_sec::S_ESP_MEDICA => array(
+            "lbl_" . Enum_sec::S_ESP_MEDICA . "_nombre" => "nom_curso",
+            "lbl_" . Enum_sec::S_ESP_MEDICA . "_tipo" => "nombre_tp_actividad",
+        ),
+        Enum_sec::S_ACTIVIDAD_DOCENTE => array(
+            "lbl_" . Enum_sec::S_ACTIVIDAD_DOCENTE . "_nombre" => "nom_curso",
+            "lbl_" . Enum_sec::S_ACTIVIDAD_DOCENTE . "_tipo" => "nombre_tp_actividad",
+        ),   
+    ),
+    Enum_sec::B_BECAS_COMISIONES_LABORALES => array(
+        Enum_sec::S_BECAS_LABORALES => array(
+            "lbl_" . Enum_sec::S_BECAS_LABORALES . "_nombre" => "nom_beca",
+            "lbl_" . Enum_sec::S_BECAS_LABORALES . "_tipo" => "nom_motivo_beca",
+        ),
+        Enum_sec::S_COMISIONES_LABORALES => array(
+            "lbl_" . Enum_sec::S_COMISIONES_LABORALES . "_nombre" => "nom_comprobante",
+            "lbl_" . Enum_sec::S_COMISIONES_LABORALES . "_tipo" => "nom_tipo_comision",
+        ),
+    ),
+    Enum_sec::B_COMISIONES_ACADEMICAS => array(
+        Enum_sec::S_COMISIONES_ACADEMICAS => array(
+            "lbl_" . Enum_sec::S_COMISIONES_ACADEMICAS . "_nombre" => "COM_ARE_NOMBRE",
+            "lbl_" . Enum_sec::S_COMISIONES_ACADEMICAS . "_tipo" => "TIP_COM_NOMBRE",
+        ),
+    ),
+    Enum_sec::B_INVESTIGACION_EDUCATIVA => array(
+        Enum_sec::S_ACT_INV_EDU => array(
+            "lbl_" . Enum_sec::S_ACT_INV_EDU . "_nombre" => "nombre_investigacion",
+            "lbl_" . Enum_sec::S_ACT_INV_EDU . "_tipo" => "tpad_nombre",
+        ),
+    ),
+    Enum_sec::B_DIRECCION_TESIS => array(
+        Enum_sec::S_DIRECCION_TESIS => array(
+            "lbl_" . Enum_sec::S_DIRECCION_TESIS . "_nombre" => "NIV_ACA_NOMBRE",
+            "lbl_" . Enum_sec::S_DIRECCION_TESIS . "_tipo" => "COM_ARE_NOMBRE",
+        ),
+    ),
+    Enum_sec::B_MATERIAL_EDUCATIVO => array(
+        Enum_sec::S_MATERIA_EDUCATIVO => array(
+            "lbl_" . Enum_sec::S_MATERIA_EDUCATIVO . "_nombre" => "nombre_material",
+            "lbl_" . Enum_sec::S_MATERIA_EDUCATIVO . "_tipo" => "opt_tipo_material",
+        ),
+    ),
+);
 
 
 

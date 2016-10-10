@@ -62,16 +62,18 @@
         <div class="col-lg-2"></div>
         <div class="col-lg-8 col-xs-12">
             <div class="row">
-                <div class="col-xs-2 col-sm-1">
-                    <a href="http://www.imss.gob.mx">
-                        <img src="<?php echo asset_url();?>sipimss/img/imss.png" 
-                             class="img-header" 
-                             alt="Instituto Mexicano del Seguro Social"
-                             title="Instituto Mexicano del Seguro Social"
+                <div class="col-lg-1"></div>
+                <div class="col-xs-2 col-sm-2">
+                    <a href="#">
+                        <img src="<?php echo asset_url();?>sipimss/img/sipimss_logo_2.png" 
+                             height="80px"
+                             class="" 
+                             alt="SIPIMSS"
+                             title="SIPIMSS"
                              target="_blank"/>
                     </a>
                 </div>
-                <div class="col-xs-2 col-sm-1">
+                <div class="col-xs-2 col-sm-2">
                     <a href="http://edumed.imss.gob.mx">
                         <img src="<?php echo asset_url();?>sipimss/img/ces.png" 
                              class="img-header" 
@@ -83,13 +85,22 @@
                 <div class="col-xs-2 col-sm-2">
                     <a href="http://innovacioneducativa.imss.gob.mx">
                         <img src="<?php echo asset_url();?>sipimss/img/die.png" 
-                             class="img-header" 
+                             class="img-header"
                              alt="División de Innovación Educativa"
                              title="División de Innovación Educativa"
                              target="_blank"/>
                     </a>
                 </div>
-                <div class="col-lg-6">Soy el logo del sipimss</div>
+                <div class="col-xs-2 col-sm-2">
+                    <a href="http://www.imss.gob.mx">
+                        <img src="<?php echo asset_url();?>sipimss/img/imss.png" 
+                             class="img-header" 
+                             alt="Instituto Mexicano del Seguro Social"
+                             title="Instituto Mexicano del Seguro Social"
+                             target="_blank"/>
+                    </a>
+                </div>
+                <div class="col-lg-1"></div>
             </div>
         </div>
         <div class="col-lg-2"></div>
@@ -307,7 +318,9 @@
             <h4><i class="icon fa fa-warning"></i> Alert!</h4>
             Warning alert preview. This alert is dismissable.
         </div>
-    <?php }
+    <?php } ?>
+    <div id="msg_general"></div>
+    <?php
     if(!is_null($main_content) ){
         echo $main_content;
     }

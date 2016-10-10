@@ -102,10 +102,10 @@ $db['default'] = array(
     // 'password' => 'sipimss',
     // 'database' => 'sipimss_20160901',
   
-   'hostname' => '11.32.41.30',
-   'username' => 'sipimss',
-   'password' => 'sipimss',
-   'database' => 'sipimss_20161003',
+   'hostname' => 'localhost',
+   'username' => 'root',
+   'password' => 'mysql',
+   'database' => 'sipimss_20161010',
   
     
     'dbdriver' => 'mysqli',

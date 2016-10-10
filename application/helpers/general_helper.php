@@ -7,14 +7,19 @@ if (!defined('BASEPATH'))
  * Método que preformatea una cadena
  * @autor 		: Jesús Díaz P.
  * @param 		: mixed $mix Cadena, objeto, arreglo a mostrar
+                bool $return Boleano que determina si se imprema o se retorna el valor
  * @return  	: Cadena preformateada
  */
 if (!function_exists('pr')) {
 
-    function pr($mix) {
-        echo "<pre>";
-        print_r($mix);
-        echo "</pre>";
+    function pr($mix,$return = false) {
+        if($return){
+          return print_r($mix,TRUE);
+        }else{
+          echo "<pre>";
+          print_r($mix);
+          echo "</pre>";
+        }
     }
 
 }

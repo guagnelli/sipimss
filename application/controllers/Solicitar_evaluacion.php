@@ -21,11 +21,35 @@ class Solicitar_evaluacion extends MY_Controller {
     }
     
     function index(){
+      $this->load->model("Solicitud_model","sol");
+      $solicitudes["solicitudes"] = $this->sol->list_solicitudes($this->session->idempleado);
+      $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$solicitudes, true);
+        //$this->template->setCuerpoModal($this->ventana_modal->carga_modal());
+      $this->template->multiligual = TRUE;
+      $this->template->setTitle("SECD");
+      
+      $this->template->setMainContent($main_content);
+      $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
+    }
+
+    function solicitar(){
+        $conditions[Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD] = array();
+        $conditions[Enum_sec::S_FORMACION_PROFESIONAL] = array();
+        $conditions[Enum_sec::S_EDUCACION_DISTANCIA] = array();
+        $conditions[Enum_sec::S_ESP_MEDICA] = array();
+        $conditions[Enum_sec::S_ACTIVIDAD_DOCENTE] = array();
+        $conditions[Enum_sec::S_BECAS_LABORALES] = array();
+        $conditions[Enum_sec::S_COMISIONES_LABORALES] =  array();
+        $conditions[Enum_sec::S_COMISIONES_ACADEMICAS] = array();
+        $conditions[Enum_sec::S_ACT_INV_EDU] = array();
+        $conditions[Enum_sec::S_DIRECCION_TESIS] = array();
+        $conditions[Enum_sec::S_MATERIA_EDUCATIVO] = array();
+            
         $this->load->model("Expediente_model","exp");
         $data = $this->exp->getECV($this->session->idempleado);
-        pr($data);
+        //pr($data);
 
-        $main_content = $this->load->view('solicitar_evaluacion/index.tpl.php',$data, true);
+        $main_content = $this->load->view('solicitar_evaluacion/solicitar.tpl.php',$data, true);
         //$this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->multiligual = TRUE;
         $this->template->setTitle("SECD");
@@ -33,11 +57,19 @@ class Solicitar_evaluacion extends MY_Controller {
         $this->template->setMainContent($main_content);
         $this->template->getTemplate(FALSE,'template/sipimss/index.tpl.php');
     }
-
-
     
-    function secd(){
-        pr($this->input->post());
+    function request(){
+        $data_post = $this->input->post();
+        //$data_post = array(2,3,4,5);
+        $this->load->model("Solicitud_model","sol");
+        $save = $this->sol->add_solicitud($this->session->idempleado,$data_post);
+
+
+        $response['message'] = "Hello world".$save;
+        $response['result'] = "true";
+        $response["content"] = $data_post;
+        echo json_encode($response);
+        return 0;
     }
 
     /*
@@ -58,5 +90,4 @@ Mejora de menus... LEAS
 //        pr($result_array);
        return $result_array;
    }*/
-    
 }
