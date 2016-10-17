@@ -1336,3 +1336,47 @@ ALTER TABLE evaluador ADD PRIMARY KEY ROL_EVALUADOR_CVE;
 ALTER TABLE evaluador ADD PRIMARY KEY (ROL_EVALUADOR_CVE);
 
 ALTER TABLE sipimss_20161005.evaluacion_bloques_val MODIFY COLUMN sec_info_cve int(11) NULL;
+
+
+-------------------------bd 14/10/2016 ejecución LEAS ----------------------------------------
+create table cregiones(  
+regiones_cve char(4),
+nom_region varchar(40),
+primary key (regiones_cve)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `cdelegacion` ADD `regiones_cve` char(4) NULL;  /*Campo agregado a la tabla "cdelegacion" */
+CREATE INDEX XIF12CDELEGACION ON cdelegacion (regiones_cve);  /* Se vuelve index el campo */
+ALTER TABLE `cdelegacion` ADD CONSTRAINT `cdelegacion_CRfk12`   /* Asigna llave foran */
+FOREIGN KEY (`regiones_cve`) REFERENCES `cregiones`(`regiones_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE cdelegacion DROP FOREIGN KEY  cdelegacion_CRfk12;
+
+create table validacion_parametros_muestra(
+val_par_muestra int(11) AUTO_INCREMENT,
+is_actual boolean null,
+porsentaje_muestra decimal(5,2) default null,
+val_esperados_minimos int(5) null,
+departamento_cve char(10) NULL, 
+delegacion_cve char(2) default null,
+regiones_cve char(4),
+PRIMARY KEY (`val_par_muestra`),
+KEY `XIF11VALIDACION_PARAMETROS_MUESTRA` (`departamento_cve`),
+KEY `XIF12VALIDACION_PARAMETROS_MUESTRA` (`delegacion_cve`),
+KEY `XIF13VALIDACION_PARAMETROS_MUESTRA` (`regiones_cve`),
+CONSTRAINT `validacion_parametros_muestra_dpcfk_11` FOREIGN KEY (`departamento_cve`) REFERENCES `cdepartamento` (`departamento_cve`),
+CONSTRAINT `validacion_parametros_muestra_dlcfk_12` FOREIGN KEY (`delegacion_cve`) REFERENCES `cdelegacion` (`DELEGACION_CVE`),
+CONSTRAINT `validacion_parametros_muestra_rgcfk_13` FOREIGN KEY (`regiones_cve`) REFERENCES `cregiones` (`regiones_cve`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table validacion_parametros_muestra_seccion(
+sec_info_cve int(11),
+val_par_muestra int(11),
+primary key(sec_info_cve, val_par_muestra),
+FOREIGN KEY (`sec_info_cve`) REFERENCES `validacion_parametros_muestra` (`sec_info_cve`),
+FOREIGN KEY (`val_par_muestra`) REFERENCES `validacion_parametros_muestra` (`val_par_muestra`),
+
+)
+
+

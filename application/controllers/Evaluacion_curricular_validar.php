@@ -399,6 +399,13 @@ class Evaluacion_curricular_validar extends MY_Controller {
             if ($this->input->post()) {
                 $datos_post = $this->input->post(null, true);
                 pr($datos_post);
+                $data = array(
+                    'titulo_modal' => $string_values['lbl_comentario'] . ': ' . $string_values['lbl_' . $bloque . '_titulo_b'],
+                    'cuerpo_modal' => $this->load->view('evaluacion_currucular_doc/validacion_bloque_evaluacion/', $data_comentario, TRUE),
+                    'pie_modal' => $this->load->view('evaluacion_currucular_doc/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
+                );
+
+                echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
             }
         } else {
             redirect(site_url());

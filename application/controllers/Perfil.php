@@ -2468,7 +2468,7 @@ class Perfil extends MY_Controller {
             /* termina obtencion de comprobantes */
             $entidades_comprobante = array(enum_ecg::ctipo_comprobante);
             //$data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, null);
-            $data_comprobante['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
+            $data['catalogos'] = carga_catalogos_generales($entidades_comprobante, null, $conditions, true, $where_grup);
             if (isset($datos_post['idc'])) {//si existe el id del comprobante
                 $data['idc'] = $datos_post['idc'];
 //                $id_desencript = $this->seguridad->decrypt_base64($datos_post['idc']);
