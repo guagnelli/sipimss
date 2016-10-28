@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <div class="row">
         <div class="col-md-12">
-            <button type="button" class="btn btn-tumblr" data-toggle="collapse" data-target="#id_div_comentarios_estado" aria-expanded="true"><?php echo $string_values['btn_text_collapse_mensajes']; ?></button>
+            <button type="button" class="btn btn-tumblr" data-toggle="collapse" data-target="#id_div_comentarios_estado" aria-expanded="true"><?php echo $string_values['btn_text_collapse_convocatorias_anteriores']; ?></button>
             <div id="id_div_comentarios_estado" class="collapse" aria-expanded="true">
                 <?php
                 if (!empty($historial_estados)) {

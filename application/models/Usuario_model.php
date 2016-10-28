@@ -135,7 +135,7 @@ class Usuario_model extends CI_Model {
         $resultado['data'] = $query->result_array();
         //pr($resultado['data']);
         $this->db->flush_cache();
-        
+
         $query->free_result(); //Libera la memoria
 
         return $resultado;
@@ -344,6 +344,7 @@ class Usuario_model extends CI_Model {
 
         return $resultado;
     }
+
     /**
      * @author LEAS
      * @fecha 20/10/2016
@@ -357,7 +358,11 @@ class Usuario_model extends CI_Model {
         }
 
         $this->db->select($parametros);
-        $this->db->where('emp_matricula', $matricula);
+        if (is_array($matricula)) {
+            $this->db->where($matricula['campo'], $matricula['dato']);
+        } else {
+            $this->db->where('emp_matricula', $matricula);
+        }
         $query = $this->db->get('empleado');
         $result = $query->result_array();
         if (!empty($result)) {
@@ -368,7 +373,7 @@ class Usuario_model extends CI_Model {
     }
 
     public function insert_usuario_rol($usuario_cve, $rol_cve) {
-        $this->db->where('USUARIO_CVE',$usuario_cve);
+        $this->db->where('USUARIO_CVE', $usuario_cve);
         $this->db->where('ROL_CVE', $rol_cve);
         $query = $this->db->get('usuario_rol');
         $result = $query->result_array();
@@ -386,7 +391,7 @@ class Usuario_model extends CI_Model {
 //                pr($this->db->last_query());
                 return 2;
             }
-        }else{
+        } else {
 //                pr('existe ..... ' . $this->db->last_query());
             return 1;
         }

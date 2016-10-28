@@ -44,36 +44,42 @@ class Perfil extends MY_Controller {
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['perfil'];
         $id_usuario = $this->session->userdata('identificador');
+        $result_id_empleado = $this->session->userdata('idempleado');
         $datosPerfil['array_menu'] = $array_menu;
 
         //modificar formatos
         setlocale(LC_ALL, 'es_ES');
         $upDate = $this->modPerfil->get_fecha_ultima_actualizacion($id_usuario)->fecha_bitacora;
         $datosPerfil['fecha_ultima_actualizacion'] = $string_values['span_fecha_last_update'] . strftime("%d de %B de %G a las %H:%M:%S", strtotime($upDate));
+        $this->load->model('Usuario_model', 'usu');
+        $data_empleado = $this->usu->get_empleado(array('campo' => 'EMPLEADO_CVE', 'dato' => $result_id_empleado), array('concat(EMP_NOMBRE, " ", EMP_APE_PATERNO, " ", EMP_APE_MATERNO) as "nom_docente"'));
+//        pr($data_empleado);
+        $datos_validacion['nom_docente'] = (isset($data_empleado['nom_docente'])) ? $data_empleado['nom_docente'] : '';
+
+//Asigna la convocatoria ala variable de sesión
         //Obtiene la convocatoria de la delegación y sus restricciones
 //        $convocatoria = get_convocatoria_delegacion_val_censo($this->session->userdata('delegacion_cve'), $this->session->userdata('rol_seleccionado_cve'));
         $convocatoria = $this->cg->get_convocatoria_delegacion($this->session->userdata('delegacion_cve'));
-        //Asigna la convocatoria ala variable de sesión
         $this->session->set_userdata('convocatoria_delegacion', $convocatoria);
 //        pr($convocatoria);
 
         /** Asignar datos de validador actual */
         if ($convocatoria->convocatoria_cve > 0) {//Pasa convocatoria o aplica la convocatoria
-            $result_id_empleado = $this->session->userdata('idempleado');
-            $this->load->model('Validacion_docente_model', 'vdm');
+//            $data_Cempleado = $this->load->model('Validacion_docente_model', 'vdm');
 //            $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria->convocatoria_cve); //Buscamos historil del docente en el historico, por convocatoria y empleado
-            $historia_docente = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria->convocatoria_cve); //Buscamos historil del docente en el historico, por convocatoria y empleado
+//            $historia_docente = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria->convocatoria_cve); //Buscamos historil del docente en el historico, por convocatoria y empleado
 //            pr($historia_docente);
-            if (empty($historia_docente)) {
-                $this->session->set_userdata(array('datosvalidadoactual' => array('est_val' => Enum_ev::Inicio)));
-            } else {
-                //Puede tener cero o más de una historia de validaión y como maxímo 3
-                $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
-            }
+//            if (empty($historia_docente)) {
+//                $this->session->set_userdata(array('datosvalidadoactual' => array('est_val' => Enum_ev::Inicio)));
+//            } else {
+//                //Puede tener cero o más de una historia de validaión y como maxímo 3
+//                $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
+//            }
         }
 //        $res = get_condiciones_catalogos_modulos(En_cat_mod::Comision_educativa, Enum_ecg::ctipo_comprobante);
 //        pr($res);
 //        pr($this->session->userdata());
+        $this->session->set_userdata('datosvalidadoactual', $datos_validacion);
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
@@ -3689,8 +3695,9 @@ class Perfil extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['validador_censo']; //Carga textos a utilizar 
-            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
-            $matricula_user = $this->session->userdata('matricula'); //Asignamos id usuario a variable
+            $data['string_values'] = $string_values;
+            $tipo_msg = $this->config->item('alert_msg');
+//            $result_id_user = $this->session->userdata('identificador'); //Asignamos id usuario a variable
             $result_id_empleado = $this->session->userdata('idempleado'); //Asignamos id usuario a variable
 
             $this->seguridad->set_tiempo_convocatoria_null(); //Reinicia validacion de convocatoria
@@ -3698,60 +3705,90 @@ class Perfil extends MY_Controller {
 
             $convocatoria_delegacion = $this->session->userdata('convocatoria_delegacion'); //Asignamos id usuario a variable
 
-            $data = array();
-//            pr($this->session->userdata());
-            $tipo_msg = $this->config->item('alert_msg');
-            $this->lang->load('interface', 'spanish');
-            $data['string_values'] = $string_values;
-            //Obtiene el historial completo de la validación del docente según la convocatoría
-            if ($this->seguridad->verificar_liga_validar()) {//Busca si existe la convocatoría, de otro modo no se puede subir ni cargar nada
-                //Vuelve a cargar la historia del usuario 
-                $this->load->model('Validacion_docente_model', 'vdm');
-                $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion->convocatoria_cve); //Buscamos historil del docente en el historico, por convocatoria y empleado
-                $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
-                //pr($historia_docente);
-                //Pregunta si existe el historial del usuario
-                if (!empty($historia_docente)) {//Tiene historial en validación
-                    $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
-                    $tmp_validado['estado_actual'] = $historia_docente['est_val'];
-                    $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
-                    $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
-
-                    $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
-                    $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria_delegacion['idconv']); //Busca mensajes generales enviados a la corrección;
-//                    pr($data['historial_estados']);
-//                exit();
-//                    pr($historia_docente);
-
-                    $pie_pag = $this->load->view('perfil/enviar_validacion/opciones_validacion_pie', $data_pie, TRUE);
-                    $data['pie_pag'] = $pie_pag;
-                    $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
-                } else {//No tiene historia como docente en validacion de sus datos
-                    //Verificar si su estado debe cambiar a completo por datos
-                    $res = $this->validar_cursos_status_completa_docente($result_id_empleado, $delegacion_doecente_cve);
-                    if ($res === 1) {//Recarga el método
-                        $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
-                        //                        pr($historia_docente);
-//                        exit();
-                        $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
-                        $tmp_validado['estado_actual'] = $historia_docente['est_val'];
-                        $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
-                        $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
-
-                        $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
-                        $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria_delegacion['idconv']); //Busca mensajes generales enviados a la corrección;
-                        $pie_pag = $this->load->view('perfil/enviar_validacion/opciones_validacion_pie', $data_pie, TRUE);
-                        $data['pie_pag'] = $pie_pag;
-                        $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
-                    } else {
-                        //Asigna estado de incompleto 
-                        $this->session->set_userdata(array('datosvalidadoactual' => array('est_val' => Enum_ev::Inicio)));
-
-                        $data['mensaje'] = $string_values['msj_no_completo_envio_validacion_censo'];
-                        $this->load->view('perfil/enviar_validacion/mensajes_info', $data, FALSE);
-                    }
+            if ($convocatoria_delegacion->convocatoria_cve > 0) {//es mayor que cero, existe una convocatoria para la delegación
+                switch ($convocatoria_delegacion->aplica_convocatoria) {
+                    case Enum_etapa_cov::CENSO_REGISTRO://Puede validar que pueda enviar la información a validar
+                        $data['mensaje_general'] = $string_values['msj_convocatoria_registro_censo']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        $data['tipo_mensaje'] = $tipo_msg['SUCCESS']['class']; //
+                        break;
+                    case Enum_etapa_cov::CEN_SIN_INICIAR_CONVOCATORIA://La convocatoria aún no existe
+                        $data['mensaje_general'] = $string_values['msj_convocatoria_sin_iniciar']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        break;
+                    case Enum_etapa_cov::CENSO_VALIDA_N1://La convocatoria aún no existe
+                        $data['mensaje_general'] = $string_values['msj_convocatoria_periodo_validacion']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        $data['tipo_mensaje'] = $tipo_msg['WARNING']['class']; //
+                        break;
+                    case Enum_etapa_cov::CENSO_VALIDA_N2://La convocatoria aún no existe
+                        $data['mensaje_general'] = $string_values['msj_convocatoria_periodo_validacion']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        $data['tipo_mensaje'] = $tipo_msg['WARNING']['class']; //
+                        break;
+                    default :
+                        $data['mensaje_general'] = $string_values['msj_convocatoria_inactiva']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        
                 }
+            } else {//No existe una convocatoria actualmente para la validacion
+                $data['mensaje_general'] = $string_values['msj_convocatoria_inactiva']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                $data['tipo_mensaje'] = $tipo_msg['WARNING']['class']; //
             }
+
+            $this->load->model('Validacion_docente_model', 'vdm'); //Carga modelo de validacioón del censo
+//            pr($this->session->userdata());
+//            //Obtiene el historial completo de la validación del docente según la convocatoría
+            if ($this->seguridad->verificar_liga_validar()) {//Busca si existe la convocatoría, de otro modo no se puede subir ni cargar nada
+//                //Vuelve a cargar la historia del usuario 
+////                $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion->convocatoria_cve); //Buscamos historil del docente en el historico, por convocatoria y empleado
+////                $historia_docente = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria_delegacion->convocatoria_cve);
+//                $delegacion_doecente_cve = $this->session->userdata('delegacion_cve');
+//
+//                //Obtener la información de las últimas dos convocatorias 
+////                pr($historia_docente);
+//                //Pregunta si existe el historial del usuario
+//                if (!empty($historia_docente)) {//Tiene historial en validación
+//                    $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
+////                    $data['historial_estados'] = $historia_docente;
+////                    $tmp_validado['estado_actual'] = $historia_docente['est_val'];
+//                    $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
+//                    $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
+//
+//                    $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
+////                    pr($data['historial_estados']);
+////                exit();
+////                    pr($historia_docente);
+//
+//                    $pie_pag = $this->load->view('perfil/enviar_validacion/opciones_validacion_pie', $data_pie, TRUE);
+            } else {//No tiene historia como docente en validacion de sus datos
+//                    //Verificar si su estado debe cambiar a completo por datos
+//                    $res = $this->validar_cursos_status_completa_docente($result_id_empleado, $delegacion_doecente_cve);
+//                    if ($res === 1) {//Recarga el método
+//                        $historia_docente = $this->vdm->get_hist_estado_validacion_docente_actual($result_id_empleado, $convocatoria_delegacion['idconv']); //Buscamos historil del docente en el historico, por convocatoria y empleado
+//                        //                        pr($historia_docente);
+////                        exit();
+//                        $this->session->set_userdata('datosvalidadoactual', $historia_docente); //Carga el validador general a cariable de sesión
+//                        $tmp_validado['estado_actual'] = $historia_docente['est_val'];
+//                        $tmp_validado['tipo_validador_rol'] = $this->session->userdata('rol_seleccionado_cve');
+//                        $tmp_validado['delegacion_cve'] = $delegacion_doecente_cve;
+//
+//                        $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
+//                        $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($result_id_empleado, $convocatoria_delegacion['idconv']); //Busca mensajes generales enviados a la corrección;
+//                        $pie_pag = $this->load->view('perfil/enviar_validacion/opciones_validacion_pie', $data_pie, TRUE);
+//                        $data['pie_pag'] = $pie_pag;
+//                        $this->load->view('perfil/enviar_validacion/valida_docente_tpl', $data, FALSE);
+//                    } else {
+//                        //Asigna estado de incompleto 
+//                        $this->session->set_userdata(array('datosvalidadoactual' => array('est_val' => Enum_ev::Inicio)));
+//
+//                        $data['mensaje_general'] = $string_values['msj_no_completo_envio_validacion_censo'];
+//                        $this->load->view('perfil/enviar_validacion/mensajes_info', $data, FALSE);
+//                    }
+//                }
+            }
+//            $data['pie_pag'] = $pie_pag;
+            $data['nom_docente'] = $this->session->userdata('datosvalidadoactual')['nom_docente']; //Nombre del docente
+            $data['matricula'] = $this->session->userdata('matricula'); //Matricula del docente a validar
+            //Obtiene el historial de las últimas dos convocatorias
+            $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente_convocatorias($result_id_empleado, 2);
+//                pr($data_comentario['historial_estados']);
+            $this->load->view('validador_censo/valida_docente/valida_docente_tpl', $data, FALSE);
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
         }
