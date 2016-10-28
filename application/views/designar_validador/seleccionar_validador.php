@@ -36,8 +36,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <?php echo $this->form_complete->create_element(array('id' => 'bus_clave_categoria', 'type' => 'text', 'value' => (isset($emp_keypue)) ? $emp_keypue : '', 'attributes' => array('placeholder' => $string_values['titulo_categoria_clave'], 'class'=>'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => $string_values['titulo_categoria_clave'], 'readonly' => 'readonly'))); ?>
             <?php echo $this->form_complete->create_element(array('id' => 'bus_nombre_categoria', 'type' => 'text', 'value' => (isset($pue_despue)) ? $pue_despue : '', 'attributes' => array('placeholder' => $string_values['titulo_categoria_descripcion'], 'class'=>'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => $string_values['titulo_categoria_descripcion'], 'readonly' => 'readonly'))); ?>
         </div>
-        <input type="hidden" id="h0" name="bus_delegacion_name_" value="<?php echo isset($delegacion)?$delegacion:'';?>">
-        <input type="hidden" id="h1" name="bus_delegacion_id_" value="<?php echo isset($delegacion_id)?$delegacion_id:'';?>">
+        <div class="panel-body input-group">
+            <label for='titulo_delegacion' class="input-group-addon" >
+                <?php echo $string_values['titulo_delegacion']; ?>
+            </label>
+            <?php echo $this->form_complete->create_element(array('id' => 'bus_delegacion_id_', 'type' => 'text', 'value' => (isset($delegacion_id)) ? $delegacion_id : '', 'attributes' => array('placeholder' => $string_values['titulo_clave_delegacion'], 'class'=>'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => $string_values['titulo_clave_delegacion'], 'readonly' => 'readonly'))); ?>
+            <?php echo $this->form_complete->create_element(array('id' => 'bus_delegacion_name_', 'type' => 'text', 'value' => (isset($delegacion)) ? $delegacion : '', 'attributes' => array('placeholder' => $string_values['titulo_delegacion'], 'class'=>'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => $string_values['titulo_delegacion'], 'readonly' => 'readonly'))); ?>
+        </div>
+        
         <input type="hidden" id="h2" name="bus_categoria_id_sipimss" value="<?php echo isset($categoria_id_sipimss)?$categoria_id_sipimss:''; ?>">
         <input type="hidden" id="h3" name="bus_base_reg_encontrado" value="<?php echo isset($base_reg_encontrado)?$base_reg_encontrado:'not'; ?>">
         
@@ -52,5 +58,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
     </div>
 </div>
+<?php
+   if(isset($pie_pag)){
+       echo $pie_pag;
+   }
+?>
 
 <?php echo form_close(); ?>

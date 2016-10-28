@@ -1345,11 +1345,10 @@ nom_region varchar(40),
 primary key (regiones_cve)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `cdelegacion` ADD `regiones_cve` char(4) NULL;  /*Campo agregado a la tabla "cdelegacion" */
-CREATE INDEX XIF12CDELEGACION ON cdelegacion (regiones_cve);  /* Se vuelve index el campo */
-ALTER TABLE `cdelegacion` ADD CONSTRAINT `cdelegacion_CRfk12`   /* Asigna llave foran */
+ALTER TABLE `validador` ADD `regiones_cve` char(4) NULL;  /*Campo agregado a la tabla "validador" */
+CREATE INDEX XIF12VALIDADOR ON validador (regiones_cve);  /* Se vuelve index el campo */
+ALTER TABLE `validador` ADD CONSTRAINT `validador_CRfk12`   /* Asigna llave foran */
 FOREIGN KEY (`regiones_cve`) REFERENCES `cregiones`(`regiones_cve`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
 
 ALTER TABLE cdelegacion DROP FOREIGN KEY  cdelegacion_CRfk12;
 
@@ -1374,9 +1373,9 @@ create table validacion_parametros_muestra_seccion(
 sec_info_cve int(11),
 val_par_muestra int(11),
 primary key(sec_info_cve, val_par_muestra),
-FOREIGN KEY (`sec_info_cve`) REFERENCES `validacion_parametros_muestra` (`sec_info_cve`),
-FOREIGN KEY (`val_par_muestra`) REFERENCES `validacion_parametros_muestra` (`val_par_muestra`),
+FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion` (`sec_info_cve`),
+FOREIGN KEY (`val_par_muestra`) REFERENCES `validacion_parametros_muestra` (`val_par_muestra`)
+);
 
-)
 
 

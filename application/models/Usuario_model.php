@@ -344,6 +344,28 @@ class Usuario_model extends CI_Model {
 
         return $resultado;
     }
+    /**
+     * @author LEAS
+     * @fecha 20/10/2016
+     * @param type $parametros
+     * @param type $matricula
+     * @return type Datos del empleado, se busca por matricula
+     */
+    public function get_empleado($matricula, $parametros = NULL) {
+        if (is_null($parametros) AND empty($parametros)) {
+            $parametros = array('EMPLEADO_CVE', 'USUARIO_CVE', 'emp_matricula');
+        }
+
+        $this->db->select($parametros);
+        $this->db->where('emp_matricula', $matricula);
+        $query = $this->db->get('empleado');
+        $result = $query->result_array();
+        if (!empty($result)) {
+            $result = $result[0];
+        }
+//        pr($this->db->last_query());
+        return $result;
+    }
 
     public function insert_usuario_rol($usuario_cve, $rol_cve) {
         $this->db->where('USUARIO_CVE',$usuario_cve);

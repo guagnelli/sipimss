@@ -9,47 +9,45 @@ class Becas_comisiones_laborales_model extends CI_Model {
         $this->load->database();
     }
 
-    private function get_formacion_subquery($params){
-        if(array_key_exists('fields', $params)){
-            if(is_array($params['fields'])){
+    private function get_formacion_subquery($params) {
+        if (array_key_exists('fields', $params)) {
+            if (is_array($params['fields'])) {
                 $this->db->select($params['fields'][0], $params['fields'][1]);
             } else {
                 $this->db->select($params['fields']);
             }
         }
-        if(array_key_exists('conditions', $params)){
+        if (array_key_exists('conditions', $params)) {
             $this->db->where($params['conditions']);
         }
-        if(array_key_exists('order', $params)){
+        if (array_key_exists('order', $params)) {
             $this->db->order_by($params['order']);
         }
-        if(array_key_exists('limit', $params)){
+        if (array_key_exists('limit', $params)) {
             $this->db->limit($params['limit']);
         }
         $subquery = $this->db->get_compiled_select($params['table']); //Obtener conjunto de registros
         return $subquery;
     }
 
-    public function get_lista_becas($empleado_cve, $params=null) {
+    public function get_lista_becas($empleado_cve, $params = null) {
         if ($empleado_cve < 1) {
             return -1;
         }
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(!is_null($params) && (isset($params['validation']) || isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
-            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
-            $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
-            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
-            
-            if(!is_null($subquery)){
-                $this->db->select('('.$subquery.') AS validation');
-            }
-            if(!is_null($subquery1)){
-                $this->db->select('('.$subquery1.') AS validation_estado');
-            }
-            if(!is_null($subquery2)){
-                $this->db->select('('.$subquery2.') AS validation_estado_anterior');
-            }
-        }
+//        if (!is_null($params) && (isset($params['validation']) || isset($params['validation_estado']) || isset($params['validation_estado_anterior']))) {
+//            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
+//            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
+//
+//            if (!is_null($subquery)) {
+//                $this->db->select('(' . $subquery . ') AS validation');
+//            }
+//            if (!is_null($subquery2)) {
+//                $this->db->select('(' . $subquery2 . ') AS validation_estado_anterior');
+//            }
+//        }
+        $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
+        $this->db->select('(' . $subquery1 . ') AS validation_estado');
         ////////////////////////////////Fin verificación existencia de validación actual
 
         $select = array('eb.EMP_BECA_CVE "emp_beca_cve"', 'eb.EMPLEADO_CVE "empleado_cve"',
@@ -58,7 +56,7 @@ class Becas_comisiones_laborales_model extends CI_Model {
             'eb.COMPROBANTE_CVE "comprobante"', 'c.COM_NOMBRE "nom_comprobante"',
             'c.TIPO_COMPROBANTE_CVE "tip_comprobante_cve"', 'tc.TIP_COM_NOMBRE "nom_comprobante"',
             'eb.BECA_INTERRIMPIDA_CVE "beca_interrumpida_cve"', 'bi.MSG_BEC_INTE "msj_beca_interrumpida"',
-            'eb.MOTIVO_BECADO_CVE "motivo_beca_cve"', 'mb.MOT_BEC_NOMBRE "nom_motivo_beca"', 'eb.IS_VALIDO_PROFESIONALIZACION');
+            'eb.MOTIVO_BECADO_CVE "motivo_beca_cve"', 'mb.MOT_BEC_NOMBRE "nom_motivo_beca"', 'eb.IS_VALIDO_PROFESIONALIZACION', 'eb.IS_CARGA_SISTEMA');
 
         $this->db->select($select);
         $this->db->from('emp_beca as eb');
@@ -67,41 +65,42 @@ class Becas_comisiones_laborales_model extends CI_Model {
         $this->db->join('cbeca_interrumpida bi', 'bi.BECA_INTERRIMPIDA_CVE = eb.BECA_INTERRIMPIDA_CVE');
         $this->db->join('comprobante c', 'c.COMPROBANTE_CVE = eb.COMPROBANTE_CVE', 'left');
         $this->db->join('ctipo_comprobante tc', 'tc.TIPO_COMPROBANTE_CVE = c.TIPO_COMPROBANTE_CVE', 'left');
-        if(is_array($empleado_cve)&& isset($empleado_cve["conditions"])){
+        if (is_array($empleado_cve) && isset($empleado_cve["conditions"])) {
             $this->db->where($empleado_cve["conditions"]);
-        }else{
-            $this->db->where('eb.EMPLEADO_CVE', $empleado_cve);    
+        } else {
+            $this->db->where('eb.EMPLEADO_CVE', $empleado_cve);
         }
         $query = $this->db->get();
-        //pr($this->db->last_query());
+//        pr($this->db->last_query());
         return $query->result_array();
     }
 
-    public function get_lista_comisiones($empleado_cve, $params=null) {
+    public function get_lista_comisiones($empleado_cve, $params = null) {
         if ($empleado_cve < 1) {
             return -1;
         }
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
-            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
-            $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
-            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
-            
-            if(!is_null($subquery)){
-                $this->db->select('('.$subquery.') AS validation');
-            }
-            if(!is_null($subquery1)){
-                $this->db->select('('.$subquery1.') AS validation_estado');
-            }
-            if(!is_null($subquery2)){
-                $this->db->select('('.$subquery2.') AS validation_estado_anterior');
-            }
-        }
+//        if (!is_null($params) && (isset($params['validation']) || isset($params['validation_estado']) || isset($params['validation_estado_anterior']))) {
+//            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
+//            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
+//
+//            if (!is_null($subquery)) {
+//                $this->db->select('(' . $subquery . ') AS validation');
+//            }
+//            if (!is_null($subquery1)) {
+//                
+//            }
+//            if (!is_null($subquery2)) {
+//                $this->db->select('(' . $subquery2 . ') AS validation_estado_anterior');
+//            }
+//        }
+        $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
+        $this->db->select('(' . $subquery1 . ') AS validation_estado');
         ////////////////////////////////Fin verificación existencia de validación actual
         $select = array('ecm.EMP_COMISION_CVE "emp_comision_cve"', 'ecm.EMPLEADO_CVE "empleado_cve"',
             'ecm.EC_FCH_INICIO "fecha_inicio"', 'ecm.EC_FCH_FIN "fecha_fin"',
             'ecm.COMPROBANTE_CVE "comprobante"', 'c.COM_NOMBRE "nom_comprobante"',
-            'ecm.TIP_COMISION_CVE "tipo_comision_cve"', 'tcm.TIP_COM_NOMBRE "nom_tipo_comision"', 'ecm.IS_VALIDO_PROFESIONALIZACION');
+            'ecm.TIP_COMISION_CVE "tipo_comision_cve"', 'tcm.TIP_COM_NOMBRE "nom_tipo_comision"', 'ecm.IS_VALIDO_PROFESIONALIZACION', 'ecm.IS_CARGA_SISTEMA');
 
         $this->db->select($select);
         $this->db->from('emp_comision ecm');
@@ -109,12 +108,12 @@ class Becas_comisiones_laborales_model extends CI_Model {
         $this->db->join('comprobante c', 'c.COMPROBANTE_CVE = ecm.COMPROBANTE_CVE', 'left');
         $this->db->join('ctipo_comprobante tc', 'tc.TIPO_COMPROBANTE_CVE = c.TIPO_COMPROBANTE_CVE', 'left');
         $this->db->where('tcm.IS_COMISION_ACADEMICA', 0);
-        if(is_array($empleado_cve)){
+        if (is_array($empleado_cve)) {
             $this->db->where($empleado_cve["conditions"]);
-        }else{
+        } else {
             $this->db->where('ecm.EMPLEADO_CVE', $empleado_cve);
         }
-        
+
         $query = $this->db->get();
 //        pr($this->db->last_query());
         return $query->result_array();

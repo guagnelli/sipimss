@@ -69,12 +69,13 @@ var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion'];
                                                 <tbody>
                                                     <?php
                                                     foreach ($formacion_salud['inicial'] as $key_ini => $fsi) {
+                                                        pr($fsi);
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
                                                         $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
                                                         ///////////Inicio ver liga de validación
                                                         $validation_estado = (isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])) ? $fsi['validation_estado'] : '';
                                                         $validation_estado_anterior = (isset($fsi['validation_estado_anterior']) && !empty($fsi['validation_estado_anterior'])) ? $fsi['validation_estado_anterior'] : null;
-                                                        $btn_validar = ($this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+//                                                        $btn_validar = ($this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_fs" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'" onclick="validar_fs(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                                                         ///////////Fin ver liga de validación
                                                         /*if(isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])){
                                                             $btn_validar = $this->seguridad->verificar_estado_correccion($fsi['validation_estado'], $btn_validar);

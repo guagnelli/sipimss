@@ -9,62 +9,63 @@ class Investigacion_docente_model extends CI_Model {
         $this->load->database();
     }
 
-    private function get_formacion_subquery($params){
-        if(array_key_exists('fields', $params)){
-            if(is_array($params['fields'])){
+    private function get_formacion_subquery($params) {
+        if (array_key_exists('fields', $params)) {
+            if (is_array($params['fields'])) {
                 $this->db->select($params['fields'][0], $params['fields'][1]);
             } else {
                 $this->db->select($params['fields']);
             }
         }
-        if(array_key_exists('conditions', $params)){
+        if (array_key_exists('conditions', $params)) {
             $this->db->where($params['conditions']);
         }
-        if(array_key_exists('order', $params)){
+        if (array_key_exists('order', $params)) {
             $this->db->order_by($params['order']);
         }
-        if(array_key_exists('limit', $params)){
+        if (array_key_exists('limit', $params)) {
             $this->db->limit($params['limit']);
         }
         $subquery = $this->db->get_compiled_select($params['table']); //Obtener conjunto de registros
         return $subquery;
     }
 
-    public function get_lista_datos_investigacion_docente($empleado_cve = null, $params=null) {
+    public function get_lista_datos_investigacion_docente($empleado_cve = null, $params = null) {
         if (isset($empleado_cve) AND is_null($empleado_cve)) {
             return -1;
         }
-        
+
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
-            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
-            $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
-            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
-            
-            if(!is_null($subquery)){
-                $this->db->select('('.$subquery.') AS validation');
-            }
-            if(!is_null($subquery1)){
-                $this->db->select('('.$subquery1.') AS validation_estado');
-            }
-            if(!is_null($subquery2)){
-                $this->db->select('('.$subquery2.') AS validation_estado_anterior');
-            }
-        }
+//        if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
+//            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
+//            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
+//            
+//            if(!is_null($subquery)){
+//                $this->db->select('('.$subquery.') AS validation');
+//            }
+//            if(!is_null($subquery1)){
+//            }
+//            if(!is_null($subquery2)){
+//                $this->db->select('('.$subquery2.') AS validation_estado_anterior');
+//            }
+//        }
+        $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
+        $this->db->select('(' . $subquery1 . ') AS validation_estado');
         ////////////////////////////////Fin verificación existencia de validación actual
         $select = array('eaid.EAID_CVE "cve_investigacion"', 'eaid.EIAE_NOMBRE_INV "nombre_investigacion"'
             , 'eaid.EAIE_FOLIO_ACEPTACION "folio_investigacion"', 'eaid.EMPLEADO_CVE', 'eaid.EAIE_PUB_CITA "cita_publicada"'
             , 'eaid.COMPROBANTE_CVE "comprobante_cve"'
-            , 'eaid.TIP_ACT_DOC_CVE "tpad_cve"', 'ctad.TIP_ACT_DOC_NOMBRE "tpad_nombre"', 'eaid.IS_VALIDO_PROFESIONALIZACION');
+            , 'eaid.TIP_ACT_DOC_CVE "tpad_cve"', 'ctad.TIP_ACT_DOC_NOMBRE "tpad_nombre"', 'eaid.IS_VALIDO_PROFESIONALIZACION'
+            , 'eaid.IS_CARGA_SISTEMA');
 
         $this->db->select($select);
         $this->db->from('emp_act_inv_edu as eaid');
         $this->db->join('ctipo_actividad_docente as ctad', 'ctad.TIP_ACT_DOC_CVE = eaid.TIP_ACT_DOC_CVE');
         //pr($empleado_cve);
-        if(is_array($empleado_cve)&& isset($empleado_cve["conditions"])){
+        if (is_array($empleado_cve) && isset($empleado_cve["conditions"])) {
             $this->db->where($empleado_cve["conditions"]);
-        }else{
-            $this->db->where('eaid.EMPLEADO_CVE', $empleado_cve);    
+        } else {
+            $this->db->where('eaid.EMPLEADO_CVE', $empleado_cve);
         }
         $query = $this->db->get();
         //pr($this->db->last_query());
@@ -150,7 +151,7 @@ class Investigacion_docente_model extends CI_Model {
         if (is_null($datos_investigacion_docente)) {
             return -1;
         }
-            $this->db->trans_begin();
+        $this->db->trans_begin();
         $this->db->insert('emp_act_inv_edu', $datos_investigacion_docente); //Almacena usuario
         $obtiene_id_usuario = $this->db->insert_id();
         if ($this->db->trans_status() === FALSE) {
@@ -195,14 +196,15 @@ class Investigacion_docente_model extends CI_Model {
         }
         return $query;
     }
-    
+
     public function get_medio_divulgacion($medio_div_cve = null) {
-       
-       $this->db->where('MED_DIVULGACION_CVE', $medio_div_cve);
-       
-       $query = $this->db->get('cmedio_divulgacion');
-       $array_validador = $query->result_array();
-       $query->free_result();
-       return $array_validador;
+
+        $this->db->where('MED_DIVULGACION_CVE', $medio_div_cve);
+
+        $query = $this->db->get('cmedio_divulgacion');
+        $array_validador = $query->result_array();
+        $query->free_result();
+        return $array_validador;
     }
+
 }

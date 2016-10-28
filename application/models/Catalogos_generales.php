@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Catalogos_generales extends CI_Model {
 
+    private $reglas_validacion_convocatoria;
+
     public function __construct() {
         // Call the CI_Model constructor
         parent::__construct();
@@ -495,17 +497,22 @@ class Catalogos_generales extends CI_Model {
      * @fecha 29/08/2016
      * @param type $delegacion_cve
      * @return type Objet con la convocatoria asociada a la delegación
-     * La consulta obtiene la convocatoria relacionada con la delegación, demás, 
+     * La consulta obtiene la convocatoria relacionada con la delegación,  
      * si existe más de una convocatoria asociada a la delegación, entonces,
      * obtiene el maximo id de la convocatoría
-     * Por etro lado regresa el estado de las fechas
-     * 
+     * Por etro lado regresa el estado de las fechas 
+     *  -sin Sin iniciar la convocatoria
+     *  -act Registro de actividad docente (registro de censo)
+     *  -vf1 Tiempo de validación por N1
+     *  -vf2 Tiempo de validacion por N2
+     *  -nap La convocatoría se encuentra caducada
+     *  -nec No existe una convocatoria aún para la delegación
      */
     public function get_convocatoria_delegacion($delegacion_cve = null) {
         $select = 'select vc.VAL_CON_CVE "convocatoria_cve",
         if(now() < vc.VAL_CON_FCH_INICIO_ACTUALIZACION, "sin", 
        	(if(now() between vc.VAL_CON_FCH_INICIO_ACTUALIZACION and vc.VAL_CON_FCH_FIN_ACTUALIZACION, "act", 
-       (if(now() between vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_I and vc.VAL_CON_FCH_FIN_VALIDACION_FASE_I,"vf1",
+        (if(now() between vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_I and vc.VAL_CON_FCH_FIN_VALIDACION_FASE_I,"vf1",
         (if(now() between vc.VAL_CON_FCH_INICIO_VALIDACION_FASE_II and vc.VAL_CON_FCH_FIN_VALIDACION_FASE_II, "vf2", "nap")))))))
         "aplica_convocatoria"
         from validacion_convocatoria vc
@@ -518,6 +525,10 @@ class Catalogos_generales extends CI_Model {
 //        pr($this->db->last_query());
         if (!empty($num_rows)) {
             $num_rows = $num_rows[0];
+        } else {
+            $tmp['convocatoria_cve'] = 0;
+            $tmp['aplica_convocatoria'] = 'nec';
+            $num_rows = (object) $tmp;
         }
         return $num_rows;
     }
@@ -535,24 +546,42 @@ class Catalogos_generales extends CI_Model {
         }
         $this->db->select($nom_campo . ' as cve'); //Nombre del campo de la entidad solicitada
         $this->db->where('MODULO_CVE', $MODULO_CVE);
-        $this->db->where($nom_campo.' is not null');
+        $this->db->where($nom_campo . ' is not null');
         $query = $this->db->get('campos_catalogos');
         $array_comprobante = $query->result_array();
         $query->free_result();
 //        pr($this->db->last_query());
         return $array_comprobante;
     }
-    
+
     /*
      * Retorna catálogo posibles dictamenes para asignar
      * Return   ResultSet Array
      */
-    public function get_cat_dictamen_result(){
+
+    public function get_cat_dictamen_result() {
 //        $sql = "SELECT * FROM ccategoria_dictamen";
         $query = $this->db->get('ccategoria_dictamen'); //Obtener conjunto de registros
         $resultado = $query->result_array();
-        $query->free_result(); 
+        $query->free_result();
         return $resultado;
+    }
+
+    public function getReglasValidacionConvocatoria() {
+        if (is_null($this->reglas_validacion_convocatoria)) {
+            $this->setReglasValidainConvocatoria();
+        }
+        return $this->reglas_validacion_convocatoria;
+    }
+
+    private function setReglasValidainConvocatoria() {
+        $this->reglas_validacion_convocatoria = array(
+            Enum_rols::Docente => array(Enum_etapa_cov::CENSO_REGISTRO, Enum_etapa_cov::CEN_CADUCO_CONVOCATORIA, Enum_etapa_cov::CEN_NO_EXISTE_CONVOCATORIA, Enum_etapa_cov::CEN_SIN_INICIAR_CONVOCATORIA),
+            Enum_rols::Validador_N1 => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
+            Enum_rols::Validador_N2 => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
+            Enum_rols::Profesionalizacion => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
+        );
+        return $this->reglas_validacion_convocatoria;
     }
 
 //Function getALL is Deprecated from this model, now, it's located in Expediente_model...
@@ -576,47 +605,46 @@ class Catalogos_generales extends CI_Model {
      *               @model : nombre del modelo 
      *               @function : nombre de la funcion que regresa los datos de la sección
      */
-    /*function getAll($empleado_cve = null, $validado = null, $where = null) {
-        if (is_null($empleado_cve)) {
-            throw new Exception('Id de usuario nulo');
-        }
+    /* function getAll($empleado_cve = null, $validado = null, $where = null) {
+      if (is_null($empleado_cve)) {
+      throw new Exception('Id de usuario nulo');
+      }
 
-        //información del profesor
-        $parametros = array("conditions"=>array("empleado_cve"=>$empleado_cve));
+      //información del profesor
+      $parametros = array("conditions"=>array("empleado_cve"=>$empleado_cve));
 
-        $this->load->model("Empleado_model", "emp");
-        $data["empleado"] = $this->emp->getEmpECD($parametros);
+      $this->load->model("Empleado_model", "emp");
+      $data["empleado"] = $this->emp->getEmpECD($parametros);
 
-        if (!is_null($validado)) {
-            if (is_bool($validado)) {
-                $parametros["conditions"]["IS_VALIDO_PROFESIONALIZACION"]=$validado;
-            } else {
-                throw new Exception('La función espera un valor booleano');
-            }
-        }
-        
-        $this->lang->load('interface', 'spanish');
+      if (!is_null($validado)) {
+      if (is_bool($validado)) {
+      $parametros["conditions"]["IS_VALIDO_PROFESIONALIZACION"]=$validado;
+      } else {
+      throw new Exception('La función espera un valor booleano');
+      }
+      }
 
-        //Etiquetas
-        $data["string_value"] = $this->lang->line('interface_secd') + $this->lang->line('interface')["secciones"];
-        // $data["cfg_actividad"] = $this->config->item("get_secciones");
-        $secciones = $this->config->item("secciones_model");
+      $this->lang->load('interface', 'spanish');
 
-        foreach ($secciones as $key => $seccion) {
-            $params["conditions"] = (isset($where[$key]) && !is_null($where[$key])) ? array_merge($parametros["conditions"], $where[$key]) : $parametros["conditions"];
-            
-            $this->load->model($seccion["model"], $seccion["acronimo"]);
-            $res = $this->{$seccion["acronimo"]}->$seccion["function"]($params);
-            unset($seccion["model"]);
-            unset($seccion["function"]);
-            if (!empty($res)) {
-                $data["actividades"][$seccion["acronimo"]] = $res;
-                $data["labels"][$seccion["acronimo"]] = "lbl_" . $seccion["acronimo"] . "_titulo";
-                $data["cfg_actividad"][$seccion["acronimo"]] = $seccion;
-            }
-        }
-        return $data;
-    }
-*/
+      //Etiquetas
+      $data["string_value"] = $this->lang->line('interface_secd') + $this->lang->line('interface')["secciones"];
+      // $data["cfg_actividad"] = $this->config->item("get_secciones");
+      $secciones = $this->config->item("secciones_model");
 
+      foreach ($secciones as $key => $seccion) {
+      $params["conditions"] = (isset($where[$key]) && !is_null($where[$key])) ? array_merge($parametros["conditions"], $where[$key]) : $parametros["conditions"];
+
+      $this->load->model($seccion["model"], $seccion["acronimo"]);
+      $res = $this->{$seccion["acronimo"]}->$seccion["function"]($params);
+      unset($seccion["model"]);
+      unset($seccion["function"]);
+      if (!empty($res)) {
+      $data["actividades"][$seccion["acronimo"]] = $res;
+      $data["labels"][$seccion["acronimo"]] = "lbl_" . $seccion["acronimo"] . "_titulo";
+      $data["cfg_actividad"][$seccion["acronimo"]] = $seccion;
+      }
+      }
+      return $data;
+      }
+     */
 }

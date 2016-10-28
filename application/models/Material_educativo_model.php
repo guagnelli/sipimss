@@ -15,47 +15,47 @@ class Material_educativo_model extends CI_Model {
         $this->load->database();
     }
 
-    private function get_formacion_subquery($params){
-        if(array_key_exists('fields', $params)){
-            if(is_array($params['fields'])){
+    private function get_formacion_subquery($params) {
+        if (array_key_exists('fields', $params)) {
+            if (is_array($params['fields'])) {
                 $this->db->select($params['fields'][0], $params['fields'][1]);
             } else {
                 $this->db->select($params['fields']);
             }
         }
-        if(array_key_exists('conditions', $params)){
+        if (array_key_exists('conditions', $params)) {
             $this->db->where($params['conditions']);
         }
-        if(array_key_exists('order', $params)){
+        if (array_key_exists('order', $params)) {
             $this->db->order_by($params['order']);
         }
-        if(array_key_exists('limit', $params)){
+        if (array_key_exists('limit', $params)) {
             $this->db->limit($params['limit']);
         }
         $subquery = $this->db->get_compiled_select($params['table']); //Obtener conjunto de registros
         return $subquery;
     }
 
-    public function get_lista_material_educativo($empleado_cve, $params=null) {
+    public function get_lista_material_educativo($empleado_cve, $params = null) {
         if ($empleado_cve < 1) {
             return -1;
         }
         /////////////////////////////////Inicio verificación existencia de validación actual
-        if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
-            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
-            $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
-            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
-            
-            if(!is_null($subquery)){
-                $this->db->select('('.$subquery.') AS validation');
-            }
-            if(!is_null($subquery1)){
-                $this->db->select('('.$subquery1.') AS validation_estado');
-            }
-            if(!is_null($subquery2)){
-                $this->db->select('('.$subquery2.') AS validation_estado_anterior');
-            }
-        }
+//        if(!is_null($params) && (isset($params['validation']) ||isset($params['validation_estado']) || isset($params['validation_estado_anterior']))){
+//            $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
+//            $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
+//            
+//            if(!is_null($subquery)){
+//                $this->db->select('('.$subquery.') AS validation');
+//            }
+//            if(!is_null($subquery1)){
+//            }
+//            if(!is_null($subquery2)){
+//                $this->db->select('('.$subquery2.') AS validation_estado_anterior');
+//            }
+//        }
+        $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
+        $this->db->select('(' . $subquery1 . ') AS validation_estado');
         ////////////////////////////////Fin verificación existencia de validación actual
 
         $select = array('eme.MATERIA_EDUCATIVO_CVE "emp_material_educativo_cve"',
@@ -64,16 +64,16 @@ class Material_educativo_model extends CI_Model {
             'c.COM_NOMBRE "nom_comprobante"', 'c.TIPO_COMPROBANTE_CVE "ctc_comprobante_cve"',
             'ctc.TIP_COM_NOMBRE "nom_ctp_comprobante"', 'ctm.TIP_MATERIAL_CVE "tipo_material_cve"',
             'ctm.TIP_MAT_TIPO "padre_tp_material"', 'ctm.TIP_MAT_NOMBRE "nom_tipo_material"',
-            'ctm.TIP_MAT_OPCION "opt_tipo_material"', 'eme.IS_VALIDO_PROFESIONALIZACION');
+            'ctm.TIP_MAT_OPCION "opt_tipo_material"', 'eme.IS_VALIDO_PROFESIONALIZACION', 'eme.IS_CARGA_SISTEMA');
 
         $this->db->select($select);
         $this->db->from('emp_materia_educativo eme');
         $this->db->join('ctipo_material ctm', 'ctm.TIP_MATERIAL_CVE = eme.TIP_MATERIAL_CVE');
         $this->db->join('comprobante c', 'c.COMPROBANTE_CVE = eme.COMPROBANTE_CVE', 'left');
         $this->db->join('ctipo_comprobante ctc', 'ctc.TIPO_COMPROBANTE_CVE = c.TIPO_COMPROBANTE_CVE', 'left');
-        if(is_array($empleado_cve)&& isset($empleado_cve["conditions"])){
+        if (is_array($empleado_cve) && isset($empleado_cve["conditions"])) {
             $this->db->where($empleado_cve["conditions"]);
-        }else{
+        } else {
             $this->db->where('eme.EMPLEADO_CVE', $empleado_cve);
         }
 
@@ -194,6 +194,7 @@ class Material_educativo_model extends CI_Model {
             return $array_datos_tipo_material_educativo;
         }
     }
+
     /**
      * 
      * @param type $id_tipo_mat_edu identificador del tipo de material educativo

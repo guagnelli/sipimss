@@ -1,3 +1,7 @@
+<?php
+$this->seguridad->set_tiempo_convocatoria_null(); //Reinicia validacion de convocatoria
+$this->seguridad->set_tiempo_convocatoria(); //Valida paso de convocatoria
+?>
 <div class="list-group">
 
     <div class="list-group-item">      
@@ -6,7 +10,7 @@
             <?php echo $string_values['title_becas']; ?>
             <br>
         </div>
-        <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+        <?php if ($this->seguridad->verificar_liga_validar()) { ?>
             <div class='row'>
                 <div class="form-group col-xs-4 col-md-4 col-md-offset-8">
                     <button type="button" class="btn btn-success btn-lg" id="btn_gregar_beca_modal" data-toggle="modal" data-target="#modal_censo">
@@ -34,8 +38,7 @@
                     <tbody>
                         <?php
                         foreach ($lista_becas as $key_ai => $val) {
-                            $key = $val['emp_beca_cve'];
-                            $key = $this->seguridad->encrypt_base64($key);
+                            $key = $this->seguridad->encrypt_base64($val['emp_beca_cve']);
                             $idcomprobante = $val['comprobante'];
                             if (!is_null($idcomprobante)) {
                                 //Btn comprobante
@@ -45,23 +48,24 @@
                                 $comprobante = 0;
                                 $btn_comprobante = '';
                             }
-                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : null;
-                            $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-becacve ="' . $key . '" data-comprobantecve ="' . $idcomprobante . '" onclick="funcion_eliminar_reg_beca(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
-                            $btn_editar = ($this->seguridad->verificar_liga_editar_docente($val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" data-idrow ="' . $key_ai . '" data-becacve ="' . $key . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_beca(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
+                            $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_VALIDO_PROFESIONALIZACION'], $val['validation_estado']);
+//                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : null;
+                            $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-becacve ="' . $key . '" data-comprobantecve ="' . $idcomprobante . '" onclick="funcion_eliminar_reg_beca(this)" >' . $string_values['tab_titulo_eliminar'] . '</button>' : '';
+                            $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" data-idrow ="' . $key_ai . '" data-becacve ="' . $key . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_beca(this)" >' . $string_values['tab_titulo_editar'] . '</button>' : '';
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">
-                                <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'])."</td>";
+                                <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA']) . "</td>";
                             echo "<td>" . $val['nom_beca'] . "</td>";
                             echo "<td>" . $val['fecha_inicio'] . "</td>";
                             echo "<td>" . $val['fecha_fin'] . "</td>";
                             echo "<td>" . $val['nom_motivo_beca'] . "</td>";
                             echo "<td>" . $val['msj_beca_interrumpida'] . "</td>";
                             echo "<td>" . $btn_comprobante . "</td>";
-                            echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_be" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="ver_be(this);">'.
-                                   $string_values['ver'].
-                                '</button>
-                                '.$btn_editar."</td>";
-                            echo "<td>".$btn_eliminar."</td>";
+                            echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_be" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="' . $key . '" onclick="ver_be(this);">' .
+                            $string_values['ver'] .
+                            '</button>
+                                ' . $btn_editar . "</td>";
+                            echo "<td>" . $btn_eliminar . "</td>";
                             echo "</tr>";
                         }
                         ?>

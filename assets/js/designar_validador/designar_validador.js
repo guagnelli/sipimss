@@ -67,15 +67,17 @@ function runScriptBuscador_sied(e) {
  * @returns {undefined}
  */
 function funcion_carga_elemento(element) {
+//    alert('sdjhsjdj');
     var obj = $(element);
-    var id_validaor = obj.data('idvalidador');
+//    var id_validaor = obj.data('idvalidador');
     var tipo_evento = obj.data('tipoevento');
     var delegacion_cve = obj.data('delcve');
     var departamento_desc = obj.data('depcve');
     var idrow = obj.data('idrow');
     $.ajax({
         url: site_url + '/designar_validador/get_data_cargar_elemento',
-        data: {id_validaor: id_validaor, tipo_evento: tipo_evento,
+        data: {tipo_evento: tipo_evento,
+//        data: {id_validaor: id_validaor, tipo_evento: tipo_evento,
             delegacion_cve: delegacion_cve, departamento_desc: departamento_desc,
             idrow: idrow
         },
@@ -196,14 +198,20 @@ function funcion_designar_validador(element) {
                             var response_json = $.parseJSON(response);//
                             var success = response_json.success;
                             if (parseInt(success) === 1) {//Se elimino correctamente el vinculo unidad validador
-                                var row = document.getElementById("id_row_"+idrow);
+                                var row = document.getElementById("id_row_" + idrow);
 //                                var row = document.getElementById("tabla_designar_validador").rows[idrow + 1];
                                 $('#check_designado_' + idrow).remove();//Remover checkbox para asignar validador
-                                var boton = add_boton_link(idrow, id_validador, departamento_desc, delegacion_cve);//Genera checkbox
+//                                var boton = add_boton_link(idrow, id_validador, departamento_desc, delegacion_cve);//Genera checkbox
+                                var boton = add_boton_link(idrow, departamento_desc, delegacion_cve);//Genera checkbox
+
                                 row.cells[6].appendChild(boton);//Agrega el botón a la celda seleccionada
                                 row.cells[3].innerHTML = '';//Limpia el texto de la celda matricula
                                 row.cells[4].innerHTML = '';//Limpia el texto de la celda nombre
                                 row.cells[5].innerHTML = '';//Limpia el texto de la celda categoría
+
+//                                document.getElementById('btn_seleccionar_validador_' + idrow).data('toggle', 'modal');
+//                                document.getElementById('btn_seleccionar_validador_' + idrow).data('target', '#modal_censo');
+
                             } else {
                                 document.getElementById("check_designado_" + idrow).checked = true;//"Cheked" del checkbox, ya que cancelo
                             }
@@ -234,7 +242,8 @@ function funcion_designar_validador(element) {
     });
 }
 
-function add_boton_link(id_row, id_validador, depcve, delcve) {
+function add_boton_link(id_row, depcve, delcve) {
+////function add_boton_link(id_row, id_validador, depcve, delcve) {
     var btn = document.createElement("button");
     btn.id = "btn_seleccionar_validador_" + id_row;
     btn.type = "button";
@@ -242,33 +251,49 @@ function add_boton_link(id_row, id_validador, depcve, delcve) {
     btn.textContent = "Seleccionar validador";
     //Agrega los atrubutos
     btn.setAttribute('class', 'btn btn-link btn-sm');
+    btn.setAttribute('data-toggle', "modal");
+    btn.setAttribute('data-target', "#modal_censo");
+//    btn.data('toggle', 'modal');
+//    btn.data('target', '#modal_censo');
+
     btn.setAttribute('data-delcve', delcve);
     btn.setAttribute('data-idrow', id_row);
-    btn.setAttribute('data-idvalidador', id_validador);
+//    btn.setAttribute('data-idvalidador', id_validador);
     btn.setAttribute('data-depcve', depcve);
     btn.setAttribute('data-tipoevento', 'cargarseleccion');
-    btn.setAttribute('data-toggle', 'modal');
-    btn.setAttribute('data-target', '#modal_censo');
-    btn.setAttribute('onchange', 'funcion_carga_elemento(this)');
+    btn.setAttribute('onclick', 'funcion_carga_elemento(this)');
+//    btn.setAttribute('onclick', function(){funcion_carga_elemento(this);});
+//    btn.onChange = function(){funcion_carga_elemento(this);};
+    //    
 //    checkbox.addEventListener('onchange', funcion_designar_validador(this), true);
 //    var data_ = document.createElement("input");
+
+//      var btn = $('#btn_seleccionar_validador_' + id_row).
+//        append($('<button>').
+//            attr("class", "btn btn-link btn-sm").
+//            attr("type", "button").
+//            attr('onchange', 'funcion_carga_elemento(this)').
+//            text('Seleccionar validador')
+//        );
+
     return btn;
-//  
+
 }
 
 function funcion_seleccionar_validador(element) {
     var obj = $(element);
-    var id_validador = obj.data('idvalidador');
     var tipo_evento = obj.data('tipoevento');
     var delegacion_cve = obj.data('delcve');
     var departamento_desc = obj.data('depcve');
+    var matricula = obj.data('matricula');
     var idrow = parseInt(obj.data('idrow'));
 //    var candidato_a_validador = document.getElementById('#candidato_a_validador').val;
     var e = document.getElementById("candidato_a_validador");
     var candidato_a_validador = e.options[e.selectedIndex].value;
 
     var datos_form_serializados = $('#form_seleccionar_validador').serialize();
-    datos_form_serializados += '&idrow=' + idrow + '&candidato_a_validador=' + candidato_a_validador + '&tipo_evento=' + tipo_evento + '&id_validaor=' + id_validador + '&delegacion_cve=' + delegacion_cve + '&departamento_desc=' + departamento_desc;
+//    datos_form_serializados += '&idrow=' + idrow + '&candidato_a_validador=' + candidato_a_validador + '&tipo_evento=' + tipo_evento + '&id_validaor=' + id_validador + '&delegacion_cve=' + delegacion_cve + '&departamento_desc=' + departamento_desc;
+    datos_form_serializados += '&idrow=' + idrow + '&candidato_a_validador=' + candidato_a_validador + '&tipo_evento=' + tipo_evento + '&matricula=' + matricula + '&delegacion_cve=' + delegacion_cve + '&departamento_desc=' + departamento_desc;
 
     document.getElementById("div_resultados_validadores").innerHTML = "";//Limpia del div resultado de validadores
     document.getElementById("div_buscador_sied").innerHTML = ""; //Limpia resultado busqueda de sied
@@ -320,6 +345,7 @@ function funcion_seleccionar_validador(element) {
                 remove_loader();
             });
 }
+
 function add_check_box(id_row, id_validador, depcve, delcve) {
     var checkbox = document.createElement("input");
     checkbox.id = "check_designado_" + id_row;
@@ -331,7 +357,8 @@ function add_check_box(id_row, id_validador, depcve, delcve) {
     checkbox.setAttribute('data-idrow', id_row)
     checkbox.setAttribute('data-delcve', delcve)
     checkbox.setAttribute('data-depcve', depcve)
-    checkbox.setAttribute('onchange', 'funcion_designar_validador(this)')
+//    checkbox.setAttribute('onchange', 'funcion_designar_validador(this)')
+    checkbox.setAttribute('onclick', 'funcion_designar_validador(this)')
 //    checkbox.addEventListener('onchange', funcion_designar_validador(this), true);//dispara el evento
 //    var data_ = document.createElement("input");
     return checkbox;

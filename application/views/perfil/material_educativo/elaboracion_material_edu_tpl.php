@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
+$this->seguridad->set_tiempo_convocatoria_null(); //Reinicia validacion de convocatoria
+$this->seguridad->set_tiempo_convocatoria(); //Valida paso de convocatoria
 //    pr($tipo_msg);
 $colapso_div_ejercicio_profesional = 'collapse in';
 //        $colapso_div_ejercicio_profesional = 'collapse';
@@ -21,15 +22,15 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                 <br>
             </div>
         </div>
-        <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
-        <div class='row'>
-            <div class="col-xs-12 col-md-12 col-lg-12 text-right">
-                <button type="button" class="btn btn-success btn-lg" id="btn_gregar_material_educativo" data-toggle="modal" data-target="#modal_censo">
-                    <?php echo $string_values['btn_agregar_material_eduactivo']; ?>
-                </button>
+        <?php if ($this->seguridad->verificar_liga_validar()) { ?>
+            <div class='row'>
+                <div class="col-xs-12 col-md-12 col-lg-12 text-right">
+                    <button type="button" class="btn btn-success btn-lg" id="btn_gregar_material_educativo" data-toggle="modal" data-target="#modal_censo">
+                        <?php echo $string_values['btn_agregar_material_eduactivo']; ?>
+                    </button>
+                </div>
             </div>
-        </div>
-        <br>
+            <br>
         <?php } ?>
         <div class='row'> 
             <div class="form-group col-xs-12 col-md-12">
@@ -54,30 +55,30 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                             $key_tp_mat_edu = $val['tipo_material_cve'];
                             $key_tp_mat_edu = $this->seguridad->encrypt_base64($key_tp_mat_edu);
                             $idcomprobante = $val['comprobante'];
-                            $desc_tipo_material = $val['nom_tipo_material']. '<br>' .$val['opt_tipo_material'];//Nombre del tipo de material, y opción como núm de años, cantidad de hojas  
+                            $desc_tipo_material = $val['nom_tipo_material'] . '<br>' . $val['opt_tipo_material']; //Nombre del tipo de material, y opción como núm de años, cantidad de hojas  
                             if (!is_null($idcomprobante)) {
                                 //Btn comprobante
                                 $idcomprobante = $this->seguridad->encrypt_base64($idcomprobante); //Encripta
-                                $btn_comprobante =  '<a href="'.site_url('administracion/ver_archivo/'.$idcomprobante).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>';
-                                
-                            }else{
+                                $btn_comprobante = '<a href="' . site_url('administracion/ver_archivo/' . $idcomprobante) . '" target="_blank">' . $string_values['lbl_ver_comprobante'] . '</a>';
+                            } else {
                                 $comprobante = 0;
-                                $btn_comprobante  = '';
+                                $btn_comprobante = '';
                             }
-                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : null;
-                            $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($val['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" onclick="funcion_eliminar_reg_material_educativo(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
-                            $btn_editar = ($this->seguridad->verificar_liga_editar_docente($val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_material_educativo(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
+                            $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA'], $val['validation_estado']);
+//                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : null;
+                            $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" onclick="funcion_eliminar_reg_material_educativo(this)" >' . $string_values['tab_titulo_eliminar'] . '</button>' : '';
+                            $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_material_educativo(this)" >' . $string_values['tab_titulo_editar'] . '</button>' : '';
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">
-                                <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'])."</td>";
+                                <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA']) . "</td>";
                             echo "<td>" . $val['nombre_material'] . "</td>";
                             echo "<td>" . $desc_tipo_material . "</td>";
                             echo "<td>" . $val['material_educativo_anio'] . "</td>";
                             echo "<td>" . $btn_comprobante . "</td>";
-                            echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="ver_me(this);">'.
-                                       $string_values['ver'].
-                                    '</button>'.$btn_eliminar.'</td>';
-                            echo "<td>".$btn_editar."</td>";
+                            echo '<td><button type="button" class="btn btn-link btn-sm btn_ver_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="' . $key . '" onclick="ver_me(this);">' .
+                            $string_values['ver'] .
+                            '</button>' . $btn_eliminar . '</td>';
+                            echo "<td>" . $btn_editar . "</td>";
                             echo "</tr>";
                         }
                         ?>

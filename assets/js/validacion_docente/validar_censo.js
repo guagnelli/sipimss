@@ -66,17 +66,17 @@ function funcion_ver_validacion_empleado(element) {
     var button_obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
     var empcve = button_obj.data('empcve');
     var matricula = button_obj.data('matricula');
-    var estval = button_obj.data('estval');
-    var validadorcve = button_obj.data('validadorcve');
-    var histvalcve = button_obj.data('histvalcve');
+//    var estval = button_obj.data('estval');
+//    var validadorcve = button_obj.data('validadorcve');
+//    var histvalcve = button_obj.data('histvalcve');
     var valgrlcve = button_obj.data('valgrlcve');
     var usuariocve = button_obj.data('usuariocve');
     var convocatoria_cve = button_obj.data('convocatoriacve');
     var idrow = button_obj.data('usuariocve');
     //Remover contenido de un div 
     $('#select_perfil_validar').empty();
-    var obj_post = {empcve: empcve, matricula: matricula, estval: estval, validadorcve: validadorcve,
-        histvalcve: histvalcve, valgrlcve: valgrlcve, usuariocve: usuariocve, convocatoria_cve: convocatoria_cve};
+    var obj_post = {empcve: empcve, matricula: matricula, valgrlcve: valgrlcve,
+        usuariocve: usuariocve, convocatoria_cve: convocatoria_cve};
     data_ajax_post(site_url + '/validacion_censo_profesores/seccion_index', null, '#select_perfil_validar', obj_post);
 }
 function funcion_cerrar_validacion_empleado(element) {
@@ -92,6 +92,14 @@ function ver_comentario_estado_doc(element) {
     var convocatoria_cve = obj.data('convocatoriacve');
     var formData = {convocatoria_cve: convocatoria_cve, empleado_cve: empleado_cve};
     data_ajax_post(site_url + '/validacion_censo_profesores/ver_comentario_estado', null, '#modal_content', formData);
+}
+function ver_detalle_validado(element) {
+    var obj = $(element); //Convierte a objeto todos los elementos del this que llegan del componente html (button en esté caso)
+//    var hist_val_cve = obj.data('histvalcve');
+    var val_gral = obj.data('valgrl');
+    var docente = obj.data('docente');
+    var formData = {val_gral: val_gral, docente: docente};
+    data_ajax_post(site_url + '/validacion_censo_profesores/ver_detalle_validado', null, '#modal_content', formData);
 }
 
 

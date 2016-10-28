@@ -20,62 +20,63 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </thead>
         <tbody>
             <?php
+//            pr($lista_unidades);
             foreach ($lista_unidades as $key_ai => $val) {
-                if(!empty($val['validador_cve']) AND intval($val['estado_validador'])===1){
+                $id_validador = $this->seguridad->encrypt_base64($val['validador_cve']); //Encripta id validador
+                $delegacion_cve = $this->seguridad->encrypt_base64($val['delegacion_cve']); //Encripta id validador
+                $departamento_cve = $this->seguridad->encrypt_base64($val['departamento_cve']); //Encripta id validador
+                if (!empty($val['validador_cve']) AND intval($val['is_validador_actual']) === 1) {
                     $link_seleccionar_val = '';
-                    $id_validador = $this->seguridad->encrypt_base64($val['validador_cve']);//Encripta id validador
                     $check_designar = $this->form_complete->create_element(
-                        array('id' => 'check_designado_'.$key_ai .'"' , 'type' => 'checkbox', 'class' => 'text-center',
-                            'value' => $val['validador_cve'],
-                            'attributes' => array(
-                            'checked' => ($id_validador===0) ? '' : 'checked',
-                            'data-idvalidador' => $id_validador,
-                            'data-delcve' => $val['delegacion_cve'],
-                            'data-depcve' => $val['departamento_cve'],
-                            'data-idrow' => $key_ai,
-                            'onchange'=>'funcion_designar_validador(this)',
+                            array('id' => 'check_designado_' . $key_ai . '"', 'type' => 'checkbox', 'class' => 'text-center',
+                                'value' => $val['validador_cve'],
+                                'attributes' => array(
+                                    'checked' => ($id_validador === 0) ? '' : 'checked',
+                                    'data-idvalidador' => $id_validador,
+                                    'data-delcve' => $delegacion_cve,
+                                    'data-depcve' => $departamento_cve,
+                                    'data-idrow' => $key_ai,
+//                                    'onchange' => 'funcion_designar_validador(this)',
+                                    'onclick' => 'funcion_designar_validador(this)',
+                                )
                             )
-                        )
-                );
-                }else if(!empty($val['validador_cve']) AND intval($val['estado_validador'])===0){
-                    $id_validador = $this->seguridad->encrypt_base64($val['validador_cve']);//Encripta id validador
-                    $check_designar = '';
-                    $link_seleccionar_val = '<button '
-                        . 'type="button" '
-                        . 'class="btn btn-link btn-sm" '
-                        . 'id="btn_seleccionar_validador_'.$key_ai .'"' 
-                        . 'data-toggle="modal"'
-                        . 'data-target="#modal_censo"'
-                        . 'data-idrow ="' . $key_ai . '"'
-                        . 'data-idvalidador="' . $id_validador . '"'
-                        . 'data-delcve="' . $val['delegacion_cve'] . '"'
-                        . 'data-idrow="' . $key_ai . '"'
-                        . 'data-depcve="' . $val['departamento_cve'] . '"'
-                        . 'data-tipoevento="cargarseleccion"'
-                        . 'onclick="funcion_carga_elemento(this)" >' .
-                        $string_values['tab_titulo_seleccionar_validador']
-                    . '</button>';
-                    
-                }else{
+                    );
+//                } else if (!empty($val['validador_cve']) AND intval($val['estado_validador']) === 0) {
+//                    $id_validador = $this->seguridad->encrypt_base64($val['validador_cve']); //Encripta id validador
+//                    $check_designar = '';
+//                    $link_seleccionar_val = '<button '
+//                            . 'type="button" '
+//                            . 'class="btn btn-link btn-sm" '
+//                            . 'id="btn_seleccionar_validador_' . $key_ai . '"'
+//                            . 'data-toggle="modal"'
+//                            . 'data-target="#modal_censo"'
+//                            . 'data-idrow ="' . $key_ai . '"'
+//                            . 'data-idvalidador="' . $id_validador . '"'
+//                            . 'data-delcve="' . $delegacion_cve . '"'
+//                            . 'data-idrow="' . $key_ai . '"'
+//                            . 'data-depcve="' . $departamento_cve . '"'
+//                            . 'data-tipoevento="cargarseleccion"'
+//                            . 'onclick="funcion_carga_elemento(this)" >' .
+//                            $string_values['tab_titulo_seleccionar_validador']
+//                            . '</button>';
+                } else {
                     $id_validador = 0;
                     $check_designar = '';
                     $link_seleccionar_val = '<button '
-                        . 'type="button" '
-                        . 'class="btn btn-link btn-sm" '
-                        . 'id="btn_seleccionar_validador_'.$key_ai .'"' 
-                        . 'data-idrow ="' . $key_ai . '"'
-                        . 'data-toggle="modal"'
-                        . 'data-target="#modal_censo"'
-                        . 'data-idvalidador="' . $id_validador . '"'
-                        . 'data-delcve="' . $val['delegacion_cve'] . '"'
-                        . 'data-idrow="' . $key_ai . '"'
-                        . 'data-depcve="' . $val['departamento_cve'] . '"'
-                        . 'data-tipoevento="cargarseleccion"'
-                        . 'onclick="funcion_carga_elemento(this)" >' .
-                        $string_values['tab_titulo_seleccionar_validador']
-                    . '</button>';
-                    
-                    
+                            . 'type="button" '
+                            . 'class="btn btn-link btn-sm" '
+                            . 'id="btn_seleccionar_validador_' . $key_ai . '"'
+                            . 'data-idrow ="' . $key_ai . '"'
+                            . 'data-toggle="modal"'
+                            . 'data-target="#modal_censo"'
+                            . 'data-idvalidador="' . $id_validador . '"'
+                            . 'data-delcve="' . $delegacion_cve . '"'
+                            . 'data-idrow="' . $key_ai . '"'
+                            . 'data-depcve="' . $departamento_cve . '"'
+                            . 'data-tipoevento="cargarseleccion"'
+                            . 'onclick="funcion_carga_elemento(this)" >' .
+                            $string_values['tab_titulo_seleccionar_validador']
+                            . '</button>';
                 }
                 echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
                 echo "<td>" . $val['nom_departamento'] . "</td>";

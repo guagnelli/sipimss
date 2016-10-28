@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 //pr($historial_estados);
+ $tipo_mensaje = (isset($tipo_mensaje))? $tipo_mensaje : 'info';
 ?>
 
 <style type="text/css">
@@ -13,24 +14,47 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!-- Inicio informacion personal -->
 <?php echo form_open('', array('id' => 'form_validar_docente')); ?>
 
+<?php ?>
+
 <div class="list-group">
     <div class="row">
+        <div class="col-sm-6">
+            <strong><?php echo $string_values["li_matricula"] ?></strong>
+            <?php echo $matricula; ?><br />
+        </div>
+        <div class="col-sm-6">
+            <strong><?php echo $string_values["titulo_docente"] ?></strong>
+            <?php echo $nom_docente; ?>
+        </div>
+    </div>
+    <br/>
+    <?php if (isset($mensaje_general)) { ?>
+        <div class="row">
+            <div class="alert alert-<?php echo $tipo_mensaje;?> col-md-12 icon-pos-right">
+                <span><?php echo $mensaje_general; ?></span><br>
+            </div>
+        </div>
+    <?php } ?>
+
+    <div class="row">
         <div class="col-md-12">
-            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#id_div_comentarios_estado" aria-expanded="true"><?php echo $string_values['btn_text_collapse_mensajes']; ?></button>
+            <button type="button" class="btn btn-tumblr" data-toggle="collapse" data-target="#id_div_comentarios_estado" aria-expanded="true"><?php echo $string_values['btn_text_collapse_mensajes']; ?></button>
             <div id="id_div_comentarios_estado" class="collapse" aria-expanded="true">
                 <?php
                 if (!empty($historial_estados)) {
                     $estados_censo = $this->config->item('estados_val_censo');
                     $array_colores = $this->config->item('cvalidacion_curso_estado');
+                    $this->load->helper('fecha');
                     foreach ($historial_estados as $value) {
                         if (intval($value['is_comentario']) === 1) {
                             $estado = $estados_censo[$value['estado_validacion']];
                             $color = $array_colores[$estado['color_status']]['color']; //Obtiene los array de color del estado
                             ?>
                             <div class="alert alert-<?php echo $color; ?>">
-                                <span><?php echo $string_values['titulo_estado_validacion'] . $value['nom_estado_validacion']; ?></span><br>
-                                <span><?php echo $string_values['titulo_validador'] . $value['nom_validador']; ?></span><br>
-                                <span><?php echo $string_values['lbl_comentario'] . $value['comentario_estado']; ?></span>
+                                <strong><?php echo $string_values['titulo_fecha_validacion'] ?></strong><?php echo get_fecha_local($value['fecha_validacion']); ?><br>
+                                <strong><?php echo $string_values['titulo_estado_validacion'] ?></strong><?php echo $value['nom_estado_validacion']; ?><br>
+                                <strong><?php echo $string_values['titulo_validador'] ?></strong><?php echo $value['nom_validador']; ?><br>
+                                <strong><?php echo $string_values['lbl_comentario'] ?></strong><?php echo $value['comentario_estado']; ?><br>
                             </div>
 
                             <?php

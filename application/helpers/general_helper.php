@@ -7,18 +7,18 @@ if (!defined('BASEPATH'))
  * Método que preformatea una cadena
  * @autor 		: Jesús Díaz P.
  * @param 		: mixed $mix Cadena, objeto, arreglo a mostrar
-                bool $return Boleano que determina si se imprema o se retorna el valor
+  bool $return Boleano que determina si se imprema o se retorna el valor
  * @return  	: Cadena preformateada
  */
 if (!function_exists('pr')) {
 
-    function pr($mix,$return = false) {
-        if($return){
-          return print_r($mix,TRUE);
-        }else{
-          echo "<pre>";
-          print_r($mix);
-          echo "</pre>";
+    function pr($mix, $return = false) {
+        if ($return) {
+            return print_r($mix, TRUE);
+        } else {
+            echo "<pre>";
+            print_r($mix);
+            echo "</pre>";
         }
     }
 
@@ -720,19 +720,17 @@ if (!function_exists('genera_botones_estado_validacion')) {
         $CI = & get_instance();
         $propiedades_gen_estado = $CI->config->item('estados_val_censo'); //Carga las propiedades de los estados de la validación del censo de docentes
         $valida_acceso_rol = valida_acceso_rol_validador($tipo_validador_rol, $estado_actual); //Valida el acceso al rol seleccionado
-//        pr($valida_acceso_rol);
         $respuesta_html_botones = array();
-        if ($valida_acceso_rol) {//**Tiene acceso el validar el estado actual la validación del docente 
+        if ($valida_acceso_rol == 1) {//**Tiene acceso el validar el estado actual la validación del docente 
             $pro_estado_actual = $propiedades_gen_estado[$estado_actual]; //Carga el estado actual del docente 
+//            Enum_ev::Por_validar_n1;
+//            pr($pro_estado_actual);
 //            $estado_transicion = $pro_estado_actual['estados_transicion'];
             $CI->load->library('seguridad');
-            /* Valida convocatoria para n1 y n2 por delegación */
-            if ($tipo_validador_rol == Enum_rols::Validador_N1 || $tipo_validador_rol == Enum_rols::Validador_N2) {
-                $pasa_convocatoria_val = get_convocatoria_delegacion_val_censo($delegacion_validador, $tipo_validador_rol);
-            }
-//            pr($pro_estado_actual['estados_transicion']);
-            foreach ($pro_estado_actual['estados_transicion'] as $value_est_trans) {
+
+            foreach ($pro_estado_actual['estados_transicion'] as $value_est_trans) {//Obtiene estados de trancision
                 $estados_trans = $propiedades_gen_estado[$value_est_trans];
+//                pr($estados_trans['is_boton']);
                 if ($estados_trans['is_boton']) {//Verifica si es un botón o el cambio va implicito por el sistema, como es el caso del cambio de estado a "En revision por .."
 //                    pr($value_est_trans);
                     $value_est_trans = $CI->seguridad->encrypt_base64($value_est_trans);
@@ -895,12 +893,12 @@ if (!function_exists('obtener_cursos_bloque_seccion_evaluacion')) {
             $bloque = $curso['bloque_seccion']; //Bloque acronimo ejem. 'F', 'AC',...,"x"
             $seccion = $curso['seccion_cve']; //Seccioón identificador 1,2,3,4,...,"n"
 //            pr($fuente_cursos[$bloque_cur_c][$seccion_cur_c]);
-            if($bloque==Enum_sec::B_INVESTIGACION_EDUCATIVA){
+            if ($bloque == Enum_sec::B_INVESTIGACION_EDUCATIVA) {
 //                pr($curso_cve);
 //                pr($seccion);
 //                pr($fuente_cursos[$bloque_cur_c]);
             }
-            if (isset($fuente_cursos[$bloque_cur_c][$seccion_cur_c]) AND !empty($fuente_cursos[$bloque_cur_c][$seccion_cur_c])) {
+            if (isset($fuente_cursos[$bloque_cur_c][$seccion_cur_c]) AND ! empty($fuente_cursos[$bloque_cur_c][$seccion_cur_c])) {
                 //Si no existe la el bloque y la sección lo crea
                 if (!isset($array_result[$bloque][$seccion])) {
                     $array_result[$bloque][$seccion] = array();
@@ -938,6 +936,62 @@ if (!function_exists('recorrer_array_encontrar_hijos_vacios')) {
      */
     function recorrer_array_encontrar_hijos_vacios($fuente_cursos, $propiedades_curso, $cursos_solicitados) {
         
+    }
+
+}
+
+if (!function_exists('get_is_interseccion_muestreo')) {
+
+    /**
+     * @author LEAS
+     * @FECHA  24/10/2016
+     * @param type $rol_actual Puede ser N1, N2 o profesionalización
+     * @param type $array_hist_validacion_convocatoria $Conjunto de estados de validación del docente en una convocatoria "X"
+     * @return type Description Si no existe una intersección retorna 0 si no retorna 1
+     * Para que se considere una intersección, N1 y N2 deberan contener a un docente igual para validar
+     */
+    function get_is_interseccion_muestreo($rol_actual, $array_hist_validacion_convocatoria) {
+//        pr($rol_actual);
+//        pr($array_hist_validacion_convocatoria);
+        if ($rol_actual != Enum_rols::Profesionalizacion) {//Los roles deberán ser N1 y N2
+            $rol_actual = intval($rol_actual);
+            foreach ($array_hist_validacion_convocatoria as $value) {
+                $rol_validador = intval($value['rol_validador']);
+                if (!empty($rol_actual) AND $rol_validador > 0 AND $rol_actual != $rol_validador AND $rol_validador != Enum_rols::Profesionalizacion) {//Si rol validador no es vacio y es diferente al rol actual, se dice que existe una intersección con un validador de nivel diferente
+//                pr(($rol_actual != $rol_validador) . ' '.$rol_validador);
+                    return 1; //si un validador N1 contiene como parte del muestreo para validar un docente y N2 también, es una interseccion  
+                }
+            }
+        }
+        return 0;
+    }
+
+}
+
+if (!function_exists('get_valida_tiempo_convocatoria_rol')) {
+
+    /**
+     * @author LEAS
+     * @FECHA  24/10/2016
+     * @param type $rol_actual Puede ser N1, N2 o profesionalización
+     * @param type $etapa_convocatoria
+     * @return type Description Valida la etapa de la convocatoria del censo 
+     */
+    function get_valida_tiempo_convocatoria_rol($rol_actual, $etapa_convocatoria) {
+//        pr($rol_actual);
+//        pr($array_hist_validacion_convocatoria);
+        $CI = & get_instance();
+        $CI->load->model('Catalogos_generales', 'cg');
+        $reglasValidacionConvocatoria = $CI->cg->getReglasValidacionConvocatoria(); //Carga las reglas de validacion de la onvocatoria
+        if (is_null($rol_actual) AND is_null($etapa_convocatoria)) {
+            return 0;
+        }
+//        pr($reglasValidacionConvocatoria[$rol_actual]);
+        if (isset($reglasValidacionConvocatoria[$rol_actual])) {
+            return (in_array($etapa_convocatoria, $reglasValidacionConvocatoria[$rol_actual])) ? 1 : 0;
+        } else {
+            return 0;
+        }
     }
 
 }

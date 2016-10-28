@@ -40,7 +40,6 @@ class Formacion_model extends CI_Model {
             $subquery = (array_key_exists('validation', $params)) ? $this->get_formacion_subquery($params['validation']) : null;
             $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
             $subquery2 = (array_key_exists('validation_estado_anterior', $params)) ? $this->get_formacion_subquery($params['validation_estado_anterior']) : null;
-            
             if(!is_null($subquery)){
                 $this->db->select('('.$subquery.') AS validation');
             }
@@ -50,7 +49,11 @@ class Formacion_model extends CI_Model {
             if(!is_null($subquery2)){
                 $this->db->select('('.$subquery2.') AS validation_estado_anterior');
             }
+//            pr($subquery);
+//            pr($subquery1);
+//            pr($subquery2);
         }
+        
         ////////////////////////////////Fin verificación existencia de validación actual
 
         if(array_key_exists('fields', $params)){

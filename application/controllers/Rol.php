@@ -116,7 +116,7 @@ class Rol extends MY_Controller {
          * 
          */
         $variables = array('rol_seleccionado', 'rol_seleccionado_cve', 'convocatoria_delegacion',
-            'datos_validador', 'datosvalidadoactual', 'nombre_rol', 'ctr_solicitante');
+            'datos_validador', 'datosvalidadoactual', 'nombre_rol', 'ctr_solicitante', 'seccion_validacion_obligatoria');
         foreach ($variables as $value) {
             $this->session->unset_userdata($value);
         }

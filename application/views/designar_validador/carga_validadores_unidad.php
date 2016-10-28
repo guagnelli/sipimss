@@ -27,7 +27,7 @@ if (!isset($lista_candidaros)) {
                         'data-toggle' => 'tooltip',
                         'data-placement' => 'top',
                         'data-tipoevento' => "opciones",
-                        'data-idvalidador' => $reg_id_validador,
+//                        'data-idvalidador' => $reg_id_validador,
                         'data-delcve' => $reg_delegacion_cve,
                         'data-depcve' => $reg_departamento_desc,
                         'data-idrow' => $reg_idrow,

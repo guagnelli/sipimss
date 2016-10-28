@@ -25,7 +25,7 @@ class Designar_validador_model extends CI_Model {
             'CONCAT(e.EMP_NOMBRE, e.EMP_APE_PATERNO', 'e.EMP_APE_MATERNO) "nom_empleado"',
             'e.EMP_MATRICULA "matricula_empleado"', 'e.CATEGORIA_CVE "categoria_id"',
             'cat.des_clave "categoria_cve"', 'cat.nom_categoria "nom_categoria"',
-            'dp.IS_UNIDAD_VALIDACION "is_unidad_validacion"'
+            'dp.IS_UNIDAD_VALIDACION "is_unidad_validacion"', 'v.IS_ACTUAL "is_validador_actual"'
         );
 
         $this->db->start_cache();
@@ -36,6 +36,7 @@ class Designar_validador_model extends CI_Model {
         $this->db->join('ccategoria cat', 'cat.id_cat = e.CATEGORIA_CVE', 'left');
 
         $this->db->where('dp.IS_UNIDAD_VALIDACION', 1); //es una unidad de validación
+//        $this->db->where('v.IS_ACTUAL', 1); //Es el último registro de validación
 
         if (!empty($params['delegacion_cve'])) {
             $this->db->where('dp.cve_delegacion', $params['delegacion_cve']);
@@ -124,7 +125,8 @@ class Designar_validador_model extends CI_Model {
             }
 //            if($res = )
 //            $array_validacion = array('VAL_ESTADO' => 0, 'EMPLEADO_CVE' => NULL, 'ROL_CVE' => NULL, 'DELEGACION_CVE' => NULL, 'DEPARTAMENTO_CVE' => NULL);
-            $array_validacion = array('VAL_ESTADO' => 0, 'EMPLEADO_CVE' => NULL, 'ROL_CVE' => NULL);
+//            $array_validacion = array('VAL_ESTADO' => 0, 'EMPLEADO_CVE' => NULL, 'ROL_CVE' => NULL, 'IS_ACTUAL' => 0);
+            $array_validacion = array('VAL_ESTADO' => 0, 'IS_ACTUAL' => 0);
             $this->db->where('VALIDADOR_CVE', $validador_cve);
             $this->db->update('validador', $array_validacion);
             if ($this->db->trans_status() === FALSE) {
@@ -224,7 +226,7 @@ class Designar_validador_model extends CI_Model {
         }
     }
 
-    public function get_buscar_empleado_delegacion($id_empleado = null, $id_delegacion = null, $rol_designar = Enum_rols::Validador_N1) {
+    public function get_buscar_empleado_delegacion_validador($id_empleado = null, $id_delegacion = null, $rol_designar = Enum_rols::Validador_N1) {
         if (is_null($id_empleado)) {
             return array();
         }
@@ -233,22 +235,81 @@ class Designar_validador_model extends CI_Model {
             , 'e.EMP_NOMBRE "nombre"', 'e.EMP_APE_PATERNO "paterno"', 'e.EMP_APE_MATERNO "materno"'
             , 'id_cat "categoria_id"', 'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"'
             , 'e.DELEGACION_CVE "delegacion_cve"', 'dl.DEL_NOMBRE "nom_delegacion"', 'v.VAL_ESTADO "estado_validador"'
-            , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"'
+            , 'dp.departamento_cve "adscripcion_cve"', 'dp.nom_dependencia "nom_dependencia_adscripcion"',
+            'v.ROL_CVE "rol_validador"', 'v.IS_ACTUAL "is_actual_validador"'
+        );
+
+        $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
+        $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
+        $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = e.DELEGACION_CVE');
+        $this->db->join('validador v', 'v.EMPLEADO_CVE = e.EMPLEADO_CVE', 'left');
+
+        $this->db->where('e.EMP_MATRICULA', $id_empleado);
+//        $this->db->where('e.DELEGACION_CVE', $id_delegacion);
+//        $this->db->where('v.ROL_CVE', $rol_designar);
+        $this->db->select($select);
+        $ejecuta = $this->db->get('ccategoria as c'); //
+        $query = $ejecuta->result_array();
+//        pr($query);
+//        pr($this->db->last_query());
+        return $query;
+    }
+
+    /**
+     * 
+     * @author LEAS
+     * @fecha 19/10/2016
+     * @param $matricula_emp Matricula del empleado 
+     * @param type $id_delegacion
+     * @return array()
+     * @desc Busca empleados en la base de datos de sipimss por medio de la matricula
+     */
+    public function get_buscar_empleado_delegacion($matricula_emp) {
+        if (is_null($matricula_emp)) {
+            return array();
+        }
+
+        $select = array('e.EMP_MATRICULA "matricula"', 'e.EMPLEADO_CVE "empleado_cve"', 'e.EDO_LABORAL_CVE "status"',
+            'concat(e.EMP_MATRICULA, "  " ,e.EMP_NOMBRE, e.EMP_APE_PATERNO, e.EMP_APE_MATERNO) as "nom_empleado"',
+            'e.EMP_NOMBRE "nombre"', 'e.EMP_APE_PATERNO "paterno"', 'e.EMP_APE_MATERNO "materno"', 'id_cat "categoria_id"',
+            'c.des_clave "desc_categoria_cve"', 'nom_categoria "nom_categoria"', 'e.DELEGACION_CVE "delegacion_cve"',
+            'dl.DEL_NOMBRE "nom_delegacion"', 'dp.departamento_cve "adscripcion_cve"',
+            'dp.nom_dependencia "nom_dependencia_adscripcion"'
         );
 
         $this->db->join('empleado e', 'e.CATEGORIA_CVE = c.id_cat');
         $this->db->join('cdepartamento dp', 'dp.departamento_cve = e.ADSCRIPCION_CVE');
         $this->db->join('cdelegacion dl', 'dl.DELEGACION_CVE = dp.cve_delegacion');
-        $this->db->join('validador v', 'v.EMPLEADO_CVE = e.EMPLEADO_CVE', 'left');
+//        $this->db->join('validador v', 'v.EMPLEADO_CVE = e.EMPLEADO_CVE', 'left');
 
-        $this->db->where('e.EMP_MATRICULA', $id_empleado);
-        $this->db->where('e.DELEGACION_CVE', $id_delegacion);
-        $this->db->where('v.ROL_CVE', $rol_designar);
+        $this->db->where('e.EMP_MATRICULA', $matricula_emp);
+//        $this->db->where('e.DELEGACION_CVE', $id_delegacion);
+//        $this->db->where('v.ROL_CVE', $rol_designar);
         $this->db->select($select);
         $ejecuta = $this->db->get('ccategoria as c'); //
         $query = $ejecuta->result_array();
+//        pr($query);
 //        pr($this->db->last_query());
         return $query;
+    }
+
+    /**
+     * 
+     * @author LEAS
+     * @fecha 19/10/2016
+     * @param type $matricula
+     * @param type $rol_validador
+     * @return type
+     */
+    public function get_is_validador_nivel($matricula, $rol_validador = Enum_rols::Validador_N1) {
+        $select = 'count(*)';
+        $this->db->select($select);
+        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE');
+        $this->db->where('em.emp_matricula', $matricula);
+        $this->db->where('v.ROL_CVE', $rol_validador);
+        $ejecuta = $this->db->get('from validador v');
+        $query = $ejecuta->result_array();
+        return $query[0];
     }
 
     public function get_buscar_candidatos_validador_por_unidad_delegacion_categoria_($params) {

@@ -43,7 +43,6 @@ class Validacion_censo_profesores extends MY_Controller {
      * Fecha creación28072016
      */
     public function index() {
-//        pr($this->session->userdata('rol_seleccionado'));
         $this->lang->load('interface', 'spanish');
         $string_values = $this->lang->line('interface')['validador_censo'];
         $data = array();
@@ -55,38 +54,52 @@ class Validacion_censo_profesores extends MY_Controller {
         $empleado_cve = $this->session->userdata('idempleado');
         $rol_usuario = $this->session->userdata('rol_seleccionado_cve');
         $datos_validador = $this->vdm->get_validador_empleado_rol($empleado_cve, $rol_usuario); //Busca datos del validador actual
-//        pr($datos_validador);
-
         switch ($rol_usuario) {
             case Enum_rols::Validador_N1:
+                $departamento_cve = $datos_validador['DEPARTAMENTO_CVE'];
                 $delegacion_cve = (isset($datos_validador['DELEGACION_CVE'])) ? $datos_validador['DELEGACION_CVE'] : ''; //Verifica si existe el rol, de lo contrario pone default cero
                 if (!empty($delegacion_cve)) {
-                    $datos_validador['VAL_CON_CVE'] = $this->cg->get_convocatoria_delegacion($delegacion_cve)->convocatoria_cve;
-                    $condiciones = array();
+                    $convocatoria = $this->cg->get_convocatoria_delegacion($delegacion_cve); //Obtiene la última convocatoría
+//                    pr($convocatoria);
+                    $datos_validador['VAL_CON_CVE'] = $convocatoria->convocatoria_cve;
+                    $datos_validador['ETAPA_CONVOCATORIA'] = $convocatoria->aplica_convocatoria;
+//                    pr($datos_validador['VAL_CON_CVE']);
+                    $secciones_validacion_obligatoria = $this->vdm->get_secciones_validacion_obligatorias_nivel($rol_usuario, $departamento_cve)['sec_info_cve']; //Busca datos del validador actual
+                } else {
+                    $datos_validador['VAL_CON_CVE'] = 0; //*No es necesario filtrar por convocatoria para el tipo de usuario profesionalización***
+                    $datos_validador['ETAPA_CONVOCATORIA'] = 0;
                 }
+                $condiciones = array();
                 break;
             case Enum_rols::Validador_N2:
                 $delegacion_cve = (isset($datos_validador['DELEGACION_CVE'])) ? $datos_validador['DELEGACION_CVE'] : ''; //Verifica si existe el rol, de lo contrario pone default cero
                 if (!empty($delegacion_cve)) {
-                    $datos_validador['VAL_CON_CVE'] = $this->cg->get_convocatoria_delegacion($delegacion_cve)->convocatoria_cve;
-                    $condiciones = array();
+                    $convocatoria = $this->cg->get_convocatoria_delegacion($delegacion_cve); //Obtiene la última convocatoría
+                    $datos_validador['VAL_CON_CVE'] = $convocatoria->convocatoria_cve;
+                    $datos_validador['ETAPA_CONVOCATORIA'] = $convocatoria->aplica_convocatoria;
+                    $secciones_validacion_obligatoria = $this->vdm->get_secciones_validacion_obligatorias_nivel($rol_usuario, $delegacion_cve)['sec_info_cve']; //Busca datos del validador actual
+                } else {
+                    $datos_validador['VAL_CON_CVE'] = 0; //*No es necesario filtrar por convocatoria para el tipo de usuario profesionalización***
+                    $datos_validador['ETAPA_CONVOCATORIA'] = 0;
                 }
                 $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
                 $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1, 'cve_delegacion' => $delegacion_cve);
                 break;
             case Enum_rols::Profesionalizacion:
                 $datos_validador['VAL_CON_CVE'] = 0; //*No es necesario filtrar por convocatoria para el tipo de usuario profesionalización***
+                $datos_validador['ETAPA_CONVOCATORIA'] = 0;
                 $datos_validador['DELEGACION_CVE'] = 0;
                 $array_catalogos[] = enum_ecg::cdelegacion;
                 $array_catalogos[] = enum_ecg::cdepartamento; //agrega vista de departamento
                 $condiciones[enum_ecg::cdepartamento] = array('IS_UNIDAD_VALIDACION' => 1);
+                $secciones_validacion_obligatoria = array();
                 break;
         }
 
-
+        //Almacena la sección obligatoria por nivel de validación, para validacion por profesionalización no aplica la validación 
+        $this->session->set_userdata('seccion_validacion_obligatoria', $secciones_validacion_obligatoria);
         $this->session->set_userdata('datos_validador', $datos_validador);
-//        pr($datos_validador);
-//        $cdelegacion
+
         $array_catalogos[] = enum_ecg::cvalidacion_estado;
         $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cvalidacion_estado => 'VAL_ESTADO_CVE')); //Carga el catálogo de ejercicio predominante
         $main_contet = $this->load->view('validador_censo/validador_censo_tpl', $data, true);
@@ -184,6 +197,117 @@ class Validacion_censo_profesores extends MY_Controller {
         return null;
     }
 
+    /**
+     * 
+     * @return identificador del usuario que se va a validar
+     */
+    private function obtener_id_usuario() {
+        if (!is_null($this->session->userdata('datosvalidadoactual'))) {
+            $array_validado = $this->session->userdata('datosvalidadoactual');
+            return $array_validado['usuario_cve_validado'];
+        }
+//        return $this->session->userdata('identificador');
+        return NULL;
+    }
+
+    private function obtener_nombre_docente() {
+        if (isset($this->session->userdata('datosvalidadoactual')['nom_docente'])) {
+            return $this->session->userdata('datosvalidadoactual')['nom_docente'];
+        }
+//        return $this->session->userdata('identificador');
+        return NULL;
+    }
+
+    /**
+     * 
+     * @return type Identificador del empleado docente a validar
+     */
+    private function obtener_id_empleado() {
+        if (isset($this->session->userdata('datosvalidadoactual')['empleado_cve'])) {
+            return intval($this->session->userdata('datosvalidadoactual')['empleado_cve']);
+        }
+        return NULL;
+    }
+
+    /**
+     * 
+     * @return type Matricula del empleado docente a validar
+     */
+    private function obtener_matricula_empleado() {
+        if (isset($this->session->userdata('datosvalidadoactual')['matricula'])) {
+            return intval($this->session->userdata('datosvalidadoactual')['matricula']);
+        }
+//        return $this->session->userdata('idempleado');
+        return NULL;
+    }
+
+    /**
+     * 
+     * @return Obtiene el identificador de la convocatoria actual de la validación del censo
+     */
+    private function obtener_convocatoria() {
+        if (isset($this->session->userdata('datos_validador')['VAL_CON_CVE'])) {
+            return intval($this->session->userdata('datos_validador')['VAL_CON_CVE']);
+        }
+        return NULL;
+    }
+
+    /**
+     * 
+     * @return Obtiene el estado en el que se encuentra la convocatoria actualmente (última convocatoria aplicada a la delegación)
+     *  -sin Sin iniciar la convocatoria
+     *  -act Registro de actividad docente (registro de censo)
+     *  -vf1 Tiempo de validación por N1
+     *  -vf2 Tiempo de validacion por N2
+     *  -nap La convocatoría se encuentra caducada
+     */
+    private function obtener_etapa_convocatoria() {
+        if (isset($this->session->userdata('datos_validador')['ETAPA_CONVOCATORIA'])) {
+            return $this->session->userdata('datos_validador')['ETAPA_CONVOCATORIA'];
+        }
+        return NULL;
+    }
+
+    /**
+     * 
+     * @return Obtiene el identificador de la convocatoria actual de la validación del censo
+     */
+    private function obtener_validacion_gral() {
+        if (isset($this->session->userdata('datosvalidadoactual')['val_grl_cve'])) {
+            return intval($this->session->userdata('datosvalidadoactual')['val_grl_cve']);
+        }
+        return NULL;
+    }
+
+    /**
+     * 
+     * @return type Obtiene el rol del usuario actual, es decir N1, N2 o profesionalización
+     */
+    private function obtener_rol_usuario() {
+        if (!is_null($this->session->userdata('rol_seleccionado_cve'))) {
+            return $this->session->userdata('rol_seleccionado_cve');
+        }
+//        return $this->session->userdata('idempleado');
+        return NULL;
+    }
+
+    private function obtener_id_validacion() {
+        if (!is_null($this->session->userdata('datosvalidadoactual')) AND isset($this->session->userdata('datosvalidadoactual')['validacion_cve'])) {
+            return $this->session->userdata('datosvalidadoactual')['validacion_cve'];
+        }
+//        return $this->session->userdata('idempleado');
+        return NULL;
+    }
+
+    private function obtener_estado_validacion_docente() {
+//        pr($this->session->userdata('datosvalidadoactual'));
+        if (!is_null($this->session->userdata('datosvalidadoactual')) AND isset($this->session->userdata('datosvalidadoactual')['est_val'])) {
+            return $this->session->userdata('datosvalidadoactual')['est_val'];
+        }
+//        return $this->session->userdata('idempleado');
+        return NULL;
+    }
+
     public function seccion_delete_datos_validado() {
         if ($this->input->is_ajax_request()) {
 //            if ($this->input->post()) {
@@ -203,42 +327,56 @@ class Validacion_censo_profesores extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             if (!is_null($this->input->post())) {
                 $this->lang->load('interface', 'spanish');
-                $filtros = $this->input->post(null, true); //Obtenemos el post o los valores
+                $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
+//                pr($datos_post);
                 $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
+//                pr($rol_seleccionado);
                 $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1)); //Busca todos los hijos de validador para que generé el menú y cargue los datos de perfil
                 $datosPerfil['array_menu'] = $array_menu;
                 $datos_validacion = array();
                 $datos_validacion['estado_correccion'] = null;
+                //Validación general de la validación actual del docente
+                if (!empty($datos_post['valgrlcve'])) {
+                    $datos_validacion['val_grl_cve'] = $this->seguridad->decrypt_base64($datos_post['valgrlcve']); //Identificador de la comisión
+                }
 
-                if (!empty($filtros['empcve'])) {
-                    $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($filtros['empcve']); //Identificador de la comisión
+                if (!empty($datos_post['empcve'])) {
+                    $datos_validacion['empleado_cve'] = $this->seguridad->decrypt_base64($datos_post['empcve']); //Identificador de la comisión
                 }
-                if (!empty($filtros['matricula'])) {
-                    $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($filtros['matricula']); //Identificador de la comisión
+
+                if (!empty($datos_post['matricula'])) {
+                    $datos_validacion['matricula'] = $this->seguridad->decrypt_base64($datos_post['matricula']); //Identificador de la comisión
                 }
-                if (!empty($filtros['estval'])) {
-                    $datos_validacion['est_val'] = $this->seguridad->decrypt_base64($filtros['estval']); //Identificador de la comisión
+                if (!empty($datos_post['usuariocve'])) {
+                    $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($datos_post['usuariocve']); //Identificador de la comisión
                 }
-                if (!empty($filtros['validadorcve'])) {
-                    $datos_validacion['validador_cve'] = $this->seguridad->decrypt_base64($filtros['validadorcve']); //Identificador de la comisión
+                if (!empty($datos_post['convocatoria_cve'])) {
+                    $datos_validacion['VAL_CON_CVE'] = $this->seguridad->decrypt_base64($datos_post['convocatoria_cve']); //Identificador de la comisión
                 }
-                if (!empty($filtros['histvalcve'])) {
-                    $datos_validacion['validacion_cve'] = $this->seguridad->decrypt_base64($filtros['histvalcve']); //Identificador de la comisión
-                }
-                if (!empty($filtros['valgrlcve'])) {
-                    $datos_validacion['val_grl_cve'] = $this->seguridad->decrypt_base64($filtros['valgrlcve']); //Identificador de la comisión
-                    /////Inicio estado corrección. Obtener si el empleado ya cuenta con validación en estado corrección
+                $this->load->model('Usuario_model', 'usu');
+                $data_empleado = $this->usu->get_empleado($datos_validacion['matricula'], array('concat(EMP_NOMBRE, " ", EMP_APE_PATERNO, " ", EMP_APE_MATERNO) as "nom_docente"'));
+                $datos_validacion['nom_docente'] = $data_empleado['nom_docente'];
+//                    $datos_validacion[] = $this->seguridad->decrypt_base64($datos_post['convocatoria_cve']); //Identificador de la comisión
+
+                $id_rol_actual = $this->obtener_rol_usuario();
+                $hist_actual_rol = $this->vdm->get_detalle_his_val_actual($datos_validacion['val_grl_cve'], $id_rol_actual);
+//                pr($hist_actual_rol);
+                if (!empty($hist_actual_rol)) {
+                    $hist_actual_rol = $hist_actual_rol[0];
+                    $datos_validacion['est_val'] = $hist_actual_rol['estado_validacion']; //Identificador de la comisión
+                    $datos_validacion['validacion_cve'] = $hist_actual_rol['hist_validacion_cve']; //Identificador de la comisión
                     $datos_validacion['estado'] = $this->obtener_validacion_correccion($datos_validacion['val_grl_cve'], $datos_validacion['est_val']);
-                    ////Fin obtener estado corrección
+//                    pr($datos_validacion['estado']);
+                    
+                } else {//Si no existe validacion ni estado de validación, el rol actual no puede validar el rol actual ya que no contiene al docente en el muestreo para validarlo 
+                    $datos_validacion['est_val'] = Enum_ev::__default; //Identificador de la comisión
+                    $datos_validacion['validacion_cve'] = 0; //Identificador de la comisión
                 }
-                if (!empty($filtros['usuariocve'])) {
-                    $datos_validacion['usuario_cve_validado'] = $this->seguridad->decrypt_base64($filtros['usuariocve']); //Identificador de la comisión
-                }
-                if (!empty($filtros['convocatoria_cve'])) {
-                    $datos_validacion['VAL_CON_CVE'] = $this->seguridad->decrypt_base64($filtros['convocatoria_cve']); //Identificador de la comisión
-                }
+//                pr($hist_actual_rol);    
                 //Manda el identificador de la delegación del usuario
                 $this->session->set_userdata('datosvalidadoactual', $datos_validacion); //Asigna la información del usuario al que se va a validar
+//                pr($datos_validacion);
+//                pr($this->session->userdata('datos_validador'));
 
                 echo $this->load->view('validador_censo/index', $datosPerfil, true);
             }
@@ -247,15 +385,16 @@ class Validacion_censo_profesores extends MY_Controller {
             redirect(site_url());
         }
     }
-
+    
+    //Erradicar, por Luis LEAS
     private function obtener_validacion_correccion($validacion_gral_cve, $est_val) {
         $resultado = array('correccion' => array('result' => false, 'VALIDACION_CVE' => null), 'fue_validado' => array('result' => false, 'VALIDACION_CVE' => null));
         $estado_anterior_verificar = $this->config->item('estados_val_censo')[$est_val]['estado_anterior_verificar'];
         ///Método que obtiene el histórico de validaciones para 'validacion_gral_cve', importante mantener ordenamiento por fecha, en sesión se añade la fecha más actual
-        $historico = $this->vdm->get_validacion_historico(array('conditions' => array('hist_validacion.VALIDACION_GRAL_CVE' => $validacion_gral_cve), 'fields'=>'hist_validacion.*, validacion_gral.*, validador.ROL_CVE', 'order' => 'VAL_FCH'));
-        //pr($historico);
+        $historico = $this->vdm->get_validacion_historico(array('conditions' => array('hist_validacion.VALIDACION_GRAL_CVE' => $validacion_gral_cve), 'fields' => 'hist_validacion.*, validacion_gral.*, validador.ROL_CVE', 'order' => 'VAL_FCH'));
+        pr($historico);
         //pr($est_val);
-        foreach ($historico as $key_hist => $hist) {
+        foreach ($historico as $hist) {
             foreach ($this->config->item('estados_val_censo') as $key_evc => $evc) {
                 if ($evc['color_status'] == $this->config->item('CORRECCION') && $hist['VAL_ESTADO_CVE'] == $key_evc) { //Se verifica si existe en el histórico alguna validación en CORRECCIÓN
                     $resultado['correccion']['result'] = true; //Si es así se envian datos para ser almacenados en sesión
@@ -267,11 +406,12 @@ class Validacion_censo_profesores extends MY_Controller {
             //if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE'] && $hist['VAL_ESTADO_CVE'] == $estado_anterior_verificar) {
             //if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['VALIDADOR_CVE'] == $hist['VALIDADOR_CVE']) {
             $condition = true;
-            if(!is_null($est_val) && $this->config->item('estados_val_censo')[$est_val]['color_status'] == $this->config->item('CORRECCION')){ ///Agregar condición cuando se realice una corrección
+            if (!is_null($est_val) && $this->config->item('estados_val_censo')[$est_val]['color_status'] ==
+                    $this->config->item('CORRECCION')) { ///Agregar condición cuando se realice una corrección
                 $condition = ($hist['VAL_ESTADO_CVE'] == $estado_anterior_verificar) ? true : false;
             }
 
-            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['ROL_CVE'] == $hist['ROL_CVE'] && $condition===true) {
+            if ($hist['IS_ACTUAL'] == $this->config->item('IS_NOT_ACTUAL') && $this->session->userdata('datos_validador')['ROL_CVE'] == $hist['ROL_CVE'] && $condition === true) {
                 $resultado['fue_validado']['result'] = true; //Si es así se envian datos para ser almacenados en sesión
                 $resultado['fue_validado']['VALIDACION_CVE'] = $hist['VALIDACION_CVE'];
                 //pr($resultado); echo "-------";
@@ -280,82 +420,91 @@ class Validacion_censo_profesores extends MY_Controller {
         return $resultado;
     }
 
-    private function obtener_id_usuario() {
-        if (!is_null($this->session->userdata('datosvalidadoactual'))) {
-            $array_validado = $this->session->userdata('datosvalidadoactual');
-            return $array_validado['usuario_cve_validado'];
-        }
-//        return $this->session->userdata('identificador');
-        return NULL;
-    }
-
-    private function obtener_id_empleado() {
-        if (!is_null($this->session->userdata('datosvalidadoactual'))) {
-            $array_validado = $this->session->userdata('datosvalidadoactual');
-            return intval($array_validado['empleado_cve']);
-        }
-//        return $this->session->userdata('idempleado');
-        return NULL;
-    }
-
-    private function obtener_convocatoria() {
-        if (!is_null($this->session->userdata('datos_validador'))) {
-            $array_validador = $this->session->userdata('datos_validador');
-            if ($array_validador['VAL_CON_CVE'] == 0) {
-                $array_validado = $this->session->userdata('datosvalidadoactual');
-                return intval($array_validado['VAL_CON_CVE']);
-            } else {
-                return intval($array_validador['VAL_CON_CVE']);
-            }
-        }
-//        return $this->session->userdata('idempleado');
-        return NULL;
-    }
-
-    private function obtener_id_validacion() {
-        if (!is_null($this->session->userdata('datosvalidadoactual'))) {
-            return $this->session->userdata('datosvalidadoactual')['validacion_cve'];
-        }
-//        return $this->session->userdata('idempleado');
-        return NULL;
-    }
-
-    private function obtener_estado_docente() {
-//        pr($this->session->userdata('datosvalidadoactual'));
-        if (!is_null($this->session->userdata('datosvalidadoactual'))) {
-            return $this->session->userdata('datosvalidadoactual')['est_val'];
-        }
-//        return $this->session->userdata('idempleado');
-        return NULL;
-    }
-
-    private function obtener_rol_usuario() {
-        if (!is_null($this->session->userdata('rol_seleccionado_cve'))) {
-            return $this->session->userdata('rol_seleccionado_cve');
-        }
-//        return $this->session->userdata('idempleado');
-        return NULL;
-    }
-
     public function seccion_validar() {
         if ($this->input->is_ajax_request()) {
             $data = array();
-//            pr($this->session->userdata());
             $tipo_msg = $this->config->item('alert_msg');
             $this->lang->load('interface', 'spanish');
             $string_values = $this->lang->line('interface')['validador_censo'];
             $data['string_values'] = $string_values;
+
+            $convocatoria = $this->obtener_convocatoria(); //Se obtiene la convocatoria actual
+            $etapa_convoatoria = $this->obtener_etapa_convocatoria();
+            $docente_actual = $this->obtener_id_empleado();
+
+
+            //Valida que exista una convocatoria, y que se encuentré dentro del tiempo de validación por nivel 1 ó 2
+            if (!is_null($convocatoria) AND $convocatoria > 0 AND ( $etapa_convoatoria == Enum_etapa_cov::CENSO_VALIDA_N1 || $etapa_convoatoria == Enum_etapa_cov::CENSO_VALIDA_N2)) {
 //            $data_pie['string_values'] = $string_values;
-            $tmp_validado['estado_actual'] = $this->obtener_estado_docente();
-            $tmp_validado['tipo_validador_rol'] = $this->obtener_rol_usuario();
-            $tmp_validado['delegacion_cve'] = $this->obtener_delegacion_validador();
-            //Obtiene el historial completo de la validación del docente según la convocatoría
-            $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($this->obtener_id_empleado(), $this->obtener_convocatoria());
-            $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
-            if (!empty($data_pie['botones_validador'])) {
-                $pie_pag = $this->load->view('validador_censo/valida_docente/opciones_validacion_pie', $data_pie, TRUE);
-                $data['pie_pag'] = $pie_pag;
+                $rol_validador = $this->obtener_rol_usuario();
+                //Reglas para profesionalización
+                if ($rol_validador == Enum_rols::Profesionalizacion) {//Si el rol es profesionalización, deberia poder validar en cualquier momento
+//                    $valida_tiempo_convocatoria = get_valida_tiempo_convocatoria_rol($rol_validador, $etapa_convoatoria); //Valida que el rol pueda validar en la etapa de la convocatoria actual
+//
+//                    if ($valida_tiempo_convocatoria == 1) {// 
+//                        $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
+//                    } else {
+//                        $br = (isset($data['mensaje_general'])) ? '<br>' : '';
+//                        $data['mensaje_general'] .= $br . $string_values['msj_convocatoria_periodo_validacion_fuera'];
+//                    }
+                } else {//Reglas que aplican para N1 y N2
+                    $tmp_validado['validacion_cve'] = $this->obtener_id_validacion();
+                    if ($tmp_validado['validacion_cve'] > 0) {//Indica que se encuentra dentro del muestreo para validar
+                        $tmp_validado['estado_actual'] = $this->obtener_estado_validacion_docente();
+                        $tmp_validado['tipo_validador_rol'] = $this->obtener_rol_usuario();
+
+                        //Mensaje de validacion concluida por nivel actual
+                        if ($tmp_validado['estado_actual'] == Enum_ev::Validado_n1 || $tmp_validado['estado_actual'] == Enum_ev::Validado_n2 ) {//Si se encuentra en el estado de validación Validado, por cualquier rol, debe mostrar el mensaje
+                            $data['mensaje_general'] = $string_values['msj_validado_nivel_actual']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                            $data['tipo_mensaje'] = $tipo_msg['SUCCESS']['class']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        } else if ($tmp_validado['estado_actual'] == Enum_ev::En_revision_n1 || $tmp_validado['estado_actual'] == Enum_ev::En_revision_n2 ) {
+                            $data['mensaje_general'] = $string_values['msj_revision_nivel_actual']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                            $data['tipo_mensaje'] = $tipo_msg['WARNING']['class']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        } else if ($tmp_validado['estado_actual'] == Enum_ev::Por_validar_n1 || $tmp_validado['estado_actual'] == Enum_ev::Por_validar_n2) {
+                            $data['mensaje_general'] = $string_values['msj_por_validar_nivel_actual']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                            $data['tipo_mensaje'] = $tipo_msg['WARNING']['class']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                        }
+                        
+                        $tmp_validado['delegacion_cve'] = $this->obtener_delegacion_validador();
+                        //Obtiene el historial completo de la validación del docente según la convocatoría
+                        $historial_estados_validacion = $this->vdm->get_hist_estados_validacion_docente($this->obtener_id_empleado(), $convocatoria);
+                        $data['historial_estados_validacion'] = $historial_estados_validacion;
+
+                        $is_interseccion = get_is_interseccion_muestreo($tmp_validado['tipo_validador_rol'], $historial_estados_validacion);
+
+                        if ($is_interseccion == 1) {//Es una intersección valida tiempo linel de validacion según el rol 
+                            $valida_tiempo_convocatoria = get_valida_tiempo_convocatoria_rol($rol_validador, $etapa_convoatoria); //Valida que el rol pueda validar en la etapa de la convocatoria actual
+
+                            if ($valida_tiempo_convocatoria == 1) {// 
+                                $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
+                            } else {
+                                $br = (isset($data['mensaje_general'])) ? '<br>' : '';
+                                $data['mensaje_general'] .= $br . $string_values['msj_convocatoria_periodo_validacion_fuera'];
+                            }
+                        } else {//No es una interseccion
+                            $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
+                        }
+                        if (!empty($data_pie['botones_validador'])) {
+                            $pie_pag = $this->load->view('validador_censo/valida_docente/opciones_validacion_pie', $data_pie, TRUE);
+                            $data['pie_pag'] = $pie_pag;
+                        }
+                    } else {
+                        $data['msj_convocatoria_inactiva'] = $string_values['msj_no_muestra_para_validador_actual']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                    }
+                }
+            } else {
+                if ($etapa_convoatoria == Enum_etapa_cov::CENSO_REGISTRO) {
+                    $data['mensaje_general'] = $string_values['msj_convocatoria_registro_censo']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                } else {
+                    $data['mensaje_general'] = $string_values['msj_convocatoria_registro_censo']; //Mensaje para validador de nivel 1 ó 2 informando que la infoemación del docente no puede ser validada en el momento
+                }
             }
+            
+            $data['nom_docente'] = $this->obtener_nombre_docente(); //Nombre del docente
+            $data['matricula'] = $this->obtener_matricula_empleado(); //Matricula del docente a validar
+            //Obtiene el historial de las últimas dos convocatorias
+            $data['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente_convocatorias($docente_actual, 2);
+//                pr($data_comentario['historial_estados']);
             $this->load->view('validador_censo/valida_docente/valida_docente_tpl', $data, FALSE);
         } else {
             redirect(site_url());
@@ -374,6 +523,41 @@ class Validacion_censo_profesores extends MY_Controller {
                 $empleado_cve = intval($this->seguridad->decrypt_base64($datos_post['empleado_cve'])); //Des encripta la clave de la historia que viene de post
 //                $resul_coment = $this->vdm->get_comentario_hist_validaso($hist_val_cve); //Consulta datos del historico
                 $data_comentario['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente($empleado_cve, $convocatoria_cve);
+                $data = array(
+                    'titulo_modal' => $string_values['titulo_modal_comentario'],
+                    'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
+                    'pie_modal' => $this->load->view('validador_censo/valida_docente/pie_cerrar_modal_pie', NULL, TRUE),
+                );
+                echo $this->ventana_modal->carga_modal($data); //Carga los div de modal
+            }
+        } else {
+            redirect(site_url());
+        }
+    }
+
+    public function ver_detalle_validado() {
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post()) {
+                $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
+//                pr($datos_post);
+                $this->lang->load('interface', 'spanish');
+                $string_values = $this->lang->line('interface')['validador_censo'];
+                $data_comentario['string_values'] = $string_values;
+                $validacion_gral_cve = intval($this->seguridad->decrypt_base64($datos_post['val_gral'])); //Des encripta la clave de la historia que viene de post
+                $empleado_cve = intval($this->seguridad->decrypt_base64($datos_post['docente'])); //Des encripta la clave de la historia que viene de post
+                //Obtiene la información de validación actual del docente (validación por n1, n2 y profesionalización simultania)
+                $data_comentario['validaciones_grales'] = $this->vdm->get_detalle_his_val_actual($validacion_gral_cve);
+                $data_comentario['nom_docente'] = '';
+                if (!empty($data_comentario['validaciones_grales'])) {//Si es diferente de vacio, se obtiene el nombre del docente
+                    $data_comentario['nom_docente'] = $data_comentario['validaciones_grales'][0]['nom_docente']; //Nombre del docente
+                    $data_comentario['matricula'] = $data_comentario['validaciones_grales'][0]['matricula']; //Nombre del docente
+                }
+
+//                pr($data_comentario['validaciones_grales']);
+                //Obtiene el historial de las últimas dos convocatorias
+                $data_comentario['historial_estados'] = $this->vdm->get_hist_estados_validacion_docente_convocatorias($empleado_cve, 2);
+//                pr($data_comentario['historial_estados']);
+//                exit();
                 $data = array(
                     'titulo_modal' => $string_values['titulo_modal_comentario'],
                     'cuerpo_modal' => $this->load->view('validador_censo/valida_docente/comentario_estado', $data_comentario, TRUE),
@@ -431,6 +615,8 @@ class Validacion_censo_profesores extends MY_Controller {
      * @return int
      */
     private function cambio_estado_validacion_censo($estado_cambio_cve, $comentario_justificacion = '', $validador_cve, $datos_empleado_validar, $validacion_id = null, $tabla_validacion = null, $validacion_registro = null) {
+        $secciones_validar_obligatorias = $this->session->userdata('seccion_validacion_obligatoria');
+
         $parametros_insert_hist_val = array();
         $parametros_insert_hist_val['VAL_ESTADO_CVE'] = $estado_cambio_cve;
         $parametros_insert_hist_val['VALIDADOR_CVE'] = $validador_cve;
@@ -444,28 +630,33 @@ class Validacion_censo_profesores extends MY_Controller {
         $estado_actual = $this->session->userdata('datosvalidadoactual')['est_val'];
         $prop_estado = $this->config->item('estados_val_censo')[$estado_actual];
 
-//        pr($prop_estado);
+        $empleado = $datos_empleado_validar['empleado_cve'];
+
+//        pr($secciones_validar_obligatorias  );
+//        exit();
         //Hace la validación del estado actual para solicitar que se pueda validar (estados en de los cuales se puede enviar a validar)
-//        if (isset($prop_estado['est_apr_para_validacion'])) {
-//            if ($estado_cambio_cve == Enum_ev::Val_n1_por_validar_n2 || $estado_cambio_cve == Enum_ev::Val_n2_por_validar_profesionalizacion || $estado_cambio_cve == Enum_ev::Validado) {
-//                //Validación 
-//                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
-//                $this->load->model('Validacion_docente_model', 'vdm');
-//                $pasa_validacion = $this->vdm->get_is_envio_validacion($this->obtener_id_empleado(), $estados_considerados_validacion);
-//            } else {//corrección
-//            }
-//        }
-//        pr($pasa_validacion);
-//        if ($pasa_validacion) {
-            $updates = null;
-             $empleado = $datos_empleado_validar['empleado_cve'];
-            if ($estado_cambio_cve == Enum_ev::Validado) {//Es la validacion por profecionalización, por lo que hay que cambiar el estado de todos los registros validados
-                $updates = $this->vdm->get_querys_updates_estado_validados_profesionalizacion($datos_empleado_validar['empleado_cve']);
+        if (isset($prop_estado['est_apr_para_validacion']) and false) {//importante quitar el false, para que valides
+            if ($estado_cambio_cve == Enum_ev::Validado_n1 || $estado_cambio_cve == Enum_ev::Validado_n2) {
+                $this->load->model('Expediente_model', 'exp'); //Modelo clase que contiene todos los datos de las secciones
+                $secciones_cursos_validar = $this->exp->get_seccionConfig($secciones_validar_obligatorias); //Configuración de secciones de las actividades del docente 
+                //Validación 
+                $estados_considerados_validacion = $prop_estado['est_apr_para_validacion'];
+                $this->load->model('Validacion_docente_model', 'vdm');
+
+                //Consulta que los requerimientos de vlidación minimos se cumplan, para poder validar
+                $pasa_validacion = $this->vdm->get_is_envio_validacion($empleado, $estados_considerados_validacion, $parametros_insert_hist_val['VALIDACION_GRAL_CVE'], $this->obtener_rol_usuario(), $secciones_cursos_validar);
+//                pr($secciones_cursos_validar);
+                exit();
+            } else {//corrección
             }
-//            pr($updates);
-//            exit();
+        }
+        if ($pasa_validacion) {//Pasa el filtro de validación
+//            $updates = null;
+//            if ($estado_cambio_cve == Enum_ev::Validado) {//Es la validacion por profecionalización, por lo que hay que cambiar el estado de todos los registros validados
+//                $updates = $this->vdm->get_querys_updates_estado_validados_profesionalizacion($datos_empleado_validar['empleado_cve']);
+//            }
             //Efectúa la actualización del nuevo estado
-            $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual, $empleado, $updates);
+            $result_cam_estado = $this->vdm->update_insert_estado_val_docente($parametros_insert_hist_val, $parametro_hist_actual_mod, $cve_hist_actual, $empleado);
 //            pr($result_cam_estado);
             if (!empty($result_cam_estado)) {
                 $this->actualizar_estado_validar_a_revision($validacion_id, $tabla_validacion, $validacion_registro, $result_cam_estado['VALIDACION_CVE']);
@@ -492,9 +683,9 @@ class Validacion_censo_profesores extends MY_Controller {
             } else {
                 return 0;
             }
-//        } else {
-//            return 0;
-//        }
+        } else {
+            return 0;
+        }
     }
 
     public function enviar_cambio_estado_validacion() {
@@ -509,20 +700,8 @@ class Validacion_censo_profesores extends MY_Controller {
 
                 $validation = array();
                 $pasa_validacion = TRUE; //Si no requiere validación, está variable abre la puerta que no verifique validación
-                if ($estado_a_validar === 'CORRECCION') {//Aplica validacion de mensaje obligatorio
-                    $this->config->load('form_validation'); //Cargar archivo con validaciones
-                    $validations_array = $this->config->item('validacion_docente'); //Obtener validaciones de archivo general
-                    //Busca validaciones para el envío a corrección
-                    foreach ($datos_post as $key => $value) {
-                        if (key_exists($key, $validations_array)) {
-                            $validation[] = $validations_array[$key];
-                        }
-                    }
-                    $this->form_validation->set_rules($validation); //Añadir validaciones
-                    $pasa_validacion = FALSE;
-                }
 
-                if ($pasa_validacion || $this->form_validation->run()) {
+                if ($pasa_validacion) {
                     $tipo_msg = $this->config->item('alert_msg');
                     $datos_validador = $this->session->userdata('datos_validador');
                     $datos_empleado_validar = $this->session->userdata('datosvalidadoactual');
@@ -545,7 +724,7 @@ class Validacion_censo_profesores extends MY_Controller {
 
                 $data['string_values'] = $string_values;
 
-                $tmp_validado['estado_actual'] = $this->obtener_estado_docente();
+                $tmp_validado['estado_actual'] = $this->obtener_estado_validacion_docente();
                 $tmp_validado['tipo_validador_rol'] = $this->obtener_rol_usuario();
                 $tmp_validado['delegacion_cve'] = $this->obtener_delegacion_validador();
                 $data_pie['botones_validador'] = genera_botones_estado_validacion($tmp_validado);
@@ -837,7 +1016,7 @@ class Validacion_censo_profesores extends MY_Controller {
             //pr($data);
             //$formacion_docente = $this->fm->get_formacion_docente(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()), 'order' => 'EFO_ANIO_CURSO', 'fields' => 'emp_formacion_profesional.*, cinstitucion_avala.IA_NOMBRE, ctipo_formacion_profesional.TIP_FOR_PRO_NOMBRE, csubtipo_formacion_profesional.SUB_FOR_PRO_NOMBRE, cmodalidad.MOD_NOMBRE, ccurso.CUR_NOMBRE', 'validation'=>array(array('table'=>'hist_efp_validacion_curso', 'fields'=>'COUNT(*) AS validation', 'conditions'=>'hist_efp_validacion_curso.EMP_FORMACION_PROFESIONAL_CVE=emp_formacion_profesional.EMP_FORMACION_PROFESIONAL_CVE AND VALIDACION_CVE='.$validacion_cve_session), array('table'=>'hist_efp_validacion_curso', 'fields'=>'VAL_CUR_EST_CVE', 'conditions'=>'hist_efp_validacion_curso.EMP_FORMACION_PROFESIONAL_CVE=emp_formacion_profesional.EMP_FORMACION_PROFESIONAL_CVE AND VALIDACION_CVE='.$validacion_cve_session)))); // ctipo_curso.TIP_CUR_NOMBRE, 
             $formacion_docente = $this->fm->get_formacion_docente(array_merge(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()), 'order' => 'EFO_ANIO_CURSO', 'fields' => 'emp_formacion_profesional.*, cinstitucion_avala.IA_NOMBRE, ctipo_formacion_profesional.TIP_FOR_PRO_NOMBRE, csubtipo_formacion_profesional.SUB_FOR_PRO_NOMBRE, cmodalidad.MOD_NOMBRE, ccurso.CUR_NOMBRE', 'validation' => array('table' => 'hist_efp_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_efp_validacion_curso.EMP_FORMACION_PROFESIONAL_CVE=emp_formacion_profesional.EMP_FORMACION_PROFESIONAL_CVE AND VALIDACION_CVE=' . $validacion_cve_session)), $val_correc_for_doc, $validation_est_corr_for_doc)); // ctipo_curso.TIP_CUR_NOMBRE, 
-            foreach ($formacion_docente as $key_fd => $fd) { ///Ordenar de acuerdo a tipo
+            foreach ($formacion_docente as $fd) { ///Ordenar de acuerdo a tipo
                 $fd['SUB_FOR_PRO_CVE'] = (!isset($fd['SUB_FOR_PRO_CVE']) || is_null($fd['SUB_FOR_PRO_CVE'])) ? 0 : $fd['SUB_FOR_PRO_CVE'];
                 $data['formacion_docente'][$fd['TIP_FOR_PROF_CVE']][$fd['SUB_FOR_PRO_CVE']][] = $fd;
             }
@@ -867,7 +1046,7 @@ class Validacion_censo_profesores extends MY_Controller {
         $data['curso_principal'] = $data['actividad_docente']['CURSO_PRINC_IMPARTE']; //Identificador del curso principal 
         $data['actividad_general_cve'] = $data['actividad_docente']['ACT_DOC_GRAL_CVE']; //Identificador del curso principal 
         $data['curso_principal_entidad_contiene'] = $data['actividad_docente']['TIP_ACT_DOC_PRINCIPAL_CVE']; //Entidad que contiene el curso principal
-        $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($data['actividad_docente']['ACT_DOC_GRAL_CVE'], $this->obtener_id_validacion(),  $this->obtener_id_empleado()); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
+        $data['datos_tabla_actividades_docente'] = $this->adm->get_actividades_docente($data['actividad_docente']['ACT_DOC_GRAL_CVE'], $this->obtener_id_validacion(), $this->obtener_id_empleado()); //Datos de las tablas emp_actividad_docente, emp_educacion_distancia, emp_esp_medica
         //}
 
         $this->load->view('validador_censo/actividad_docente/actividad_tpl', $data, FALSE);
@@ -1339,8 +1518,6 @@ class Validacion_censo_profesores extends MY_Controller {
             //$datos_pie['comprobantecve'] = $datos_post['comprobantecve'];
             $id_inv = $this->seguridad->decrypt_base64($identificador);
             $data_investigacion['dir_tes'] = $this->idm->get_datos_investigacion_docente($id_inv); //Variable que carga los datos del registro de investigación, será enviada a la vista para cargar los datos
-
-            
             //Selecciona divulgación
             $data_investigacion['formulario_carga_opt_tipo_divulgacion'] = $this->divulgacion_cargar($data_investigacion['dir_tes']['med_divulgacion_cve'], $data_investigacion, TRUE);
             //}

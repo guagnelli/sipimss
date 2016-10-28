@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 //    pr($tipo_msg);
+$this->seguridad->set_tiempo_convocatoria_null();//Reinicia validacion de convocatoria
+$this->seguridad->set_tiempo_convocatoria();//Valida paso de convocatoria
 $colapso_div_ejercicio_profesional = 'collapse in';
 //        $colapso_div_ejercicio_profesional = 'collapse';
 //        pr($datos_tabla_actividades_docente);
@@ -16,7 +18,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
 
 <!-- Inicio informacion personal -->
 <?php echo form_open('', array('id' => 'form_actividad_docente')); 
-if($this->seguridad->verificar_liga_agregar_docente()){
+if($this->seguridad->verificar_liga_validar()){
     $readonly = '';    
     $function = 'funcion_asignar_curso_principal(this)';
     $disabled = '';
@@ -93,7 +95,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                     </div>
 
                 </div>
-                <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                <?php if($this->seguridad->verificar_liga_validar()){ ?>
                     <div class="row">
                         <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1 ">
                             <!--<a class="btn btn-success " data-toggle="tab" href="#get_data_ajax_actividad" >-->
@@ -113,7 +115,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
 
                     </div>
                         <?php if (isset($datos_tabla_actividades_docente)) { ?>
-                            <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                            <?php if($this->seguridad->verificar_liga_validar()){ ?>
                                 <div class="form-group col-xs-5 col-md-5 col-md-offset-1 col-md-offset-1">
                                     <button type="button" class="btn btn-success btn-lg" id="btn_agregar_actividad_modal_nueva" 
                                             data-actgralcve =" <?php echo $actividad_general_cve;?>"
@@ -174,7 +176,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                             $btn_comprobante = '';
                                         }
                                         echo "<tr class='" . $reg_principal . "' id='id_row_" . $key . "' data-cp='" . $cp . "' data-keyrow=" . $key . " >
-                                            <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($value['IS_VALIDO_PROFESIONALIZACION'])."</td>";
+                                            <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($value['IS_VALIDO_PROFESIONALIZACION'], $value['IS_CARGA_SISTEMA'])."</td>";
                                         echo "<td >" . $this->form_complete->create_element(
                                                 array('id' => 'radio_curso_principal', 'type' => 'radio',
                                                     'value' => $value['cve_actividad_docente'],
@@ -192,10 +194,10 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                     )
                                         )) .
                                         "</td>";
+                                        $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($value['IS_VALIDO_PROFESIONALIZACION'], $value['IS_CARGA_SISTEMA'], $value['validation_estado']);
                                         $id = $this->seguridad->encrypt_base64($value['cve_actividad_docente']);
-                                        $validation_estado = (isset($value['validation_estado']) && !empty($value['validation_estado'])) ? $value['validation_estado'] : null;
-                                        $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($value['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="' . $key . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-cp ="' . $is_cur_principal . '" onclick="funcion_eliminar_actividad_docente(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
-                                        $btn_editar = ($this->seguridad->verificar_liga_editar_docente($value['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm" data-idrow ="' . $key . '" data-becacve ="' . $value['cve_actividad_docente'] . '" data-comprobantecve ="' . $idcomprobante . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_actividad(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
+                                        $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="' . $key . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-cp ="' . $is_cur_principal . '" onclick="funcion_eliminar_actividad_docente(this)" >'.$string_values['tab_titulo_eliminar'].'</button>' : '';
+                                        $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" data-idrow ="' . $key . '" data-becacve ="' . $value['cve_actividad_docente'] . '" data-comprobantecve ="' . $idcomprobante . '" data-tacve ="' . $value['ta_cve'] . '" data-cvead ="' . $value['cve_actividad_docente'] . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_actividad(this)" >'.$string_values['tab_titulo_editar'].'</button>' : '';
                                         echo "<td class='class_titulo'>" . $value['nombre_tp_actividad'] . "</td>";
                                         echo "<td >" . $value['anio'] . "</td>";
                                         echo "<td >" . $value['duracion'] . "</td>";

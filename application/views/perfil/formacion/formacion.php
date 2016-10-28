@@ -1,9 +1,13 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); 
+    $this->seguridad->set_tiempo_convocatoria_null();//Reinicia validacion de convocatoria
+    $this->seguridad->set_tiempo_convocatoria();//Valida paso de convocatoria
+    
+?>
 <script type="text/javascript">
 var confirmar_eliminacion = "<?php echo $string_values['confirmar_eliminacion']; ?>";
 </script>
 <?php echo js('perfil/formacion.js'); 
-if($this->seguridad->verificar_liga_agregar_docente()){
+if($this->seguridad->verificar_liga_validar()){
     $readonly = '';
     $disabled = '';
 } else {
@@ -48,7 +52,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                             </div>
                             <div id="error_ejercicio_profesional"></div>
                         </div>
-                        <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                        <?php if($this->seguridad->verificar_liga_validar()){ ?>
                             <div class='col-sm-12 col-md-12 col-lg-2 text-right'>
                                 <div>
                                     <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_ejercicio">
@@ -74,7 +78,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                 <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOneSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['INICIAL']['id']; ?>">
                                     <div class="panel-body">
                                     <div class="row">
-                                        <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                                        <?php if($this->seguridad->verificar_liga_validar()){ ?>
                                             <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
                                                 <div>
                                                     <button type="button" aria-expanded="false" class="btn btn-success btn_agregar_formacion_salud_modal" data-toggle="modal" data-target="#modal_censo" data-value="1">
@@ -99,13 +103,14 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                 <tbody>
                                                     <?php
                                                     foreach ($formacion_salud['inicial'] as $key_ini => $fsi) {
+//                                                        pr($fsi);
+                                                        $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $fsi['IS_CARGA_SISTEMA'], $fsi['validation_estado']);
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
-                                                        $validation_estado = (isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])) ? $fsi['validation_estado'] : null;
                                                         $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                                        $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
-                                                        $btn_editar = ($this->seguridad->verificar_liga_editar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
+                                                        $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
+                                                        $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                         echo '<tr id="tr_'.$id.'">
-                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
+                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($fsi['IS_VALIDO_PROFESIONALIZACION'], $fsi['IS_CARGA_SISTEMA']).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_FIN'], 'm-Y').'</td>
                                                                 <td>'.$fsi['TIP_FORM_SALUD_NOMBRE'].((!empty($fsi['SUBTIP_NOMBRE'])) ? ' > '.$fsi['SUBTIP_NOMBRE'] : '').'</td>
@@ -135,7 +140,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                 </div>
                                 <div id="collapseSalud<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwoSalud" data-value="<?php echo $this->config->item('EFPCS_FOR_INICIAL')['CONTINUA']['id']; ?>">
                                     <div class="panel-body">
-                                        <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                                        <?php if($this->seguridad->verificar_liga_validar()){ ?>
                                             <div class="row">
                                                 <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
                                                     <div>
@@ -161,11 +166,11 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                 <tbody>
                                                     <?php
                                                     foreach ($formacion_salud['continua'] as $key_ini => $fsi) {
+                                                        $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $fsi['IS_CARGA_SISTEMA'], $fsi['validation_estado']);
                                                         $id = $this->seguridad->encrypt_base64($fsi['FPCS_CVE']);
-                                                        $validation_estado = (isset($fsi['validation_estado']) && !empty($fsi['validation_estado'])) ? $fsi['validation_estado'] : null;
                                                         $btn_comprobante = (!is_null($fsi['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($fsi['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                                        $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
-                                                        $btn_editar = ($this->seguridad->verificar_liga_editar_docente($fsi['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
+                                                        $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fi" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
+                                                        $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fi" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                         echo '<tr id="tr_'.$id.'">
                                                                 <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($fsi['IS_VALIDO_PROFESIONALIZACION']).'</td>
                                                                 <td>'.nice_date($fsi['EFPCS_FCH_INICIO'], 'm-Y').'</td>
@@ -197,7 +202,7 @@ if($this->seguridad->verificar_liga_agregar_docente()){
             <div class="panel">
                 <div class="panel-body">
                     <div id="mensaje"></div>
-                    <?php if($this->seguridad->verificar_liga_agregar_docente()){ ?>
+                    <?php if($this->seguridad->verificar_liga_validar()){ ?>
                         <div class="row">
                             <div class='col-sm-12 col-md-12 col-lg-12 text-right'>
                                 <div>
@@ -257,13 +262,13 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                                                     //pr($formacion_docente);
                                                                                     if(count($formacion_docente[$key_tfp][$key_sfp])>0) {
                                                                                         foreach ($formacion_docente[$key_tfp][$key_sfp] as $key_fd => $for_doc) {
+                                                                                            $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $fsi['IS_CARGA_SISTEMA'], $fsi['validation_estado']);
                                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
-                                                                                            $validation_estado = (isset($for_doc['validation_estado']) && !empty($for_doc['validation_estado'])) ? $for_doc['validation_estado'] : null;
                                                                                             $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                                                                            $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
-                                                                                            $btn_editar = ($this->seguridad->verificar_liga_editar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
+                                                                                            $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
+                                                                                            $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                                                             echo '<tr id="tr_'.$id.'">
-                                                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
+                                                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($for_doc['IS_VALIDO_PROFESIONALIZACION'], $for_doc['IS_CARGA_SISTEMA']).'</td>
                                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
@@ -314,13 +319,13 @@ if($this->seguridad->verificar_liga_agregar_docente()){
                                                                 if(isset($formacion_docente) && array_key_exists($key_tfp, $formacion_docente)){
                                                                     if(count($formacion_docente[$key_tfp][0])>0) {
                                                                         foreach ($formacion_docente[$key_tfp][0] as $key_fd => $for_doc) {
+                                                                            $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($fsi['IS_VALIDO_PROFESIONALIZACION'], $fsi['IS_CARGA_SISTEMA'], $fsi['validation_estado']);
                                                                             $id = $this->seguridad->encrypt_base64($for_doc['EMP_FORMACION_PROFESIONAL_CVE']);
-                                                                            $validation_estado = (isset($for_doc['validation_estado']) && !empty($for_doc['validation_estado'])) ? $for_doc['validation_estado'] : null;
                                                                             $btn_comprobante = (!is_null($for_doc['COMPROBANTE_CVE'])) ? '<a href="'.site_url('administracion/ver_archivo/'.$this->seguridad->encrypt_base64($for_doc['COMPROBANTE_CVE'])).'" target="_blank">'.$string_values['lbl_ver_comprobante'].'</a>' : '';
-                                                                            $btn_eliminar = ($this->seguridad->verificar_liga_eliminar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'])) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
-                                                                            $btn_editar = ($this->seguridad->verificar_liga_editar_docente($for_doc['IS_VALIDO_PROFESIONALIZACION'], $validation_estado)) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
+                                                                            $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_fd" data-value="'.$id.'">'.$string_values['eliminar'].'</button>' : '';
+                                                                            $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_editar_fd" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$id.'">'.$string_values['editar'].'</button>' : '';
                                                                             echo '<tr id="tr_'.$id.'">
-                                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($for_doc['IS_VALIDO_PROFESIONALIZACION']).'</td>
+                                                                                <td class="text-center">'.$this->seguridad->html_verificar_valido_profesionalizacion($for_doc['IS_VALIDO_PROFESIONALIZACION'], $for_doc['IS_CARGA_SISTEMA']).'</td>
                                                                                 <td>'.$for_doc['EFO_ANIO_CURSO'].'</td>
                                                                                 <td>'.$for_doc['TIP_FOR_PRO_NOMBRE'].((isset($for_doc['SUB_FOR_PRO_NOMBRE']) && !empty($for_doc['SUB_FOR_PRO_NOMBRE'])) ? ' > '.$for_doc['SUB_FOR_PRO_NOMBRE'] : '').'</td>
                                                                                 <td>'.$for_doc['CUR_NOMBRE'].'</td>
