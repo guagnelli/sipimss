@@ -21,7 +21,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
 <?php echo form_open('', array('id' => 'form_busqueda_unidades')); ?>
 <div class="list-group">
 
-    <div class="list-group-item">
+<!--    <div class="list-group-item">
         <div class="row" >
             <div class="col-md-12 col-sm-12 col-xs-12 " id='div_error_index' style='display:none'>
                 <div id='mensaje_error_div_index' class='alert'>
@@ -30,7 +30,7 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="list-group-item">
         
         <div class="panel-body">

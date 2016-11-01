@@ -216,6 +216,9 @@ class Form_complete {
 				case 'p':
 					$elemento = html_p($value, $attributes);
 				break;
+                                case 'help_popover':
+                                        $elemento = html_help_popover($attributes, $element['in_group']);
+                                break;
 				default: //Text
 					/*echo "id:";
 					pr(array('id'=>$element['id'], 'name'=>$name, 'value'=>set_value($element['id'], $value)));

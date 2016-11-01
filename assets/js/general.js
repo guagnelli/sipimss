@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip(); //Llamada a tooltip
+    $('.help-popover').popover();
 });
 
 /**
@@ -88,6 +89,29 @@ function callbackIniDataTables(idTabla){
         );
     }
     
+}
+
+/*
+ *       Función que inicializa dataTables después de una petición ajax
+ * Se mandan a la función data_ajax en 4° parametro para ejecutar la función de inicio de dataTables.
+ * No usa parametros inicializa los elementos con la clase help-popover
+ */
+function callbackIniPopover(){
+    return function(){
+        $('.help-popover').popover();
+    }
+}
+
+/*
+ *  @param: elementsArray   {array}     elementos a los que se les tratará de apicar todas las funciones de callback 
+ *  @param: callbackArray   {array}     funcinoes callback que aplicararan a los elementos del primer array 
+ */
+function someCallback(elementsArray, callbackArray){
+    for(var x in callbackArray){
+        for(var y in elementsArray){
+            callbackArray[x](elementsArray[y]);
+        }
+    }
 }
 
 /**

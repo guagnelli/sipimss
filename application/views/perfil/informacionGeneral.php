@@ -44,6 +44,18 @@
                             )
                         )
                     );
+            echo    $this->form_complete->create_element(
+                        array(
+                            'id' => 'help_perfil_nombre_clave_adscripcion',
+                            'type' => 'help_popover',
+                            'in_group' => true,
+                            'attributes' => array(
+                                'data-placement' => 'left',
+                                'title' => 'Titulo de alluda',
+                                'data-content' => 'Contenido texto de alluda'
+                            )
+                        )
+                    );
             ?>
             </div>
             <?php echo form_error_format('emp_ape_paterno'); ?>
@@ -507,12 +519,12 @@
                         'type'=>'text',
                         'value' => !empty($claveAdscripcion) ? $claveAdscripcion : '',
                         'attributes'=>array(
-                            'class'=>'form-control form-control-personal',
-                            'autocomplete'=>'off',
-                            'data-toggle'=>'tooltip',
-                            'data-placement'=>'bottom',
-                            'maxlength'=>20,
-                            'disabled' => true,
+                                'class'=>'form-control form-control-personal',
+                                'autocomplete'=>'off',
+                                'data-toggle'=>'tooltip',
+                                'data-placement'=>'bottom',
+                                'maxlength'=>20,
+                                'disabled' => true,
                             )
                         )
                     );

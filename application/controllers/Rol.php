@@ -36,12 +36,12 @@ class Rol extends MY_Controller {
 
     public function index() {
         $data = array();
-        if ($this->input->post()) { //Validar que la información se haya enviado por método POST para almacenado
-            //Carga herramientas de mensajes de texto al usuario 
+        if ($this->input->get()) { //Validar que la información se haya enviado por método POST para almacenado
+            //Carga herramientpostas de mensajes de texto al usuario 
             $this->lang->load('interface', 'spanish');
             $mensajes = $this->lang->line('interface');
             $tipo_msg = $this->config->item('alert_msg');
-            $value_rol_cve = $this->input->post('seleciion_role', TRUE);
+            $value_rol_cve = $this->input->get('seleciion_role', TRUE);
             $this->limpiar_datos_temp_variable_sesion();
 //            pr($value);
             if (empty($value_rol_cve)) {
@@ -99,11 +99,12 @@ class Rol extends MY_Controller {
         }
 //        pr($this->session->userdata('rol_seleccionado'));
 
-        $lista_roles = $this->session->userdata('lista_roles');
-        $data['lista_roles'] = $lista_roles;
-        $main_contet = $this->load->view('login/Selection_role_tpl', $data, true);
-        $this->template->setMainContent($main_contet);
-        $this->template->getTemplate();
+//        $lista_roles = $this->session->userdata('lista_roles');
+//        $data['lista_roles'] = $lista_roles;
+//        $main_contet = $this->load->view('login/Selection_role_tpl', $data, true);
+//        $this->template->setMainContent($main_contet);
+//        $this->template->getTemplate();
+        $this->template->getTemplate(FALSE, 'template/sipimss/index.tpl.php');
     }
 
     private function limpiar_datos_temp_variable_sesion() {

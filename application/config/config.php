@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 //$config['base_url'] = 'http://11.32.41.86/sipimss_censo/';
-$config['base_url'] = 'http://localhost:8080/sipimss/sipimss/';
+$config['base_url'] = 'http://localhost/sipimss/';
 /*
 |--------------------------------------------------------------------------
 | Index File

@@ -15,7 +15,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
 
 <div class="list-group">
 
-    <div class="list-group-item" style='display:none'>
+    <div class="list-group-item imss-no-border" style='display:none'>
         <div class='row' >
             <div class="row" id='div_error'>
                 <div class="col-md-10 col-sm-10 col-xs-10">
@@ -28,7 +28,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
         </div>
     </div>
 
-    <div class="list-group-item">
+    <div class="list-group-item imss-no-border">
         <ul class="nav nav-tabs">
             <li class="active">
                 <a data-toggle="tab" href="#becas_tab">

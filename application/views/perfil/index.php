@@ -17,19 +17,19 @@ $string_values = $this->lang->line('interface');
 
     <div class="col-sm-12 col-md-12 col-lg-12">
 
-        <div class="panel">
-            <div class="breadcrumbs6 panel-heading" style="padding-left:20px;">
-                <h1 id="titulo_registro">
+        <div class="panel imss-border-gray">
+            <div class="breadcrumbs6 panel-heading imss-center-content imss-background-green" style="padding-left:20px;">
+                <h1 id="titulo_registro imss-font-yellow">
                     <small>
-                        <span class="glyphicon glyphicon-info-sign">
+                        <span class="glyphicon glyphicon-info-sign imss-font-yellow">
                         </span>
                     </small>
-                    <?php echo $string_values['perfil']['lbl_titulo_seccion']; ?>
+                    <span class="imss-font-yellow"><?php echo $string_values['perfil']['lbl_titulo_seccion']; ?></span>
                 </h1>
             </div>
             <div class="panel-body">
                 <!--**************Generá menu*************-->
-                <ul class="nav nav-pills nav-stacked col-md-3">
+                <ul class="nav nav-pills nav-stacked col-md-3 imss-border-right">
                     <?php
                     foreach ($array_menu as $value) {
                         $pos = strpos($value['ruta'], ':');
@@ -60,7 +60,7 @@ $string_values = $this->lang->line('interface');
                     <?php } ?>
                 </ul>
                 <!-- genera div por opción de menu -->
-                <div id = 'tabContent' class='tab-content col-md-9'>
+                <div id = 'tabContent' class='tab-content col-md-9 imss-border-left'>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 text-left" id="msg_general" style='display:none'>
                         </div>

@@ -49,7 +49,8 @@ class Designar_validador extends MY_Controller {
         $data = carga_catalogos_generales(array(enum_ecg::cdelegacion), $data); //Carga el catálogo de ejercicio predominante
         $main_contet = $this->load->view('designar_validador/designarvalidador_tpl', $data, true);
         $this->template->setMainContent($main_contet);
-        $this->template->getTemplate();
+        $this->template->getTemplate(false, 'template/sipimss/index.tpl.php');
+//        $this->template->getTemplate();
     }
 
     public function get_data_cargar_elemento() {

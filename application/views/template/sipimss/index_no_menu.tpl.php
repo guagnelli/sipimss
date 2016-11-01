@@ -120,170 +120,14 @@
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <?php if($this->session->userdata('usuario_logeado')){ ?>
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="<?php echo asset_url();?>sipimss/img/iconTeach.png" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php echo $this->session->userdata("nombre") . " "  
-                        . $this->session->userdata("apaterno") . " "
-                        . $this->session->userdata("amaterno") ?></span>
-            </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-                <img src="<?php echo asset_url();?>sipimss/img/iconTeach.png" class="img-circle" alt="User Image">
 
-                <p>
-                 <?php echo $this->session->userdata("nombre") . " "  
-                        . $this->session->userdata("apaterno") . " "
-                        . $this->session->userdata("amaterno") ?>
-                  <small><?php echo $this->session->userdata("matricula")?></small>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <!--a href="#">Followers</a-->
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <!--a href="#">Sales</a-->
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <!--a href="#">Friends</a-->
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <!--<a href="#" class="btn btn-default btn-flat"><? php echo  $string_tpl["lbl_link_profile"]?></a>-->
-                    
-                </div>
-                <div class="pull-right">
-                  <!--<a href="<? php echo site_url('login/cerrar_session'); ?>" class="btn btn-default btn-flat"><? php echo $string_tpl["lbl_link_logout"]?></a>-->
-                    <a href="<?= base_url(); ?>/index.php/login/cerrar_session" class="btn btn-default btn-flat">Cerrar sesión</a>
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <?php }?>
     </nav>
   </header>
 
   <!-- =============================================== -->
-
-  <!-- Left side column. contains the sidebar -->
-  <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-      <!-- Sidebar user panel -->
-      
-      
-      <!--Posiblidad de quitar por duplicidad de datos-->
-<!--      <div class="user-panel">
-        <div class="pull-left image">
-          <img src="<? php echo asset_url();?>sipimss/img/iconTeach.png" class="img-circle" alt="User Image">
-        </div>
-        <div class="pull-left info">
-          <p><? php echo $this->session->userdata("nombre") . "<br /> "  
-                        . $this->session->userdata("apaterno") . "<br /> "
-                        . $this->session->userdata("amaterno") ;
-            ?>
-          </p>
-        </div>
-      </div>-->
-        <div class="user-body">
-            <p  class="bg-red">
-                <?php
-                    if( $this->session->userdata("nombre_rol") != "" ){
-                        echo "Rol: " .$this->session->userdata("nombre_rol"); 
-                    }else{
-                        echo "Seleccione un rol";
-                    }    
-                ?>
-            </p>
-        </div>
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu">
-          <?php
-          
-            // En esta parte se imprime la selección de rol del menú
-            $roles = $this->session->userdata('lista_roles');
-            if($roles){
-          ?>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-exchange"> </i>
-                    <span>
-                        <?php
-                            if( $this->session->userdata("nombre_rol") != "" ){
-                                echo "Cambio de rol "; 
-                            }else{
-                                echo "Roles disponibles ";
-                            }    
-                        ?>
-                    </span>
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-                </a>
-                <ul class="treeview-menu" >
-                   <?php
-                        $printRolesLi = "";
-                        $cont = 0;
-                        foreach($roles as $num => $rol){
-                            $printRolesLi.= '<li class=""><a href="#"><i class="fa fa-circle-o"></i> '.$rol.' </a>
-                                                    <ul class="treeview-menu">
-                                                        <li><a href="'. base_url().'index.php/rol?seleciion_role='.$num.'&seccion=resumen"><i class="fa fa-circle-o"></i> Resumen </a></li>   
-                                                        <li><a href="'. base_url().'index.php/rol?seleciion_role='.$num.'&seccion=entrar"><i class="fa fa-circle-o"></i> Entrar </a></li>
-                                                    </ul>
-                                              </li>';
-                        }
-                        echo $printRolesLi;
-                   ?> 
-                </ul>
-            </li>
-        <!--Crear menu-->
-        <?php 
-            }
-            if($this->uri->segment(1)!=='rol' AND !is_null($this->session->userdata("rol_seleccionado"))){
-            echo '<li class="header">ACTIVIDADES</li>';
-                        $rol_opciones = $this->session->userdata("rol_seleccionado");
-                        $tam_array_color = sizeof($tipo_color) - 1;
-                        $color = '';     
-//                        pr($rol_opciones);
-                        foreach($rol_opciones as $key => $value){
-                            if(empty(!$value['is_controlador'])AND intval($value['is_controlador']) ===1){
-                            $color = $tipo_color[rand(0, $tam_array_color)];//Asignar un color
-        ?>  
-        <li><a href="<?php echo site_url($value['ruta']); ?>"><i class="fa fa-circle-o <?php echo $color; ?>"></i> <span><?php  echo $value['nombre_modulo'];?></span></a></li>
-        <?php
-                }
-            }
-        }//fin if 
-        ?>
-      </ul>
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-
-  <!-- =============================================== -->
-
+  
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper imss-no-margin">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -351,7 +195,7 @@
 		</div>
 		<!-- Termina la ventana modal llamada modal_censo -->
     
-  <footer class="main-footer">
+  <footer class="main-footer imss-no-margin">
     <div class="pull-right hidden-xs">
       <b>SIPIMSS Versi&oacute;n</b> 0.4.0
     </div>

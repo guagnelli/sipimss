@@ -8,7 +8,7 @@ $this->seguridad->set_tiempo_convocatoria(); //Valida paso de convocatoria
         <?php echo $string_values['title_comisiones']; ?>
         <br>
     </div>
-    <div class="list-group-item">      
+    <div class="list-group-item imss-no-border">      
         <?php if ($this->seguridad->verificar_liga_validar()) { ?>
             <div class='row'>
                 <div class="form-group col-xs-4 col-md-4 col-md-offset-8">

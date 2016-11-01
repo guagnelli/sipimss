@@ -432,7 +432,6 @@ $lang['interface'] = array(
         'lbl_jus_comentario' => 'Justificación de la ',
         'msj_sin_comntarios_estado' => 'No existen mensajes de estado',
         'btn_text_collapse_mensajes' => 'Ver comentario(s)',
-        'btn_text_collapse_convocatorias_anteriores' => 'Ver historial de convocatorias anteriores',
         'titulo_estado_validacion' => 'Estado de la validación: ',
         'titulo_fecha_validacion' => 'Fecha de la validación: ',
         'drop_delegacion' => 'Seleccione delegación',
@@ -454,8 +453,6 @@ $lang['interface'] = array(
         'msj_convocatoria_inactiva' => 'No existe una convocatoria activa actualmente',
         'msj_convocatoria_registro_censo' => 'La convocatoria se encuentra en periodo de registro del censo',
         'msj_convocatoria_periodo_validacion_fuera' => 'La convocatoria no se encuentra en periodo de validación por el nivel actual',
-        'msj_convocatoria_periodo_validacion' => 'La convocatoria se encuentra en periodo de validación',
-        'msj_convocatoria_sin_iniciar' => 'Aún no comienza el periodo para enviar información a validación',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',

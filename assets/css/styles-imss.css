@@ -1,0 +1,40 @@
+/*
+    Corrección de estilos para adaptar template a esquema del IMSS
+*/
+/* 
+    Created on : 31/10/2016, 05:12:44 PM
+    Author     : Dperez
+*/
+
+.widget-user-2 .widget-user-username, .widget-user-2 .widget-user-desc {
+     margin-left: 0px; 
+}
+
+.imss-center-content{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
+}
+.imss-background-green{
+    background-color: #00b2a2;
+}
+.imss-font-yellow{
+    color: #f0de22;
+}
+.imss-border-gray{
+    border-color: #ddd;
+}
+.imss-border-right {
+    border-right: 1px solid #ddd;
+}
+.imss-border-left{
+    border-left: 1px solid #ddd;
+    margin-left: -1px;
+}
+.imss-no-border{
+    border: 0px solid rgba(0,0,0,0);
+}
+.imss-no-margin{
+    margin: 0;
+}
