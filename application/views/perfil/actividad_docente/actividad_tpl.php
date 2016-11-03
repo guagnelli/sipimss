@@ -152,6 +152,7 @@ if($this->seguridad->verificar_liga_validar()){
                                     <?php
                                     //Generará la tabla que muestrá las actividades del docente
                                     foreach ($datos_tabla_actividades_docente as $key => $value) {
+                                        pr($datos_tabla_actividades_docente);
                                         //Valida curso principal
                                         $is_cur_principal_igual = ($curso_principal === $value['cve_actividad_docente']) ? 1 : 0;
                                         $is_tp_actividad_igual = ($curso_principal_entidad_contiene === $value['ta_cve']) ? 1 : 0;

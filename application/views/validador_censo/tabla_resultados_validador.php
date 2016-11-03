@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //pr($lista_docentes_validar);
 ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_docente/validar_censo.js"></script>
-<div id="tabla_designar_validador" class="col-lg-12 table-responsive">
+<div id="tabla_designar_validador">
     <!--Mostrará la tabla de actividad docente --> 
     <table class="table table-striped table-hover table-bordered" id="tabla_investigacion_docente">
         <thead>
@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <tbody>
             <?php
             foreach ($lista_docentes_validar as $key_ai => $val) {
-//                pr($val['hist_validacion_cve']);
+//                pr($lista_docentes_validar);
                 $empleado_cve = $this->seguridad->encrypt_base64(intval($val['empleado_cve']));
                 $matricula = $this->seguridad->encrypt_base64($val['matricula']);
 //                $estado_val = $this->seguridad->encrypt_base64(intval($val['estado_validacion']));

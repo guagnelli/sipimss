@@ -104,46 +104,9 @@ class Seguridad {
         for ($i = 0; $i < $limit; $i++) {
             $password .= $cadena_base[rand(0, $limite)];
         }
-
         return $password;
     }
 
-//    public function verificar_liga_validar($IS_VALIDO_PROFESIONALIZACION=null, $validation_estado=null, $validation_estado_anterior=null){
-//        //$this->CI->load->config('general');
-//        $flag_validar = false;
-//        $estados_val_censo = $this->CI->config->item('estados_val_censo'); ///Obtener listado de estados de la validaci�n, definidos en archivo de configuraci�n
-//        $rol_validador_actual = $this->CI->session->userdata('datos_validador')['ROL_CVE']; //Obtener de sesi�n el rol del usuario que validar�
-//        $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Obtener de sesi�n el estado actual de la validaci�n
-//        //pr($this->CI->session->userdata());
-//        //pr($estados_val_censo[$estado_validacion_actual]['rol_permite']);
-//        //echo $IS_VALIDO_PROFESIONALIZACION."|".$rol_validador_actual."|".$estado_validacion_actual; pr('<br>');
-//        $fue_validado = $this->CI->session->userdata('datosvalidadoactual')['estado']['fue_validado'];
-//        if($IS_VALIDO_PROFESIONALIZACION==0 && in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite'])){
-//            //pr('////////////////////////////////////////////////');
-//            //pr('entro');
-//            if($fue_validado['result']==true){
-//                //pr('entro1: '.$validation_estado_anterior.'|'.$this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id']);
-//                if($validation_estado_anterior == $this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id']){
-//                    /*pr('entro2');
-//                    pr('/////////');
-//                    pr($validation_estado_anterior);
-//                    pr($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id']);*/
-//                    $flag_validar = true;
-//                }
-//            } else {
-//                //pr('else');
-//                $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validaci�n
-//                if($this->CI->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->CI->config->item('CORRECCION')
-//                    && ($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] != $validation_estado)) { //Validar estado en correcci�n
-//                    $flag_validar = false;
-//                    //pr('else2');
-//                } else {
-//                    $flag_validar = true;
-//                }
-//            }
-//        }
-//        return $flag_validar;
-//    }
     /**
      * @author Jesús Zoe Días 
      * @fecha 27/08/2016
@@ -188,18 +151,24 @@ class Seguridad {
         return $flag_validar;
     }
 
-    public function set_tiempo_convocatoria($convocatoria_delegacion = null, $rol_validar = null) {
-        if (is_null($convocatoria_delegacion)) {
+    public function set_tiempo_convocatoria($convocatoria_delegacion = null, $rol_validar = null, $is_interseccion = 0) {
+        if (is_null($convocatoria_delegacion) AND ! is_null($this->CI->session->userdata('convocatoria_delegacion'))) {
             $convocatoria_delegacion = $this->CI->session->userdata('convocatoria_delegacion');
+        } else if (is_null($convocatoria_delegacion) AND ! is_null($this->CI->session->userdata('datos_validador')['ETAPA_CONVOCATORIA'])) {
+            $convocatoria_delegacion['convocatoria_cve'] = $this->CI->session->userdata('datos_validador')['VAL_CON_CVE'];
+            $convocatoria_delegacion['aplica_convocatoria'] = $this->CI->session->userdata('datos_validador')['ETAPA_CONVOCATORIA'];
+            $convocatoria_delegacion = (object) $convocatoria_delegacion;
         }
         if (is_null($rol_validar)) {
             $rol_validar = $this->CI->session->userdata('rol_seleccionado_cve');
         }
+        $this->rol_actual = $rol_validar;
         if (!empty($rol_validar) AND ! empty($convocatoria_delegacion) AND is_null($this->pasa_convocatoria)) {
-            $this->pasa_convocatoria = get_valida_tiempo_convocatoria_rol($rol_validar, $convocatoria_delegacion->aplica_convocatoria);
+            $this->pasa_convocatoria = get_valida_tiempo_convocatoria_rol($rol_validar, $convocatoria_delegacion->aplica_convocatoria, $is_interseccion);
         } else {
             $this->pasa_convocatoria = 0;
         }
+//        pr('pasa convocatoria ' . $this->pasa_convocatoria);
     }
 
     public function set_tiempo_convocatoria_null() {
@@ -220,8 +189,10 @@ class Seguridad {
     public function verificar_liga_validar($is_profesionalizacion_evaluado = null, $is_carga_sistema = null, $estado_validacion_curso = null, $convocatoria_delegacion = null, $rol_validar = NULL) {
         //$this->CI->load->config('general');
         $flag_validar = 0;
+//        pr($this->pasa_convocatoria);
         //Valida que el curso no se encuentre evaluado "$is_profesionalizacion_evaluado" o que allá sido argado por el sistem "$is_carga_sistema"
         if (!is_null($this->pasa_convocatoria)) {
+//            pr($this->pasa_convocatoria);
             //Valida que rol tenga aceso al estado de la convocatoria con la variable global, considerar que se deba resetear cada que se consulte la convocatoria
             $flag_validar = $this->pasa_convocatoria;
 //            pr($flag_validar);
@@ -246,23 +217,11 @@ class Seguridad {
                         //No se define aún actualmente
                         break;
                 }
-                $estado_validacion_curso = $estado_validacion_curso;
             }
         }
-
-
+//        pr($flag_validar);
         return $flag_validar;
     }
-
-    /* public function verificar_estado_correccion($estado, $btn){
-      $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validaci�n
-      if($this->CI->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->CI->config->item('CORRECCION')
-      && ($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] != $estado)) { //Validar estado en correcci�n
-      $btn = '';
-      }
-
-      return $btn;
-      } */
 
     /**
      * 
@@ -272,47 +231,72 @@ class Seguridad {
      * @param type $is_carga_sistema Parametro que indica que es un curso cargado por sistema
      * @return type
      */
-    public function html_verificar_valido_profesionalizacion($is_valido_profesionalizacion = null, $is_carga_sistema = null) {
+    public function html_verificar_valido_profesionalizacion($is_valido_profesionalizacion = null, $is_carga_sistema = null, $is_valido = null) {
         if ($is_valido_profesionalizacion == 1) {
             return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="Curso evaluado"></span>';
         } else if ($is_carga_sistema == 1) {
             return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="Curso cargado por sistema"></span>';
+        } else if ($is_valido == 1) {
+            return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="left" title="Valido"></span>';
         }
         return '';
     }
 
-    public function html_verificar_validacion_registro($is_validado, $is_valido_profesionalizacion, $estado_actual, $validation_estado_anterior) {
-        $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validaci�n
-        $fue_validado = $this->CI->session->userdata('datosvalidadoactual')['estado']['fue_validado'];
-        //pr($this->CI->session->userdata());
+    /**
+     * 
+     * @author LEAS 
+     * @modificado 02/11/2016
+     * @param type $is_evaluado_gaecud Parametro que indica si ya fue evaluado el curso
+     * @param type $is_carga_sistema Parametro que indica que es un curso cargado por sistema
+     * @return type
+     */
+    public function html_verificar_evaluado_issistema_valido($is_evaluado_gaecud = null, $is_carga_sistema = null, $is_valido = null) {
+//        pr($is_valido . ' -> ' . $is_carga_sistema . ' -> ' . $is_valido);
+        $glyphicon = 'minus';
+        $texto = '';
+        if (!is_null($is_valido)) {//Menor_a mayor peso
+            switch ($is_valido) {
+                case 1:
+                    $glyphicon = 'ok-circle';
+                    $texto = 'El curso es valido ';
+                    break;
+                case 2:
+                    $glyphicon = 'remove-sign';
+                    $texto = 'El curso no es valido ';
+                    break;
+                case 3:
+                    $glyphicon = 'remove';
+                    $texto = 'El curso fue enviado a corrección ';
+                    break;
+                default :
+                    $glyphicon = 'minus';
+                    $texto = 'Curso no validado por ningun nivel ';
+            }
+        }
+        if (!is_null($is_carga_sistema) and $is_carga_sistema == 1) {
+            $glyphicon = 'ok';
+            $texto .= 'Curso cargado por sistema ';
+        }
+        if (!is_null($is_evaluado_gaecud) and $is_evaluado_gaecud == 1) {
+            $glyphicon = 'ok-sign';
+            $texto .= 'Curso evaluado por GAECUD ';
+        }
+        $texto = (!empty($texto)) ? $texto : 'Curso no validado por ningun nivel';
+        return '<span class="class_validacion_registro text-black glyphicon glyphicon-' . $glyphicon . '" '
+                . 'data-toggle="tooltip" data-placement="left" data-original-title="' . $texto . '"></span>';
+//        return '<span class="class_validacion_registro text-black glyphicon glyphicon-' . $glyphicon . '" data-toggle="tooltip" data-placement="left" title="a,snasnd"></span>';
+    }
+
+    public function html_verificar_validacion_registro($is_valido_profesionalizacion, $is_carga_sistema) {
         $html_valido = '<span class="class_validacion_registro ' . (($is_valido_profesionalizacion == 1) ? 'text-black' : '') . ' glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="' . (($is_valido_profesionalizacion == 1) ? 'Validaci&oacute;n confirmada por profesionalizaci&oacute;n' : 'Validaci&oacute;n realizada') . '"></span>';
         $html = $html_no_valido = '-';
 
-
-        $estados_val_censo = $this->CI->config->item('estados_val_censo'); ///Obtener listado de estados de la validaci�n, definidos en archivo de configuraci�n
-        $rol_validador_actual = $this->CI->session->userdata('datos_validador')['ROL_CVE']; //Obtener de sesi�n el rol del usuario que validar�
-        $estado_validacion_actual = $this->CI->session->userdata('datosvalidadoactual')['est_val']; //Obtener de sesi�n el estado actual de la validaci�n
-        //pr($estados_val_censo);
-        //pr($rol_validador_actual);
-        //pr($estado_validacion_actual);
-        //pr(in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite']));
-        //pr($fue_validado['result']);
-        if (in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite']) == false && $fue_validado['result'] == false) {
-            $html = $html_no_valido;
-        } elseif (in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite']) == false && $fue_validado['result'] == true) {
-            //pr(in_array($rol_validador_actual, $estados_val_censo[$estado_validacion_actual]['rol_permite']));
+        if ($is_valido_profesionalizacion || $is_carga_sistema) {
             $html = $html_valido;
-            //pr('***');
         } else {
-            //pr('////');
-            //echo $is_validado."|".$is_valido_profesionalizacion."|".$estado_actual."|".$validation_estado_anterior; pr('<br>');
-            $html = ($is_validado > 0 || $is_valido_profesionalizacion == 1 ||
-                    ($this->CI->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->CI->config->item('CORRECCION') && ($this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] != $estado_actual))
-                    ) ? $html_valido : $html_no_valido;
-            if ($fue_validado['result'] == true && $validation_estado_anterior != $this->CI->config->item('cvalidacion_curso_estado')['CORRECCION']['id'] && $is_validado == 0) { ///Modificar icono en caso de que se haya validado con anterioridad y el estado de la anterior validaci�n sea correcci�n
-                $html = $html_valido;
-            }
+            $html = $html_no_valido;
         }
+
         return $html;
     }
 

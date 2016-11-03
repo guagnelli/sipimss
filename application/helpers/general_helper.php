@@ -977,16 +977,16 @@ if (!function_exists('get_valida_tiempo_convocatoria_rol')) {
      * @param type $etapa_convocatoria
      * @return type Description Valida la etapa de la convocatoria del censo 
      */
-    function get_valida_tiempo_convocatoria_rol($rol_actual, $etapa_convocatoria) {
-//        pr($rol_actual);
+    function get_valida_tiempo_convocatoria_rol($rol_actual, $etapa_convocatoria, $is_inteseccion = 0) {
+//        pr('rol --> '.$rol_actual);
+//        pr('convoca --> '.$etapa_convocatoria);
 //        pr($array_hist_validacion_convocatoria);
         $CI = & get_instance();
         $CI->load->model('Catalogos_generales', 'cg');
-        $reglasValidacionConvocatoria = $CI->cg->getReglasValidacionConvocatoria(); //Carga las reglas de validacion de la onvocatoria
+        $reglasValidacionConvocatoria = $CI->cg->getReglasValidacionConvocatoria($is_inteseccion); //Carga las reglas de validacion de la onvocatoria
         if (is_null($rol_actual) AND is_null($etapa_convocatoria)) {
             return 0;
         }
-//        pr($reglasValidacionConvocatoria[$rol_actual]);
         if (isset($reglasValidacionConvocatoria[$rol_actual])) {
             return (in_array($etapa_convocatoria, $reglasValidacionConvocatoria[$rol_actual])) ? 1 : 0;
         } else {

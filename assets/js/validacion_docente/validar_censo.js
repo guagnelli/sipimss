@@ -13,6 +13,7 @@ $(function () {
 
     var hash = window.location.hash;
     $('.nav.nav-pills a[href="' + hash + '"]').tab('show', function () {
+        alert('invocacion');
         $(document).scrollTop();
     });
 

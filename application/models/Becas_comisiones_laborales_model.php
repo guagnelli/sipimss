@@ -176,7 +176,6 @@ class Becas_comisiones_laborales_model extends CI_Model {
 
     public function insert_becas($datos_beca) {
         $this->db->trans_begin();
-
         $this->db->insert('emp_beca', $datos_beca); //Almacena usuario
         $obtiene_id_emp_beca = $this->db->insert_id();
         if ($this->db->trans_status() === FALSE) {

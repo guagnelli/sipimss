@@ -75,7 +75,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-    'dsn' => '',
+    'dsn' => '', 
     
 //    'hostname' => '11.32.41.238',
 //    'username' => 'sipimss',
@@ -92,23 +92,21 @@ $db['default'] = array(
 //    'password' => 'mysql',
 //    'database' => 'sipimss',
     
-//    'hostname' => '11.32.41.238',
+//    'hostname' => '11.32.41.30',
 //    'username' => 'sipimss',
 //    'password' => 'sipimss',
-//    'database' => 'sipimss_20160815',
+//    'database' => 'sipimss_20161005',
 
-    // 'hostname' => '11.32.41.30',
-    // 'username' => 'sipimss',
-    // 'password' => 'sipimss',
-    // 'database' => 'sipimss_20160901',
-  
-
-   'hostname' => '11.32.41.30',
-   'username' => 'sipimss',
-   'password' => 'sipimss',
-   'database' => 'sipimss_20161010',
-
-  
+     'hostname' => 'localhost',
+     'username' => 'sipimss',
+     'password' => 'sipimss',
+     'database' => 'sipimss_20161019',
+//  
+//   'hostname' => '11.32.41.30',
+//   'username' => 'sipimss',
+//   'password' => 'sipimss',
+//   'database' => 'sipimss_20161003',
+//  
     
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
@@ -119,6 +117,33 @@ $db['default'] = array(
     'char_set' => 'utf8',
     'dbcollat' => 'utf8_general_ci',
     'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE,
+    
+    
+);
+
+$db['encuestas'] = array(
+    'hostname' => '11.32.41.92',
+    'username' => 'innovaedu',
+    'password' => '1n_n0v43d.u',
+    'database' => 'kio_prod2016',
+    'dbdriver' => 'postgre',
+    'port' => '5432',
+    'dbprefix' => '',
+    'pconnect' => TRUE,
+    'db_debug' => TRUE,
+    'db_debug' => (ENVIRONMENT !== 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'autoinit' => TRUE,
+    'schema' => 'encuestas',
     'encrypt' => FALSE,
     'compress' => FALSE,
     'stricton' => FALSE,

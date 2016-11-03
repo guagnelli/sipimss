@@ -1,3 +1,7 @@
+<?php
+$this->seguridad->set_tiempo_convocatoria_null(); //Reinicia validacion de convocatoria
+$this->seguridad->set_tiempo_convocatoria(null, null, $is_interseccion); //Valida paso de convocatoria y, si la validación actual es una intersección
+?>
 <div>
     <div>
         <br>
@@ -36,13 +40,13 @@
                             }
                             //$btn_validar = ($this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'])) ?                                                '<button type="button" class="btn btn-link btn-sm btn_validar_co" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_co(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                             ///////////Inicio ver liga de validación
-                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : '';
-                            $validation_estado_anterior = (isset($val['validation_estado_anterior']) && !empty($val['validation_estado_anterior'])) ? $val['validation_estado_anterior'] : null;
-                            $btn_validar = ($this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_co" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_co(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : null;
+                            $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA'], $validation_estado);
+                            $btn_validar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_validar_co" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_co(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                             ///////////Fin ver liga de validación
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
-                            echo '<td class="text-center">'.$this->seguridad->html_verificar_validacion_registro($val['validation'], $val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior).'</td>';
+                            echo '<td class="text-center">'.$this->seguridad->html_verificar_evaluado_issistema_valido($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA'], $validation_estado).'</td>';
                             echo "<td>" . $val['nom_tipo_comision'] . "</td>";
                             echo "<td>" . $val['fecha_inicio'] . "</td>";
                             echo "<td>" . $val['fecha_fin'] . "</td>";

@@ -1377,5 +1377,16 @@ FOREIGN KEY (`sec_info_cve`) REFERENCES `cseccion_informacion` (`sec_info_cve`),
 FOREIGN KEY (`val_par_muestra`) REFERENCES `validacion_parametros_muestra` (`val_par_muestra`)
 );
 
-
+-------------------------bd 28/10/2016 ejecución LEAS ----------------------------------------
+ALTER TABLE hist_beca_validacion_curso  ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_comision_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_eaid_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_ecc_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_edd_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_edis_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_eem_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_efp_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_efpd_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_fpcs_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
+ALTER TABLE hist_me_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
 

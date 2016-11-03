@@ -567,20 +567,22 @@ class Catalogos_generales extends CI_Model {
         return $resultado;
     }
 
-    public function getReglasValidacionConvocatoria() {
-        if (is_null($this->reglas_validacion_convocatoria)) {
-            $this->setReglasValidainConvocatoria();
+    public function getReglasValidacionConvocatoria($is_interseccion = 0) {
+        if ($is_interseccion) {
+            $regla_val = $this->reglas_validacion_convocatoria = array(
+                Enum_rols::Docente => array(Enum_etapa_cov::CENSO_REGISTRO, Enum_etapa_cov::CEN_CADUCO_CONVOCATORIA, Enum_etapa_cov::CEN_NO_EXISTE_CONVOCATORIA, Enum_etapa_cov::CEN_SIN_INICIAR_CONVOCATORIA),
+                Enum_rols::Validador_N1 => array(Enum_etapa_cov::CENSO_VALIDA_N1),
+                Enum_rols::Validador_N2 => array(Enum_etapa_cov::CENSO_VALIDA_N2),
+                Enum_rols::Profesionalizacion => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
+            );
+        } else {
+            $regla_val = $this->reglas_validacion_convocatoria = array(
+                Enum_rols::Docente => array(Enum_etapa_cov::CENSO_REGISTRO, Enum_etapa_cov::CEN_CADUCO_CONVOCATORIA, Enum_etapa_cov::CEN_NO_EXISTE_CONVOCATORIA, Enum_etapa_cov::CEN_SIN_INICIAR_CONVOCATORIA),
+                Enum_rols::Validador_N1 => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
+                Enum_rols::Validador_N2 => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
+                Enum_rols::Profesionalizacion => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
+            );
         }
-        return $this->reglas_validacion_convocatoria;
-    }
-
-    private function setReglasValidainConvocatoria() {
-        $this->reglas_validacion_convocatoria = array(
-            Enum_rols::Docente => array(Enum_etapa_cov::CENSO_REGISTRO, Enum_etapa_cov::CEN_CADUCO_CONVOCATORIA, Enum_etapa_cov::CEN_NO_EXISTE_CONVOCATORIA, Enum_etapa_cov::CEN_SIN_INICIAR_CONVOCATORIA),
-            Enum_rols::Validador_N1 => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
-            Enum_rols::Validador_N2 => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
-            Enum_rols::Profesionalizacion => array(Enum_etapa_cov::CENSO_VALIDA_N1, Enum_etapa_cov::CENSO_VALIDA_N2),
-        );
         return $this->reglas_validacion_convocatoria;
     }
 

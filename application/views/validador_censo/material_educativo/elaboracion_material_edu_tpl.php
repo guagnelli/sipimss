@@ -7,6 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //        pr($datos_tabla_actividades_docente);
 //        pr($actividades_docente_objet);
 echo js('validacion_censo_profesores/material_educativo.js');
+$this->seguridad->set_tiempo_convocatoria_null(); //Reinicia validacion de convocatoria
+$this->seguridad->set_tiempo_convocatoria(null, null, $is_interseccion); //Valida paso de convocatoria y, si la validación actual es una intersección
 ?>
 <!-- <script type='text/javascript' src="<?php echo base_url(); ?>assets/js/validacion_censo_profesores/material_educativo.js"></script> -->
 <!-- Inicio informacion personal -->
@@ -36,6 +38,7 @@ echo js('validacion_censo_profesores/material_educativo.js');
                     <tbody>
                         <?php
                         foreach ($lista_material_educativo as $key_ai => $val) {
+//                            pr($lista_material_educativo);
                             $key = $val['emp_material_educativo_cve'];
                             $key = $this->seguridad->encrypt_base64($key);
                             $key_tp_mat_edu = $val['tipo_material_cve'];
@@ -53,13 +56,14 @@ echo js('validacion_censo_profesores/material_educativo.js');
                             }
                             //$btn_validar = ($this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'])) ?                                                '<button type="button" class="btn btn-link btn-sm btn_validar_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_me(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                             ///////////Inicio ver liga de validación
-                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : '';
-                            $validation_estado_anterior = (isset($val['validation_estado_anterior']) && !empty($val['validation_estado_anterior'])) ? $val['validation_estado_anterior'] : null;
-                            $btn_validar = ($this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior)) ? '<button type="button" class="btn btn-link btn-sm btn_validar_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_me(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
+//                            $validation_estado = (isset($val['validation_estado']) && !empty($val['validation_estado'])) ? $val['validation_estado'] : '';
+//                            $validation_estado_anterior = (isset($val['validation_estado_anterior']) && !empty($val['validation_estado_anterior'])) ? $val['validation_estado_anterior'] : null;
+                            $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA']);
+                            $btn_validar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_validar_me" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="'.$key.'" onclick="validar_me(this);" data-valid="'.$this->seguridad->encrypt_base64($this->config->item('ACCION_GENERAL')['VALIDAR']['valor']).'">'.$string_values['validar'].'</button>' : '';
                             ///////////Fin ver liga de validación
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">";
-                            echo '<td class="text-center">'.$this->seguridad->html_verificar_validacion_registro($val['validation'], $val['IS_VALIDO_PROFESIONALIZACION'], $validation_estado, $validation_estado_anterior).'</td>';
+                            echo '<td class="text-center">'.$this->seguridad->html_verificar_evaluado_issistema_valido($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA'], $val['validation_estado']).'</td>';
                             echo "<td>" . $val['nombre_material'] . "</td>";
                             echo "<td>" . $desc_tipo_material . "</td>";
                             echo "<td>" . $val['material_educativo_anio'] . "</td>";
