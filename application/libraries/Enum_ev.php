@@ -26,7 +26,7 @@ class Enum_ev {
             Listo_por_validar = 4,
             Por_validar_n1 = 5,
             En_revision_n1 = 6,
-            Validado_n1 = 7,
+            Validado_n1 = 7,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
             Por_validar_n2 = 8,
             En_revision_n2 = 9,
             Validado_n2 = 10,

@@ -155,7 +155,7 @@ class Formacion_model extends CI_Model {
         $this->db->join('comprobante', 'emp_formacion_profesional.comprobante_cve=comprobante.comprobante_cve', 'left');
 
         $query = $this->db->get('emp_formacion_profesional'); //Obtener conjunto de registros
-        pr($this->db->last_query());
+//        pr($this->db->last_query());
         $resultado=$query->result_array();
 
         $query->free_result(); //Libera la memoria

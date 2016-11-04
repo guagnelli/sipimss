@@ -3,6 +3,10 @@ menu_busqueda_validar_censo['matricula'] = 'Matrícula';
 menu_busqueda_validar_censo['nombre'] = 'Nombre del empleado';
 menu_busqueda_validar_censo['clavecategoria'] = 'Categoría';
 
+//Carga las solicitudes
+$(window).load(function () {
+    funcion_buscar_docentes_validar();
+});
 
 $(function () {
     $('#btnEditarNombre').on('click', function () {
