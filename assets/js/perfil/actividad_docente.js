@@ -299,7 +299,7 @@ function funcion_guardar(element) {
 //                                    .replace(/\$\$actividadgeneralcve\$\$/g, cve_actividad_general);//identificador unitario de el row
 //                            $('#tabla_actividades').append($(htmlNewRow));
                             recargar_opcion_menu_mostrar_mensaje('seccion_actividad_docente', true, response_json.error);
-                            
+
                         }
                     } catch (e) {
                         $('#info_actividad_docente').html(response);

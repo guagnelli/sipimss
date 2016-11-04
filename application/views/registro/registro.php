@@ -8,34 +8,19 @@
 
 <div class="row" id="contenedor_formulario">
 
-<!--    <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="panel">
-                <div class="breadcrumbs6 panel-heading" style="padding-left:20px;">
-                    <h1>
-                        <small>
-                            <span class="glyphicon glyphicon-info-sign"></span>
-                        </small>
-                        <? php echo $string_values['registro']['lbl_bienvenido']; ?>
-                    </h1>
-                </div>
-                <div class="panel-body">
-
-                </div>
-        </div>
-    </div>-->
     <div class="col-sm-12 col-md-2 col-lg-2">
-        <a href="javascript:window.history.back();" style="float:right"><i class="fa fa-backward"></i>  Regresar</a>
+        <a href="javascript:window.history.back();" style="float:right"><i class="fa fa-mail-reply"></i>  Regresar</a>
     </div>
     <div class="col-sm-12 col-md-8 col-lg-8 ">
         <div class="row" style="margin:5px;">
             <div class="panel imss-border-gray">
-                <div class="breadcrumbs6 panel-heading imss-background-green" style="padding-left:20px;">
+                <div class="breadcrumbs6 panel-heading imss-border-bottom" style="padding-left:20px;">
                     <h1 id="titulo_registro imss-font-yellow">
                         <small>
-                            <span class="glyphicon glyphicon-info-sign imss-font-yellow">
+                            <span class="glyphicon glyphicon-info-sign ">
                             </span>
                         </small>
-                        <span class="imss-font-yellow"><?php echo $string_values['registro']['lbl_bienvenido']; ?></span>
+                        <span class=""><?php echo $string_values['registro']['lbl_bienvenido']; ?></span>
                     </h1>
                 </div>
 

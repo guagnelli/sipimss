@@ -18,13 +18,13 @@ $string_values = $this->lang->line('interface');
     <div class="col-sm-12 col-md-12 col-lg-12">
 
         <div class="panel imss-border-gray">
-            <div class="breadcrumbs6 panel-heading imss-center-content imss-background-green" style="padding-left:20px;">
+            <div class="breadcrumbs6 panel-heading imss-center-content imss-border-bottom " style="padding-left:20px;">
                 <h1 id="titulo_registro imss-font-yellow">
                     <small>
-                        <span class="glyphicon glyphicon-info-sign imss-font-yellow">
+                        <span class="glyphicon glyphicon-info-sign ">
                         </span>
                     </small>
-                    <span class="imss-font-yellow"><?php echo $string_values['perfil']['lbl_titulo_seccion']; ?></span>
+                    <span class=""><?php echo $string_values['perfil']['lbl_titulo_seccion']; ?></span>
                 </h1>
             </div>
             <div class="panel-body">

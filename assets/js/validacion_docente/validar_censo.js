@@ -3,17 +3,17 @@ menu_busqueda_validar_censo['matricula'] = 'Matrícula';
 menu_busqueda_validar_censo['nombre'] = 'Nombre del empleado';
 menu_busqueda_validar_censo['clavecategoria'] = 'Categoría';
 
+
 $(function () {
     $('#btnEditarNombre').on('click', function () {
         var isReadOnly = $('.nameFields').prop('readonly');
         $('.nameFields').prop('readonly', !isReadOnly);
     });
 
-
+//    $('#btn_buscar_docentes_validacion').trigger('click')
 
     var hash = window.location.hash;
     $('.nav.nav-pills a[href="' + hash + '"]').tab('show', function () {
-        alert('invocacion');
         $(document).scrollTop();
     });
 
@@ -83,7 +83,8 @@ function funcion_ver_validacion_empleado(element) {
 function funcion_cerrar_validacion_empleado(element) {
 //    alert('jsahjhdadas');
     $('#select_perfil_validar').empty();
-    data_ajax_post(site_url + '/validacion_censo_profesores/seccion_delete_datos_validado', null, null);
+//  data_ajax_post(site_url + '/validacion_censo_profesores/seccion_delete_datos_validado', null, null);
+    data_ajax_post(site_url + '/validacion_censo_profesores/seccion_delete_datos_validado', '#form_busqueda_docentes_validar', null);
 }
 
 function ver_comentario_estado_doc(element) {

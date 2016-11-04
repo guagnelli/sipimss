@@ -24,18 +24,19 @@ $string_values = $this->lang->line('interface');
     <div class="col-sm-12 col-md-12 col-lg-12">
 
         <div class="panel">
-            <div class="breadcrumbs6 panel-heading" style="padding-left:20px;">
+            <a data-toggle='tab' href='#select_buscador_validar' class="imss-return-link-top" onclick="funcion_cerrar_validacion_empleado(this)"> <i class="fa fa-reply"></i> Regresar </a>
+            <div class="breadcrumbs6 panel-heading imss-center-content imss-border-bottom" style="padding-left:20px;">
                 <h1 id="titulo_registro">
                     <small>
-                        <span class="glyphicon glyphicon-info-sign">
+                        <span class="glyphicon glyphicon-info-sign ">
                         </span>
                     </small>
-                    <?php echo $string_values['perfil']['lbl_titulo_seccion']; ?>
+                    <span class=""><?php echo $string_values['perfil']['lbl_titulo_seccion']; ?></span>
                 </h1>
             </div>
             <div class="panel-body">
                 <!--**************Generá menu*************-->
-                <ul class="nav nav-pills nav-stacked col-md-3">
+                <ul class="nav nav-pills nav-stacked col-md-3 imss-border-right">
                     <?php
                     foreach ($array_menu as $value) {
                         $pos = strpos($value['ruta'], ':');
@@ -66,7 +67,7 @@ $string_values = $this->lang->line('interface');
                     <?php } ?>
                 </ul>
                 <!-- genera div por opción de menu -->
-                <div id = 'tabContent' class='tab-content col-md-9'>
+                <div id = 'tabContent' class='tab-content col-md-9 imss-border-left'>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 text-left" id="msg_general" style='display:none'>
                         </div>
@@ -125,15 +126,16 @@ $string_values = $this->lang->line('interface');
                             </div>
                         </div>
                     <?php } ?>
-                    <div class="row">
+<!--                    <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 contenedor" >
                             <span id="pie"  onclick="funcion_cerrar_validacion_empleado(this)">
                                 <a class="botonF1" data-toggle='tab' href='#select_buscador_validar'>><?php // echo $string_values['lbl_validar_empleado'];   ?></a>
                             </span>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
+            <a data-toggle='tab' href='#select_buscador_validar' class="imss-return-link-bottom" onclick="funcion_cerrar_validacion_empleado(this)"> <i class="fa fa-reply"></i> Regresar </a>
         </div>
     </div>
 </div>

@@ -116,11 +116,11 @@ function funcion_carga_validador(element) {
     var e = document.getElementById("candidato_a_validador");
     var candidato_a_validador = parseInt(e.options[e.selectedIndex].value);
     var div_resultado = 'div_buscador_sied'; //div resultados
-    document.getElementById("div_resultados_validadores").innerHTML = "";
+//    document.getElementById("div_resultados_validadores").innerHTML = "";
     document.getElementById("div_buscador_sied").innerHTML = "";
-    if (candidato_a_validador > 0) {
-        div_resultado = 'div_resultados_validadores';
-    }
+//    if (candidato_a_validador > 0) {
+//        div_resultado = 'div_resultados_validadores';
+//    }
     $.ajax({
         url: site_url + '/designar_validador/get_data_cargar_datos_opcion_validador',
 //        data: {cve_inv: cve_inv, carga_datos: 1, idrow: idrow, comprobantecve: comprobantecve},

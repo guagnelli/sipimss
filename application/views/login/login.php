@@ -9,10 +9,11 @@
         <!-- CSS -->
         
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-        <link rel="stylesheet" href="<?php echo asset_url();?>/login/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="<?php echo asset_url();?>/login/font-awesome/css/font-awesome.min.css">
-		<link rel="stylesheet" href="<?php echo asset_url();?>/login/css/form-elements.css">
-        <link rel="stylesheet" href="<?php echo asset_url();?>/login/css/style.css">
+        <link rel="stylesheet" href="<?php echo asset_url();?>login/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo asset_url();?>login/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="<?php echo asset_url();?>login/css/form-elements.css">
+        <link rel="stylesheet" href="<?php echo asset_url();?>login/css/style.css">
+        <link rel="stylesheet" href="<?php echo asset_url();?>css/styles-imss.css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -142,7 +143,7 @@
                                              <?php echo form_error('userCaptcha','','');?>
                                          </span>
                                     </div>
-			                        <button type="submit" class="btn">Entrar</button>
+			                        <button type="submit" class="btn btn-success">Entrar</button>
 			                        <input type="hidden" 
                                            id="token" 
                                            name="token" 

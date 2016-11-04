@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 2016 ';
 ?>
-
+<link rel="stylesheet" href="<?= base_url(); ?>/assets/css/validacion_censo_profesores/styles.css">
 <style type="text/css">
     .button-padding {padding-top: 30px}
     .rojo {color: #a94442}.panel-body table{color: #000} .pinfo{padding-left:20px; padding-bottom: 20px;}

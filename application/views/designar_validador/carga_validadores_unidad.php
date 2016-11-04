@@ -43,6 +43,6 @@ if (!isset($lista_candidaros)) {
 <div id = "div_buscador_sied" class="list-group-item" >
 
 </div>
-<div id = "div_resultados_validadores" class="list-group-item" >
+<!--<div id = "div_resultados_validadores" class="list-group-item" >
 
-</div>
+</div>-->

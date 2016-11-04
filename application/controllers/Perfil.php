@@ -79,8 +79,8 @@ class Perfil extends MY_Controller {
         $main_content = $this->load->view('perfil/index', $datosPerfil, true);
         $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
-        $this->template->getTemplate(false, 'template/sipimss/index.tpl.php');
-//        $this->template->getTemplate();
+//        $this->template->getTemplate(false, 'template/sipimss/index.tpl.php');
+        $this->template->getTemplate();
     }
 
     /**

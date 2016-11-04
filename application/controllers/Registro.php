@@ -209,8 +209,8 @@ class Registro extends MY_Controller {
         //$this->load->view('registro/index', $datos_registro);
         $main_contet = $this->load->view('registro/registro', $datos_registro, true);
         $this->template->setMainContent($main_contet);
-        $this->template->getTemplate(false, 'template/sipimss/index_no_menu.tpl.php');
-//        $this->template->getTemplate();
+//        $this->template->getTemplate(false, 'template/sipimss/index_no_menu.tpl.php');
+        $this->template->getTemplate();
     }
 
     public function imprime_texto_lang() {

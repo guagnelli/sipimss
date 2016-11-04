@@ -49,7 +49,8 @@ class Template {
      * @return: mixed[] Data arreglo de datos de plantilla con la siguisnte estructura array("title"=>null,"nav"=>null,"main_title"=>null,"main_content"=>null);
      */
 
-    function getTemplate($tipo = FALSE,$tpl = 'template/home.tpl.php') {
+//    function getTemplate($tipo = FALSE,$tpl = 'template/home.tpl.php') {
+    function getTemplate($tipo = FALSE,$tpl = 'template/sipimss/index.tpl.php') {
         //if(!empty($this->lang_text)){ $this->elements = $this->elements+$this->lang_text }
         if($this->multiligual){
             $this->CI->lang->load('interface', $this->lang);

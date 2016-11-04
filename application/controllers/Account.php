@@ -79,8 +79,8 @@ class Account extends MY_Controller {
         }
 
         $this->template->setMainContent($main_contet);
-        $this->template->getTemplate(false, 'template/sipimss/index_no_menu.tpl.php');
-//        $this->template->getTemplate();
+//        $this->template->getTemplate(false, 'template/sipimss/index_no_menu.tpl.php');
+        $this->template->getTemplate();
     }
 
     /**

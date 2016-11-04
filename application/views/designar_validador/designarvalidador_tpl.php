@@ -31,13 +31,10 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
             </div>
         </div>
     </div>-->
-    <div class="list-group-item">
         
-        <div class="panel-body">
-            <div>
-                <br>
-                <h4><?php echo $string_values['titulo_template']; ?> </h4>
-                <br>
+        <div class="panel-body imss-background-white imss-border-gray">
+            <div class="imss-center-content imss-border-bottom">
+                <h2><?php echo $string_values['titulo_template']; ?> </h2>
             </div>
             <br>
             <div class="row">
@@ -108,7 +105,6 @@ $fecha_ultima_actualizacion = 'Fecha de última actualizacón: 11 de julio de 20
         </div>
         <?php echo form_close(); ?>
 
-    </div>
 </div>
 
 

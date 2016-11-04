@@ -402,7 +402,7 @@ class Validacion_censo_profesores extends MY_Controller {
             redirect(site_url());
         }
     }
-
+    
     //Erradicar, por Luis LEAS
     private function obtener_validacion_correccion($validacion_gral_cve, $est_val) {
         $resultado = array('correccion' => array('result' => false, 'VALIDACION_CVE' => null), 'fue_validado' => array('result' => false, 'VALIDACION_CVE' => null));

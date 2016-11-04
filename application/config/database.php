@@ -75,7 +75,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-    'dsn' => '', 
+    'dsn' => '',
     
 //    'hostname' => '11.32.41.238',
 //    'username' => 'sipimss',
@@ -92,21 +92,23 @@ $db['default'] = array(
 //    'password' => 'mysql',
 //    'database' => 'sipimss',
     
-//    'hostname' => '11.32.41.30',
+//    'hostname' => '11.32.41.238',
 //    'username' => 'sipimss',
 //    'password' => 'sipimss',
-//    'database' => 'sipimss_20161005',
+//    'database' => 'sipimss_20160815',
 
-     'hostname' => 'localhost',
-     'username' => 'sipimss',
-     'password' => 'sipimss',
-     'database' => 'sipimss_20161019',
-//  
-//   'hostname' => '11.32.41.30',
-//   'username' => 'sipimss',
-//   'password' => 'sipimss',
-//   'database' => 'sipimss_20161003',
-//  
+    // 'hostname' => '11.32.41.30',
+    // 'username' => 'sipimss',
+    // 'password' => 'sipimss',
+    // 'database' => 'sipimss_20160901',
+  
+
+   'hostname' => '11.32.41.30',
+   'username' => 'sipimss',
+   'password' => 'sipimss',
+   'database' => 'sipimss',
+
+  
     
     'dbdriver' => 'mysqli',
     'dbprefix' => '',

@@ -25,9 +25,13 @@
   <link rel="stylesheet" href="<?php echo asset_url();?>sipimss/css/skins/_all-skins.css">
   <!-- Pace style -->
   <link rel="stylesheet" href="<?php echo asset_url();?>plugins/pace/pace.css">
+  <!--date time piker-->
+  <?php echo css("bootstrap-datetimepicker.css"); ?>
+  <?php echo css("jasny-bootstrap.min.css"); ?>
   <!--estilos IMSS sobre la platilla-->
   <link href="<?php echo asset_url();?>css/styles-imss.css" rel="stylesheet" type="text/css"/>
   
+  <?php echo css("general_censo.css"); ?>
   <!-- APPRISE -->
   <?php echo css("apprise.css"); ?>
 
@@ -41,12 +45,20 @@
   <script src="<?php echo asset_url();?>plugins/pace/pace.min.js"></script>
   <!-- SlimScroll -->
   <script src="<?php echo asset_url();?>plugins/slimScroll/jquery.slimscroll.min.js"></script>
+
   <!-- FastClick -->
   <script src="<?php echo asset_url();?>plugins/fastclick/fastclick.js"></script>
   <!-- AdminLTE App -->
   <script src="<?php echo asset_url();?>sipimss/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="<?php echo asset_url();?>sipimss/js/demo.js"></script>
+
+    <?php echo js("moment.js"); ?>
+    <?php echo js("transition.js"); ?>
+    <?php echo js("bootstrap-datetimepicker.js"); ?>
+    <?php echo js("collapse.js"); ?>
+    <?php echo js("file-browse.js"); ?>
+    <?php echo js("jasny-bootstrap.min.js"); ?>
   
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,51 +74,50 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="row" style="background-color:#d1d3d4; height:80px">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8 col-xs-12">
-            <div class="row">
-                <div class="col-lg-1"></div>
-                <div class="col-xs-2 col-sm-2">
-                    <a href="#">
-                        <img src="<?php echo asset_url();?>sipimss/img/sipimss_logo_2.png" 
-                             height="80px"
-                             class="" 
-                             alt="SIPIMSS"
-                             title="SIPIMSS"
-                             target="_blank"/>
-                    </a>
-                </div>
-                <div class="col-xs-2 col-sm-2">
+    <div class="col col-xs-12 col-sm-8 col-sm-push-2">
+        <div class="imss-table-img-header">
+            <div class="imss-table-row">
+                <div class="imss-table-cell">
                     <a href="http://edumed.imss.gob.mx">
-                        <img src="<?php echo asset_url();?>sipimss/img/ces.png" 
-                             class="img-header" 
-                             alt="Coordinación de Educación en Salud" 
-                             title="Coordinación de Educación en Salud"
-                             target="_blank"/>
-                    </a>
+                            <img src="<?php echo asset_url();?>sipimss/img/ces.png" 
+                                 class="" 
+                                 alt="Coordinación de Educación en Salud" 
+                                 title="Coordinación de Educación en Salud"
+                                 target="_blank"/>
+                        </a>
                 </div>
-                <div class="col-xs-2 col-sm-2">
+                <div class="imss-table-cell">
                     <a href="http://innovacioneducativa.imss.gob.mx">
-                        <img src="<?php echo asset_url();?>sipimss/img/die.png" 
-                             class="img-header"
-                             alt="División de Innovación Educativa"
-                             title="División de Innovación Educativa"
-                             target="_blank"/>
-                    </a>
+                            <img src="<?php echo asset_url();?>sipimss/img/die.png" 
+                                 class=""
+                                 alt="División de Innovación Educativa"
+                                 title="División de Innovación Educativa"
+                                 target="_blank"/>
+                        </a>
                 </div>
-                <div class="col-xs-2 col-sm-2">
+                <div class="imss-table-cell">
+                    <a href="#">
+                            <img src="<?php echo asset_url();?>sipimss/img/sipimss_logo_2.png" 
+                                 height="55px"
+                                 class="" 
+                                 alt="SIPIMSS"
+                                 title="SIPIMSS"
+                                 target="_blank"/>
+                        </a>
+                </div>
+                <div class="imss-table-cell">
                     <a href="http://www.imss.gob.mx">
-                        <img src="<?php echo asset_url();?>sipimss/img/imss.png" 
-                             class="img-header" 
-                             alt="Instituto Mexicano del Seguro Social"
-                             title="Instituto Mexicano del Seguro Social"
-                             target="_blank"/>
-                    </a>
+                            <img src="<?php echo asset_url();?>sipimss/img/imss.png" 
+                                 class="" 
+                                 alt="Instituto Mexicano del Seguro Social"
+                                 title="Instituto Mexicano del Seguro Social"
+                                 target="_blank"/>
+                        </a>
                 </div>
-                <div class="col-lg-1"></div>
             </div>
         </div>
-        <div class="col-lg-2"></div>
+    </div>
+        
 </div>
 <!-- Site wrapper -->
 <div class="wrapper">
@@ -119,15 +130,16 @@
       <span class="logo-lg"><b>SIPIMSS</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
+    <nav class="navbar navbar-static-top <?= ($this->session->userdata('usuario_logeado'))? "show" : "imss-display-none" ?>">
       <!-- Sidebar toggle button-->
+      <?php if($this->session->userdata('usuario_logeado')){ ?>
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <?php if($this->session->userdata('usuario_logeado')){ ?>
+      
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
@@ -167,7 +179,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <!--<a href="#" class="btn btn-default btn-flat"><? php echo  $string_tpl["lbl_link_profile"]?></a>-->
+                  <a href="#" class="btn btn-default btn-flat">Mi perfil</a>
                     
                 </div>
                 <div class="pull-right">
@@ -185,6 +197,7 @@
 
   <!-- =============================================== -->
 
+  <?php if($this->session->userdata('usuario_logeado')){ ?>
   <!-- Left side column. contains the sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -247,8 +260,8 @@
                         foreach($roles as $num => $rol){
                             $printRolesLi.= '<li class=""><a href="#"><i class="fa fa-circle-o"></i> '.$rol.' </a>
                                                     <ul class="treeview-menu">
-                                                        <li><a href="'. base_url().'index.php/rol?seleciion_role='.$num.'&seccion=resumen"><i class="fa fa-circle-o"></i> Resumen </a></li>   
-                                                        <li><a href="'. base_url().'index.php/rol?seleciion_role='.$num.'&seccion=entrar"><i class="fa fa-circle-o"></i> Entrar </a></li>
+                                                        <li><a href="'. base_url().'index.php/rol?seleciion_role='.$num.'&seccion=resumen"><i class="fa fa-bar-chart"></i> Resumen </a></li>   
+                                                        <li><a href="'. base_url().'index.php/rol?seleciion_role='.$num.'&seccion=entrar"><i class="fa fa-sign-in"></i> Entrar </a></li>
                                                     </ul>
                                               </li>';
                         }
@@ -263,13 +276,13 @@
             echo '<li class="header">ACTIVIDADES</li>';
                         $rol_opciones = $this->session->userdata("rol_seleccionado");
                         $tam_array_color = sizeof($tipo_color) - 1;
-                        $color = '';     
+                   //     $color = '';     
 //                        pr($rol_opciones);
                         foreach($rol_opciones as $key => $value){
                             if(empty(!$value['is_controlador'])AND intval($value['is_controlador']) ===1){
-                            $color = $tipo_color[rand(0, $tam_array_color)];//Asignar un color
+                   //         $color = $tipo_color[rand(0, $tam_array_color)];//Asignar un color
         ?>  
-        <li><a href="<?php echo site_url($value['ruta']); ?>"><i class="fa fa-circle-o <?php echo $color; ?>"></i> <span><?php  echo $value['nombre_modulo'];?></span></a></li>
+        <li><a href="<?php echo site_url($value['ruta']); ?>"><i class="fa fa-circle-o "></i> <span><?php  echo $value['nombre_modulo'];?></span></a></li>
         <?php
                 }
             }
@@ -279,11 +292,11 @@
     </section>
     <!-- /.sidebar -->
   </aside>
-
+  <?php } ?>
   <!-- =============================================== -->
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper  <?php if( !$this->session->userdata('usuario_logeado')  ){ echo ' imss-no-margin-left '; }?>" >  
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -351,7 +364,7 @@
 		</div>
 		<!-- Termina la ventana modal llamada modal_censo -->
     
-  <footer class="main-footer">
+  <footer class="main-footer <?php if( !$this->session->userdata('usuario_logeado')  ){ echo ' imss-no-margin-left '; }?> ">
     <div class="pull-right hidden-xs">
       <b>SIPIMSS Versi&oacute;n</b> 0.4.0
     </div>
