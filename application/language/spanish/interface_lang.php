@@ -441,11 +441,10 @@ $lang['interface'] = array(
         'text_estado_revision' => 'En revisión',
         'msj_no_completo_envio_validacion_censo' => 'No es posible enviar a validación del censo en este momento, 
         para ello requiere cumplir con los siguientes requisitos. <br> 1. Debe contar por lo menos con una actividad de docente. 
-        <br> 2.- Debe contar por lo menos con un registro de formación en salud. <br> 3.- Debe seleccionar un curso principal en actividad docente 
-        ',
+        <br> 2.- Debe contar por lo menos con un registro de formación en salud. <br> 3.- Debe seleccionar un curso principal en actividad docente',
         'msj_envio_validacion' => 'Envió de datos a validación del censo',
-        'msj_completa_info_docente' => 'El docente completo los requisitos minimos. Para enviar a validar el censo',
         'lbl_departamento' => 'Unidad',
+        'msj_completa_info_docente' => 'El docente completo los requisitos minimos. Para enviar a validar el censo',
         'msj_no_muestra_para_validador_actual' => 'La información del docente no puede ser validada en esté momento por el nivel de validación actual',
         'msj_validado_nivel_actual' => 'El proceso de validación para el nivel actual concluye satisfactoriamente',
         'msj_revision_nivel_actual' => 'El proceso de validación para el nivel actual se encuentra en revisión',
@@ -454,6 +453,16 @@ $lang['interface'] = array(
         'msj_convocatoria_registro_censo' => 'La convocatoria se encuentra en periodo de registro del censo',
         'msj_convocatoria_periodo_validacion_fuera' => 'La convocatoria no se encuentra en periodo de validación por el nivel actual',
     ),
+    
+    'etapas_convocatoria' => array(
+        'conv_act' => 'La convocatoria se encuentra en periodo de registro del censo',
+        'conv_vf1' => 'La convocatoria se encuentra en periodo de validación por la unidad de adscripción',
+        'conv_vf2' => 'La convocatoria no se encuentra en periodo de validación por el nivel 2',
+        'conv_sin' => 'La convocatoría esta sin iniciar',
+        'conv_nap' => 'El periodo de convocatoria termino',
+        'conv_nec' => 'No existe actualmente una convocatoria',
+        
+        ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',
         't_h_anio' => 'Año en que fue dirigida',

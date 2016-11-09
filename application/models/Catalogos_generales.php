@@ -567,6 +567,12 @@ class Catalogos_generales extends CI_Model {
         return $resultado;
     }
 
+    /**
+     * @author LEAS
+     * @fecha 01/11/2016
+     * @param type $is_interseccion
+     * @return type
+     */
     public function getReglasValidacionConvocatoria($is_interseccion = 0) {
         if ($is_interseccion) {
             $regla_val = $this->reglas_validacion_convocatoria = array(
@@ -584,6 +590,53 @@ class Catalogos_generales extends CI_Model {
             );
         }
         return $this->reglas_validacion_convocatoria;
+    }
+
+    /**
+     * @author LEAS
+     * @fecha 07/11/2016
+     * @param type $estado_convocatoria
+     * @prop tipo_convocatoria "st" -> sin tipo, "censo" -> convocatoria del censo
+     * "evaluacion" -> convocatoria de evaluación curricular  
+     */
+    public function getPropiedadesEstadosConvocatoria($estado_convocatoria) {
+        $tipo_msg = $this->config->item('alert_msg');
+        $this->lang->load('interface', 'spanish');
+        $string_values = $this->lang->line('interface')['etapas_convocatoria'];
+        $propiedades_etapa_concvocatoria = array(
+            Enum_etapa_cov::CENSO_REGISTRO => array(
+                'tipo_convocatoria' => 'censo',
+                'tipo_mensaje' => $tipo_msg['INFO']['class'],
+                'mensaje_a' => $string_values['conv_act'],
+            ),
+            Enum_etapa_cov::CENSO_VALIDA_N1 => array(
+                'tipo_convocatoria' => 'censo',
+                'tipo_mensaje' => $tipo_msg['WARNING']['class'],
+                'mensaje_a' => $string_values['conv_vf1'],
+            ),
+            Enum_etapa_cov::CENSO_VALIDA_N2 => array(
+                'tipo_convocatoria' => 'censo',
+                'tipo_mensaje' => $tipo_msg['WARNING']['class'],
+                'mensaje_a' => $string_values['conv_vf2'],
+            ),
+            Enum_etapa_cov::CEN_SIN_INICIAR_CONVOCATORIA => array(
+                'tipo_convocatoria' => 'censo',
+                'tipo_mensaje' => $tipo_msg['WARNING']['class'],
+                'mensaje_a' => $string_values['conv_sin'],
+            ),
+            Enum_etapa_cov::CEN_CADUCO_CONVOCATORIA => array(
+                'tipo_convocatoria' => 'censo',
+                'tipo_mensaje' => $tipo_msg['WARNING']['class'],
+                'mensaje_a' => $string_values['conv_nap'],
+            ),
+            Enum_etapa_cov::CEN_NO_EXISTE_CONVOCATORIA => array(
+                'tipo_convocatoria' => 'st',
+                'tipo_mensaje' => $tipo_msg['WARNING']['class'],
+                'mensaje_a' => $string_values['conv_nec'],
+            ),
+        );
+        
+        return (isset($propiedades_etapa_concvocatoria[$estado_convocatoria]) ? $propiedades_etapa_concvocatoria[$estado_convocatoria]: array()) ;
     }
 
 //Function getALL is Deprecated from this model, now, it's located in Expediente_model...

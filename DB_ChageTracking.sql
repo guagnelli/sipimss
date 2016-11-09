@@ -1390,3 +1390,17 @@ ALTER TABLE hist_efpd_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP defau
 ALTER TABLE hist_fpcs_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
 ALTER TABLE hist_me_validacion_curso ADD VAL_CUR_FCH_ACTUALIZA TIMESTAMP default current_timestamp on UPDATE current_timestamp;
 
+-------------------------bd 08/11/2016 ejecución LEAS ----------------------------------------
+ALTER TABLE validacion_convocatoria_delegacion ADD regiones_cve char(4) default 'd';  --Campo agregado a la tabla 
+alter table validacion_convocatoria_delegacion add primary key (regiones_cve);
+
+CREATE TABLE validacion_convocatoria_delegacion_region(
+val_conv_del_reg_cve int(11) AUTO_INCREMENT,
+VAL_CON_CVE int(11) NOT NULL,
+delegacion_cve char(2) not null,
+region_cve char(4) not null,
+constraint pk_ebs
+primary key(val_conv_del_reg_cve)
+FOREIGN KEY (VAL_CON_CVE) REFERENCES `cseccion_informacion` (`sec_info_cve`),
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

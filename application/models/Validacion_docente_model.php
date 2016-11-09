@@ -424,27 +424,27 @@ class Validacion_docente_model extends CI_Model {
      * @param $convocatoria 
      * @return datos del validador
      */
-    function get_hist_estado_validacion_docente_actual($empleado_cve = null, $convocatoria = null) {
-        if (is_null($convocatoria) || is_null($empleado_cve) || empty($convocatoria) || empty($empleado_cve)) {
-//            pr('ashdlasldakl  es vacia');
-            return array();
-        }
-//        pr($convocatoria);
-//        pr($empleado_cve);
-        $select = array('vg.VALIDACION_GRAL_CVE "val_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
-            'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "est_val"', 'vg.VAL_CONV_CVE',
-            'hv.VAL_COMENTARIO "comentario_estado"', 'vg.EMPLEADO_CVE "empleado_cve"');
-        $this->db->where('hv.IS_ACTUAL', 1); //Para obtener el último registro de la actualización
-        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
-        $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
-        $this->db->select($select);
-
-        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
-
-        $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
+//    function get_hist_estado_validacion_docente_actual($empleado_cve = null, $convocatoria = null) {
+//        if (is_null($convocatoria) || is_null($empleado_cve) || empty($convocatoria) || empty($empleado_cve)) {
+////            pr('ashdlasldakl  es vacia');
+//            return array();
+//        }
+////        pr($convocatoria);
+////        pr($empleado_cve);
+//        $select = array('vg.VALIDACION_GRAL_CVE "val_grl_cve"', 'hv.VALIDACION_CVE "validacion_cve"',
+//            'hv.VALIDADOR_CVE "validador_cve"', 'hv.VAL_ESTADO_CVE "est_val"', 'vg.VAL_CONV_CVE',
+//            'hv.VAL_COMENTARIO "comentario_estado"', 'vg.EMPLEADO_CVE "empleado_cve"');
+//        $this->db->where('hv.IS_ACTUAL', 1); //Para obtener el último registro de la actualización
+//        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
+//        $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
+//        $this->db->select($select);
+//
+//        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
+//
+//        $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
 //        pr($query);
 //        if (!is_null($query->row()) AND is_object($query->row())) {
-        $row_query = $query->result_array();
+//        $row_query = $query->result_array();
 //        pr($row_query);
 //        }
 //        
@@ -454,8 +454,8 @@ class Validacion_docente_model extends CI_Model {
 //        }
 //        pr($this->db->last_query());    
 //        pr($this->db->last_query());
-        return $row_query;
-    }
+//        return $row_query;
+//    }
 
     /**
      * @author LEAS 
@@ -487,6 +487,42 @@ class Validacion_docente_model extends CI_Model {
         $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
         $this->db->order_by('hv.VALIDACION_CVE', "desc");
         $this->db->order_by('vg.VAL_CONV_CVE', "desc");
+        $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
+//        pr($this->db->last_query());
+        $result = $query->result_array();
+        return $result;
+    }
+
+    /**
+     * @author LEAS 
+     * @fecha 07/11/2016
+     * @param $empleado_cve 
+     * Uso actual en docente
+     * @param $convocatoria 
+     * @return Historias de los estados de validación del docente, incluye todos 
+     * los mensajes y comentarios de los validadores en el proceso de validación
+     */
+    function get_estado_validacion_docente($empleado_cve, $convocatoria) {
+        $select = array('vg.VALIDACION_GRAL_CVE "validacion_gral"', 'v.VALIDADOR_CVE "validador_cve"',
+            'vg.EMPLEADO_CVE "emp_docente_cve"', 'vg.VAL_CONV_CVE "convocatoria_cve"',
+            'hv.VALIDACION_CVE "hist_validacion_cve"', 'v.ROL_CVE "rol_validador"',
+            'v.EMPLEADO_CVE "emp_validador_cve"', 'hv.VAL_ESTADO_CVE "est_val"');
+
+        $this->db->select($select);
+        $this->db->where('vg.VAL_CONV_CVE', $convocatoria);
+        $this->db->where('vg.EMPLEADO_CVE', $empleado_cve);
+
+        $this->db->join('hist_validacion hv', 'hv.VALIDACION_GRAL_CVE = vg.VALIDACION_GRAL_CVE');
+        $this->db->join('cvalidacion_estado cve', 'cve.VAL_ESTADO_CVE = hv.VAL_ESTADO_CVE');
+        $this->db->join('validador v', 'v.VALIDADOR_CVE = hv.VALIDADOR_CVE', 'left');
+        $this->db->join('empleado em', 'em.EMPLEADO_CVE = v.EMPLEADO_CVE', 'left');
+
+        $this->db->order_by('hv.VALIDACION_CVE', "desc");
+        $this->db->order_by('vg.VAL_CONV_CVE', "desc");
+        $this->db->order_by('hv.VAL_ESTADO_CVE', "desc");
+
+        $this->db->limit(1);
+
         $query = $this->db->get('validacion_gral vg'); //Obtener conjunto de registros
 //        pr($this->db->last_query());
         $result = $query->result_array();
@@ -598,10 +634,11 @@ class Validacion_docente_model extends CI_Model {
      * @author LEAS
      * @fecha 26/10/2016
      * @param type $rol_validador Rol validador aactual
-     * @param type                                                                                                                                                                                 
+     * @param type $delegacion                                                                                                                                                                                 
+     * @param type $adscripcion Departamento de adscripción, 
      * @return type descript 
      */
-    public function get_secciones_validacion_obligatorias_nivel($rol_validador, $delegacion_adscripcion) {
+    public function get_secciones_validacion_obligatorias_nivel($rol_validador, $delegacion, $adscripcion = null) {
 //        $select = array('vpm.departamento_cve', 'vpm.delegacion_cve', 'vpm.regiones_cve',
 //            'vpm.val_esperados_minimos', 'vpm.porsentaje_muestra', 'vpms.sec_info_cve'
 //        );
@@ -611,15 +648,25 @@ class Validacion_docente_model extends CI_Model {
         $this->db->where('is_actual', 1);
         switch ($rol_validador) {
             case Enum_rols::Validador_N1:
-                $this->db->where('vpm.departamento_cve', $delegacion_adscripcion);
+                $this->db->where('vpm.departamento_cve', $adscripcion);
+                //Secciones por defecto, para el rol correspondiente a N1
                 $val_secc_ = array('sec_info_cve' => array(Enum_sec::S_FORMACION_PROFESIONAL,
                         Enum_sec::S_EDUCACION_DISTANCIA, Enum_sec::S_ESP_MEDICA, Enum_sec::S_ACTIVIDAD_DOCENTE));
                 break;
             case Enum_rols::Validador_N2:
-                $this->db->where('vpm.delegacion_cve', $delegacion_adscripcion);
+                //Secciones por defecto, para el rol correspondiente a N2
+                $this->db->where('vpm.delegacion_cve', $delegacion);
                 $val_secc_ = array('sec_info_cve' => array(Enum_sec::S_ACT_INV_EDU, Enum_sec::S_FORMACION_PROFESIONAL));
                 break;
-            default:
+            case Enum_rols::Docente:
+                $this->db->where('vpm.departamento_cve', $adscripcion);
+                $this->db->or_where('vpm.delegacion_cve', $delegacion);
+                //Secciones por defecto, para el rol correspondiente a docente
+                $val_secc_ = array('sec_info_cve' => array(Enum_sec::S_FORMACION_PROFESIONAL,
+                        Enum_sec::S_EDUCACION_DISTANCIA, Enum_sec::S_ESP_MEDICA, Enum_sec::S_ACTIVIDAD_DOCENTE
+                        ));
+
+                break;
         }
         $query = $this->db->get('validacion_parametros_muestra vpm'); //Obtener conjunto de registros
         $result = $query->result_array();
@@ -859,7 +906,7 @@ class Validacion_docente_model extends CI_Model {
         }
         //pr($this->db->last_query());
     }
-    
+
     /**
      * 
      * @param type $empleado empleado a validar 
@@ -876,8 +923,8 @@ class Validacion_docente_model extends CI_Model {
             $result_estados .= $or . ' hv.VAL_ESTADO_CVE = ' . $value;
             $or = ' or ';
         }
-        $where_estados = ' hgn.VAL_CUR_EST_CVE in(1,2) ';//Estados para validar cursos (valido, no valido)
-        
+        $where_estados = ' hgn.VAL_CUR_EST_CVE in(1,2) '; //Estados para validar cursos (valido, no valido)
+
         $union = '';
         $select = 'select sum(A1) "num_registros_cargados", sum(B1) "num_registros_est_valido" from ( ';
         foreach ($secciones_validacion as $value) {
@@ -887,7 +934,7 @@ class Validacion_docente_model extends CI_Model {
                     . 'select 0 "A1", count(*) "B1" from ' . $value['entidad_validacion_curso'] . ' hgn '
                     . ' join hist_validacion hv on hv.VALIDACION_CVE = hgn.VALIDACION_CVE '
                     . ' join validador v on v.VALIDADOR_CVE  = hv.VALIDADOR_CVE '
-                    . ' where  ' . $where_estados . ' and (' . $result_estados . ') and  hv.VALIDACION_GRAL_CVE = ' . $val_gral .' and v.ROL_CVE = ' . $rol_cve 
+                    . ' where  ' . $where_estados . ' and (' . $result_estados . ') and  hv.VALIDACION_GRAL_CVE = ' . $val_gral . ' and v.ROL_CVE = ' . $rol_cve
             ;
             $union = ' union ';
         }
@@ -904,6 +951,43 @@ class Validacion_docente_model extends CI_Model {
 //        pr($query);
 //        pr($this->db->last_query());
         return $is_validados;
+    }
+
+    /**
+     * 
+     * @param type $empleado empleado a validar 
+     * @param type $hist_estados_curso_evaluar estado de curso a validar, es decir, "valido" y "no valido" 
+     * @param type $val_gral validacion general de la validacion, activa con la convocatoria
+     * @param type $rol_cve rol que va a validar N1 o N2
+     * @param type $secciones_validacion array() de propiedades de las secciones obligatorias a validar
+     * @return type Un entero, donde "1->valido" y "0->No valido"
+     */
+    public function get_minimo_cursos_envio_validacion($empleado, $secciones_validacion) {
+//        pr($secciones_validacion);
+        $union = '';
+        $select = 'select sum(A1) "num_registros_cargados", seccion "secciones" from ( ';
+        foreach ($secciones_validacion as $seccion => $value) {
+            $select .= $union .
+                    ' select count(*) "A1", ' . $seccion . ' "seccion" from ' . $value['entidad'] . ' where EMPLEADO_CVE = ' . $empleado . ' and IS_VALIDO_PROFESIONALIZACION = 0 and IS_CARGA_SISTEMA = 0 '
+            ;
+            $union = ' union ';
+        }
+        $select .= ' ) as res ';
+        $group_by = ' group by secciones ';
+        $order_by = ' order by num_registros_cargados desc ';
+        
+        $select .= $group_by . $order_by;
+        
+        $query = $this->db->query($select)->result();
+        $this->db->reset_query();
+        //Recorre los resultados, con el objetivo de identificarque exista por lo menos un registro
+        foreach ($query as $value) {
+            $value->num_registros_cargados;
+            $value->secciones;
+        }
+        pr($query);
+        pr($this->db->last_query());
+        return $query;
     }
 
 }

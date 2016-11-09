@@ -64,7 +64,7 @@ class Validacion_censo_profesores extends MY_Controller {
                     $datos_validador['VAL_CON_CVE'] = $convocatoria->convocatoria_cve;
                     $datos_validador['ETAPA_CONVOCATORIA'] = $convocatoria->aplica_convocatoria;
 //                    pr($datos_validador['VAL_CON_CVE']);
-                    $secciones_validacion_obligatoria = $this->vdm->get_secciones_validacion_obligatorias_nivel($rol_usuario, $departamento_cve)['sec_info_cve']; //Busca datos del validador actual
+                    $secciones_validacion_obligatoria = $this->vdm->get_secciones_validacion_obligatorias_nivel($rol_usuario, null, $departamento_cve)['sec_info_cve']; //Busca datos del validador actual
                     //Obtiene el historial completo de la validación del docente según la convocatoría
                     $historial_estados_validacion = $this->vdm->get_hist_estados_validacion_docente($this->obtener_id_empleado(), $convocatoria->convocatoria_cve);
                     $data['historial_estados_validacion'] = $historial_estados_validacion;
@@ -108,6 +108,7 @@ class Validacion_censo_profesores extends MY_Controller {
         //Almacena la sección obligatoria por nivel de validación, para validacion por profesionalización no aplica la validación 
         $this->session->set_userdata('seccion_validacion_obligatoria', $secciones_validacion_obligatoria);
         $this->session->set_userdata('datos_validador', $datos_validador);
+        
 
         $array_catalogos[] = enum_ecg::cvalidacion_estado;
         $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cvalidacion_estado => 'VAL_ESTADO_CVE')); //Carga el catálogo de ejercicio predominante
