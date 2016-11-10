@@ -127,7 +127,7 @@ class Validacion_docente_model extends CI_Model {
 
         $ejecuta = $this->db->get('validacion_gral as vg'); //Prepara la consulta ( aún no la ejecuta)
         $query = $ejecuta->result_array();
-        pr($this->db->last_query());
+//        pr($this->db->last_query());
 //        $query->free_result();
         $this->db->flush_cache(); //Limpia la cache
         $result['result'] = $query;
@@ -664,7 +664,7 @@ class Validacion_docente_model extends CI_Model {
                 //Secciones por defecto, para el rol correspondiente a docente
                 $val_secc_ = array('sec_info_cve' => array(Enum_sec::S_FORMACION_PROFESIONAL,
                         Enum_sec::S_EDUCACION_DISTANCIA, Enum_sec::S_ESP_MEDICA, Enum_sec::S_ACTIVIDAD_DOCENTE
-                        ));
+                ));
 
                 break;
         }
@@ -731,6 +731,38 @@ class Validacion_docente_model extends CI_Model {
             return $parametros_insert_nuevo_hist;
         }
         //pr($this->db->last_query());
+    }
+
+    public function insert_val_gral_estado_val_docente($param_inser_val_gral, $param_inser_historial) {
+        $this->db->trans_begin(); //Definir inicio de transacción
+        $this->db->where($param_inser_val_gral);
+        $query = $this->db->get('validacion_gral'); //Obtener conjunto de registros
+        $resultado = $query->result_array();
+        $query->free_result(); //Libera la memoria
+        
+        if (!empty($resultado)) {
+            $data_gral_cve = $resultado[0]['VALIDACION_GRAL_CVE'];
+        } else {
+            $this->db->insert('validacion_gral', $param_inser_val_gral); //Inserción de registro de la validación general
+            $data_gral_cve = $this->db->insert_id(); //Obtener identificador insertado
+        }
+
+        if ($this->db->trans_status() === FALSE || $data_gral_cve < 1) {//rolback 
+            $this->db->trans_rollback();
+            return 0;
+        } else {
+            $param_inser_historial['VALIDACION_GRAL_CVE'] = $data_gral_cve; //agrega cve de la validación general
+            $this->db->insert('hist_validacion', $param_inser_historial); //Inserción de registro en historial de validación
+            $data_hist_cve = $this->db->insert_id(); //Obtener identificador insertado
+
+            if ($this->db->trans_status() === FALSE || $data_hist_cve < 1) {//rolback 
+                $this->db->trans_rollback();
+                return 0;
+            } else {//No es validación por profesionalización, 
+                $this->db->trans_commit();
+                return $data_hist_cve;
+            }
+        }
     }
 
     /**
@@ -956,11 +988,10 @@ class Validacion_docente_model extends CI_Model {
     /**
      * 
      * @param type $empleado empleado a validar 
-     * @param type $hist_estados_curso_evaluar estado de curso a validar, es decir, "valido" y "no valido" 
-     * @param type $val_gral validacion general de la validacion, activa con la convocatoria
-     * @param type $rol_cve rol que va a validar N1 o N2
      * @param type $secciones_validacion array() de propiedades de las secciones obligatorias a validar
-     * @return type Un entero, donde "1->valido" y "0->No valido"
+     * @return type Un entero, donde "1->Registro actividades minimas para validar" y "0->No cumple con lo"
+     * @descript Los bloques o secciones del la carrera docente para que puedan ser validados, deben cumplir con un minimo
+     * cursos o actividades registradas
      */
     public function get_minimo_cursos_envio_validacion($empleado, $secciones_validacion) {
 //        pr($secciones_validacion);
@@ -975,19 +1006,39 @@ class Validacion_docente_model extends CI_Model {
         $select .= ' ) as res ';
         $group_by = ' group by secciones ';
         $order_by = ' order by num_registros_cargados desc ';
-        
+
         $select .= $group_by . $order_by;
-        
+
         $query = $this->db->query($select)->result();
         $this->db->reset_query();
-        //Recorre los resultados, con el objetivo de identificarque exista por lo menos un registro
+        $tmp_bufer_bloque = array();
+        //Recorre los resultados, con el objetivo de identificarque exista por lo menos un registro en cada bloque o sección obligatoria
         foreach ($query as $value) {
-            $value->num_registros_cargados;
-            $value->secciones;
+            $prop_seccion = $secciones_validacion[$value->secciones]; //Se obtiene las propiedades de una sección
+            if ($value->num_registros_cargados > 0) {//Cuenta que la cantidad de registros por la sección, sea mayor que cero, para agregar como parte de un bloque
+                if (!isset($tmp_bufer_bloque[$prop_seccion['bloque']])) {//Si no existe el bloque en el temporal, lo agregará
+                    $tmp_bufer_bloque[$prop_seccion['bloque']] = $value->num_registros_cargados; //guarda el bloque
+                }
+            }
         }
-        pr($query);
-        pr($this->db->last_query());
-        return $query;
+        $tmp_bufer_bloque_esperado = array();
+        //Cuenta bloques de seccion esperados
+        foreach ($secciones_validacion as $key => $value) {
+            if ($value['bloque']) {
+                if (!isset($tmp_bufer_bloque_esperado[$value['bloque']])) {//Si no existe el bloque en el temporal, lo agregará
+                    $tmp_bufer_bloque_esperado[$value['bloque']] = $key;
+                }
+            }
+        }
+
+        //Cuenta cantidad de bloques esperados y bloques con cursos registrados 
+        $count_bloques_netos = count($tmp_bufer_bloque);
+        $count_bloques_esperados = count($tmp_bufer_bloque_esperado);
+        $res = ($count_bloques_netos == $count_bloques_esperados) ? 1 : 0; //Si la cantidad de bloques esperados minimos es igual a la cantidad de bloques cubiertos por los cursos registrados pasa para enviar a validar
+//        pr($count_bloques_netos . ' -> ' . $count_bloques_esperados);
+//        pr($query);
+//        pr($this->db->last_query());
+        return $res;
     }
 
 }

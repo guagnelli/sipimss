@@ -27,7 +27,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$lang['interface_'][''][''] = '';
 //$lang['interface']['registro']['texto_bienvenida'] = 'Hola mundo';
 $lang['interface'] = array(
-
     'secciones' => array(
         'lbl_ca_titulo' => 'Comisión académica',
         'lbl_fs_titulo' => 'Formaci&oacute;n en salud',
@@ -430,7 +429,7 @@ $lang['interface'] = array(
         'save_estado_error' => 'No fue posible llevar a cabo la validación. <br>Por favor intente más tarde',
         'titulo_modal_comentario' => 'Detalle del proceso de validación del docente',
         'lbl_jus_comentario' => 'Justificación de la ',
-        'msj_sin_comntarios_estado' => 'No existen mensajes de estado',
+        'msj_sin_comntarios_estado' => 'Sin comentarios de estado',
         'btn_text_collapse_mensajes' => 'Ver comentario(s)',
         'titulo_estado_validacion' => 'Estado de la validación: ',
         'titulo_fecha_validacion' => 'Fecha de la validación: ',
@@ -448,12 +447,11 @@ $lang['interface'] = array(
         'msj_no_muestra_para_validador_actual' => 'La información del docente no puede ser validada en esté momento por el nivel de validación actual',
         'msj_validado_nivel_actual' => 'El proceso de validación para el nivel actual concluye satisfactoriamente',
         'msj_revision_nivel_actual' => 'El proceso de validación para el nivel actual se encuentra en revisión',
-        'msj_por_validar_nivel_actual' => 'Es posible comenzar a validar la formación del docente por el nivel actual' ,
+        'msj_por_validar_nivel_actual' => 'Es posible comenzar a validar la formación del docente por el nivel actual',
         'msj_convocatoria_inactiva' => 'No existe una convocatoria activa actualmente',
         'msj_convocatoria_registro_censo' => 'La convocatoria se encuentra en periodo de registro del censo',
         'msj_convocatoria_periodo_validacion_fuera' => 'La convocatoria no se encuentra en periodo de validación por el nivel actual',
     ),
-    
     'etapas_convocatoria' => array(
         'conv_act' => 'La convocatoria se encuentra en periodo de registro del censo',
         'conv_vf1' => 'La convocatoria se encuentra en periodo de validación por la unidad de adscripción',
@@ -461,8 +459,19 @@ $lang['interface'] = array(
         'conv_sin' => 'La convocatoría esta sin iniciar',
         'conv_nap' => 'El periodo de convocatoria termino',
         'conv_nec' => 'No existe actualmente una convocatoria',
-        
-        ),
+    ),
+    'msj_estado_validacion_censo' => array(
+        'msj_info_docente_2' => 'No cumple con las actividades minimas para la validación del censo',
+        'msj_info_docente_3' => 'La información fue enviada a validar',
+        'msj_info_valido_4' => 'La información se encuentra lista para validar',
+        'msj_info_valido_5' => 'La información se encuentra en revisión por la unidad de adscripción',
+        'msj_info_valido_6' => 'La información se encuentra en revisión por la unidad de adscripción',
+        'msj_info_docente_7' => 'La información fue validada por la unidad de adscripción',
+        'msj_info_valido_8' => 'La información se encuentra en revisión por la unidad delegacinal',
+        'msj_info_valido_9' => 'La información se encuentra en revisión por la unidad delegacinal',
+        'msj_info_valido_10' => 'La información fue validada por la delegación',
+        'msj_info_valido_gral' => 'La información se en validación',
+    ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',
         't_h_anio' => 'Año en que fue dirigida',
@@ -753,7 +762,7 @@ $lang["interface_tpl"] = array(
     'lbl_link_logout' => 'Cerrar sesión',
     'lbl_link_profile' => 'Mi perfil',
 );
-$lang["fields"]= array(
+$lang["fields"] = array(
     Enum_sec::B_FORMACION => array(
         Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD => array(
             "lbl_" . Enum_sec::S_FOR_PERSONAL_CONTINUA_SALUD . "_nombre" => "SUBTIP_NOMBRE",
@@ -776,7 +785,7 @@ $lang["fields"]= array(
         Enum_sec::S_ACTIVIDAD_DOCENTE => array(
             "lbl_" . Enum_sec::S_ACTIVIDAD_DOCENTE . "_nombre" => "nom_curso",
             "lbl_" . Enum_sec::S_ACTIVIDAD_DOCENTE . "_tipo" => "nombre_tp_actividad",
-        ),   
+        ),
     ),
     Enum_sec::B_BECAS_COMISIONES_LABORALES => array(
         Enum_sec::S_BECAS_LABORALES => array(

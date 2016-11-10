@@ -38,7 +38,7 @@ $this->load->helper('fecha');
                         <button type="button" class="btn btn-github" data-toggle="collapse" data-target="#id_ver_comentario<?php echo $key; ?>" aria-expanded="true"><?php echo $string_values['btn_text_collapse_mensajes']; ?></button>
                         <div id="id_ver_comentario<?php echo $key; ?>" class="collapse" aria-expanded="true">
                             <?php
-                            $estado = $estados_censo[$value['est_val']];
+                            $estado = $estados_censo[$value['estado_validacion']];
                             $color = $array_colores[$estado['color_status']]['color']; //Obtiene los array de color del estado
                             ?>
                             <div class="alert alert-<?php echo $color; ?>">
@@ -60,7 +60,7 @@ $this->load->helper('fecha');
             if (!empty($historial_estados)) {
                 foreach ($historial_estados as $value) {
                     if (intval($value['is_comentario']) === 1) {
-                        $estado = $estados_censo[$value['est_val']];
+                        $estado = $estados_censo[$value['estado_validacion']];
                         $color = $array_colores[$estado['color_status']]['color']; //Obtiene los array de color del estado
                         ?>
                         <div class="alert alert-<?php echo $color; ?>">

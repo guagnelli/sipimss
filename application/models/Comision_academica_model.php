@@ -52,7 +52,9 @@ class Comision_academica_model extends My_model {
 //            }
 //        }
         $subquery1 = (array_key_exists('validation_estado', $params)) ? $this->get_formacion_subquery($params['validation_estado']) : null;
-        $this->db->select('(' . $subquery1 . ') AS validation_estado');
+        if (!is_null($subquery1)) {
+            $this->db->select('(' . $subquery1 . ') AS validation_estado');
+        }
         ////////////////////////////////Fin verificación existencia de validación actual
 
         if (array_key_exists('fields', $params)) {
@@ -64,6 +66,9 @@ class Comision_academica_model extends My_model {
         }
         if (array_key_exists('conditions', $params)) {
             $this->db->where($params['conditions']);
+        }
+        if (array_key_exists('conditions_in', $params)) {
+            $this->db->where_in('emp_comision.TIP_COMISION_CVE', $params['conditions_in']['emp_comision.TIP_COMISION_CVE']);
         }
         if (array_key_exists('order', $params)) {
             $this->db->order_by($params['order']);
@@ -77,7 +82,7 @@ class Comision_academica_model extends My_model {
         $this->db->join('ctipo_comision', 'ctipo_comision.TIP_COMISION_CVE=emp_comision.TIP_COMISION_CVE', 'left');
 
         $query = $this->db->get('emp_comision'); //Obtener conjunto de registros
-        //pr($this->db->last_query());
+//        pr($this->db->last_query());
         $resultado = $query->result_array();
 
         $query->free_result(); //Libera la memoria

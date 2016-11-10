@@ -108,7 +108,7 @@ class Validacion_censo_profesores extends MY_Controller {
         //Almacena la sección obligatoria por nivel de validación, para validacion por profesionalización no aplica la validación 
         $this->session->set_userdata('seccion_validacion_obligatoria', $secciones_validacion_obligatoria);
         $this->session->set_userdata('datos_validador', $datos_validador);
-        
+
 
         $array_catalogos[] = enum_ecg::cvalidacion_estado;
         $data = carga_catalogos_generales($array_catalogos, $data, $condiciones, TRUE, NULL, array(enum_ecg::cvalidacion_estado => 'VAL_ESTADO_CVE')); //Carga el catálogo de ejercicio predominante
@@ -403,7 +403,7 @@ class Validacion_censo_profesores extends MY_Controller {
             redirect(site_url());
         }
     }
-    
+
     //Erradicar, por Luis LEAS
     private function obtener_validacion_correccion($validacion_gral_cve, $est_val) {
         $resultado = array('correccion' => array('result' => false, 'VALIDACION_CVE' => null), 'fue_validado' => array('result' => false, 'VALIDACION_CVE' => null));
@@ -556,7 +556,7 @@ class Validacion_censo_profesores extends MY_Controller {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post()) {
                 $datos_post = $this->input->post(null, true); //Obtenemos el post o los valores
-//                pr($datos_post);
+//                pr($datos_post);    
                 $this->lang->load('interface', 'spanish');
                 $string_values = $this->lang->line('interface')['validador_censo'];
                 $data_comentario['string_values'] = $string_values;
@@ -565,9 +565,14 @@ class Validacion_censo_profesores extends MY_Controller {
                 //Obtiene la información de validación actual del docente (validación por n1, n2 y profesionalización simultania)
                 $data_comentario['validaciones_grales'] = $this->vdm->get_detalle_his_val_actual($validacion_gral_cve);
                 $data_comentario['nom_docente'] = '';
-                if (!empty($data_comentario['validaciones_grales'])) {//Si es diferente de vacio, se obtiene el nombre del docente
-                    $data_comentario['nom_docente'] = $data_comentario['validaciones_grales'][0]['nom_docente']; //Nombre del docente
-                    $data_comentario['matricula'] = $data_comentario['validaciones_grales'][0]['matricula']; //Nombre del docente
+                $data_comentario['matricula'] = '';
+
+                $this->load->model('Usuario_model', 'usu');
+                $data_empleado = $this->usu->get_empleado(array('EMPLEADO_CVE' => $empleado_cve), array('concat(EMP_NOMBRE, " ", EMP_APE_PATERNO, " ", EMP_APE_MATERNO) as "nom_docente"', 'emp_matricula "matricula"'));
+//                
+                if (!empty($data_empleado)) {//Si es diferente de vacio, se obtiene el nombre del docente
+                    $data_comentario['nom_docente'] = $data_empleado['nom_docente']; //Nombre del empleado docente
+                    $data_comentario['matricula'] = $data_empleado['matricula']; //Matricula del empleado docente
                 }
 
 //                pr($data_comentario['validaciones_grales']);
@@ -870,16 +875,42 @@ class Validacion_censo_profesores extends MY_Controller {
                 ////////Inicio agregar validaciones de estado
                 $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
                 
-                $val_estado_comisiones = array('validation_estado' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE ', 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
+                $val_estado_comisiones = array('validation_estado' => array(
+                    'table' => 'hist_comision_validacion_curso', 
+                    'fields' => 'VAL_CUR_EST_CVE', 
+                    'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE ', 
+                    'order' => 'VAL_CUR_FCH DESC', 
+                    'limit' => '1'));
                 /////////Fin agregar validaciones de estado
                 $data['comisiones'][$ctc] = $this->ca->get_comision_academica(
-                        array_merge(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 
+                        array_merge(array('conditions' => array('emp_comision.EMPLEADO_CVE' => $this->obtener_id_empleado(), 
                     'emp_comision.TIP_COMISION_CVE' => $ctc), 
                     'order' => 'EC_ANIO desc', 
                     'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE, TIP_CUR_NOMBRE', 
-                    'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE'),$val_estado_comisiones));
+                    ),
+                  $val_estado_comisiones));
             }
-            //pr($data);
+//            $tc_cve = array();
+//            foreach ($data['catalogos']['ctipo_comision'] as $ctc => $tc) {
+//                $tc_cve[] = $ctc;
+//            }
+//            ////////Inicio agregar validaciones de estado
+//            $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
+//
+//            $val_estado_comisiones = array('validation_estado' => array(
+//                    'table' => 'hist_comision_validacion_curso',
+//                    'fields' => 'VAL_CUR_EST_CVE',
+//                    'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE ',
+//                    'order' => 'VAL_CUR_FCH DESC',
+//                    'limit' => '1'));
+//            /////////Fin agregar validaciones de estado
+//            $data['comisiones'][$ctc] = $this->ca->get_comision_academica(
+//                    array_merge(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado()),
+//                'order' => 'EC_ANIO desc',
+//                'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE, TIP_CUR_NOMBRE',
+//                'conditions_in' => array('emp_comision.TIP_COMISION_CVE' => $tc_cve)), $val_estado_comisiones));
+//            //pr($data);
+            $data['is_interseccion'] = $this->obtener_is_interseccion(); //Agrega si es intersección en muestreo de docentes entré validador de nivel 1 y 2 
             echo $this->load->view('validador_censo/comision_academica/comision_academica.php', $data, true); //Valores que muestrán la lista
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
@@ -951,18 +982,9 @@ class Validacion_censo_profesores extends MY_Controller {
             $validacion_cve_session = $this->obtener_id_validacion();
 
             $this->load->model('Direccion_tesis_model', 'dt');
-            ////////Inicio agregar validaciones de estado
-            $val_correc_dir = $validation_est_corr_dir = array();
-            $estado_validacion_actual = $this->session->userdata('datosvalidadoactual')['est_val']; //Estado actual de la validación
-            if ($this->config->item('estados_val_censo')[$estado_validacion_actual]['color_status'] == $this->config->item('CORRECCION')) { ///Verificar que se encuentre en estado corrección para poder agregar
-                $val_correc_dir = array('validation_estado' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE != ' . $validacion_cve_session, 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
-            }
-            if (isset($this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['result']) && $this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['result'] == true) {
-                $validation_est_corr_dir = array('validation_estado_anterior' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE=' . $this->session->userdata('datosvalidadoactual')['estado']['fue_validado']['VALIDACION_CVE'], 'order' => 'VAL_CUR_FCH DESC', 'limit' => '1'));
-            }
-            /////////Fin agregar validaciones de estado
-            $data['lista_direccion'] = $this->dt->get_lista_datos_direccion_tesis(array_merge(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'TIP_COMISION_CVE' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']), 'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE', 'order' => 'EC_ANIO desc', 'validation' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'COUNT(*) AS validation', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE AND VALIDACION_CVE=' . $validacion_cve_session)), $val_correc_dir, $validation_est_corr_dir));
+            $data['lista_direccion'] = $this->dt->get_lista_datos_direccion_tesis(array_merge(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'TIP_COMISION_CVE' => $this->config->item('tipo_comision')['DIRECCION_TESIS']['id']), 'fields' => 'emp_comision.*, NIV_ACA_NOMBRE, COM_ARE_NOMBRE', 'order' => 'EC_ANIO desc', 'validation_estado' => array('table' => 'hist_comision_validacion_curso', 'fields' => 'VAL_CUR_EST_CVE', 'conditions' => 'hist_comision_validacion_curso.EMP_COMISION_CVE=emp_comision.EMP_COMISION_CVE', 'order' => 'VAL_CUR_FCH desc', 'limit' => 1))));
             //pr($data);
+            $data['is_interseccion'] = $this->obtener_is_interseccion(); //Agrega si es intersección en muestreo de docentes entré validador de nivel 1 y 2 
             echo $this->load->view('validador_censo/direccionTesis', $data, true); //Valores que muestrán la lista
         } else {
             redirect(site_url()); //Redirigir al inicio del sistema si se desea acceder al método mediante una petición normal, no ajax
@@ -2085,9 +2107,9 @@ class Validacion_censo_profesores extends MY_Controller {
                 $data_comision['lista_comisiones'] = $lista_comisiones;
                 $data_becas['string_values'] = $string_values;
                 $data_comision['string_values'] = $string_values;
-                $data_becas['is_interseccion'] = $this->session->userdata('datos_validador')['is_interseccion'];//Para validar que no sea una intersección en becas 
+                $data_becas['is_interseccion'] = $this->session->userdata('datos_validador')['is_interseccion']; //Para validar que no sea una intersección en becas 
                 $data['cuerpo_becas'] = $this->load->view('validador_censo/becas_comisiones/becas_cuerpo', $data_becas, TRUE); //Valores que muestrán la lista
-                $data_comision['is_interseccion'] = $this->session->userdata('datos_validador')['is_interseccion'];//Para validar que no sea una intersección en comisiones
+                $data_comision['is_interseccion'] = $this->session->userdata('datos_validador')['is_interseccion']; //Para validar que no sea una intersección en comisiones
                 $data['cuerpo_comisiones'] = $this->load->view('validador_censo/becas_comisiones/comisiones_cuerpo', $data_comision, TRUE); //Valores que muestrán la lista
                 $this->load->view('validador_censo/becas_comisiones/becas_comisiones_tpl', $data, FALSE); //Valores que muestrán la lista
                 //Error, No existe el empleado
@@ -2351,13 +2373,20 @@ class Validacion_censo_profesores extends MY_Controller {
 
             $data['mostrar_hora_fecha_duracion'] = 0; //$this->get_valor_validacion($datos_formulario, 'duracion'); //Muestrá validaciones de hora y fecha de inicio y termino según la opción de duración
 
-            $data['dir_tes'] = $this->ca->get_comision_academica(array('conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'EMP_COMISION_CVE' => $ca_id), 'fields' => 'emp_comision.*, comprobante.COM_NOMBRE, comprobante.TIPO_COMPROBANTE_CVE, ctipo_curso.TIP_CUR_NOMBRE, ccurso.CUR_NOMBRE, cnivel_academico.NIV_ACA_NOMBRE'))[0]; //Obtener datos
+            $data['dir_tes'] = $this->ca->get_comision_academica(array(
+                'conditions' => array('EMPLEADO_CVE' => $this->obtener_id_empleado(), 'EMP_COMISION_CVE' => $ca_id), 
+                'fields' => 'emp_comision.*, comprobante.COM_NOMBRE, comprobante.TIPO_COMPROBANTE_CVE, '
+                . 'ctipo_curso.TIP_CUR_NOMBRE, ccurso.CUR_NOMBRE, cnivel_academico.NIV_ACA_NOMBRE'))[0]; //Obtener datos
 
             $accion_general = $this->config->item('ACCION_GENERAL');
             if ($this->seguridad->decrypt_base64($validar) == $accion_general['VALIDAR']['valor']) { //En caso de que la acción almacenada
-                $data = $this->validar_registro(array_merge($data, array('tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_comision_academica', 'identificador_registro' => $ca_id)));
+                $data = $this->validar_registro(array_merge($data, array(
+                    'tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_comision_academica', 
+                    'identificador_registro' => $ca_id)));
             } else {
-                $data['formulario_validacion'] = $this->historico_registro(array_merge($data, array('tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_comision_academica', 'identificador_registro' => $ca_id)));
+                $data['formulario_validacion'] = $this->historico_registro(array_merge($data, array(
+                    'tipo_id' => 'COMISION_ACADEMICA', 'seccion_actualizar' => 'seccion_comision_academica', 
+                    'identificador_registro' => $ca_id)));
                 $data['pie_modal'] = '<div class="col-xs-12 col-sm-12 col-md-12 text-right"><button type="button" id="close_modal_censo" class="btn btn-success" data-dismiss="modal">' . $data['string_values']['cerrar'] . '</button></div>';
             }
             //pr($data);

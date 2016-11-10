@@ -1397,10 +1397,13 @@ alter table validacion_convocatoria_delegacion add primary key (regiones_cve);
 CREATE TABLE validacion_convocatoria_delegacion_region(
 val_conv_del_reg_cve int(11) AUTO_INCREMENT,
 VAL_CON_CVE int(11) NOT NULL,
-delegacion_cve char(2) not null,
-region_cve char(4) not null,
-constraint pk_ebs
-primary key(val_conv_del_reg_cve)
-FOREIGN KEY (VAL_CON_CVE) REFERENCES `cseccion_informacion` (`sec_info_cve`),
+DELEGACION_CVE char(2) null,
+regiones_cve char(4) null,
+primary key(val_conv_del_reg_cve),
+KEY XIF12VALIDACION_CONVOCATORIA_DELEGACION_REGION (VAL_CON_CVE),
+CONSTRAINT validacion_convocatoria_delegacion_region_vcfk_10 FOREIGN KEY (VAL_CON_CVE) REFERENCES validacion_convocatoria(VAL_CON_CVE),
+CONSTRAINT validacion_convocatoria_delegacion_region_cdfk_11 FOREIGN KEY (DELEGACION_CVE) REFERENCES cdelegacion (DELEGACION_CVE),
+CONSTRAINT validacion_convocatoria_delegacion_region_crfk_12 FOREIGN KEY (regiones_cve) REFERENCES cregiones (regiones_cve)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
