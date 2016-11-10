@@ -176,7 +176,7 @@ if($this->seguridad->verificar_liga_validar()){
                                             $btn_comprobante = '';
                                         }
                                         echo "<tr class='" . $reg_principal . "' id='id_row_" . $key . "' data-cp='" . $cp . "' data-keyrow=" . $key . " >
-                                            <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($value['IS_VALIDO_PROFESIONALIZACION'], $value['IS_CARGA_SISTEMA'])."</td>";
+                                            <td class='text-center'>".$this->seguridad->html_verificar_valido_profesionalizacion($value['IS_VALIDO_PROFESIONALIZACION'], $value['IS_CARGA_SISTEMA'], $value['validation_estado'])."</td>";
                                         echo "<td >" . $this->form_complete->create_element(
                                                 array('id' => 'radio_curso_principal', 'type' => 'radio',
                                                     'value' => $value['cve_actividad_docente'],

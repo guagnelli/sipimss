@@ -52,7 +52,7 @@ $this->seguridad->set_tiempo_convocatoria(); //Valida paso de convocatoria
                             $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" data-idrow ="' . $key_ai . '" data-comisioncve ="' . $key . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_comision(this)" >' . $string_values['tab_titulo_editar'] . '</button>' : '';
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">
-                                <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA']) . "</td>";
+                                <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA'], $val['validation_estado']) . "</td>";
                             echo "<td>" . $val['nom_tipo_comision'] . "</td>";
                             echo "<td>" . $val['fecha_inicio'] . "</td>";
                             echo "<td>" . $val['fecha_fin'] . "</td>";

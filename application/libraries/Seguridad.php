@@ -227,19 +227,51 @@ class Seguridad {
      * 
      * @author LEAS y Jesús Días
      * @modificado 27/10/2016
-     * @param type $is_valido_profesionalizacion Parametro que indica si ya fue evaluado el curso
+     * @param type $is_evaluado_gaecud Parametro que indica si ya fue evaluado el curso
      * @param type $is_carga_sistema Parametro que indica que es un curso cargado por sistema
      * @return type
      */
-    public function html_verificar_valido_profesionalizacion($is_valido_profesionalizacion = null, $is_carga_sistema = null, $is_valido = null) {
-        if ($is_valido_profesionalizacion == 1) {
-            return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="Curso evaluado"></span>';
-        } else if ($is_carga_sistema == 1) {
-            return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="Curso cargado por sistema"></span>';
-        } else if ($is_valido == 1) {
-            return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="left" title="Valido"></span>';
+    public function html_verificar_valido_profesionalizacion($is_evaluado_gaecud = null, $is_carga_sistema = null, $is_valido = null) {
+//        if ($is_evaluado_gaecud == 1) {
+//            return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="Curso evaluado"></span>';
+//        } else if ($is_carga_sistema == 1) {
+//            return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok-sign" data-toggle="tooltip" data-placement="left" title="Curso cargado por sistema"></span>';
+//        } else if ($is_valido == 1) {
+//            return '<span class="class_validacion_registro text-black glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="left" title="Valido"></span>';
+//        }
+//        return '';
+        $glyphicon = 'minus';
+        $texto = '';
+        if (!is_null($is_valido)) {//Menor_a mayor peso
+            switch ($is_valido) {
+                case 1:
+                    $glyphicon = 'ok-circle';
+                    $texto = 'El curso es valido ';
+                    break;
+                case 2:
+                    $glyphicon = 'remove-sign';
+                    $texto = 'El curso no es valido ';
+                    break;
+                case 3:
+                    $glyphicon = 'remove';
+                    $texto = 'El curso fue enviado a corrección ';
+                    break;
+                default :
+                    $glyphicon = 'minus';
+                    $texto = 'Curso no validado por ningun nivel ';
+            }
         }
-        return '';
+        if (!is_null($is_carga_sistema) and $is_carga_sistema == 1) {
+            $glyphicon = 'ok';
+            $texto .= 'Curso cargado por sistema ';
+        }
+        if (!is_null($is_evaluado_gaecud) and $is_evaluado_gaecud == 1) {
+            $glyphicon = 'ok-sign';
+            $texto .= 'Curso evaluado por GAECUD ';
+        }
+        $texto = (!empty($texto)) ? $texto : 'Curso no validado por ningun nivel';
+        return '<span class="class_validacion_registro text-black glyphicon glyphicon-' . $glyphicon . '" '
+                . 'data-toggle="tooltip" data-placement="left" data-original-title="' . $texto . '"></span>';
     }
 
     /**

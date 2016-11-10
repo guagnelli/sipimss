@@ -61,7 +61,7 @@ $this->seguridad->set_tiempo_convocatoria(); //Valida paso de convocatoria
                                                         $valido_eliminar_editar = $this->seguridad->verificar_liga_validar($comision_academica['IS_VALIDO_PROFESIONALIZACION'], $comision_academica['IS_VALIDO_PROFESIONALIZACION'], $comision_academica['validation_estado']);
                                                         $btn_comprobante = (!is_null($comision_academica['COMPROBANTE_CVE'])) ? '<a href="' . site_url('administracion/ver_archivo/' . $this->seguridad->encrypt_base64($comision_academica['COMPROBANTE_CVE'])) . '" target="_blank">' . $string_values['lbl_ver_comprobante'] . '</a>' : '';
                                                         echo '<tr id="tr_' . $id . '">
-                                                              <td class="text-center">' . $this->seguridad->html_verificar_valido_profesionalizacion($comision_academica['IS_VALIDO_PROFESIONALIZACION'], $comision_academica['IS_CARGA_SISTEMA']) . '</td>';
+                                                              <td class="text-center">' . $this->seguridad->html_verificar_valido_profesionalizacion($comision_academica['IS_VALIDO_PROFESIONALIZACION'], $comision_academica['IS_CARGA_SISTEMA'], $comision_academica['validation_estado']) . '</td>';
                                                         foreach ($columns[$key_tc] as $key_dato => $dato) {
                                                             echo '<td>' . $comision_academica[$key_dato] . '</td>';
                                                         }

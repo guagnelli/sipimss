@@ -18,7 +18,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
         <div class='row'>
             <div class="col-xs-12 col-md-12 col-lg-12 text-left">
                 <br>
-                <?php echo $string_values['title_material_eduacativo']; ?>
+                    <?php echo $string_values['title_material_eduacativo']; ?>
                 <br>
             </div>
         </div>
@@ -70,7 +70,7 @@ $colapso_div_ejercicio_profesional = 'collapse in';
                             $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" id="btn_editar_mat_educativo" data-idrow ="' . $key_ai . '" data-mateducve ="' . $key . '" data-tpmateducve ="' . $key_tp_mat_edu . '" data-comprobantecve ="' . $idcomprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_material_educativo(this)" >' . $string_values['tab_titulo_editar'] . '</button>' : '';
                             //Crea los row de la tabla
                             echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">
-                                <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA']) . "</td>";
+                                <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA'], $val['validation_estado']) . "</td>";
                             echo "<td>" . $val['nombre_material'] . "</td>";
                             echo "<td>" . $desc_tipo_material . "</td>";
                             echo "<td>" . $val['material_educativo_anio'] . "</td>";

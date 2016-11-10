@@ -55,7 +55,7 @@ $this->seguridad->set_tiempo_convocatoria(); //Valida paso de convocatoria
                                         $btn_eliminar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_eliminar_dt" data-value="' . $id . '">' . $string_values['eliminar'] . '</button>' : '';
                                         $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm btn_editar_dt" aria-expanded="false" data-toggle="modal" data-target="#modal_censo" data-value="' . $id . '">' . $string_values['editar'] . '</button>' : '';
                                         echo '<tr id="tr_' . $id . '">
-                                                    <td class="text-center">' . $this->seguridad->html_verificar_valido_profesionalizacion($direccion['IS_VALIDO_PROFESIONALIZACION'], $direccion['IS_CARGA_SISTEMA']) . '</td>
+                                                    <td class="text-center">' . $this->seguridad->html_verificar_valido_profesionalizacion($direccion['IS_VALIDO_PROFESIONALIZACION'], $direccion['IS_CARGA_SISTEMA'],  $direccion['validation_estado']) . '</td>
 													<td>' . $direccion['EC_ANIO'] . '</td>
 													<td>' . $direccion['NIV_ACA_NOMBRE'] . '</td>
 													<td>' . $direccion['COM_ARE_NOMBRE'] . '</td>

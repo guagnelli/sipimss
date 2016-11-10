@@ -80,7 +80,7 @@ $this->seguridad->set_tiempo_convocatoria(); //Valida paso de convocatoria
                                 $btn_editar = ($valido_eliminar_editar) ? '<button type="button" class="btn btn-link btn-sm" id="btn_eliminar_actividad_modal" data-idrow ="' . $key_ai . '" data-invcve ="' . $key . '" data-comprobantecve ="' . $comprobante . '" data-toggle="modal" data-target="#modal_censo" onclick="funcion_editar_reg_investigacion(this)" >' . $string_values['tab_titulo_editar'] . '</button>' : '';
                                 //Crea los row de la tabla
                                 echo "<tr id='id_row_" . $key_ai . "' data-keyrow=" . $key_ai . ">
-                                      <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA']) . "</td>";
+                                      <td class='text-center'>" . $this->seguridad->html_verificar_valido_profesionalizacion($val['IS_VALIDO_PROFESIONALIZACION'], $val['IS_CARGA_SISTEMA'], $val['validation_estado']) . "</td>";
                                 echo "<td>" . $val['tpad_nombre'] . "</td>";
                                 echo "<td>" . $val['nombre_investigacion'] . "</td>";
                                 echo "<td>" . $val['folio_investigacion'] . "</td>";
