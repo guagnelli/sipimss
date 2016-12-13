@@ -1407,3 +1407,6 @@ CONSTRAINT validacion_convocatoria_delegacion_region_crfk_12 FOREIGN KEY (region
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+--- modificar longitud 08/12/2016
+ALTER TABLE sipimss_demo_20161020.cmodulo MODIFY COLUMN MODULO_NOMBRE varchar(50) NOT NULL;
+ALTER TABLE sipimss_demo_20161103.comision_area MODIFY COLUMN COM_ARE_NOMBRE varchar(50) NOT NULL;

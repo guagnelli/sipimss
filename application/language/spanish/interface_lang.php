@@ -470,7 +470,7 @@ $lang['interface'] = array(
         'msj_info_valido_8' => 'La información se encuentra en revisión por la unidad delegacinal',
         'msj_info_valido_9' => 'La información se encuentra en revisión por la unidad delegacinal',
         'msj_info_valido_10' => 'La información fue validada por la delegación',
-        'msj_info_valido_gral' => 'La información se en validación',
+        'msj_info_valido_gral' => 'La información fue enviada a validación',
     ),
     'direccion_tesis' => array(
         'title' => 'Dirección de tesis',
