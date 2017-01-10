@@ -185,7 +185,7 @@ if (!empty($divulgacion)) {
                         <?php echo $string_values['lbl_tipo_divulgacion']; ?>
                     </label>
                     <div class="btn-group pull-right" data-toggle="buttons">
-                            <span class="btn btn-info btn-sm" onclick="funcion_mostrar_medio_divulgacion(1);"><input type="radio" name="articulo" id="articulo1" value="1" autocomplete="off">Foro</span>
+                            <span class="btn btn-info btn-sm" onclick="funcion_mostrar_medio_divulgacion(1);"><input type="radio" name="articulo" id="articulo1" value="1" autocomplete="off">Foro/Congreso</span>
                             <span class="btn btn-info btn-sm" onclick="funcion_mostrar_medio_divulgacion(2);"><input type="radio" name="articulo" id="articulo1" value="2" autocomplete="off">Libro</span> <!-- data-toggle="collapse" data-target="#div_numero_paginas" aria-expanded="false" aria-controls="collapseExample" -->
                             <span class="btn btn-info btn-sm" onclick="funcion_mostrar_medio_divulgacion(3);"><input type="radio" name="articulo" id="articulo1" value="3" autocomplete="off">Revista</span>
                     </div>

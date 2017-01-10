@@ -82,6 +82,9 @@ class Rol extends MY_Controller {
                         case 5:
                             redirect('designar_validador');
                         break;
+                        case 4:
+                            redirect('catalogo');
+                        break;
                         case 6:
                         case 7:
                             redirect('dictamen');

@@ -366,6 +366,7 @@ function cargar_archivo(req, form) {
         $(error).html(html_message("Debe seleccionar un archivo. Por favor elija uno.", 'danger'));
     }
 }
+
 /**
  * @author LEAS
  * @fecha 10/09/2016

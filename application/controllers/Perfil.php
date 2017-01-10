@@ -326,7 +326,7 @@ class Perfil extends MY_Controller {
             }
             //pr($data);
             $data['formulario_carga_archivo'] = $this->load->view('template/formulario_carga_archivo', $data, TRUE);
-            $data['titulo_modal'] = $data['string_values']['title'];
+            $data['titulo_modal'] = $data['string_values']['title'] . $config['title_complemento'];
 
             $data['cuerpo_modal'] = $this->load->view($config['plantilla'], $data, TRUE);
 
@@ -381,6 +381,8 @@ class Perfil extends MY_Controller {
 
     private function comision_academica_configuracion($tipo_comision, $edicion = true) {
         $config = array('plantilla' => null, 'validacion' => null);
+        $this->lang->load('interface');
+        $string_value = $this->lang->line('interface')['comision_academica'];
         /*
           $condiciones_ = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $comp_conditions_ids));
           $where_grup = array(Enum_ecg::ctipo_comprobante=>'OR');
@@ -392,6 +394,7 @@ class Perfil extends MY_Controller {
             case $this->config->item('tipo_comision')['COMITE_EDUCACION']['id']:
                 $config['plantilla'] = ($edicion == true) ? 'perfil/comision_academica/comision_academica_comite_educacion_formulario' : 'perfil/comision_academica/comision_academica_comite_educacion_vista';
                 $config['validacion'] = 'form_comision_academica_comite_educacion';
+                $config['title_complemento'] = ''; 
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ctipo_curso);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_educativa, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
@@ -400,6 +403,7 @@ class Perfil extends MY_Controller {
             case $this->config->item('tipo_comision')['SINODAL_EXAMEN']['id']:
                 $config['plantilla'] = ($edicion == true) ? 'perfil/comision_academica/comision_academica_sinodal_examen_formulario' : 'perfil/comision_academica/comision_academica_sinodal_examen_vista';
                 $config['validacion'] = 'form_comision_academica_sinodal_examen';
+                $config['title_complemento'] = $string_value['title_SE']; 
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::cnivel_academico);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Sinodal_de_examen, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
@@ -408,6 +412,7 @@ class Perfil extends MY_Controller {
             case $this->config->item('tipo_comision')['COORDINADOR_TUTORES']['id']:
                 $config['plantilla'] = ($edicion == true) ? 'perfil/comision_academica/comision_academica_coordinador_tutores_formulario' : 'perfil/comision_academica/comision_academica_coordinador_tutores_vista';
                 $config['validacion'] = 'form_comision_academica_coordinador_tutores';
+                $config['title_complemento'] = $string_value['title_CT']; 
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Coordinador_de_tutores_en_educacion_a_distancia, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
@@ -418,6 +423,7 @@ class Perfil extends MY_Controller {
                 //$config['validacion'] = 'form_comision_academica_coordinador_curso';
                 $config['plantilla'] = ($edicion == true) ? 'perfil/comision_academica/comision_academica_coordinador_tutores_formulario' : 'perfil/comision_academica/comision_academica_coordinador_tutores_vista';
                 $config['validacion'] = 'form_comision_academica_coordinador_tutores';
+                $config['title_complemento'] = $string_value['title_CC']; 
                 $entidades_ = array(enum_ecg::ctipo_comprobante, enum_ecg::ccurso, enum_ecg::ctipo_curso);
                 $res_comprobantes = get_condiciones_catalogos_modulos(En_cat_mod::Comision_educativa, Enum_ecg::ctipo_comprobante);
                 $conditions = array(enum_ecg::ctipo_comprobante => array('TIPO_COMPROBANTE_CVE ' => $res_comprobantes));
@@ -678,7 +684,7 @@ class Perfil extends MY_Controller {
             }
             //pr($data);
             $data['formulario_carga_archivo'] = $this->load->view('template/formulario_visualizar_archivo', $data, TRUE);
-            $data['titulo_modal'] = $data['string_values']['title'];
+            $data['titulo_modal'] = $data['string_values']['title'] . $config['title_complemento'];
 
             $data['cuerpo_modal'] = $this->load->view($config['plantilla'], $data, TRUE);
 
