@@ -589,11 +589,11 @@ if (!function_exists('get_busca_hijos')) {
     function get_busca_hijos($array_busqueda = null, $controlador = null) {
         //Si el arreglo es null y vacio, retorna false 
         $array_result = array();
-
+        pr($controlador);
         if (is_null($array_busqueda) AND empty($array_busqueda)) {
             return $array_result;
         }
-
+        pr($array_busqueda);
         foreach ($array_busqueda as $keys => $valores) {
             $cad1 = strtolower($controlador);
 //            $cad2 = strtolower($valores['nombre_padre']);

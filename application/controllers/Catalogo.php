@@ -13,23 +13,31 @@ class Catalogo extends MY_Controller {
         $this->load->library('form_complete');
         $this->load->library('form_validation');
         $this->load->library('seguridad');
-        $this->load->model('Catalogos_generales');
         $this->load->model('Adminstracion_catalogos_model','adm_catmod');
+        $this->load->library('empleados_siap');
+        $this->load->model('Perfil_model', 'modPerfil');
+        $this->load->model('Catalogos_generales', 'cg');
+        $this->load->library('Ventana_modal');
+        $this->load->config('general');
     }
 
     public function index() {
-        $main_content = null;
-        $datos = array();
-        $datos['string_values'] = $this->lang->line('interface_administracion')['usuario']; //Cargar textos utilizados en vista
+        //echo "SOY UN INDEX....";
+        $rol_seleccionado = $this->session->userdata('rol_seleccionado'); //Rol seleccionado de la pantalla de roles
+        pr($rol_seleccionado);
 
-        //$entidades_ = array(enum_ecg::cdelegacion, enum_ecg::cdepartamento, enum_ecg::ccategoria);
-        $entidades_ = array(enum_ecg::cdelegacion, enum_ecg::crol, enum_ecg::cestado_usuario);
-        $datos['catalogos'] = carga_catalogos_generales($entidades_, null, null);
-    
-        $datos['order_columns'] = array('USU_MATRICULA'=>$datos['string_values']['buscador']['tab_head_matricula'], 'USU_PATERNO'=>$datos['string_values']['buscador']['tab_head_nombre'], 'nom_delegacion'=>$datos['string_values']['buscador']['tab_head_delegacion'], 'dep_nombre'=>$datos['string_values']['buscador']['tab_head_adscripcion'], 'EDO_USUARIO_DESC'=>$datos['string_values']['buscador']['tab_head_estado']);
-        $main_content = $this->load->view('administracion/usuario/buscador_listado', $datos, true);
+        $array_menu = get_busca_hijos($rol_seleccionado, $this->uri->segment(1));
+     
+        pr($array_menu);
+        $datosPerfil['array_menu'] = $array_menu;
+
+
+        $main_content = $this->load->view('perfil/index', $datosPerfil, true);
+        $this->template->setCuerpoModal($this->ventana_modal->carga_modal());
         $this->template->setMainContent($main_content);
+//        $this->template->getTemplate(false, 'template/sipimss/index.tpl.php');
         $this->template->getTemplate();
+
     }
 
     //bono_cestado_bono
